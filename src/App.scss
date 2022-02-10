@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Galdeano&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Candal&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital@1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;1,600;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,500;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap");
+
+:root {
+  --cimigo-blue: #1f61a9;
+  --cimigo-blue-light: #73b1f4;
+
+  --cimigo-green: #a6cc17;
+  --cimigo-black: #333333;
+  --cimigo-gray: #c2baad;
+  --cimigo-danger: #ca0039;
+  font-size: 16px;
+  font-weight: 500;
+  @media only screen and (max-width: 1024px) {
+    font-size: 16px !important;
+  }
+  @media only screen and (max-width: 767px) {
+    font-size: 14px !important;
+  }
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px rgb(255, 255, 255) inset;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
