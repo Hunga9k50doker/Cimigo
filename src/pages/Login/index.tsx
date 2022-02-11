@@ -5,6 +5,8 @@ import useStyles from "./styles";
 import { Grid } from "@mui/material";
 import Header from "components/Header";
 import Footer from "components/Footer";
+import Inputs from "components/Inputs";
+// import Buttons from "components/Buttons";
 
 
 const schema = yup.object().shape({
@@ -28,8 +30,24 @@ const Login = () => {
 
   return (
     <Grid className={classes.root}>
-      <Header/>
-      <Footer/>
+      <Header />
+      <Grid className={classes.body}>
+        <p className="textLogin">Login</p>
+        <Inputs
+          title="Email address"
+          name="email"
+          placeholder="Enter your email address"
+        />
+        <Inputs
+          title="Password"
+          name="password"
+          type="password"
+          showEyes
+          placeholder="Enter your password"
+        />
+        {/* <Buttons children={"Login"} btnType="blue" width={200}/> */}
+      </Grid>
+      <Footer />
     </Grid>
   );
 };
