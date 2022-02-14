@@ -47,33 +47,18 @@ const Header = memo((props: HeaderProps) => {
         <nav className={classes.navBar}>
           <ul className={classes.listMenu}>
             <li className={classes.item}>
-              <a className={classes.routerItem} href={cimigoUrl}>
-                Home
-              </a>
-            </li>
-            <li className={classes.item}>
-              <a className={classes.routerItem} href={`${cimigoUrl}/people.html`}>
-                People
-              </a>
-            </li>
-            <li className={classes.item}>
-              <a className={classes.routerItem} href={`${cimigoUrl}/solutions.html`}>
+              <a className={classes.routerItem}>
                 Solutions
               </a>
             </li>
             <li className={classes.item}>
-              <a className={classes.routerItem} href={`${cimigoUrl}/news.html`}>
-                News
+              <a className={classes.routerItem}>
+                Pricing
               </a>
             </li>
             <li className={classes.item}>
-              <a className={classes.routerItem} href={`${cimigoUrl}/reports.html`}>
-                Reports
-              </a>
-            </li>
-            <li className={classes.item}>
-              <a className={classes.routerItem} href={`${cimigoUrl}/case-studies.html`}>
-                Case studies
+              <a className={classes.routerItem}>
+                Resources
               </a>
             </li>
             <li className={classes.item}>
