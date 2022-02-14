@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import useStyles from './styles';
 import clsx from 'clsx';
-
+import icCaretDown from 'assets/img/icon/ic-caret-down-grey.svg'
 interface InputSelectProps {
   title?: string,
   name?: string,
@@ -20,16 +20,18 @@ interface InputSelectProps {
   disabled?: boolean,
   readonly?: boolean,
   multiple?: boolean,
+  displayEmpty?: boolean,
   className?: string,
+  placeholder?: any,
 }
 
-const InputSelect = memo((props: InputSelectProps, ref) => { //React.forwardRef((props: InputsProps, ref)
-  const { title, options, defaultValue, inputRef, value, errorMessage, name, multiple, className, ...rest } = props;
+const InputSelect = memo((props: InputSelectProps, ref) => { 
+  const { title, placeholder, onChange, options, defaultValue, inputRef, value, errorMessage, name, multiple, displayEmpty, className, ...rest } = props;
   const classes = useStyles();
 
   const ExpandIcon = (props) => {
     return (
-      <img src="" alt="drop-down" {...props} />
+      <img src={icCaretDown} alt="drop-down" {...props} />
     )
   };
 
@@ -39,13 +41,14 @@ const InputSelect = memo((props: InputSelectProps, ref) => { //React.forwardRef(
     <FormControl className={className} classes={{ root: classes.container }} >
       {title && <Typography className={classes.textTitle} classes={{ root: classes.textTitle }}>{title}</Typography>}
       <Select
+        placeholder={placeholder}
         multiple={multiple}
         classes={{
           root: clsx(classes.customSelect, {
             [classes.inputInvalid]: errorMessage
           })
         }}
-        className={classes.customSelectRoot}
+        className={value === "" ? classes.customSelectRoot1 : classes.customSelectRoot}
         MenuProps={{
           anchorOrigin: {
             vertical: "bottom",
@@ -65,14 +68,20 @@ const InputSelect = memo((props: InputSelectProps, ref) => { //React.forwardRef(
         }}
         defaultValue={defaultValue || ''}
         value={value || ''}
+        displayEmpty={displayEmpty}
         name={name}
         labelId={name}
         inputProps={{ name: name, id: name }}
         IconComponent={ExpandIcon}
+        onChange={onChange}
         {...inputProps}
         inputRef={refInput}
         {...rest}
       >
+        {
+          placeholder && 
+          <MenuItem key={placeholder} selected hidden value="" className={classes.placeholder}>{ placeholder }</MenuItem>
+        }
         {
           options && options.map((option, index) =>
             <MenuItem key={index} className={classes.option} value={option.id} >

@@ -3,7 +3,7 @@ export default makeStyles(() =>
   createStyles({
     container: {
       width: "100%",
-      height: "40px",
+      height: "auto",
       marginBottom: '5%',
       position: 'relative',
       '& .MuiSelect-selectMenu': {
@@ -31,6 +31,15 @@ export default makeStyles(() =>
       paddingLeft: 24,
       minHeight: 37
     },
+    placeholder: {
+      fontFamily: 'Arial Rounded MT !important',
+      letterSpacing: 1,
+      fontSize: 14,
+      fontWeight: 700,
+      color: 'rgba(28, 28, 28, 0.2) !important',
+      paddingLeft: 24,
+      minHeight: 37
+    },
     customSelectRoot: {
       '&:before, &.Mui-disabled:before': {
         border: 'none'
@@ -41,6 +50,19 @@ export default makeStyles(() =>
       '& img.MuiSelect-icon': {
         marginRight: 7
       },
+      color: '#333333 !important',
+    },
+    customSelectRoot1: {
+      '&:before, &.Mui-disabled:before': {
+        border: 'none'
+      },
+      '&:hover:before, &.Mui-focused:after': {
+        borderBottom: 'none !important',
+      },
+      '& img.MuiSelect-icon': {
+        marginRight: 7
+      },
+      color: 'rgba(28, 28, 28, 0.2) !important',
     },
     customSelect: {
       border: '1px solid #304D95',

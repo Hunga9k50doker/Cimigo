@@ -61,16 +61,16 @@ const Footer = memo((props: FooterProps) => {
                 </div>
                 <div className={classes.body}>
                   <a href={`${cimigoUrl}/vi/viec-lam`} className={classes.textLink}>
-                    Làm việc với Cimigo
+                    Working at Cimigo
                   </a>
                   <a href={`${cimigoUrl}/vi/moi-nguoi`} className={classes.textLink}>
-                    Mọi người
+                    People
                   </a>
                   <a href={`${cimigoUrl}/vi/nghien-cuu-tinh-huong`} className={classes.textLink}>
-                    Nghiên Cứu Tình Huống
+                    Case studies
                   </a>
                   <a href={`${cimigoUrl}/vi/bao-cao`} className={classes.textLink}>
-                    Nghiên Cứu & Báo Cáo
+                    Market research reports
                   </a>
                 </div>
               </div>

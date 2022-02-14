@@ -1,5 +1,4 @@
-import { ThemeProvider } from '@mui/material/styles';
-import { StylesProvider } from '@mui/styles';
+import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { defaultTheme } from 'config/themes';
 import { useSelector } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
@@ -32,16 +31,16 @@ const App = ({ history, dispatch }: AppProps) => {
   }, [dispatch])
   
   return (
-    <ThemeProvider theme={theme}>
-      <StylesProvider injectFirst>
-       <AppContainer>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <AppContainer>
         <ConnectedRouter history={history}>
           <AppStatus />
           { !isLoadingAuth && <Routers /> } 
         </ConnectedRouter>
-       </AppContainer>
-      </StylesProvider>
-    </ThemeProvider>
+        </AppContainer>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }
 

@@ -1,11 +1,9 @@
 import React, { useState, memo } from 'react';
 import { TextField, Typography, FormControl, InputAdornment, IconButton } from '@mui/material';
-// import classes from './styles.module.scss';
+import classes from './styles.module.scss';
 import clsx from 'clsx';
 import iconEyeOpen from 'assets/img/icon/eye-open.svg';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { withStyles } from '@mui/styles';
-import useStyles from "./styles";
 
 interface InputsProps {
   title?: string,
@@ -20,9 +18,10 @@ interface InputsProps {
   onChange?: any,
   autoComplete?: string,
   errorMessage?: string | null,
+  optional?: boolean,
 }
 const Inputs = memo((props: InputsProps) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const [toggleEyes, setToggleEyes] = useState(false);
   const { title,
     placeholder,
@@ -35,6 +34,7 @@ const Inputs = memo((props: InputsProps) => {
     inputRef,
     errorMessage,
     autoComplete,
+    optional,
     ...rest
   } = props;
 
@@ -45,15 +45,17 @@ const Inputs = memo((props: InputsProps) => {
   const { ref: refInput, ...inputProps } = inputRef || { ref: null }
 
   return (
-    <FormControl fullWidth>
-      <Typography className={classes.textTitle} classes={{root: classes.textTitle}}>{title}</Typography>
+    <FormControl className={classes.root} fullWidth>
+      <Typography classes={{root: classes.textTitle}}>{title} {optional ? <span className={classes.optional}>(optional)</span> : ""}</Typography>
       <TextField
         type={!toggleEyes ? type : 'text'}
         placeholder={placeholder}
         name={name}
         defaultValue={defaultValue}
         value={value}
+        variant="standard"
         fullWidth
+        classes={{root: classes.rootInput}}
         InputProps={{
           disableUnderline: true,
           classes: {

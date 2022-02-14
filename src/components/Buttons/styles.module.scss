@@ -1,0 +1,21 @@
+.root {
+  text-transform: none;
+  font-size: 14px;
+  font-weight: 600;
+} 
+.btnBlue {
+  background: var(--cimigo-blue);
+  color: white;
+  &:hover {
+    background: var(--cimigo-blue-light);
+  }
+}
+
+.btnTransparentBlue {
+  background: transparent;
+  color: var(--cimigo-blue);;
+  border: 1px solid var(--cimigo-blue);
+  &:hover {
+    background: var(--cimigo-blue-light);
+  }
+}

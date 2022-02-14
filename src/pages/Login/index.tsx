@@ -7,10 +7,8 @@ import Header from "components/Header";
 import Footer from "components/Footer";
 import Inputs from "components/Inputs";
 import icGoogle from 'assets/img/icon/ic-google.svg';
-import InputSelect from "components/InputsSelect";
-
-// import Buttons from "components/Buttons";
-
+import Buttons from "components/Buttons";
+import {routes} from 'routers/routers/routes';
 
 const schema = yup.object().shape({
 
@@ -64,14 +62,14 @@ const Login = () => {
             />}
             label="Keep me logged in"
           />
-          <a href="" className={classes.linkText}>Forgot your password?</a>
+          <a href={routes.forgotPassword} className={classes.linkText}>Forgot your password?</a>
         </Grid>
+        <Buttons children={"LOGIN"} btnType="Blue" padding="16px 0px"/>
         <div className={classes.separator}>
           <span>or login with</span>
         </div>
         <Button classes={{root: classes.icGoogle}} startIcon={<img src={icGoogle} alt=""/>}>Google</Button>
-        <a className={classes.linkText} href="" >Don't have an account? Register now!</a>
-        {/* <Buttons children={"Login"} btnType="blue" width={200}/> */}
+        <a className={classes.linkText} href={routes.register} >Don't have an account? Register now!</a>
       </Grid>
       <Footer />
     </Grid>
