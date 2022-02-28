@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
-import { Button, Checkbox, FormControlLabel, Grid, IconButton } from "@mui/material";
+import { Button, Checkbox, FormControlLabel, Grid } from "@mui/material";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Inputs from "components/Inputs";

@@ -37,7 +37,6 @@ const Login = () => {
     { id: "3", name: "3" }
 
   ]
-  console.log(valueSelect, "sss");
   
   return (
     <Grid className={classes.root}>

@@ -19,9 +19,9 @@ interface InputsProps {
   autoComplete?: string,
   errorMessage?: string | null,
   optional?: boolean,
+  infor?: string
 }
 const Inputs = memo((props: InputsProps) => {
-  // const classes = useStyles();
   const [toggleEyes, setToggleEyes] = useState(false);
   const { title,
     placeholder,
@@ -35,6 +35,7 @@ const Inputs = memo((props: InputsProps) => {
     errorMessage,
     autoComplete,
     optional,
+    infor,
     ...rest
   } = props;
 
@@ -56,6 +57,7 @@ const Inputs = memo((props: InputsProps) => {
         variant="standard"
         fullWidth
         classes={{root: classes.rootInput}}
+        className={className}
         InputProps={{
           disableUnderline: true,
           classes: {
@@ -77,6 +79,7 @@ const Inputs = memo((props: InputsProps) => {
         inputRef={refInput}
         {...rest}
       />
+      {infor && <p className={classes.textInfor}>{infor}</p>}
       {errorMessage && <Typography className={classes.textError}>{errorMessage}</Typography>}
     </FormControl>
   );

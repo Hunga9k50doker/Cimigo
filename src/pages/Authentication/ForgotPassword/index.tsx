@@ -3,12 +3,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
 import { Grid } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
+
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Inputs from "components/Inputs";
 import Buttons from "components/Buttons";
 import {routes} from 'routers/routers/routes';
-import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object().shape({
 

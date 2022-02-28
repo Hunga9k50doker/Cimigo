@@ -4,8 +4,9 @@ export default makeStyles(() =>
     container: {
       width: "100%",
       height: "auto",
-      marginBottom: '5%',
+      paddingBottom: 15,
       position: 'relative',
+      
       '& .MuiSelect-selectMenu': {
         color: '#666666',
         fontSize: 14,
@@ -16,11 +17,11 @@ export default makeStyles(() =>
       },
     },
     textTitle: {
-      lineHeight: '17px',
-      color: "",
+      fontWeight: 400,
       fontSize: 14,
-      paddingBottom: 9,
-      fontWeight: 500,
+      paddingLeft: 20,
+      paddingBottom: 5,
+      color: "rgba(28, 28, 28, 0.65)",
     },
     option: {
       fontFamily: 'Arial Rounded MT !important',
@@ -51,6 +52,9 @@ export default makeStyles(() =>
         marginRight: 7
       },
       color: '#333333 !important',
+      '& > div': {
+        padding: "15.5px 14px"
+      }
     },
     customSelectRoot1: {
       '&:before, &.Mui-disabled:before': {
@@ -66,7 +70,7 @@ export default makeStyles(() =>
     },
     customSelect: {
       border: '1px solid #304D95',
-      padding: '14px 16px',
+      padding: '15.5px 16px !important',
       borderRadius: '50px !important',
     },
     textError: {

@@ -1,0 +1,30 @@
+.paper {
+  padding : 24px;
+  width: 550px;
+  max-width: 550px;
+}
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+  color: #08182A;
+}
+.input {
+  width: 60%;
+  margin: auto;
+  margin-top: 24px;
+  margin-bottom: 40px;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  button {
+    margin-left: 10px;
+  }
+}

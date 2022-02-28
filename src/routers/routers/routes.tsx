@@ -14,7 +14,11 @@ export const routes = {
   resetPassword: '/reset-password',
   project: {
     management: '/projects',
+    newManagement: '/projects/create',
     detail: '/project/:id',
+  },
+  survey: {
+    setup: '/survey',
   },
   admin: {
     root: '/admin',

@@ -5,22 +5,23 @@ import classes from './styles.module.scss';
 
 interface ButtonsProps {
   btnType?: string;
-  children?: string;
+  children?: any;
   onClick?: (e?: any) => void;
   type?: any;
   disabled?: boolean;
-  width?: number;
+  className?: any;
+  width?: string;
   padding?: string;
 }
 
 const Buttons = memo((props: ButtonsProps) => {
-  const { width, padding, btnType, children, onClick, ...rest } = props;
-  console.log(onClick, 'onClick', props)
+  const { width, padding, className, btnType, children, onClick, ...rest } = props;
   return (
     <Button
       className={clsx(
-        classes.root,
+        classes.root, className,
         btnType === "Blue" ? classes.btnBlue : "",
+        btnType === "Red" ? classes.btnRed : "",
         btnType === "TransparentBlue" ? classes.btnTransparentBlue : "",
       )}
       type="button"

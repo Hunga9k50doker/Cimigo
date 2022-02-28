@@ -1,0 +1,258 @@
+.title {
+  font-weight: 600;
+  font-size: 24px;
+  color: #1f61a9;
+  margin: 0;
+  margin-bottom: 30px;
+}
+.flex {
+  padding: 0px 24px;
+}
+.flex > p {
+  font-weight: normal;
+  font-size: 14px;
+  color: #1c1c1c;
+  margin: 0;
+  margin-top: 5px;
+}
+.flex > p > span {
+  color: #1f61a9;
+  border-bottom: 1px dashed #1f61a9;
+  cursor: pointer;
+  &:hover {
+    color: #1f62a98f;
+  }
+}
+.subTitle {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1c1c1c;
+  margin: 0;
+  span {
+    color: #7c9911;
+  }
+}
+.input {
+  display: flex;
+  min-width: 700px;
+}
+.input > div {
+  padding: 20px;
+}
+.packs {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px -12px;
+}
+.itemPacks {
+  padding: 16px;
+  position: relative;
+  flex: 0 1;
+  max-width: 400px;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 12px;
+  margin: 12px;
+}
+.itemPacks > button {
+  position: absolute;
+  right: 16px;
+  background: rgba(28, 28, 28, 0.4);
+  &:hover {
+    background: rgba(28, 28, 28, 0.4);
+  }
+}
+.itemPacks > img {
+  width: 100%;
+  min-width: 300px;
+}
+.textPacks {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  p {
+    font-weight: normal;
+    font-size: 14px;
+    color: #1c1c1c;
+  }
+}
+.addPack {
+  background: #ffffff;
+  flex: 0 1;
+  padding: 16px;
+  border: 1px dashed rgba(28, 28, 28, 0.65);
+  border-radius: 12px;
+  margin: 12px;
+  max-width: 400px;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  align-content: center;
+  justify-content: center;
+  min-height: 300px;
+  p {
+    font-weight: 600;
+    font-size: 32px;
+    color: rgba(28, 28, 28, 0.4);
+    margin-top: 10px;
+    min-width: 300px;
+    text-align: center;
+  }
+}
+.menuAction {
+  width: 120px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+.itemAciton {
+  img {
+    padding-right: 10px;
+  }
+  p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 12px;
+    color: rgba(28, 28, 28, 0.65);
+  }
+}
+.table {
+  width: 80%;
+  margin: auto;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  margin-top: 35px;
+  margin-bottom: 50px;
+}
+.tableHead {
+  background: #1f61a9;
+  th {
+    font-weight: 400;
+    font-size: 16px;
+    color: #ffffff;
+  }
+}
+.tableBody {
+  &:nth-child(even) {
+    background: rgba(28, 28, 28, 0.05);
+  }
+  td {
+    font-weight: 400;
+    font-size: 16px;
+    color: #333333;
+  }
+}
+.rootTextfield {
+  width: 80%;
+}
+.inputTextfield {
+  padding: 10px 20px;
+  font-size: 14px;
+  &.placeholder {
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    color: #bdbdbd;
+  }
+}
+.btnAddBrand {
+  cursor: pointer;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    font-weight: 400;
+    font-size: 14px;
+    color: #1f61a9;
+    img {
+      padding-right: 10px;
+    }
+  }
+}
+.rootList {
+  padding: 40px 20px;
+}
+.listFlex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.listTextLeft > p {
+  margin: 0;
+  font-weight: 400;
+  font-size: 12px;
+  color: #1c1c1c;
+  text-align: end;
+}
+.listTextRight > p {
+  margin: 0;
+  font-weight: 400;
+  font-size: 12px;
+  color: #1c1c1c;
+  text-align: start;
+}
+.listNumber {
+  margin: auto 35px;
+  max-width: 240px;
+  div {
+    display: flex;
+    min-width: 200px;
+    justify-content: space-between;
+    border-radius: 4px;
+    border: 1px solid #dddddd;
+    span {
+      width: 24px;
+      height: 24px;
+      max-width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 400;
+      font-size: 12px;
+      color: rgba(28, 28, 28, 0.65);
+    }
+    span:not(:last-child) {
+      border-right: 1px solid #dddddd;
+    }
+  }
+}
+.rootListItem > div {
+  &:first-child {
+    display: block;
+    padding-left: 16px;
+    padding-right: 16px;
+    min-height: 40px;
+  }
+}
+.selected {
+  background-color: rgba(28, 28, 28, 0.05) !important;
+}
+.selected > div > div {
+  &:last-child > p {
+    width: 77%;
+  }
+}
+.iconAction {
+  width: 32px;
+  height: 32px;
+  margin-left: 10px;
+  &:hover {
+    background-color: #ffffff !important;
+  }
+}
+.icSelect {
+  right: 25px;
+}
+.selectType {
+  font-weight: 500;
+  font-size: 12px;
+  color: #1f61a9;
+}
+.rootSelect {
+  min-width: 185px;
+}
+.rootSelect > div > fieldset{
+  border-color: #1f61a9 !important;
+}

@@ -1,0 +1,43 @@
+.paper {
+  padding : 24px;
+  width: 550px;
+  max-width: 550px;
+}
+.body {
+
+}
+.title {
+  text-align: center;
+  span {
+    font-weight: 600;
+    font-size: 24px;    
+    color: rgba(28, 28, 28, 0.65);
+    margin: 0;
+    margin-top: 8px;
+  }
+  p {
+    font-weight: 400;
+    font-size: 16px;   
+    color: rgba(28, 28, 28, 0.65);
+    margin-top: 18px;
+    margin-bottom: 32px; 
+  }
+}
+.input {
+  width: 60%;
+  margin: auto;
+  margin-top: 24px;
+  margin-bottom: 40px;
+}
+.header {
+  display: flex;
+  justify-content: flex-end;
+}
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  button {
+    margin-left: 10px;
+  }
+}
