@@ -47,8 +47,12 @@ const PopupPack = memo((props: PopupCreateFolderProps) => {
               <div className={classes.textInfo}>The file size must be <span>less than 10MB.</span></div>
               <div className={classes.textInfo}>YThe pack image should be <span>front facing</span>, as would be seen on a shelf.</div>
               <Grid className={classes.input}>
-                <Inputs title='Pack Name' name='' placeholder='Enter custom pack name' infor='This name will be used in the report' />
-                <InputSelect title='Pack type' placeholder="-- Select a pack type --" displayEmpty />
+                <Grid item xs={6}>
+                  <Inputs title='Pack Name' name='' placeholder='Enter custom pack name' infor='This name will be used in the report' />
+                </Grid>
+                <Grid item xs={6}>
+                  <InputSelect title='Pack type' placeholder="-- Select a pack type --" />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -56,7 +60,7 @@ const PopupPack = memo((props: PopupCreateFolderProps) => {
             <p>Brand-related information on the pack</p>
             <span>These information will be added in brand use questions in the pack test survey.</span>
             <Grid>
-              <Inputs title='Brand' name='' placeholder='Enter product brand'/>
+              <Inputs title='Brand' name='' placeholder='Enter product brand' />
               <Inputs title='Variant' name='' placeholder='Enter product variant' />
               <Inputs title='Manufacturer' name='' placeholder='Enter product manufacturer' />
             </Grid>

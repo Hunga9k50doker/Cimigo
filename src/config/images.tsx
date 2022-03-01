@@ -14,6 +14,9 @@ import icAddPack from 'assets/img/icon/ic-add-pack.svg';
 import icAddPhoto from 'assets/img/icon/ic-add-photo.svg';
 import icSave from 'assets/img/icon/ic-save.svg';
 import icSelectBlue from 'assets/img/icon/ic-select-blue.svg';
+import icTipGray from 'assets/img/icon/ic-tip-gray.svg';
+import icCheck from 'assets/img/icon/ic-check.svg';
+import icCheckActive from 'assets/img/icon/ic-check-active.svg';
 
 const images = {
   // ===================== Images =========================
@@ -33,6 +36,9 @@ const images = {
   icAddPhoto,
   icSave,
   icSelectBlue,
+  icTipGray,
+  icCheck,
+  icCheckActive,
 }
 
 export default images

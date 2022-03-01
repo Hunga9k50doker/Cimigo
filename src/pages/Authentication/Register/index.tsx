@@ -10,7 +10,7 @@ import icGoogle from 'assets/img/icon/ic-google.svg';
 import InputSelect from "components/InputsSelect";
 import Buttons from "components/Buttons";
 import { useState } from "react";
-
+import Select from 'react-select';
 
 const schema = yup.object().shape({
 
@@ -21,7 +21,7 @@ interface FormData {
 }
 
 const Login = () => {
-  const [valueSelect, setValueSelect] = useState()
+  const [valueSelect, setValueSelect] = useState(null)
   const { register, handleSubmit, formState: { errors }, getValues } = useForm<FormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
@@ -32,12 +32,11 @@ const Login = () => {
   };
 
   const options = [
-    { id: "1", name: "1" },
-    { id: "2", name: "2" },
-    { id: "3", name: "3" }
-
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
   ]
-  
+
   return (
     <Grid className={classes.root}>
       <Header />
@@ -69,12 +68,11 @@ const Login = () => {
           placeholder="Enter your password"
         />
         <InputSelect
-          options={options}
           title="Country"
+          defaultValue={valueSelect}
+          onChange={setValueSelect}
+          options={options}
           placeholder="- Select your country -"
-          displayEmpty
-          onChange={(e) => setValueSelect(e?.target.value)}
-          value={valueSelect}
         />
         <Inputs
           title="Phone number"
