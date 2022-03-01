@@ -1,0 +1,35 @@
+.paper {
+  width: 550px;
+  max-width: 550px;
+}
+.root {
+
+}
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+  color: #08182A;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #17497F;
+  padding: 12px 24px;
+  p {
+    font-weight: 600;
+    font-size: 22px;
+    color: #FAFAFF;
+  }
+  button {
+    background-color: #FFFFFF !important;
+  }
+}
+.body {
+  min-height: 300px;
+  padding: 24px;
+}
+.btn {
+  margin: 24px;
+}

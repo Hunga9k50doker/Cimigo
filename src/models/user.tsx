@@ -73,3 +73,8 @@ export interface Information {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface LoginForm {
+    email: string,
+    password: string
+}

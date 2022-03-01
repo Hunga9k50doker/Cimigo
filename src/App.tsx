@@ -1,5 +1,4 @@
-import { ThemeProvider } from '@mui/material/styles';
-import { StylesProvider } from '@mui/styles';
+import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { defaultTheme } from 'config/themes';
 import { useSelector } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
@@ -8,13 +7,14 @@ import './App.scss';
 import styled from 'styled-components';
 import { ConnectedRouter } from 'connected-react-router';
 import AppStatus from 'components/AppStatus';
-import Routers from 'routers/routers';
+import Routers from 'routers';
 import { useEffect } from 'react';
 import { getMe } from 'redux/reducers/User/actionTypes';
-import { BrowserHistory } from 'history';
+import { History } from 'history';
+
 
 interface AppProps {
-  history: BrowserHistory;
+  history: History;
   dispatch: Dispatch<AnyAction>;
 }
 
@@ -32,16 +32,16 @@ const App = ({ history, dispatch }: AppProps) => {
   }, [dispatch])
   
   return (
-    <ThemeProvider theme={theme}>
-      <StylesProvider injectFirst>
-       <AppContainer>
-        <ConnectedRouter history={history}>
-          <AppStatus />
-          { !isLoadingAuth && <Routers /> } 
-        </ConnectedRouter>
-       </AppContainer>
-      </StylesProvider>
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <AppContainer>
+            <ConnectedRouter history={history}>
+              <AppStatus />
+              { !isLoadingAuth && <Routers /> } 
+            </ConnectedRouter>
+        </AppContainer>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }
 

@@ -7,7 +7,7 @@ import storage from 'redux-persist/lib/storage'; // defaults to localStorage for
 import createSagaMiddleware from 'redux-saga';
 import { rootSaga } from 'redux/sagas';
 
-export const history = createBrowserHistory();
+export const history = createBrowserHistory<any>();
 const sagaMiddleware = createSagaMiddleware();
 
 const persistConfig = {

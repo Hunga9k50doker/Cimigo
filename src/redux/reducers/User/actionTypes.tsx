@@ -1,3 +1,4 @@
+import { User } from "models/user";
 
 export const USER_LOGIN_REQUEST = 'USER_LOGIN_REQUEST';
 export const USER_SOCIAL_LOGIN_REQUEST = 'USER_SOCIAL_LOGIN_REQUEST';
@@ -24,5 +25,24 @@ export const SET_PROJECT_STATE_REDUCER = 'SET_PROJECT_STATE_REDUCER';
 export const getMe = () => {
   return {
     type: GET_ME_REQUEST
+  }
+}
+
+export const setUserLogin = (data: User) => {
+  return {
+    type: USER_LOGIN_REDUCER,
+    data: data
+  }
+}
+
+export const userLogoutRequest = () => {
+  return {
+    type: USER_LOGOUT_REQUEST
+  }
+}
+
+export const userLogoutReducer = () => {
+  return {
+    type: USER_LOGOUT_REDUCER
   }
 }

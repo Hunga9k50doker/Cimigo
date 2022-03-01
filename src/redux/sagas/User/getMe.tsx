@@ -1,35 +1,25 @@
-import { put, takeLatest, select } from 'redux-saga/effects';
-import { SET_LOADING_AUTH_REDUCER } from 'redux/reducers/Status/actionTypes';
-import { ReducerType } from 'redux/reducers';
-import { GET_ME_REQUEST } from 'redux/reducers/User/actionTypes';
+import { put, takeLatest, call } from 'redux-saga/effects';
+import { setLoadingAuth } from 'redux/reducers/Status/actionTypes';
+import { GET_ME_REQUEST, setUserLogin, userLogoutRequest } from 'redux/reducers/User/actionTypes';
+import { EKey } from 'models/general';
+import UserService from 'services/user';
 
 function* requestGetMe() {
-  const token = yield select((state: ReducerType) => state.auth.token);
+  const token = localStorage.getItem(EKey.TOKEN)
   if(!token) {
-    yield put({
-      type: SET_LOADING_AUTH_REDUCER,
-      isLoadingAuth: false,
-    });
+    yield put(setLoadingAuth(false));
     return;
   }
-  // try {
-  //   const userLogin = yield call(getMeApi);
-  //   yield put({
-  //     type: USER_LOGIN_REDUCER,
-  //     user: userLogin,
-  //   });
-  // } catch (e) {
-  //   if(e.status !== 401) {
-  //     yield put({
-  //       type: USER_LOGOUT_REQUEST,
-  //     });
-  //   }
-  // } finally {
-  //   yield put({
-  //     type: SET_LOADING_AUTH_REDUCER,
-  //     isLoadingAuth: false,
-  //   });
-  // }
+  try {
+    const userLogin = yield call(UserService.getMe);
+    yield put(setUserLogin(userLogin))
+  } catch (e: any) {
+    if(e.status !== 401) {
+      yield put(userLogoutRequest())
+    }
+  } finally {
+    yield put(setLoadingAuth(false));
+  }
 }
 
 function* getMe() {

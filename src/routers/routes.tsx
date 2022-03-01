@@ -11,9 +11,14 @@ export const routes = {
   login: '/login',
   register: '/register',
   forgotPassword: '/forgot-password',
+  resetPassword: '/reset-password',
   project: {
     management: '/projects',
+    newManagement: '/projects/create',
     detail: '/project/:id',
+  },
+  survey: {
+    setup: '/survey',
   },
   admin: {
     root: '/admin',

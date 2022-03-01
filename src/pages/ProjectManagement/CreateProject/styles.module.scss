@@ -1,0 +1,150 @@
+.root {
+  padding : 0px,
+}
+.rootStepper {
+  padding: 50px 0px;
+  width: 40%;
+  margin: auto;
+  min-width: 400px;
+}
+.rootStepLabel {
+  font-weight: 400;
+  font-size: 16px;
+  color: rgba(28, 28, 28, 0.4);
+}
+.rootStepLabelCompleted {
+  color: #53660C !important;
+  font-weight: 600;
+  font-size: 16px;
+}
+.rootStepLabelActive {
+  color: #53660C !important;
+  font-weight: 600;
+  font-size: 16px;
+}
+.rootConnector {
+  top: 16px !important;
+  margin: 0px 7px !important;
+}
+.activeConnector {
+  span {
+    border-color: #7C9911;
+  }
+}
+
+// ========================= Select solution =====================
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  p {
+    font-weight: 600;
+    font-size: 24px;
+    color: #1F61A9;
+    padding-right: 30px;
+    margin: 0px;
+  }
+}
+.body {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px -9px;
+  padding: 50px 0px;
+}
+.card {
+  background: #EEF0F2;
+    min-height: 300px;
+    max-width: 23%;
+    display: flex;
+    padding: 30px 24px;
+    justify-items: center;
+    align-items: center;
+    flex: 1 1 21%;
+    margin: 12px;
+    min-width: 225px;
+    flex-direction: column;
+  p {
+    font-weight: 600;
+    font-size: 16px;
+    color: #1F61A9;
+    margin-top: 16px;
+    margin-bottom: 23px;
+  }
+  span {
+    text-align: center;
+  }
+}
+.cardComing {
+  background: #FAFAFF;
+  min-height: 300px;
+  max-width: 23%;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1 1 21%;
+  margin: 12px;
+  min-width: 225px;
+  div {
+    background: rgba(28, 28, 28, 0.05);
+    width: 100%;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(28, 28, 28, 0.65);
+    margin-bottom: 27px;
+  }
+  p {
+    font-weight: 600;
+    font-size: 16px;
+    color: rgba(28, 28, 28, 0.4);
+    padding: 0px 24px;
+  }
+  span {
+    text-align: center;
+    color: rgba(28, 28, 28, 0.2);
+    padding: 0px 24px;
+  }
+}
+
+// ========================= Create project =====================
+
+.form {
+  width: 29%;
+  margin: auto;
+  margin-bottom: 100px;
+  min-width: 360px;
+}
+.title {
+  font-weight: 500;
+  font-size: 40px;
+  color: #1F61A9;
+  text-align: center;
+  margin: 0,
+}
+.textLink {
+  font-weight: 400;
+  font-size: 16px;
+  color: #1F61A9;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 44px;
+}
+.textInfo {
+  font-weight: 400;
+  font-size: 16px;
+  color: #1F61A9;
+  span {
+    font-weight: 500;
+    font-size: 12px;
+    color: #7C9911;
+  }
+  a {
+    font-weight: 500;
+    font-size: 12px;
+    color: rgba(28, 28, 28, 0.65);
+  }
+}

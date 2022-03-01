@@ -14,7 +14,7 @@ export const userReducer = (state = initial, action: any) =>
   produce(state, draft => {
     switch (action.type) {
       case types.USER_LOGIN_REDUCER:
-        draft.user = action.user;
+        draft.user = action.data;
         break;
       case types.USER_LOGOUT_REDUCER:
         draft.user = null;
