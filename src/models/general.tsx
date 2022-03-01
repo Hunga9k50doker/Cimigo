@@ -96,3 +96,8 @@ export interface SortItem {
   sortedField: string;
   isDescending: boolean;
 }
+
+export enum EKey {
+  TOKEN = 'token',
+  REFRESH_TOKEN = 'refresh_token'
+}

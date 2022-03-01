@@ -3,13 +3,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
 import { Grid } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Inputs from "components/Inputs";
 import Buttons from "components/Buttons";
-import {routes} from 'routers/routers/routes';
+import {routes} from 'routers/routes';
 
 const schema = yup.object().shape({
 
@@ -20,7 +20,7 @@ interface FormData {
 }
 
 const ForgotPassword = () => {
-  const history = useNavigate();
+  const history = useHistory();
   const { register, handleSubmit, formState: { errors }, getValues } = useForm<FormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
@@ -42,7 +42,7 @@ const ForgotPassword = () => {
           placeholder="Enter your email address"
           type="text"
         />
-        <Buttons children={"Send recovery email"} btnType="Blue" padding="16px 0px" onClick={() => history(routes.resetPassword)}/>
+        <Buttons children={"Send recovery email"} btnType="Blue" padding="16px 0px" onClick={() => history.push(routes.resetPassword)}/>
         <a className={classes.linkText} href={`/register`} >Back to login page</a>
       </Grid>
       <Footer />

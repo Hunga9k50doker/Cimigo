@@ -8,7 +8,7 @@ import {
 
 import Header from "components/Header";
 import Footer from "components/Footer";
-// import { routes } from 'routers/routers/routes';
+// import { routes } from 'routers/routes';
 import Container from "components/Container";
 import Images from "config/images";
 import TabPanel from "components/TabPanel";

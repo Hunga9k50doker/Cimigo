@@ -18,11 +18,11 @@ import {
   TableRow
 } from "@mui/material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { useNavigate } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import Header from "components/Header";
 import Footer from "components/Footer";
-import { routes } from 'routers/routers/routes';
+import { routes } from 'routers/routes';
 import Container from "components/Container";
 import Images from "config/images";
 import Buttons from "components/Buttons";
@@ -31,7 +31,8 @@ import InputSearch from "components/InputSearch";
 import PopupCreateFolder from "./components/PopupCreateFolder";
 
 const ProjectManagement = () => {
-  const history = useNavigate();
+  const history = useHistory();
+
   const [selectedIndex, setSelectedIndex] = useState();
   const [openPopup, setOpenPopup] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -135,7 +136,7 @@ const ProjectManagement = () => {
           <Grid item xs={9} className={classes.right}>
             <Grid className={classes.header}>
               <InputSearch placeholder="Search" width="25%"/>
-              <Buttons onClick={() => history(routes.project.newManagement)} btnType="Blue" padding="16px"><img src={Images.icAddWhite} alt=""/>Create project</Buttons>
+              <Buttons onClick={() => history.push(routes.project.newManagement)} btnType="Blue" padding="16px"><img src={Images.icAddWhite} alt=""/>Create project</Buttons>
             </Grid>
             <TableContainer className={classes.table}>
               <Table>

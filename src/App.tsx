@@ -7,13 +7,14 @@ import './App.scss';
 import styled from 'styled-components';
 import { ConnectedRouter } from 'connected-react-router';
 import AppStatus from 'components/AppStatus';
-import Routers from 'routers/routers';
+import Routers from 'routers';
 import { useEffect } from 'react';
 import { getMe } from 'redux/reducers/User/actionTypes';
-import { BrowserHistory } from 'history';
+import { History } from 'history';
+
 
 interface AppProps {
-  history: BrowserHistory;
+  history: History;
   dispatch: Dispatch<AnyAction>;
 }
 
@@ -34,10 +35,10 @@ const App = ({ history, dispatch }: AppProps) => {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <AppContainer>
-        <ConnectedRouter history={history}>
-          <AppStatus />
-          { !isLoadingAuth && <Routers /> } 
-        </ConnectedRouter>
+            <ConnectedRouter history={history}>
+              <AppStatus />
+              { !isLoadingAuth && <Routers /> } 
+            </ConnectedRouter>
         </AppContainer>
       </ThemeProvider>
     </StyledEngineProvider>

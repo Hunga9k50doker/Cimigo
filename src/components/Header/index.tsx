@@ -5,18 +5,18 @@ import cimigoLogo from 'assets/img/cimigo_logo.svg';
 import iconMenuOpen from 'assets/img/icon/menu-open.svg';
 import clsx from "clsx";
 import UseAuth from "hooks/useAuth";
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import PopoverMenu from "components/PopoverMenu";
 import Container from "components/Container";
 import Buttons from "components/Buttons";
-import { routes } from "routers/routers/routes";
+import { routes } from "routers/routes";
 
 interface HeaderProps {
 
 }
 
 const Header = memo((props: HeaderProps) => {
-  const history = useNavigate()
+  const history = useHistory()
   const { isLoggedIn } = UseAuth();
   const anchorRef = useRef(null);
   const [isOpen, setOpen] = useState(false);
@@ -96,10 +96,10 @@ const Header = memo((props: HeaderProps) => {
             </div>
             <li className={classes.item}>
               <a href={cimigoUrl} className={classes.btnLogin}>
-                <Buttons btnType="TransparentBlue" children="Log in" padding="6px 16px" onClick={() => history(routes.login)}/>
+                <Buttons btnType="TransparentBlue" children="Log in" padding="6px 16px" onClick={() => history.push(routes.login)}/>
               </a>
               <a href={cimigoUrl}>
-                <Buttons btnType="Blue" children="Register" padding="7px 16px" onClick={() => history(routes.register)}/>
+                <Buttons btnType="Blue" children="Register" padding="7px 16px" onClick={() => history.push(routes.register)}/>
               </a>
             </li>
           </ul>

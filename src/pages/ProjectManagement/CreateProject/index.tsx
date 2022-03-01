@@ -13,7 +13,7 @@ import {
 import QontoStepIcon from "../components/QontoStepIcon";
 import Header from "components/Header";
 import Footer from "components/Footer";
-// import { routes } from 'routers/routers/routes';
+// import { routes } from 'routers/routes';
 import Container from "components/Container";
 import Images from "config/images";
 import InputSearch from "components/InputSearch";
