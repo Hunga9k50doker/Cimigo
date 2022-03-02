@@ -1,6 +1,6 @@
+import { SocialProvider } from "models/general";
 import { User } from "models/user";
 
-export const USER_LOGIN_REQUEST = 'USER_LOGIN_REQUEST';
 export const USER_SOCIAL_LOGIN_REQUEST = 'USER_SOCIAL_LOGIN_REQUEST';
 
 export const USER_LOGIN_REDUCER = 'USER_LOGIN_REDUCER';
@@ -31,6 +31,19 @@ export const getMe = () => {
 export const setUserLogin = (data: User) => {
   return {
     type: USER_LOGIN_REDUCER,
+    data: data
+  }
+}
+
+
+interface UserSocialLogin {
+  token: string,
+  provider: SocialProvider
+}
+
+export const userSocialLogin = (data: UserSocialLogin) => {
+  return {
+    type: USER_SOCIAL_LOGIN_REQUEST,
     data: data
   }
 }

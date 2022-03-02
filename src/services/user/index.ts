@@ -1,6 +1,6 @@
 import api from '../configApi';
 import { API } from 'config/constans';
-import { LoginForm } from 'models/user';
+import { LoginForm, SocialLoginData } from 'models/user';
 
 export class UserService {
   static async login(data: LoginForm): Promise<any> {
@@ -32,6 +32,18 @@ export class UserService {
         return Promise.reject(e?.response?.data);
       })
   }
+
+  static async socialLogin(data: SocialLoginData) {
+    return await api.post(API.AUTH.LOGIN_SOCIAL, data)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  
 }
 
 export default UserService

@@ -1,4 +1,4 @@
-import { OptionItem } from "./general"
+import { OptionItem, SocialProvider } from "./general"
 
 export enum EUserStatus {
     ACTIVE = 1,
@@ -77,4 +77,9 @@ export interface Information {
 export interface LoginForm {
     email: string,
     password: string
+}
+
+export interface SocialLoginData {
+    token: string,
+    provider: SocialProvider
 }

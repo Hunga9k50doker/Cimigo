@@ -19,6 +19,7 @@ import Popup from "components/Popup";
 import { EKey } from "models/general";
 import { setUserLogin } from "redux/reducers/User/actionTypes";
 import { push } from "connected-react-router";
+import Google from "components/SocialButton/Google";
 
 const schema = yup.object().shape({
   email: yup.string().email('Email invalid').required('Email is required.'),
@@ -108,7 +109,7 @@ const Login = () => {
           <div className={classes.separator}>
             <span>or login with</span>
           </div>
-          <Button classes={{ root: classes.icGoogle }} startIcon={<img src={icGoogle} alt="" />}>Google</Button>
+          <Google />
           <Link className={classes.linkText} to={routes.register} >Don't have an account? Register now!</Link>
         </Grid>
       </form>
