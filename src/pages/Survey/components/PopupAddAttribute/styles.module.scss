@@ -1,35 +1,149 @@
 .paper {
-  width: 550px;
-  max-width: 550px;
-}
-.root {
-
+  width: 900px;
+  max-width: 900px;
 }
 .title {
   margin: 0;
   font-weight: 600;
   font-size: 22px;
-  color: #08182A;
+  color: #08182a;
 }
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #17497F;
+  background-color: #17497f;
   padding: 12px 24px;
   p {
     font-weight: 600;
     font-size: 22px;
-    color: #FAFAFF;
+    color: #fafaff;
   }
   button {
-    background-color: #FFFFFF !important;
+    background-color: #ffffff !important;
   }
 }
 .body {
   min-height: 300px;
   padding: 24px;
 }
+.body > p {
+  margin: 0;
+  font-weight: 400;
+  font-size: 16px;
+}
+.rootList {
+  padding: 30px 0px;
+}
+.listFlex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.listTextLeft > p {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  color: #000000;
+}
+.listTextRight > p {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  color: #000000;
+}
+.listNumber {
+  margin: auto 35px;
+  max-width: 240px;
+  div {
+    display: flex;
+    min-width: 200px;
+    justify-content: space-between;
+    border-radius: 4px;
+    border: 1px solid #dddddd;
+    span {
+      width: 24px;
+      height: 24px;
+      max-width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 400;
+      font-size: 12px;
+      color: rgba(28, 28, 28, 0.65);
+    }
+    span:not(:last-child) {
+      border-right: 1px solid #dddddd;
+    }
+  }
+}
+.rootListItem {
+  &:nth-child(even) {
+    background: #eef0f2;
+  }
+}
+.rootListItem > div {
+  &:first-child {
+    display: block;
+    padding-left: 16px;
+    padding-right: 16px;
+    // min-height: 40px;
+  }
+}
+.tips {
+  display: flex;
+  align-items: flex-start;
+  padding-right: 40px;
+  margin-bottom: 46px;
+  img {
+    cursor: pointer;
+  }
+}
+.border {
+  background: rgba(28, 28, 28, 0.4);
+  width: 1px;
+  height: 135px;
+  margin: auto 12px;
+}
+.collapse > p {
+  margin-top: 3px;
+  font-size: 14px;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+.collapse > div {
+  p {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 140%;
+    text-align: justify;
+    letter-spacing: 0.015em;
+    color: rgba(28, 28, 28, 0.65);
+  }
+}
+.rootinput {
+  margin-bottom: 5px;
+  margin-top: 3px;
+}
+.input {
+  padding: 14px 16px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+}
+
+.input2 {
+  padding: 9px 16px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 120%;
+  letter-spacing: 0.05em;
+}
 .btn {
-  margin: 24px;
+  display: flex;
+  justify-content: flex-end;
 }

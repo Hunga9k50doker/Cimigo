@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { TextField, FormControl, InputAdornment } from '@mui/material';
+import { OutlinedInput, FormControl, InputAdornment } from '@mui/material';
 import Images from 'config/images';
 import classes from './styles.module.scss';
 import clsx from 'clsx';
@@ -35,7 +35,7 @@ const InputSearch = memo(React.forwardRef((props: InputSearchProps, ref) => {
 
   return (
     <FormControl sx={{ width: width }}>
-      <TextField
+      <OutlinedInput
         type='text'
         disabled={disabled}
         className={className}
@@ -43,19 +43,13 @@ const InputSearch = memo(React.forwardRef((props: InputSearchProps, ref) => {
         name={name}
         defaultValue={defaultValue}
         value={value}
-        classes={{ root: classes.rootTextField }}
-        InputProps={{
-          disableUnderline: true,
-          classes: {
-            input: clsx(classes.inputTextfield),
-          },
-          autoComplete,
-          endAdornment: (
-            <InputAdornment position="end">
-              <img src={Images.icSearch} alt="eye-close" />
-            </InputAdornment>
-          )
-        }}
+        classes={{ root: classes.rootTextField, input: classes.inputTextfield }}
+        autoComplete={autoComplete}
+        endAdornment={
+          <InputAdornment position="end">
+            <img src={Images.icSearch} alt="eye-close" />
+          </InputAdornment>
+        }
         {...inputProps}
         inputRef={refInput}
         {...rest}
