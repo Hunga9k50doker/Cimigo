@@ -1,0 +1,111 @@
+.select {
+  display: flex;
+  justify-content: space-between;
+}
+.selectAge {
+  display: grid;
+  background: #eef0f2;
+  border-radius: 4px;
+  padding: 27px 50px;
+  min-width: 380px;
+  p {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 0.015em;
+    color: #1c1c1c;
+    padding-bottom: 13px;
+  }
+  span {
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+    text-align: center;
+    letter-spacing: 0.015em;
+    color: #1c1c1c;
+    padding-bottom: 18px;
+  }
+}
+.age > a {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  text-decoration-line: underline;
+  display: flex;
+  justify-content: flex-end;
+  color: #1f61a9;
+  margin-bottom: 25px;
+}
+.momOnly > a {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  text-decoration-line: underline;
+  display: flex;
+  justify-content: flex-end;
+  color: #1f61a9;
+  margin-bottom: 25px;
+}
+.rootLocation {
+  border: 1px solid #c4c4c4;
+  border-radius: 4px;
+  margin-bottom: 25px;
+  max-width: 782px;
+}
+.rootLocation > p {
+  background: #1f61a9;
+  border-radius: 4px 4px 0px 0px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #ffffff;
+  padding: 8px;
+}
+.checkAge {
+  margin: 25px 129px;
+  display: flex;
+  flex-wrap: wrap;
+  label:nth-child(1) {
+    margin-right: 80px;
+  }
+  label:nth-child(2) {
+    margin-right: 80px;
+  }
+  label:nth-child(3) {
+    margin-right: 80px;
+  }
+  label:nth-child(4) {
+    margin-right: 0px;
+  }
+  label:nth-child(5) {
+    margin-right: 78px;
+  }
+  label:nth-child(6) {
+    margin-right: 83px;
+  }
+}
+.rootBtn {
+  display: flex;
+  justify-content: flex-end;
+}
+.checkGender {
+  margin: 25px 163px;
+  display: flex;
+  justify-content: space-evenly;
+}
+.checkAgeChild {
+  display: flex;
+  margin: 25px 65px;
+  justify-content: space-between;
+}
+.checkAgeChild1 {
+  display: grid;
+}
+.checkAgeChild2 {
+  display: grid;
+}

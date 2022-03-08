@@ -1,0 +1,83 @@
+.rootStrata {
+  display: flex;
+  align-items: center;
+}
+.rootStrata > p {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #333333;
+  margin: 0;
+  margin-right: 76px;
+}
+.rootStrata > span {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #1c1c1c;
+}
+.rootStrata > span:nth-child(3) {
+  margin-right: 30px;
+}
+.rootCountry {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 30px;
+}
+.rootCountry > p {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #333333;
+  margin: 0;
+  margin-right: 66px;
+}
+.rootCountry > div > p {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #000000;
+}
+.rootCountry > div > span {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 120%;
+  letter-spacing: 0.05em;
+  color: rgba(28, 28, 28, 0.65);
+}
+.rootLocation {
+  border: 1px solid #c4c4c4;
+  border-radius: 4px;
+  margin-top: 25px;
+}
+.rootLocation > p {
+  background: #1f61a9;
+  border-radius: 4px 4px 0px 0px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #ffffff;
+  padding: 8px;
+}
+.rootTags {
+  display: flex;
+  align-items: center;
+  padding: 25px 40px;
+  border-bottom: 1px solid rgba(197, 189, 189, 0.48);
+  p {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: 0.015em;
+    color: #333333;
+    margin-right: 40px;
+  }
+}

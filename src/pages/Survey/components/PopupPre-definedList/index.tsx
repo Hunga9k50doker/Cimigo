@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Checkbox, Dialog, Grid, IconButton, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { Checkbox, Dialog, Grid, IconButton, ListItem, ListItemText } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';

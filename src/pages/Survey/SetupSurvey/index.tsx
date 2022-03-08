@@ -15,7 +15,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  OutlinedInput
+  OutlinedInput,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
+  StepConnector
 } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -26,11 +31,11 @@ import Inputs from "components/Inputs";
 import ImgPack from "assets/img/img-pack.svg"
 import PopupPack from "../components/PopupPack";
 import PopupDeletePack from "../components/PopupDeletePack";
-import clsx from "clsx";
 import Buttons from "components/Buttons";
 import PopupManatoryAttributes from "../components/PopupManatoryAttributes";
 import PopupPreDefinedList from "../components/PopupPre-definedList";
 import PopupAddAttributes from "../components/PopupAddAttribute";
+import ColorlibStepIcon from "../components/ColorlibStepIcon";
 
 const ExpandIcon = (props) => {
   return (
@@ -50,6 +55,7 @@ const SetupSurvey = () => {
   const [selected, setSelected] = useState()
   const [addRow, setAddRow] = useState(false)
   const [select, setSelect] = useState<any>();
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -94,6 +100,27 @@ const SetupSurvey = () => {
       manufacturer: "ChupaChups",
     },
   ]
+
+  const steps = [
+    {
+      label: 'Basic information',
+      description: `For each ad campaign that you create, you can control how much
+                you're willing to spend on clicks and conversions, which networks
+                and geographical locations you want your ads to show on, and more.`,
+    },
+    {
+      label: 'Upload your pack',
+      description:
+        'An ad group contains one or more ads which target a shared set of keywords.',
+    },
+    {
+      label: 'Additional brand list',
+      description: `Try out different ad text to see what brings in the most customers,
+                and learn how to enhance your ads using features like ad extensions.
+                If you run into any problems with your ads, find out how to tell if
+                they're running and how to resolve approval issues.`,
+    },
+  ];
 
   const handleListItemClick = (index) => {
     setSelected(index);
@@ -295,7 +322,37 @@ const SetupSurvey = () => {
         </Grid>
       </Grid>
       <Grid item xs={3}>
-
+        <Grid className={classes.summary}>
+          <p>Summary</p>
+          <Stepper
+            activeStep={activeStep}
+            orientation="vertical"
+            classes={{ root: classes.rootSteper }}
+            connector={<StepConnector classes={{ root: classes.rootConnector, active: classes.activeConnector }} />}
+          >
+            {steps.map((step, index) => (
+              <Step
+                key={step.label}
+                onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
+              >
+                <StepLabel
+                  StepIconComponent={ColorlibStepIcon}
+                  classes={{
+                    root: classes.rootStepLabel,
+                    completed: classes.rootStepLabelCompleted,
+                    active: classes.rootStepLabelActive,
+                    label: classes.rootStepLabel
+                  }}
+                >
+                  {step.label}
+                </StepLabel>
+                <StepContent classes={{ root: classes.rootConnector }}>
+                  <p>{step.description}</p>
+                </StepContent>
+              </Step>
+            ))}
+          </Stepper>
+        </Grid>
       </Grid>
       <PopupPack onClickOpen={openPopupNewPack} onClickCancel={() => setOpenPopupNewPack(false)} isAdd />
       <PopupPack onClickOpen={openPopupEditPack} onClickCancel={() => setOpenPopupEditPack(false)} />
