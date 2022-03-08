@@ -40,18 +40,21 @@ const dataValue = [
 const listTabs = [
   {
     choose: <a>Choose location</a>,
+    title: "Location",
     infor:
-      <div>
+      <li>
         <p><span>Strata: </span>Urban</p>
         <p><span>Location: </span>Ho Chi Minh, Dong Nai, Bien Hoa, Vung Tau, Binh Duong.</p>
-      </div>
+      </li>
   },
   {
     choose: <a>Choose economic class</a>,
-    infor: <div><p><span>Economic class: </span>Economic class A, Economic class B, Economic class C.</p></div>
+    title: "Economic class",
+    infor: <li><p><span>Economic class: </span>Economic class A, Economic class B, Economic class C.</p></li>
   },
   {
     choose: <a>Choose age coverage</a>,
+    title: "Age coverage",
     infor: <a>Choose age coverage</a>,
   },
 ]
@@ -79,8 +82,9 @@ const Target = () => {
               onChange={handleChange}
               classes={{ root: classes.toggleButtonGroup }}
             >
-              {dataValue.map((item) => (
+              {dataValue.map((item, index) => (
                 <ToggleButton
+                  key={index}
                   value={item.value}
                   classes={{
                     root: classes.toggleButton,
@@ -93,7 +97,7 @@ const Target = () => {
                 </ToggleButton>
               ))}
             </ToggleButtonGroup>
-            <p><div />popular choices.</p>
+            <p><span />popular choices.</p>
           </Grid>
         </Grid>
         <p className={classes.code}>Sample size cost:<span>$1999</span></p>
@@ -109,7 +113,8 @@ const Target = () => {
           }}>
           {listTabs.map((item, index) => (
             <Tab
-              icon={<img src={ImgTab} alt="" title="sss"/>}
+              title={item.title} 
+              icon={<img src={ImgTab} alt="" />}
               key={index}
               classes={{
                 selected: classes.selectedTab,
@@ -120,13 +125,13 @@ const Target = () => {
           ))}
         </Tabs>
         <TabPanelImg value={value} index={0}>
-          <Location/>
+          <Location />
         </TabPanelImg>
         <TabPanelImg value={value} index={1}>
-          <EconomicClass/>
+          <EconomicClass />
         </TabPanelImg>
         <TabPanelImg value={value} index={2}>
-          <AgeCoverage/>
+          <AgeCoverage />
         </TabPanelImg>
       </Grid>
     </Grid>

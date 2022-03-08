@@ -11,6 +11,7 @@ import Footer from "components/Footer";
 import TabPanel from "components/TabPanel";
 import SetupSurvey from "./SetupSurvey";
 import Target from "./Target";
+import Quotas from "./Quotas";
 
 const listTabs = ['Setup survey', 'Target', 'Quotas', 'Payment & Billing', 'Report']
 
@@ -58,7 +59,7 @@ const Survey = () => {
             <Target/>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            Item Three
+            <Quotas/>
           </TabPanel>
           <TabPanel value={value} index={3}>
             Item Three

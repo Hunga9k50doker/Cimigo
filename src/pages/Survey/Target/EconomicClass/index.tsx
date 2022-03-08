@@ -13,11 +13,11 @@ const EconomicClass = () => {
         <p>Choose economic class</p>
         <div>
           <Grid className={classes.rootCheck} container spacing={2}>
-          {checks.map((item) => {
+          {checks.map((item, index) => {
             return (
               <Grid item xs={6}>
                 <FormControlLabel
-                  key={item}
+                  key={index}
                   control={
                     <Checkbox
                       classes={{ root: classes.rootCheckbox }}

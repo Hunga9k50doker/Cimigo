@@ -23,7 +23,7 @@ function TabPanelImg(props: TabPanelProps) {
             background: "#FFFFFF",
             border: "1px solid rgba(28, 28, 28, 0.2)",
             padding: "36px 80px",
-
+            borderRadius: value === 0 ? "0px 4px 4px 4px" : value === 1 ? "4px" : "4px 0px 4px 4px"
           }}
         >
           <div>{children}</div>

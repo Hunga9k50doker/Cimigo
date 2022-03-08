@@ -2,6 +2,11 @@
   display: flex;
   align-items: center;
 }
+.rootCheckbox {
+  img {
+    border-radius: 4px;
+  }
+}
 .rootStrata > p {
   font-weight: 600;
   font-size: 16px;
@@ -53,7 +58,7 @@
 .rootLocation {
   border: 1px solid #c4c4c4;
   border-radius: 4px;
-  margin-top: 25px;
+  margin: 25px 0px;
 }
 .rootLocation > p {
   background: #1f61a9;
@@ -79,5 +84,64 @@
     letter-spacing: 0.015em;
     color: #333333;
     margin-right: 40px;
+  }
+}
+.rootBody {
+  display: flex;
+}
+.rootSelect {
+  width: 29%;
+  border-right: 1px solid #c4c4c4;
+}
+.rootBtn {
+  display: flex;
+  justify-content: flex-end;
+}
+.selected {
+  background-color: rgba(28, 28, 28, 0.05) !important;
+  padding-right: 30px !important;
+}
+.rootPrimary {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #1c1c1c;
+}
+.rootCheckboxLocation {
+  padding: 10px;
+  margin-left: -10px;
+  img {
+    border-radius: 4px;
+  }
+}
+.rootLevel {
+  width: 70%;
+  margin: 0px 40px;
+}
+.rootLevel > p {
+  border-bottom: 1px solid rgba(197, 189, 189, 0.48);
+  padding-bottom: 1px;
+}
+.rootSwitch {
+  margin-left: 40px;
+}
+.checkedSwitch {
+  color: #7c9911 !important;
+}
+.trackSwitchOn {
+  background: #a6cc17 !important;
+}
+.trackSwitchOff {
+  background: rgba(28, 28, 28, 0.4) !important;
+}
+.checkLocation {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 15px;
+  max-width: 450px;
+  label {
+    margin: 0 !important;
   }
 }

@@ -95,10 +95,10 @@ const AgeCoverage = () => {
             <p>Choose age of child</p>
             <Grid classes={{ root: classes.checkAgeChild }}>
               <Grid classes={{ root: classes.checkAgeChild1 }}>
-                {checkAgeChild.slice(0, 3).map((item) => {
+                {checkAgeChild.slice(0, 3).map((item, index) => {
                   return (
                     <FormControlLabel
-                      key={item}
+                      key={index}
                       control={
                         <Checkbox
                           classes={{ root: classes.rootCheckbox }}
@@ -111,10 +111,10 @@ const AgeCoverage = () => {
                 })}
               </Grid>
               <Grid classes={{ root: classes.checkAgeChild2 }}>
-                {checkAgeChild.slice(3, 6).map((item) => {
+                {checkAgeChild.slice(3, 6).map((item, index) => {
                   return (
                     <FormControlLabel
-                      key={item}
+                      key={index}
                       control={
                         <Checkbox
                           classes={{ root: classes.rootCheckbox }}

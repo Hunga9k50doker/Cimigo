@@ -32,7 +32,7 @@
 .size > div {
   margin-top: 27px;
 }
-.size > div > p > div {
+.size > div > p > span {
   width: 10px;
   height: 10px;
   background: #a6cc17;
@@ -121,13 +121,22 @@
   width: 300px;
   height: 150px;
 }
-.iconWrapper::after {
-  content: "ssssssssssss";
-  display: block;
-  width: 100px;
-  height: 100px;
-  position: relative;
-  background-color: rgb(0, 0, 0);
+.rootTab::before {
+  content: attr(title);
+  display: flex;
+  align-items: center;
+  padding: 0px 15px;
+  width: 120px;
+  height: 25px;
+  position: absolute;
+  top: 10px;
+  background: #1f61a9;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 0px 4px 4px 0px;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 15px;
+  color: #ffffff;
 }
 .selectedTab {
   background: #ffffff;
@@ -137,9 +146,10 @@
   border-bottom: none;
   margin-bottom: 0px;
   padding-bottom: 21px;
-  div {
+  li {
     padding: 5px 15px;
     width: 300px;
+    display: block;
     p {
       text-align: start;
       font-style: normal;
