@@ -12,6 +12,7 @@ import TabPanel from "components/TabPanel";
 import SetupSurvey from "./SetupSurvey";
 import Target from "./Target";
 import Quotas from "./Quotas";
+import PaymentBilling from "./PaymentBilling";
 
 const listTabs = ['Setup survey', 'Target', 'Quotas', 'Payment & Billing', 'Report']
 
@@ -53,19 +54,19 @@ const Survey = () => {
         </Tabs>
         <Grid className={classes.bodyTab}>
           <TabPanel value={value} index={0}>
-            <SetupSurvey/>
+            <SetupSurvey />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <Target/>
+            <Target />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <Quotas/>
+            <Quotas />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            Item Three
+            <PaymentBilling />
           </TabPanel>
           <TabPanel value={value} index={4}>
-            Item Three
+            Report
           </TabPanel>
         </Grid>
       </Grid>

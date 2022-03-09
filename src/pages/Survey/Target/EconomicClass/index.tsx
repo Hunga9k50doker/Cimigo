@@ -15,9 +15,8 @@ const EconomicClass = () => {
           <Grid className={classes.rootCheck} container spacing={2}>
           {checks.map((item, index) => {
             return (
-              <Grid item xs={6}>
+              <Grid item xs={6} key={index}>
                 <FormControlLabel
-                  key={index}
                   control={
                     <Checkbox
                       classes={{ root: classes.rootCheckbox }}

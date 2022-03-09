@@ -1,0 +1,89 @@
+.title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #1c1c1c;
+  span {
+    font-weight: 700;
+  }
+}
+.body {
+  background: #fafaff;
+  border: 1px solid rgba(28, 28, 28, 0.2);
+  border-radius: 4px;
+  padding: 32px 40px;
+  margin-top: 36px;
+}
+.flex > p > span > img {
+  width: 11px;
+  margin-right: 10px;
+}
+.flex > p > span {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #1f61a9;
+  margin-left: 170px;
+}
+.flex {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  p {
+    display: flex;
+    align-items: center;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.015em;
+    color: #7c9911;
+    margin-right: 170px;
+  }
+}
+.rootbtn {
+  background: #eef0f2;
+  border-radius: 50px;
+  text-transform: none;
+  padding: 6px 8px;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #103055;
+  margin-left: 16px;
+  img {
+    width: 5px;
+    margin-right: 5px !important;
+  }
+}
+.flex1 {
+  display: flex;
+}
+.left > p {
+  display: flex;
+  align-items: center;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #7c9911;
+  margin-right: 170px;
+}
+.left > p:first-child {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.left > p > span {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #1c1c1c;
+  margin-left: 65px;
+}

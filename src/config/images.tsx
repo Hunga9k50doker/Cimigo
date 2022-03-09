@@ -24,6 +24,8 @@ import icHelp from 'assets/img/icon/ic-help.svg';
 import icUploadPack from 'assets/img/icon/ic-upload-pack.svg';
 import icAdditionalBrandList from 'assets/img/icon/ic-additional-brand-list.svg';
 import icSelect from 'assets/img/icon/ic-select.svg';
+import icSad from 'assets/img/icon/ic-sad.svg';
+import icNext from 'assets/img/icon/ic-next.svg';
 
 const images = {
   // ===================== Images =========================
@@ -52,7 +54,9 @@ const images = {
   icHelp,
   icUploadPack,
   icAdditionalBrandList,
-  icSelect
+  icSelect,
+  icSad,
+  icNext
 }
 
 export default images
