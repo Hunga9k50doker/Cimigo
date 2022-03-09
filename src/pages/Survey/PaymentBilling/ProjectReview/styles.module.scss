@@ -1,3 +1,7 @@
+.root {
+  max-width: 1000px;
+  margin: auto;
+}
 .title {
   font-style: normal;
   font-weight: normal;
@@ -16,35 +20,23 @@
   padding: 32px 40px;
   margin-top: 36px;
 }
-.flex > p > span > img {
-  width: 11px;
-  margin-right: 10px;
-}
-.flex > p > span {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 20px;
-  letter-spacing: 0.015em;
-  color: #1f61a9;
-  margin-left: 170px;
-}
 .flex {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
-  p {
+  margin-right: 150px;
+  div {
     display: flex;
     align-items: center;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 20px;
-    letter-spacing: 0.015em;
-    color: #7c9911;
-    margin-right: 170px;
+    p {
+      margin-right: 170px;
+    }
   }
+}
+.flexCenter {
+  display: flex;
+  align-items: center;
 }
 .rootbtn {
   background: #eef0f2;
@@ -63,8 +55,48 @@
 }
 .flex1 {
   display: flex;
+  justify-content: space-between;
 }
-.left > p {
+.text {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #000000;
+}
+.textSub {
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 120%;
+  letter-spacing: 0.05em;
+  color: rgba(28, 28, 28, 0.65);
+  margin-top: 16px;
+  margin-bottom: 27px;
+}
+.textSub1 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: rgba(28, 28, 28, 0.65);
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+.textBlue {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #1f61a9;
+  img {
+    width: 11px;
+    margin-right: 10px;
+  }
+}
+.textGreen {
   display: flex;
   align-items: center;
   font-style: normal;
@@ -73,17 +105,114 @@
   line-height: 20px;
   letter-spacing: 0.015em;
   color: #7c9911;
-  margin-right: 170px;
 }
-.left > p:first-child {
-  margin-top: 20px;
-  margin-bottom: 30px;
-}
-.left > p > span {
+.textBlack {
   font-weight: 600;
   font-size: 16px;
   line-height: 140%;
   letter-spacing: 0.015em;
   color: #1c1c1c;
-  margin-left: 65px;
+}
+.left > div:first-child {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  p {
+    margin-right: 66px;
+  }
+}
+.flex2 {
+  border-left: 1px dashed rgba(28, 28, 28, 0.2);
+  padding-left: 16px;
+  margin-left: 10px;
+  margin-top: 10px;
+  div {
+    display: flex;
+    align-items: center;
+    a {
+      font-style: italic;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 140%;
+      letter-spacing: 0.015em;
+      text-decoration-line: underline;
+      color: #1f61a9;
+    }
+  }
+  div:first-child {
+    p {
+      margin-right: 93px;
+    }
+  }
+  div:last-child {
+    p {
+      margin-right: 77px;
+    }
+  }
+}
+.right {
+  border-left: 1px dashed rgba(28, 28, 28, 0.2);
+  padding-left: 16px;
+  margin-left: 10px;
+}
+.right > div {
+  display: flex;
+  &:not(:last-child) {
+    margin-bottom: 24px;
+  }
+}
+.bascInfor > p {
+  margin-right: 40px;
+}
+.pack > p {
+  margin-right: 146px;
+}
+.brandList > p {
+  margin-right: 108px;
+}
+.attribute > p {
+  margin-right: 25px;
+}
+.infor {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #000000;
+}
+.box {
+  display: flex;
+  justify-content: center;
+  div {
+    margin: 0px 20px;
+    display: grid;
+    justify-items: center;
+    span {
+      width: 48px;
+      height: 48px;
+      background: #c4c4c4;
+    }
+    p {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 140%;
+      text-align: center;
+      letter-spacing: 0.015em;
+      color: #1f61a9;
+      margin-top: 5px;
+    }
+  }
+}
+.btn {
+  margin-top: 24px;
+  button {
+    display: flex;
+    margin: auto;
+  }
+  p {
+    text-align: center;
+  }
 }

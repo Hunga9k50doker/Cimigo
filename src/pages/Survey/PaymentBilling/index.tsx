@@ -10,7 +10,7 @@ const steps = ['Project review', 'Payment'];
 const PaymentBilling = () => {
   const [activeStep, setActiveStep] = useState(0);
 
-  const handleNextStep = () => {
+  const handleNextStep = () => {    
     steps.map((_, index) => setActiveStep(index))
   }
   return (
@@ -23,7 +23,7 @@ const PaymentBilling = () => {
         >
           {steps.map((label, index) => {
             return (
-              <Step key={label}>
+              <Step key={index}>
                 <StepLabel
                   StepIconComponent={QontoStepIcon}
                   classes={{
@@ -37,7 +37,7 @@ const PaymentBilling = () => {
             );
           })}
         </Stepper>
-        {activeStep === 0 ? <ProjectReview/> : <Payment/>}  
+        {activeStep === 0 ? <ProjectReview onConfirm={() => handleNextStep()}/> : <Payment/>}  
     </Grid>
   )
 }

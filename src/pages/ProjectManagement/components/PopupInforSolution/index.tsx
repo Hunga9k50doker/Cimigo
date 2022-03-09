@@ -8,14 +8,14 @@ import Images from "config/images";
 
 
 
-interface PopupCreateFolderProps {
+interface PopupPopupInforSolution {
   onClickCancel?: () => void,
   onClickOpen?: boolean,
   onSubmit?: () => void,
 }
 
 
-const PopupInforSolution = memo((props: PopupCreateFolderProps) => {
+const PopupInforSolution = memo((props: PopupPopupInforSolution) => {
   const { onClickCancel, onClickOpen, onSubmit } = props;
 
   return (

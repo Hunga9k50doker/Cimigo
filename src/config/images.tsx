@@ -26,10 +26,16 @@ import icAdditionalBrandList from 'assets/img/icon/ic-additional-brand-list.svg'
 import icSelect from 'assets/img/icon/ic-select.svg';
 import icSad from 'assets/img/icon/ic-sad.svg';
 import icNext from 'assets/img/icon/ic-next.svg';
+import icOrder from 'assets/img/icon/ic-order.svg';
+import icBank from 'assets/img/icon/ic-bank.svg';
+import icTip from 'assets/img/icon/ic-tip.svg';
 
 const images = {
   // ===================== Images =========================
+  icOrder,
+  icBank,
   icDelete,
+  icTip,
   icEdit,
   icMove,
   icRename,
