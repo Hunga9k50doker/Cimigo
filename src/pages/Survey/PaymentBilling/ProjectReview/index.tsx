@@ -4,11 +4,11 @@ import classes from './styles.module.scss';
 import Images from "config/images";
 import Buttons from "components/Buttons";
 
-interface PopupPopupInforSolution {
+interface ProjectReviewProps {
   onConfirm?: () => void,
 }
 
-const ProjectReview = (props: PopupPopupInforSolution) => {
+const ProjectReview = (props: ProjectReviewProps) => {
   const { onConfirm } = props;
   
   return (

@@ -64,6 +64,7 @@
   font-size: 14px;
   letter-spacing: 0.015em;
   border: none !important;
+  text-transform: none;
 }
 .selectedButton {
   background-color: #1f61a9 !important;
@@ -161,6 +162,48 @@
       span {
         font-weight: 600;
       }
+    }
+  }
+}
+// .sizeCustom {
+// }
+.rootButton {
+  display: flex;
+  align-items: center;
+  border: 1px solid #1f61a9;
+  border-radius: 50px;
+  max-height: 32px;
+  fieldset {
+    border: none;
+  }
+  div {
+    width: 127px;
+    border-radius: 50px 0px 0px 50px;
+  }
+  input {
+    padding: 5px 7px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 140%;
+    letter-spacing: 0.015em;
+  }
+  button {
+    height: 32px;
+    border-radius: 0px 50px 50px 0px;
+    background: #1f61a9;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.08em;
+    color: #fafaff;
+    text-transform: none;
+    padding: 0px 10px;
+    &:hover {
+      background: var(--cimigo-blue-light);
+    }
+    span:first-child {
+      margin-right: 6px;
     }
   }
 }

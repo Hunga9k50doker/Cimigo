@@ -7,6 +7,8 @@ import {
   Badge,
   Tabs,
   Tab,
+  OutlinedInput,
+  Button,
 } from "@mui/material"
 
 import ImgTab from 'assets/img/img-tab.png';
@@ -14,6 +16,8 @@ import TabPanelImg from "components/TabPanelImg";
 import Location from "./Location";
 import EconomicClass from "./EconomicClass";
 import AgeCoverage from "./AgeCoverage";
+import Buttons from "components/Buttons";
+import images from "config/images";
 
 function a11yProps(index: number) {
   return {
@@ -62,6 +66,7 @@ const listTabs = [
 const Target = () => {
   const [alignment, setAlignment] = useState();
   const [value, setValue] = useState(0);
+  const [showInput, setShowInput] = useState(false);
 
   const handleChangeTab = (e, newValue: number) => {
     setValue(newValue);
@@ -96,6 +101,23 @@ const Target = () => {
                   </Badge>
                 </ToggleButton>
               ))}
+              
+              
+                {/* {showInput ?
+                  <Grid classes={{ root: classes.rootButton }}>
+                    <OutlinedInput fullWidth placeholder="Custom" onChange={(e) => {
+                      console.log(e, "sss")
+                    }}></OutlinedInput>
+                    <Button onClick={() => setShowInput(false)} startIcon={<img src={images.icSaveWhite} alt="" />}>Save</Button>
+                  </Grid>
+                  :
+                  <ToggleButton classes={{
+                    root: classes.toggleButton,
+                    selected: classes.selectedButton,
+                  }} value={""} onClick={() => setShowInput(true)}>Custom
+                  </ToggleButton>
+                } */}
+              
             </ToggleButtonGroup>
             <p><span />popular choices.</p>
           </Grid>
@@ -113,7 +135,7 @@ const Target = () => {
           }}>
           {listTabs.map((item, index) => (
             <Tab
-              title={item.title} 
+              title={item.title}
               icon={<img src={ImgTab} alt="" />}
               key={index}
               classes={{

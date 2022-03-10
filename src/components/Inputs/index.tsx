@@ -45,7 +45,7 @@ const Inputs = memo((props: InputsProps) => {
   const { ref: refInput, ...inputProps } = inputRef || { ref: null }
 
   return (
-    <FormControl className={classes.root} fullWidth>
+    <FormControl className={classes.root}>
       <Typography classes={{ root: classes.textTitle }}>{title} {optional ? <span className={classes.optional}>(optional)</span> : ""}</Typography>
       <OutlinedInput
         type={!toggleEyes ? type : 'text'}
@@ -54,7 +54,6 @@ const Inputs = memo((props: InputsProps) => {
         defaultValue={defaultValue}
         value={value}
         variant="standard"
-        fullWidth
         classes={{ root: classes.rootInput, input: classes.inputTextfield }}
         className={className}
         autoComplete={autoComplete}

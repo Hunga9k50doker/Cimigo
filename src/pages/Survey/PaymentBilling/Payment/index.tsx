@@ -5,7 +5,12 @@ import images from "config/images";
 import Inputs from "components/Inputs";
 import Buttons from "components/Buttons";
 
-const Payment = () => {
+interface PaymentProps {
+  onConfirm?: () => void,
+}
+
+const Payment = (props: PaymentProps) => {
+  const { onConfirm } = props
 
   return (
     <Grid classes={{ root: classes.root }}>
@@ -66,7 +71,7 @@ const Payment = () => {
               label="Save for later"
             />
             <Tooltip classes={{ tooltip: classes.popper }} placement="right" title="This information will be used to automatically fill out the form in subsequent payments.">
-              <img src={images.icTip} alt=""/>
+              <img src={images.icTip} alt="" />
             </Tooltip>
           </Grid>
         </form>
@@ -81,8 +86,8 @@ const Payment = () => {
           <div className={classes.flexOrder}>
             <span>Eye tracking</span>
             <span>$99</span>
-          </div>     
-          <Divider/>
+          </div>
+          <Divider />
           <div className={classes.flexOrder}>
             <span>Sample size</span>
             <span>$99</span>
@@ -90,15 +95,15 @@ const Payment = () => {
           <div className={classes.flexOrder}>
             <span>Eye tracking</span>
             <span>$99</span>
-          </div>     
-          <Divider/>
+          </div>
+          <Divider />
           <div className={classes.flexTotal}>
             <span>Total (USD)</span>
             <a>$218.9</a>
           </div>
-          <span>(4,599,000 VND)</span>     
+          <span>(4,599,000 VND)</span>
         </Grid>
-        <Buttons children={"Place order"} btnType="Blue" width="100%" padding="16px" className={classes.btn}/>
+        <Buttons onClick={onConfirm} children={"Place order"} btnType="Blue" width="100%" padding="16px" className={classes.btn} />
       </Grid>
     </Grid>
   )
