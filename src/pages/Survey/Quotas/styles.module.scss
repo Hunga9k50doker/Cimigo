@@ -1,0 +1,89 @@
+.title {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+  color: #1f61a9;
+  margin-bottom: 13px;
+}
+.subTitle {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #1c1c1c;
+  margin-bottom: 15px;
+}
+.tableProvinces {
+  border-radius: 4px;
+  border: 1px solid #dddddd;
+  border-collapse: unset !important;
+  margin-top: 30px;
+  margin-bottom: 40px;
+}
+.tableHead {
+  th {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.015em;
+    color: #17497f;
+    padding: 16px 30px;
+  }
+}
+.tableBody {
+  td {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: 0.015em;
+    color: #1c1c1c;
+    padding: 16px 30px;
+  }
+}
+.rowTotal {
+  background: #e8f1fb;
+  border-radius: 0px 0px 4px 4px;
+  td {
+    font-weight: 700 !important;
+  }
+}
+
+.noSetup {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  padding: 150px 0px;
+  p {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 49px;
+    letter-spacing: -0.02em;
+    color: rgba(28, 28, 28, 0.4);
+    padding-top: 30px;
+    padding-bottom: 18px;
+  }
+  span {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+    text-align: center;
+    letter-spacing: 0.015em;
+    color: rgba(28, 28, 28, 0.65);
+    padding-bottom: 32px;
+  }
+  a {
+    font-style: italic;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+    text-align: center;
+    letter-spacing: 0.015em;
+    text-decoration-line: underline;
+    color: #1f61a9;
+  }
+}

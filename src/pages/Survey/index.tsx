@@ -8,11 +8,11 @@ import {
 
 import Header from "components/Header";
 import Footer from "components/Footer";
-// import { routes } from 'routers/routes';
-import Container from "components/Container";
-import Images from "config/images";
 import TabPanel from "components/TabPanel";
 import SetupSurvey from "./SetupSurvey";
+import Target from "./Target";
+import Quotas from "./Quotas";
+import PaymentBilling from "./PaymentBilling";
 
 const listTabs = ['Setup survey', 'Target', 'Quotas', 'Payment & Billing', 'Report']
 
@@ -54,19 +54,19 @@ const Survey = () => {
         </Tabs>
         <Grid className={classes.bodyTab}>
           <TabPanel value={value} index={0}>
-            <SetupSurvey/>
+            <SetupSurvey />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            Item Two
+            <Target />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            Item Three
+            <Quotas />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            Item Three
+            <PaymentBilling />
           </TabPanel>
           <TabPanel value={value} index={4}>
-            Item Three
+            Report
           </TabPanel>
         </Grid>
       </Grid>

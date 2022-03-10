@@ -15,7 +15,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField
+  OutlinedInput,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
+  StepConnector
 } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -26,14 +31,15 @@ import Inputs from "components/Inputs";
 import ImgPack from "assets/img/img-pack.svg"
 import PopupPack from "../components/PopupPack";
 import PopupDeletePack from "../components/PopupDeletePack";
-import clsx from "clsx";
 import Buttons from "components/Buttons";
 import PopupManatoryAttributes from "../components/PopupManatoryAttributes";
 import PopupPreDefinedList from "../components/PopupPre-definedList";
+import PopupAddAttributes from "../components/PopupAddAttribute";
+import ColorlibStepIcon from "../components/ColorlibStepIcon";
 
 const ExpandIcon = (props) => {
   return (
-    <img src={Images.icSelectBlue} alt="" {...props}/>
+    <img src={Images.icSelectBlue} alt="" {...props} />
   )
 };
 
@@ -45,9 +51,11 @@ const SetupSurvey = () => {
   const [openPopupEditPack, setOpenPopupEditPack] = useState(false)
   const [openPopupMandatory, setOpenPopupMandatory] = useState(false)
   const [openPopupPreDefined, setOpenPopupPreDefined] = useState(false)
+  const [openPopupAddAttributes, setOpenPopupAddAttributes] = useState(false)
   const [selected, setSelected] = useState()
   const [addRow, setAddRow] = useState(false)
   const [select, setSelect] = useState<any>();
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -92,6 +100,27 @@ const SetupSurvey = () => {
       manufacturer: "ChupaChups",
     },
   ]
+
+  const steps = [
+    {
+      label: 'Basic information',
+      description: `For each ad campaign that you create, you can control how much
+                you're willing to spend on clicks and conversions, which networks
+                and geographical locations you want your ads to show on, and more.`,
+    },
+    {
+      label: 'Upload your pack',
+      description:
+        'An ad group contains one or more ads which target a shared set of keywords.',
+    },
+    {
+      label: 'Additional brand list',
+      description: `Try out different ad text to see what brings in the most customers,
+                and learn how to enhance your ads using features like ad extensions.
+                If you run into any problems with your ads, find out how to tell if
+                they're running and how to resolve approval issues.`,
+    },
+  ];
 
   const handleListItemClick = (index) => {
     setSelected(index);
@@ -194,44 +223,29 @@ const SetupSurvey = () => {
                     </TableRow>
                   )
                 })}
-                {addRow ?
+                {addRow &&
                   <TableRow>
                     <TableCell>
-                      <TextField
+                      <OutlinedInput
                         placeholder="Add text"
-                        classes={{ root: classes.rootTextfield }}
-                        InputProps={{
-                          disableUnderline: true,
-                          classes: {
-                            input: classes.inputTextfield
-                          },
-                        }} />
+                        classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                      />
                     </TableCell>
                     <TableCell>
-                      <TextField
+                      <OutlinedInput
                         placeholder="Add text"
-                        classes={{ root: classes.rootTextfield }}
-                        InputProps={{
-                          disableUnderline: true,
-                          classes: {
-                            input: classes.inputTextfield
-                          },
-                        }} />
+                        classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                      />
                     </TableCell>
                     <TableCell>
-                      <TextField
+                      <OutlinedInput
                         placeholder="Add text"
-                        classes={{ root: classes.rootTextfield }}
-                        InputProps={{
-                          disableUnderline: true,
-                          classes: {
-                            input: classes.inputTextfield
-                          },
-                        }} />
+                        classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                      />
                     </TableCell>
                     <TableCell align="center"><Buttons padding="7px" width="100%" btnType="TransparentBlue" ><img src={Images.icSave} alt="" />Save</Buttons></TableCell>
                   </TableRow>
-                  : ""}
+                }
                 <TableRow hover className={classes.btnAddBrand} onClick={() => setAddRow(true)}>
                   <TableCell colSpan={4} variant="footer" align="center" scope="row"><div><img src={Images.icAddBlue} /> Add new brand</div></TableCell>
                 </TableRow>
@@ -281,8 +295,8 @@ const SetupSurvey = () => {
               </ListItem>
             ))}
           </Grid>
-          <Grid classes={{root: classes.select }}>
-            <FormControl classes={{root: classes.rootSelect }}>
+          <Grid classes={{ root: classes.select }}>
+            <FormControl classes={{ root: classes.rootSelect }}>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -291,30 +305,61 @@ const SetupSurvey = () => {
                 displayEmpty
                 onChange={(e) => setSelect(e?.target.value)}
                 defaultValue={""}
-                classes={{select: classes.selectType, icon: classes.icSelect}}
-                IconComponent={ExpandIcon}             
+                classes={{ select: classes.selectType, icon: classes.icSelect }}
+                IconComponent={ExpandIcon}
               >
                 <MenuItem disabled value="">Add new attributes</MenuItem>
-                <MenuItem value={20}>From pre-defined list</MenuItem>
-                <MenuItem value={30}>Your own attribute</MenuItem>
+                <MenuItem value={20} onClick={() => setOpenPopupPreDefined(true)}>From pre-defined list</MenuItem>
+                <MenuItem value={30} onClick={() => setOpenPopupAddAttributes(true)}>Your own attribute</MenuItem>
               </Select>
             </FormControl>
             <p>You can only add maximum of 6 attributes.</p>
           </Grid>
-          <Grid classes={{root: classes.tip }}>
-            <img src={Images.icTipGray} alt=""/>
+          <Grid classes={{ root: classes.tip }}>
+            <img src={Images.icTipGray} alt="" />
             <p><span>Tip:</span> We recommend you include attributes that test the brand positioning or messages you wish to communicate to consumers through your pack design. You may also think about what your key competitor is trying to communicate in their pack design.</p>
           </Grid>
         </Grid>
       </Grid>
       <Grid item xs={3}>
-
+        <Grid className={classes.summary}>
+          <p>Summary</p>
+          <Stepper
+            activeStep={activeStep}
+            orientation="vertical"
+            classes={{ root: classes.rootSteper }}
+            connector={<StepConnector classes={{ root: classes.rootConnector, active: classes.activeConnector }} />}
+          >
+            {steps.map((step, index) => (
+              <Step
+                key={step.label}
+                onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
+              >
+                <StepLabel
+                  StepIconComponent={ColorlibStepIcon}
+                  classes={{
+                    root: classes.rootStepLabel,
+                    completed: classes.rootStepLabelCompleted,
+                    active: classes.rootStepLabelActive,
+                    label: classes.rootStepLabel
+                  }}
+                >
+                  {step.label}
+                </StepLabel>
+                <StepContent classes={{ root: classes.rootConnector }}>
+                  <p>{step.description}</p>
+                </StepContent>
+              </Step>
+            ))}
+          </Stepper>
+        </Grid>
       </Grid>
       <PopupPack onClickOpen={openPopupNewPack} onClickCancel={() => setOpenPopupNewPack(false)} isAdd />
       <PopupPack onClickOpen={openPopupEditPack} onClickCancel={() => setOpenPopupEditPack(false)} />
       <PopupDeletePack onClickOpen={openPopupDeletePack} onClickCancel={() => setOpenPopupDeletePack(false)} />
-      <PopupManatoryAttributes onClickOpen={openPopupMandatory} onClickCancel={() => setOpenPopupMandatory(false)}/>
-      <PopupPreDefinedList onClickOpen={openPopupPreDefined} onClickCancel={() => setOpenPopupPreDefined(false)}/>
+      <PopupManatoryAttributes onClickOpen={openPopupMandatory} onClickCancel={() => setOpenPopupMandatory(false)} />
+      <PopupPreDefinedList onClickOpen={openPopupPreDefined} onClickCancel={() => setOpenPopupPreDefined(false)} />
+      <PopupAddAttributes onClickOpen={openPopupAddAttributes} onClickCancel={() => setOpenPopupAddAttributes(false)} />
     </Grid>
   );
 };

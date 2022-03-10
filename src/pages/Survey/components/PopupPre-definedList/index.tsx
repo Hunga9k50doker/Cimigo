@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Checkbox, Dialog, Grid, IconButton, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { Checkbox, Dialog, Grid, IconButton, ListItem, ListItemText } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
@@ -51,9 +51,7 @@ const PopupPreDefinedList = memo((props: PopupCreateFolderProps) => {
   const { onClickCancel, onClickOpen } = props;
   const [check, setCheck] = useState()
 
-  const handleListItemClick = (e) => {
-    console.log(e, "sss");
-    
+  const handleListItemClick = (e) => {    
     setCheck(e);
   };
 
@@ -85,7 +83,6 @@ const PopupPreDefinedList = memo((props: PopupCreateFolderProps) => {
                     <Grid>
                       <Checkbox
                         onChange={(e) => handleListItemClick(e.target.checked)}
-                        checked={check}
                         classes={{ root: classes.rootCheckbox }}
                         icon={<img src={Images.icCheck} alt="" />}
                         checkedIcon={<img src={Images.icCheckActive} alt="" />} />

@@ -1,4 +1,4 @@
-import { Box, MenuItem } from "@mui/material";
+import { Box, IconButton, MenuItem } from "@mui/material";
 import React, { memo, useEffect, useState, useRef } from "react";
 import classes from './styles.module.scss';
 import cimigoLogo from 'assets/img/cimigo_logo.svg';
@@ -10,6 +10,7 @@ import PopoverMenu from "components/PopoverMenu";
 import Container from "components/Container";
 import Buttons from "components/Buttons";
 import { routes } from "routers/routes";
+import images from "config/images";
 
 interface HeaderProps {
 
@@ -85,23 +86,36 @@ const Header = memo((props: HeaderProps) => {
         </a>
         <nav className={classes.navBar}>
           <ul className={classes.listMenu}>
-            <div className={classes.listItem}>
-              {dataList.map(item => (
-                <li key={item.name} className={classes.item}>
-                  <a className={classes.routerItem}>
-                    {item.name}
-                  </a>
-                </li>
-              ))}
-            </div>
-            <li className={classes.item}>
-              <a href={cimigoUrl} className={classes.btnLogin}>
-                <Buttons btnType="TransparentBlue" children="Log in" padding="6px 16px" onClick={() => history.push(routes.login)}/>
-              </a>
-              <a href={cimigoUrl}>
-                <Buttons btnType="Blue" children="Register" padding="7px 16px" onClick={() => history.push(routes.register)}/>
-              </a>
-            </li>
+            {isLoggedIn ? "" :
+              <div className={classes.listItem}>
+                {dataList.map(item => (
+                  <li key={item.name} className={classes.item}>
+                    <a className={classes.routerItem}>
+                      {item.name}
+                    </a>
+                  </li>
+                ))}
+              </div>
+            }
+            {isLoggedIn ?
+              <li className={classes.item}>
+                <IconButton>
+                  <img src={images.icHelp} alt="" />
+                </IconButton>
+                <IconButton>
+                  <img src={images.icProfile} alt="" />
+                </IconButton>
+              </li>
+              :
+              <li className={classes.item}>
+                <a href={cimigoUrl} className={classes.btnLogin}>
+                  <Buttons btnType="TransparentBlue" children="Log in" padding="6px 16px" onClick={() => history.push(routes.login)} />
+                </a>
+                <a href={cimigoUrl}>
+                  <Buttons btnType="Blue" children="Register" padding="7px 16px" onClick={() => history.push(routes.register)} />
+                </a>
+              </li>
+            }
           </ul>
         </nav>
       </Container>

@@ -1,0 +1,47 @@
+.root {
+  max-width: 800px;
+  margin: auto;
+  display: block;
+}
+.root > img {
+  margin: 15px auto 22px auto;
+  display: block;
+}
+.title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 49px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: #1f61a9;
+  margin-bottom: 32px;
+}
+.textGreen {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 49px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: #7c9911;
+}
+.textBlue {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+  color: #17497f;
+  margin-bottom: 25px;
+  margin-top: 8px;
+}
+.subTitle {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: 0.015em;
+  color: #1c1c1c;
+}

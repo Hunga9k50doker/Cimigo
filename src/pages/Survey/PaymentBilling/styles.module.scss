@@ -1,0 +1,30 @@
+.rootStepper {
+  padding: 50px 0px;
+  width: 40%;
+  margin: auto;
+  min-width: 400px;
+}
+.rootStepLabel {
+  font-weight: 400;
+  font-size: 16px;
+  color: rgba(28, 28, 28, 0.4);
+}
+.rootStepLabelCompleted {
+  color: #53660C !important;
+  font-weight: 600;
+  font-size: 16px;
+}
+.rootStepLabelActive {
+  color: #53660C !important;
+  font-weight: 600;
+  font-size: 16px;
+}
+.rootConnector {
+  top: 16px !important;
+  margin: 0px 7px !important;
+}
+.activeConnector {
+  span {
+    border-color: #7C9911;
+  }
+}

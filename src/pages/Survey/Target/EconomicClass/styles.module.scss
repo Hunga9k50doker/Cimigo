@@ -1,0 +1,38 @@
+.rootLocation {
+  border: 1px solid #c4c4c4;
+  border-radius: 4px;
+  margin-bottom: 25px;
+  max-width: 782px;
+}
+.rootLocation > p {
+  background: #1f61a9;
+  border-radius: 4px 4px 0px 0px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #ffffff;
+  padding: 8px;
+}
+.rootBtn {
+  display: flex;
+  justify-content: flex-end;
+}
+.rootCheckbox {
+  img {
+    border-radius: 4px;
+  }
+}
+.rootCheck {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin: 25px auto;
+  label {
+    margin: 0 !important;
+  }
+}
+.rootCheck > div{
+  max-width: 40%;
+}

@@ -1,0 +1,209 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 45px;
+}
+.code {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+}
+.code > span {
+  background-color: #a6cc17;
+  padding: 6px 14px;
+  margin-left: 5px;
+}
+.size {
+  display: flex;
+  align-items: center;
+}
+.size > p {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #333333;
+  padding-right: 30px;
+}
+.size > div {
+  margin-top: 27px;
+}
+.size > div > p > span {
+  width: 10px;
+  height: 10px;
+  background: #a6cc17;
+  border: 1px solid #ffffff;
+  margin-right: 4px;
+  border-radius: 100%;
+}
+.size > div > p {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 15px;
+  color: rgba(28, 28, 28, 0.65);
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+}
+.toggleButtonGroup {
+  border-radius: 0;
+  display: flex;
+}
+.toggleButton {
+  margin-right: 8px;
+  border-radius: 50px !important;
+  background: #eef0f2;
+  padding: 4px 16px;
+  color: #1c1c1c;
+  font-weight: normal;
+  font-size: 14px;
+  letter-spacing: 0.015em;
+  border: none !important;
+  text-transform: none;
+}
+.selectedButton {
+  background-color: #1f61a9 !important;
+  color: #fafaff !important;
+}
+.badge {
+  border: 1px solid #ffffff;
+  top: -3px;
+  right: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+}
+.body {
+  display: grid;
+  justify-content: center;
+}
+.rootTabs {
+  z-index: 22;
+  position: relative;
+  top: 1px;
+}
+.rootTab {
+  background: #eef0f2;
+  height: auto;
+  border-radius: 4px 4px 0px 0px;
+  text-transform: none;
+  font-weight: 500;
+  font-size: 20px;
+  color: #1c1c1c;
+  padding: 0;
+  margin-bottom: 21px;
+  display: grid;
+  align-items: start;
+  a {
+    font-style: italic;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: 0.015em;
+    text-decoration-line: underline;
+    color: #1f61a9;
+    text-align: center;
+    padding-top: 39px;
+    padding-bottom: 48px;
+  }
+}
+.rootTab:not(:last-child) {
+  margin-right: 21px;
+}
+.indicatorTabs {
+  display: none;
+}
+.iconWrapper {
+  width: 300px;
+  height: 150px;
+}
+.rootTab::before {
+  content: attr(title);
+  display: flex;
+  align-items: center;
+  padding: 0px 15px;
+  width: 120px;
+  height: 25px;
+  position: absolute;
+  top: 10px;
+  background: #1f61a9;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 0px 4px 4px 0px;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 15px;
+  color: #ffffff;
+}
+.selectedTab {
+  background: #ffffff;
+  height: auto;
+  color: #103055 !important;
+  border: 1px solid rgba(28, 28, 28, 0.2);
+  border-bottom: none;
+  margin-bottom: 0px;
+  padding-bottom: 21px;
+  li {
+    padding: 5px 15px;
+    width: 300px;
+    display: block;
+    p {
+      text-align: start;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      letter-spacing: 0.015em;
+      color: #1c1c1c;
+      span {
+        font-weight: 600;
+      }
+    }
+  }
+}
+// .sizeCustom {
+// }
+.rootButton {
+  display: flex;
+  align-items: center;
+  border: 1px solid #1f61a9;
+  border-radius: 50px;
+  max-height: 32px;
+  fieldset {
+    border: none;
+  }
+  div {
+    width: 127px;
+    border-radius: 50px 0px 0px 50px;
+  }
+  input {
+    padding: 5px 7px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 140%;
+    letter-spacing: 0.015em;
+  }
+  button {
+    height: 32px;
+    border-radius: 0px 50px 50px 0px;
+    background: #1f61a9;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.08em;
+    color: #fafaff;
+    text-transform: none;
+    padding: 0px 10px;
+    &:hover {
+      background: var(--cimigo-blue-light);
+    }
+    span:first-child {
+      margin-right: 6px;
+    }
+  }
+}

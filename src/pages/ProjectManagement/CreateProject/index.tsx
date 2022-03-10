@@ -148,15 +148,15 @@ const CreateProject = () => {
               ))}
             </Stack>
             <Grid className={classes.body}>
-              {cards.map((item) => (
+              {cards.map((item, index) => (
                 <>{item.type === 1 ?
-                  <Grid className={classes.card} onClick={() => setOpenPopup(true)}>
+                  <Grid key={index} className={classes.card} onClick={() => setOpenPopup(true)}>
                     <img src={item.icon} alt="" />
                     <p>{item.title}</p>
                     <span>{item.info}</span>
                   </Grid>
                   :
-                  <Grid className={classes.cardComing}>
+                  <Grid key={index} className={classes.cardComing}>
                     <div>Coming soon</div>
                     <img src={item.icon} alt="" />
                     <p>{item.title}</p>
