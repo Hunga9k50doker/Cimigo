@@ -6,6 +6,8 @@ import {
 import Select, { components, DropdownIndicatorProps } from 'react-select';
 import classes from './styles.module.scss';
 import icCaretDown from 'assets/img/icon/ic-caret-down-grey.svg'
+import { Controller } from 'react-hook-form';
+import { StateManagerProps } from 'react-select/dist/declarations/src/stateManager';
 
 const customStyles = {
   indicatorSeparator: () => ({
@@ -35,30 +37,45 @@ const DropdownIndicator = (props: DropdownIndicatorProps) => {
 interface InputSelectProps {
   title?: string,
   name?: string,
-  value?: any,
-  defaultValue?: any,
-  options?: any,
-  onChange?: any,
   errorMessage?: string | null,
-  className?: string,
-  placeholder?: string,
+  control?: any,
+  bindKey?: string,
+  bindLabel?: string,
+  selectProps?: StateManagerProps
 }
 
-const InputSelect = memo((props: InputSelectProps, ref) => {
-  const { title, placeholder, onChange, options, defaultValue, value, errorMessage, name, className, ...rest } = props;
-
+const InputSelect = memo((props: InputSelectProps) => {
+  const { title, errorMessage, name, control, bindKey, bindLabel, selectProps } = props;
+  
   return (
     <FormControl classes={{ root: classes.container }} >
       {title && <Typography classes={{ root: classes.textTitle }}>{title}</Typography>}
-      <Select
-        defaultValue={defaultValue}
-        onChange={onChange}
-        options={options}
-        placeholder={placeholder}
-        styles={customStyles}
-        components={{ DropdownIndicator }}
-
-      />
+      {
+        control ? (
+          <>
+            <Controller
+              name={name}
+              control={control}
+              render={({ field }) => <Select 
+                {...field} 
+                styles={customStyles}
+                getOptionValue={(option) => option[bindKey || 'id']}
+                getOptionLabel={(option) => option[bindLabel || 'name']}
+                components={{ DropdownIndicator }}
+                {...selectProps}
+              />}
+            />
+          </>
+        ) : (
+          <>
+            <Select
+              styles={customStyles}
+              components={{ DropdownIndicator }}
+              {...selectProps}
+            />
+          </>
+        )
+      }
       {errorMessage && <Typography classes={{ root: classes.textError }}>{errorMessage}</Typography>}
     </FormControl>
   );

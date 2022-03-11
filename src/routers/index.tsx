@@ -23,8 +23,8 @@ const Routers = () => {
         <PublicRoute exact path={routes.register} component={Register}/>
         <PublicRoute exact path={routes.forgotPassword} component={ForgotPassword}/>
         <PublicRoute exact path={routes.resetPassword} component={ResetPassword}/>
-        <PublicRoute exact path={routes.project.management} component={ProjectManagement}/>
-        <PublicRoute exact path={routes.project.newManagement} component={CreateProject}/>
+        <PrivateRoute exact path={routes.project.management} component={ProjectManagement}/>
+        <PublicRoute exact path={routes.project.create} component={CreateProject}/>
         <PublicRoute exact path={routes.survey.setup} component={Survey}/>
         <Redirect to={routes.login} />
       </Switch>

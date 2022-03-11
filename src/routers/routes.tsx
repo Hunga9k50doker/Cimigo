@@ -14,7 +14,7 @@ export const routes = {
   resetPassword: '/reset-password',
   project: {
     management: '/projects',
-    newManagement: '/projects/create',
+    create: '/projects/create',
     detail: '/project/:id',
   },
   survey: {

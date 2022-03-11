@@ -9,20 +9,42 @@ import Inputs from "components/Inputs";
 import icGoogle from 'assets/img/icon/ic-google.svg';
 import InputSelect from "components/InputsSelect";
 import Buttons from "components/Buttons";
-import { useState } from "react";
-import Select from 'react-select';
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import CountryService from "services/country";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { OptionItem } from "models/general";
 
 const schema = yup.object().shape({
-
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup.string().email().required(),
+  password: yup.string().min(8).required(),
+  countryId: yup.object().shape({
+    id: yup.number().required(),
+    name: yup.string().required()
+  }).required(),
+  isNotify: yup.bool(),
+  company: yup.string().required(),
 });
 
 interface FormData {
-
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  countryId: number;
+  isNotify: boolean;
+  company: number;
 }
 
 const Login = () => {
-  const [valueSelect, setValueSelect] = useState(null)
-  const { register, handleSubmit, formState: { errors }, getValues } = useForm<FormData>({
+
+  const [countries, setCountries] = useState<OptionItem[]>([])
+  
+  const dispatch = useDispatch()
+  
+  const { register, handleSubmit, control, formState: { errors }, getValues } = useForm<FormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
@@ -31,11 +53,21 @@ const Login = () => {
 
   };
 
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ]
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(setLoading(true))
+      const data = await CountryService.getCountries({take: 9999})
+        .catch((e) => {
+          dispatch(setErrorMess(e))
+          return null
+        })
+      setCountries(data?.data || [])
+      dispatch(setLoading(false))
+    }
+    fetchData()
+  }, [dispatch])
+
+  
 
   return (
     <Grid className={classes.root}>
@@ -49,6 +81,8 @@ const Login = () => {
               name="name"
               placeholder="Your first name"
               type="text"
+              inputRef={register('firstName')}
+              errorMessage={errors.firstName?.message}
             />
           </Grid>
           <Grid item xs={6}>
@@ -57,6 +91,8 @@ const Login = () => {
               name="name"
               placeholder="Your last name"
               type="text"
+              inputRef={register('lastName')}
+              errorMessage={errors.lastName?.message}
             />
           </Grid>
         </Grid>
@@ -66,13 +102,18 @@ const Login = () => {
           type="password"
           showEyes
           placeholder="Enter your password"
+          inputRef={register('password')}
+          errorMessage={errors.password?.message}
         />
         <InputSelect
           title="Country"
-          defaultValue={valueSelect}
-          onChange={setValueSelect}
-          options={options}
-          placeholder="- Select your country -"
+          name="countryId"
+          control={control}
+          selectProps={{
+            options: countries,
+            placeholder: "Select your country"
+          }}
+          errorMessage={errors.countryId?.message}
         />
         <Inputs
           title="Phone number"

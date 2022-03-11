@@ -136,7 +136,7 @@ const ProjectManagement = () => {
           <Grid item xs={9} className={classes.right}>
             <Grid className={classes.header}>
               <InputSearch placeholder="Search" width="25%"/>
-              <Buttons onClick={() => history.push(routes.project.newManagement)} btnType="Blue" padding="16px"><img src={Images.icAddWhite} alt=""/>Create project</Buttons>
+              <Buttons onClick={() => history.push(routes.project.create)} btnType="Blue" padding="16px"><img src={Images.icAddWhite} alt=""/>Create project</Buttons>
             </Grid>
             <TableContainer className={classes.table}>
               <Table>

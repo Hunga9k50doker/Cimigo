@@ -1,4 +1,4 @@
-import api from '../configApi';
+import api from './configApi';
 import { API } from 'config/constans';
 import { LoginForm, SocialLoginData } from 'models/user';
 

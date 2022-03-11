@@ -14,7 +14,7 @@ const Google = () => {
     const userInfo = res as GoogleLoginResponse
     dispatch(userSocialLogin({
       token: userInfo.tokenId,
-        provider: SocialProvider.GOOGLE
+      provider: SocialProvider.GOOGLE
     }))
   }
 

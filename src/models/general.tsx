@@ -15,6 +15,11 @@ export interface OptionItem {
   name: string;
 }
 
+export interface PaginationParams {
+  take?: number;
+  page?: number;
+}
+
 export interface Meta {
   take: number;
   itemCount: number;

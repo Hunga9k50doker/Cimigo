@@ -51,7 +51,12 @@ const PopupPack = memo((props: PopupCreateFolderProps) => {
                   <Inputs title='Pack Name' name='' placeholder='Enter custom pack name' infor='This name will be used in the report' />
                 </Grid>
                 <Grid item xs={6}>
-                  <InputSelect title='Pack type' placeholder="-- Select a pack type --" />
+                  <InputSelect 
+                    title='Pack type' 
+                    selectProps={{
+                      placeholder: "-- Select a pack type --"
+                    }}
+                  />
                 </Grid>
               </Grid>
             </Grid>
