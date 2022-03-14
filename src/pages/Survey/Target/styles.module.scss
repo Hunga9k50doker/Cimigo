@@ -2,7 +2,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 45px;
+  max-width: 942px;
+  margin: auto auto 45px auto;
 }
 .code {
   font-style: normal;
@@ -53,12 +54,14 @@
 .toggleButtonGroup {
   border-radius: 0;
   display: flex;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 .toggleButton {
   margin-right: 8px;
   border-radius: 50px !important;
   background: #eef0f2;
-  padding: 4px 16px;
+  padding: 7px 16px;
   color: #1c1c1c;
   font-weight: normal;
   font-size: 14px;
@@ -99,6 +102,8 @@
   margin-bottom: 21px;
   display: grid;
   align-items: start;
+  width: 300px;
+  border: 1px solid transparent;
   a {
     font-style: italic;
     font-weight: normal;

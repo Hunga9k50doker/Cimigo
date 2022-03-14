@@ -1,4 +1,4 @@
-import { Box, IconButton, MenuItem } from "@mui/material";
+import { Box, IconButton, Menu, MenuItem } from "@mui/material";
 import React, { memo, useEffect, useState, useRef } from "react";
 import classes from './styles.module.scss';
 import cimigoLogo from 'assets/img/cimigo_logo.svg';
@@ -22,7 +22,16 @@ const Header = memo((props: HeaderProps) => {
   const anchorRef = useRef(null);
   const [isOpen, setOpen] = useState(false);
   const [isScrolling, setScrolling] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openProfile = Boolean(anchorEl);
 
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const handleScroll = () => {
     setScrolling(window.scrollY !== 0)
   }
@@ -99,12 +108,27 @@ const Header = memo((props: HeaderProps) => {
             }
             {isLoggedIn ?
               <li className={classes.item}>
-                <IconButton>
+                <IconButton className={classes.itemBtn}>
                   <img src={images.icHelp} alt="" />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={handleClick} className={classes.itemBtn}>
                   <img src={images.icProfile} alt="" />
                 </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={openProfile}
+                  onClose={handleClose}
+                  classes={{ paper: classes.menuProfile }}
+                >
+                  <MenuItem className={classes.itemAciton}>
+                    <img src={images.icProfile} alt="" />
+                    <p>My account</p>
+                  </MenuItem>
+                  <MenuItem className={classes.itemAciton}>
+                    <img src={images.icLogout} alt="" />
+                    <p>Log out</p>
+                  </MenuItem>
+                </Menu>
               </li>
               :
               <li className={classes.item}>

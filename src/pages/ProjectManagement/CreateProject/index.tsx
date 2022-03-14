@@ -171,18 +171,18 @@ const CreateProject = () => {
           <Grid className={classes.form}>
             <p className={classes.title}>Solution: Pack test</p>
             <a className={classes.textLink} href="">Choose another solution</a>
-            <Inputs name="" type="" placeholder="Enter your project name" title="Project name"/>
-            <p className={classes.textInfo}>Pack test specific information<span> (optional)</span><br/><a>You may modify these later</a></p>
-            <Inputs name="" type="" placeholder="e.g. C7727 On Demand" title="Category"/>
-            <Inputs name="" type="" placeholder="Enter your product brand name" title="Brand"/>
-            <Inputs name="" type="" placeholder="Enter your product variant" title="Variant"/>
-            <Inputs name="" type="" placeholder="Enter product manufacturer" title="Manufacturer"/>
-            <Buttons children="Create project" btnType="Blue" width="100%" padding="16px"/>
+            <Inputs name="" type="" placeholder="Enter your project name" title="Project name *" />
+            <p className={classes.textInfo}>Pack test specific information<span> (optional)</span><br /><a>You may modify these later</a></p>
+            <Inputs name="" type="" placeholder="e.g. C7727 On Demand" title="Category" />
+            <Inputs name="" type="" placeholder="Enter your product brand name" title="Brand" />
+            <Inputs name="" type="" placeholder="Enter your product variant" title="Variant" />
+            <Inputs name="" type="" placeholder="Enter product manufacturer" title="Manufacturer" />
+            <Buttons children="Create project" btnType="Blue" width="100%" padding="16px" />
           </Grid>
         }
       </Container>
       <Footer />
-      <PopupInforSolution onClickOpen={openPopup} onSubmit={() => handleNextStep()} onClickCancel={() => setOpenPopup(false)}/>
+      <PopupInforSolution onClickOpen={openPopup} onSubmit={() => handleNextStep()} onClickCancel={() => setOpenPopup(false)} />
     </Grid>
   );
 };

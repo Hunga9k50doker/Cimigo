@@ -22,14 +22,14 @@ const PopupCreateFolder = memo((props: PopupCreateFolderProps) => {
       open={onClickOpen}
       classes={{ paper: classes.paper }}
     >
-      <Grid>
+      <Grid classes={{root: classes.root}}>
         <Grid className={classes.header}>
           <p className={classes.title}>Create a folder</p>
           <IconButton onClick={onClickCancel}>
             <img src={Images.icClose} alt=''/>
           </IconButton>
         </Grid>
-        <Inputs name='name' placeholder='Enter folder name' className={classes.input}/>
+        <Inputs name='name' placeholder='Enter folder name'/>
         <Grid className={classes.btn}>
           <Buttons children="Cancel" btnType='TransparentBlue' padding='13px 16px' onClick={onClickCancel}/>
           <Buttons children="Create folder" btnType='Blue' padding='13px 16px' />

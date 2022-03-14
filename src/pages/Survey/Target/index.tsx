@@ -9,6 +9,8 @@ import {
   Tab,
   OutlinedInput,
   Button,
+  List,
+  ListItemButton,
 } from "@mui/material"
 
 import ImgTab from 'assets/img/img-tab.png';
@@ -67,7 +69,11 @@ const Target = () => {
   const [alignment, setAlignment] = useState();
   const [value, setValue] = useState(0);
   const [showInput, setShowInput] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(1);
 
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+  };
   const handleChangeTab = (e, newValue: number) => {
     setValue(newValue);
   };
@@ -79,46 +85,39 @@ const Target = () => {
       <Grid className={classes.header}>
         <Grid className={classes.size}>
           <p>Choose sample size:</p>
+
           <Grid>
-            <ToggleButtonGroup
-              orientation="horizontal"
-              value={alignment}
-              exclusive
-              onChange={handleChange}
-              classes={{ root: classes.toggleButtonGroup }}
-            >
+            <List component="nav" aria-label="main mailbox folders" className={classes.toggleButtonGroup}>
               {dataValue.map((item, index) => (
-                <ToggleButton
+                <ListItemButton
+                  selected={selectedIndex === index}
+                  onClick={(event) => handleListItemClick(event, index)}
                   key={index}
-                  value={item.value}
                   classes={{
                     root: classes.toggleButton,
                     selected: classes.selectedButton,
                   }}
-                >
-                  <Badge color="secondary" invisible={item.popular} variant="dot" classes={{ dot: classes.badge }}>
+                ><Badge color="secondary" invisible={item.popular} variant="dot" classes={{ dot: classes.badge }}>
                     {item.value}
                   </Badge>
-                </ToggleButton>
+                </ListItemButton>
               ))}
-              
-              
-                {/* {showInput ?
-                  <Grid classes={{ root: classes.rootButton }}>
-                    <OutlinedInput fullWidth placeholder="Custom" onChange={(e) => {
-                      console.log(e, "sss")
-                    }}></OutlinedInput>
-                    <Button onClick={() => setShowInput(false)} startIcon={<img src={images.icSaveWhite} alt="" />}>Save</Button>
-                  </Grid>
-                  :
-                  <ToggleButton classes={{
+              {showInput ?
+                <Grid classes={{ root: classes.rootButton }}>
+                  <OutlinedInput fullWidth placeholder="Custom" onChange={(e) => {
+                    console.log(e, "sss")
+                  }}></OutlinedInput>
+                  <Button onClick={() => setShowInput(false)} startIcon={<img src={images.icSaveWhite} alt="" />}>Save</Button>
+                </Grid>
+                :
+                <ListItemButton
+                  classes={{
                     root: classes.toggleButton,
                     selected: classes.selectedButton,
-                  }} value={""} onClick={() => setShowInput(true)}>Custom
-                  </ToggleButton>
-                } */}
-              
-            </ToggleButtonGroup>
+                  }} onClick={() => setShowInput(true)}>Custom
+                </ListItemButton>
+              }
+            </List>
             <p><span />popular choices.</p>
           </Grid>
         </Grid>

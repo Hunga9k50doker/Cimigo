@@ -1,6 +1,7 @@
 import { useState } from "react";
 import classes from './styles.module.scss';
 import {
+  FormControl,
   Grid,
   IconButton,
   List,
@@ -10,6 +11,7 @@ import {
   ListSubheader,
   Menu,
   MenuItem,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -30,10 +32,16 @@ import LabelStatus from "components/LableStatus";
 import InputSearch from "components/InputSearch";
 import PopupCreateFolder from "./components/PopupCreateFolder";
 
+const ExpandIcon = (props) => {
+  return (
+    <img src={Images.icSelectBlue} alt="" {...props} />
+  )
+};
+
 const ProjectManagement = () => {
   const history = useHistory();
 
-  const [selectedIndex, setSelectedIndex] = useState();
+  const [select, setSelect] = useState<any>();
   const [openPopup, setOpenPopup] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -77,10 +85,6 @@ const ProjectManagement = () => {
     }
   ]
 
-  const handleListItemClick = (index) => {
-    setSelectedIndex(index);
-  };
-
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
   };
@@ -109,23 +113,20 @@ const ProjectManagement = () => {
               {dataList.map((item, index) => (
                 <ListItem
                   key={index}
-                  secondaryAction={selectedIndex === index ?
-                    <>
+                  classes={{ root: classes.rootList }}
+                  secondaryAction={
+                    <div className={classes.btnAction}>
                       <IconButton classes={{ root: classes.iconAction }} edge="end" aria-label="Edit">
                         <img src={Images.icRename} alt="" />
                       </IconButton>
                       <IconButton classes={{ root: classes.iconAction }} edge="end" aria-label="Delete">
                         <img src={Images.icDelete} alt="" />
                       </IconButton>
-                    </> : ""
+                    </div>
                   }
                   disablePadding
                 >
-                  <ListItemButton
-                    selected={selectedIndex === index}
-                    onClick={() => handleListItemClick(index)}
-                    classes={{ selected: classes.selected }}
-                  >
+                  <ListItemButton>
                     <ListItemText primary={item.name} />
                   </ListItemButton>
                 </ListItem>
@@ -135,8 +136,26 @@ const ProjectManagement = () => {
           </Grid>
           <Grid item xs={9} className={classes.right}>
             <Grid className={classes.header}>
-              <InputSearch placeholder="Search" width="25%"/>
-              <Buttons onClick={() => history.push(routes.project.create)} btnType="Blue" padding="16px"><img src={Images.icAddWhite} alt=""/>Create project</Buttons>
+              <div>
+                <FormControl classes={{ root: classes.rootSelect }}>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    variant="outlined"
+                    value={select}
+                    displayEmpty
+                    onChange={(e) => setSelect(e?.target.value)}
+                    defaultValue={""}
+                    classes={{ select: classes.selectType, icon: classes.icSelect }}
+                    IconComponent={ExpandIcon}
+                  >
+                    <MenuItem disabled value="">All statuses</MenuItem>
+                  </Select>
+                </FormControl>
+                <InputSearch placeholder="Search" width="55%" />
+              </div>
+
+              <Buttons onClick={() => history.push(routes.project.create)} btnType="Blue" padding="16px"><img src={Images.icAddWhite} alt="" />Create project</Buttons>
             </Grid>
             <TableContainer className={classes.table}>
               <Table>
@@ -161,12 +180,12 @@ const ProjectManagement = () => {
                 </TableHead>
                 <TableBody>
                   {dataTable.map((item, index) => (
-                    <TableRow key={index} className={classes.tableBody}>
+                    <TableRow hover key={index} className={classes.tableBody} onClick={() => history.push(routes.survey.setup)}>
                       <TableCell>{item.projectName}</TableCell>
                       <TableCell><LabelStatus typeStatus={item.status} /></TableCell>
                       <TableCell>{item.lastModified}</TableCell>
                       <TableCell>{item.solution}</TableCell>
-                      <TableCell align="center">
+                      <TableCell align="center" onClick={e => e.stopPropagation()}>
                         <IconButton onClick={handleClick}>
                           <MoreHorizIcon />
                         </IconButton>
@@ -203,7 +222,7 @@ const ProjectManagement = () => {
         </Grid>
       </Container>
       <Footer />
-      <PopupCreateFolder onClickOpen={openPopup} onClickCancel={() => setOpenPopup(false)}/>
+      <PopupCreateFolder onClickOpen={openPopup} onClickCancel={() => setOpenPopup(false)} />
     </Grid>
   );
 };

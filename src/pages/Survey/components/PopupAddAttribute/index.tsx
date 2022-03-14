@@ -45,11 +45,13 @@ const PopupAddAttributes = memo((props: PopupCreateFolderProps) => {
                   <Grid item xs={4} className={classes.listTextLeft}>
                     <p>Start point label</p>
                     <OutlinedInput
+                    fullWidth
                       placeholder='Enter start point label in English'
                       classes={{ root: classes.rootinput, input: classes.input }}
                     />
                     <OutlinedInput
                       placeholder='Enter local language translation'
+                      fullWidth
                       classes={{ root: classes.rootinput2, input: classes.input2 }}
                       endAdornment={<InputAdornment position="end">
                         <Tooltip title="The local language translation will be used in the survey to elicit responses from consumers." placement="top-start"><img src={Images.icTranslation} alt="" /></Tooltip>
@@ -63,10 +65,12 @@ const PopupAddAttributes = memo((props: PopupCreateFolderProps) => {
                     <p>End point label</p>
                     <OutlinedInput
                       placeholder='Enter end point label in English'
+                      fullWidth
                       classes={{ root: classes.rootinput, input: classes.input }}
                     />
                     <OutlinedInput
                       placeholder='Enter local language translation'
+                      fullWidth
                       classes={{ input: classes.input2 }}
                       endAdornment={<InputAdornment position="end">
                         <Tooltip title="The local language translation will be used in the survey to elicit responses from consumers." placement="top"><img src={Images.icTranslation} alt="" /></Tooltip>
