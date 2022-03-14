@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classes from './styles.module.scss';
 import {
   FormControl,
@@ -36,6 +36,7 @@ import PopupManatoryAttributes from "../components/PopupManatoryAttributes";
 import PopupPreDefinedList from "../components/PopupPre-definedList";
 import PopupAddAttributes from "../components/PopupAddAttribute";
 import ColorlibStepIcon from "../components/ColorlibStepIcon";
+import LabelStatus from "../components/LableStatus";
 
 const ExpandIcon = (props) => {
   return (
@@ -56,6 +57,22 @@ const SetupSurvey = () => {
   const [addRow, setAddRow] = useState(false)
   const [select, setSelect] = useState<any>();
   const [activeStep, setActiveStep] = useState(0);
+  const [isScrolling, setScrolling] = useState(false);
+
+  const handleScroll = () => {
+    setScrolling(window.scrollY !== 0)
+  }
+
+  function _handleScroll(e: any) {
+    handleScroll();
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', _handleScroll);
+    return () => {
+      window.removeEventListener('scroll', _handleScroll);
+    }
+  }, [])
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -127,7 +144,7 @@ const SetupSurvey = () => {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} >
       <Grid item xs={9}>
         <p className={classes.title}>Setup your pack test survey</p>
         <p className={classes.subTitle}>1.Basic information</p>
@@ -150,26 +167,33 @@ const SetupSurvey = () => {
           <Grid className={classes.packs}>
             {[0, 1, 2].map((_, index) => (
               <Grid className={classes.itemPacks} key={index}>
-                <IconButton onClick={handleClick}><MoreVertIcon sx={{ color: "white" }} /></IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  classes={{ paper: classes.menuAction }}
-                >
-                  <MenuItem className={classes.itemAciton} onClick={() => setOpenPopupEditPack(true)}>
-                    <img src={Images.icEdit} alt="" />
-                    <p>Edit</p>
-                  </MenuItem>
-                  <MenuItem className={classes.itemAciton} onClick={() => setOpenPopupDeletePack(true)}>
-                    <img src={Images.icDelete} alt="" />
-                    <p>Delete</p>
-                  </MenuItem>
-                </Menu>
-                <img src={ImgPack} alt="" />
+                <Grid>
+                  <IconButton onClick={handleClick}><MoreVertIcon sx={{ color: "white" }} /></IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    classes={{ paper: classes.menuAction }}
+                  >
+                    <MenuItem className={classes.itemAciton} onClick={() => setOpenPopupEditPack(true)}>
+                      <img src={Images.icEdit} alt="" />
+                      <p>Edit</p>
+                    </MenuItem>
+                    <MenuItem className={classes.itemAciton} onClick={() => setOpenPopupDeletePack(true)}>
+                      <img src={Images.icDelete} alt="" />
+                      <p>Delete</p>
+                    </MenuItem>
+                  </Menu>
+                  <img src={ImgPack} alt="" />
+                  <div className={classes.itemInfor}>
+                    <div><p style={{paddingRight: 82}}>Brand: </p><span>Four'N Twenty</span></div>
+                    <div><p style={{paddingRight: 72}}>Variant: </p><span>Classic Meat Pie</span></div>
+                    <div><p style={{paddingRight: 18}}>Manufacturer: </p><span>Patties Foods</span></div>
+                  </div>
+                </Grid>
                 <Grid className={classes.textPacks}>
                   <p>Holland's Green pack</p>
-                  <span>Current pack</span>
+                  <LabelStatus typeStatus="currentPack"/>
                 </Grid>
               </Grid>
             ))}
@@ -263,22 +287,22 @@ const SetupSurvey = () => {
                 component="div"
                 key={index}
                 classes={{ root: classes.rootListItem }}
-                secondaryAction={selected === index ?
-                  <>
+                secondaryAction={
+                  <div className={classes.btnAction}>
                     <IconButton classes={{ root: classes.iconAction }} edge="end" aria-label="Edit">
                       <img src={Images.icRename} alt="" />
                     </IconButton>
                     <IconButton classes={{ root: classes.iconAction }} edge="end" aria-label="Delete">
                       <img src={Images.icDelete} alt="" />
                     </IconButton>
-                  </> : ""
+                  </div>
                 }
                 disablePadding
               >
                 <ListItemButton
-                  selected={selected === index}
+                  // selected={selected === index}
                   onClick={() => handleListItemClick(index)}
-                  classes={{ selected: classes.selected }}
+                  // classes={{ selected: classes.selected }}
                 >
                   <Grid className={classes.listFlex}>
                     <Grid item xs={4} className={classes.listTextLeft}>
@@ -321,9 +345,9 @@ const SetupSurvey = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={3}>
-        <Grid className={classes.summary}>
-          <p>Summary</p>
+      <Grid item xs={3} style={{position: "relative"}}>
+        <Grid className={isScrolling ? classes.summaryScroll : classes.summary}>
+          <p className={classes.textSummary}>Summary</p>
           <Stepper
             activeStep={activeStep}
             orientation="vertical"

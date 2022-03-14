@@ -3,17 +3,16 @@
   width: 550px;
   max-width: 550px;
 }
+.root > div:nth-child(2){
+  margin: 24px auto 35px auto;
+  width: 60% !important;
+  display: block;
+}
 .title {
   margin: 0;
   font-weight: 600;
   font-size: 22px;
   color: #08182A;
-}
-.input {
-  width: 60%;
-  margin: auto;
-  margin-top: 24px;
-  margin-bottom: 40px;
 }
 .header {
   display: flex;

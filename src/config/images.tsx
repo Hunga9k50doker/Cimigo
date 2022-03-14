@@ -32,10 +32,14 @@ import icBank from 'assets/img/icon/ic-bank.svg';
 import icTip from 'assets/img/icon/ic-tip.svg';
 import imgOrder from 'assets/img/img-order.svg';
 import imgPayment from 'assets/img/img-payment-completed.svg';
+import icError from 'assets/img/icon/ic-error.svg';
+import icLogout from 'assets/img/icon/ic-logout.svg';
 
 const images = {
   // ===================== Images =========================
   icOrder,
+  icLogout,
+  icError,
   icBank,
   icDelete,
   icTip,

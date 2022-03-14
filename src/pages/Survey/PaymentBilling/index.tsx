@@ -11,7 +11,7 @@ const steps = ['Project review', 'Payment'];
 
 const PaymentBilling = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(0);
 
   const handleNextStep = () => {
     steps.map((_, index) => setActiveStep(index))

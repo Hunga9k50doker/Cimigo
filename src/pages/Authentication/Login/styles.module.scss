@@ -1,8 +1,8 @@
 .root {
-  background-color: #FAFAFF;
+  background-color: #fafaff;
 }
 .body {
-  background-color: #FFF;
+  background-color: #fff;
   height: auto;
   max-width: 470px;
   margin: 70px auto 180px;
@@ -10,12 +10,25 @@
   padding: 48px;
 }
 .textLogin {
-  color: #1F61A9;
+  color: #1f61a9;
   font-weight: 700;
   font-size: 24px;
   text-align: center;
   margin: 0;
   margin-bottom: 25px;
+}
+.errorText {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 140%;
+  display: block;
+  text-align: center;
+  color: #af1c10;
+  padding: 4px 0px;
+  background: rgba(175, 28, 16, 0.08);
+  border-radius: 2px;
+  margin-bottom: 24px;
 }
 .checkbox {
   display: flex;
@@ -25,26 +38,26 @@
 }
 .linkText {
   font-size: 12px;
-  color: #1F61A9;
+  color: #1f61a9;
   font-style: italic;
   text-align: center;
 }
 .labelCheckbox {
   font-size: 12px !important;
   color: rgba(28, 28, 28, 0.65);
-  font-weight: 300; 
+  font-weight: 300;
 }
 .separator {
   padding: 22px 0px;
   display: flex;
   align-items: center;
   &:before {
-    content: ' ';
+    content: " ";
     flex: 1;
     border-bottom: 1px solid rgba(28, 28, 28, 0.2);
   }
   &:after {
-    content: ' ';
+    content: " ";
     flex: 1;
     border-bottom: 1px solid rgba(28, 28, 28, 0.2);
   }
@@ -57,14 +70,12 @@
   }
 }
 .icGoogle {
-  
   border: 1px solid rgba(28, 28, 28, 0.2);
   border-radius: 50px;
   text-transform: none;
   width: max-content;
   font-size: 14px;
-  color: #1C1C1C;
+  color: #1c1c1c;
   padding: 3px 13px;
   margin: 0px auto 25px;
-
 }

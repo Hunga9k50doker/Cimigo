@@ -2,11 +2,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
-import { Box, Button, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Inputs from "components/Inputs";
-import icGoogle from 'assets/img/icon/ic-google.svg';
 import Buttons from "components/Buttons";
 import { routes } from 'routers/routes';
 import { LoginForm } from "models/user";
@@ -63,6 +62,7 @@ const Login = () => {
       .finally(() => dispatch(setLoading(false)))
 
   }
+  const checkRequired = errors.email?.type === "required" && errors.password?.type === "required"
 
   return (
     <Grid className={classes.root}>
@@ -76,7 +76,7 @@ const Login = () => {
             placeholder="Enter your email address"
             type="text"
             inputRef={register('email')}
-            errorMessage={errors.email?.message}
+            errorMessage={!checkRequired && errors.email?.message}
           />
           <Inputs
             title="Password"
@@ -85,7 +85,7 @@ const Login = () => {
             showEyes
             placeholder="Enter your password"
             inputRef={register('password')}
-            errorMessage={errors.password?.message}
+            errorMessage={!checkRequired && errors.password?.message}
           />
           <Grid className={classes.checkbox}>
             <FormControlLabel
@@ -105,6 +105,10 @@ const Login = () => {
             />
             <a href={routes.forgotPassword} className={classes.linkText}>Forgot your password?</a>
           </Grid>
+          {errors.email?.type  && errors.password?.type === "required" ?
+          <Typography className={classes.errorText}>
+            Please enter a correct email and password.
+          </Typography> : ""}
           <Buttons type={'submit'} children={"LOGIN"} btnType="Blue" padding="16px 0px" />
           <div className={classes.separator}>
             <span>or login with</span>
@@ -123,7 +127,7 @@ const Login = () => {
         <Typography variant="subtitle1">
           Your account has not been verified
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "2rem"}}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "2rem" }}>
           <Buttons btnType="Blue" padding="7px 16px" onClick={onSendVerify}>Send email verify</Buttons>
         </Box>
       </Popup>

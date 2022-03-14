@@ -41,6 +41,7 @@ const InputSearch = memo(React.forwardRef((props: InputSearchProps, ref) => {
         className={className}
         placeholder={placeholder}
         name={name}
+        fullWidth
         defaultValue={defaultValue}
         value={value}
         classes={{ root: classes.rootTextField, input: classes.inputTextfield }}

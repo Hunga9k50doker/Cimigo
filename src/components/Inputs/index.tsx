@@ -3,6 +3,8 @@ import { OutlinedInput, Typography, FormControl, InputAdornment, IconButton } fr
 import classes from './styles.module.scss';
 import iconEyeOpen from 'assets/img/icon/eye-open.svg';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import clsx from 'clsx';
+import images from 'config/images';
 
 interface InputsProps {
   title?: string,
@@ -46,18 +48,19 @@ const Inputs = memo((props: InputsProps) => {
 
   return (
     <FormControl className={classes.root}>
-      <Typography classes={{ root: classes.textTitle }}>{title} {optional ? <span className={classes.optional}>(optional)</span> : ""}</Typography>
+      <Typography classes={{ root: clsx(!errorMessage ? classes.textTitle : classes.textTitleInvalid) }}>{title} {optional ? <span className={classes.optional}>(optional)</span> : ""}</Typography>
       <OutlinedInput
         type={!toggleEyes ? type : 'text'}
-        placeholder={placeholder}
+        placeholder={!errorMessage ? placeholder : "Error text field"}
+        fullWidth
         name={name}
         defaultValue={defaultValue}
         value={value}
         variant="standard"
-        classes={{ root: classes.rootInput, input: classes.inputTextfield }}
+        classes={{ root: clsx(!errorMessage ? classes.inputTextfield : classes.inputInvalid) }}
         className={className}
         autoComplete={autoComplete}
-        endAdornment={
+        endAdornment={ !errorMessage ?
         showEyes && <InputAdornment position="end">
           <IconButton
             aria-label="toggle password visibility"
@@ -65,7 +68,7 @@ const Inputs = memo((props: InputsProps) => {
             className={classes.iconEye}>
             {toggleEyes ? <img src={iconEyeOpen} alt="eye-close" /> : <VisibilityOffIcon />}
           </IconButton>
-        </InputAdornment>
+        </InputAdornment> : <img src={images.icError} alt="error" />
       }
       {...inputProps}
       inputRef={refInput}
