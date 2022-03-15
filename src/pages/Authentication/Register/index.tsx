@@ -42,7 +42,7 @@ interface DataForm {
   company: string;
 }
 
-const Login = () => {
+const Register = () => {
 
   const [countries, setCountries] = useState<OptionItem[]>([])
   const [registerSuccess, setRegisterSuccess] = useState(false)
@@ -58,15 +58,13 @@ const Login = () => {
   });
 
   const onSubmit = (data: DataForm) => {
-    console.log(data, "===data===");
     dispatch(setLoading(true))
     UserService.register({
       ...data,
       countryId: data.countryId.id
     })
-      .then((res) => {
+      .then(() => {
         setRegisterSuccess(true)
-        console.log(res, "=====");
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -221,4 +219,4 @@ const Login = () => {
     </Grid>
   );
 };
-export default Login;
+export default Register;

@@ -53,6 +53,18 @@ export class UserService {
       })
   }
 
+  static async active(code: string) {
+    return await api.post(API.AUTH.ACTIVE, {
+      code
+    })
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
   
 }
 

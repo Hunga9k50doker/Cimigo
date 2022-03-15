@@ -4,7 +4,8 @@ export const API = {
     LOGIN: '/v1.0/user/login',
     LOGIN_SOCIAL: '/v1.0/user/login/social',
     SEND_VERIFY_EMAIL: '/v1.0/user/send-verify-email',
-    REGISTER: '/v1.0/user/register'
+    REGISTER: '/v1.0/user/register',
+    ACTIVE: '/v1.0/user/active'
   },
   COUNTRY: {
     LIST: '/v1.0/country'

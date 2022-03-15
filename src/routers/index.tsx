@@ -12,6 +12,7 @@ import { routes } from './routes';
 import ScrollToTop from './ScrollToTop';
 import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
+import CallbackActiveUser from 'pages/Callback/User/Active';
 
 const Routers = () => {
 
@@ -26,6 +27,7 @@ const Routers = () => {
         <PrivateRoute exact path={routes.project.management} component={ProjectManagement}/>
         <PublicRoute exact path={routes.project.create} component={CreateProject}/>
         <PublicRoute exact path={routes.survey.setup} component={Survey}/>
+        <PublicRoute exact path={routes.callback.user.active} component={CallbackActiveUser}/>
         <Redirect to={routes.login} />
       </Switch>
     </Suspense>

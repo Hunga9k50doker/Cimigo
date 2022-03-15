@@ -2,10 +2,9 @@
 
 export const routes = {
   callback: {
-    zalo: '/callback/zalo',
     user: {
-      active: 'callback/user/active/:code',
-      forgotPassword: 'callback/user/forgot-password/:code',
+      active: '/callback/user/active/:code',
+      forgotPassword: '/callback/user/forgot-password/:code',
     }
   },
   login: '/login',

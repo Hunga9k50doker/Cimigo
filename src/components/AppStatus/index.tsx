@@ -2,7 +2,7 @@ import { Alert, Snackbar } from '@mui/material';
 import LoadingScreen from 'components/LoadingScreen';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReducerType } from 'redux/reducers';
-import { setErrorMess, setSuccessMess, clearErrorMess } from 'redux/reducers/Status/actionTypes';
+import { setSuccessMess, clearErrorMess } from 'redux/reducers/Status/actionTypes';
 
 export const AppStatus = () => {
   const dispach = useDispatch()
@@ -14,7 +14,7 @@ export const AppStatus = () => {
       <Snackbar
         open={!!status.error}
         autoHideDuration={6000}
-        onClose={() => dispach(setErrorMess(undefined))}
+        onClose={() => dispach(clearErrorMess(undefined))}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right'
