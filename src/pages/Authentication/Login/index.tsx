@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
 import UserService from "services/user";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Popup from "components/Popup";
 import { EKey } from "models/general";
 import { setUserLogin } from "redux/reducers/User/actionTypes";
@@ -21,18 +21,26 @@ import { push } from "connected-react-router";
 import Google from "components/SocialButton/Google";
 
 const schema = yup.object().shape({
-  email: yup.string().email('Email invalid').required('Email is required.'),
+  email: yup.string().email('Please enter a valid email adress').required('Email is required.'),
   password: yup.string().required('Password is required.'),
 });
 
 const Login = () => {
   const dispatch = useDispatch()
   const [isNotVerified, setIsNotVerified] = useState(false)
+  const [errorSubmit, setErrorSubmit] = useState('')
 
-  const { register, handleSubmit, formState: { errors }, getValues } = useForm<LoginForm>({
+  const { register, handleSubmit, formState: { errors }, getValues, watch } = useForm<LoginForm>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
+
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      errorSubmit && setErrorSubmit('')
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const onSubmit = (data: LoginForm) => {
     dispatch(setLoading(true))
@@ -44,7 +52,7 @@ const Login = () => {
       })
       .catch(e => {
         if (e.detail === 'notVerified') setIsNotVerified(true)
-        else dispatch(setErrorMess(e))
+        else setErrorSubmit(e.detail || e.message || e.error || "Please enter a correct email and password.")
       })
       .finally(() => dispatch(setLoading(false)))
   };
@@ -60,9 +68,7 @@ const Login = () => {
       })
       .catch(e => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
-
   }
-  const checkRequired = errors.email?.type === "required" && errors.password?.type === "required"
 
   return (
     <Grid className={classes.root}>
@@ -76,7 +82,7 @@ const Login = () => {
             placeholder="Enter your email address"
             type="text"
             inputRef={register('email')}
-            errorMessage={!checkRequired && errors.email?.message}
+            errorMessage={errors.email?.message}
           />
           <Inputs
             title="Password"
@@ -85,30 +91,35 @@ const Login = () => {
             showEyes
             placeholder="Enter your password"
             inputRef={register('password')}
-            errorMessage={!checkRequired && errors.password?.message}
+            errorMessage={errors.password?.message}
           />
           <Grid className={classes.checkbox}>
             <FormControlLabel
               classes={{
                 label: classes.labelCheckbox,
               }}
-              control={<Checkbox
-                defaultChecked
-                sx={{
-                  color: "rgba(28, 28, 28, 0.2)",
-                  '&.Mui-checked': {
+              control={
+                <Checkbox
+                  defaultChecked
+                  sx={{
                     color: "rgba(28, 28, 28, 0.2)",
-                  },
-                }}
-              />}
+                    '&.Mui-checked': {
+                      color: "rgba(28, 28, 28, 0.2)",
+                    },
+                  }}
+                />
+              }
               label="Keep me logged in"
             />
             <a href={routes.forgotPassword} className={classes.linkText}>Forgot your password?</a>
           </Grid>
-          {errors.email?.type  && errors.password?.type === "required" ?
-          <Typography className={classes.errorText}>
-            Please enter a correct email and password.
-          </Typography> : ""}
+          {
+            errorSubmit && (
+              <Typography className={classes.errorText}>
+                Please enter a correct email and password.
+              </Typography>
+            )
+          }
           <Buttons type={'submit'} children={"LOGIN"} btnType="Blue" padding="16px 0px" />
           <div className={classes.separator}>
             <span>or login with</span>

@@ -18,7 +18,7 @@ interface HeaderProps {
 
 const Header = memo((props: HeaderProps) => {
   const history = useHistory()
-  const { isLoggedIn } = UseAuth();
+  const { isLoggedIn, logout } = UseAuth();
   const anchorRef = useRef(null);
   const [isOpen, setOpen] = useState(false);
   const [isScrolling, setScrolling] = useState(false);
@@ -124,7 +124,7 @@ const Header = memo((props: HeaderProps) => {
                     <img src={images.icProfile} alt="" />
                     <p>My account</p>
                   </MenuItem>
-                  <MenuItem className={classes.itemAciton}>
+                  <MenuItem className={classes.itemAciton} onClick={logout}>
                     <img src={images.icLogout} alt="" />
                     <p>Log out</p>
                   </MenuItem>

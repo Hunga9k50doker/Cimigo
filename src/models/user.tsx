@@ -83,3 +83,15 @@ export interface SocialLoginData {
     token: string,
     provider: SocialProvider
 }
+
+export interface RegisterData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    countryId: number;
+    state?: string;
+    isNotify?: boolean;
+    company?: string;
+    phone?: string;
+}

@@ -51,7 +51,7 @@ const Inputs = memo((props: InputsProps) => {
       <Typography classes={{ root: clsx(!errorMessage ? classes.textTitle : classes.textTitleInvalid) }}>{title} {optional ? <span className={classes.optional}>(optional)</span> : ""}</Typography>
       <OutlinedInput
         type={!toggleEyes ? type : 'text'}
-        placeholder={!errorMessage ? placeholder : "Error text field"}
+        placeholder={placeholder}
         fullWidth
         name={name}
         defaultValue={defaultValue}
