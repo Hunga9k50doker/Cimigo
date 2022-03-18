@@ -95,3 +95,9 @@ export interface RegisterData {
     company?: string;
     phone?: string;
 }
+
+export interface ForgotPasswordData {
+    code: string,
+    password: string,
+    confirmPassword: string
+}

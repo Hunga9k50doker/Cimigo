@@ -3,48 +3,62 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
 import { Grid } from "@mui/material";
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Inputs from "components/Inputs";
 import Buttons from "components/Buttons";
 import {routes} from 'routers/routes';
+import { useDispatch } from "react-redux";
+import UserService from "services/user";
+import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
 
 const schema = yup.object().shape({
-
+  email: yup.string().email('Please enter a valid email adress').required('Email is required.'),
 });
 
-interface FormData {
-
+interface DataForm {
+  email: string
 }
 
 const ForgotPassword = () => {
-  const history = useHistory();
-  const { register, handleSubmit, formState: { errors }, getValues } = useForm<FormData>({
+  const dispatch = useDispatch()
+
+  const { register, handleSubmit, formState: { errors } } = useForm<DataForm>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
 
-  const onSubmit = (data: FormData) => {
-
+  const onSubmit = (data: DataForm) => {
+    dispatch(setLoading(true))
+    UserService.sendEmailForgotPassword(data.email)
+      .then(() => {
+        dispatch(setSuccessMess('Email has been sent successfully, please check your email'))
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   };
-  
+
   return (
     <Grid className={classes.root}>
       <Header />
-      <Grid className={classes.body}>
-        <p className={classes.textLogin}>Forgot password?</p>
-        <p className={classes.subTextLogin}>No worries! Just enter your email and we will send you a reset password link.</p>
-        <Inputs
-          title="Email address"
-          name="email"
-          placeholder="Enter your email address"
-          type="text"
-        />
-        <Buttons children={"Send recovery email"} btnType="Blue" padding="16px 0px" onClick={() => history.push(routes.resetPassword)}/>
-        <a className={classes.linkText} href={`/register`} >Back to login page</a>
-      </Grid>
+      <form onSubmit={handleSubmit(onSubmit)} name="forgot-password" noValidate autoComplete="off">
+        <Grid className={classes.body}>
+          <p className={classes.textLogin}>Forgot password?</p>
+          <p className={classes.subTextLogin}>No worries! Just enter your email and we will send you a reset password link.</p>
+          <Inputs
+            title="Email address"
+            name="email"
+            placeholder="Enter your email address"
+            type="text"
+            inputRef={register('email')}
+            errorMessage={errors.email?.message}
+          />
+          <Buttons type={'submit'} children={"Send recovery email"} btnType="Blue" padding="16px 0px"/>
+          <Link className={classes.linkText} to={routes.login}>Back to login page</Link>
+        </Grid>
+      </form>
       <Footer />
     </Grid>
   );

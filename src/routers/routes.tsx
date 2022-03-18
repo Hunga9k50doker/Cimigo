@@ -10,7 +10,6 @@ export const routes = {
   login: '/login',
   register: '/register',
   forgotPassword: '/forgot-password',
-  resetPassword: '/reset-password',
   project: {
     management: '/projects',
     create: '/projects/create',

@@ -1,6 +1,6 @@
 import api from './configApi';
 import { API } from 'config/constans';
-import { LoginForm, RegisterData, SocialLoginData } from 'models/user';
+import { ForgotPasswordData, LoginForm, RegisterData, SocialLoginData } from 'models/user';
 
 export class UserService {
   static async login(data: LoginForm): Promise<any> {
@@ -59,6 +59,28 @@ export class UserService {
     })
       .then((res) => {
         return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async sendEmailForgotPassword(email: string) {
+    return await api.post(API.AUTH.SEND_EMAIL_FORGOT_PASSWORD, {
+      email
+    })
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async forgotPassword(data: ForgotPasswordData) {
+    return await api.post(API.AUTH.FORGOT_PASSWORD, data)
+      .then((res) => {
+        return Promise.resolve(res.data)
       })
       .catch((e) => {
         return Promise.reject(e?.response?.data);
