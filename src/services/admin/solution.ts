@@ -2,7 +2,7 @@ import { API } from 'config/constans';
 import { CreateSolutionCategoryParams, GetSolutionCategoriesHomeParams, GetSolutionCategoriesParams, GetSolutionsParams, UpdateSolutionCategoryParams } from 'models/Admin/solution';
 import api from 'services/configApi';
 
-export class SolutionService {
+export class AdminSolutionService {
 
   static async getSolutionCategories(data: GetSolutionCategoriesParams): Promise<any> {
     return await api.get(API.ADMIN.SOLUTION_CATEGORY.DEFAULT, {
@@ -226,4 +226,4 @@ export class SolutionService {
 
 }
 
-export default SolutionService
+export default AdminSolutionService

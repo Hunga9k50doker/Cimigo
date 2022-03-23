@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
-import SolutionService from "services/admin/solution"
+import AdminSolutionService from "services/admin/solution"
 import QueryString from 'query-string';
 import { push } from "connected-react-router"
 import { routes } from "routers/routes"
@@ -28,7 +28,7 @@ const Edit= memo((props: Props) => {
     if(id && !isNaN(Number(id))) {
       const fetchData = async () => {
         dispatch(setLoading(true))
-        SolutionService.getSolutionCategoryHome(Number(id), lang)
+        AdminSolutionService.getSolutionCategoryHome(Number(id), lang)
         .then((res) => {
           setItemEdit(res)
         })
@@ -41,7 +41,7 @@ const Edit= memo((props: Props) => {
 
   const onSubmit = (data: FormData) => {
     dispatch(setLoading(true))
-    SolutionService.updateSolutionCategoryHome(Number(id), data)
+    AdminSolutionService.updateSolutionCategoryHome(Number(id), data)
       .then(() => {
         dispatch(push(routes.admin.solutionCategoryHome.root))
       })

@@ -19,7 +19,7 @@ import ErrorMessage from "components/Inputs/components/ErrorMessage";
 import clsx from "clsx";
 import UploadImage from "components/UploadImage";
 import { setErrorMess } from "redux/reducers/Status/actionTypes";
-import SolutionService from "services/admin/solution";
+import AdminSolutionService from "services/admin/solution";
 
 const modules = {
   toolbar: [
@@ -110,8 +110,8 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
   useEffect(() => {
     const fetchOption = async () => {
       Promise.all([
-        SolutionService.getSolutionCategories({ take: 999999 }),
-        SolutionService.getSolutionCategoriesHome({ take: 999999 })
+        AdminSolutionService.getSolutionCategories({ take: 999999 }),
+        AdminSolutionService.getSolutionCategoriesHome({ take: 999999 })
       ])
         .then((res) => {
           setCategories((res[0].data as SolutionCategory[]).map((it) => ({ id: it.id, name: it.name })))

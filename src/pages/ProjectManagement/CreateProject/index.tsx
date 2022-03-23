@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import classes from './styles.module.scss';
 import {
   Grid,
@@ -13,103 +13,145 @@ import {
 import QontoStepIcon from "../components/QontoStepIcon";
 import Header from "components/Header";
 import Footer from "components/Footer";
-// import { routes } from 'routers/routes';
 import Container from "components/Container";
-import Images from "config/images";
 import InputSearch from "components/InputSearch";
 import Inputs from "components/Inputs";
 import Buttons from "components/Buttons";
 import PopupInforSolution from "../components/PopupInforSolution";
+import { useDispatch } from "react-redux";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { SolutionService } from "services/solution";
+import useDebounce from "hooks/useDebounce";
+import { DataPagination, EStatus } from "models/general";
+import { Solution, SolutionCategory } from "models/Admin/solution";
+import * as yup from 'yup';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import clsx from "clsx";
+import QueryString from 'query-string';
 
+interface IQueryString {
+  solution_id?: string
+}
 
+const schema = yup.object().shape({
+  name: yup.string().required('Name is required.'),
+  category: yup.string(),
+  brand: yup.string(),
+  variant: yup.string(),
+  manufacturer: yup.string()
+})
 
-const steps = ['Select solution', 'Create project'];
+export interface CreateProjectFormData {
+  name: string,
+  category: string,
+  brand: string,
+  variant: string,
+  manufacturer: string
+}
 
-const tags = ['Marketing', 'Experience', 'Advertisement', 'Experience', 'Marketing'];
+enum EStep {
+  SELECT_SOLUTION,
+  CREATE_PROJECT
+}
 
-const cards = [
-  {
-    title: 'Pack test',
-    info: 'Pack tests compare new designs with current or competitive designs to determine preference and identify areas for improvement.',
-    icon: Images.icPack,
-    type: 1,
-  },
-  {
-    title: 'Pack test',
-    info: 'Pack tests compare new designs with current or competitive designs to determine preference and identify areas for improvement.',
-    icon: Images.icPack,
-    type: 1,
-  },
-  {
-    title: 'Pack test',
-    info: 'Pack tests compare new designs with current or competitive designs to determine preference and identify areas for improvement.',
-    icon: Images.icPack,
-    type: 1,
-  },
-  {
-    title: 'Pack test',
-    info: 'Pack tests compare new designs with current or competitive designs to determine preference and identify areas for improvement.',
-    icon: Images.icPack,
-    type: 1,
-  },
-  {
-    title: 'Pack test',
-    info: 'Pack tests compare new designs with current or competitive designs to determine preference and identify areas for improvement.',
-    icon: Images.icPack,
-    type: 1,
-  },
-  {
-    title: 'Pack test',
-    info: 'Pack tests compare new designs with current or competitive designs to determine preference and identify areas for improvement.',
-    icon: Images.icPack,
-    type: 1,
-  },
-  {
-    title: 'Pack test',
-    info: 'Pack tests compare new designs with current or competitive designs to determine preference and identify areas for improvement.',
-    icon: Images.icPack,
-    type: 1,
-  },
-  {
-    title: 'Pack test',
-    info: 'Pack tests compare new designs with current or competitive designs to determine preference and identify areas for improvement.',
-    icon: Images.icPack,
-    type: 1,
-  },
-  {
-    title: 'Customer experience (CX)',
-    info: 'Cimigo will help you measure customer experience that enable you to make cons tant improvements to your customer journey.',
-    icon: Images.icPriceGray,
-    type: 2,
-  },
-  {
-    title: 'Customer experience (CX)',
-    info: 'Cimigo will help you measure customer experience that enable you to make cons tant improvements to your customer journey.',
-    icon: Images.icPriceGray,
-    type: 2,
-  },
-  {
-    title: 'Customer experience (CX)',
-    info: 'Cimigo will help you measure customer experience that enable you to make cons tant improvements to your customer journey.',
-    icon: Images.icPriceGray,
-    type: 2,
-  },
-  {
-    title: 'Customer experience (CX)',
-    info: 'Cimigo will help you measure customer experience that enable you to make cons tant improvements to your customer journey.',
-    icon: Images.icPriceGray,
-    type: 2,
-  },
-];
+const steps = [
+  { id: EStep.SELECT_SOLUTION, name: 'Select solution' },
+  { id: EStep.CREATE_PROJECT, name: 'Create project' },
+]
 
 const CreateProject = () => {
-  const [activeStep, setActiveStep] = useState(0);
-  const [openPopup, setOpenPopup] = useState(false);
+
+  const dispatch = useDispatch()
+  const [keyword, setKeyword] = useState<string>('');
+  const [category, setCategory] = useState<SolutionCategory>();
+  const [solutionShow, setSolutionShow] = useState<Solution>();
+  const [solutionSelected, setSolutionSelected] = useState<Solution>();
+  const [solution, setSolution] = useState<DataPagination<Solution>>();
+  const [solutionCategory, setSolutionCategory] = useState<DataPagination<SolutionCategory>>();
+  const [activeStep, setActiveStep] = useState<EStep>(EStep.SELECT_SOLUTION);
+  const { solution_id }: IQueryString = QueryString.parse(window.location.search);
+
+  const { register, handleSubmit, formState: { errors } } = useForm<CreateProjectFormData>({
+    resolver: yupResolver(schema),
+    mode: 'onChange'
+  });
 
   const handleNextStep = () => {
-    steps.map((label, index) => setActiveStep(index))
-    setOpenPopup(false)
+    if (!solutionShow) return
+    setSolutionSelected(solutionShow)
+    setSolutionShow(undefined)
+    setActiveStep(EStep.CREATE_PROJECT)
   }
+
+  const handleBackStep = () => {
+    setActiveStep(EStep.SELECT_SOLUTION)
+  }
+
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value)
+    _onSearch(e.target.value)
+  }
+
+  const getSolutions = async (params: { keyword?: string, categoryId?: number }) => {
+    dispatch(setLoading(true))
+    SolutionService.getSolutions({ take: 99999, keyword: params?.keyword ?? keyword, categoryId: params?.categoryId !== undefined ? params?.categoryId : category?.id })
+      .then((res) => {
+        setSolution({
+          data: res.data,
+          meta: res.meta
+        })
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const _onSearch = useDebounce((keyword: string) => getSolutions({ keyword }), 500)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(setLoading(true))
+      Promise.all([
+        SolutionService.getSolutions({ take: 99999 }),
+        SolutionService.getSolutionCategories({ take: 99999 })
+      ])
+        .then((res) => {
+          setSolution({
+            data: res[0].data,
+            meta: res[0].meta
+          })
+          setSolutionCategory({
+            data: res[1].data,
+            meta: res[1].meta
+          })
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+    fetchData()
+  }, [dispatch])
+
+  const onSubmit = (data: CreateProjectFormData) => {
+    console.log(data, "===data===");
+  }
+
+  const onChangeCategory = (item: SolutionCategory) => {
+    let data = category?.id === item?.id ? null : item
+    console.log(data ?? 0);
+    setCategory(data)
+    getSolutions({ categoryId: data?.id || null })
+  }
+
+  useEffect(() => {
+    if(solution_id && !isNaN(Number(solution_id))) {
+      SolutionService.getSolution(Number(solution_id))
+        .then((res) => {
+          setSolutionSelected(res)
+          setActiveStep(EStep.CREATE_PROJECT)
+        })
+    }
+  }, [solution_id])
+
   return (
     <Grid className={classes.root}>
       <Header />
@@ -120,9 +162,9 @@ const CreateProject = () => {
           classes={{ root: classes.rootStepper }}
           connector={<StepConnector classes={{ root: classes.rootConnector, active: classes.activeConnector }} />}
         >
-          {steps.map((label, index) => {
+          {steps.map((item, index) => {
             return (
-              <Step key={label}>
+              <Step key={index}>
                 <StepLabel
                   StepIconComponent={QontoStepIcon}
                   classes={{
@@ -131,58 +173,109 @@ const CreateProject = () => {
                     active: classes.rootStepLabelActive,
                     label: classes.rootStepLabel
                   }}
-                >{label}</StepLabel>
+                >{item.name}</StepLabel>
               </Step>
             );
           })}
         </Stepper>
-        {activeStep === 0 ?
+        {activeStep === EStep.SELECT_SOLUTION ? (
           <>
             <Grid className={classes.header}>
               <p>Select a solution</p>
-              <InputSearch placeholder="Search solution" width="30%" />
+              <InputSearch
+                placeholder="Search solution"
+                width="30%"
+                value={keyword || ''}
+                onChange={onSearch}
+              />
             </Grid>
             <Stack direction="row" spacing={1}>
-              {tags.map((tag) => (
-                <Chip label={tag} clickable variant="outlined" />
+              {solutionCategory?.data.map((item) => (
+                <Chip key={item.id} label={item.name} className={clsx(classes.category, {[classes.categorySelected]: item.id === category?.id})} clickable variant="outlined" onClick={() => onChangeCategory(item)}/>
               ))}
             </Stack>
             <Grid className={classes.body}>
-              {cards.map((item, index) => (
-                <>{item.type === 1 ?
-                  <Grid key={index} className={classes.card} onClick={() => setOpenPopup(true)}>
-                    <img src={item.icon} alt="" />
-                    <p>{item.title}</p>
-                    <span>{item.info}</span>
-                  </Grid>
-                  :
-                  <Grid key={index} className={classes.cardComing}>
-                    <div>Coming soon</div>
-                    <img src={item.icon} alt="" />
-                    <p>{item.title}</p>
-                    <span>{item.info}</span>
-                  </Grid>
+              {solution?.data.map((item, index) => {
+                switch (item.status) {
+                  case EStatus.Active:
+                    return (
+                      <Grid key={index} className={classes.card} onClick={() => setSolutionShow(item)}>
+                        <img src={item.image} alt="solution image" />
+                        <p>{item.title}</p>
+                        <span>{item.description}</span>
+                      </Grid>
+                    )
+                  case EStatus.Coming_Soon:
+                    return (
+                      <Grid key={index} className={classes.cardComing}>
+                        <div>Coming soon</div>
+                        <img src={item.image} alt="solution image" />
+                        <p>{item.title}</p>
+                        <span>{item.description}</span>
+                      </Grid>
+                    )
                 }
-                </>
-              ))}
+              })}
             </Grid>
           </>
-          :
+        ) : (
           <Grid className={classes.form}>
-            <p className={classes.title}>Solution: Pack test</p>
-            <a className={classes.textLink} href="">Choose another solution</a>
-            <Inputs name="" type="" placeholder="Enter your project name" title="Project name *" />
-            <p className={classes.textInfo}>Pack test specific information<span> (optional)</span><br /><a>You may modify these later</a></p>
-            <Inputs name="" type="" placeholder="e.g. C7727 On Demand" title="Category" />
-            <Inputs name="" type="" placeholder="Enter your product brand name" title="Brand" />
-            <Inputs name="" type="" placeholder="Enter your product variant" title="Variant" />
-            <Inputs name="" type="" placeholder="Enter product manufacturer" title="Manufacturer" />
-            <Buttons children="Create project" btnType="Blue" width="100%" padding="16px" />
+            <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)}>
+              <p className={classes.title}>Solution: {solutionSelected?.title}</p>
+              <span className={classes.textLink} onClick={handleBackStep}>Choose another solution</span>
+              <Inputs
+                titleRequired
+                name="name"
+                type="text"
+                placeholder="Enter your project name"
+                title="Project name"
+                inputRef={register('name')}
+                errorMessage={errors.name?.message}
+              />
+              <p className={classes.textInfo}>Pack test specific information<span> (optional)</span><br /><a>You may modify these later</a></p>
+              <Inputs
+                name="category"
+                type="text"
+                placeholder="e.g. C7727 On Demand"
+                title="Category"
+                inputRef={register('category')}
+                errorMessage={errors.category?.message}
+              />
+              <Inputs
+                name="brand"
+                type="text"
+                placeholder="Enter your product brand name"
+                title="Brand"
+                inputRef={register('brand')}
+                errorMessage={errors.brand?.message}
+              />
+              <Inputs
+                name="variant" 
+                type="text"
+                placeholder="Enter your product variant"
+                title="Variant"
+                inputRef={register('variant')}
+                errorMessage={errors.variant?.message}
+              />
+              <Inputs
+                name="manufacturer"
+                type="text"
+                placeholder="Enter product manufacturer"
+                title="Manufacturer"
+                inputRef={register('manufacturer')}
+                errorMessage={errors.manufacturer?.message}
+              />
+              <Buttons type="submit" children="Create project" btnType="Blue" width="100%" padding="16px" />
+            </form>
           </Grid>
-        }
+        )}
       </Container>
       <Footer />
-      <PopupInforSolution onClickOpen={openPopup} onSubmit={() => handleNextStep()} onClickCancel={() => setOpenPopup(false)} />
+      <PopupInforSolution
+        solution={solutionShow}
+        onSelect={() => handleNextStep()}
+        onCancel={() => setSolutionShow(undefined)}
+      />
     </Grid>
   );
 };

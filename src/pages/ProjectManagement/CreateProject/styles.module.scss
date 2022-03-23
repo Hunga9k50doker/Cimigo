@@ -126,6 +126,7 @@
   margin: 0;
 }
 .textLink {
+  cursor: pointer;
   font-weight: 400;
   font-size: 16px;
   color: #1f61a9;
@@ -133,6 +134,8 @@
   justify-content: center;
   margin-top: 10px;
   margin-bottom: 44px;
+  font-style: italic;
+  text-decoration-line: underline;
 }
 .textInfo {
   font-weight: 400;
@@ -149,4 +152,16 @@
     font-size: 12px;
     color: rgba(28, 28, 28, 0.65);
   }
+}
+.category {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+}
+.categorySelected {
+  background: #bed7f3;
+  color: #103055;
+  border: 1px solid #17497F;
 }

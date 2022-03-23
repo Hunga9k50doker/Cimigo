@@ -10,6 +10,7 @@ import ErrorMessage from './components/ErrorMessage';
 
 interface InputsProps extends OutlinedInputProps {
   title?: string,
+  titleRequired?: boolean,
   placeholder?: string,
   name: string,
   type?: string,
@@ -39,6 +40,7 @@ const Inputs = memo((props: InputsProps) => {
     autoComplete,
     optional,
     infor,
+    titleRequired,
     ...rest
   } = props;
 
@@ -50,7 +52,10 @@ const Inputs = memo((props: InputsProps) => {
 
   return (
     <FormControl className={classes.root}>
-      <TextTitle invalid={errorMessage}>{title} {optional ? <span className={classes.optional}>(optional)</span> : ""}</TextTitle>
+      <TextTitle invalid={errorMessage}>{title}
+      {optional ? <span className={classes.optional}> (optional)</span> : ""}
+      {titleRequired ? <span className={classes.titleRequired}> *</span> : ""}
+      </TextTitle>
       {/* <Typography classes={{ root: clsx(!errorMessage ? classes.textTitle : classes.textTitleInvalid) }}>{title} {optional ? <span className={classes.optional}>(optional)</span> : ""}</Typography> */}
       <OutlinedInput
         type={!toggleEyes ? type : 'text'}

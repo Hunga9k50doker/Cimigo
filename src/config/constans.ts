@@ -10,7 +10,13 @@ export const API = {
     FORGOT_PASSWORD: '/v1.0/user/forgot-password',
   },
   COUNTRY: {
-    LIST: '/v1.0/country'
+    LIST: '/v1.0/country',
+    
+  },
+  SOLUTION: {
+    DEFAULT: '/v1.0/solution',
+    CATEGORY: '/v1.0/solution/categories',
+    CATEGORY_HOME: '/v1.0/solution/categories-home'
   },
   ADMIN: {
     SOLUTION: {

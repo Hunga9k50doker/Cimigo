@@ -3,7 +3,7 @@ import { memo } from "react"
 import { useDispatch } from "react-redux"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { routes } from "routers/routes"
-import SolutionService from "services/admin/solution"
+import AdminSolutionService from "services/admin/solution"
 import SolutionCategoryForm, { SolutionCategoryFormData } from "../components/SolutionCategoryForm"
 
 interface Props {
@@ -16,7 +16,7 @@ const Create = memo((props: Props) => {
 
   const onSubmit = (data: SolutionCategoryFormData) => {
     dispatch(setLoading(true))
-    SolutionService.createSolutionCategory({
+    AdminSolutionService.createSolutionCategory({
       name: data.name
     })
     .then(() => {

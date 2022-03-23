@@ -14,7 +14,7 @@ import { memo, useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
-import SolutionService from "services/admin/solution";
+import AdminSolutionService from "services/admin/solution";
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
@@ -61,10 +61,10 @@ const List = memo(({ }: Props) => {
 
   const fetchData = (params?: { take?: number, page?: number, keyword?: string }) => {
     dispatch(setLoading(true))
-    SolutionService.getSolutionCategoriesHome({
+    AdminSolutionService.getSolutionCategoriesHome({
       take: params?.take || data?.meta?.take || 10,
       page: params?.page || data?.meta?.page || 1,
-      keyword: params?.keyword || keyword,
+      keyword: params?.keyword ?? keyword,
     })
       .then((res) => {
         setData({
@@ -120,7 +120,7 @@ const List = memo(({ }: Props) => {
     if (!itemDelete) return
     onCloseConfirm()
     dispatch(setLoading(true))
-    SolutionService.deleteSolutionCategoryHome(itemDelete.id)
+    AdminSolutionService.deleteSolutionCategoryHome(itemDelete.id)
       .then(() => {
         fetchData()
       })
@@ -141,7 +141,7 @@ const List = memo(({ }: Props) => {
     if (!itemAction) return
     onCloseActionMenu()
     dispatch(setLoading(true))
-    SolutionService.updateSolutionCategoryHomeStatus(itemAction.id, status)
+    AdminSolutionService.updateSolutionCategoryHomeStatus(itemAction.id, status)
       .then(() => {
         fetchData()
       })

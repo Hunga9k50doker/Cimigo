@@ -25,7 +25,7 @@ const Routers = () => {
         <PublicRoute exact path={routes.register} component={Register}/>
         <PublicRoute exact path={routes.forgotPassword} component={ForgotPassword}/>
         <PrivateRoute exact path={routes.project.management} component={ProjectManagement}/>
-        <PublicRoute exact path={routes.project.create} component={CreateProject}/>
+        <PrivateRoute exact path={routes.project.create} component={CreateProject}/>
         <PublicRoute exact path={routes.survey.setup} component={Survey}/>
         <PublicRoute exact path={routes.callback.user.active} component={CallbackActiveUser}/>
         <PublicRoute exact path={routes.callback.user.forgotPassword} component={ResetPassword}/>
