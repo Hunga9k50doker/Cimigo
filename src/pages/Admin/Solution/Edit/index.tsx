@@ -7,6 +7,7 @@ import QueryString from 'query-string';
 import { push } from "connected-react-router"
 import { routes } from "routers/routes"
 import { Solution } from "models/Admin/solution"
+import SolutionForm from "../components/SolutionForm"
 
 interface IQueryString {
   lang?: string;
@@ -19,15 +20,15 @@ interface Props {
 const EditSolution = memo((props: Props) => {
 
   const dispatch = useDispatch()
-  const { id, solution_id } = useParams<{ id: string, solution_id: string }>();
+  const { id } = useParams<{ id: string }>();
   const [itemEdit, setItemEdit] = useState<Solution>(null);
   const { lang }: IQueryString = QueryString.parse(window.location.search);
 
   useEffect(() => {
-    if(solution_id && !isNaN(Number(solution_id))) {
+    if(id && !isNaN(Number(id))) {
       const fetchData = async () => {
         dispatch(setLoading(true))
-        SolutionService.getSolution(Number(solution_id), lang)
+        SolutionService.getSolution(Number(id), lang)
         .then((res) => {
           setItemEdit(res)
         })
@@ -36,15 +37,13 @@ const EditSolution = memo((props: Props) => {
       }
       fetchData()
     }
-  }, [solution_id, lang, dispatch])
+  }, [id, lang, dispatch])
 
-  
-  
   const onSubmit = (data: FormData) => {
     dispatch(setLoading(true))
-    SolutionService.updateSolution(Number(solution_id), data)
+    SolutionService.updateSolution(Number(id), data)
       .then(() => {
-        dispatch(push(routes.admin.solutionCategory.solution.edit.replace(':id', id)))
+        dispatch(push(routes.admin.solution.root))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -52,7 +51,12 @@ const EditSolution = memo((props: Props) => {
   
   return (
     <>
-      
+       <SolutionForm
+        title="Edit Solution"
+        langEdit={lang}
+        itemEdit={itemEdit}
+        onSubmit={onSubmit}
+      />
     </>
   )
 })

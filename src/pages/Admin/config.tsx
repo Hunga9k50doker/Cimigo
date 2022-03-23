@@ -2,15 +2,31 @@ import {
   NavItem, 
   routes 
 } from "routers/routes";
-import { Category } from '@mui/icons-material';
+import { Category, Lightbulb } from '@mui/icons-material';
 import SolutionCategory from "./SolutionCategory";
+import Solution from "./Solution";
+import SolutionCategoryHome from "./SolutionCategoryHome";
 
 export const adminRouter: NavItem[] = [
   {
+    path: routes.admin.solution.root,
+    name: 'Solution',
+    icon: Lightbulb,
+    component: Solution,
+    layout: "/admin"
+  },
+  {
     path: routes.admin.solutionCategory.root,
-    name: 'Solution Category',
+    name: 'Solution category',
     icon: Category,
     component: SolutionCategory,
+    layout: "/admin"
+  },
+  {
+    path: routes.admin.solutionCategoryHome.root,
+    name: 'Solution category home',
+    icon: Category,
+    component: SolutionCategoryHome,
     layout: "/admin"
   }
   // {

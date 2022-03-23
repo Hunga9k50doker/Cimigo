@@ -3,20 +3,23 @@ import { ArrowBackOutlined, Save } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
-import { Solution } from "models/Admin/solution";
+import { Solution, SolutionCategory, SolutionCategoryHome } from "models/Admin/solution";
 import moment from "moment";
-import { memo, useEffect } from "react"
+import { memo, useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { routes } from "routers/routes";
 import * as yup from 'yup';
-import ReactQuill from 'react-quill'; 
+import ReactQuill from 'react-quill';
 import { OptionItem } from "models/general";
 import classes from './styles.module.scss';
 import InputSelect from "components/InputsSelect";
 import TextTitle from "components/Inputs/components/TextTitle";
 import ErrorMessage from "components/Inputs/components/ErrorMessage";
 import clsx from "clsx";
+import UploadImage from "components/UploadImage";
+import { setErrorMess } from "redux/reducers/Status/actionTypes";
+import SolutionService from "services/admin/solution";
 
 const modules = {
   toolbar: [
@@ -28,6 +31,7 @@ const modules = {
 }
 
 const schema = yup.object().shape({
+  image: yup.mixed().required('Image is required.'),
   title: yup.string().required('Title is required.'),
   description: yup.string().required('Description is required.'),
   content: yup.string().required('Content is required.'),
@@ -38,12 +42,13 @@ const schema = yup.object().shape({
   categoryHomeId: yup.object().shape({
     id: yup.number(),
     name: yup.string()
-  }),
+  }).nullable(),
   createdAt: yup.string(),
   updatedAt: yup.string(),
 })
 
 export interface SolutionFormData {
+  image: string | File;
   title: string,
   description: string,
   content: string,
@@ -55,39 +60,42 @@ export interface SolutionFormData {
 
 interface SolutionFormProps {
   title: string;
-  categoryId: number;
   langEdit?: string;
   itemEdit?: Solution;
   onSubmit: (data: FormData) => void
 }
 
-const SolutionForm = memo(({ title, itemEdit, categoryId, onSubmit }: SolutionFormProps)=> {
+const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionFormProps) => {
 
   const dispatch = useDispatch();
-  
-  const { register, handleSubmit, formState: { errors }, reset, control, watch } = useForm<SolutionFormData>({
+  const [categories, setCategories] = useState<OptionItem[]>([]);
+  const [categoriesHome, setCategoriesHome] = useState<OptionItem[]>([]);
+  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<SolutionFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
 
   const handleBack = () => {
-    dispatch(push(routes.admin.solutionCategory.root))
-  }
-  
-  const _onSubmit = (data: SolutionFormData) => {
-    //onSubmit(data)
+    dispatch(push(routes.admin.solution.root))
   }
 
-  useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
-      console.log(value, name, type);
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+  const _onSubmit = (data: SolutionFormData) => {
+    const formData = new FormData()
+    formData.append('title', data.title)
+    formData.append('description', data.description)
+    formData.append('content', data.content)
+    formData.append('categoryId', `${data.categoryId.id}`)
+    if (data.image && typeof data.image === 'object') formData.append('image', data.image)
+    if (data?.categoryHomeId?.id) formData.append('categoryHomeId', `${data.categoryHomeId.id}`)
+    if (langEdit) formData.append('language', langEdit)
+    
+    onSubmit(formData)
+  }
 
   useEffect(() => {
     if (itemEdit) {
       reset({
+        image: itemEdit.image,
         title: itemEdit.title,
         description: itemEdit.description,
         content: itemEdit.content,
@@ -98,6 +106,21 @@ const SolutionForm = memo(({ title, itemEdit, categoryId, onSubmit }: SolutionFo
       })
     }
   }, [reset, itemEdit])
+
+  useEffect(() => {
+    const fetchOption = async () => {
+      Promise.all([
+        SolutionService.getSolutionCategories({ take: 999999 }),
+        SolutionService.getSolutionCategoriesHome({ take: 999999 })
+      ])
+        .then((res) => {
+          setCategories((res[0].data as SolutionCategory[]).map((it) => ({ id: it.id, name: it.name })))
+          setCategoriesHome((res[1].data as SolutionCategoryHome[]).map((it) => ({ id: it.id, name: it.name })))
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+    }
+    fetchOption()
+  }, [dispatch])
 
   return (
     <div>
@@ -119,10 +142,25 @@ const SolutionForm = memo(({ title, itemEdit, categoryId, onSubmit }: SolutionFo
           <Grid item xs={12} md={12}>
             <Card elevation={3} >
               <CardContent>
-                <Typography component="h2" variant="h6" align="left" sx={{marginBottom: "2rem"}}>
+                <Typography component="h2" variant="h6" align="left" sx={{ marginBottom: "2rem" }}>
                   Solution
                 </Typography>
                 <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12}>
+                    <Grid item xs={12} sm={6}>
+                      <TextTitle invalid={errors.image?.message}>Image</TextTitle>
+                      <Controller
+                        name="image"
+                        control={control}
+                        render={({ field }) => <UploadImage
+                          square
+                          file={field.value}
+                          errorMessage={errors.image?.message}
+                          onChange={(value) => field.onChange(value)}
+                        />}
+                      />
+                    </Grid>
+                  </Grid>
                   <Grid item xs={12} sm={6}>
                     <Inputs
                       title="Title"
@@ -148,7 +186,7 @@ const SolutionForm = memo(({ title, itemEdit, categoryId, onSubmit }: SolutionFo
                       control={control}
                       render={({ field }) => <ReactQuill
                         modules={modules}
-                        className={clsx(classes.editor, {[classes.editorError]: errors.content?.message} )}
+                        className={clsx(classes.editor, { [classes.editorError]: !!errors.content?.message })}
                         value={field.value || ''}
                         onBlur={() => field.onBlur()}
                         onChange={(value) => field.onChange(value)}
@@ -163,7 +201,7 @@ const SolutionForm = memo(({ title, itemEdit, categoryId, onSubmit }: SolutionFo
                       name="categoryId"
                       control={control}
                       selectProps={{
-                        options: [],
+                        options: categories,
                         placeholder: "Select category"
                       }}
                       errorMessage={(errors.categoryId as any)?.id?.message}
@@ -176,7 +214,7 @@ const SolutionForm = memo(({ title, itemEdit, categoryId, onSubmit }: SolutionFo
                       name="categoryHomeId"
                       control={control}
                       selectProps={{
-                        options: [],
+                        options: categoriesHome,
                         placeholder: "Select category home"
                       }}
                       errorMessage={(errors.categoryHomeId as any)?.id?.message}
@@ -202,7 +240,7 @@ const SolutionForm = memo(({ title, itemEdit, categoryId, onSubmit }: SolutionFo
                       errorMessage={errors.updatedAt?.message}
                     />
                   </Grid>
-                  
+
                 </Grid>
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <Button

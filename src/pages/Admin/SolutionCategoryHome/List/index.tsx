@@ -1,4 +1,4 @@
-import { Add as AddIcon, DeleteOutlineOutlined, Done, EditOutlined, ExpandMoreOutlined, HideSource } from "@mui/icons-material";
+import { Add, DeleteOutlineOutlined, Done, EditOutlined, ExpandMoreOutlined, HideSource } from "@mui/icons-material";
 import { Box, Button, Grid, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
 import clsx from "clsx";
 import InputSearch from "components/InputSearch";
@@ -8,7 +8,7 @@ import StatusChip from "components/StatusChip";
 import TableHeader from "components/Table/TableHead";
 import { push } from "connected-react-router";
 import useDebounce from "hooks/useDebounce";
-import { SolutionCategory } from "models/Admin/solution";
+import { SolutionCategoryHome } from "models/Admin/solution"
 import { DataPagination, EStatus, LangSupport, langSupports, TableHeaderLabel } from "models/general";
 import { memo, useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
@@ -27,18 +27,18 @@ const tableHeaders: TableHeaderLabel[] = [
 interface Props {
 }
 
-const SolutionCategoryList = memo((props: Props) => {
+const List = memo(({ }: Props) => {
 
   const dispatch = useDispatch()
   const [keyword, setKeyword] = useState<string>('');
-  const [data, setData] = useState<DataPagination<SolutionCategory>>();
-  const [itemAction, setItemAction] = useState<SolutionCategory>();
+  const [data, setData] = useState<DataPagination<SolutionCategoryHome>>();
+  const [itemAction, setItemAction] = useState<SolutionCategoryHome>();
   const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
   const [languageAnchor, setLanguageAnchor] = useState<null | HTMLElement>(null);
-  const [itemDelete, setItemDelete] = useState<SolutionCategory>(null);
+  const [itemDelete, setItemDelete] = useState<SolutionCategoryHome>(null);
 
-  const handleCreate = () => {
-    dispatch(push(routes.admin.solutionCategory.create));
+  const handleAdd = () => {
+    dispatch(push(routes.admin.solutionCategoryHome.create));
   }
 
   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => {
@@ -61,10 +61,10 @@ const SolutionCategoryList = memo((props: Props) => {
 
   const fetchData = (params?: { take?: number, page?: number, keyword?: string }) => {
     dispatch(setLoading(true))
-    SolutionService.getSolutionCategories({
+    SolutionService.getSolutionCategoriesHome({
       take: params?.take || data?.meta?.take || 10,
       page: params?.page || data?.meta?.page || 1,
-      keyword: params?.keyword || keyword
+      keyword: params?.keyword || keyword,
     })
       .then((res) => {
         setData({
@@ -85,7 +85,7 @@ const SolutionCategoryList = memo((props: Props) => {
 
   const handleAction = (
     event: React.MouseEvent<HTMLButtonElement>,
-    item: SolutionCategory
+    item: SolutionCategoryHome
   ) => {
     setItemAction(item)
     setActionAnchor(event.currentTarget);
@@ -120,7 +120,7 @@ const SolutionCategoryList = memo((props: Props) => {
     if (!itemDelete) return
     onCloseConfirm()
     dispatch(setLoading(true))
-    SolutionService.deleteSolutionCategory(itemDelete.id)
+    SolutionService.deleteSolutionCategoryHome(itemDelete.id)
       .then(() => {
         fetchData()
       })
@@ -132,8 +132,7 @@ const SolutionCategoryList = memo((props: Props) => {
     if (!itemAction) return
     onCloseActionMenu();
     dispatch(push({
-      pathname: routes.admin.solutionCategory.edit
-        .replace(':id', `${itemAction.id}`),
+      pathname: routes.admin.solutionCategoryHome.edit.replace(':id', `${itemAction.id}`),
       search: lang && `?lang=${lang.key}`
     }));
   }
@@ -142,7 +141,7 @@ const SolutionCategoryList = memo((props: Props) => {
     if (!itemAction) return
     onCloseActionMenu()
     dispatch(setLoading(true))
-    SolutionService.updateSolutionCategoryStatus(itemAction.id, status)
+    SolutionService.updateSolutionCategoryHomeStatus(itemAction.id, status)
       .then(() => {
         fetchData()
       })
@@ -150,9 +149,8 @@ const SolutionCategoryList = memo((props: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-
   return (
-    <>
+    <div>
       <Grid container alignItems="center" justifyContent="space-between">
         <Grid item xs={6}>
           <Typography component="h2" variant="h6" align="left">
@@ -161,7 +159,7 @@ const SolutionCategoryList = memo((props: Props) => {
         </Grid>
         <Grid item xs={6}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleCreate}>
+            <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleAdd}>
               Create
             </Button>
           </Box>
@@ -230,7 +228,7 @@ const SolutionCategoryList = memo((props: Props) => {
               component="div"
               count={data?.meta?.itemCount || 0}
               rowsPerPage={data?.meta?.take || 10}
-              page={data?.meta?.page ? data?.meta?.page -1 : 0}
+              page={data?.meta?.page ? data?.meta?.page - 1 : 0}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
@@ -250,7 +248,7 @@ const SolutionCategoryList = memo((props: Props) => {
               onClick={onShowLangAction}
             >
               <Box display="flex" alignItems={"center"}>
-                <EditOutlined sx={{marginRight: '0.25rem'}} fontSize="small" />
+                <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
                 <span>Edit Languages</span>
               </Box>
             </MenuItem>
@@ -281,7 +279,7 @@ const SolutionCategoryList = memo((props: Props) => {
               onClick={onShowConfirm}
             >
               <Box display="flex" alignItems={"center"}>
-                <DeleteOutlineOutlined sx={{marginRight: '0.25rem'}} color="error" fontSize="small" />
+                <DeleteOutlineOutlined sx={{ marginRight: '0.25rem' }} color="error" fontSize="small" />
                 <span>Delete</span>
               </Box>
             </MenuItem>
@@ -314,7 +312,7 @@ const SolutionCategoryList = memo((props: Props) => {
               ))
             }
           </Menu>
-          <WarningModal 
+          <WarningModal
             title="Confirm"
             isOpen={!!itemDelete}
             onClose={onCloseConfirm}
@@ -324,8 +322,8 @@ const SolutionCategoryList = memo((props: Props) => {
           </WarningModal>
         </Grid>
       </Grid>
-    </>
+    </div>
   )
 })
 
-export default SolutionCategoryList
+export default List

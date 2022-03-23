@@ -2,11 +2,10 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
-import { Box, Button, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Inputs from "components/Inputs";
-import icGoogle from 'assets/img/icon/ic-google.svg';
 import InputSelect from "components/InputsSelect";
 import Buttons from "components/Buttons";
 import { useEffect, useState } from "react";
@@ -16,6 +15,7 @@ import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/
 import { OptionItem } from "models/general";
 import UserService from "services/user";
 import Popup from "components/Popup";
+import Google from "components/SocialButton/Google";
 
 const schema = yup.object().shape({
   firstName: yup.string().required('First name is required.'),
@@ -198,7 +198,7 @@ const Register = () => {
           <div className={classes.separator}>
             <span>or sign up with</span>
           </div>
-          <Button classes={{ root: classes.icGoogle }} startIcon={<img src={icGoogle} alt="" />}>Google</Button>
+          <Google />
           <span className={classes.text}>Click "Create an account" to agree to Terms of Service and Privacy Policy.</span>
         </Grid>
       </form>

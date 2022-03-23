@@ -24,7 +24,7 @@ const LoadingScreen = memo(({ className, ...other }: LoadingScreenProps) => {
         }}
       >
         <div className={classes.boxLogo}>
-          <img src={logo} />
+          <img alt='logo' src={logo} />
         </div>
       </motion.div>
 

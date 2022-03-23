@@ -9,7 +9,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { memo } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, matchPath, NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { NavItem, routes } from 'routers/routes';
 import cimigoLogo from 'assets/img/cimigo_logo.svg';
@@ -23,11 +23,15 @@ interface SidebarProps {
 const Sidebar = memo((props: SidebarProps) => {
   const { isOpen, routes: routesList, handleDrawerToggle } = props;
   const theme = useTheme();
-
+  
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const activeRoute = (routeName: string) => {
-    return window.location.href.indexOf(routeName) > -1 ? true : false;
+    const match = matchPath(window.location.pathname, {
+      path: routeName,
+      exact: false
+    })
+    return !!match
   };
 
   const links = (

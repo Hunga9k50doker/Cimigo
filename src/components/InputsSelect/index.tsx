@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import {
-  FormControl,
-  Typography,
+  FormControl
 } from '@mui/material';
 import Select, { components, DropdownIndicatorProps } from 'react-select';
 import classes from './styles.module.scss';

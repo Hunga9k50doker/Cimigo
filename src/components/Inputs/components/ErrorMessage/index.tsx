@@ -9,7 +9,7 @@ const ErrorMessage = styled(Typography)`
   letter-spacing: 0.015em;
   color: #af1c10;
   padding-top: 5px;
-  padding-left: 16px;
+  padding-left: ${(props) => props.align === 'center' ? '0px' : '16px'};
   white-space: initial;
 `
 

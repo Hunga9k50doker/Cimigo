@@ -1,5 +1,5 @@
-import React, { useState, memo } from 'react';
-import { OutlinedInput, Typography, FormControl, InputAdornment, IconButton, OutlinedInputProps } from '@mui/material';
+import { useState, memo } from 'react';
+import { OutlinedInput, FormControl, InputAdornment, IconButton, OutlinedInputProps } from '@mui/material';
 import classes from './styles.module.scss';
 import iconEyeOpen from 'assets/img/icon/eye-open.svg';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';

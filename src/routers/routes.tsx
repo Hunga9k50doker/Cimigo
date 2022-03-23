@@ -25,14 +25,20 @@ export const routes = {
       create: '/admin/user/create',
       edit: '/admin/user/:id/edit',
     },
+    solution: {
+      root: '/admin/solution', 
+      create: '/admin/solution/create', 
+      edit: '/admin/solution/:id/edit',
+    },
     solutionCategory: {
       root: '/admin/solution-category',
       create: '/admin/solution-category/create',
       edit: '/admin/solution-category/:id/edit',
-      solution: {
-        create: '/admin/solution-category/:id/solution/create', 
-        edit: '/admin/solution-category/:id/solution/:solution_id/edit',
-      },
+    },
+    solutionCategoryHome: {
+      root: '/admin/solution-category-home',
+      create: '/admin/solution-category-home/create',
+      edit: '/admin/solution-category-home/:id/edit',
     },
     project: {
       root: '/admin/project',

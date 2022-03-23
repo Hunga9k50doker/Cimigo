@@ -12,9 +12,9 @@
 }
 .editorError {
   [class~=ql-toolbar] {
-    border-color: #af1c10;
+    border-color: var(--cimigo-danger) !important;
   }
   [class~=ql-container] {
-    border-color: #af1c10;
+    border-color: var(--cimigo-danger) !important;
   }
 }

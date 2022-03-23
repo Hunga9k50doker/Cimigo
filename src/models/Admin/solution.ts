@@ -40,7 +40,7 @@ export interface Solution {
   deletedAt: Date;
   languages?: Solution[];
   category?: SolutionCategory;
-  categoryHome?: SolutionCategory;
+  categoryHome?: SolutionCategoryHome;
 }
 
 export interface GetSolutionsParams {
@@ -48,4 +48,23 @@ export interface GetSolutionsParams {
   page?: number;
   keyword?: string;
   categoryId?: number;
+}
+
+export interface GetSolutionCategoriesHomeParams {
+  take?: number;
+  page?: number;
+  keyword?: string;
+}
+
+export interface SolutionCategoryHome {
+  id: number;
+  name: string;
+  status: number;
+  image: string;
+  parentLanguage: number;
+  language: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
+  solutions?: Solution[];
 }
