@@ -1,9 +1,8 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Dialog, Grid, IconButton } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
-import Inputs from 'components/Inputs';
 import Images from "config/images";
 
 

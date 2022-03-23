@@ -3,6 +3,11 @@ export interface TableHeaderLabel {
   name: string;
   label: string;
   sortable: boolean;
+  align?: 'center'
+  | 'inherit'
+  | 'justify'
+  | 'left'
+  | 'right'
 }
 
 export interface Country {
@@ -105,4 +110,10 @@ export interface SortItem {
 export enum EKey {
   TOKEN = 'token',
   REFRESH_TOKEN = 'refresh_token'
+}
+
+export enum EStatus {
+  Active = 1,
+  Inactive,
+  Coming_Soon
 }

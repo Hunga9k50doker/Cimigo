@@ -6,6 +6,9 @@ import { configureStore, history } from 'redux/configureStore';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import LoadingScreen from 'components/LoadingScreen';
+import 'assets/scss/_variables.scss';
+import 'react-quill/dist/quill.snow.css';
+
 
 const { store, persistor } = configureStore();
 

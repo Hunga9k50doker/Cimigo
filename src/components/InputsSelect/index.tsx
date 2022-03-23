@@ -8,8 +8,10 @@ import classes from './styles.module.scss';
 import icCaretDown from 'assets/img/icon/ic-caret-down-grey.svg'
 import { Controller } from 'react-hook-form';
 import { StateManagerProps } from 'react-select/dist/declarations/src/stateManager';
+import TextTitle from 'components/Inputs/components/TextTitle';
+import ErrorMessage from 'components/Inputs/components/ErrorMessage';
 
-const customStyles = {
+const customStyles = (error?: boolean) => ({
   indicatorSeparator: () => ({
     display: "none",
   }),
@@ -17,14 +19,19 @@ const customStyles = {
     ...provided,
     fontSize: 16,
     fontWeight: 400,
-    color: "rgba(28, 28, 28, 0.2)",
+    color: error ? '#1C1C1C' : "rgba(28, 28, 28, 0.2)",
     whiteSpace: "nowrap",
   }),
   valueContainer: (provided) => ({
     ...provided,
     padding: "11.5px 13px"
+  }),
+  control: (provided: any) => ({
+    ...provided,
+    background: error ? 'rgba(175, 28, 16, 0.08)' : '#ffffff',
+    borderColor: error ? '#af1c10' : 'rgba(28, 28, 28, 0.2)',
   })
-}
+})
 
 const DropdownIndicator = (props: DropdownIndicatorProps) => {
   return (
@@ -41,15 +48,17 @@ interface InputSelectProps {
   control?: any,
   bindKey?: string,
   bindLabel?: string,
-  selectProps?: StateManagerProps
+  selectProps?: StateManagerProps,
+  fullWidth?: boolean,
+  optional?: boolean
 }
 
 const InputSelect = memo((props: InputSelectProps) => {
-  const { title, errorMessage, name, control, bindKey, bindLabel, selectProps } = props;
+  const { title, errorMessage, name, control, bindKey, bindLabel, selectProps, fullWidth, optional } = props;
   
   return (
-    <FormControl classes={{ root: classes.container }} >
-      {title && <Typography classes={{ root: classes.textTitle }}>{title}</Typography>}
+    <FormControl classes={{ root: classes.container }} sx={{ width: fullWidth ? '100%' : 'auto' }}>
+      {title && <TextTitle invalid={errorMessage}>{title} {optional && <span className={classes.optional}>(optional)</span>}</TextTitle>}
       {
         control ? (
           <>
@@ -58,7 +67,7 @@ const InputSelect = memo((props: InputSelectProps) => {
               control={control}
               render={({ field }) => <Select 
                 {...field} 
-                styles={customStyles}
+                styles={customStyles(!!errorMessage)}
                 getOptionValue={(option) => option[bindKey || 'id']}
                 getOptionLabel={(option) => option[bindLabel || 'name']}
                 components={{ DropdownIndicator }}
@@ -69,14 +78,14 @@ const InputSelect = memo((props: InputSelectProps) => {
         ) : (
           <>
             <Select
-              styles={customStyles}
+              styles={customStyles(!!errorMessage)}
               components={{ DropdownIndicator }}
               {...selectProps}
             />
           </>
         )
       }
-      {errorMessage && <Typography classes={{ root: classes.textError }}>{errorMessage}</Typography>}
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </FormControl>
   );
 });

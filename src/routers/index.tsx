@@ -13,6 +13,7 @@ import ScrollToTop from './ScrollToTop';
 import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
 import CallbackActiveUser from 'pages/Callback/User/Active';
+import Admin from 'pages/Admin';
 
 const Routers = () => {
 
@@ -28,6 +29,7 @@ const Routers = () => {
         <PublicRoute exact path={routes.survey.setup} component={Survey}/>
         <PublicRoute exact path={routes.callback.user.active} component={CallbackActiveUser}/>
         <PublicRoute exact path={routes.callback.user.forgotPassword} component={ResetPassword}/>
+        <PrivateRoute path={routes.admin.root} component={Admin}/>
         <Redirect to={routes.login} />
       </Switch>
     </Suspense>

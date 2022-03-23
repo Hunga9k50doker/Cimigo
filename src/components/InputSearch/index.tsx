@@ -1,10 +1,9 @@
 import React, { memo } from 'react';
-import { OutlinedInput, FormControl, InputAdornment } from '@mui/material';
+import { OutlinedInput, FormControl, InputAdornment, OutlinedInputProps } from '@mui/material';
 import Images from 'config/images';
 import classes from './styles.module.scss';
-import clsx from 'clsx';
 
-interface InputSearchProps {
+interface InputSearchProps extends OutlinedInputProps {
   type?: string,
   placeholder?: string,
   name?: string,

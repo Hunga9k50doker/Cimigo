@@ -1,12 +1,14 @@
 import React, { useState, memo } from 'react';
-import { OutlinedInput, Typography, FormControl, InputAdornment, IconButton } from '@mui/material';
+import { OutlinedInput, Typography, FormControl, InputAdornment, IconButton, OutlinedInputProps } from '@mui/material';
 import classes from './styles.module.scss';
 import iconEyeOpen from 'assets/img/icon/eye-open.svg';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import clsx from 'clsx';
 import images from 'config/images';
+import TextTitle from './components/TextTitle';
+import ErrorMessage from './components/ErrorMessage';
 
-interface InputsProps {
+interface InputsProps extends OutlinedInputProps {
   title?: string,
   placeholder?: string,
   name: string,
@@ -48,7 +50,8 @@ const Inputs = memo((props: InputsProps) => {
 
   return (
     <FormControl className={classes.root}>
-      <Typography classes={{ root: clsx(!errorMessage ? classes.textTitle : classes.textTitleInvalid) }}>{title} {optional ? <span className={classes.optional}>(optional)</span> : ""}</Typography>
+      <TextTitle invalid={errorMessage}>{title} {optional ? <span className={classes.optional}>(optional)</span> : ""}</TextTitle>
+      {/* <Typography classes={{ root: clsx(!errorMessage ? classes.textTitle : classes.textTitleInvalid) }}>{title} {optional ? <span className={classes.optional}>(optional)</span> : ""}</Typography> */}
       <OutlinedInput
         type={!toggleEyes ? type : 'text'}
         placeholder={placeholder}
@@ -75,7 +78,8 @@ const Inputs = memo((props: InputsProps) => {
       {...rest}
       />
       {infor && <p className={classes.textInfor}>{infor}</p>}
-      {errorMessage && <Typography className={classes.textError}>{errorMessage}</Typography>}
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      {/* {errorMessage && <Typography className={classes.textError}>{errorMessage}</Typography>} */}
     </FormControl>
   );
 });

@@ -20,6 +20,24 @@ export const routes = {
   },
   admin: {
     root: '/admin',
+    user: {
+      root: '/admin/user',
+      create: '/admin/user/create',
+      edit: '/admin/user/:id/edit',
+    },
+    solutionCategory: {
+      root: '/admin/solution-category',
+      create: '/admin/solution-category/create',
+      edit: '/admin/solution-category/:id/edit',
+      solution: {
+        create: '/admin/solution-category/:id/solution/create', 
+        edit: '/admin/solution-category/:id/solution/:solution_id/edit',
+      },
+    },
+    project: {
+      root: '/admin/project',
+      detail: '/admin/project/:id',
+    },
   }
 }
 
