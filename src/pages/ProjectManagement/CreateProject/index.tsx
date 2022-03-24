@@ -147,7 +147,6 @@ const CreateProject = () => {
       manufacturer: data.manufacturer || ''
     })
       .then((res: Project) => {
-        console.log(res, "===res===");
         dispatch(push(routes.project.detail.replace(':id', `${res.id}`)))
       })
       .catch(e => dispatch(setErrorMess(e)))
