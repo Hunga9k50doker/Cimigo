@@ -29,6 +29,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
 import QueryString from 'query-string';
+import { routes } from "routers/routes";
+import { push } from "connected-react-router";
+import { ProjectService } from "services/project";
+import { Project } from "models/project";
 
 interface IQueryString {
   solution_id?: string
@@ -132,12 +136,26 @@ const CreateProject = () => {
   }, [dispatch])
 
   const onSubmit = (data: CreateProjectFormData) => {
-    console.log(data, "===data===");
+    if (!solutionSelected) return
+    dispatch(setLoading(true))
+    ProjectService.createProject({
+      solutionId: solutionSelected.id,
+      name: data.name,
+      category: data.category || '',
+      brand: data.brand || '',
+      variant: data.variant || '',
+      manufacturer: data.manufacturer || ''
+    })
+      .then((res: Project) => {
+        console.log(res, "===res===");
+        dispatch(push(routes.project.detail.replace(':id', `${res.id}`)))
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
   const onChangeCategory = (item: SolutionCategory) => {
     let data = category?.id === item?.id ? null : item
-    console.log(data ?? 0);
     setCategory(data)
     getSolutions({ categoryId: data?.id || null })
   }
@@ -146,6 +164,7 @@ const CreateProject = () => {
     if(solution_id && !isNaN(Number(solution_id))) {
       SolutionService.getSolution(Number(solution_id))
         .then((res) => {
+          dispatch(push(routes.project.create))
           setSolutionSelected(res)
           setActiveStep(EStep.CREATE_PROJECT)
         })

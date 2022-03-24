@@ -31,7 +31,7 @@ const PopupInforSolution = memo((props: PopupPopupInforSolution) => {
           </IconButton>
         </Grid>
         <Grid className={classes.body}>
-          <span dangerouslySetInnerHTML={{__html: solution?.content || ''}}></span>
+          <div dangerouslySetInnerHTML={{__html: solution?.content || ''}}></div>
         </Grid>
         <Buttons children="Get started" btnType='Blue' padding='13px 16px' width='91%' onClick={onSelect} className={classes.btn}/>
       </Grid>

@@ -180,7 +180,7 @@ const ProjectManagement = () => {
                 </TableHead>
                 <TableBody>
                   {dataTable.map((item, index) => (
-                    <TableRow hover key={index} className={classes.tableBody} onClick={() => history.push(routes.survey.setup)}>
+                    <TableRow hover key={index} className={classes.tableBody} onClick={() => history.push(routes.project.create)}>
                       <TableCell>{item.projectName}</TableCell>
                       <TableCell><LabelStatus typeStatus={item.status} /></TableCell>
                       <TableCell>{item.lastModified}</TableCell>
