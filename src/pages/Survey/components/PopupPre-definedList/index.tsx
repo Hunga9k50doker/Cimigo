@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { Checkbox, Dialog, Grid, IconButton, ListItem, ListItemText } from '@mui/material';
+import { Checkbox, Collapse, Dialog, Grid, IconButton, ListItem, ListItemText } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
@@ -50,8 +50,17 @@ interface PopupCreateFolderProps {
 const PopupPreDefinedList = memo((props: PopupCreateFolderProps) => {
   const { onClickCancel, onClickOpen } = props;
   const [check, setCheck] = useState()
+  const [selectedIndex, setSelectedIndex] = useState("")
 
-  const handleListItemClick = (e) => {    
+  const handleClickCollapse = index => {
+    if (selectedIndex === index) {
+      setSelectedIndex("")
+    } else {
+      setSelectedIndex(index)
+    }
+  }
+
+  const handleListItemClick = (e) => {
     setCheck(e);
   };
 
@@ -62,13 +71,62 @@ const PopupPreDefinedList = memo((props: PopupCreateFolderProps) => {
     >
       <Grid className={classes.root}>
         <Grid className={classes.header}>
-          <p className={classes.title}>Manatory attributes</p>
+          <p className={classes.title}>Add attributes</p>
           <IconButton onClick={onClickCancel}>
             <img src={Images.icClose} alt='' />
           </IconButton>
         </Grid>
         <Grid className={classes.body}>
-          <p>Consumers will be asked their associations with the pack tested to all of the following mandatory attributes.</p>
+          <p>The following list of attributes are pre-defined by Cimigo over projects. Your may select the attributes that might be relevant to your project.</p>
+          <Grid className={classes.listNumberMobile}>
+            <div className={classes.textMobile}>
+              <p>Start point label</p>
+              <p>End point label</p>
+            </div>
+            <div className={classes.numberMobile}>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
+          </Grid>
+          {/* ==========================Mobile========================= */}
+
+          <Grid container classes={{ root: classes.rootListMobile }}>
+            {dataLists.map((item, index: any) => (
+              <Grid
+                className={classes.attributesMobile}
+                key={index}
+                onClick={() => { handleClickCollapse(index) }}
+                style={{ background: index === selectedIndex ? '#EEEEEE' : '' }}
+              >
+                <Grid classes={{ root: classes.rootCollapseMobile }}>
+                  <Checkbox
+                    onChange={(e) => handleListItemClick(e.target.checked)}
+                    classes={{ root: classes.rootCheckboxMobile }}
+                    onClick={e => e.stopPropagation()}
+                    sx={{
+                      color: "rgba(28, 28, 28, 0.4)",
+                      '&.Mui-checked': {
+                        color: "rgba(28, 28, 28, 0.4)",
+                      },
+                    }}
+                  />
+                  {index === selectedIndex ? '' :
+                    <p className={classes.titleAttributesMobile} >{item.firstText}</p>
+                  }
+                  <Collapse
+                    in={index === selectedIndex}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <div className={classes.CollapseAttributesMobile}>
+                      <p>Start label: <span>{item.firstText}</span></p>
+                      <p>End label: <span>{item.lastText}</span></p>
+                    </div>
+                  </Collapse >
+                </Grid>
+                <img style={{ transform: index === selectedIndex ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Images.icShowGray} alt='' />
+              </Grid>
+            ))}
+          </Grid>
+          {/* ==========================Desktop========================= */}
+
           <Grid container classes={{ root: classes.rootList }}>
             {dataLists.map((item, index) => (
               <ListItem
@@ -101,9 +159,9 @@ const PopupPreDefinedList = memo((props: PopupCreateFolderProps) => {
               </ListItem>
             ))}
           </Grid>
-          <Grid className={classes.btn}>
-            <Buttons children="Add attributes" btnType='Blue' padding='13px 16px' width='25%' onClick={onClickCancel} />
-          </Grid>
+        </Grid>
+        <Grid className={classes.btn}>
+          <Buttons children="Add attributes" btnType='Blue' padding='13px 16px' width='25%' onClick={onClickCancel} />
         </Grid>
       </Grid>
     </Dialog>

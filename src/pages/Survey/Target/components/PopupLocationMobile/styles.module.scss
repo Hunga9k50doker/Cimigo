@@ -1,0 +1,217 @@
+.paper {
+  // display: none;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    margin: 0px !important;
+    overflow: hidden;
+    display: block;
+  }
+}
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+  color: #08182a;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #17497f;
+  padding: 12px 24px;
+  p {
+    font-weight: 600;
+    font-size: 14px;
+    color: #fafaff;
+  }
+  button {
+    background-color: #ffffff !important;
+  }
+}
+.body {
+  min-height: 300px;
+  padding: 24px;
+  @media only screen and (max-width: 767px) {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 400px;
+    padding: 24px 24px 0px 24px;
+  }
+}
+.btn {
+  margin: 24px;
+  display: flex;
+  justify-content: flex-end;
+  button {
+    width: 25%;
+  }
+  @media only screen and (max-width: 767px) {
+    button {
+      width: 100%;
+    }
+  }
+}
+// =============================================================
+
+.rootStrata {
+  display: flex;
+  align-items: center;
+}
+.rootCheckbox {
+  img {
+    border-radius: 4px;
+  }
+}
+.rootStrata > p {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.015em;
+  color: #7c9911;
+  margin-right: 24px;
+}
+.rootStrata > span {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 140%;
+  color: #1c1c1c;
+}
+.rootStrata > span:nth-child(3) {
+  margin-right: 30px;
+}
+.rootCountry {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 24px;
+}
+.rootCountry > p {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.015em;
+  color: #7c9911;
+  margin-right: 16px;
+}
+.rootCountry > div > p {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.025em;
+  color: #000000;
+}
+.rootCountry > div > span {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 120%;
+  letter-spacing: 0.05em;
+  color: rgba(28, 28, 28, 0.65);
+}
+.rootLocation {
+  margin-top: 24px;
+}
+.rootLocation > div > div {
+  -webkit-overflow-scrolling: auto;
+  overflow: auto;
+}
+.rootLocation > p {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.015em;
+  color: #7c9911;
+}
+.rootTags {
+  padding: 15px;
+  p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 140%;
+    letter-spacing: 0.025em;
+    color: #1c1c1c;
+    margin-bottom: 12px;
+  }
+}
+.rootListMobile {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: block;
+    margin: 24px 0px;
+  }
+}
+.CollapseAttributesMobile {
+  margin-left: 15px;
+  padding-left: 15px;
+  border-left: 1px solid rgba(28, 28, 28, 0.2);
+}
+.attributesMobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 0px;
+}
+.titleAttributesMobile {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.025em;
+  color: #1c1c1c;
+}
+.rootRegionLevel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(28, 28, 28, 0.05);
+  p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 140%;
+    letter-spacing: 0.025em;
+    color: #1c1c1c;
+  }
+}
+.rootSwitch {
+  margin-left: 40px;
+}
+.checkedSwitch {
+  color: #7c9911 !important;
+}
+.trackSwitchOn {
+  background: #a6cc17 !important;
+}
+.trackSwitchOff {
+  background: rgba(28, 28, 28, 0.4) !important;
+}
+.checkLocation {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  max-width: 450px;
+  label {
+    margin: 0 !important;
+  }
+}
+.rootCheckboxLocation {
+  padding: 0px;
+  margin-right: 7px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  img {
+    border-radius: 4px;
+  }
+}

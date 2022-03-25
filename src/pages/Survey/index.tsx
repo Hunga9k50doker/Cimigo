@@ -2,8 +2,10 @@ import { useState } from "react";
 import classes from './styles.module.scss';
 import {
   Grid,
+  IconButton,
   Tab,
-  Tabs
+  Tabs,
+  tabsClasses
 } from "@mui/material";
 
 import Header from "components/Header";
@@ -13,8 +15,15 @@ import SetupSurvey from "./SetupSurvey";
 import Target from "./Target";
 import Quotas from "./Quotas";
 import PaymentBilling from "./PaymentBilling";
+import images from "config/images";
 
 const listTabs = ['Setup survey', 'Target', 'Quotas', 'Payment & Billing', 'Report']
+
+// const ExpandIcon = (props) => {
+//   return (
+//     <img {...props} src={images.icCheck} />
+//   )
+// };
 
 function a11yProps(index: number) {
   return {
@@ -22,7 +31,6 @@ function a11yProps(index: number) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-
 const Survey = () => {
   const [value, setValue] = useState(0);
 
@@ -33,15 +41,30 @@ const Survey = () => {
   return (
     <Grid>
       <Header />
+      <Grid className={classes.rootMobile}>
+        <img src={images.icHomeMobile} alt='' />
+        <img src={images.icNextMobile} alt='' />
+        <p>C7938 On Demand (SaaS)</p>
+      </Grid>
       <Grid className={classes.root}>
         <Tabs
           value={value}
           onChange={handleChange}
+          // ScrollButtonComponent={ExpandIcon}
+          variant="scrollable"
+          allowScrollButtonsMobile
           classes={{
             root: classes.rootTabs,
             indicator: classes.indicatorTabs,
             flexContainer: classes.flexContainer,
-          }}>
+            scrollButtons: classes.scrollButtonsMobile,
+          }}
+          sx={{
+            [`& .${tabsClasses.scrollButtons}`]: {
+              '&.Mui-disabled': { display: "none" },
+            },
+          }}
+        >
           {listTabs.map((item, index) => (
             <Tab
               key={index}

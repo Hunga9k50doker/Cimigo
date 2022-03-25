@@ -2,8 +2,6 @@ import { useState } from "react";
 import classes from './styles.module.scss';
 import {
   Grid,
-  ToggleButtonGroup,
-  ToggleButton,
   Badge,
   Tabs,
   Tab,
@@ -11,6 +9,10 @@ import {
   Button,
   List,
   ListItemButton,
+  CardActionArea,
+  Card,
+  CardMedia,
+  CardContent,
 } from "@mui/material"
 
 import ImgTab from 'assets/img/img-tab.png';
@@ -20,6 +22,9 @@ import EconomicClass from "./EconomicClass";
 import AgeCoverage from "./AgeCoverage";
 import Buttons from "components/Buttons";
 import images from "config/images";
+import PopupLocationMobile from "./components/PopupLocationMobile";
+import PopupEconomicClassMobile from "./components/PopupEconomicClass";
+import PopupAgeCoverageMobile from "./components/PopupAgeCoverageMobile";
 
 function a11yProps(index: number) {
   return {
@@ -43,33 +48,39 @@ const dataValue = [
   },
 ]
 
-const listTabs = [
-  {
-    choose: <a>Choose location</a>,
-    title: "Location",
-    infor:
-      <li>
-        <p><span>Strata: </span>Urban</p>
-        <p><span>Location: </span>Ho Chi Minh, Dong Nai, Bien Hoa, Vung Tau, Binh Duong.</p>
-      </li>
-  },
-  {
-    choose: <a>Choose economic class</a>,
-    title: "Economic class",
-    infor: <li><p><span>Economic class: </span>Economic class A, Economic class B, Economic class C.</p></li>
-  },
-  {
-    choose: <a>Choose age coverage</a>,
-    title: "Age coverage",
-    infor: <a>Choose age coverage</a>,
-  },
-]
+
 
 const Target = () => {
   const [alignment, setAlignment] = useState();
   const [value, setValue] = useState(0);
   const [showInput, setShowInput] = useState(false);
+  const [onPopupLocation, setOnPopupLocation] = useState(false);
+  const [onPopupEconomicClass, setOnPopupEconomicClass] = useState(false);
+  const [onPopupAgeCoverage, setOnPopupAgeCoverage] = useState(false);
+
   const [selectedIndex, setSelectedIndex] = useState(1);
+
+  const listTabs = [
+    {
+      choose: <a>Choose location</a>,
+      title: "Location",
+      infor:
+        <li>
+          <p><span>Strata: </span>Urban</p>
+          <p><span>Location: </span>Ho Chi Minh, Dong Nai, Bien Hoa, Vung Tau, Binh Duong.</p>
+        </li>
+    },
+    {
+      choose: <a>Choose economic class</a>,
+      title: "Economic class",
+      infor: <li><p><span>Economic class: </span>Economic class A, Economic class B, Economic class C.</p></li>
+    },
+    {
+      choose: <a>Choose age coverage</a>,
+      title: "Age coverage",
+      infor: <a>Choose age coverage</a>,
+    },
+  ]
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -80,8 +91,19 @@ const Target = () => {
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
+  const handleClick = (val) => {
+    if (val === 'Location') {
+      setOnPopupLocation(true)
+    }
+    else if (val === 'Economic class') {
+      setOnPopupEconomicClass(true)
+    }
+    else if (val === 'Age coverage') {
+      setOnPopupAgeCoverage(true)
+    }
+  }
   return (
-    <Grid>
+    <Grid classes={{ root: classes.root }}>
       <Grid className={classes.header}>
         <Grid className={classes.size}>
           <p>Choose sample size:</p>
@@ -121,7 +143,9 @@ const Target = () => {
             <p><span />popular choices.</p>
           </Grid>
         </Grid>
-        <p className={classes.code}>Sample size cost:<span>$1999</span></p>
+        <div className={classes.code}>
+          <p >Sample size cost:</p><span>$1999</span>
+        </div>
       </Grid>
       <Grid className={classes.body}>
         <Tabs
@@ -142,7 +166,9 @@ const Target = () => {
                 root: classes.rootTab,
                 iconWrapper: classes.iconWrapper,
               }}
-              label={value === index ? item.infor : item.choose} {...a11yProps(index)} />
+              label={value === index ? item.infor : item.choose}
+              {...a11yProps(index)}
+            />
           ))}
         </Tabs>
         <TabPanelImg value={value} index={0}>
@@ -155,6 +181,29 @@ const Target = () => {
           <AgeCoverage />
         </TabPanelImg>
       </Grid>
+
+      <Grid className={classes.bodyMobile}>
+        <p className={classes.titleMobile}>Target criteria:</p>
+        <p className={classes.subTitleMobile}>Choose your target consumers. We'll deliver your survey to the right people that satisfy your criteria.</p>
+        {listTabs.map((item, index) => (
+          <Card classes={{ root: classes.cardMobile }} key={index} onClick={() => handleClick(item.title)}>
+            <CardActionArea title={item.title}>
+              <CardMedia
+                component="img"
+                height="140"
+                image={ImgTab}
+                alt="green iguana"
+              />
+              <div className={classes.bodyCardMobile}>
+                {item.choose}
+              </div>
+            </CardActionArea>
+          </Card>
+        ))}
+      </Grid>
+      <PopupLocationMobile onClickOpen={onPopupLocation} onClickCancel={() => setOnPopupLocation(false)} />
+      <PopupEconomicClassMobile onClickOpen={onPopupEconomicClass} onClickCancel={() => setOnPopupEconomicClass(false)} />
+      <PopupAgeCoverageMobile onClickOpen={onPopupAgeCoverage} onClickCancel={() => setOnPopupAgeCoverage(false)} />
     </Grid>
   )
 }

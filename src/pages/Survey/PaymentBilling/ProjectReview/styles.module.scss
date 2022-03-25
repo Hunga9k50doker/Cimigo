@@ -9,6 +9,9 @@
   line-height: 140%;
   letter-spacing: 0.015em;
   color: #1c1c1c;
+  @media only screen and (max-width: 767px) {
+    padding: 0px 19px;
+  }
   span {
     font-weight: 700;
   }
@@ -19,13 +22,25 @@
   border-radius: 4px;
   padding: 32px 40px;
   margin-top: 36px;
+  @media only screen and (max-width: 767px) {
+    background: #ffffff;
+    border: none;
+    border-radius: 0px;
+    padding: 0px 19px;
+  }
 }
-.flex {
+.solution {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  margin-right: 150px;
+  height: 29px;
+  margin-right: 20px;
+  @media only screen and (max-width: 767px) {
+    margin-right: 0px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #dddddd;
+  }
   div {
     display: flex;
     align-items: center;
@@ -48,6 +63,9 @@
   line-height: 17px;
   color: #103055;
   margin-left: 16px;
+  @media only screen and (max-width: 767px) {
+    margin-left: 0px;
+  }
   img {
     width: 5px;
     margin-right: 5px !important;
@@ -56,6 +74,10 @@
 .flex1 {
   display: flex;
   justify-content: space-between;
+  @media only screen and (max-width: 767px) {
+    display: grid;
+    justify-content: unset;
+  }
 }
 .text {
   font-weight: normal;
@@ -63,6 +85,12 @@
   line-height: 140%;
   letter-spacing: 0.015em;
   color: #000000;
+  @media only screen and (max-width: 767px) {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 140%;
+    letter-spacing: 0.025em;
+  }
 }
 .textSub {
   font-weight: normal;
@@ -72,6 +100,9 @@
   color: rgba(28, 28, 28, 0.65);
   margin-top: 16px;
   margin-bottom: 27px;
+  @media only screen and (max-width: 767px) {
+    padding: 0px 19px;
+  }
 }
 .textSub1 {
   font-style: normal;
@@ -82,6 +113,9 @@
   color: rgba(28, 28, 28, 0.65);
   margin-top: 10px;
   margin-bottom: 25px;
+  @media only screen and (max-width: 767px) {
+    padding: 0px 19px;
+  }
 }
 .textBlue {
   display: flex;
@@ -96,6 +130,18 @@
     margin-right: 10px;
   }
 }
+.textBlue1 {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #1f61a9;
+  @media only screen and (max-width: 767px) {
+    padding: 0px 19px;
+  }
+}
 .textGreen {
   display: flex;
   align-items: center;
@@ -105,6 +151,9 @@
   line-height: 20px;
   letter-spacing: 0.015em;
   color: #7c9911;
+  @media only screen and (max-width: 767px) {
+    justify-content: space-between;
+  }
 }
 .textBlack {
   font-weight: 600;
@@ -112,14 +161,35 @@
   line-height: 140%;
   letter-spacing: 0.015em;
   color: #1c1c1c;
+  @media only screen and (max-width: 767px) {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    letter-spacing: 0.04em;
+  }
 }
-.left > div:first-child {
-  margin-top: 20px;
+.expected {
   margin-bottom: 30px;
   display: flex;
   align-items: center;
+  @media only screen and (max-width: 767px) {
+    justify-content: space-between;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 20px;
+  }
   p {
     margin-right: 66px;
+    @media only screen and (max-width: 767px) {
+      margin-right: 0px;
+    }
+  }
+}
+.target {
+  @media only screen and (max-width: 767px) {
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #dddddd;
   }
 }
 .flex2 {
@@ -127,6 +197,7 @@
   padding-left: 16px;
   margin-left: 10px;
   margin-top: 10px;
+
   div {
     display: flex;
     align-items: center;
@@ -143,20 +214,26 @@
   div:first-child {
     p {
       margin-right: 93px;
+      @media only screen and (max-width: 767px) {
+        margin-right: 80px;
+      }
     }
   }
   div:last-child {
     p {
       margin-right: 77px;
+      @media only screen and (max-width: 767px) {
+        margin-right: 64px;
+      }
     }
   }
 }
-.right {
+.right > div {
   border-left: 1px dashed rgba(28, 28, 28, 0.2);
   padding-left: 16px;
   margin-left: 10px;
 }
-.right > div {
+.right > div > div {
   display: flex;
   &:not(:last-child) {
     margin-bottom: 24px;
@@ -167,12 +244,28 @@
 }
 .pack > p {
   margin-right: 146px;
+  @media only screen and (max-width: 767px) {
+    margin-right: 135px;
+  }
 }
 .brandList > p {
   margin-right: 108px;
+  @media only screen and (max-width: 767px) {
+    margin-right: 101px;
+  }
 }
 .attribute > p {
   margin-right: 25px;
+  @media only screen and (max-width: 767px) {
+    margin-right: 27px;
+  }
+}
+.divider {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: block;
+    margin-bottom: 20px;
+  }
 }
 .infor {
   font-style: normal;
@@ -181,6 +274,30 @@
   line-height: 140%;
   letter-spacing: 0.015em;
   color: #000000;
+  div {
+    display: flex;
+    a {
+      padding-right: 2px;
+    }
+    @media only screen and (max-width: 767px) {
+      display: grid;
+      p {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 120%;
+        letter-spacing: 0.05em;
+        color: rgba(28, 28, 28, 0.65);
+        a {
+          display: none;
+        }
+      }
+      span {
+        font-weight: 600;
+        font-size: 14px;
+      }
+    }
+  }
 }
 .box {
   display: flex;

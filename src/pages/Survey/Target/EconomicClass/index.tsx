@@ -13,24 +13,23 @@ const EconomicClass = () => {
         <p>Choose economic class</p>
         <div>
           <Grid className={classes.rootCheck} container spacing={2}>
-          {checks.map((item, index) => {
-            return (
-              <Grid item xs={6} key={index}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      classes={{ root: classes.rootCheckbox }}
-                      icon={<img src={Images.icCheck} alt="" />}
-                      checkedIcon={<img src={Images.icCheckActive} alt="" />} />
-                  }
-                  label={item}
-                />
-              </Grid>
-            )
-          })}
-        </Grid>
+            {checks.map((item, index) => {
+              return (
+                <Grid item xs={6} key={index}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        classes={{ root: classes.rootCheckbox }}
+                        icon={<img src={Images.icCheck} alt="" />}
+                        checkedIcon={<img src={Images.icCheckActive} alt="" />} />
+                    }
+                    label={item}
+                  />
+                </Grid>
+              )
+            })}
+          </Grid>
         </div>
-        
       </Grid>
       <Grid classes={{ root: classes.rootBtn }}>
         <Buttons btnType="Blue" children={"Save"} padding="16px 56px" />

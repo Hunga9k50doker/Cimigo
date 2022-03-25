@@ -8,6 +8,7 @@
 } 
 .btnBlue {
   background: var(--cimigo-blue);
+  border: 1px solid transparent;
   color: white;
   &:hover {
     background: var(--cimigo-blue-light);
@@ -15,6 +16,7 @@
 }
 .btnRed {
   background: #AF1C10;
+  border: 1px solid transparent;
   color: white;
   &:hover {
     background: #af1d1080;

@@ -1,0 +1,105 @@
+.paper {
+  // display: none;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    margin: 0px !important;
+    overflow: hidden;
+    display: block;
+  }
+}
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+  color: #08182a;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #17497f;
+  padding: 12px 24px;
+  p {
+    font-weight: 600;
+    font-size: 14px;
+    color: #fafaff;
+  }
+  button {
+    background-color: #ffffff !important;
+  }
+}
+.body {
+  min-height: 300px;
+  @media only screen and (max-width: 767px) {
+    overflow: auto;
+    max-height: 400px;
+    padding-top: 14px;
+  }
+}
+
+.btn {
+  margin: 24px;
+  display: flex;
+  justify-content: flex-end;
+  button {
+    width: 25%;
+  }
+  @media only screen and (max-width: 767px) {
+    button {
+      width: 100%;
+    }
+  }
+}
+.rootTabs > div {
+  max-height: 35px;
+  border-bottom: 1px solid rgba(28, 28, 28, 0.2);
+}
+.rootTab {
+  width: 50%;
+  text-transform: none;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: rgba(28, 28, 28, 0.2);
+  min-height: unset !important;
+  padding: 6px 8px;
+}
+.selectedTab {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #7c9911 !important;
+}
+.text {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0.04em;
+  color: #1c1c1c;
+}
+.rootCheckboxLocation {
+  padding: 10px;
+  img {
+    border-radius: 4px;
+  }
+}
+.checkLocation {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: 10px;
+  max-width: 450px;
+  label {
+    margin: 0 !important;
+  }
+}
+.checkAgeOfChild {
+  margin: 10px;
+  max-width: 450px;
+  label {
+    margin: 0 !important;
+  }
+}

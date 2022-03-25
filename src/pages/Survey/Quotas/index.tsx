@@ -1,4 +1,5 @@
 import { Grid, TableHead, TableRow, TableCell, TableBody, Table } from '@mui/material';
+import { useEffect, useState } from 'react';
 import classes from './styles.module.scss';
 // import Images from "config/images";
 
@@ -30,9 +31,15 @@ const rows = [
 ]
 
 const Quotas = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    window.innerWidth <= 760 ? setIsMobile(true) : setIsMobile(false);
+  }, [window.innerWidth]);
+
   return (
     <>
-      <Grid>
+      <Grid classes={{ root: classes.root }}>
         <p className={classes.title}>Quotas</p>
         <p className={classes.subTitle}>The following quota tables are suggested by Cimigo, based on your selection of target criteria. The sample design is automatically allocated in proportion to the population for the best result.</p>
         <p className={classes.subTitle}>We recommend that you leave these unchanged unless you have compelling reasons to change them.</p>
@@ -42,7 +49,7 @@ const Quotas = () => {
           <TableHead className={classes.tableHead}>
             <TableRow>
               <TableCell>Strata</TableCell>
-              <TableCell>Region</TableCell>
+              <TableCell className={classes.cellMobile}>Region</TableCell>
               <TableCell>Provinces</TableCell>
               <TableCell align='center'>Representative sample size</TableCell>
             </TableRow>
@@ -53,13 +60,13 @@ const Quotas = () => {
                 key={index}
               >
                 <TableCell>{row.strata}</TableCell>
-                <TableCell>{row.region}</TableCell>
+                <TableCell className={classes.cellMobile}>{row.region}</TableCell>
                 <TableCell>{row.provinces}</TableCell>
                 <TableCell align='center'>{row.size}</TableCell>
               </TableRow>
             ))}
             <TableRow className={classes.rowTotal}>
-              <TableCell align="right" colSpan={3}>Total</TableCell>
+              <TableCell align="right" colSpan={isMobile ? 2 : 3}>Total</TableCell>
               <TableCell align="center">9999</TableCell>
             </TableRow>
           </TableBody>
