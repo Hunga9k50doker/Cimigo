@@ -172,7 +172,7 @@ const ProjectManagement = memo((props: Props) => {
         setFolders(res.data)
         if (folderId) {
           const item = res.data.find((it: Folder) => it.id === folderId.id)
-          if (!item) setFolderId(null)
+          if (!item) onChangeFolder()
         }
       })
       .catch((e) => dispatch(setErrorMess(e)))
@@ -252,8 +252,9 @@ const ProjectManagement = memo((props: Props) => {
     if (!folderDelete) return
     dispatch(setLoading(true))
     FolderService.delete(folderDelete.id, { isDeleteProject })
-      .then(() => {
+      .then(async () => {
         setFolderDelete(null)
+        await fetchData()
         getMyFolders()
       })
       .catch((e) => dispatch(setErrorMess(e)))
@@ -279,8 +280,8 @@ const ProjectManagement = memo((props: Props) => {
       deleteFolderIds: data.deleteFolderIds || []
     })
       .then(async () => {
-        await getMyFolders()
-        fetchData()
+        await fetchData()
+        getMyFolders()
         onCloseMoveProject()
       })
       .catch((e) => dispatch(setErrorMess(e)))
