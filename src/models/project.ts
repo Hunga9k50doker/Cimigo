@@ -1,3 +1,4 @@
+import { ProjectFolder } from './folder';
 import { OptionItem } from './general';
 import { Solution } from 'models/Admin/solution';
 export interface CreateProjectData {
@@ -26,6 +27,7 @@ export interface Project {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
+  project_folders?: ProjectFolder[]
 }
 
 export enum ProjectStatus {
@@ -50,4 +52,10 @@ export interface GetMyProjects {
   keyword?: string;
   take?: number;
   page?: number;
+}
+
+export interface MoveProject {
+  createFolderIds?: number[],
+  deleteFolderIds?: number[],
+  createFolder?: string
 }

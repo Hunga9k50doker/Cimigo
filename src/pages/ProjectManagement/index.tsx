@@ -46,6 +46,8 @@ import ConfirmDelete from "components/Modal/ConfirmDelete";
 import { FolderService } from "services/folder";
 import { Folder } from "models/folder";
 import clsx from "clsx";
+import PopupDeleteFolder from "./components/PopupDeleteFolder";
+import PopupMoveProject, { MoveProjectData } from "./components/PopupMoveProject";
 
 const ExpandIcon = (props) => {
   return (
@@ -77,14 +79,16 @@ const ProjectManagement = memo((props: Props) => {
 
   const [itemAction, setItemAction] = useState<Project>(null);
   const [itemDelete, setItemDelete] = useState<Project>(null);
+  const [itemMove, setItemMove] = useState<Project>(null);
   const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
 
 
   const [folders, setFolders] = useState<Folder[]>();
   const [folderEdit, setFolderEdit] = useState<Folder>(null);
+  const [folderDelete, setFolderDelete] = useState<Folder>(null);
   const [createFolder, setCreateFolder] = useState(false);
 
-  const fetchData = (value?: {
+  const fetchData = async (value?: {
     sort?: SortItem,
     folderId?: Folder,
     statusId?: OptionItem,
@@ -115,7 +119,7 @@ const ProjectManagement = memo((props: Props) => {
       params.statusIds = value?.statusId ? [value.statusId.id] : undefined
     }
     dispatch(setLoading(true))
-    ProjectService.getMyProjects(params)
+    await ProjectService.getMyProjects(params)
       .then((res) => {
         setData({ data: res.data, meta: res.meta })
       })
@@ -160,10 +164,14 @@ const ProjectManagement = memo((props: Props) => {
     fetchData({ sort: sortItem })
   }
 
-  const getMyFolders = () => {
-    FolderService.getFolders({ take: 9999 })
+  const getMyFolders = async () => {
+    await FolderService.getFolders({ take: 9999 })
       .then((res) => {
         setFolders(res.data)
+        if (folderId) {
+          const item = res.data.find((it: Folder) => it.id === folderId.id)
+          if (!item) setFolderId(null)
+        }
       })
       .catch((e) => dispatch(setErrorMess(e)))
   }
@@ -238,6 +246,45 @@ const ProjectManagement = memo((props: Props) => {
     setFolderEdit(null)
   }
 
+  const onDeleteFolder = (isDeleteProject: boolean = false) => {
+    if (!folderDelete) return
+    dispatch(setLoading(true))
+    FolderService.delete(folderDelete.id, { isDeleteProject })
+      .then(() => {
+        setFolderDelete(null)
+        getMyFolders()
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onShowMoveProject = () => {
+    if (!itemAction) return
+    setItemMove(itemAction)
+    onCloseActionMenu()
+  }
+
+  const onCloseMoveProject = () => {
+    setItemMove(null)
+  }
+
+  const onMoveProject = (data: MoveProjectData) => {
+    if (!itemMove) return
+    dispatch(setLoading(true))
+    ProjectService.moveProject(itemMove.id, {
+      createFolder: data.createFolder || '',
+      createFolderIds: data.createFolderIds || [],
+      deleteFolderIds: data.deleteFolderIds || []
+    })
+      .then(async () => {
+        await getMyFolders()
+        fetchData()
+        onCloseMoveProject()
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
   return (
     <Grid className={classes.root}>
       <Header />
@@ -270,12 +317,18 @@ const ProjectManagement = memo((props: Props) => {
                   onClick={() => onChangeFolder(item)}
                   secondaryAction={
                     <div className={classes.btnAction}>
-                      <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); setFolderEdit(item) }} edge="end" aria-label="Edit">
-                        <img src={Images.icRename} alt="" />
-                      </IconButton>
-                      <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); }} edge="end" aria-label="Delete">
-                        <img src={Images.icDelete} alt="" />
-                      </IconButton>
+                      {
+                        item.id !== folderId?.id && (
+                          <>
+                            <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); setFolderEdit(item) }} edge="end" aria-label="Edit">
+                              <img src={Images.icRename} alt="" />
+                            </IconButton>
+                            <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); setFolderDelete(item) }} edge="end" aria-label="Delete">
+                              <img src={Images.icDelete} alt="" />
+                            </IconButton>
+                          </>
+                        )
+                      }
                     </div>
                   }
                   disablePadding
@@ -388,7 +441,7 @@ const ProjectManagement = memo((props: Props) => {
                 <img src={Images.icRename} alt="" />
                 <p>Rename</p>
               </MenuItem>
-              <MenuItem className={classes.itemAciton}>
+              <MenuItem className={classes.itemAciton} onClick={() => onShowMoveProject()}>
                 <img src={Images.icMove} alt="" />
                 <p>Move</p>
               </MenuItem>
@@ -412,7 +465,18 @@ const ProjectManagement = memo((props: Props) => {
         isOpen={createFolder || !!folderEdit}
         itemEdit={folderEdit}
         onCancel={onCloseCreateOrEditFolder}
-        onSubmit={(name, id) => onCreateOrEditFolder(name)}
+        onSubmit={(name) => onCreateOrEditFolder(name)}
+      />
+      <PopupDeleteFolder
+        itemDelete={folderDelete}
+        onCancel={() => setFolderDelete(null)}
+        onDelete={onDeleteFolder}
+      />
+      <PopupMoveProject
+        project={itemMove}
+        folders={folders}
+        onCancel={() => onCloseMoveProject()}
+        onMove={onMoveProject}
       />
     </Grid>
   );

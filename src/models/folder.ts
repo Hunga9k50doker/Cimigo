@@ -3,6 +3,7 @@ import { Project } from "./project";
 export interface GetFolders {
   take?: number;
   page?: number;
+  projectIds?: number[]
 }
 
 export interface Folder {
@@ -22,4 +23,8 @@ export interface ProjectFolder {
   project?: Project,
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface DeleteFolderParams {
+  isDeleteProject?: boolean
 }

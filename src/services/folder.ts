@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { GetFolders } from 'models/folder';
+import { DeleteFolderParams, GetFolders } from 'models/folder';
 import api from 'services/configApi';
 
 export class FolderService {
@@ -33,8 +33,10 @@ export class FolderService {
       })
   }
 
-  static async delete(id: number): Promise<any> {
-    return await api.delete(`${API.FOLDER.DEFAULT}/${id}`)
+  static async delete(id: number, data?: DeleteFolderParams): Promise<any> {
+    return await api.delete(`${API.FOLDER.DEFAULT}/${id}`, {
+      params: data
+    })
       .then((res) => {
         return Promise.resolve(res.data)
       })

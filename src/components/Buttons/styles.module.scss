@@ -27,6 +27,7 @@
   color: var(--cimigo-blue);;
   border: 1px solid var(--cimigo-blue);
   &:hover {
-    background: var(--cimigo-blue-light);
+    color: white;
+    background: var(--cimigo-blue);
   }
 }
