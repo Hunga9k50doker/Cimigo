@@ -1,3 +1,4 @@
+import { OptionItem } from './general';
 import { Solution } from 'models/Admin/solution';
 export interface CreateProjectData {
   solutionId: number;
@@ -28,8 +29,25 @@ export interface Project {
 }
 
 export enum ProjectStatus {
-  DRAFT,
+  DRAFT = 1,
   AWAIT_PAYMENT,
   IN_PROGRESS,
   COMPLETED
+}
+
+export const projectStatus: OptionItem[] = [
+  { id: ProjectStatus.DRAFT, name: 'Draft' },
+  { id: ProjectStatus.AWAIT_PAYMENT, name: 'Await payment' },
+  { id: ProjectStatus.IN_PROGRESS, name: 'In progress' },
+  { id: ProjectStatus.COMPLETED, name: 'Completed' }
+]
+
+export interface GetMyProjects {
+  sortedField?: string;
+  isDescending?: boolean;
+  folderIds?: number[];
+  statusIds?: number[];
+  keyword?: string;
+  take?: number;
+  page?: number;
 }

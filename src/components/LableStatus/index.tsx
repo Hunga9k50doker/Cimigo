@@ -1,21 +1,22 @@
 import { memo } from "react";
 import classes from './styles.module.scss';
 import clsx from "clsx";
+import { ProjectStatus } from "models/project";
 
 interface LabelStatusProps {
-  typeStatus: string,
+  typeStatus: ProjectStatus,
 }
 
 const LabelStatus = memo((props: LabelStatusProps) => {
   const statusLabel = () => {
     switch (typeStatus) {
-      case "awaitPayment":
+      case ProjectStatus.AWAIT_PAYMENT:
         return "Await Payment";
-      case "draft":
+      case ProjectStatus.DRAFT:
         return "Draft";
-      case "inProgress":
+      case ProjectStatus.IN_PROGRESS:
         return "In Progress";
-      case "completed":
+      case ProjectStatus.COMPLETED:
         return "Completed";
       default: return typeStatus;
     }
@@ -26,10 +27,10 @@ const LabelStatus = memo((props: LabelStatusProps) => {
     <div
       className={clsx(
         classes.root,
-        typeStatus === "awaitPayment" ? classes.red : "",
-        typeStatus === "draft" ? classes.gray : "",
-        typeStatus === "inProgress" ? classes.yellow : "",
-        typeStatus === "completed" ? classes.green : "",
+        typeStatus === ProjectStatus.AWAIT_PAYMENT ? classes.red : "",
+        typeStatus === ProjectStatus.DRAFT ? classes.gray : "",
+        typeStatus === ProjectStatus.IN_PROGRESS ? classes.yellow : "",
+        typeStatus === ProjectStatus.COMPLETED ? classes.green : "",
       )
       }
       {...rest}

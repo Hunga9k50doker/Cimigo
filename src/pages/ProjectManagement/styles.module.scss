@@ -24,6 +24,7 @@
   margin-top: 18px;
 }
 .subTitle {
+  position: unset;
   color: rgba(28, 28, 28, 0.65);
   font-style: normal;
   font-weight: 600;
@@ -32,6 +33,7 @@
   border-radius: 4px 4px 0px 0px;
 }
 .subTitle1 {
+  position: unset;
   background-color: rgba(28, 28, 28, 0.65);
   font-style: normal;
   font-weight: 400;
@@ -39,14 +41,27 @@
   color: #fafaff;
   padding: 0px 32px;
 }
-.rootList:hover .btnAction {
+.rootList:hover:not(.folderListItemSelected) .btnAction {
   display: block !important;
 }
-.selected {
-  background-color: rgba(28, 28, 28, 0.05) !important;
+.folderListItemSelected {
+  .folderListItem:hover,
+  .folderListItem {
+    color: #FAFAFF;
+    background-color: rgba(28, 28, 28, 0.65) !important;
+  }
+  .btnAction {
+    display: none;
+  }
 }
 .btnAction {
   display: none;
+}
+.folderListItem {
+  &:hover {
+    color: #1C1C1C;
+    background-color: rgba(28, 28, 28, 0.05) !important;
+  }
 }
 .iconAction {
   width: 40px;

@@ -25,6 +25,9 @@ export const API = {
     BASIC_INFORMATION: '/v1.0/project/:id/basic-information',
     target: '/v1.0/project/:id/target',
   },
+  FOLDER: {
+    DEFAULT: '/v1.0/folder',
+  },
   ADMIN: {
     SOLUTION: {
       DEFAULT: '/v1.0/admin/solution',
