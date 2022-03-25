@@ -44,18 +44,19 @@ const AgeCoverage = () => {
           <Grid classes={{ root: classes.rootLocation }}>
             <p>Choose age</p>
             <Grid classes={{ root: classes.checkAge }}>
-              {checkAge.map((item) => {
+              {checkAge.map((item, index) => {
                 return (
-                  <FormControlLabel
-                    key={item}
-                    control={
-                      <Checkbox
-                        classes={{ root: classes.rootCheckbox }}
-                        icon={<img src={Images.icCheck} alt="" />}
-                        checkedIcon={<img src={Images.icCheckActive} alt="" />} />
-                    }
-                    label={item}
-                  />
+                  <Grid item xs={3} key={index} >
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          classes={{ root: classes.rootCheckbox }}
+                          icon={<img src={Images.icCheck} alt="" />}
+                          checkedIcon={<img src={Images.icCheckActive} alt="" />} />
+                      }
+                      label={item}
+                    />
+                  </Grid>
                 )
               })}
             </Grid>
@@ -94,11 +95,10 @@ const AgeCoverage = () => {
           <Grid classes={{ root: classes.rootLocation }}>
             <p>Choose age of child</p>
             <Grid classes={{ root: classes.checkAgeChild }}>
-              <Grid classes={{ root: classes.checkAgeChild1 }}>
-                {checkAgeChild.slice(0, 3).map((item, index) => {
-                  return (
+              {checkAgeChild.map((item, index) => {
+                return (
+                  <Grid item xs={6} key={index} >
                     <FormControlLabel
-                      key={index}
                       control={
                         <Checkbox
                           classes={{ root: classes.rootCheckbox }}
@@ -107,25 +107,9 @@ const AgeCoverage = () => {
                       }
                       label={item}
                     />
-                  )
-                })}
-              </Grid>
-              <Grid classes={{ root: classes.checkAgeChild2 }}>
-                {checkAgeChild.slice(3, 6).map((item, index) => {
-                  return (
-                    <FormControlLabel
-                      key={index}
-                      control={
-                        <Checkbox
-                          classes={{ root: classes.rootCheckbox }}
-                          icon={<img src={Images.icCheck} alt="" />}
-                          checkedIcon={<img src={Images.icCheckActive} alt="" />} />
-                      }
-                      label={item}
-                    />
-                  )
-                })}
-              </Grid>
+                  </Grid>
+                )
+              })}
             </Grid>
           </Grid>
           <Grid classes={{ root: classes.rootBtn }}>

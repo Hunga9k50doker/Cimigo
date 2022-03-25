@@ -67,26 +67,13 @@
   padding: 8px;
 }
 .checkAge {
-  margin: 25px 129px;
   display: flex;
+  justify-content: flex-start;
   flex-wrap: wrap;
-  label:nth-child(1) {
-    margin-right: 80px;
-  }
-  label:nth-child(2) {
-    margin-right: 80px;
-  }
-  label:nth-child(3) {
-    margin-right: 80px;
-  }
-  label:nth-child(4) {
-    margin-right: 0px;
-  }
-  label:nth-child(5) {
-    margin-right: 78px;
-  }
-  label:nth-child(6) {
-    margin-right: 83px;
+  margin: 15px 80px;
+  max-width: unset;
+  label {
+    margin: 0 !important;
   }
 }
 .rootBtn {
@@ -100,8 +87,13 @@
 }
 .checkAgeChild {
   display: flex;
-  margin: 25px 65px;
-  justify-content: space-between;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: 15px 80px;
+  max-width: unset;
+  label {
+    margin: 0 !important;
+  }
 }
 .checkAgeChild1 {
   display: grid;

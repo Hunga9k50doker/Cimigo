@@ -4,6 +4,8 @@ import classes from './styles.module.scss';
 import images from "config/images";
 import Inputs from "components/Inputs";
 import Buttons from "components/Buttons";
+import InputSelect from "components/InputsSelect";
+import clsx from "clsx";
 
 interface PaymentProps {
   onConfirm?: () => void,
@@ -14,6 +16,7 @@ const Payment = (props: PaymentProps) => {
 
   return (
     <Grid classes={{ root: classes.root }}>
+      <Divider className={classes.divider1} />
       <Grid classes={{ root: classes.left }}>
         <p>Payment method:</p>
         <RadioGroup defaultValue="order" classes={{ root: classes.radioGroup }}>
@@ -25,7 +28,7 @@ const Payment = (props: PaymentProps) => {
               <Grid classes={{ root: classes.order }}>
                 <Grid classes={{ root: classes.title }}><img src={images.icOrder} alt="" />Make an order</Grid>
                 <p className={classes.titleSub}>The simplest way to get started, especially if you need consultation. Our professional consultants will contact you using the information provided below.</p>
-                <form name="order" autoComplete="off">
+                <form name="order" autoComplete="off" >
                   <Inputs title="Contact name" name="Contactname" placeholder="Enter contact name" />
                   <Inputs title="Contact email" name="Contactemail" placeholder="Enter contact email address" />
                   <Inputs title="Contact phone" name="Contactphone" placeholder="e.g. +84378312333" />
@@ -47,7 +50,7 @@ const Payment = (props: PaymentProps) => {
           <Divider />
         </RadioGroup>
         <p>Invoice and contract information <span>(optional)</span></p>
-        <span className={classes.titleSub}>You can update this information later</span>
+        <span className={classes.titleSub1}>You can update this information later</span>
         <form name="bank" autoComplete="off">
           <Grid classes={{ root: classes.flex }}>
             <Inputs title="Full name" placeholder="e.g. John Smith" name="" />
@@ -56,7 +59,13 @@ const Payment = (props: PaymentProps) => {
           <Inputs title="Email" placeholder="e.g. John Smith" name="email" />
           <Grid classes={{ root: classes.flex }}>
             <Inputs title="Phone" placeholder="e.g. John Smith" name="" />
-            <Inputs title="Country" placeholder="e.g. John Smith" name="" />
+            <InputSelect
+              title="Country"
+              name="countryId"
+              selectProps={{
+                placeholder: "Enter country"
+              }}
+            />
           </Grid>
           <Inputs title="Company address" placeholder="e.g. John Smith" name="address" />
           <Inputs title="Tax code for invoice (optional)" placeholder="Enter tax code" name="code" />
@@ -75,6 +84,7 @@ const Payment = (props: PaymentProps) => {
             </Tooltip>
           </Grid>
         </form>
+        <Divider className={classes.divider1} />
       </Grid>
       <Grid classes={{ root: classes.right }}>
         <Grid classes={{ root: classes.bodyOrder }}>
@@ -87,16 +97,20 @@ const Payment = (props: PaymentProps) => {
             <span>Eye tracking</span>
             <span>$99</span>
           </div>
+          <div className={clsx(classes.flexOrder, classes.isMobile)}>
+            <span>VAT (10%)</span>
+            <span>$99</span>
+          </div>
           <Divider />
-          <div className={classes.flexOrder}>
+          <div className={clsx(classes.flexOrder, classes.notMobile)}>
             <span>Sample size</span>
             <span>$99</span>
           </div>
-          <div className={classes.flexOrder}>
+          <div className={clsx(classes.flexOrder, classes.notMobile)}>
             <span>Eye tracking</span>
             <span>$99</span>
           </div>
-          <Divider />
+          <Divider className={classes.notMobile} />
           <div className={classes.flexTotal}>
             <span>Total (USD)</span>
             <a>$218.9</a>
@@ -104,6 +118,14 @@ const Payment = (props: PaymentProps) => {
           <span>(4,599,000 VND)</span>
         </Grid>
         <Buttons onClick={onConfirm} children={"Place order"} btnType="Blue" width="100%" padding="16px" className={classes.btn} />
+      </Grid>
+      <Grid className={classes.flexTotalMobile}>
+        <Grid>
+          <p>Total (USD)</p>
+          <a>$218.9</a>
+          <span>(4,599,000 VND)</span>
+        </Grid>
+        <Buttons onClick={onConfirm} children={"Place order"} btnType="Blue" padding="16px" className={classes.btnMobile} />
       </Grid>
     </Grid>
   )

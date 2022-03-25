@@ -1,3 +1,10 @@
+.root {
+  max-width: 1000px;
+  margin: auto;
+  @media only screen and (max-width: 767px) {
+    padding: 22px 19px;
+  }
+}
 .title {
   font-weight: 600;
   font-size: 24px;
@@ -5,6 +12,12 @@
   text-align: center;
   color: #1f61a9;
   margin-bottom: 13px;
+  @media only screen and (max-width: 767px) {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.015em;
+  }
 }
 .subTitle {
   font-weight: normal;
@@ -13,6 +26,12 @@
   letter-spacing: 0.015em;
   color: #1c1c1c;
   margin-bottom: 15px;
+  @media only screen and (max-width: 767px) {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.015em;
+  }
 }
 .tableProvinces {
   border-radius: 4px;
@@ -30,6 +49,25 @@
     letter-spacing: 0.015em;
     color: #17497f;
     padding: 16px 30px;
+    @media only screen and (max-width: 767px) {
+      padding: 8px 15px;
+      font-size: 14px;
+      vertical-align: baseline;
+    }
+  }
+  th:last-child {
+    width: 300px;
+    @media only screen and (max-width: 1024px) {
+      width: unset;
+    }
+    @media only screen and (max-width: 767px) {
+      width: unset;
+    }
+  }
+}
+.cellMobile {
+  @media only screen and (max-width: 767px) {
+    display: none;
   }
 }
 .tableBody {
@@ -41,6 +79,10 @@
     letter-spacing: 0.015em;
     color: #1c1c1c;
     padding: 16px 30px;
+    @media only screen and (max-width: 767px) {
+      padding: 8px 15px;
+      font-size: 14px;
+    }
   }
 }
 .rowTotal {
@@ -48,6 +90,14 @@
   border-radius: 0px 0px 4px 4px;
   td {
     font-weight: 700 !important;
+    @media only screen and (max-width: 767px) {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 17px;
+      letter-spacing: 0.04em;
+      color: #1c1c1c;
+    }
   }
 }
 

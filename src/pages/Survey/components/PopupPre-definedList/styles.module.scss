@@ -1,6 +1,12 @@
 .paper {
   width: 800px;
   max-width: 800px;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 !important;
+    overflow: hidden;
+  }
 }
 .title {
   margin: 0;
@@ -26,14 +32,29 @@
 .body {
   min-height: 300px;
   padding: 24px;
+  @media only screen and (max-width: 767px) {
+    overflow: auto;
+    max-height: 400px;
+    padding: 24px 24px 0px 24px;
+  }
 }
 .body > p {
   margin: 0;
   font-weight: 400;
   font-size: 16px;
+  @media only screen and (max-width: 767px) {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 140%;
+    letter-spacing: 0.015em;
+    color: #1c1c1c;
+  }
 }
 .rootList {
   padding: 30px 0px;
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
 }
 .listFlex {
   display: flex;
@@ -101,6 +122,114 @@
   }
 }
 .btn {
+  margin: 24px;
   display: flex;
   justify-content: flex-end;
+  button {
+    width: 25%;
+  }
+  @media only screen and (max-width: 767px) {
+    button {
+      width: 100%;
+    }
+  }
+}
+.listNumberMobile {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: block;
+    margin: 24px auto 0px auto;
+    max-width: 350px;
+  }
+}
+.textMobile {
+  @media only screen and (max-width: 767px) {
+    display: flex;
+    justify-content: space-between;
+    p {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 15px;
+      color: #000000;
+      margin-bottom: 12px;
+    }
+  }
+}
+.numberMobile {
+  @media only screen and (max-width: 767px) {
+    display: flex;
+    min-width: 200px;
+    justify-content: space-between;
+    border-radius: 4px;
+    border: 1px solid #dddddd;
+    max-width: 240px;
+    margin: auto;
+    span {
+      width: 24px;
+      height: 24px;
+      max-width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 400;
+      font-size: 12px;
+      color: rgba(28, 28, 28, 0.65);
+    }
+    span:not(:last-child) {
+      border-right: 1px solid #dddddd;
+    }
+  }
+}
+.rootListMobile {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: block;
+    border: 0.5px solid #dddddd;
+    border-radius: 4px;
+    margin: 24px 0px;
+  }
+}
+.attributesMobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 10px;
+  &:not(:last-child) {
+    border-bottom: 0.5px solid #dddddd;
+  }
+}
+.titleAttributesMobile {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.025em;
+  color: #1c1c1c;
+}
+.rootCollapseMobile {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.CollapseAttributesMobile {
+  padding-right: 0px;
+  p {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 140%;
+    letter-spacing: 0.025em;
+    color: #1c1c1c;
+    margin-bottom: 10px;
+    span {
+      font-weight: 400;
+      font-size: 14px;
+    }
+  }
+}
+.rootCheckboxMobile {
+  padding: 0;
+  margin-right: 10px;
 }

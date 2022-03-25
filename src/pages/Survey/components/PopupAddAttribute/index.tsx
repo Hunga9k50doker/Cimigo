@@ -33,6 +33,13 @@ const PopupAddAttributes = memo((props: PopupCreateFolderProps) => {
         </Grid>
         <Grid className={classes.body}>
           <p>Your attribute will be asked as a 10-point scales. Please enter the start point label corresponds to 1, and the end point label corresponds to 10 in the boxes below. Also add the local translation for those labels, they will be used in the survey to elicit responses from consumers.</p>
+          <Grid className={classes.listNumberMobile}>
+            <div className={classes.textMobile}>
+              <p>Start label</p>
+              <p>End label</p>
+            </div>
+            <div className={classes.numberMobile}>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
+          </Grid>
           <Grid container classes={{ root: classes.rootList }}>
             <ListItem
               alignItems="center"
@@ -45,7 +52,7 @@ const PopupAddAttributes = memo((props: PopupCreateFolderProps) => {
                   <Grid item xs={4} className={classes.listTextLeft}>
                     <p>Start point label</p>
                     <OutlinedInput
-                    fullWidth
+                      fullWidth
                       placeholder='Enter start point label in English'
                       classes={{ root: classes.rootinput, input: classes.input }}
                     />
@@ -99,9 +106,9 @@ const PopupAddAttributes = memo((props: PopupCreateFolderProps) => {
               </Collapse>
             </Grid>
           </Grid>
-          <Grid className={classes.btn}>
-            <Buttons children="Add attribute" btnType='Blue' padding='13px 16px' width='25%' onClick={onClickCancel} />
-          </Grid>
+        </Grid>
+        <Grid className={classes.btn}>
+          <Buttons children="Add attribute" btnType='Blue' padding='13px 16px' onClick={onClickCancel} />
         </Grid>
       </Grid>
     </Dialog>

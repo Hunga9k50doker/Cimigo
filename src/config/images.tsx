@@ -5,6 +5,7 @@ import icMove from 'assets/img/icon/ic-move.svg';
 import icSearch from 'assets/img/icon/ic-search.svg';
 import icAddWhite from 'assets/img/icon/ic-add-white.svg';
 import icAddBlue from 'assets/img/icon/ic-add-blue.svg';
+import icAddGray from 'assets/img/icon/ic-add-gray.svg';
 import icClose from 'assets/img/icon/ic-close.svg';
 import icPack from 'assets/img/icon/ic-pack.svg';
 import icPrice from 'assets/img/icon/ic-price.svg';
@@ -34,11 +35,21 @@ import imgOrder from 'assets/img/img-order.svg';
 import imgPayment from 'assets/img/img-payment-completed.svg';
 import icError from 'assets/img/icon/ic-error.svg';
 import icLogout from 'assets/img/icon/ic-logout.svg';
+import icShowGray from 'assets/img/icon/ic-show-gray.svg';
+import icTabGray from 'assets/img/icon/ic-tab-gray.svg';
+import icTabGreen from 'assets/img/icon/ic-tab-green.svg';
+import icHomeMobile from 'assets/img/icon/ic-home-mobile.svg';
+import icNextMobile from 'assets/img/icon/ic-next-gray.svg';
 
 const images = {
   // ===================== Images =========================
   icOrder,
+  icHomeMobile,
+  icNextMobile,
+  icTabGray,
+  icTabGreen,
   icLogout,
+  icShowGray,
   icError,
   icBank,
   icDelete,
@@ -49,6 +60,7 @@ const images = {
   icSearch,
   icAddWhite,
   icAddBlue,
+  icAddGray,
   icClose,
   icPack,
   icPrice,

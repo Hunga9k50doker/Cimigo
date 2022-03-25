@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Dialog, Grid, IconButton } from '@mui/material';
+import { Button, Dialog, Grid, IconButton } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
@@ -34,25 +34,25 @@ const PopupPack = memo((props: PopupCreateFolderProps) => {
         <Grid className={classes.body}>
           <p>{isAdd ? "Upload your pack image and enter corresponding information." : "Edit your pack image and enter corresponding information."}</p>
           <Grid className={classes.spacing}>
-            <Grid item xs={5}>
+            <Grid>
               <Grid className={classes.imgUp}>
                 <img src={Images.icAddPhoto} />
                 <a href=''>Select pack image</a>
               </Grid>
             </Grid>
-            <Grid item xs={7}>
+            <Grid>
               <p className={classes.textTitle}>Pack image instructions:</p>
-              <div className={classes.textInfo}>Your pack image needs to have a <span>white background.</span></div>
-              <div className={classes.textInfo}>The file must be a <span>jpeg format.</span></div>
-              <div className={classes.textInfo}>The file size must be <span>less than 10MB.</span></div>
-              <div className={classes.textInfo}>YThe pack image should be <span>front facing</span>, as would be seen on a shelf.</div>
+              <div className={classes.textInfo}><p>Your pack image needs to have a <span>white background.</span></p></div>
+              <div className={classes.textInfo}><p>The file must be a &nbsp;<span>jpeg format.</span></p></div>
+              <div className={classes.textInfo}><p>The file size must be &nbsp;<span> less than 10MB.</span></p></div>
+              <div className={classes.textInfo}><p>The pack image should be &nbsp;<span> front facing</span>, as would be seen on a shelf.</p></div>
               <Grid className={classes.input}>
                 <Grid item xs={6}>
                   <Inputs title='Pack Name' name='' placeholder='Enter custom pack name' infor='This name will be used in the report' />
                 </Grid>
                 <Grid item xs={6}>
-                  <InputSelect 
-                    title='Pack type' 
+                  <InputSelect
+                    title='Pack type'
                     selectProps={{
                       placeholder: "-- Select a pack type --"
                     }}
@@ -60,6 +60,15 @@ const PopupPack = memo((props: PopupCreateFolderProps) => {
                 </Grid>
               </Grid>
             </Grid>
+          </Grid>
+          <Grid className={classes.inputMobile}>
+            <Inputs title='Pack Name' name='' placeholder='Enter custom pack name' infor='This name will be used in the report' />
+            <InputSelect
+              title='Pack type'
+              selectProps={{
+                placeholder: "-- Select a pack type --"
+              }}
+            />
           </Grid>
           <Grid className={classes.flex}>
             <p>Brand-related information on the pack</p>
@@ -73,7 +82,10 @@ const PopupPack = memo((props: PopupCreateFolderProps) => {
           <Grid >
           </Grid>
         </Grid>
-        <Buttons children={isAdd ? "Add pack" : "Update pack"} btnType='Blue' padding='13px 16px' className={classes.btn} />
+        <Grid className={classes.btn}>
+          <Buttons children={isAdd ? "Add pack" : "Update pack"} btnType='Blue' padding='13px 16px'  />
+          <Button onClick={onClickCancel}>Cancel</Button>
+        </Grid>
       </Grid>
     </Dialog>
   );

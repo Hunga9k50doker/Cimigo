@@ -1,0 +1,54 @@
+.paper {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px !important;
+    overflow: hidden;
+    display: block;
+  }
+}
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+  color: #08182a;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #17497f;
+  padding: 12px 24px;
+  p {
+    font-weight: 600;
+    font-size: 22px;
+    color: #fafaff;
+  }
+  button {
+    background-color: #ffffff !important;
+  }
+}
+.body {
+  min-height: 300px;
+  padding: 24px;
+  @media only screen and (max-width: 767px) {
+    overflow: auto;
+    max-height: 400px;
+    padding: 24px 24px 0px 24px;
+  }
+}
+
+.btn {
+  margin: 24px;
+  display: flex;
+  justify-content: flex-end;
+  button {
+    width: 25%;
+  }
+  @media only screen and (max-width: 767px) {
+    button {
+      width: 100%;
+    }
+  }
+}

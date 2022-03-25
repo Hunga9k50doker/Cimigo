@@ -1,12 +1,35 @@
+.root {
+  display: flex;
+  @media only screen and (max-width: 767px) {
+    padding: 22px 19px;
+  }
+}
+.left {
+  width: 75%;
+  @media only screen and (max-width: 1024px) {
+    width: 100%;
+  }
+}
+.right {
+  @media only screen and (max-width: 1024px) {
+    display: none;
+  }
+}
 .title {
   font-weight: 600;
   font-size: 24px;
   color: #1f61a9;
   margin: 0;
   margin-bottom: 30px;
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
 }
 .flex {
   padding: 0px 24px;
+  @media only screen and (max-width: 1024px) {
+    padding: 0px;
+  }
 }
 .flex > p {
   font-weight: normal;
@@ -28,21 +51,50 @@
   font-size: 16px;
   color: #1c1c1c;
   margin: 0;
+  @media only screen and (max-width: 767px) {
+    color: #1f61a9;
+  }
   span {
     color: #7c9911;
   }
 }
 .input {
   display: flex;
-  min-width: 700px;
+  max-width: 700px;
+  @media only screen and (max-width: 767px) {
+    display: grid;
+    max-width: none;
+    padding-top: 24px;
+  }
 }
 .input > div {
   padding: 20px;
+  @media only screen and (max-width: 767px) {
+    padding: 0px;
+  }
+}
+.btnSave {
+  max-width: 700px;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 20px;
+  padding-bottom: 24px;
+  @media only screen and (max-width: 767px) {
+    max-width: none;
+    justify-content: flex-start;
+    padding-right: 0px;
+  }
 }
 .packs {
   display: flex;
   flex-wrap: wrap;
   margin: 0px -12px;
+  @media only screen and (max-width: 767px) {
+    margin: auto;
+    justify-content: center;
+    display: grid;
+    flex-wrap: unset;
+  }
 }
 .itemPacks {
   padding: 16px;
@@ -55,7 +107,7 @@
 }
 .itemPacks:hover .itemInfor {
   display: block;
-} 
+}
 .itemPacks > div {
   position: relative;
 }
@@ -77,7 +129,7 @@
   bottom: 10px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, #ffffff 100%);
   width: 110%;
-  border-bottom: 1px solid #DDDDDD;
+  border-bottom: 1px solid #dddddd;
   padding: 10px 20px;
   margin-left: -16px;
   div {
@@ -125,6 +177,17 @@
   align-content: center;
   justify-content: center;
   min-height: 300px;
+  cursor: pointer;
+  @media only screen and (max-width: 767px) {
+    display: flex;
+    background: rgba(28, 28, 28, 0.05);
+    min-height: auto;
+    flex: 1 0;
+    img {
+      width: 20px;
+      margin-right: 10px;
+    }
+  }
   p {
     font-weight: 600;
     font-size: 32px;
@@ -132,6 +195,18 @@
     margin-top: 10px;
     min-width: 300px;
     text-align: center;
+    @media only screen and (max-width: 767px) {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 15px;
+      text-align: center;
+      letter-spacing: 0.04em;
+      color: rgba(28, 28, 28, 0.65);
+      min-width: auto;
+      white-space: nowrap;
+      margin-top: 0px;
+    }
   }
 }
 .menuAction {
@@ -159,6 +234,9 @@
   border-radius: 4px;
   margin-top: 35px;
   margin-bottom: 50px;
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
 }
 .tableHead {
   background: #1f61a9;
@@ -206,8 +284,125 @@
     }
   }
 }
+.brandListMobile {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: grid;
+    padding: 24px 0px;
+  }
+}
+.itemBrandMobile {
+  background: #eef0f2;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 7px 18px;
+  margin-bottom: 24px;
+}
+.itemBrandMobile > button {
+  padding: 0px;
+}
+.textBrand {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.04em;
+  color: #1c1c1c;
+}
+.textVariant {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.04em;
+  color: #1c1c1c;
+}
+.itemBrandMobileAdd {
+  background: rgba(28, 28, 28, 0.05);
+  border: 1px dashed rgba(28, 28, 28, 0.2);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 9px;
+  p {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+    letter-spacing: 0.04em;
+    color: rgba(28, 28, 28, 0.65);
+    padding-left: 7px;
+  }
+}
 .rootList {
   padding: 40px 20px;
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
+}
+.rootListMobile {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: block;
+    border: 0.5px solid #dddddd;
+    border-radius: 4px;
+    margin: 24px 0px;
+  }
+}
+.attributesMobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  &:not(:last-child) {
+    border-bottom: 0.5px solid #dddddd;
+  }
+}
+.titleAttributesMobile {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.025em;
+  color: #1c1c1c;
+}
+.CollapseAttributesMobile {
+  padding-right: 23px;
+  p {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 140%;
+    letter-spacing: 0.025em;
+    color: #1c1c1c;
+    margin-bottom: 10px;
+    span {
+      font-weight: 400;
+      font-size: 14px;
+    }
+  }
+}
+.btnActionMobile {
+  display: flex;
+  justify-content: flex-end;
+  button {
+    text-transform: none;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 140%;
+  }
+  button:first-child {
+    color: #1f61a9;
+  }
+  button:last-child {
+    color: #af1c10;
+  }
 }
 .listFlex {
   display: flex;
@@ -283,6 +478,9 @@
 }
 .icSelect {
   right: 15px;
+  @media only screen and (max-width: 767px) {
+    // position: unset;
+  }
 }
 .selectType {
   font-weight: 500;
@@ -293,28 +491,49 @@
   display: flex;
   align-items: center;
   padding: 0px 20px;
+  @media only screen and (max-width: 767px) {
+    display: grid;
+    align-items: start;
+    padding: 0px;
+
+  }
 }
 .select > p {
   font-weight: normal;
   font-size: 12px;
   color: #af1c10;
   margin-left: 15px;
+  @media only screen and (max-width: 767px) {
+    margin-left: 0px;
+    margin-top: 9px;
+  }
 }
 .rootSelect {
   min-width: 165px;
 }
 .rootSelect > div > div {
   padding: 5px 14px;
+  @media only screen and (max-width: 767px) {
+    padding: 9px 14px;
+  }
 }
 .rootSelect {
   fieldset {
     border-color: #1f61a9 !important;
+    @media only screen and (max-width: 767px) {
+      border-color: rgba(28, 28, 28, 0.2) !important;
+      background: rgba(28, 28, 28, 0.05);
+      border: 1px dashed rgba(28, 28, 28, 0.2);
+    }
   }
 }
 .tip {
   display: flex;
   align-items: flex-start;
   padding: 20px 19px;
+  @media only screen and (max-width: 767px) {
+    padding: 9px 0px;
+  }
   img {
     padding-right: 11px;
   }
