@@ -59,3 +59,11 @@ export interface MoveProject {
   deleteFolderIds?: number[],
   createFolder?: string
 }
+
+export interface RenameProject {
+  name: string,
+  category?: string,
+  brand?: string,
+  variant?: string,
+  manufacturer?: string
+}

@@ -48,6 +48,7 @@ import { Folder } from "models/folder";
 import clsx from "clsx";
 import PopupDeleteFolder from "./components/PopupDeleteFolder";
 import PopupMoveProject, { MoveProjectData } from "./components/PopupMoveProject";
+import PopupRenameProject, { RenameProjectFormData } from "./components/PopupRenameProject";
 
 const ExpandIcon = (props) => {
   return (
@@ -80,6 +81,7 @@ const ProjectManagement = memo((props: Props) => {
   const [itemAction, setItemAction] = useState<Project>(null);
   const [itemDelete, setItemDelete] = useState<Project>(null);
   const [itemMove, setItemMove] = useState<Project>(null);
+  const [itemRename, setItemRename] = useState<Project>(null);
   const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
 
 
@@ -285,6 +287,27 @@ const ProjectManagement = memo((props: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
+  const onShowRenameProject = () => {
+    if (!itemAction) return
+    setItemRename(itemAction)
+    onCloseActionMenu()
+  }
+
+  const onCloseRenameProject = () => {
+    setItemRename(null)
+  }
+
+  const onRenameProject = (data: RenameProjectFormData) => {
+    if (!itemRename) return
+    ProjectService.renameProject(itemRename.id, data)
+      .then(() => {
+        fetchData()
+        onCloseRenameProject()
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
   return (
     <Grid className={classes.root}>
       <Header />
@@ -437,7 +460,7 @@ const ProjectManagement = memo((props: Props) => {
                 <img src={Images.icEdit} alt="" />
                 <p>Detail</p>
               </MenuItem>
-              <MenuItem className={classes.itemAciton}>
+              <MenuItem className={classes.itemAciton} onClick={() => onShowRenameProject()}>
                 <img src={Images.icRename} alt="" />
                 <p>Rename</p>
               </MenuItem>
@@ -475,8 +498,13 @@ const ProjectManagement = memo((props: Props) => {
       <PopupMoveProject
         project={itemMove}
         folders={folders}
-        onCancel={() => onCloseMoveProject()}
+        onCancel={onCloseMoveProject}
         onMove={onMoveProject}
+      />
+      <PopupRenameProject 
+        project={itemRename}
+        onCancel={onCloseRenameProject}
+        onSubmit={onRenameProject}
       />
     </Grid>
   );

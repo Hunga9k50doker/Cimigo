@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { CreateProjectData, GetMyProjects, MoveProject } from 'models/project';
+import { CreateProjectData, GetMyProjects, MoveProject, RenameProject } from 'models/project';
 import api from 'services/configApi';
 
 export class ProjectService {
@@ -35,6 +35,16 @@ export class ProjectService {
 
   static async moveProject(id: number, data: MoveProject): Promise<any> {
     return await api.put(API.PROJECT.MOVE.replace(":id", `${id}`), data)
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async renameProject(id: number, data: RenameProject): Promise<any> {
+    return await api.put(API.PROJECT.RENAME.replace(":id", `${id}`), data)
       .then((res) => {
         return Promise.resolve(res.data)
       })
