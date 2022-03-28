@@ -33,6 +33,8 @@ import { routes } from "routers/routes";
 import { push } from "connected-react-router";
 import { ProjectService } from "services/project";
 import { Project } from "models/project";
+import images from "config/images";
+import { useHistory } from 'react-router-dom';
 
 interface IQueryString {
   solution_id?: string
@@ -67,6 +69,7 @@ const steps = [
 const CreateProject = () => {
 
   const dispatch = useDispatch()
+  const history = useHistory();
   const [keyword, setKeyword] = useState<string>('');
   const [category, setCategory] = useState<SolutionCategory>();
   const [solutionShow, setSolutionShow] = useState<Solution>();
@@ -160,7 +163,7 @@ const CreateProject = () => {
   }
 
   useEffect(() => {
-    if(solution_id && !isNaN(Number(solution_id))) {
+    if (solution_id && !isNaN(Number(solution_id))) {
       SolutionService.getSolution(Number(solution_id))
         .then((res) => {
           dispatch(push(routes.project.create))
@@ -172,8 +175,13 @@ const CreateProject = () => {
 
   return (
     <Grid className={classes.root}>
-      <Header />
+      <Header project />
       <Container>
+        <div className={classes.linkTextHome} >
+          <img src={images.icHomeMobile} alt='' onClick={() => history.push(routes.project.management)} />
+          <img src={images.icNextMobile} alt='' />
+          <span>Projects</span>
+        </div>
         <Stepper
           alternativeLabel
           activeStep={activeStep}
@@ -209,7 +217,7 @@ const CreateProject = () => {
             </Grid>
             <Stack direction="row" spacing={1}>
               {solutionCategory?.data.map((item) => (
-                <Chip key={item.id} label={item.name} className={clsx(classes.category, {[classes.categorySelected]: item.id === category?.id})} clickable variant="outlined" onClick={() => onChangeCategory(item)}/>
+                <Chip key={item.id} label={item.name} className={clsx(classes.category, { [classes.categorySelected]: item.id === category?.id })} clickable variant="outlined" onClick={() => onChangeCategory(item)} />
               ))}
             </Stack>
             <Grid className={classes.body}>
@@ -268,7 +276,7 @@ const CreateProject = () => {
                 errorMessage={errors.brand?.message}
               />
               <Inputs
-                name="variant" 
+                name="variant"
                 type="text"
                 placeholder="Enter your product variant"
                 title="Variant"

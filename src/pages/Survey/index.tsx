@@ -16,6 +16,8 @@ import Target from "./Target";
 import Quotas from "./Quotas";
 import PaymentBilling from "./PaymentBilling";
 import images from "config/images";
+import { routes } from "routers/routes";
+import { useHistory } from 'react-router-dom';
 
 const listTabs = ['Setup survey', 'Target', 'Quotas', 'Payment & Billing', 'Report']
 
@@ -29,9 +31,10 @@ function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
-  };
+  }; 
 }
 const Survey = () => {
+  const history = useHistory();
   const [value, setValue] = useState(0);
 
   const handleChange = (e, newValue: number) => {
@@ -40,9 +43,9 @@ const Survey = () => {
 
   return (
     <Grid>
-      <Header />
+      <Header project detail="C7938 On Demand (SaaS)"/>
       <Grid className={classes.rootMobile}>
-        <img src={images.icHomeMobile} alt='' />
+        <img src={images.icHomeMobile} alt='' onClick={() => history.push(routes.project.management)}/>
         <img src={images.icNextMobile} alt='' />
         <p>C7938 On Demand (SaaS)</p>
       </Grid>
