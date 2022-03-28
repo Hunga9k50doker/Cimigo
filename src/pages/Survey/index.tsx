@@ -44,7 +44,7 @@ function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
-  };
+  }; 
 }
 const Survey = () => {
 
@@ -86,9 +86,9 @@ const Survey = () => {
 
   return (
     <Grid>
-      <Header />
+      <Header project detail={project?.name}/>
       <Grid className={classes.rootMobile}>
-        <img src={images.icHomeMobile} alt='' />
+        <img src={images.icHomeMobile} alt='' onClick={() => dispatch(push(routes.project.management))}/>
         <img src={images.icNextMobile} alt='' />
         <p>{project?.name}</p>
       </Grid>

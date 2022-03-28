@@ -1,5 +1,8 @@
 .root {
   background-color: #fafaff;
+  @media only screen and (max-width: 767px) {
+    background-color: #fff;
+  }
 }
 .body {
   background-color: #fff;
@@ -8,6 +11,10 @@
   margin: 70px auto 180px;
   display: grid;
   padding: 48px;
+  @media only screen and (max-width: 767px) {
+    margin: 40px auto 40px;
+    padding: 24px;
+  }
 }
 .textLogin {
   color: #1f61a9;

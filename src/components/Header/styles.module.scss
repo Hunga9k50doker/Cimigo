@@ -111,8 +111,8 @@
   }
   @media only screen and (max-width: 767px) {
     max-width: 550px !important;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+    padding: 0px 14px;
+    height: 50px;
   }
 }
 
@@ -121,6 +121,9 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  @media only screen and (max-width: 767px) {
+    margin-left: -15px;
+  }
   img {
     width: 100%;
     max-width: 200px;
@@ -129,7 +132,7 @@
       min-width: 60px;
     }
     @media only screen and (max-width: 767px) {
-      max-width: 78px;
+      max-width: 85px;
       min-width: 50px;
     }
   }
@@ -180,6 +183,34 @@
 }
 .btnLogin {
   padding-right: 10px;
+  @media only screen and (max-width: 767px) {
+    button {
+      border: unset;
+      background-image: url("../../assets/img/icon/ic-profile-blue.svg");
+      background-repeat: no-repeat;
+      background-position: left 11px;
+      padding: 6px 0px 0px 18px;
+      &:not(.disable):hover {
+        background: none;
+        background-image: url("../../assets/img/icon/ic-profile-blue.svg");
+        background-repeat: no-repeat;
+        background-position: left 11px;
+      }
+    }
+  }
+}
+.btnLogout {
+  @media only screen and (max-width: 767px) {
+    button {
+      border: unset;
+      background: transparent;
+      color: #7c9911;
+      padding: 6px 0px 0px 0px;
+      &:not(.disable):hover {
+        background: none;
+      }
+    }
+  }
 }
 .searchWrapper {
   position: relative;
@@ -205,6 +236,10 @@
     }
   }
 }
+.rootMenu {
+  min-width: 200px;
+  top: 45px !important;
+}
 .menuAction {
   display: none;
   margin: 0 10px;
@@ -214,38 +249,13 @@
     display: flex;
   }
   button {
-    background: transparent;
     padding: 0;
-    margin: 0;
-    border: none;
-    display: flex;
-    align-items: center;
-    img {
-      width: 29px !important;
-      height: 16px !important;
-      object-fit: contain;
-    }
   }
-}
-.menuActionPaper {
-  left: auto !important;
-  right: 2px;
-  width: 30rem;
-  background: #1f61a9;
-  border: 1px solid #d3d3d3 !important;
-  border-radius: 5px;
-  display: none;
-  @media only screen and (max-width: 767px) {
-    display: block;
-  }
-}
-.menuActionArrow {
-  display: none;
 }
 .menuItem {
   display: flex;
   padding: 0;
-  border-bottom: .5px solid #fff;
+  border-bottom: 0.5px solid #fff;
   a {
     font-size: 1.1666rem;
     color: #fff;
@@ -280,5 +290,51 @@
     font-weight: 500;
     font-size: 12px;
     color: rgba(28, 28, 28, 0.65);
+  }
+}
+.linkProject {
+  display: flex;
+  align-items: center;
+  left: 250px;
+  position: absolute;
+  @media only screen and (max-width: 1024px) {
+    left: 200px;
+  }
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
+}
+.linkTextHome {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  cursor: pointer;
+  img {
+    margin-right: 5px;
+  }
+  span {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.015em;
+    color: #1f61a9;
+    margin-top: 5px;
+  }
+}
+.linkTexDetail {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  img {
+    margin-right: 15px;
+  }
+  span {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.015em;
+    color: #53660c;
   }
 }
