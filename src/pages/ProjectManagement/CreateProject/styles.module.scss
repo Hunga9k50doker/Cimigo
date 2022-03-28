@@ -2,7 +2,7 @@
   padding: 0px;
 }
 .rootStepper {
-  padding: 50px 0px;
+  padding: 30px 0px 50px 0px;
   width: 40%;
   margin: auto;
   min-width: 400px;
@@ -164,5 +164,24 @@
 .categorySelected {
   background: #bed7f3;
   color: #103055;
-  border: 1px solid #17497F;
+  border: 1px solid #17497f;
+}
+.linkTextHome {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: flex;
+    align-items: center;
+    margin: 20px 19px 0px 19px;
+    img {
+      margin-right: 15px;
+    }
+    span {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+      letter-spacing: 0.015em;
+      color: #1f61a9;
+    }
+  }
 }

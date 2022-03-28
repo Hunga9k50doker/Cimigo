@@ -13,11 +13,13 @@ import { routes } from "routers/routes";
 import images from "config/images";
 
 interface HeaderProps {
-
+  project?: boolean;
+  detail?: string;
 }
 
 const Header = memo((props: HeaderProps) => {
-  const history = useHistory()
+  const { project, detail } = props;
+  const history = useHistory();
   const { isLoggedIn, logout } = UseAuth();
   const anchorRef = useRef(null);
   const [isOpen, setOpen] = useState(false);
@@ -64,35 +66,48 @@ const Header = memo((props: HeaderProps) => {
     <header className={classes.root}>
       <Container className={classes.container}>
         <li className={clsx(classes.item, classes.menuAction)}>
-          <button
+          <IconButton
             ref={anchorRef}
             onClick={() => setOpen(true)}
           >
             <img src={iconMenuOpen} alt="menu-action" />
-          </button>
-          <PopoverMenu
+          </IconButton>
+          <Menu
             open={isOpen}
-            paperClass={classes.menuActionPaper}
-            arrowClass={classes.menuActionArrow}
             onClose={() => setOpen(false)}
             anchorEl={anchorRef.current}
+            classes={{ paper: classes.rootMenu }}
           >
-            <Box sx={{ py: 0 }}>
-              {dataList.map(item => (
-                <MenuItem key={item.name} className={classes.menuItem}>
-                  <a href={cimigoUrl}>
-                    {item.name}
-                  </a>
-                </MenuItem>
-              ))}
-            </Box>
-          </PopoverMenu>
+            {dataList.map(item => (
+              <MenuItem key={item.name}>
+                <a href={cimigoUrl}>
+                  {item.name}
+                </a>
+              </MenuItem>
+            ))}
+          </Menu>
         </li>
         <a href={cimigoUrl}>
           <div className={classes.imgContainer}>
             <img src={cimigoLogo} alt="cimigo" />
           </div>
         </a>
+        {isLoggedIn &&
+          <div className={classes.linkProject}>
+            {project &&
+              <div className={classes.linkTextHome} >
+                <img src={images.icHomeMobile} alt='' onClick={() => history.push(routes.project.management)} />
+                <span>Projects</span>
+              </div>
+            }
+            {detail &&
+              <p className={classes.linkTexDetail}>
+                <img src={images.icNextMobile} alt='' />
+                <span>{detail}</span>
+              </p>
+            }
+          </div>
+        }
         <nav className={classes.navBar}>
           <ul className={classes.listMenu}>
             {isLoggedIn ? "" :
@@ -135,8 +150,8 @@ const Header = memo((props: HeaderProps) => {
                 <a href={cimigoUrl} className={classes.btnLogin}>
                   <Buttons btnType="TransparentBlue" children="Log in" padding="6px 16px" onClick={() => history.push(routes.login)} />
                 </a>
-                <a href={cimigoUrl}>
-                  <Buttons btnType="Blue" children="Register" padding="7px 16px" onClick={() => history.push(routes.register)} />
+                <a href={cimigoUrl} className={classes.btnLogout}>
+                  <Buttons btnType="Blue" children="Register" padding="6px 16px" onClick={() => history.push(routes.register)} />
                 </a>
               </li>
             }
