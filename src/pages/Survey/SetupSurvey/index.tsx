@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import classes from './styles.module.scss';
 import {
   FormControl,
@@ -40,6 +40,28 @@ import PopupAddAttributes from "../components/PopupAddAttribute";
 import ColorlibStepIcon from "../components/ColorlibStepIcon";
 import LabelStatus from "../components/LableStatus";
 import PopupAddBrand from "../components/AddBrandMobile";
+import { useDispatch, useSelector } from "react-redux";
+import { ReducerType } from "redux/reducers";
+import * as yup from 'yup';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { ProjectService } from "services/project";
+import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+
+const schema = yup.object().shape({
+  category: yup.string(),
+  brand: yup.string(),
+  variant: yup.string(),
+  manufacturer: yup.string()
+})
+
+interface BasicInformationFormData {
+  category: string,
+  brand: string,
+  variant: string,
+  manufacturer: string
+}
 
 const ExpandIcon = (props) => {
   return (
@@ -47,7 +69,20 @@ const ExpandIcon = (props) => {
   )
 };
 
-const SetupSurvey = () => {
+interface Props {
+  id: number
+}
+
+const SetupSurvey = memo(({ id }: Props) => {
+
+  const dispatch = useDispatch()
+  const { project } = useSelector((state: ReducerType) => state.project)
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<BasicInformationFormData>({
+    resolver: yupResolver(schema),
+    mode: 'onChange'
+  });
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [openPopupDeletePack, setOpenPopupDeletePack] = useState(false)
@@ -155,6 +190,29 @@ const SetupSurvey = () => {
       setSelectedIndex(index)
     }
   }
+
+  useEffect(() => {
+    if (project) {
+      reset({
+        category: project.category,
+        brand: project.brand,
+        variant: project.variant,
+        manufacturer: project.manufacturer
+      })
+    }
+  }, [project])
+
+  const onSubmitBI = (data: BasicInformationFormData) => {
+    dispatch(setLoading(true))
+    ProjectService.updateProjectBasicInformation(id, data)
+      .then(() => {
+        dispatch(getProjectRequest(id))
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(true)))
+  }
+
+
   return (
     <Grid classes={{ root: classes.root }} >
       <Grid classes={{ root: classes.left }} >
@@ -162,19 +220,21 @@ const SetupSurvey = () => {
         <p className={classes.subTitle}>1.Basic information</p>
         <Grid className={classes.flex}>
           <p>These information will be used in the report, enter these correctly would make your report legible.</p>
-          <Grid className={classes.input}>
-            <Grid>
-              <Inputs title="Category" name="" placeholder="Enter your product category" />
-              <Inputs title="Variant" name="" placeholder="Enter your product variant" />
+          <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmitBI)}>
+            <Grid className={classes.input}>
+              <Grid>
+                <Inputs title="Category" name="category" placeholder="Enter your product category" inputRef={register('category')} errorMessage={errors.category?.message} />
+                <Inputs title="Variant" name="" placeholder="Enter your product variant" inputRef={register('variant')} errorMessage={errors.variant?.message} />
+              </Grid>
+              <Grid>
+                <Inputs title="Brand" name="" placeholder="Enter your product brand" inputRef={register('brand')} errorMessage={errors.brand?.message} />
+                <Inputs title="Manufacturer" name="" placeholder="Enter your product manufacturer" inputRef={register('manufacturer')} errorMessage={errors.manufacturer?.message} />
+              </Grid>
             </Grid>
-            <Grid>
-              <Inputs title="Brand" name="" placeholder="Enter your product brand" />
-              <Inputs title="Manufacturer" name="" placeholder="Enter your product manufacturer" />
+            <Grid className={classes.btnSave}>
+              <Buttons type={"submit"} padding="8px 18px" btnType="TransparentBlue" ><img src={Images.icSave} alt="icon save" />Save</Buttons>
             </Grid>
-          </Grid>
-          <Grid className={classes.btnSave}>
-            <Buttons padding="8px 18px" btnType="TransparentBlue" ><img src={Images.icSave} alt="" />Save</Buttons>
-          </Grid>
+          </form>
         </Grid>
         <p className={classes.subTitle}>2.Upload packs <span>(max 4)</span></p>
         <Grid className={classes.flex}>
@@ -436,32 +496,91 @@ const SetupSurvey = () => {
         <Grid className={isScrolling ? classes.summaryScroll : classes.summary}>
           <p className={classes.textSummary}>Summary</p>
           <Stepper
-            activeStep={activeStep}
+            activeStep={-1}
             orientation="vertical"
             classes={{ root: classes.rootSteper }}
             connector={<StepConnector classes={{ root: classes.rootConnector, active: classes.activeConnector }} />}
           >
-            {steps.map((step, index) => (
-              <Step
-                key={step.label}
-                onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
+            <Step>
+              <StepLabel
+                StepIconComponent={ColorlibStepIcon}
+                classes={{
+                  root: classes.rootStepLabel,
+                  completed: classes.rootStepLabelCompleted,
+                  active: classes.rootStepLabelActive,
+                  label: classes.rootStepLabel
+                }}
               >
-                <StepLabel
-                  StepIconComponent={ColorlibStepIcon}
-                  classes={{
-                    root: classes.rootStepLabel,
-                    completed: classes.rootStepLabelCompleted,
-                    active: classes.rootStepLabelActive,
-                    label: classes.rootStepLabel
-                  }}
-                >
-                  {step.label}
-                </StepLabel>
-                <StepContent classes={{ root: classes.rootConnector }}>
-                  <p>{step.description}</p>
-                </StepContent>
-              </Step>
-            ))}
+                Basic information
+              </StepLabel>
+              <StepContent classes={{ root: classes.rootConnector }}>
+                <ul>
+                  {project?.category && <li>{project.category} (Category)</li>} 
+                  {project?.brand && <li>{project.brand} (Brand)</li>} 
+                  {project?.variant && <li>{project.variant} (Variant)</li>} 
+                  {project?.manufacturer && <li>{project.manufacturer} (Manufacturer)</li>} 
+                </ul>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel
+                StepIconComponent={ColorlibStepIcon}
+                classes={{
+                  root: classes.rootStepLabel,
+                  completed: classes.rootStepLabelCompleted,
+                  active: classes.rootStepLabelActive,
+                  label: classes.rootStepLabel
+                }}
+              >
+                Upload your pack
+              </StepLabel>
+              <StepContent classes={{ root: classes.rootConnector }}>
+                <ul>
+                  <li>Cocacola light</li>
+                  <li>Cocacola light</li>
+                  <li>Cocacola light</li>
+                </ul>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel
+                StepIconComponent={ColorlibStepIcon}
+                classes={{
+                  root: classes.rootStepLabel,
+                  completed: classes.rootStepLabelCompleted,
+                  active: classes.rootStepLabelActive,
+                  label: classes.rootStepLabel
+                }}
+              >
+                Additional brand list
+              </StepLabel>
+              <StepContent classes={{ root: classes.rootConnector }}>
+                <ul>
+                  <li>Cocacola light</li>
+                  <li>Cocacola light</li>
+                  <li>Cocacola light</li>
+                </ul>
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel
+                StepIconComponent={ColorlibStepIcon}
+                classes={{
+                  root: classes.rootStepLabel,
+                  completed: classes.rootStepLabelCompleted,
+                  active: classes.rootStepLabelActive,
+                  label: classes.rootStepLabel
+                }}
+              >
+                Additional attributes
+              </StepLabel>
+              <StepContent classes={{ root: classes.rootConnector }}>
+                <ul>
+                  <li>Pre-defined attribute (0)</li>
+                  <li>Custom attribute (0)</li>
+                </ul>
+              </StepContent>
+            </Step>
           </Stepper>
         </Grid>
       </Grid>
@@ -474,5 +593,6 @@ const SetupSurvey = () => {
       <PopupAddBrand onClickOpen={openPopupAddBrand} onClickCancel={() => setOpenPopupAddBrand(false)} />
     </Grid>
   );
-};
+})
+
 export default SetupSurvey;

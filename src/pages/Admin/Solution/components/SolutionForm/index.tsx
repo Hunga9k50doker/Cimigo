@@ -202,7 +202,8 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                       control={control}
                       selectProps={{
                         options: categories,
-                        placeholder: "Select category"
+                        placeholder: "Select category",
+                        isDisabled: !!langEdit
                       }}
                       errorMessage={(errors.categoryId as any)?.id?.message}
                     />
@@ -213,9 +214,11 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                       title="Category Home"
                       name="categoryHomeId"
                       control={control}
+                      
                       selectProps={{
                         options: categoriesHome,
-                        placeholder: "Select category home"
+                        placeholder: "Select category home",
+                        isDisabled: !!langEdit
                       }}
                       errorMessage={(errors.categoryHomeId as any)?.id?.message}
                     />

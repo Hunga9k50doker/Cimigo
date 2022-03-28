@@ -1,8 +1,18 @@
 import { API } from 'config/constans';
-import { CreateProjectData, GetMyProjects, MoveProject, RenameProject } from 'models/project';
+import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, UpdateProjectBasicInformation } from 'models/project';
 import api from 'services/configApi';
 
 export class ProjectService {
+  static async getProject(id: number): Promise<any> {
+    return await api.get(`${API.PROJECT.DEFAULT}/${id}`)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
   static async createProject(data: CreateProjectData): Promise<any> {
     return await api.post(API.PROJECT.DEFAULT, data)
       .then((res) => {
@@ -53,5 +63,15 @@ export class ProjectService {
       })
   }
 
+  static async updateProjectBasicInformation(id: number, data: UpdateProjectBasicInformation): Promise<any> {
+    return await api.put(API.PROJECT.BASIC_INFORMATION.replace(":id", `${id}`), data)
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+  
 
 }

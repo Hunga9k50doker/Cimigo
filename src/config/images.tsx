@@ -40,6 +40,7 @@ import icTabGray from 'assets/img/icon/ic-tab-gray.svg';
 import icTabGreen from 'assets/img/icon/ic-tab-green.svg';
 import icHomeMobile from 'assets/img/icon/ic-home-mobile.svg';
 import icNextMobile from 'assets/img/icon/ic-next-gray.svg';
+import icAdditionalAttributes from 'assets/img/icon/ic-additional-attributes.svg';
 
 const images = {
   // ===================== Images =========================
@@ -85,6 +86,7 @@ const images = {
   icNext,
   imgOrder,
   imgPayment,
+  icAdditionalAttributes
 }
 
 export default images

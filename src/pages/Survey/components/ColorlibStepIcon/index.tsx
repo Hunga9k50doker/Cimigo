@@ -62,6 +62,7 @@ function ColorlibStepIcon(props) {
     1: <Check className="QontoStepIcon-completedIcon" />,
     2: <img src={Images.icUploadPack} alt='' />,
     3: <img src={Images.icAdditionalBrandList} alt='' />,
+    4: <img src={Images.icAdditionalAttributes} alt='' />,
   };
 
   return (
