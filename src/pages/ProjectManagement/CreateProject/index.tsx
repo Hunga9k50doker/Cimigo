@@ -8,6 +8,9 @@ import {
   StepConnector,
   Stack,
   Chip,
+  useMediaQuery,
+  useTheme,
+  Button,
 } from "@mui/material";
 
 import QontoStepIcon from "../components/QontoStepIcon";
@@ -78,12 +81,23 @@ const CreateProject = () => {
   const [solutionCategory, setSolutionCategory] = useState<DataPagination<SolutionCategory>>();
   const [activeStep, setActiveStep] = useState<EStep>(EStep.SELECT_SOLUTION);
   const { solution_id }: IQueryString = QueryString.parse(window.location.search);
+  const theme = useTheme();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down(767));
 
   const { register, handleSubmit, formState: { errors } } = useForm<CreateProjectFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
 
+  const hendleSolutionShow = (item) => {
+    if (!isMobile) {
+      setSolutionShow(item)
+    }
+    else {
+      
+    }
+  }
   const handleNextStep = () => {
     if (!solutionShow) return
     setSolutionSelected(solutionShow)
@@ -210,12 +224,11 @@ const CreateProject = () => {
               <p>Select a solution</p>
               <InputSearch
                 placeholder="Search solution"
-                width="30%"
                 value={keyword || ''}
                 onChange={onSearch}
               />
             </Grid>
-            <Stack direction="row" spacing={1}>
+            <Stack direction="row" spacing={1} className={classes.stack}>
               {solutionCategory?.data.map((item) => (
                 <Chip key={item.id} label={item.name} className={clsx(classes.category, { [classes.categorySelected]: item.id === category?.id })} clickable variant="outlined" onClick={() => onChangeCategory(item)} />
               ))}
@@ -225,10 +238,13 @@ const CreateProject = () => {
                 switch (item.status) {
                   case EStatus.Active:
                     return (
-                      <Grid key={index} className={classes.card} onClick={() => setSolutionShow(item)}>
+                      <Grid key={index} className={!solutionShow ? classes.card : classes.cardSelect} onClick={() => hendleSolutionShow(item)}>
                         <img src={item.image} alt="solution image" />
                         <p>{item.title}</p>
                         <span>{item.description}</span>
+                        <Grid className={classes.btnReadMore}>
+                          <Button onClick={() => setSolutionShow(item)} startIcon={<img src={images.icAddWhite} />}>Read more</Button>
+                        </Grid>
                       </Grid>
                     )
                   case EStatus.Coming_Soon:

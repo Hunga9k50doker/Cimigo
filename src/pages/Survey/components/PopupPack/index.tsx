@@ -80,7 +80,7 @@ const PopupPack = memo((props: Props) => {
   useEffect(() => {
     console.log(image, "==image==");
     if (image) {
-      if(typeof image === "object") {
+      if (typeof image === "object") {
         const reader = new FileReader();
         reader.readAsDataURL(image);
         reader.onload = () => setFileReview(reader.result as string);
@@ -147,18 +147,25 @@ const PopupPack = memo((props: Props) => {
             <p>{!itemEdit ? "Upload your pack image and enter corresponding information." : "Edit your pack image and enter corresponding information."}</p>
             <Grid className={classes.spacing}>
               <Grid>
-                <Grid className={classes.imgUp}  {...getRootProps()}>
+                <Grid
+                  className={classes.imgUp}
+                  style={{
+                    border: fileReview ? '1px solid rgba(28, 28, 28, 0.2)' : '1px dashed rgba(28, 28, 28, 0.2)',
+                    minHeight: fileReview ? 200 : 'unset'
+                  }}
+                  {...getRootProps()}
+                >
                   <input {...getInputProps()} />
                   {fileReview ? (
                     <>
-                      <img src={fileReview} className={classes.imgPreview}/>
+                      <img src={fileReview} className={classes.imgPreview} />
                       <IconButton aria-label="upload" className={classes.btnUpload}>
                         <CameraAlt />
                       </IconButton>
                     </>
                   ) : (
                     <>
-                      <img src={Images.icAddPhoto} />
+                      <img className={classes.imgAddPhoto} src={Images.icAddPhoto} />
                       <span>Select pack image</span>
                     </>
                   )}
@@ -167,10 +174,10 @@ const PopupPack = memo((props: Props) => {
               </Grid>
               <Grid>
                 <p className={classes.textTitle}>Pack image instructions:</p>
-                <div className={classes.textInfo}><p>Your pack image needs to have a <span>white background.</span></p></div>
-                <div className={classes.textInfo}><p>The file must be a &nbsp;<span>jpeg format.</span></p></div>
-                <div className={classes.textInfo}><p>The file size must be &nbsp;<span> less than 10MB.</span></p></div>
-                <div className={classes.textInfo}><p>The pack image should be &nbsp;<span> front facing</span>, as would be seen on a shelf.</p></div>
+                <div className={classes.textInfo}><p>Your pack image needs to have a&nbsp;<span>white background.</span></p></div>
+                <div className={classes.textInfo}><p>The file must be a&nbsp;<span>jpeg format.</span></p></div>
+                <div className={classes.textInfo}><p>The file size must be&nbsp;<span>less than 10MB.</span></p></div>
+                <div className={classes.textInfo}><p>The pack image should be&nbsp;<span>front facing</span>, as would be seen on a shelf.</p></div>
                 <Grid className={classes.input}>
                   <Grid item xs={6}>
                     <Controller

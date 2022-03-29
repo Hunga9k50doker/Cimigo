@@ -2,13 +2,22 @@
   padding: 0px;
 }
 .container {
-  margin: 50px 0px;
-  margin-left: -16px;
+  margin: auto;
+  display: flex;
+  padding: 50px 64px;
+  max-width: 1240px;
+  @media only screen and (max-width: 1024px) {
+    padding: 50px 24px;
+  }
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
 }
-
 // ---------------------Left------------------
 .left {
   min-height: 200px;
+  width: 30%;
+  padding-right: 18px;
 }
 .title {
   font-style: normal;
@@ -21,7 +30,7 @@
 .list {
   background-color: rgba(28, 28, 28, 0.05);
   border-radius: 4px;
-  margin-top: 18px;
+  margin-top: 10px;
 }
 .subTitle {
   position: unset;
@@ -47,7 +56,7 @@
 .folderListItemSelected {
   .folderListItem:hover,
   .folderListItem {
-    color: #FAFAFF;
+    color: #fafaff;
     background-color: rgba(28, 28, 28, 0.65) !important;
   }
   .btnAction {
@@ -59,7 +68,7 @@
 }
 .folderListItem {
   &:hover {
-    color: #1C1C1C;
+    color: #1c1c1c;
     background-color: rgba(28, 28, 28, 0.05) !important;
   }
 }
@@ -98,6 +107,9 @@
 
 // --------------------Right--------------------
 
+.right {
+  width: 80%;
+}
 .header {
   display: flex;
   align-items: flex-end;
@@ -139,6 +151,9 @@
 .rootSelect {
   min-width: 135px;
   margin-right: 15px;
+  @media only screen and (max-width: 767px) {
+    margin-right: 0px;
+  }
 }
 .rootSelect > div > div {
   padding: 4.5px 14px;
@@ -155,4 +170,68 @@
   font-weight: 500;
   font-size: 12px;
   color: #1f61a9;
+}
+// --------------------Mobile--------------------
+
+.containerMobile {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: block;
+    padding: 24px 19px;
+  }
+}
+.inputMobile {
+  border-radius: 40px;
+  margin: 24px 0px;
+}
+.headerMobile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  p {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.015em;
+    color: #1f61a9;
+  }
+}
+.listProject {
+  display: block;
+  margin: 24px auto;
+}
+.listItemProject {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.itemNameMobile {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0.015em;
+  color: #1c1c1c;
+  margin-bottom: 4px;
+}
+.itemDateMobile {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 140%;
+  color: rgba(28, 28, 28, 0.65);
+}
+.itemStatusMobile {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.05em;
+  span {
+    width: 8px;
+    height: 8px;
+  }
 }
