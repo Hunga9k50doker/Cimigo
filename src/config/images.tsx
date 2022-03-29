@@ -12,7 +12,7 @@ import icPrice from 'assets/img/icon/ic-price.svg';
 import icPriceGray from 'assets/img/icon/ic-price-gray.svg';
 import icVideo from 'assets/img/icon/ic-video.svg';
 import icAddPack from 'assets/img/icon/ic-add-pack.svg';
-import icAddPhoto from 'assets/img/icon/ic-add-photo.svg';
+import icAddPhoto from 'assets/img/icon/ic-add-photo.png';
 import icSave from 'assets/img/icon/ic-save.svg';
 import icSaveWhite from 'assets/img/icon/ic-save-white.svg';
 import icSelectBlue from 'assets/img/icon/ic-select-blue.svg';

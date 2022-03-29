@@ -28,6 +28,12 @@ export const API = {
   FOLDER: {
     DEFAULT: '/v1.0/folder',
   },
+  PACK: {
+    DEFAULT: '/v1.0/pack',
+  },
+  ADDITIONAL_BRAND: {
+    DEFAULT: '/v1.0/additional_brand',
+  },
   ADMIN: {
     SOLUTION: {
       DEFAULT: '/v1.0/admin/solution',

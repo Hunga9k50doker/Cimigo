@@ -71,6 +71,9 @@
   width: 100%;
 }
 .imgUp {
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
   background: rgba(28, 28, 28, 0.05);
   border: 1px dashed rgba(28, 28, 28, 0.2);
   border-radius: 5px;
@@ -87,7 +90,7 @@
       width: 50px;
     }
   }
-  a {
+  span {
     margin-top: 28px;
     font-style: italic;
     font-weight: 400;
@@ -98,6 +101,22 @@
     @media only screen and (max-width: 767px) {
       margin-top: 9px;
     }
+  }
+}
+.imgPreview {
+  position: absolute;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  cursor: unset;
+}
+.btnUpload {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  background: #EEF0F2;
+  &:hover {
+    background: #EEF0F2;
   }
 }
 .textTitle {

@@ -48,6 +48,10 @@ import { useForm } from "react-hook-form";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { ProjectService } from "services/project";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import { PackService } from "services/pack";
+import { Pack } from "models/pack";
+
+const MAX_PACK = 4
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -84,7 +88,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   });
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const [anchorElPack, setAnchorElPack] = useState<null | HTMLElement>(null);
   const [openPopupDeletePack, setOpenPopupDeletePack] = useState(false)
   const [openPopupNewPack, setOpenPopupNewPack] = useState(false)
   const [openPopupEditPack, setOpenPopupEditPack] = useState(false)
@@ -96,8 +100,13 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [selected, setSelected] = useState()
   const [addRow, setAddRow] = useState(false)
   const [select, setSelect] = useState<any>();
-  const [activeStep, setActiveStep] = useState(0);
   const [isScrolling, setScrolling] = useState(false);
+
+  const [packs, setPacks] = useState<Pack[]>([]);
+  const [addNewPack, setAddNewPack] = useState<boolean>(false);
+  const [packAction, setPackAction] = useState<Pack>();
+  const [packEdit, setPackEdit] = useState<Pack>();
+  const [packDelete, setPackDelete] = useState<Pack>();
 
   const handleScroll = () => {
     setScrolling(window.scrollY !== 0)
@@ -158,27 +167,6 @@ const SetupSurvey = memo(({ id }: Props) => {
     },
   ]
 
-  const steps = [
-    {
-      label: 'Basic information',
-      description: `For each ad campaign that you create, you can control how much
-                you're willing to spend on clicks and conversions, which networks
-                and geographical locations you want your ads to show on, and more.`,
-    },
-    {
-      label: 'Upload your pack',
-      description:
-        'An ad group contains one or more ads which target a shared set of keywords.',
-    },
-    {
-      label: 'Additional brand list',
-      description: `Try out different ad text to see what brings in the most customers,
-                and learn how to enhance your ads using features like ad extensions.
-                If you run into any problems with your ads, find out how to tell if
-                they're running and how to resolve approval issues.`,
-    },
-  ];
-
   const handleListItemClick = (index) => {
     setSelected(index);
   };
@@ -202,6 +190,18 @@ const SetupSurvey = memo(({ id }: Props) => {
     }
   }, [project])
 
+  const getPacks = () => {
+    PackService.getPacks({ take: 9999, projectId: id })
+      .then(res => {
+        setPacks(res.data)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+  }
+
+  useEffect(() => {
+    getPacks()
+  }, [id])
+
   const onSubmitBI = (data: BasicInformationFormData) => {
     dispatch(setLoading(true))
     ProjectService.updateProjectBasicInformation(id, data)
@@ -209,15 +209,54 @@ const SetupSurvey = memo(({ id }: Props) => {
         dispatch(getProjectRequest(id))
       })
       .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(true)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
+  const onCloseAddOrEditPack = () => {
+    setAddNewPack(false)
+    setPackEdit(null)
+  }
+
+  const onAddOrEditPack = (data: FormData) => {
+    data.append('projectId', `${id}`)
+    if (packEdit) {
+      dispatch(setLoading(true))
+      PackService.update(packEdit.id, data)
+        .then(() => {
+          getPacks()
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true))
+      PackService.create(data)
+        .then(() => {
+          getPacks()
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+    onCloseAddOrEditPack()
+
+  }
+
+  const onDeletePack = () => {
+    if (!packDelete) return
+    dispatch(setLoading(true))
+    PackService.delete(packDelete.id)
+      .then(() => {
+        getPacks()
+        setPackDelete(null)
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
 
   return (
     <Grid classes={{ root: classes.root }} >
       <Grid classes={{ root: classes.left }} >
         <p className={classes.title}>Setup your pack test survey</p>
-        <p className={classes.subTitle}>1.Basic information</p>
+        <p className={classes.subTitle} id="basic-information">1.Basic information</p>
         <Grid className={classes.flex}>
           <p>These information will be used in the report, enter these correctly would make your report legible.</p>
           <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmitBI)}>
@@ -236,51 +275,67 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
           </form>
         </Grid>
-        <p className={classes.subTitle}>2.Upload packs <span>(max 4)</span></p>
+        <p className={classes.subTitle} id="upload-packs">2.Upload packs <span>(max {MAX_PACK})</span></p>
         <Grid className={classes.flex}>
           <p>You may test between one and four packs. These would typically include your current pack, 2 new test pack and a key competitor pack.</p>
           <Grid className={classes.packs}>
-            {[0, 1, 2].map((_, index) => {
+            {packs.map((item, index) => {
               return (
                 <Grid className={classes.itemPacks} key={index}>
                   <Grid>
-                    <IconButton onClick={handleClick}><MoreVertIcon sx={{ color: "white" }} /></IconButton>
-                    <Menu
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      classes={{ paper: classes.menuAction }}
-                    >
-                      <MenuItem className={classes.itemAciton} onClick={() => { setOpenPopupEditPack(true); console.log("sss"); }}>
-                        <img src={Images.icEdit} alt="" />
-                        <p>Edit</p>
-                      </MenuItem>
-                      <MenuItem className={classes.itemAciton} onClick={() => setOpenPopupDeletePack(true)}>
-                        <img src={Images.icDelete} alt="" />
-                        <p>Delete</p>
-                      </MenuItem>
-                    </Menu>
-                    <img src={ImgPack} alt="" />
+                    <IconButton onClick={(e) => {
+                      setAnchorElPack(e.currentTarget)
+                      setPackAction(item)
+                    }}><MoreVertIcon sx={{ color: "white" }} /></IconButton>
+
+                    <img src={item.image} alt="image pack" />
                     <div className={classes.itemInfor}>
-                      <div><p style={{ paddingRight: 82 }}>Brand: </p><span>Four'N Twenty</span></div>
-                      <div><p style={{ paddingRight: 72 }}>Variant: </p><span>Classic Meat Pie</span></div>
-                      <div><p style={{ paddingRight: 18 }}>Manufacturer: </p><span>Patties Foods</span></div>
+                      <div><p style={{ paddingRight: 82 }}>Brand: </p><span>{item.brand}</span></div>
+                      <div><p style={{ paddingRight: 72 }}>Variant: </p><span>{item.variant}</span></div>
+                      <div><p style={{ paddingRight: 18 }}>Manufacturer: </p><span>{item.manufacturer}</span></div>
                     </div>
                   </Grid>
                   <Grid className={classes.textPacks}>
-                    <p>Holland's Green pack</p>
-                    <LabelStatus typeStatus="currentPack" />
+                    <p>{item.name}</p>
+                    <LabelStatus status={item.packType} />
                   </Grid>
                 </Grid>
               )
             })}
-            <Grid className={classes.addPack} onClick={() => setOpenPopupNewPack(true)}>
-              <img src={Images.icAddPack} alt="" />
-              <p>Add pack</p>
-            </Grid>
+            {MAX_PACK > packs?.length && (
+              <Grid className={classes.addPack} onClick={() => setAddNewPack(true)}>
+                <img src={Images.icAddPack} alt="" />
+                <p>Add pack</p>
+              </Grid>
+            )}
           </Grid>
         </Grid>
-        <p className={classes.subTitle}>3.Additional brand list <span>(max 10)</span></p>
+        <Menu
+          anchorEl={anchorElPack}
+          open={Boolean(anchorElPack)}
+          onClose={() => setAnchorElPack(null)}
+          classes={{ paper: classes.menuAction }}
+        >
+          <MenuItem className={classes.itemAciton} onClick={() => {
+            if (!packAction) return
+            setPackEdit(packAction)
+            setAnchorElPack(null)
+            setPackAction(null)
+          }}>
+            <img src={Images.icEdit} alt="" />
+            <p>Edit</p>
+          </MenuItem>
+          <MenuItem className={classes.itemAciton} onClick={() => {
+            if (!packAction) return
+            setPackDelete(packAction)
+            setAnchorElPack(null)
+            setPackAction(null)
+          }}>
+            <img src={Images.icDelete} alt="" />
+            <p>Delete</p>
+          </MenuItem>
+        </Menu>
+        <p className={classes.subTitle} id="additional-brand-list">3.Additional brand list <span>(max 10)</span></p>
         <Grid className={classes.flex}>
           <p>In your pack test survey, we will ask consumers some brand use questions. Besides the uploaded pack products. Please add the brand, variant name and manufacturer for top selling products in the category and market in which you are testing.
             <br />Try to include products accounting for at least two-thirds of sales or market share.</p>
@@ -307,7 +362,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                         </IconButton>
                         <Menu
                           anchorEl={anchorEl}
-                          open={open}
+                          open={Boolean(anchorEl)}
                           onClose={handleClose}
                           classes={{ paper: classes.menuAction }}
                         >
@@ -369,7 +424,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   </IconButton>
                   <Menu
                     anchorEl={anchorEl}
-                    open={open}
+                    open={Boolean(anchorEl)}
                     onClose={handleClose}
                     classes={{ paper: classes.menuAction }}
                   >
@@ -496,14 +551,14 @@ const SetupSurvey = memo(({ id }: Props) => {
         <Grid className={isScrolling ? classes.summaryScroll : classes.summary}>
           <p className={classes.textSummary}>Summary</p>
           <Stepper
-            activeStep={-1}
             orientation="vertical"
             classes={{ root: classes.rootSteper }}
             connector={<StepConnector classes={{ root: classes.rootConnector, active: classes.activeConnector }} />}
           >
-            <Step>
+            <Step active={!!project?.category && !!project?.brand && !!project?.variant && !!project?.manufacturer} expanded>
               <StepLabel
                 StepIconComponent={ColorlibStepIcon}
+                onClick={() => document.getElementById('basic-information')?.scrollIntoView()}
                 classes={{
                   root: classes.rootStepLabel,
                   completed: classes.rootStepLabelCompleted,
@@ -515,15 +570,16 @@ const SetupSurvey = memo(({ id }: Props) => {
               </StepLabel>
               <StepContent classes={{ root: classes.rootConnector }}>
                 <ul>
-                  {project?.category && <li>{project.category} (Category)</li>} 
-                  {project?.brand && <li>{project.brand} (Brand)</li>} 
-                  {project?.variant && <li>{project.variant} (Variant)</li>} 
-                  {project?.manufacturer && <li>{project.manufacturer} (Manufacturer)</li>} 
+                  {project?.category && <li>{project.category} (Category)</li>}
+                  {project?.brand && <li>{project.brand} (Brand)</li>}
+                  {project?.variant && <li>{project.variant} (Variant)</li>}
+                  {project?.manufacturer && <li>{project.manufacturer} (Manufacturer)</li>}
                 </ul>
               </StepContent>
             </Step>
-            <Step>
+            <Step active={packs?.length >= 2} expanded>
               <StepLabel
+                onClick={() => document.getElementById('upload-packs')?.scrollIntoView()}
                 StepIconComponent={ColorlibStepIcon}
                 classes={{
                   root: classes.rootStepLabel,
@@ -536,14 +592,13 @@ const SetupSurvey = memo(({ id }: Props) => {
               </StepLabel>
               <StepContent classes={{ root: classes.rootConnector }}>
                 <ul>
-                  <li>Cocacola light</li>
-                  <li>Cocacola light</li>
-                  <li>Cocacola light</li>
+                  {packs?.map(it => (<li key={it.id}>{it.name}</li>))}
                 </ul>
               </StepContent>
             </Step>
-            <Step>
+            <Step expanded>
               <StepLabel
+                onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
                 StepIconComponent={ColorlibStepIcon}
                 classes={{
                   root: classes.rootStepLabel,
@@ -562,7 +617,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                 </ul>
               </StepContent>
             </Step>
-            <Step>
+            <Step expanded>
               <StepLabel
                 StepIconComponent={ColorlibStepIcon}
                 classes={{
@@ -584,9 +639,17 @@ const SetupSurvey = memo(({ id }: Props) => {
           </Stepper>
         </Grid>
       </Grid>
-      <PopupPack onClickOpen={openPopupNewPack} onClickCancel={() => setOpenPopupNewPack(false)} isAdd />
-      <PopupPack onClickOpen={openPopupEditPack} onClickCancel={() => setOpenPopupEditPack(false)} />
-      <PopupDeletePack onClickOpen={openPopupDeletePack} onClickCancel={() => setOpenPopupDeletePack(false)} />
+      <PopupPack
+        isOpen={addNewPack}
+        itemEdit={packEdit}
+        onCancel={onCloseAddOrEditPack}
+        onSubmit={onAddOrEditPack}
+      />
+      <PopupDeletePack
+        isOpen={!!packDelete}
+        onCancel={() => setPackDelete(null)}
+        onDelete={onDeletePack}
+      />
       <PopupManatoryAttributes onClickOpen={openPopupMandatory} onClickCancel={() => setOpenPopupMandatory(false)} />
       <PopupPreDefinedList onClickOpen={openPopupPreDefined} onClickCancel={() => setOpenPopupPreDefined(false)} />
       <PopupAddAttributes onClickOpen={openPopupAddAttributes} onClickCancel={() => setOpenPopupAddAttributes(false)} />

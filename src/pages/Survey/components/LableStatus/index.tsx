@@ -1,37 +1,29 @@
 import { memo } from "react";
 import classes from './styles.module.scss';
 import clsx from "clsx";
+import { OptionItem } from "models/general";
+import { PackType } from "models/pack";
 
 interface LabelStatusProps {
-  typeStatus: string,
+  status: OptionItem
 }
 
 const LabelStatus = memo((props: LabelStatusProps) => {
-  const statusLabel = () => {
-    switch (typeStatus) {
-      case "currentPack":
-        return "Current pack";
-      case "testPack":
-        return "Test pack";
-      case "competitorPack":
-        return "Competitor pack";
-      default: return typeStatus;
-    }
-  };
-  const { typeStatus, ...rest } = props;
+  
+  const { status, ...rest } = props;
 
   return (
     <div
       className={clsx(
         classes.root,
-        typeStatus === "currentPack" ? classes.green : "",
-        typeStatus === "testPack" ? classes.blue : "",
-        typeStatus === "competitorPack" ? classes.brown : "",
+        status.id === PackType.Current_Pack ? classes.green : "",
+        status.id === PackType.Test_Pack ? classes.blue : "",
+        status.id === PackType.Competitor_Pack ? classes.brown : "",
       )
       }
       {...rest}
     >
-      {statusLabel()}
+      {status.name}
     </div >
   );
 });

@@ -7,23 +7,24 @@ import Images from "config/images";
 
 
 
-interface PopupCreateFolderProps {
-  onClickCancel?: () => void,
-  onClickOpen?: boolean,
+interface Props {
+  isOpen: boolean,
+  onCancel: () => void,
+  onDelete: () => void,
 }
 
 
-const PopupDeletePack = memo((props: PopupCreateFolderProps) => {
-  const { onClickCancel, onClickOpen } = props;
+const PopupDeletePack = memo((props: Props) => {
+  const { onCancel, isOpen, onDelete } = props;
 
   return (
     <Dialog
-      open={onClickOpen}
+      open={isOpen}
       classes={{ paper: classes.paper }}
     >
       <Grid>
         <Grid className={classes.header}>
-          <IconButton onClick={onClickCancel}>
+          <IconButton onClick={onCancel}>
             <img src={Images.icClose} alt='' />
           </IconButton>
         </Grid>
@@ -32,8 +33,8 @@ const PopupDeletePack = memo((props: PopupCreateFolderProps) => {
             <p>Are you sure you want to delete this packed?</p>
           </Grid>
           <Grid className={classes.btn}>
-            <Buttons children="CANCEL" btnType='TransparentBlue' padding='16px' onClick={onClickCancel} />
-            <Buttons children="DELETE" btnType='Red' padding='16px' />
+            <Buttons children="CANCEL" btnType='TransparentBlue' padding='16px' onClick={onCancel} />
+            <Buttons children="DELETE" btnType='Red' padding='16px' onClick={onDelete}/>
           </Grid>
       </Grid>
     </Dialog>
