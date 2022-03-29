@@ -22,12 +22,12 @@ import {
   TableSortLabel
 } from "@mui/material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useHistory } from "react-router-dom";
 
 import Header from "components/Header";
 import Footer from "components/Footer";
 import { routes } from 'routers/routes';
-import Container from "components/Container";
 import Images from "config/images";
 import Buttons from "components/Buttons";
 import LabelStatus from "components/LableStatus";
@@ -49,6 +49,7 @@ import clsx from "clsx";
 import PopupDeleteFolder from "./components/PopupDeleteFolder";
 import PopupMoveProject, { MoveProjectData } from "./components/PopupMoveProject";
 import PopupRenameProject, { RenameProjectFormData } from "./components/PopupRenameProject";
+import LabelStatusMobile from "./components/LableStatusMobile";
 
 const ExpandIcon = (props) => {
   return (
@@ -312,178 +313,222 @@ const ProjectManagement = memo((props: Props) => {
   return (
     <Grid className={classes.root}>
       <Header />
-      <Container>
-        <Grid className={classes.container} container spacing={2}>
-          <Grid item xs={3} className={classes.left}>
-            <p className={classes.title}>Projects</p>
-            <List
-              className={classes.list}
-              component="nav"
-              subheader={
-                <>
-                  <ListSubheader className={classes.subTitle}>Your folders</ListSubheader>
-                </>
-              }
+
+      <Grid className={classes.container}>
+        <Grid className={classes.left}>
+          <p className={classes.title}>Projects</p>
+          <List
+            className={classes.list}
+            component="nav"
+            subheader={
+              <ListSubheader className={classes.subTitle}>Your folders</ListSubheader>
+            }
+          >
+            <ListItem
+              classes={{ root: clsx(classes.rootList, { [classes.folderListItemSelected]: !folderId }) }}
+              disablePadding
+              onClick={() => onChangeFolder()}
             >
+              <ListItemButton className={classes.folderListItem}>
+                <ListItemText primary={"All projects"} />
+              </ListItemButton>
+            </ListItem>
+            {folders?.map((item, index) => (
               <ListItem
-                classes={{ root: clsx(classes.rootList, { [classes.folderListItemSelected]: !folderId }) }}
+                key={index}
+                classes={{ root: clsx(classes.rootList, { [classes.folderListItemSelected]: folderId?.id === item.id }) }}
+                onClick={() => onChangeFolder(item)}
+                secondaryAction={
+                  <div className={classes.btnAction}>
+                    {
+                      item.id !== folderId?.id && (
+                        <>
+                          <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); setFolderEdit(item) }} edge="end" aria-label="Edit">
+                            <img src={Images.icRename} alt="" />
+                          </IconButton>
+                          <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); setFolderDelete(item) }} edge="end" aria-label="Delete">
+                            <img src={Images.icDelete} alt="" />
+                          </IconButton>
+                        </>
+                      )
+                    }
+                  </div>
+                }
                 disablePadding
-                onClick={() => onChangeFolder()}
               >
                 <ListItemButton className={classes.folderListItem}>
-                  <ListItemText primary={"All projects"} />
+                  <ListItemText primary={item.name} />
                 </ListItemButton>
               </ListItem>
-              {folders?.map((item, index) => (
-                <ListItem
-                  key={index}
-                  classes={{ root: clsx(classes.rootList, { [classes.folderListItemSelected]: folderId?.id === item.id }) }}
-                  onClick={() => onChangeFolder(item)}
-                  secondaryAction={
-                    <div className={classes.btnAction}>
-                      {
-                        item.id !== folderId?.id && (
-                          <>
-                            <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); setFolderEdit(item) }} edge="end" aria-label="Edit">
-                              <img src={Images.icRename} alt="" />
-                            </IconButton>
-                            <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); setFolderDelete(item) }} edge="end" aria-label="Delete">
-                              <img src={Images.icDelete} alt="" />
-                            </IconButton>
-                          </>
-                        )
-                      }
-                    </div>
-                  }
-                  disablePadding
+            ))}
+            <Buttons onClick={() => setCreateFolder(true)} children="Create a folder" btnType="TransparentBlue" className={classes.btnFolder} padding="7px 16px" />
+          </List>
+        </Grid>
+        <Grid className={classes.right}>
+          <Grid className={classes.header}>
+            <div>
+              <FormControl classes={{ root: classes.rootSelect }}>
+                <Select
+                  variant="outlined"
+                  value={statusId?.id || 0}
+                  onChange={(e) => onChangeStatus(e.target.value as number)}
+                  classes={{ select: classes.selectType, icon: classes.icSelect }}
+                  IconComponent={ExpandIcon}
                 >
-                  <ListItemButton className={classes.folderListItem}>
-                    <ListItemText primary={item.name} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-              <Buttons onClick={() => setCreateFolder(true)} children="Create a folder" btnType="TransparentBlue" className={classes.btnFolder} padding="7px 16px" />
-            </List>
+                  <MenuItem value={0}>All statuses</MenuItem>
+                  {projectStatus.map((item => (
+                    <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
+                  )))}
+                </Select>
+              </FormControl>
+              <InputSearch
+                placeholder="Search"
+                width="55%"
+                value={keyword || ''}
+                onChange={onSearch}
+              />
+            </div>
+            <Buttons onClick={() => history.push(routes.project.create)} btnType="Blue" padding="11px 18px"><img src={Images.icAddWhite} alt="" />Create project</Buttons>
           </Grid>
-          <Grid item xs={9} className={classes.right}>
-            <Grid className={classes.header}>
-              <div>
-                <FormControl classes={{ root: classes.rootSelect }}>
-                  <Select
-                    variant="outlined"
-                    value={statusId?.id || 0}
-                    onChange={(e) => onChangeStatus(e.target.value as number)}
-                    classes={{ select: classes.selectType, icon: classes.icSelect }}
-                    IconComponent={ExpandIcon}
-                  >
-                    <MenuItem value={0}>All statuses</MenuItem>
-                    {projectStatus.map((item => (
-                      <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
-                    )))}
-                  </Select>
-                </FormControl>
-                <InputSearch
-                  placeholder="Search"
-                  width="55%"
-                  value={keyword || ''}
-                  onChange={onSearch}
-                />
-              </div>
-              <Buttons onClick={() => history.push(routes.project.create)} btnType="Blue" padding="16px"><img src={Images.icAddWhite} alt="" />Create project</Buttons>
-            </Grid>
-            <TableContainer className={classes.table}>
-              <Table>
-                <TableHead className={classes.tableHead}>
-                  <TableRow>
-                    <TableCell>
-                      <TableSortLabel
-                        active={sort?.sortedField === SortedField.name}
-                        direction={sort?.isDescending ? 'desc' : 'asc'}
-                        onClick={() => { onChangeSort(SortedField.name) }}
-                      >
-                        Project name
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell>
-                      Status
-                    </TableCell>
-                    <TableCell>
-                      <TableSortLabel
-                        active={sort?.sortedField === SortedField.updatedAt}
-                        direction={sort?.isDescending ? 'desc' : 'asc'}
-                        onClick={() => { onChangeSort(SortedField.updatedAt) }}
-                      >
-                        Last modified
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell>
-                      Solution
-                    </TableCell>
-                    <TableCell align="center">
-                      Action
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {data?.data?.length ? (
-                    data?.data?.map(item => (
-                      <TableRow hover key={item.id} className={classes.tableBody}>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell><LabelStatus typeStatus={item.status} /></TableCell>
-                        <TableCell>{moment(item.updatedAt).format('DD-MM-yyyy')}</TableCell>
-                        <TableCell>{item.solution?.title}</TableCell>
-                        <TableCell align="center">
-                          <IconButton onClick={(event) => handleAction(event, item)}>
-                            <MoreHorizIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow hover className={classes.tableBody}>
-                      <TableCell align="center" colSpan={5}>
-                        <Box sx={{ py: 3 }}>
-                          <SearchNotFound searchQuery={keyword} />
-                        </Box>
+          <TableContainer className={classes.table}>
+            <Table>
+              <TableHead className={classes.tableHead}>
+                <TableRow>
+                  <TableCell>
+                    <TableSortLabel
+                      active={sort?.sortedField === SortedField.name}
+                      direction={sort?.isDescending ? 'desc' : 'asc'}
+                      onClick={() => { onChangeSort(SortedField.name) }}
+                    >
+                      Project name
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell>
+                    Status
+                  </TableCell>
+                  <TableCell>
+                    <TableSortLabel
+                      active={sort?.sortedField === SortedField.updatedAt}
+                      direction={sort?.isDescending ? 'desc' : 'asc'}
+                      onClick={() => { onChangeSort(SortedField.updatedAt) }}
+                    >
+                      Last modified
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell>
+                    Solution
+                  </TableCell>
+                  <TableCell align="center">
+                    Action
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data?.data?.length ? (
+                  data?.data?.map(item => (
+                    <TableRow hover key={item.id} className={classes.tableBody}>
+                      <TableCell>{item.name}</TableCell>
+                      <TableCell><LabelStatus typeStatus={item.status} /></TableCell>
+                      <TableCell>{moment(item.updatedAt).format('DD-MM-yyyy')}</TableCell>
+                      <TableCell>{item.solution?.title}</TableCell>
+                      <TableCell align="center">
+                        <IconButton onClick={(event) => handleAction(event, item)}>
+                          <MoreHorizIcon />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <Menu
-              anchorEl={actionAnchor}
-              open={Boolean(actionAnchor)}
-              onClose={onCloseActionMenu}
-              classes={{ paper: classes.menuAction }}
-            >
-              <MenuItem className={classes.itemAciton} onClick={gotoDetail}>
-                <img src={Images.icEdit} alt="" />
-                <p>Detail</p>
-              </MenuItem>
-              <MenuItem className={classes.itemAciton} onClick={() => onShowRenameProject()}>
-                <img src={Images.icRename} alt="" />
-                <p>Rename</p>
-              </MenuItem>
-              <MenuItem className={classes.itemAciton} onClick={() => onShowMoveProject()}>
-                <img src={Images.icMove} alt="" />
-                <p>Move</p>
-              </MenuItem>
-              <MenuItem className={classes.itemAciton} onClick={onShowConfirmDelete}>
-                <img src={Images.icDelete} alt="" />
-                <p>Delete</p>
-              </MenuItem>
-            </Menu>
-            <ConfirmDelete
-              isOpen={!!itemDelete}
-              onCancel={onCloseConfirmDelete}
-              onDelete={onDelete}
-              title="Delete project"
-              description="Are you sure you want to delete this project?"
-            />
-          </Grid>
+                  ))
+                ) : (
+                  <TableRow hover className={classes.tableBody}>
+                    <TableCell align="center" colSpan={5}>
+                      <Box sx={{ py: 3 }}>
+                        <SearchNotFound searchQuery={keyword} />
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Menu
+            anchorEl={actionAnchor}
+            open={Boolean(actionAnchor)}
+            onClose={onCloseActionMenu}
+            classes={{ paper: classes.menuAction }}
+          >
+            <MenuItem className={classes.itemAciton} onClick={gotoDetail}>
+              <img src={Images.icEdit} alt="" />
+              <p>Detail</p>
+            </MenuItem>
+            <MenuItem className={classes.itemAciton} onClick={() => onShowRenameProject()}>
+              <img src={Images.icRename} alt="" />
+              <p>Rename</p>
+            </MenuItem>
+            <MenuItem className={classes.itemAciton} onClick={() => onShowMoveProject()}>
+              <img src={Images.icMove} alt="" />
+              <p>Move</p>
+            </MenuItem>
+            <MenuItem className={classes.itemAciton} onClick={onShowConfirmDelete}>
+              <img src={Images.icDelete} alt="" />
+              <p>Delete</p>
+            </MenuItem>
+          </Menu>
+          <ConfirmDelete
+            isOpen={!!itemDelete}
+            onCancel={onCloseConfirmDelete}
+            onDelete={onDelete}
+            title="Delete project"
+            description="Are you sure you want to delete this project?"
+          />
         </Grid>
-      </Container>
+      </Grid>
+      {/* =================================Mobile=============================== */}
+
+      <Grid className={classes.containerMobile}>
+        <Buttons onClick={() => history.push(routes.project.create)} children='Create your project' padding='11px' width="100%" btnType="Blue" />
+        <InputSearch
+          placeholder="Search project"
+          width="100%"
+          value={keyword || ''}
+          onChange={onSearch}
+          className={classes.inputMobile}
+        />
+        <Grid className={classes.headerMobile}>
+          <p>Projects</p>
+          <FormControl classes={{ root: classes.rootSelect }}>
+            <Select
+              variant="outlined"
+              value={statusId?.id || 0}
+              onChange={(e) => onChangeStatus(e.target.value as number)}
+              classes={{ select: classes.selectType, icon: classes.icSelect }}
+              IconComponent={ExpandIcon}
+            >
+              <MenuItem value={0}>All statuses</MenuItem>
+              {projectStatus.map((item => (
+                <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
+              )))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid classes={{ root: classes.listProject }}>
+          {data?.data?.length ? (
+            data?.data?.map(item => (
+              <Grid classes={{ root: classes.listItemProject }}>
+                <div>
+                  <p className={classes.itemNameMobile}>{item.name}</p>
+                  <LabelStatusMobile typeStatus={item.status} />
+                  <span className={classes.itemDateMobile}>Last modified on {moment(item.updatedAt).format('DD-MM-yyyy')}</span>
+                </div>
+                <IconButton onClick={(event) => handleAction(event, item)}>
+                  <MoreVertIcon />
+                </IconButton>
+              </Grid>
+            ))
+          ) : (
+            <SearchNotFound searchQuery={keyword} />
+          )}
+        </Grid>
+      </Grid>
       <Footer />
       <PopupCreateOrEditFolder
         isOpen={createFolder || !!folderEdit}
@@ -502,7 +547,7 @@ const ProjectManagement = memo((props: Props) => {
         onCancel={onCloseMoveProject}
         onMove={onMoveProject}
       />
-      <PopupRenameProject 
+      <PopupRenameProject
         project={itemRename}
         onCancel={onCloseRenameProject}
         onSubmit={onRenameProject}

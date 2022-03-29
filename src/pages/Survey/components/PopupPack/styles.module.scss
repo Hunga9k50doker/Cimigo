@@ -70,14 +70,18 @@
 .spacing > div {
   width: 100%;
 }
+.imgAddPhoto {
+  @media only screen and (max-width: 767px) {
+    width: 50px;
+  }
+}
 .imgUp {
   overflow: hidden;
   position: relative;
   cursor: pointer;
   background: rgba(28, 28, 28, 0.05);
-  border: 1px dashed rgba(28, 28, 28, 0.2);
   border-radius: 5px;
-  max-height: 236px;
+  max-height: 326px;
   height: 100%;
   width: 100%;
   display: grid;
@@ -86,9 +90,6 @@
   align-content: center;
   @media only screen and (max-width: 767px) {
     padding: 15px;
-    img {
-      width: 50px;
-    }
   }
   span {
     margin-top: 28px;
@@ -108,15 +109,19 @@
   object-fit: cover;
   width: 100%;
   height: 100%;
+  padding: 4px;
+  border-radius: 9px;
   cursor: unset;
+  @media only screen and (max-width: 767px) {
+  }
 }
 .btnUpload {
   position: absolute;
-  right: 8px;
-  bottom: 8px;
-  background: #EEF0F2;
+  right: 16px;
+  bottom: 16px;
+  background: #eef0f2;
   &:hover {
-    background: #EEF0F2;
+    background: #eef0f2;
   }
 }
 .textTitle {

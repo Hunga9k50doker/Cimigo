@@ -64,7 +64,7 @@ const Header = memo((props: HeaderProps) => {
 
   return (
     <header className={classes.root}>
-      <Container className={classes.container}>
+      <div className={classes.container}>
         <li className={clsx(classes.item, classes.menuAction)}>
           <IconButton
             ref={anchorRef}
@@ -157,7 +157,7 @@ const Header = memo((props: HeaderProps) => {
             }
           </ul>
         </nav>
-      </Container>
+      </div>
     </header>
   )
 })
