@@ -2,6 +2,9 @@
   text-transform: none;
   font-size: 14px;
   font-weight: 600;
+  &[class~=Mui-disabled] {
+    opacity: 0.5;
+  }
   img {
     padding-right: 9px;
   }

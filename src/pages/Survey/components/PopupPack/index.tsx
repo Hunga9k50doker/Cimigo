@@ -72,13 +72,19 @@ const PopupPack = memo((props: Props) => {
   }
 
   useEffect(() => {
-    if (!isOpen || !itemEdit) reset()
-  }, [isOpen])
+    if (!isOpen && !itemEdit) reset({
+      image: '',
+      name: '',
+      packTypeId: null,
+      brand: '',
+      manufacturer: '',
+      variant: ''
+    })
+  }, [isOpen, itemEdit])
 
   const image = watch('image')
 
   useEffect(() => {
-    console.log(image, "==image==");
     if (image) {
       if (typeof image === "object") {
         const reader = new FileReader();

@@ -39,7 +39,6 @@ import PopupPreDefinedList from "../components/PopupPre-definedList";
 import PopupAddAttributes from "../components/PopupAddAttribute";
 import ColorlibStepIcon from "../components/ColorlibStepIcon";
 import LabelStatus from "../components/LableStatus";
-import PopupAddBrand from "../components/AddBrandMobile";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import * as yup from 'yup';
@@ -50,8 +49,12 @@ import { ProjectService } from "services/project";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { PackService } from "services/pack";
 import { Pack } from "models/pack";
+import { AdditionalBrandService } from "services/additional_brand";
+import { AdditionalBrand } from "models/additional_brand";
+import PopupAddOrEditBrand, { BrandFormData } from "../components/PopupAddOrEditBrand";
 
 const MAX_PACK = 4
+const MAX_ADDITIONAL_BRAND = 10
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -88,7 +91,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   });
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [anchorElPack, setAnchorElPack] = useState<null | HTMLElement>(null);
+
   const [openPopupDeletePack, setOpenPopupDeletePack] = useState(false)
   const [openPopupNewPack, setOpenPopupNewPack] = useState(false)
   const [openPopupEditPack, setOpenPopupEditPack] = useState(false)
@@ -98,7 +101,6 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [openPopupAddAttributes, setOpenPopupAddAttributes] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState("")
   const [selected, setSelected] = useState()
-  const [addRow, setAddRow] = useState(false)
   const [select, setSelect] = useState<any>();
   const [isScrolling, setScrolling] = useState(false);
 
@@ -107,6 +109,18 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [packAction, setPackAction] = useState<Pack>();
   const [packEdit, setPackEdit] = useState<Pack>();
   const [packDelete, setPackDelete] = useState<Pack>();
+  const [anchorElPack, setAnchorElPack] = useState<null | HTMLElement>(null);
+
+  const [additionalBrand, setAdditionalBrand] = useState<AdditionalBrand[]>([]);
+  const [addRow, setAddRow] = useState(false)
+  const [brandFormData, setBrandFormData] = useState<{ brand: string; manufacturer: string; variant: string }>()
+  const [additionalBrandAction, setAdditionalBrandAction] = useState<AdditionalBrand>();
+  const [additionalBrandEdit, setAdditionalBrandEdit] = useState<AdditionalBrand>();
+  // const [additionalBrandDelete, setAdditionalBrandDelete] = useState<AdditionalBrand>();
+  const [anchorElADB, setAnchorElADB] = useState<null | HTMLElement>(null);
+  const [anchorElADBMobile, setAnchorElADBMobile] = useState<null | HTMLElement>(null);
+  const [addBrandMobile, setAddBrandMobile] = useState<boolean>(false);
+  const [brandEditMobile, setBrandEditMobile] = useState<AdditionalBrand>();
 
   const handleScroll = () => {
     setScrolling(window.scrollY !== 0)
@@ -154,19 +168,6 @@ const SetupSurvey = memo(({ id }: Props) => {
     }
   ]
 
-  const tableData = [
-    {
-      brand: "ChupaChups",
-      variant: "ChupaChups",
-      manufacturer: "ChupaChups",
-    },
-    {
-      brand: "ChupaChups",
-      variant: "ChupaChups",
-      manufacturer: "ChupaChups",
-    },
-  ]
-
   const handleListItemClick = (index) => {
     setSelected(index);
   };
@@ -200,6 +201,7 @@ const SetupSurvey = memo(({ id }: Props) => {
 
   useEffect(() => {
     getPacks()
+    getAdditionalBrand()
   }, [id])
 
   const onSubmitBI = (data: BasicInformationFormData) => {
@@ -250,6 +252,131 @@ const SetupSurvey = memo(({ id }: Props) => {
       })
       .catch(e => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+  }
+
+  const enableAdditionalBrand = () => {
+    return MAX_ADDITIONAL_BRAND > additionalBrand?.length
+  }
+
+  const getAdditionalBrand = () => {
+    AdditionalBrandService.getAdditionalBrandList({ take: 9999, projectId: id })
+      .then((res) => {
+        setAdditionalBrand(res.data)
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+  }
+
+  const onCloseActionADB = () => {
+    setAnchorElADB(null)
+    setAnchorElADBMobile(null)
+    setAdditionalBrandAction(null)
+  }
+
+  const enableAddBrand = () => {
+    return !!brandFormData?.brand && !!brandFormData?.manufacturer && !!brandFormData?.variant
+  }
+
+  const onCancelAddOrEditBrand = () => {
+    setAddRow(false)
+    setBrandFormData(null)
+    setAdditionalBrandEdit(null)
+  }
+
+  const onAddOrEditBrand = () => {
+    if (!enableAddBrand()) return
+    if (additionalBrandEdit) {
+      dispatch(setLoading(true))
+      AdditionalBrandService.update(additionalBrandEdit.id, {
+        brand: brandFormData.brand,
+        manufacturer: brandFormData.manufacturer,
+        variant: brandFormData.variant,
+      })
+        .then(() => {
+          getAdditionalBrand()
+          onCancelAddOrEditBrand()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true))
+      AdditionalBrandService.create({
+        projectId: id,
+        brand: brandFormData.brand,
+        manufacturer: brandFormData.manufacturer,
+        variant: brandFormData.variant,
+      })
+        .then(() => {
+          getAdditionalBrand()
+          onCancelAddOrEditBrand()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
+  const onEditBrand = () => {
+    if (!additionalBrandAction) return
+    setAdditionalBrandEdit(additionalBrandAction)
+    setBrandFormData({
+      brand: additionalBrandAction.brand,
+      manufacturer: additionalBrandAction.manufacturer,
+      variant: additionalBrandAction.variant
+    })
+    onCloseActionADB()
+  }
+
+  const onDeleteBrand = () => {
+    if (!additionalBrandAction) return
+    dispatch(setLoading(true))
+    AdditionalBrandService.delete(additionalBrandAction.id)
+      .then(() => {
+        getAdditionalBrand()
+        onCloseActionADB()
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onClosePopupAddOrEditBrand = () => {
+    setAddBrandMobile(false)
+    setBrandEditMobile(null)
+  }
+
+  const onAddOrEditBrandMobile = (data: BrandFormData) => {
+    if (brandEditMobile) {
+      dispatch(setLoading(true))
+      AdditionalBrandService.update(brandEditMobile.id, {
+        brand: data.brand,
+        manufacturer: data.manufacturer,
+        variant: data.variant,
+      })
+        .then(() => {
+          getAdditionalBrand()
+          onClosePopupAddOrEditBrand()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true))
+      AdditionalBrandService.create({
+        projectId: id,
+        brand: data.brand,
+        manufacturer: data.manufacturer,
+        variant: data.variant,
+      })
+        .then(() => {
+          getAdditionalBrand()
+          onClosePopupAddOrEditBrand()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
+  const onShowBrandEditMobile = () => {
+    if (!additionalBrandAction) return
+    setBrandEditMobile(additionalBrandAction)
+    onCloseActionADB()
   }
 
   return (
@@ -335,7 +462,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             <p>Delete</p>
           </MenuItem>
         </Menu>
-        <p className={classes.subTitle} id="additional-brand-list">3.Additional brand list <span>(max 10)</span></p>
+        <p className={classes.subTitle} id="additional-brand-list">3.Additional brand list <span>(max {MAX_ADDITIONAL_BRAND})</span></p>
         <Grid className={classes.flex}>
           <p>In your pack test survey, we will ask consumers some brand use questions. Besides the uploaded pack products. Please add the brand, variant name and manufacturer for top selling products in the category and market in which you are testing.
             <br />Try to include products accounting for at least two-thirds of sales or market share.</p>
@@ -350,68 +477,176 @@ const SetupSurvey = memo(({ id }: Props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tableData.map((item, index) => {
-                  return (
-                    <TableRow key={index} className={classes.tableBody}>
-                      <TableCell>{item.brand}</TableCell>
-                      <TableCell>{item.variant}</TableCell>
-                      <TableCell>{item.manufacturer}</TableCell>
-                      <TableCell align="center">
-                        <IconButton onClick={handleClick}>
-                          <MoreHorizIcon />
-                        </IconButton>
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={Boolean(anchorEl)}
-                          onClose={handleClose}
-                          classes={{ paper: classes.menuAction }}
-                        >
-                          <MenuItem className={classes.itemAciton}>
-                            <img src={Images.icEdit} alt="" />
-                            <p>Edit</p>
-                          </MenuItem>
-                          <MenuItem className={classes.itemAciton}>
-                            <img src={Images.icDelete} alt="" />
-                            <p>Delete</p>
-                          </MenuItem>
-                        </Menu>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-                {addRow &&
+                {packs?.map(item => (
+                  <TableRow key={item.id} className={classes.tableBody}>
+                    <TableCell>{item.brand}</TableCell>
+                    <TableCell>{item.variant}</TableCell>
+                    <TableCell>{item.manufacturer}</TableCell>
+                    <TableCell align="center">
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {additionalBrand?.map(item => (
+                  <TableRow key={item.id} className={classes.tableBody}>
+                    {
+                      additionalBrandEdit?.id !== item.id ? (
+                        <>
+                          <TableCell>{item.brand}</TableCell>
+                          <TableCell>{item.variant}</TableCell>
+                          <TableCell>{item.manufacturer}</TableCell>
+                          <TableCell align="center">
+                            <IconButton onClick={(e) => {
+                              setAnchorElADB(e.currentTarget)
+                              setAdditionalBrandAction(item)
+                            }}>
+                              <MoreHorizIcon />
+                            </IconButton>
+                          </TableCell>
+                        </>
+                      ) : (
+                        <>
+                          <TableCell>
+                            <OutlinedInput
+                              placeholder="Add text"
+                              value={brandFormData?.brand || ''}
+                              onChange={(e) => {
+                                setBrandFormData({
+                                  ...brandFormData,
+                                  brand: e.target.value || ''
+                                })
+                              }}
+                              classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <OutlinedInput
+                              placeholder="Add text"
+                              value={brandFormData?.variant || ''}
+                              onChange={(e) => {
+                                setBrandFormData({
+                                  ...brandFormData,
+                                  variant: e.target.value || ''
+                                })
+                              }}
+                              classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <OutlinedInput
+                              placeholder="Add text"
+                              value={brandFormData?.manufacturer || ''}
+                              onChange={(e) => {
+                                setBrandFormData({
+                                  ...brandFormData,
+                                  manufacturer: e.target.value || ''
+                                })
+                              }}
+                              classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                            />
+                          </TableCell>
+                          <TableCell align="center">
+                            <Buttons
+                              padding="7px"
+                              width="100%"
+                              btnType="TransparentBlue"
+                              disabled={!enableAddBrand()}
+                              onClick={onAddOrEditBrand}
+                            >
+                              <img src={Images.icSave} alt="icon save" />Save
+                            </Buttons>
+                          </TableCell>
+                        </>
+                      )
+                    }
+                  </TableRow>
+                ))}
+                {(addRow && !additionalBrandEdit) &&
                   <TableRow>
                     <TableCell>
                       <OutlinedInput
                         placeholder="Add text"
+                        value={brandFormData?.brand || ''}
+                        onChange={(e) => {
+                          setBrandFormData({
+                            ...brandFormData,
+                            brand: e.target.value || ''
+                          })
+                        }}
                         classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
                       />
                     </TableCell>
                     <TableCell>
                       <OutlinedInput
                         placeholder="Add text"
+                        value={brandFormData?.variant || ''}
+                        onChange={(e) => {
+                          setBrandFormData({
+                            ...brandFormData,
+                            variant: e.target.value || ''
+                          })
+                        }}
                         classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
                       />
                     </TableCell>
                     <TableCell>
                       <OutlinedInput
                         placeholder="Add text"
+                        value={brandFormData?.manufacturer || ''}
+                        onChange={(e) => {
+                          setBrandFormData({
+                            ...brandFormData,
+                            manufacturer: e.target.value || ''
+                          })
+                        }}
                         classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
                       />
                     </TableCell>
-                    <TableCell align="center"><Buttons padding="7px" width="100%" btnType="TransparentBlue" ><img src={Images.icSave} alt="" />Save</Buttons></TableCell>
+                    <TableCell align="center">
+                      <Buttons
+                        padding="7px"
+                        width="100%"
+                        btnType="TransparentBlue"
+                        disabled={!enableAddBrand()}
+                        onClick={onAddOrEditBrand}
+                      >
+                        <img src={Images.icSave} alt="icon save" />Save
+                      </Buttons>
+                    </TableCell>
                   </TableRow>
                 }
-                <TableRow hover className={classes.btnAddBrand} onClick={() => setAddRow(true)}>
+                {(enableAdditionalBrand() && !addRow && !additionalBrandEdit) && <TableRow hover className={classes.btnAddBrand} onClick={() => setAddRow(true)}>
                   <TableCell colSpan={4} variant="footer" align="center" scope="row"><div><img src={Images.icAddBlue} /> Add new brand</div></TableCell>
-                </TableRow>
+                </TableRow>}
               </TableBody>
             </Table>
           </TableContainer>
-
+          <Menu
+            anchorEl={anchorElADB}
+            open={Boolean(anchorElADB)}
+            onClose={onCloseActionADB}
+            classes={{ paper: classes.menuAction }}
+          >
+            <MenuItem className={classes.itemAciton} onClick={() => onEditBrand()}>
+              <img src={Images.icEdit} alt="icon edit" />
+              <p>Edit</p>
+            </MenuItem>
+            <MenuItem className={classes.itemAciton} onClick={() => onDeleteBrand()}>
+              <img src={Images.icDelete} alt="icon delete" />
+              <p>Delete</p>
+            </MenuItem>
+          </Menu>
           {/* ===================brand list mobile====================== */}
           <Grid className={classes.brandListMobile}>
-            {tableData.map((item, index) => {
+            {packs?.map(item => (
+              <Grid key={item.id} className={classes.itemBrandMobile}>
+                <div>
+                  <p className={classes.textBrand}>Brand: {item.brand}</p>
+                  <p className={classes.textVariant}>Variant: {item.variant}</p>
+                  <p className={classes.textVariant}>Manufacturer: {item.manufacturer}</p>
+                </div>
+              </Grid>
+            ))}
+            {additionalBrand?.map((item, index) => {
               return (
                 <Grid key={index} className={classes.itemBrandMobile}>
                   <div>
@@ -419,34 +654,41 @@ const SetupSurvey = memo(({ id }: Props) => {
                     <p className={classes.textVariant}>Variant: {item.variant}</p>
                     <p className={classes.textVariant}>Manufacturer: {item.manufacturer}</p>
                   </div>
-                  <IconButton onClick={handleClick}>
+                  <IconButton
+                    onClick={(e) => {
+                      setAnchorElADBMobile(e.currentTarget)
+                      setAdditionalBrandAction(item)
+                    }}
+                  >
                     <MoreVertIcon />
                   </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                    classes={{ paper: classes.menuAction }}
-                  >
-                    <MenuItem className={classes.itemAciton}>
-                      <img src={Images.icEdit} alt="" />
-                      <p>Edit</p>
-                    </MenuItem>
-                    <MenuItem className={classes.itemAciton}>
-                      <img src={Images.icDelete} alt="" />
-                      <p>Delete</p>
-                    </MenuItem>
-                  </Menu>
                 </Grid>
               )
             })}
-            <Grid className={classes.itemBrandMobileAdd} onClick={() => setOpenPopupAddBrand(true)}>
-              <img src={Images.icAddGray} alt="" />
-              <p>Add new brand</p>
-            </Grid>
+            {enableAdditionalBrand() && (
+              <Grid className={classes.itemBrandMobileAdd} onClick={() => setAddBrandMobile(true)}>
+                <img src={Images.icAddGray} alt="" />
+                <p>Add new brand</p>
+              </Grid>
+            )}
           </Grid>
         </Grid>
-        <p className={classes.subTitle}>4.Additional attributes <span>(max 6)</span></p>
+        <Menu
+          anchorEl={anchorElADBMobile}
+          open={Boolean(anchorElADBMobile)}
+          onClose={onCloseActionADB}
+          classes={{ paper: classes.menuAction }}
+        >
+          <MenuItem className={classes.itemAciton} onClick={() => onShowBrandEditMobile()}>
+            <img src={Images.icEdit} alt="icon edit" />
+            <p>Edit</p>
+          </MenuItem>
+          <MenuItem className={classes.itemAciton} onClick={() => onDeleteBrand()}>
+            <img src={Images.icDelete} alt="icon delete" />
+            <p>Delete</p>
+          </MenuItem>
+        </Menu>
+        <p className={classes.subTitle} id="additional-attributes">4.Additional attributes <span>(max 6)</span></p>
         <Grid className={classes.flex}>
           <p>We will test your packs associations with some <span onClick={() => setOpenPopupMandatory(true)}>mandatory attributes</span>. You have an option to select further attributes from a pre-defined list or add your own attributes.</p>
           <Grid container classes={{ root: classes.rootList }}>
@@ -596,7 +838,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                 </ul>
               </StepContent>
             </Step>
-            <Step expanded>
+            <Step active={additionalBrand?.length >= 2} expanded>
               <StepLabel
                 onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
                 StepIconComponent={ColorlibStepIcon}
@@ -611,14 +853,23 @@ const SetupSurvey = memo(({ id }: Props) => {
               </StepLabel>
               <StepContent classes={{ root: classes.rootConnector }}>
                 <ul>
-                  <li>Cocacola light</li>
-                  <li>Cocacola light</li>
-                  <li>Cocacola light</li>
+                  {additionalBrand?.map(it => (<li key={it.id}>{it.variant} ({it.brand})</li>))}
                 </ul>
+                {additionalBrand?.length > 4 && (
+                  <Grid display={"flex"} justifyContent="flex-end">
+                    <span
+                      className={classes.moreStepContent}
+                      onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
+                    >
+                      {additionalBrand?.length - 4} more
+                    </span>
+                  </Grid>
+                )}
               </StepContent>
             </Step>
             <Step expanded>
               <StepLabel
+                onClick={() => document.getElementById('additional-attributes')?.scrollIntoView()}
                 StepIconComponent={ColorlibStepIcon}
                 classes={{
                   root: classes.rootStepLabel,
@@ -653,7 +904,12 @@ const SetupSurvey = memo(({ id }: Props) => {
       <PopupManatoryAttributes onClickOpen={openPopupMandatory} onClickCancel={() => setOpenPopupMandatory(false)} />
       <PopupPreDefinedList onClickOpen={openPopupPreDefined} onClickCancel={() => setOpenPopupPreDefined(false)} />
       <PopupAddAttributes onClickOpen={openPopupAddAttributes} onClickCancel={() => setOpenPopupAddAttributes(false)} />
-      <PopupAddBrand onClickOpen={openPopupAddBrand} onClickCancel={() => setOpenPopupAddBrand(false)} />
+      <PopupAddOrEditBrand 
+        isAdd={addBrandMobile}
+        itemEdit={brandEditMobile}
+        onCancel={onClosePopupAddOrEditBrand} 
+        onSubmit={onAddOrEditBrandMobile}
+      />
     </Grid>
   );
 })

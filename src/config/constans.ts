@@ -32,7 +32,7 @@ export const API = {
     DEFAULT: '/v1.0/pack',
   },
   ADDITIONAL_BRAND: {
-    DEFAULT: '/v1.0/additional_brand',
+    DEFAULT: '/v1.0/additional-brand',
   },
   ADMIN: {
     SOLUTION: {
