@@ -2,11 +2,18 @@
   padding : 24px;
   width: 550px;
   max-width: 550px;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    margin: 0px !important;
+  }
 }
 .root > div:nth-child(2){
   margin: 24px auto 35px auto;
   width: 60% !important;
   display: block;
+  @media only screen and (max-width: 767px) {
+    width: 80% !important;
+  }
 }
 .title {
   margin: 0;

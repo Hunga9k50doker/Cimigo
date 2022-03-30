@@ -2,6 +2,11 @@
   padding: 24px;
   width: 550px;
   max-width: 550px;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    max-width: 400px;
+    margin: 0px !important;
+  }
 }
 .title {
   margin: 0;
@@ -29,4 +34,8 @@
   margin-bottom: 34px;
   display: block;
   color: rgba(28, 28, 28, 0.65);
+  @media only screen and (max-width: 767px) {
+    margin-bottom: 14px;
+    margin-top: 14px;
+  }
 }

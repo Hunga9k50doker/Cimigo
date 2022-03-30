@@ -14,6 +14,16 @@ const customStyles = (error?: boolean) => ({
   indicatorSeparator: () => ({
     display: "none",
   }),
+  option: (provided, state) => ({
+    ...provided,
+    fontStyle: 400,
+    fontWeight: 500,
+    fontSize: 14,
+    lineHeight: '140%',
+    letterSpacing: '0.015em',
+    color: '#1C1C1C',
+    padding: '14px 15px',
+  }),
   placeholder: (provided) => ({
     ...provided,
     fontSize: 16,
@@ -54,7 +64,7 @@ interface InputSelectProps {
 
 const InputSelect = memo((props: InputSelectProps) => {
   const { title, errorMessage, name, control, bindKey, bindLabel, selectProps, fullWidth, optional } = props;
-  
+
   return (
     <FormControl classes={{ root: classes.container }} sx={{ width: fullWidth ? '100%' : 'auto' }}>
       {title && <TextTitle invalid={errorMessage}>{title} {optional && <span className={classes.optional}>(optional)</span>}</TextTitle>}
@@ -64,8 +74,8 @@ const InputSelect = memo((props: InputSelectProps) => {
             <Controller
               name={name}
               control={control}
-              render={({ field }) => <Select 
-                {...field} 
+              render={({ field }) => <Select
+                {...field}
                 styles={customStyles(!!errorMessage)}
                 getOptionValue={(option) => option[bindKey || 'id']}
                 getOptionLabel={(option) => option[bindLabel || 'name']}

@@ -517,7 +517,7 @@ const ProjectManagement = memo((props: Props) => {
                 <div>
                   <p className={classes.itemNameMobile}>{item.name}</p>
                   <LabelStatusMobile typeStatus={item.status} />
-                  <span className={classes.itemDateMobile}>Last modified on {moment(item.updatedAt).format('DD-MM-yyyy')}</span>
+                  <span className={classes.itemDateMobile}>Last modified on {moment(item.updatedAt).format('MMM DD, yyyy')}</span>
                 </div>
                 <IconButton onClick={(event) => handleAction(event, item)}>
                   <MoreVertIcon />

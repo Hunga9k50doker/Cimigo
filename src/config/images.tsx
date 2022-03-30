@@ -41,10 +41,18 @@ import icTabGreen from 'assets/img/icon/ic-tab-green.svg';
 import icHomeMobile from 'assets/img/icon/ic-home-mobile.svg';
 import icNextMobile from 'assets/img/icon/ic-next-gray.svg';
 import icAdditionalAttributes from 'assets/img/icon/ic-additional-attributes.svg';
+import icReadMore from 'assets/img/icon/ic-read-more.svg';
+import icTicked from 'assets/img/icon/ic-ticked.svg';
+import icReadMoreGray from 'assets/img/icon/ic-read-more-gray.svg';
+import icTick from 'assets/img/icon/ic-tick.svg';
 
 const images = {
   // ===================== Images =========================
   icOrder,
+  icTicked,
+  icReadMoreGray,
+  icTick,
+  icReadMore,
   icHomeMobile,
   icNextMobile,
   icTabGray,
