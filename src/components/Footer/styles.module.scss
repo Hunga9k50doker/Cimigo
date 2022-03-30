@@ -1,5 +1,3 @@
-.root {
-}
 .footerWidget1 {
   background-color: var(--cimigo-green);
   padding: 0.625rem 0;
@@ -7,6 +5,19 @@
 .containerWidget1.containerWidget1 {
   display: flex;
   justify-content: space-between;
+  max-width: 1240px !important;
+  padding-left: 64px;
+  padding-right: 64px;
+  @media only screen and (max-width: 1024px) {
+    max-width: 1024px !important;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  @media only screen and (max-width: 767px) {
+    max-width: 550px !important;
+    padding-left: 19px;
+    padding-right: 19px;
+  }
 }
 .emailContact {
   display: flex;
@@ -42,9 +53,19 @@
 .containerWidget2.containerWidget2 {
   display: flex;
   flex-direction: row;
+  max-width: 1240px !important;
+  padding-left: 64px;
+  padding-right: 64px;
+  @media only screen and (max-width: 1024px) {
+    max-width: 1024px !important;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
   @media only screen and (max-width: 767px) {
     flex-direction: column !important;
     align-items: center;
+    padding-left: 19px;
+    padding-right: 19px;
   }
 }
 .leftContainer {
@@ -165,8 +186,6 @@
     width: 100%;
     margin-top: 1rem;
   }
-}
-.footerWidget3 {
 }
 .containerWidget3.containerWidget3 {
   padding: 1rem 0;

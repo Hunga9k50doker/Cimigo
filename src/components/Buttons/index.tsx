@@ -15,7 +15,7 @@ interface ButtonsProps {
 }
 
 const Buttons = memo((props: ButtonsProps) => {
-  const { width, padding, className, btnType, children, onClick, ...rest } = props;
+  const { width, padding, className, btnType, children, disabled, onClick, ...rest } = props;
   return (
     <Button
       className={clsx(
@@ -24,9 +24,11 @@ const Buttons = memo((props: ButtonsProps) => {
         btnType === "Red" ? classes.btnRed : "",
         btnType === "TransparentBlue" ? classes.btnTransparentBlue : "",
       )}
+      classes={{ disabled: classes.btndisabled }}
       type="button"
       {...rest}
       onClick={onClick}
+      disabled={disabled}
       sx={{minWidth: width, padding: padding}}
     >
       {children}

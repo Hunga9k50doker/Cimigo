@@ -1,6 +1,23 @@
 .root {
   padding: 0px;
 }
+.container {
+  margin: 0 auto;
+  box-sizing: border-box;
+  max-width: 1240px !important;
+  padding-left: 64px;
+  padding-right: 64px;
+  @media only screen and (max-width: 1024px) {
+    max-width: 1024px !important;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  @media only screen and (max-width: 767px) {
+    max-width: 550px !important;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
 .rootStepper {
   padding: 30px 0px 50px 0px;
   width: 40%;
@@ -54,6 +71,9 @@
   display: flex;
   align-items: center;
   margin-bottom: 30px;
+  @media only screen and (max-width: 767px) {
+    padding: 0px 19px;
+  }
   p {
     font-weight: 600;
     font-size: 24px;
@@ -79,7 +99,10 @@
   }
 }
 .stack {
-  overflow: auto;
+  @media only screen and (max-width: 767px) {
+    overflow: auto;
+    padding-left: 19px;
+  }
 }
 .body {
   display: flex;
@@ -88,8 +111,15 @@
   padding: 50px 0px;
   @media only screen and (max-width: 767px) {
     flex-direction: column;
-    padding: 24px 0px;
+    padding: 24px 19px;
+    margin: 0px;
   }
+}
+.card > div > img {
+  margin: 0px auto;
+  width: 48px;
+  height: 48px;
+  display: block;
 }
 .card {
   background: #eef0f2;
@@ -104,9 +134,6 @@
   margin: 12px;
   min-width: 225px;
   flex-direction: column;
-  img {
-    margin: auto;
-  }
   p {
     font-weight: 600;
     font-size: 16px;
@@ -128,19 +155,27 @@
     }
   }
   @media only screen and (max-width: 767px) {
-    min-height: unset;
-    max-width: unset;
+    max-width: 100%;
     padding: 30px 24px;
     flex: unset;
-    margin: 0px 8px 24px 8px;
-    min-width: unset;
+    margin: 0px 0px 24px 0px;
     justify-items: unset;
     align-items: unset;
+    justify-content: space-between;
   }
 }
 .cardSelect {
-  background: #0080ff;
-
+  background: #1f61a9;
+  p {
+    color: #fafaff;
+  }
+  span {
+    color: #fafaff;
+  }
+  button {
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(8, 24, 42, 0.2);
+  }
 }
 .cardComing {
   background: #fafaff;
@@ -175,6 +210,10 @@
     color: rgba(28, 28, 28, 0.2);
     padding: 0px 24px;
   }
+  button {
+    color: rgba(28, 28, 28, 0.2);
+    background: rgba(28, 28, 28, 0.2);
+  }
 }
 
 // ========================= Create project =====================
@@ -185,7 +224,7 @@
   margin-bottom: 100px;
   // min-width: 360px;
   @media only screen and (max-width: 767px) {
-    // min-width: 300px;
+    padding: 0px 19px;
   }
 }
 .title {
@@ -218,6 +257,9 @@
   font-size: 16px;
   color: #1f61a9;
   margin: 20px 0px;
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+  }
   span {
     font-weight: 500;
     font-size: 12px;
@@ -247,6 +289,7 @@
     display: flex;
     align-items: center;
     margin: 20px 19px 0px 19px;
+
     img {
       margin-right: 15px;
     }
@@ -264,7 +307,9 @@
   display: none;
   @media only screen and (max-width: 767px) {
     display: flex;
-    margin-top: 10px;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 25px;
     button {
       border-radius: 40px;
       font-style: normal;
@@ -273,6 +318,76 @@
       line-height: 15px;
       letter-spacing: 0.04em;
       text-transform: none;
+      padding: 8.5px 16px;
     }
   }
+}
+.ticked {
+  position: relative;
+  bottom: -10px;
+  right: -4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img:first-child {
+    position: absolute;
+  }
+  img:last-child {
+    position: absolute;
+    right: -13px;
+    bottom: -10px;
+  }
+}
+.disable {
+  display: none;
+}
+.btndisabled {
+  background: rgba(28, 28, 28, 0.2);
+  color: rgba(28, 28, 28, 0.2);
+}
+.footerSelected {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: flex;
+    justify-content: space-between;
+    background: #ffffff;
+    box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 0px;
+    padding: 16px 19px;
+    margin-top: 50px;
+    align-items: center;
+    position: sticky;
+    div {
+      display: grid;
+      p {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 140%;
+        letter-spacing: 0.025em;
+        color: #1c1c1c;
+        margin-bottom: 4px;
+      }
+      span {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.015em;
+        color: #53660c;
+      }
+      a {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 140%;
+        display: flex;
+        align-items: center;
+        color: #af1c10;
+      }
+    }
+  }
+}
+.btnMobile {
+  white-space: nowrap;
 }

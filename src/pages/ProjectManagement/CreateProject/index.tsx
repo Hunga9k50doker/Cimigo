@@ -78,7 +78,9 @@ const CreateProject = () => {
   const [solutionShow, setSolutionShow] = useState<Solution>();
   const [solutionSelected, setSolutionSelected] = useState<Solution>();
   const [solution, setSolution] = useState<DataPagination<Solution>>();
+  const [solutionShowMobile, setSolutionShowMobile] = useState<Solution>();
   const [solutionCategory, setSolutionCategory] = useState<DataPagination<SolutionCategory>>();
+  const [selectedIndex, setSelectedIndex] = useState<any>('');
   const [activeStep, setActiveStep] = useState<EStep>(EStep.SELECT_SOLUTION);
   const { solution_id }: IQueryString = QueryString.parse(window.location.search);
   const theme = useTheme();
@@ -90,18 +92,36 @@ const CreateProject = () => {
     mode: 'onChange'
   });
 
-  const hendleSolutionShow = (item) => {
+  const handleClickCollapse = index => {
+    if (selectedIndex === index) {
+      setSelectedIndex("")
+    } else {
+      setSelectedIndex(index)
+    }
+  }
+
+  const hendleSolutionShow = (item, index) => {
     if (!isMobile) {
       setSolutionShow(item)
     }
     else {
-      
+      handleClickCollapse(index)
+      setSolutionShowMobile(item)
     }
   }
+  console.log(solutionShowMobile, 'sss');
+
   const handleNextStep = () => {
     if (!solutionShow) return
     setSolutionSelected(solutionShow)
     setSolutionShow(undefined)
+    setActiveStep(EStep.CREATE_PROJECT)
+  }
+
+  const handleNextStepMobile = () => {
+    if (!solutionShowMobile) return
+    setSolutionSelected(solutionShowMobile)
+    setSolutionShowMobile(undefined)
     setActiveStep(EStep.CREATE_PROJECT)
   }
 
@@ -190,7 +210,7 @@ const CreateProject = () => {
   return (
     <Grid className={classes.root}>
       <Header project />
-      <Container>
+      <Grid className={classes.container}>
         <div className={classes.linkTextHome} >
           <img src={images.icHomeMobile} alt='' onClick={() => history.push(routes.project.management)} />
           <img src={images.icNextMobile} alt='' />
@@ -238,12 +258,18 @@ const CreateProject = () => {
                 switch (item.status) {
                   case EStatus.Active:
                     return (
-                      <Grid key={index} className={!solutionShow ? classes.card : classes.cardSelect} onClick={() => hendleSolutionShow(item)}>
-                        <img src={item.image} alt="solution image" />
-                        <p>{item.title}</p>
-                        <span>{item.description}</span>
+                      <Grid key={index} className={clsx(index === selectedIndex ? classes.cardSelect : "", classes.card)} onClick={() => hendleSolutionShow(item, index)}>
+                        <div>
+                          <img src={item.image} alt="solution image" />
+                          <p>{item.title}</p>
+                          <span>{item.description}</span>
+                        </div>
                         <Grid className={classes.btnReadMore}>
-                          <Button onClick={() => setSolutionShow(item)} startIcon={<img src={images.icAddWhite} />}>Read more</Button>
+                          <Button classes={{ disabled: classes.btndisabled }} disabled={index !== selectedIndex} onClick={() => setSolutionShow(item)} startIcon={<img src={index === selectedIndex ? images.icReadMore : images.icReadMoreGray} alt='' />}>Read more</Button>
+                          <div className={clsx(index === selectedIndex ? classes.ticked : classes.disable)}>
+                            <img src={images.icTicked} alt='' />
+                            <img src={images.icTick} alt='' />
+                          </div>
                         </Grid>
                       </Grid>
                     )
@@ -258,6 +284,19 @@ const CreateProject = () => {
                     )
                 }
               })}
+            </Grid>
+            <Grid className={classes.footerSelected}>
+              <Grid>
+                {selectedIndex === '' ?
+                  <a>No solution selected</a>
+                  :
+                  <>
+                    <p>Selected solution</p>
+                    <span>{solutionShowMobile?.title}</span>
+                  </>
+                }
+              </Grid>
+              <Buttons onClick={() => handleNextStepMobile()} disabled={selectedIndex === '' ? true : false} children={"Get started"} btnType="Blue" padding="16px" className={classes.btnMobile} />
             </Grid>
           </>
         ) : (
@@ -311,7 +350,7 @@ const CreateProject = () => {
             </form>
           </Grid>
         )}
-      </Container>
+      </Grid>
       <Footer />
       <PopupInforSolution
         solution={solutionShow}

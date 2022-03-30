@@ -2,6 +2,10 @@
   padding: 24px;
   width: 550px;
   max-width: 550px;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    margin: 0px !important;
+  }
 }
 .title {
   margin: 0;
