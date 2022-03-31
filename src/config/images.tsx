@@ -45,10 +45,12 @@ import icReadMore from 'assets/img/icon/ic-read-more.svg';
 import icTicked from 'assets/img/icon/ic-ticked.svg';
 import icReadMoreGray from 'assets/img/icon/ic-read-more-gray.svg';
 import icTick from 'assets/img/icon/ic-tick.svg';
+import icMore from 'assets/img/icon/ic-more.svg';
 
 const images = {
   // ===================== Images =========================
   icOrder,
+  icMore,
   icTicked,
   icReadMoreGray,
   icTick,
