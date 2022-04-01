@@ -141,8 +141,13 @@
   width: 100%;
   border-bottom: 1px solid #dddddd;
   padding: 10px 20px;
+  max-height: 250px;
+  @media only screen and (max-width: 767px) {
+    max-height: 150px;
+  }
   div {
     display: flex;
+    padding-bottom: 5px;
     p {
       font-weight: 400;
       font-size: 16px;
@@ -156,6 +161,14 @@
       line-height: 140%;
       letter-spacing: 0.015em;
       color: #1c1c1c;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      @media only screen and (max-width: 767px) {
+        -webkit-line-clamp: 2;
+      }
     }
   }
 }
@@ -170,6 +183,15 @@
     line-height: 140%;
     letter-spacing: 0.015em;
     color: #1c1c1c;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    width: 230px;
+    @media only screen and (max-width: 767px) {
+      width: 130px;
+    }
   }
 }
 .addPack {
@@ -502,7 +524,6 @@
     display: grid;
     align-items: start;
     padding: 0px;
-
   }
 }
 .select > p {
@@ -613,6 +634,6 @@
   cursor: pointer;
   font-size: 12px;
   font-style: italic;
-  color: #1F61A9;
+  color: #1f61a9;
   text-decoration-line: underline;
 }

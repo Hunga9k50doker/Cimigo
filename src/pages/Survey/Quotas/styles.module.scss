@@ -115,6 +115,13 @@
     color: rgba(28, 28, 28, 0.4);
     padding-top: 30px;
     padding-bottom: 18px;
+    @media only screen and (max-width: 767px) {
+      font-size: 16px;
+      font-weight: 600;
+      padding-top: 16px;
+      padding-bottom: 5px;
+      line-height: 20px;
+    }
   }
   span {
     font-style: normal;
@@ -125,6 +132,10 @@
     letter-spacing: 0.015em;
     color: rgba(28, 28, 28, 0.65);
     padding-bottom: 32px;
+    @media only screen and (max-width: 767px) {
+      font-size: 14px;
+      padding-bottom: 14px;
+    }
   }
   a {
     font-style: italic;
@@ -135,5 +146,11 @@
     letter-spacing: 0.015em;
     text-decoration-line: underline;
     color: #1f61a9;
+    @media only screen and (max-width: 767px) {
+      font-size: 14px;
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    padding: 44px 18px;
   }
 }

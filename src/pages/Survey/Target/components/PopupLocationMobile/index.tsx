@@ -134,7 +134,7 @@ const PopupLocationMobile = memo((props: PopupLocationMobileProps) => {
                     </div>
                   </Collapse >
                 </Grid>
-                <img style={{ transform: index === selectedIndex ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Images.icShowGray} alt='' />
+                <img style={{ transform: index === selectedIndex ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Images.icMore} alt='' />
               </Grid>
             ))}
           </Grid>
