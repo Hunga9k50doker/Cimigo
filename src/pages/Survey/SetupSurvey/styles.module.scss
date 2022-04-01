@@ -459,24 +459,20 @@
     }
   }
 }
-.rootListItem > div {
-  &:first-child {
+.rootListItem {
+  > [class~=MuiListItemButton-root] {
     display: block;
+    padding-right: calc(70px + 16px);
     padding-left: 16px;
-    padding-right: 16px;
     min-height: 40px;
   }
 }
 .rootListItem:hover .btnAction {
-  display: block !important;
-}
-.rootListItem:hover .listTextRight {
-  p {
-    width: 73%;
-  }
+  visibility: visible !important;
 }
 .btnAction {
-  display: none;
+  width: 70px;
+  visibility: hidden;
 }
 
 .iconAction {
@@ -566,15 +562,8 @@
   box-sizing: border-box;
   border-radius: 4px;
   max-width: 300px;
-}
-.summaryScroll {
-  background: #eef0f2;
-  border: 0.5px solid rgba(28, 28, 28, 0.2);
-  box-sizing: border-box;
-  border-radius: 4px;
   position: sticky;
-  max-width: 300px;
-  top: 60px;
+  top: 38px;
 }
 .textSummary {
   background: #bed7f3;
