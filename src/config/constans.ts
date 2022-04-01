@@ -34,6 +34,15 @@ export const API = {
   ADDITIONAL_BRAND: {
     DEFAULT: '/v1.0/additional-brand',
   },
+  ATTRIBUTE: {
+    DEFAULT: '/v1.0/additional-attribute',
+  },
+  PROJECT_ATTRIBUTE: {
+    DEFAULT: '/v1.0/project-attribute',
+  },
+  USER_ATTRIBUTE: {
+    DEFAULT: '/v1.0/user-attribute',
+  },
   ADMIN: {
     SOLUTION: {
       DEFAULT: '/v1.0/admin/solution',
@@ -46,6 +55,9 @@ export const API = {
     SOLUTION_CATEGORY_HOME: {
       DEFAULT: '/v1.0/admin/solution-category-home',
       UPDATE_STATUS: '/v1.0/admin/solution-category-home/update-status/:id',
+    },
+    ATTRIBUTE: {
+      DEFAULT: '/v1.0/admin/attribute',
     }
   }
 }

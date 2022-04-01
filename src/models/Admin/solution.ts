@@ -6,7 +6,8 @@ export interface SolutionCategory {
   language: string;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date
+  deletedAt: Date;
+  languages?: SolutionCategory[]
 }
 
 export interface GetSolutionCategoriesParams {
@@ -35,6 +36,9 @@ export interface Solution {
   categoryHomeId: number;
   parentLanguage: number,
   language: string;
+  maxPack: number;
+  maxAdditionalBrand: number;
+  maxAdditionalAttribute: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
@@ -67,4 +71,5 @@ export interface SolutionCategoryHome {
   updatedAt: Date;
   deletedAt: Date;
   solutions?: Solution[];
+  languages?: SolutionCategoryHome[]
 }

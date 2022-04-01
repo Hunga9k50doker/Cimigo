@@ -21,6 +21,7 @@ const tableHeaders: TableHeaderLabel[] = [
   { name: 'id', label: 'Id', sortable: false },
   { name: 'title', label: 'Title', sortable: false },
   { name: 'description', label: 'Description', sortable: false },
+  { name: 'languages', label: 'Languages', sortable: false },
   { name: 'status', label: 'Status', sortable: false },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
@@ -198,6 +199,9 @@ const List = memo(({ }: Props) => {
                             {item.description}
                           </TableCell>
                           <TableCell component="th">
+                            {item?.languages?.map(it => it.language).join(', ')}
+                          </TableCell>
+                          <TableCell component="th">
                             <StatusChip status={item.status} />
                           </TableCell>
                           <TableCell component="th">
@@ -218,7 +222,7 @@ const List = memo(({ }: Props) => {
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={5}>
+                      <TableCell align="center" colSpan={6}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>

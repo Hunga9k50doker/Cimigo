@@ -20,6 +20,7 @@ import classes from './styles.module.scss';
 const tableHeaders: TableHeaderLabel[] = [
   { name: 'id', label: 'Id', sortable: false },
   { name: 'name', label: 'Name', sortable: false },
+  { name: 'languages', label: 'Languages', sortable: false },
   { name: 'status', label: 'Status', sortable: false },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
@@ -196,6 +197,9 @@ const SolutionCategoryList = memo((props: Props) => {
                             {item.name}
                           </TableCell>
                           <TableCell component="th">
+                            {item?.languages?.map(it => it.language).join(', ')}
+                          </TableCell>
+                          <TableCell component="th">
                             <StatusChip status={item.status} />
                           </TableCell>
                           <TableCell component="th">
@@ -216,7 +220,7 @@ const SolutionCategoryList = memo((props: Props) => {
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={4}>
+                      <TableCell align="center" colSpan={5}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>

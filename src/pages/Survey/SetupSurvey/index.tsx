@@ -30,13 +30,11 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 // import { routes } from 'routers/routes';
 import Images from "config/images";
 import Inputs from "components/Inputs";
-import ImgPack from "assets/img/img-pack.svg"
 import PopupPack from "../components/PopupPack";
-import PopupDeletePack from "../components/PopupDeletePack";
 import Buttons from "components/Buttons";
 import PopupManatoryAttributes from "../components/PopupManatoryAttributes";
 import PopupPreDefinedList from "../components/PopupPre-definedList";
-import PopupAddAttributes from "../components/PopupAddAttribute";
+import PopupAddOrEditAttribute, { UserAttributeFormData } from "../components/PopupAddOrEditAttribute";
 import ColorlibStepIcon from "../components/ColorlibStepIcon";
 import LabelStatus from "../components/LableStatus";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,9 +50,11 @@ import { Pack } from "models/pack";
 import { AdditionalBrandService } from "services/additional_brand";
 import { AdditionalBrand } from "models/additional_brand";
 import PopupAddOrEditBrand, { BrandFormData } from "../components/PopupAddOrEditBrand";
-
-const MAX_PACK = 4
-const MAX_ADDITIONAL_BRAND = 10
+import { ProjectAttribute } from "models/project_attribute";
+import { UserAttribute } from "models/user_attribute";
+import { ProjectAttributeService } from "services/project_attribute";
+import { UserAttributeService } from "services/user_attribute";
+import PopupConfirmDelete from "components/PopupConfirmDelete";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -76,6 +76,19 @@ const ExpandIcon = (props) => {
   )
 };
 
+enum AttributeShowType {
+  Project = 1,
+  User
+}
+
+interface AttributeShow {
+  id: number,
+  start: string,
+  end: string,
+  data: ProjectAttribute | UserAttribute,
+  type: AttributeShowType
+}
+
 interface Props {
   id: number
 }
@@ -90,18 +103,8 @@ const SetupSurvey = memo(({ id }: Props) => {
     mode: 'onChange'
   });
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const [openPopupDeletePack, setOpenPopupDeletePack] = useState(false)
-  const [openPopupNewPack, setOpenPopupNewPack] = useState(false)
-  const [openPopupEditPack, setOpenPopupEditPack] = useState(false)
   const [openPopupMandatory, setOpenPopupMandatory] = useState(false)
   const [openPopupPreDefined, setOpenPopupPreDefined] = useState(false)
-  const [openPopupAddBrand, setOpenPopupAddBrand] = useState(false)
-  const [openPopupAddAttributes, setOpenPopupAddAttributes] = useState(false)
-  const [selectedIndex, setSelectedIndex] = useState("")
-  const [selected, setSelected] = useState()
-  const [select, setSelect] = useState<any>();
   const [isScrolling, setScrolling] = useState(false);
 
   const [packs, setPacks] = useState<Pack[]>([]);
@@ -121,6 +124,15 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [anchorElADBMobile, setAnchorElADBMobile] = useState<null | HTMLElement>(null);
   const [addBrandMobile, setAddBrandMobile] = useState<boolean>(false);
   const [brandEditMobile, setBrandEditMobile] = useState<AdditionalBrand>();
+  const [brandDelete, setBrandDelete] = useState<AdditionalBrand>();
+
+  const [projectAttributes, setProjectAttributes] = useState<ProjectAttribute[]>([]);
+  const [userAttributes, setUserAttributes] = useState<UserAttribute[]>([]);
+  const [expandedAttribute, setExpandedAttribute] = useState<string>()
+  const [openPopupAddAttributes, setOpenPopupAddAttributes] = useState(false)
+  const [userAttributeEdit, setUserAttributeEdit] = useState<UserAttribute>()
+  const [userAttributeDelete, setUserAttributeDelete] = useState<UserAttribute>()
+  const [projectAttributeDelete, setProjectAttributeDelete] = useState<ProjectAttribute>()
 
   const handleScroll = () => {
     setScrolling(window.scrollY !== 0)
@@ -136,49 +148,6 @@ const SetupSurvey = memo(({ id }: Props) => {
       window.removeEventListener('scroll', _handleScroll);
     }
   }, [])
-
-  const handleClick = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const dataLists = [
-    {
-      firstText: "This pack is masculine",
-      lastText: "This pack is femimine",
-    },
-    {
-      firstText: "This pack suggests the brand setting the trends",
-      lastText: "This pack suggests the brand mimics others",
-    },
-    {
-      firstText: "Is a contemporary looking brand",
-      lastText: "It is an old looking brand",
-    },
-    {
-      firstText: "This pack is eye catching",
-      lastText: "I would never notice this pack",
-    },
-    {
-      firstText: "This pack suggests the brand setting the trends",
-      lastText: "This pack suggests the brand setting the trends",
-    }
-  ]
-
-  const handleListItemClick = (index) => {
-    setSelected(index);
-  };
-
-  const handleClickCollapse = index => {
-    if (selectedIndex === index) {
-      setSelectedIndex("")
-    } else {
-      setSelectedIndex(index)
-    }
-  }
 
   useEffect(() => {
     if (project) {
@@ -199,9 +168,27 @@ const SetupSurvey = memo(({ id }: Props) => {
       .catch((e) => dispatch(setErrorMess(e)))
   }
 
+  const getProjectAttributes = () => {
+    ProjectAttributeService.getProjectAttributes({ take: 9999, projectId: id })
+      .then((res) => {
+        setProjectAttributes(res.data)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+  }
+
+  const getUserAttributes = () => {
+    UserAttributeService.getUserAttributes({ take: 9999, projectId: id })
+      .then((res) => {
+        setUserAttributes(res.data)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+  }
+
   useEffect(() => {
     getPacks()
     getAdditionalBrand()
+    getProjectAttributes()
+    getUserAttributes()
   }, [id])
 
   const onSubmitBI = (data: BasicInformationFormData) => {
@@ -255,7 +242,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   }
 
   const enableAdditionalBrand = () => {
-    return MAX_ADDITIONAL_BRAND > additionalBrand?.length
+    return maxAdditionalBrand() > additionalBrand?.length
   }
 
   const getAdditionalBrand = () => {
@@ -326,15 +313,25 @@ const SetupSurvey = memo(({ id }: Props) => {
   }
 
   const onDeleteBrand = () => {
-    if (!additionalBrandAction) return
+    if (!brandDelete) return
     dispatch(setLoading(true))
-    AdditionalBrandService.delete(additionalBrandAction.id)
+    AdditionalBrandService.delete(brandDelete.id)
       .then(() => {
         getAdditionalBrand()
-        onCloseActionADB()
+        onCloseConfirmDeleteBrand()
       })
       .catch(e => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onShowConfirmDeleteBrand = () => {
+    if (!additionalBrandAction) return
+    setBrandDelete(additionalBrandAction)
+    onCloseActionADB()
+  }
+
+  const onCloseConfirmDeleteBrand = () => {
+    setBrandDelete(null)
   }
 
   const onClosePopupAddOrEditBrand = () => {
@@ -379,6 +376,137 @@ const SetupSurvey = memo(({ id }: Props) => {
     onCloseActionADB()
   }
 
+  const maxPack = () => {
+    return project?.solution?.maxPack || 0
+  }
+
+  const maxAdditionalAttribute = () => {
+    return project?.solution?.maxAdditionalAttribute || 0
+  }
+
+  const maxAdditionalBrand = () => {
+    return project?.solution?.maxAdditionalBrand || 0
+  }
+
+  const enableAdditionalAttributes = () => {
+    return maxAdditionalAttribute() > ((projectAttributes?.length || 0) + (userAttributes?.length || 0))
+  }
+
+  const onAddProjectAttribute = (attributeIds: number[]) => {
+    if (!attributeIds?.length) {
+      setOpenPopupPreDefined(false)
+      return
+    }
+    dispatch(setLoading(true))
+    ProjectAttributeService.create({
+      projectId: id,
+      attributeIds: attributeIds
+    })
+      .then(() => {
+        getProjectAttributes()
+        setOpenPopupPreDefined(false)
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const getAttributeShow = (): AttributeShow[] => {
+    const res: AttributeShow[] = [
+      ...(projectAttributes.map(it => ({
+        id: it.id,
+        start: it.attribute.start,
+        end: it.attribute.end,
+        type: AttributeShowType.Project,
+        data: it
+      }))),
+      ...(userAttributes.map(it => ({
+        id: it.id,
+        start: it.start,
+        end: it.end,
+        type: AttributeShowType.User,
+        data: it
+      })))
+    ]
+    return res
+  }
+
+  const onClosePopupAttribute = () => {
+    setOpenPopupAddAttributes(false)
+    setUserAttributeEdit(null)
+  }
+
+  const onAddOrEditUserAttribute = (data: UserAttributeFormData) => {
+    if (userAttributeEdit) {
+      dispatch(setLoading(true))
+      UserAttributeService.update(userAttributeEdit.id, {
+        start: data.start,
+        end: data.end
+      })
+        .then(() => {
+          getUserAttributes()
+          onClosePopupAttribute()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true))
+      UserAttributeService.create({
+        projectId: id,
+        start: data.start,
+        end: data.end
+      })
+        .then(() => {
+          getUserAttributes()
+          onClosePopupAttribute()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
+  const onEditUserAttribute = (item: UserAttribute) => {
+    setUserAttributeEdit(item)
+  }
+
+  const onCloseConfirmDeleteAttribute = () => {
+    setUserAttributeDelete(null)
+    setProjectAttributeDelete(null)
+  }
+
+  const onShowConfirmDeleteAttribute = (item: AttributeShow) => {
+    switch (item.type) {
+      case AttributeShowType.User:
+        setUserAttributeDelete(item.data as UserAttribute)
+        break;
+      case AttributeShowType.Project:
+        setProjectAttributeDelete(item.data as ProjectAttribute)
+        break;
+    }
+  }
+
+  const onDeleteAttribute = () => {
+    if (userAttributeDelete) {
+      dispatch(setLoading(true))
+      UserAttributeService.delete(userAttributeDelete.id)
+        .then(() => {
+          getUserAttributes()
+          onCloseConfirmDeleteAttribute()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+    if (projectAttributeDelete) {
+      dispatch(setLoading(true))
+      ProjectAttributeService.delete(projectAttributeDelete.id)
+        .then(() => {
+          getProjectAttributes()
+          onCloseConfirmDeleteAttribute()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
   return (
     <Grid classes={{ root: classes.root }} >
       <Grid classes={{ root: classes.left }} >
@@ -402,7 +530,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
           </form>
         </Grid>
-        <p className={classes.subTitle} id="upload-packs">2.Upload packs <span>(max {MAX_PACK})</span></p>
+        <p className={classes.subTitle} id="upload-packs">2.Upload packs <span>(max {maxPack()})</span></p>
         <Grid className={classes.flex}>
           <p>You may test between one and four packs. These would typically include your current pack, 2 new test pack and a key competitor pack.</p>
           <Grid className={classes.packs}>
@@ -429,7 +557,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                 </Grid>
               )
             })}
-            {MAX_PACK > packs?.length && (
+            {maxPack() > packs?.length && (
               <Grid className={classes.addPack} onClick={() => setAddNewPack(true)}>
                 <img src={Images.icAddPack} alt="" />
                 <p>Add pack</p>
@@ -462,7 +590,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             <p>Delete</p>
           </MenuItem>
         </Menu>
-        <p className={classes.subTitle} id="additional-brand-list">3.Additional brand list <span>(max {MAX_ADDITIONAL_BRAND})</span></p>
+        <p className={classes.subTitle} id="additional-brand-list">3.Additional brand list <span>(max {maxAdditionalBrand()})</span></p>
         <Grid className={classes.flex}>
           <p>In your pack test survey, we will ask consumers some brand use questions. Besides the uploaded pack products. Please add the brand, variant name and manufacturer for top selling products in the category and market in which you are testing.
             <br />Try to include products accounting for at least two-thirds of sales or market share.</p>
@@ -630,7 +758,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               <img src={Images.icEdit} alt="icon edit" />
               <p>Edit</p>
             </MenuItem>
-            <MenuItem className={classes.itemAciton} onClick={() => onDeleteBrand()}>
+            <MenuItem className={classes.itemAciton} onClick={() => onShowConfirmDeleteBrand()}>
               <img src={Images.icDelete} alt="icon delete" />
               <p>Delete</p>
             </MenuItem>
@@ -683,16 +811,16 @@ const SetupSurvey = memo(({ id }: Props) => {
             <img src={Images.icEdit} alt="icon edit" />
             <p>Edit</p>
           </MenuItem>
-          <MenuItem className={classes.itemAciton} onClick={() => onDeleteBrand()}>
+          <MenuItem className={classes.itemAciton} onClick={() => onShowConfirmDeleteBrand()}>
             <img src={Images.icDelete} alt="icon delete" />
             <p>Delete</p>
           </MenuItem>
         </Menu>
-        <p className={classes.subTitle} id="additional-attributes">4.Additional attributes <span>(max 6)</span></p>
+        <p className={classes.subTitle} id="additional-attributes">4.Additional attributes <span>(max {maxAdditionalAttribute()})</span></p>
         <Grid className={classes.flex}>
           <p>We will test your packs associations with some <span onClick={() => setOpenPopupMandatory(true)}>mandatory attributes</span>. You have an option to select further attributes from a pre-defined list or add your own attributes.</p>
           <Grid container classes={{ root: classes.rootList }}>
-            {dataLists.map((item, index) => (
+            {getAttributeShow().map((item, index) => (
               <ListItem
                 alignItems="center"
                 component="div"
@@ -700,30 +828,28 @@ const SetupSurvey = memo(({ id }: Props) => {
                 classes={{ root: classes.rootListItem }}
                 secondaryAction={
                   <div className={classes.btnAction}>
-                    <IconButton classes={{ root: classes.iconAction }} edge="end" aria-label="Edit">
-                      <img src={Images.icRename} alt="" />
-                    </IconButton>
-                    <IconButton classes={{ root: classes.iconAction }} edge="end" aria-label="Delete">
+                    {item.type === AttributeShowType.User && (
+                      <IconButton onClick={() => onEditUserAttribute(item.data as any)} classes={{ root: classes.iconAction }} edge="end" aria-label="Edit">
+                        <img src={Images.icRename} alt="" />
+                      </IconButton>
+                    )}
+                    <IconButton onClick={() => onShowConfirmDeleteAttribute(item)} classes={{ root: classes.iconAction }} edge="end" aria-label="Delete">
                       <img src={Images.icDelete} alt="" />
                     </IconButton>
                   </div>
                 }
                 disablePadding
               >
-                <ListItemButton
-                  // selected={selected === index}
-                  onClick={() => handleListItemClick(index)}
-                // classes={{ selected: classes.selected }}
-                >
+                <ListItemButton>
                   <Grid className={classes.listFlex}>
                     <Grid item xs={4} className={classes.listTextLeft}>
-                      <p>{item.firstText}</p>
+                      <p>{item.start}</p>
                     </Grid>
                     <Grid item xs={4} className={classes.listNumber}>
                       <div>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
                     </Grid>
                     <Grid item xs={4} className={classes.listTextRight}>
-                      <p>{item.lastText}</p>
+                      <p>{item.end}</p>
                     </Grid>
                   </Grid>
                 </ListItemButton>
@@ -733,45 +859,47 @@ const SetupSurvey = memo(({ id }: Props) => {
           {/* ===================Additional attributes mobile====================== */}
 
           <Grid container classes={{ root: classes.rootListMobile }}>
-            {dataLists.map((item, index: any) => (
-              <Grid
-                className={classes.attributesMobile}
-                key={index}
-                onClick={() => { handleClickCollapse(index) }}
-                style={{ background: index === selectedIndex ? '#EEEEEE' : '', padding: index === selectedIndex ? '15px 20px 0px 20px' : '15px 20px' }}
-              >
-                <Grid style={{ width: "100%" }}>
-                  {index === selectedIndex ? '' :
-                    <p className={classes.titleAttributesMobile} >{item.firstText}</p>
-                  }
-                  <Collapse
-                    in={index === selectedIndex}
-                    timeout="auto"
-                    unmountOnExit
-                  >
-                    <div className={classes.CollapseAttributesMobile}>
-                      <p>Start: <span>{item.firstText}</span></p>
-                      <p>End: <span>{item.lastText}</span></p>
-                    </div>
-                    <div className={classes.btnActionMobile} onClick={e => e.stopPropagation()}>
-                      <Button>Edit</Button>
-                      <Button>Delete</Button>
-                    </div>
-                  </Collapse >
+            {getAttributeShow().map((item, index) => {
+              const uuid = `${item.id}-${item.type}`
+              const expanded = uuid === expandedAttribute
+              return (
+                <Grid
+                  className={classes.attributesMobile}
+                  key={index}
+                  onClick={() => {
+                    if (expanded) setExpandedAttribute(null) 
+                    else setExpandedAttribute(uuid) 
+                  }}
+                  style={{ background: expanded ? '#EEEEEE' : '', padding: expanded ? '15px 20px 0px 20px' : '15px 20px' }}
+                >
+                  <Grid style={{ width: "100%" }}>
+                    {!expanded && <p className={classes.titleAttributesMobile}>{item.start}</p>}
+                    <Collapse
+                      in={expanded}
+                      timeout="auto"
+                      unmountOnExit
+                    >
+                      <div className={classes.CollapseAttributesMobile}>
+                        <p>Start: <span>{item.start}</span></p>
+                        <p>End: <span>{item.end}</span></p>
+                      </div>
+                      <div className={classes.btnActionMobile} onClick={e => e.stopPropagation()}>
+                        {item.type === AttributeShowType.User && <Button onClick={() => onEditUserAttribute(item.data as any)}>Edit</Button>}
+                        <Button onClick={() => onShowConfirmDeleteAttribute(item)}>Delete</Button>
+                      </div>
+                    </Collapse >
+                  </Grid>
+                  <img style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Images.icShowGray} alt='' />
                 </Grid>
-                <img style={{ transform: index === selectedIndex ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Images.icShowGray} alt='' />
-              </Grid>
-            ))}
+              )
+            })}
           </Grid>
           <Grid classes={{ root: classes.select }}>
             <FormControl classes={{ root: classes.rootSelect }}>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
                 variant="outlined"
-                value={select}
                 displayEmpty
-                onChange={(e) => setSelect(e?.target.value)}
+                disabled={!enableAdditionalAttributes()}
                 defaultValue={""}
                 classes={{ select: classes.selectType, icon: classes.icSelect }}
                 IconComponent={ExpandIcon}
@@ -781,7 +909,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                 <MenuItem value={30} onClick={() => setOpenPopupAddAttributes(true)}>Your own attribute</MenuItem>
               </Select>
             </FormControl>
-            <p>You can only add maximum of 6 attributes.</p>
+            {!enableAdditionalAttributes() && <p>You can only add maximum of {maxAdditionalAttribute()} attributes.</p>}
           </Grid>
           <Grid classes={{ root: classes.tip }}>
             <img src={Images.icTipGray} alt="" />
@@ -790,7 +918,7 @@ const SetupSurvey = memo(({ id }: Props) => {
         </Grid>
       </Grid>
       <Grid classes={{ root: classes.right }} >
-        <Grid className={isScrolling ? classes.summaryScroll : classes.summary}>
+        <Grid className={classes.summary}>
           <p className={classes.textSummary}>Summary</p>
           <Stepper
             orientation="vertical"
@@ -867,7 +995,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                 )}
               </StepContent>
             </Step>
-            <Step expanded>
+            <Step active={!!projectAttributes?.length || !!userAttributes?.length} expanded>
               <StepLabel
                 onClick={() => document.getElementById('additional-attributes')?.scrollIntoView()}
                 StepIconComponent={ColorlibStepIcon}
@@ -882,8 +1010,8 @@ const SetupSurvey = memo(({ id }: Props) => {
               </StepLabel>
               <StepContent classes={{ root: classes.rootConnector }}>
                 <ul>
-                  <li>Pre-defined attribute (0)</li>
-                  <li>Custom attribute (0)</li>
+                  <li>Pre-defined attribute ({projectAttributes?.length || 0})</li>
+                  <li>Custom attribute ({userAttributes?.length || 0})</li>
                 </ul>
               </StepContent>
             </Step>
@@ -896,19 +1024,51 @@ const SetupSurvey = memo(({ id }: Props) => {
         onCancel={onCloseAddOrEditPack}
         onSubmit={onAddOrEditPack}
       />
-      <PopupDeletePack
+      <PopupConfirmDelete 
         isOpen={!!packDelete}
+        title="Delete pack?"
+        description="Are you sure you want to delete this packed?"
         onCancel={() => setPackDelete(null)}
         onDelete={onDeletePack}
       />
-      <PopupManatoryAttributes onClickOpen={openPopupMandatory} onClickCancel={() => setOpenPopupMandatory(false)} />
-      <PopupPreDefinedList onClickOpen={openPopupPreDefined} onClickCancel={() => setOpenPopupPreDefined(false)} />
-      <PopupAddAttributes onClickOpen={openPopupAddAttributes} onClickCancel={() => setOpenPopupAddAttributes(false)} />
-      <PopupAddOrEditBrand 
+      <PopupManatoryAttributes
+        isOpen={openPopupMandatory}
+        project={project}
+        onClose={() => setOpenPopupMandatory(false)}
+      />
+      <PopupPreDefinedList
+        isOpen={openPopupPreDefined}
+        project={project}
+        projectAttributes={projectAttributes}
+        maxSelect={(project?.solution?.maxAdditionalAttribute || 0) - ((projectAttributes?.length || 0) + (userAttributes?.length || 0))}
+        onClose={() => setOpenPopupPreDefined(false)}
+        onSubmit={onAddProjectAttribute}
+      />
+      <PopupAddOrEditAttribute 
+        isAdd={openPopupAddAttributes} 
+        itemEdit={userAttributeEdit}
+        onCancel={() => onClosePopupAttribute()}
+        onSubmit={onAddOrEditUserAttribute}
+      />
+      <PopupAddOrEditBrand
         isAdd={addBrandMobile}
         itemEdit={brandEditMobile}
-        onCancel={onClosePopupAddOrEditBrand} 
+        onCancel={onClosePopupAddOrEditBrand}
         onSubmit={onAddOrEditBrandMobile}
+      />
+      <PopupConfirmDelete 
+        isOpen={!!brandDelete}
+        title="Delete brand?"
+        description="Are you sure you want to delete this brand?"
+        onCancel={() => onCloseConfirmDeleteBrand()}
+        onDelete={onDeleteBrand}
+      />
+       <PopupConfirmDelete 
+        isOpen={!!userAttributeDelete || !!projectAttributeDelete}
+        title="Delete attribute?"
+        description="Are you sure you want to delete this attribute?"
+        onCancel={() => onCloseConfirmDeleteAttribute()}
+        onDelete={onDeleteAttribute}
       />
     </Grid>
   );

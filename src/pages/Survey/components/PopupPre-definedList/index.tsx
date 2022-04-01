@@ -1,78 +1,90 @@
-import React, { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Checkbox, Collapse, Dialog, Grid, IconButton, ListItem, ListItemText } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
 import Images from "config/images";
+import { Attribute, AttributeType } from 'models/Admin/attribute';
+import { AdditionalAttributeService } from 'services/additional_attribute';
+import { Project } from 'models/project';
+import { ProjectAttribute } from 'models/project_attribute';
 
-const dataLists = [
-  {
-    firstText: "This pack is masculine",
-    lastText: "This pack is femimine",
-  },
-  {
-    firstText: "This pack suggests the brand setting the trends",
-    lastText: "This pack suggests the brand mimics others",
-  },
-  {
-    firstText: "Is a contemporary looking brand",
-    lastText: "It is an old looking brand",
-  },
-  {
-    firstText: "This pack is eye catching",
-    lastText: "I would never notice this pack",
-  },
-  {
-    firstText: "This pack suggests the brand setting the trends",
-    lastText: "This pack suggests the brand setting the trends",
-  },
-  {
-    firstText: "This pack is masculine",
-    lastText: "This pack is femimine",
-  },
-  {
-    firstText: "This pack suggests the brand setting the trends",
-    lastText: "This pack suggests the brand mimics others",
-  },
-  {
-    firstText: "Is a contemporary looking brand",
-    lastText: "It is an old looking brand",
-  },
-
-]
-
-interface PopupCreateFolderProps {
-  onClickCancel?: () => void,
-  onClickOpen?: boolean,
+interface Props {
+  isOpen: boolean,
+  project: Project,
+  maxSelect: number,
+  projectAttributes: ProjectAttribute[],
+  onClose: () => void,
+  onSubmit: (attributeIds: number[]) => void,
 }
 
+const PopupPreDefinedList = memo((props: Props) => {
+  const { isOpen, project, maxSelect, projectAttributes, onClose, onSubmit } = props;
 
-const PopupPreDefinedList = memo((props: PopupCreateFolderProps) => {
-  const { onClickCancel, onClickOpen } = props;
-  const [check, setCheck] = useState()
-  const [selectedIndex, setSelectedIndex] = useState("")
+  const [expanded, setExpanded] = useState<number>()
+  const [attributes, setAttributes] = useState<Attribute[]>([])
+  const [attributesSelected, setAttributesSelected] = useState<number[]>([])
 
-  const handleClickCollapse = index => {
-    if (selectedIndex === index) {
-      setSelectedIndex("")
+  const handleClickCollapse = (item: Attribute) => {
+    if (item.id === expanded) {
+      setExpanded(null)
     } else {
-      setSelectedIndex(index)
+      setExpanded(item.id)
     }
   }
 
-  const handleListItemClick = (e) => {
-    setCheck(e);
-  };
+  const onChange = (item: Attribute) => {
+    if (maxSelect <= attributesSelected.length) return
+    let _attributesSelected = [...attributesSelected]
+    if (_attributesSelected.includes(item.id)) {
+      _attributesSelected = _attributesSelected.filter(it => it !== item.id)
+    } else {
+      _attributesSelected.push(item.id)
+    }
+    setAttributesSelected(_attributesSelected)
+  }
+
+  const _onSubmit = () => {
+    if (!attributesSelected?.length) {
+      onClose()
+      return
+    }
+    onSubmit(attributesSelected)
+  }
+
+  useEffect(() => {
+    if (!isOpen) {
+      setExpanded(null)
+      setAttributes([])
+      setAttributesSelected([])
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (project?.solutionId && isOpen) {
+      AdditionalAttributeService.getAdditionalAttributes({ take: 9999, typeId: AttributeType.PRE_DEFINED, solutionId: project.solutionId })
+        .then((res) => {
+          const ids = projectAttributes.map(it => it.attributeId)
+          const data = (res.data as Attribute[]).filter(it => !ids.includes(it.id))
+          setAttributes(data)
+        })
+    }
+  }, [isOpen, project])
+
+  const isDisabled = (item: Attribute) => {
+    return !attributesSelected.includes(item.id) && maxSelect <= attributesSelected.length
+  }
 
   return (
     <Dialog
-      open={onClickOpen}
+      open={isOpen}
+      onClose={onClose}
       classes={{ paper: classes.paper }}
     >
       <Grid className={classes.root}>
         <Grid className={classes.header}>
           <p className={classes.title}>Add attributes</p>
-          <IconButton onClick={onClickCancel}>
+          <IconButton onClick={onClose}>
             <img src={Images.icClose} alt='' />
           </IconButton>
         </Grid>
@@ -88,47 +100,45 @@ const PopupPreDefinedList = memo((props: PopupCreateFolderProps) => {
           {/* ==========================Mobile========================= */}
 
           <Grid container classes={{ root: classes.rootListMobile }}>
-            {dataLists.map((item, index: any) => (
+            {attributes.map((item, index: any) => (
               <Grid
                 className={classes.attributesMobile}
                 key={index}
-                onClick={() => { handleClickCollapse(index) }}
-                style={{ background: index === selectedIndex ? '#EEEEEE' : '' }}
+                onClick={() => { handleClickCollapse(item) }}
+                style={{ background: item.id === expanded ? '#EEEEEE' : '' }}
               >
                 <Grid classes={{ root: classes.rootCollapseMobile }}>
                   <Checkbox
-                    onChange={(e) => handleListItemClick(e.target.checked)}
+                    disabled={isDisabled(item)}
+                    checked={attributesSelected.includes(item.id)}
+                    onChange={(e) => onChange(item)}
                     classes={{ root: classes.rootCheckboxMobile }}
                     onClick={e => e.stopPropagation()}
-                    sx={{
-                      color: "rgba(28, 28, 28, 0.4)",
-                      '&.Mui-checked': {
-                        color: "rgba(28, 28, 28, 0.4)",
-                      },
-                    }}
+                    icon={<img src={Images.icCheck} alt="" />}
+                    checkedIcon={<img src={Images.icCheckActive} alt="" />}
                   />
-                  {index === selectedIndex ? '' :
-                    <p className={classes.titleAttributesMobile} >{item.firstText}</p>
+                  {item.id === expanded ? '' :
+                    <p className={classes.titleAttributesMobile} >{item.start}</p>
                   }
                   <Collapse
-                    in={index === selectedIndex}
-                    timeout="auto"
+                    in={item.id === expanded}
+                    timeout={0}
                     unmountOnExit
                   >
                     <div className={classes.CollapseAttributesMobile}>
-                      <p>Start label: <span>{item.firstText}</span></p>
-                      <p>End label: <span>{item.lastText}</span></p>
+                      <p>Start label: <span>{item.start}</span></p>
+                      <p>End label: <span>{item.end}</span></p>
                     </div>
                   </Collapse >
                 </Grid>
-                <img style={{ transform: index === selectedIndex ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Images.icShowGray} alt='' />
+                <img style={{ transform: item.id === expanded ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Images.icShowGray} alt='' />
               </Grid>
             ))}
           </Grid>
           {/* ==========================Desktop========================= */}
 
           <Grid container classes={{ root: classes.rootList }}>
-            {dataLists.map((item, index) => (
+            {attributes.map((item, index) => (
               <ListItem
                 alignItems="center"
                 component="div"
@@ -140,19 +150,21 @@ const PopupPreDefinedList = memo((props: PopupCreateFolderProps) => {
                   <Grid className={classes.listFlex}>
                     <Grid>
                       <Checkbox
-                        onChange={(e) => handleListItemClick(e.target.checked)}
+                        disabled={isDisabled(item)}
+                        checked={attributesSelected.includes(item.id)}
+                        onChange={(e) => onChange(item)}
                         classes={{ root: classes.rootCheckbox }}
                         icon={<img src={Images.icCheck} alt="" />}
                         checkedIcon={<img src={Images.icCheckActive} alt="" />} />
                     </Grid>
                     <Grid item xs={4} className={classes.listTextLeft}>
-                      <p>{item.firstText}</p>
+                      <p>{item.start}</p>
                     </Grid>
                     <Grid item xs={4} className={classes.listNumber}>
                       <div>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
                     </Grid>
                     <Grid item xs={4} className={classes.listTextRight}>
-                      <p>{item.lastText}</p>
+                      <p>{item.end}</p>
                     </Grid>
                   </Grid>
                 </ListItemText>
@@ -161,7 +173,7 @@ const PopupPreDefinedList = memo((props: PopupCreateFolderProps) => {
           </Grid>
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons children="Add attributes" btnType='Blue' padding='13px 16px' width='25%' onClick={onClickCancel} />
+          <Buttons children="Add attributes" btnType='Blue' padding='13px 16px' width='25%' onClick={_onSubmit} />
         </Grid>
       </Grid>
     </Dialog>

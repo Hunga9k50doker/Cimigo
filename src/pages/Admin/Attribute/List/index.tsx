@@ -1,27 +1,28 @@
-import { Add, DeleteOutlineOutlined, Done, EditOutlined, ExpandMoreOutlined, HideSource } from "@mui/icons-material";
+import { Add, DeleteOutlineOutlined, EditOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 import { Box, Button, Grid, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
 import clsx from "clsx";
 import InputSearch from "components/InputSearch";
 import WarningModal from "components/Modal/WarningModal";
 import SearchNotFound from "components/SearchNotFound";
-import StatusChip from "components/StatusChip";
 import TableHeader from "components/Table/TableHead";
 import { push } from "connected-react-router";
 import useDebounce from "hooks/useDebounce";
-import { SolutionCategoryHome } from "models/Admin/solution"
-import { DataPagination, EStatus, LangSupport, langSupports, TableHeaderLabel } from "models/general";
+import { Attribute, GetAttributesParams } from "models/Admin/attribute";
+import { DataPagination, LangSupport, langSupports, TableHeaderLabel } from "models/general";
 import { memo, useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
-import AdminSolutionService from "services/admin/solution";
+import { AdminAttributeService } from "services/admin/attribute";
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
   { name: 'id', label: 'Id', sortable: false },
-  { name: 'name', label: 'Name', sortable: false },
+  { name: 'start', label: 'Start', sortable: false },
+  { name: 'end', label: 'End', sortable: false },
+  { name: 'type', label: 'Type', sortable: false },
+  { name: 'solution', label: 'Solution', sortable: false },
   { name: 'languages', label: 'Languages', sortable: false },
-  { name: 'status', label: 'Status', sortable: false },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
 
@@ -32,14 +33,14 @@ const List = memo(({ }: Props) => {
 
   const dispatch = useDispatch()
   const [keyword, setKeyword] = useState<string>('');
-  const [data, setData] = useState<DataPagination<SolutionCategoryHome>>();
-  const [itemAction, setItemAction] = useState<SolutionCategoryHome>();
+  const [data, setData] = useState<DataPagination<Attribute>>();
+  const [itemAction, setItemAction] = useState<Attribute>();
   const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
   const [languageAnchor, setLanguageAnchor] = useState<null | HTMLElement>(null);
-  const [itemDelete, setItemDelete] = useState<SolutionCategoryHome>(null);
+  const [itemDelete, setItemDelete] = useState<Attribute>(null);
 
   const handleAdd = () => {
-    dispatch(push(routes.admin.solutionCategoryHome.create));
+    dispatch(push(routes.admin.attribute.create));
   }
 
   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => {
@@ -60,18 +61,18 @@ const List = memo(({ }: Props) => {
     _onSearch(e.target.value)
   }
 
-  const fetchData = (params?: { take?: number, page?: number, keyword?: string }) => {
+  const fetchData = (value?: { take?: number, page?: number, keyword?: string }) => {
     dispatch(setLoading(true))
-    AdminSolutionService.getSolutionCategoriesHome({
-      take: params?.take || data?.meta?.take || 10,
-      page: params?.page || data?.meta?.page || 1,
-      keyword: params?.keyword ?? keyword,
-    })
+    const params: GetAttributesParams = {
+      take: value?.take || data?.meta?.take || 10,
+      page: value?.page || data?.meta?.page || 1,
+    }
+    if (value?.keyword !== undefined) {
+      params.keyword = value.keyword || undefined
+    }
+    AdminAttributeService.getAttributes(params)
       .then((res) => {
-        setData({
-          data: res.data,
-          meta: res.meta
-        })
+        setData({ data: res.data, meta: res.meta })
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -86,7 +87,7 @@ const List = memo(({ }: Props) => {
 
   const handleAction = (
     event: React.MouseEvent<HTMLButtonElement>,
-    item: SolutionCategoryHome
+    item: Attribute
   ) => {
     setItemAction(item)
     setActionAnchor(event.currentTarget);
@@ -121,7 +122,7 @@ const List = memo(({ }: Props) => {
     if (!itemDelete) return
     onCloseConfirm()
     dispatch(setLoading(true))
-    AdminSolutionService.deleteSolutionCategoryHome(itemDelete.id)
+    AdminAttributeService.delete(itemDelete.id)
       .then(() => {
         fetchData()
       })
@@ -133,21 +134,9 @@ const List = memo(({ }: Props) => {
     if (!itemAction) return
     onCloseActionMenu();
     dispatch(push({
-      pathname: routes.admin.solutionCategoryHome.edit.replace(':id', `${itemAction.id}`),
+      pathname: routes.admin.attribute.edit.replace(':id', `${itemAction.id}`),
       search: lang && `?lang=${lang.key}`
     }));
-  }
-
-  const updateStatus = (status: number) => {
-    if (!itemAction) return
-    onCloseActionMenu()
-    dispatch(setLoading(true))
-    AdminSolutionService.updateSolutionCategoryHomeStatus(itemAction.id, status)
-      .then(() => {
-        fetchData()
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
   }
 
   return (
@@ -155,7 +144,7 @@ const List = memo(({ }: Props) => {
       <Grid container alignItems="center" justifyContent="space-between">
         <Grid item xs={6}>
           <Typography component="h2" variant="h6" align="left">
-            Category
+            Attribute
           </Typography>
         </Grid>
         <Grid item xs={6}>
@@ -192,13 +181,19 @@ const List = memo(({ }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
-                            {item.name}
+                            {item.end}
+                          </TableCell>
+                          <TableCell component="th">
+                            {item.start}
+                          </TableCell>
+                          <TableCell component="th">
+                            {item?.type?.name}
+                          </TableCell>
+                          <TableCell component="th">
+                            {item?.solution?.title}
                           </TableCell>
                           <TableCell component="th">
                             {item?.languages?.map(it => it.language).join(', ')}
-                          </TableCell>
-                          <TableCell component="th">
-                            <StatusChip status={item.status} />
                           </TableCell>
                           <TableCell component="th">
                             <IconButton
@@ -218,7 +213,7 @@ const List = memo(({ }: Props) => {
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={5}>
+                      <TableCell align="center" colSpan={7}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>
@@ -256,28 +251,6 @@ const List = memo(({ }: Props) => {
                 <span>Edit Languages</span>
               </Box>
             </MenuItem>
-            {itemAction && itemAction?.status !== EStatus.Active && (
-                <MenuItem
-                  sx={{ fontSize: '0.875rem' }}
-                  onClick={() => updateStatus(EStatus.Active)}
-                >
-                  <Box display="flex" alignItems={"center"}>
-                    <Done sx={{marginRight: '0.25rem'}} color="success" fontSize="small" />
-                    <span>Active</span>
-                  </Box>
-                </MenuItem>
-              )}
-            {itemAction && itemAction?.status !== EStatus.Inactive && (
-                <MenuItem
-                  sx={{ fontSize: '0.875rem' }}
-                  onClick={() => updateStatus(EStatus.Inactive)}
-                >
-                  <Box display="flex" alignItems={"center"}>
-                    <HideSource sx={{marginRight: '0.25rem'}} color="error" fontSize="small" />
-                    <span>Inactive</span>
-                  </Box>
-                </MenuItem>
-              )}
             <MenuItem
               sx={{ fontSize: '0.875rem' }}
               onClick={onShowConfirm}

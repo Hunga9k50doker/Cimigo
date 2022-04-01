@@ -4,7 +4,6 @@ import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material"
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
 import { Solution, SolutionCategory, SolutionCategoryHome } from "models/Admin/solution";
-import moment from "moment";
 import { memo, useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -43,8 +42,9 @@ const schema = yup.object().shape({
     id: yup.number(),
     name: yup.string()
   }).nullable(),
-  createdAt: yup.string(),
-  updatedAt: yup.string(),
+  maxPack: yup.number().typeError('Max Pack is required.').positive('Max Pack must be a positive number').required('Max Pack is required.'),
+  maxAdditionalBrand: yup.number().typeError('Max Additional Brand is required.').positive('Max Additional Brand must be a positive number').required('Max Additional Brand is required.'),
+  maxAdditionalAttribute: yup.number().typeError('Max Additional Attribute is required.').positive('Max Additional Attribute must be a positive number').required('Max Additional Attribute is required.')
 })
 
 export interface SolutionFormData {
@@ -54,8 +54,9 @@ export interface SolutionFormData {
   content: string,
   categoryId: OptionItem,
   categoryHomeId: OptionItem,
-  createdAt: string,
-  updatedAt: string,
+  maxPack: number;
+  maxAdditionalBrand: number;
+  maxAdditionalAttribute: number;
 }
 
 interface SolutionFormProps {
@@ -85,10 +86,13 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     formData.append('description', data.description)
     formData.append('content', data.content)
     formData.append('categoryId', `${data.categoryId.id}`)
+    formData.append('maxPack', `${data.maxPack}`)
+    formData.append('maxAdditionalBrand', `${data.maxAdditionalBrand}`)
+    formData.append('maxAdditionalAttribute', `${data.maxAdditionalAttribute}`)
     if (data.image && typeof data.image === 'object') formData.append('image', data.image)
     if (data?.categoryHomeId?.id) formData.append('categoryHomeId', `${data.categoryHomeId.id}`)
     if (langEdit) formData.append('language', langEdit)
-    
+
     onSubmit(formData)
   }
 
@@ -101,8 +105,9 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         content: itemEdit.content,
         categoryId: itemEdit.category ? { id: itemEdit.category.id, name: itemEdit.category.name } : null,
         categoryHomeId: itemEdit.categoryHome ? { id: itemEdit.categoryHome.id, name: itemEdit.categoryHome.name } : null,
-        createdAt: itemEdit?.createdAt && moment(itemEdit.createdAt).format('DD-MM-yyyy hh:ss'),
-        updatedAt: itemEdit?.updatedAt && moment(itemEdit.updatedAt).format('DD-MM-yyyy hh:ss')
+        maxPack: itemEdit.maxPack,
+        maxAdditionalBrand: itemEdit.maxAdditionalBrand,
+        maxAdditionalAttribute: itemEdit.maxAdditionalAttribute
       })
     }
   }, [reset, itemEdit])
@@ -214,7 +219,7 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                       title="Category Home"
                       name="categoryHomeId"
                       control={control}
-                      
+
                       selectProps={{
                         options: categoriesHome,
                         placeholder: "Select category home",
@@ -225,25 +230,34 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Inputs
-                      title="Created Date"
-                      name="createdAt"
-                      type="text"
-                      disabled
-                      inputRef={register('createdAt')}
-                      errorMessage={errors.createdAt?.message}
+                      title="Max Pack"
+                      name="maxPack"
+                      type="number"
+                      disabled={!!langEdit}
+                      inputRef={register('maxPack')}
+                      errorMessage={errors.maxPack?.message}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Inputs
-                      title="Updated Date"
-                      name="updatedAt"
-                      type="text"
-                      disabled
-                      inputRef={register('updatedAt')}
-                      errorMessage={errors.updatedAt?.message}
+                      title="Max Additional Brand"
+                      name="maxAdditionalBrand"
+                      type="number"
+                      disabled={!!langEdit}
+                      inputRef={register('maxAdditionalBrand')}
+                      errorMessage={errors.maxAdditionalBrand?.message}
                     />
                   </Grid>
-
+                  <Grid item xs={12} sm={6}>
+                    <Inputs
+                      title="Max Additional Attribute"
+                      name="maxAdditionalAttribute"
+                      type="number"
+                      disabled={!!langEdit}
+                      inputRef={register('maxAdditionalAttribute')}
+                      errorMessage={errors.maxAdditionalAttribute?.message}
+                    />
+                  </Grid>
                 </Grid>
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <Button

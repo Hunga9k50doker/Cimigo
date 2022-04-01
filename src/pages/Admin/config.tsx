@@ -2,10 +2,11 @@ import {
   NavItem, 
   routes 
 } from "routers/routes";
-import { Category, Lightbulb } from '@mui/icons-material';
+import { Category, FormatListBulleted, Lightbulb } from '@mui/icons-material';
 import SolutionCategory from "./SolutionCategory";
 import Solution from "./Solution";
 import SolutionCategoryHome from "./SolutionCategoryHome";
+import Attribute from "./Attribute";
 
 export const adminRouter: NavItem[] = [
   {
@@ -28,7 +29,15 @@ export const adminRouter: NavItem[] = [
     icon: Category,
     component: SolutionCategoryHome,
     layout: "/admin"
+  },
+  {
+    path: routes.admin.attribute.root,
+    name: 'Attribute',
+    icon: FormatListBulleted,
+    component: Attribute,
+    layout: "/admin"
   }
+  
   // {
   //   path: routes.admin.user.root,
   //   name: 'User',

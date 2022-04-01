@@ -4,7 +4,6 @@ import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material"
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
 import { SolutionCategory } from "models/Admin/solution";
-import moment from "moment";
 import { memo, useEffect } from "react"
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -14,14 +13,10 @@ import * as yup from 'yup';
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required'),
-  createdAt: yup.string(),
-  updatedAt: yup.string(),
 })
 
 export interface SolutionCategoryFormData {
   name: string,
-  createdAt: string,
-  updatedAt: string,
 }
 
 interface SolutionCategoryFormProps {
@@ -51,9 +46,7 @@ const SolutionCategoryForm = memo(({ title, itemEdit, onSubmit }: SolutionCatego
   useEffect(() => {
     if (itemEdit) {
       reset({
-        name: itemEdit?.name,
-        createdAt: itemEdit?.createdAt && moment(itemEdit.createdAt).format('DD-MM-yyyy hh:ss'),
-        updatedAt: itemEdit?.updatedAt && moment(itemEdit.updatedAt).format('DD-MM-yyyy hh:ss')
+        name: itemEdit?.name
       })
     }
   }, [reset, itemEdit])
@@ -89,26 +82,6 @@ const SolutionCategoryForm = memo(({ title, itemEdit, onSubmit }: SolutionCatego
                       type="text"
                       inputRef={register('name')}
                       errorMessage={errors.name?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Inputs
-                      title="Created Date"
-                      name="createdAt"
-                      type="text"
-                      disabled
-                      inputRef={register('createdAt')}
-                      errorMessage={errors.createdAt?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Inputs
-                      title="Updated Date"
-                      name="updatedAt"
-                      type="text"
-                      disabled
-                      inputRef={register('updatedAt')}
-                      errorMessage={errors.updatedAt?.message}
                     />
                   </Grid>
                 </Grid>
