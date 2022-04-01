@@ -26,7 +26,7 @@ const schema = yup.object().shape({
   packTypeId: yup.object().shape({
     id: yup.number().required('Pack type is required.'),
     name: yup.string().required()
-  }).required(),
+  }).required('Pack type is required.'),
   brand: yup.string().required('Brand is required.'),
   manufacturer: yup.string().required('Manufacturer is required.'),
   variant: yup.string().required('Variant is required.'),
@@ -73,9 +73,9 @@ const PopupPack = memo((props: Props) => {
 
   useEffect(() => {
     if (!isOpen && !itemEdit) reset({
-      image: '',
+      image: undefined,
       name: '',
-      packTypeId: null,
+      packTypeId: undefined,
       brand: '',
       manufacturer: '',
       variant: ''
@@ -210,7 +210,7 @@ const PopupPack = memo((props: Props) => {
                         options: packTypes,
                         placeholder: "-- Select a pack type --"
                       }}
-                      errorMessage={(errors.packTypeId as any)?.id?.message}
+                      errorMessage={(errors.packTypeId as any)?.message || errors.packTypeId?.id?.message}
                     />
                   </Grid>
                 </Grid>

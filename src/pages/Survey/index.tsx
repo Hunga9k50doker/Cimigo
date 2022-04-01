@@ -80,7 +80,6 @@ const Survey = () => {
           search: `?tab=${activeTab}`
         }))
       }
-      console.log(tab, "====tab===");
     }
   }, [tab])
 
