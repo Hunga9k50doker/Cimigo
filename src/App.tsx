@@ -11,6 +11,8 @@ import Routers from 'routers';
 import { useEffect } from 'react';
 import { getMe } from 'redux/reducers/User/actionTypes';
 import { History } from 'history';
+import { I18nextProvider } from 'react-i18next';
+import i18n from 'locales';
 
 
 interface AppProps {
@@ -26,20 +28,22 @@ const AppContainer = styled.div`
 const App = ({ history, dispatch }: AppProps) => {
   const theme = defaultTheme;
   const isLoadingAuth = useSelector((state: ReducerType) => state.status.isLoadingAuth)
-  
+
   useEffect(() => {
     dispatch(getMe())
   }, [dispatch])
-  
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
-        <AppContainer>
+        <I18nextProvider i18n={i18n}>
+          <AppContainer>
             <ConnectedRouter history={history}>
               <AppStatus />
-              { !isLoadingAuth && <Routers /> } 
+              {!isLoadingAuth && <Routers />}
             </ConnectedRouter>
-        </AppContainer>
+          </AppContainer>
+        </I18nextProvider>
       </ThemeProvider>
     </StyledEngineProvider>
   );

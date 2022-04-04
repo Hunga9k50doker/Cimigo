@@ -43,6 +43,9 @@ export const API = {
   USER_ATTRIBUTE: {
     DEFAULT: '/v1.0/user-attribute',
   },
+  LOCALES: {
+    DEFAULT: '/v1.0/locales/{{lng}}/{{ns}}'
+  },
   ADMIN: {
     SOLUTION: {
       DEFAULT: '/v1.0/admin/solution',

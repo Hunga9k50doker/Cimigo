@@ -19,6 +19,7 @@ import { EKey } from "models/general";
 import { setUserLogin } from "redux/reducers/User/actionTypes";
 import { push } from "connected-react-router";
 import Google from "components/SocialButton/Google";
+import { useTranslation } from 'react-i18next';
 
 const schema = yup.object().shape({
   email: yup.string().email('Please enter a valid email adress').required('Email is required.'),
@@ -26,6 +27,8 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
+  const { t } = useTranslation()
+  
   const dispatch = useDispatch()
   const [isNotVerified, setIsNotVerified] = useState(false)
   const [errorSubmit, setErrorSubmit] = useState('')
