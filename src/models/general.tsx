@@ -20,6 +20,11 @@ export interface OptionItem {
   name: string;
 }
 
+export interface OptionItemT<T> {
+  id: T;
+  name: string;
+}
+
 export interface PaginationParams {
   take?: number;
   page?: number;

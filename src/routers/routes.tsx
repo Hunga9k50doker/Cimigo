@@ -45,6 +45,11 @@ export const routes = {
       root: '/admin/attribute',
       create: '/admin/attribute/create',
       edit: '/admin/attribute/:id/edit',
+    },
+    translate: {
+      root: '/admin/locales',
+      create: '/admin/locales/create',
+      edit: '/admin/locales/:id/edit',
     }
   }
 }

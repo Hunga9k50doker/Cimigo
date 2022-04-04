@@ -78,7 +78,7 @@ const Login = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="login" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <p className={classes.textLogin}>Login</p>
+          <p className={classes.textLogin}>{t('login')}</p>
           <Inputs
             title="Email address"
             name="email"

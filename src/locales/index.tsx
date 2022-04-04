@@ -8,7 +8,7 @@ i18n
   .use(LanguageDetector)
   .init({
     debug: true,
-    lng: localStorage.getItem('lang') || 'vi',
+    //lng: localStorage.getItem('lang') || 'vi',
     load: 'languageOnly',
     fallbackLng: 'vi',
     ns: ['common'],
@@ -25,7 +25,7 @@ i18n
       lookupSessionStorage: 'lang',
     },
     backend: {
-      loadPath: process.env.REACT_APP_BASE_API_URL + API.LOCALES.DEFAULT,
+      loadPath: process.env.REACT_APP_BASE_API_URL + API.TRANSLATION.DEFAULT,
     }
   });
 

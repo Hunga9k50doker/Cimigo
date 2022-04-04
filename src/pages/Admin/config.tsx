@@ -2,11 +2,12 @@ import {
   NavItem, 
   routes 
 } from "routers/routes";
-import { Category, FormatListBulleted, Lightbulb } from '@mui/icons-material';
+import { Category, FormatListBulleted, GTranslate, Lightbulb } from '@mui/icons-material';
 import SolutionCategory from "./SolutionCategory";
 import Solution from "./Solution";
 import SolutionCategoryHome from "./SolutionCategoryHome";
 import Attribute from "./Attribute";
+import Translate from "./Translate";
 
 export const adminRouter: NavItem[] = [
   {
@@ -36,8 +37,14 @@ export const adminRouter: NavItem[] = [
     icon: FormatListBulleted,
     component: Attribute,
     layout: "/admin"
+  },
+  {
+    path: routes.admin.translate.root,
+    name: 'Translation',
+    icon: GTranslate,
+    component: Translate,
+    layout: "/admin"
   }
-  
   // {
   //   path: routes.admin.user.root,
   //   name: 'User',
