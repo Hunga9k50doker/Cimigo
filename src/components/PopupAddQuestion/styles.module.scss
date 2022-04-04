@@ -1,4 +1,4 @@
-.content{
+.content {
     background-color: var(--cimigo-blue);
     display: flex;
     justify-content: space-between;
@@ -6,81 +6,75 @@
     color: rgba(250, 250, 255, 1);
     font-size: 22px;
     line-height: 31px;
-
-    .iconClose::after{
+    .iconClose::after {
         width: 32px;
         height: 32px;
         background-color: white;
-      
+
         display: flex;
         justify-content: center;
         align-items: center;
         content: "\00d7";
         font-size: 30px;
         border-radius: 100%;
-        color: var(--cimigo-blue);
+        color: rgba(23, 73, 127, 1);
     }
-    button{
+    button {
         padding: 0px;
     }
 }
-.formControl{
+.formControl {
     width: 100%;
-    .error{
+    .error {
         color: red;
-       margin-top: 10px;
-       font-weight: 500;
+        margin-top: 10px;
+        font-weight: 500;
     }
 }
-.inputQuestion{
-    border: 1px solid rgba(0,0,0,0.4);
+.inputQuestion {
+    border: 1px solid rgba(0, 0, 0, 0.4);
     border-bottom: none;
     position: relative;
     width: 100%;
     min-height: 42px;
     border-radius: 5px;
     padding-left: 10px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 22px;
     display: flex;
     align-items: center;
+    color: red;
 
-  .iconVI{
-   color: rgba(28, 28, 28, 0.65);
-   background-color: rgba(221, 221, 221, 1);
-   font-weight: 500;
-   font-size: 12px;
-//    padding: 3px 6px 3px 6px;
-   border-radius: 5px;
-    width: 29px;
-    height: 22px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    line-height: 14.6px;
-
-  }
-
-
+    .iconVI {
+        color: rgba(28, 28, 28, 0.65);
+        background-color: rgba(221, 221, 221, 1);
+        font-weight: 500;
+        font-size: 12px;
+        //    padding: 3px 6px 3px 6px;
+        border-radius: 5px;
+        width: 29px;
+        height: 22px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 14.6px;
+    }
 }
-.classform{
+.classform {
     background-color: white;
     min-height: 100px;
     padding: 32px 22px 26px 22px;
-  position: relative;
-    p:nth-child(1){
+    position: relative;
+    p:nth-child(1) {
         padding-left: 20px;
     }
-
- 
-    .title{
+    .title {
         margin-bottom: 5px;
         font-size: 16px;
         font-weight: 500;
-        
     }
-    .btnSave{
+    .btnSave {
         background-color: var(--cimigo-blue);
         float: right;
         padding: 16px;
@@ -88,16 +82,27 @@
         font-size: 14px;
         font-weight: 600;
         line-height: 16px;
-     text-transform: none;
-     margin-top: 48px;
-     margin-bottom: 36px;
-     position: absolute;
-     right: 3%;
-     top: 90%;
+        text-transform: none;
+        margin-top: 48px;
+        margin-bottom: 36px;
+        position: absolute;
+        right: 4%;
+        top: 90%;
     }
-    
+    @media only screen and (max-width: 600px) {
+        .btnSave {
+            width: 92%;
+        }
+        .iconDotsDragMUI {
+            display: block;
+        }
+        .choiceAnswer {
+            display: none;
+        }
+    }
 }
-.boxInputRadio{
+
+.boxInputRadio {
     position: absolute;
     top: 100%;
     left: 5%;
@@ -108,7 +113,7 @@
     padding-right: 20px;
 }
 
-.addList{
+.addList {
     display: flex;
     align-items: center;
     font-size: 16px;
@@ -118,55 +123,70 @@
 }
 
 
-.rowRadio:first{
+.rowRadio:first {
     margin-top: 30px;
 }
-.rowInputAnswer{
+
+.rowInputAnswer {
     display: flex;
     align-items: center;
     margin-top: 27px;
     padding-left: 35px;
+    position: relative;
 }
-.rowInputAnswerCheckBox{
+
+.rowInputAnswerCheckBox {
     display: flex;
- 
+    position: relative;
     margin-top: 27px;
     padding-left: 35px;
 }
 
-.inputanswer{
+.inputanswer {
     width: 100%;
     border: none;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     height: 22px;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 400;
     margin-left: 5px;
 }
-.inputanswer:focus-visible{
-   outline: none;
+
+.inputanswer:focus-visible {
+    outline: none;
 }
-.closeInputAnswer{
+
+.closeInputAnswer {
     width: 13px;
     height: 13px;
     background-color: transparent;
     border: none;
-    
 }
-.choiceAnswer{
+
+.choiceAnswer {
     height: 20px;
     width: 20px;
     margin-right: 16px;
-
 }
-.iconDotsDrag{
+
+.iconDotsDrag {
     width: 10px;
     height: 16px;
     position: absolute;
     top: 3px;
-   left: 10px;
+    left: 10px;
 }
-.addOptions{
+
+.iconDotsDragMUI {
+    display: none;
+    width: 10px;
+    height: 16px;
+    position: absolute;
+    top: 3px;
+    left: 10px;
+}
+
+.addOptions {
     display: flex;
     align-items: center;
     background-color: transparent;
@@ -175,16 +195,15 @@
     font-size: 16px;
     color: rgba(28, 28, 28, 0.65);
 }
-.IconListAdd{
+
+.IconListAdd {
     width: 30px;
     height: 25px;
     margin-right: 15px;
     margin-left: -12px;
 }
 
-
-
-.inputSwitch{
+.inputSwitch {
     width: 0;
     height: 0;
     visibility: hidden;
@@ -194,7 +213,6 @@
     display: block;
     width: 36px;
     height: 14px;
-
     background-color: rgba(28, 28, 28, 0.4);
     border-radius: 100px;
     position: relative;
@@ -205,41 +223,67 @@
 
 
 .toggleSwitch::after {
-          content: "";
-          width: 20px;
-          height:  20px;
-          background-color: white;
-          position: absolute;
-          border-radius: 70px;
-          top: 50%;
-          left: 0%;
-          transform: translate(-50%,-50%);
-          transition: 0.5s;
+    content: "";
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    position: absolute;
+    border-radius: 70px;
+    top: 50%;
+    left: 28%;
+    transform: translate(-50%, -50%);
+    transition: 0.5s;
 }
 
-input:checked + .toggleSwitch:after {
+input:checked+.toggleSwitch:after {
     left: calc(100% - 20px);
     transform: translateY(-50%);
     background-color: rgba(124, 153, 17, 1);
- 
-    
 }
-input:checked + .toggleSwitch{
+
+input:checked+.toggleSwitch {
     background-color: rgba(166, 204, 23, 1);
 }
-.excluOptions{
+
+input:checked {
+    .excluOptions {
+        color: rgb(17, 255, 0);
+        font-weight: 500;
+    }
+}
+
+.excluOptions {
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 400;
     margin-left: 8px;
 }
-.dialogSigle{
+
+.dialogSigle {
     padding-bottom: 90px;
 }
-.dnd{
-    width:100%;
+
+.dnd {
+    width: 100%;
     border-radius: 5px;
     color: black;
     display: flex;
     align-items: center;
+}
 
+@media only screen and (max-width: 500px) {
+    .titlePopup {
+        font-size: 14px;
+    }
+
+    .inputQuestion {
+        font-size: 14px;
+    }
+
+    .inputanswer {
+        font-size: 14px;
+    }
+
+    .clickAddOption {
+        font-size: 14px;
+    }
 }

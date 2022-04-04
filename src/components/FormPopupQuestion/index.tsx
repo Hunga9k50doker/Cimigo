@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, IconButton, Grid, FormControl, Input, Box } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import classes from './styles.module.scss';
-import iconX from 'assets/img/icon/xmark-solid.svg';
 import InputAdornment from '@mui/material/InputAdornment';
 import * as yup from 'yup';
 import Inputs from 'components/Inputs';

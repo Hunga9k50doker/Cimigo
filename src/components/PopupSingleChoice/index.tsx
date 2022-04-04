@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, IconButton, Grid, FormControl, Input,  Container, Dialog, DialogContent } from '@mui/material';
+import { Button, IconButton, Grid, Dialog, DialogContent } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import classes from './styles.module.scss';
-import IconListAdd from 'assets/img/ic-add-list.png';
-import FormInput from './form';
-import InputAnswer from './inputanswer';
+import IconListAdd from 'assets/img/icon/ic-list-add-svgrepo-com.svg';
+import FormInput from '../FormPopupQuestion/index';
+import InputAnswer from '../InputPopupChoice/index';
 import IconDotsDrag from 'assets/img/icon/ic-dots-drag.svg';
 
 const PopupSingleChoice = () => {
@@ -23,7 +23,6 @@ const PopupSingleChoice = () => {
     },
   ]);
   const [fullWidth, setFullWidth] = React.useState(true);
-
   const handleDrag = (ev) => {setDragId(ev.currentTarget.id);};
   const handleDrop = (ev) => {
   const dragBox = boxes.find((box) => box.title === dragId);
@@ -44,11 +43,10 @@ const PopupSingleChoice = () => {
   const [open, setOpen] = useState(true);
   const togglePopup = () =>{ setOpen(!open); }
     return <React.Fragment> 
-      {   open && <Dialog open={open}  fullWidth={fullWidth}
-   onClose={togglePopup} >
+      {  <Dialog open={open}  fullWidth={fullWidth} onClose={togglePopup} >
                   <DialogContent sx={{minHeight:'470px',padding:'0px'}}>
                   <Grid className={classes.content}>
-                                        <div>Add single choice</div>
+                                        <div className={classes.titlePopup}>Add single choice</div>
                                         <IconButton className={classes.iconClose}  onClick={togglePopup}></IconButton>
                             </Grid>
                             <Grid xs={12} className={classes.classform}>
@@ -56,7 +54,9 @@ const PopupSingleChoice = () => {
                                 <Grid sx={{position:'relative',marginTop:'40px'}}>
                                 <img src={IconDotsDrag} className={classes.iconDotsDrag}></img>
                                 {boxes.sort((a, b) => a.order - b.order).map((box) => (
+                                  
                                   <div className={classes.rowInputAnswer}>
+                                    <img src={IconDotsDrag} className={classes.iconDotsDragMUI}></img>
                                   <input type="radio" name="radio_answer" className={classes.choiceAnswer}></input>
                                   <InputAnswer
                                     key={box.title}
@@ -70,13 +70,13 @@ const PopupSingleChoice = () => {
                                 <Grid xs={12} className={classes.addList}>
                               <button type="submit" className={classes.addOptions}>
                               <img src={IconListAdd} className={classes.IconListAdd}/>
-                              <p>Click to add option</p>
+                              <p className={classes.clickAddOptionSigle}>Click to add option</p>
                               </button>
                             </Grid>
                             </Grid>
                   </DialogContent>
             </Dialog>
-                        }
+      }
     </React.Fragment>
 };
 export default PopupSingleChoice;

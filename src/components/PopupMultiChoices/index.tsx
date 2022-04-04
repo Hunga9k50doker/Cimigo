@@ -1,14 +1,10 @@
 import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, IconButton, Grid,  Dialog, DialogContent } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import classes from './styles.module.scss';
-import iconX from 'assets/img/icon/xmark-solid.svg';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconListAdd from 'assets/img/ic-add-list.png';
-import FormInput from './form';
-import BoxTest from './inputanswer';
-import InputAnswer from './inputanswer';
+import IconListAdd from 'assets/img/icon/ic-list-add-svgrepo-com.svg';
+import FormInput from '../FormPopupQuestion/index';
+import InputAnswer from '../InputPopupChoice/index';
 import IconDotsDrag from 'assets/img/icon/ic-dots-drag.svg';
 
 const PopupMultiChoice = () => {
@@ -48,10 +44,10 @@ const [fullWidth, setFullWidth] = React.useState(true);
 const togglePopup = () =>{
     setOpen(!open);
 }
-    return (   open && <Dialog open={open} onClose={togglePopup}  fullWidth={fullWidth} sx={{paddingBottom:'100px'}}>
-                <DialogContent sx={{minHeight:'530px',padding:'0px'}}>
+    return (  <Dialog open={open} onClose={togglePopup}  fullWidth={fullWidth} sx={{paddingBottom:'100px'}}>
+                <DialogContent sx={{minHeight:'530px',padding:'0px'}} className={classes.responMUIdialogContent}>
                 <Grid className={classes.content}>
-                                    <div>Add multiple choices</div>
+                                    <div className={classes.titlePopup}>Add multiple choices</div>
                                     <IconButton className={classes.iconClose}  onClick={togglePopup}></IconButton>
                         </Grid>
                         <Grid xs={12} className={classes.classform}>
@@ -63,6 +59,7 @@ const togglePopup = () =>{
                               .sort((a, b) =>    parseInt(a.order)  -  parseInt(b.order))
                               .map((box) => (
                               <div className={classes.rowInputAnswerCheckBox}>
+                                 <img src={IconDotsDrag} className={classes.iconDotsDragMUI}></img>
                                 <input type="checkbox" name="radio_answer" className={classes.choiceAnswer}></input>
                                   <div style={{'display':'block','width':'100%'}}>
                                       <InputAnswer
@@ -83,7 +80,7 @@ const togglePopup = () =>{
                             <Grid xs={12} className={classes.addList}>   
                                       <button type="submit" className={classes.addOptions}>
                                       <img src={IconListAdd} className={classes.IconListAdd}/>
-                                      <p>Click to add option</p>
+                                      <p className={classes.clickAddOption}>Click to add option</p>
                                       </button>
                         </Grid>
                         </Grid>
