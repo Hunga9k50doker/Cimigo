@@ -12,6 +12,9 @@ import youtubeIcon from 'assets/img/youtube-icon.svg';
 import Container from "components/Container";
 import { useState } from "react";
 import clsx from "clsx";
+import PopupAddQuestion from "components/PopupPack/popupquestion";
+import PopupSingleChoice from "components/PopupPack/popupsinglechoice";
+import PopupMultiChoice from "components/PopupPack/popupmultichoice";
 
 
 interface FooterProps {
@@ -160,6 +163,10 @@ const Footer = memo((props: FooterProps) => {
             <a className={classes.textPrivacy}>Privacy policy</a>
           </Container>
         </div>
+        
+        <PopupSingleChoice></PopupSingleChoice>
+        <PopupAddQuestion></PopupAddQuestion>
+        <PopupMultiChoice></PopupMultiChoice>
       </footer>
     </>
   )
