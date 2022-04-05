@@ -22,7 +22,7 @@ const CreateTranslation = memo((props: Props) => {
       language: data.language.id
     })
       .then(() => {
-        dispatch(push(routes.admin.translate.root))
+        dispatch(push(routes.admin.translation.root))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))

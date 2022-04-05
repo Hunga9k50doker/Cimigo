@@ -48,7 +48,7 @@ const EditTranslation = memo((props: Props) => {
     }
     TranslationService.update(Number(id), form)
       .then(() => {
-        dispatch(push(routes.admin.translate.root))
+        dispatch(push(routes.admin.translation.root))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))

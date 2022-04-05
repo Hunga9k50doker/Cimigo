@@ -7,7 +7,7 @@ import SolutionCategory from "./SolutionCategory";
 import Solution from "./Solution";
 import SolutionCategoryHome from "./SolutionCategoryHome";
 import Attribute from "./Attribute";
-import Translate from "./Translate";
+import Translation from "./Translation";
 
 export const adminRouter: NavItem[] = [
   {
@@ -39,10 +39,10 @@ export const adminRouter: NavItem[] = [
     layout: "/admin"
   },
   {
-    path: routes.admin.translate.root,
+    path: routes.admin.translation.root,
     name: 'Translation',
     icon: GTranslate,
-    component: Translate,
+    component: Translation,
     layout: "/admin"
   }
   // {

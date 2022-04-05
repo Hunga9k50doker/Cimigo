@@ -37,7 +37,7 @@ const List = memo(({ }: Props) => {
   const [itemDelete, setItemDelete] = useState<Translation>(null);
 
   const handleAdd = () => {
-    dispatch(push(routes.admin.translate.create));
+    dispatch(push(routes.admin.translation.create));
   }
 
   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => {
@@ -121,7 +121,7 @@ const List = memo(({ }: Props) => {
   const handleEdit = () => {
     if (!itemAction) return
     onCloseActionMenu();
-    dispatch(push(routes.admin.translate.edit.replace(':id', `${itemAction.id}`)));
+    dispatch(push(routes.admin.translation.edit.replace(':id', `${itemAction.id}`)));
   }
 
   return (

@@ -42,7 +42,7 @@ const TranslationForm = memo(({ title, itemEdit, onSubmit }: Props) => {
   });
 
   const handleBack = () => {
-    dispatch(push(routes.admin.translate.root))
+    dispatch(push(routes.admin.translation.root))
   }
 
   const _onSubmit = (data: TranslationFormData) => {
