@@ -6,6 +6,7 @@
     color: rgba(250, 250, 255, 1);
     font-size: 22px;
     line-height: 31px;
+
     .iconClose::after {
         width: 32px;
         height: 32px;
@@ -18,6 +19,7 @@
         border-radius: 100%;
         color: rgba(23, 73, 127, 1);
     }
+
     button {
         padding: 0px;
     }
@@ -28,16 +30,20 @@
     min-height: 100px;
     padding: 32px 22px 26px 22px;
     position: relative;
+
     p:nth-child(1) {
         padding-left: 20px;
     }
+
     @media only screen and (max-width: 600px) {
         .btnSave {
             width: 92%;
         }
+
         .iconDotsDragMUI {
             display: block;
         }
+
         .choiceAnswer {
             display: none;
         }
@@ -64,7 +70,6 @@
     padding-left: 35px;
     position: relative;
 }
-
 
 .closeInputAnswer {
     width: 13px;
@@ -177,7 +182,6 @@ input:checked {
     color: black;
     display: flex;
     align-items: center;
-
 }
 
 @media only screen and (max-width: 500px) {

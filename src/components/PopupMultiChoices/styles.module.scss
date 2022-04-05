@@ -10,7 +10,7 @@
     .iconClose::after {
         width: 32px;
         height: 32px;
-        background-color: white;    
+        background-color: white;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -19,6 +19,7 @@
         border-radius: 100%;
         color: rgba(23, 73, 127, 1);
     }
+
     button {
         padding: 0px;
     }
@@ -26,6 +27,7 @@
 
 .formControl {
     width: 100%;
+
     .error {
         color: red;
         margin-top: 10px;
@@ -37,6 +39,7 @@
     .titlePopup {
         font-size: 14px;
     }
+
     .inputQuestion {
         font-size: 14px;
     }
@@ -58,6 +61,7 @@
         margin-right: 12px;
         margin-left: -10px;
     }
+
 }
 
 .classform {
@@ -69,6 +73,7 @@
     p:nth-child(1) {
         padding-left: 20px;
     }
+
     @media only screen and (max-width: 600px) {
         .btnSave {
             width: 92%;
@@ -86,9 +91,7 @@
             margin-right: 14px;
             margin-left: -11px;
         }
-
     }
-
 }
 
 .addList {
@@ -112,14 +115,12 @@
     height: 13px;
     background-color: transparent;
     border: none;
-
 }
 
 .choiceAnswer {
     height: 20px;
     width: 20px;
     margin-right: 16px;
-
 }
 
 .iconDotsDrag {
