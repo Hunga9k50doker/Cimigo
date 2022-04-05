@@ -18,7 +18,6 @@ const PopupSingleChoice = () => {
     },
     {
       title: "Enter answer",
-
       order: 2
     },
   ]);
@@ -46,6 +45,7 @@ const PopupSingleChoice = () => {
     <Dialog open={isOpen}
       fullWidth
       onClose={togglePopup}
+      maxWidth={'md'}
     >
       <DialogContent sx={{ minHeight: '470px', padding: '0px' }}>
         <Grid className={classes.content}>
@@ -61,7 +61,7 @@ const PopupSingleChoice = () => {
                 <img src={IconDotsDrag} className={classes.iconDotsDragMUI}></img>
                 <input type="radio" name="radio_answer" className={classes.choiceAnswer}></input>
                 <InputAnswer
-                  key={box.title}
+                  key={box.order}
                   content={box.title}
                   handleDrag={handleDrag}
                   handleDrop={handleDrop}

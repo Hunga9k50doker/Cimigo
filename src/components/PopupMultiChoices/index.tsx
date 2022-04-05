@@ -46,7 +46,8 @@ const PopupMultiChoice = () => {
   return (
     <Dialog open={isOpen}
       onClose={togglePopup}
-      fullWidth sx={{ paddingBottom: '100px' }}
+      fullWidth maxWidth={'md'}
+      sx={{ paddingBottom: '100px' }}
     >
       <DialogContent sx={{ minHeight: '530px', padding: '0px' }} className={classes.responMUIdialogContent}>
         <Grid className={classes.content}>
@@ -66,7 +67,7 @@ const PopupMultiChoice = () => {
                     <input type="checkbox" name="radio_answer" className={classes.choiceAnswer}></input>
                     <div style={{ 'display': 'block', 'width': '100%' }}>
                       <InputAnswer
-                        key={box.title}
+                        key={box.order}
                         content={box.title}
                         handleDrag={handleDrag}
                         handleDrop={handleDrop}

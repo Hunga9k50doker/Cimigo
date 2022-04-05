@@ -1,3 +1,20 @@
+.inputTextfield {
+    ::placeholder {
+      color: rgba(28, 28, 28, 0.2);
+      opacity: 1;
+    }
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: 0.015em;
+    input {
+      padding: 0px 0px;
+    }
+    fieldset {
+      border-width: 1px !important;
+    }
+  }
 .content {
     background-color: var(--cimigo-blue);
     display: flex;
