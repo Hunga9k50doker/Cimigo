@@ -163,9 +163,6 @@ const Footer = memo((props: FooterProps) => {
             <a className={classes.textPrivacy}>Privacy policy</a>
           </Container>
         </div>
-       <PopupAddQuestion></PopupAddQuestion> 
-       <PopupSingleChoice></PopupSingleChoice>
-    <PopupMultiChoice></PopupMultiChoice>  
       </footer>
     </>
   )
