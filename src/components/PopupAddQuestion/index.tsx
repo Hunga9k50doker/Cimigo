@@ -14,7 +14,8 @@ const PopupAddQuestion = () => {
         <Dialog
             open={isOpen}
             onClose={togglePopup}
-            fullWidth sx={{ marginBottom: '120px' }}
+            fullWidth maxWidth={'md'}
+            sx={{ marginBottom: '120px' }}
         >
             <DialogContent sx={{ minHeight: '330px', padding: '0px' }}>
                 <Grid className={classes.content}>
