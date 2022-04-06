@@ -50,7 +50,30 @@ export const routes = {
       root: '/admin/translation',
       create: '/admin/translation/create',
       edit: '/admin/translation/:id/edit',
-    }
+    },
+    target: {
+      root: '/admin/target',
+      question: {
+        root: '/admin/target/question',
+        create: '/admin/target/question/create',
+        edit: '/admin/target/question/:id/edit',
+        answer: {
+          root: '/admin/target/question/:id/answer',
+          create: '/admin/target/question/:id/answer/create',
+          edit: '/admin/target/question/:id/answer/:answerId/edit',
+        },
+        answerGroup: {
+          root: '/admin/target/question/:id/answer-group',
+          create: '/admin/target/question/:id/answer-group/create',
+          edit: '/admin/target/question/:id/answer-group/:answerGroupId/edit',
+        },
+        answerSuggestion: {
+          root: '/admin/target/question/:id/answer-suggestion',
+          create: '/admin/target/question/:id/answer-suggestion/create',
+          edit: '/admin/target/question/:id/answer-suggestion/:answerSuggestionId/edit',
+        }
+      },
+    },
   }
 }
 

@@ -64,6 +64,21 @@ export const API = {
     },
     TRANSLATION: {
       DEFAULT: '/v1.0/admin/translation',
+    },
+    TARGET: {
+      QUESTION: {
+        DEFAULT: '/v1.0/admin/target/question',
+      },
+      ANSWER: {
+        DEFAULT: '/v1.0/admin/target/answer',
+      },
+      ANSWER_GROUP: {
+        DEFAULT: '/v1.0/admin/target/answer-group',
+      },
+      ANSWER_SUGGESTION: {
+        DEFAULT: '/v1.0/admin/target/answer-suggestion',
+      }
     }
+    
   }
 }

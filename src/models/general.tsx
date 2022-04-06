@@ -58,17 +58,6 @@ export interface DataPagination<T> {
   meta: Meta;
 }
 
-export interface TargetQuestion {
-  id: number;
-  name: string;
-  code: number;
-}
-
-export interface Selector {
-  id: number;
-  name: string;
-}
-
 export enum SocialProvider {
   FACEBOOK = 'Facebook',
   ZALO = 'Zalo',
