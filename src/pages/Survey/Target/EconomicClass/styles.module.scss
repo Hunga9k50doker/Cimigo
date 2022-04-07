@@ -26,13 +26,10 @@
 }
 .rootCheck {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   flex-wrap: wrap;
-  margin: 25px auto;
+  padding: 25px 15px;
   label {
     margin: 0 !important;
   }
-}
-.rootCheck > div{
-  max-width: 40%;
 }

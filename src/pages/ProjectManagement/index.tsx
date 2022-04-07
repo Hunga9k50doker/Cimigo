@@ -197,7 +197,7 @@ const ProjectManagement = memo((props: Props) => {
 
   const gotoDetail = () => {
     onCloseActionMenu()
-    dispatch(push(routes.project.detail.replace(":id", `${itemAction.id}`)))
+    dispatch(push(routes.project.detail.root.replace(":id", `${itemAction.id}`)))
   }
 
   const onShowConfirmDelete = () => {

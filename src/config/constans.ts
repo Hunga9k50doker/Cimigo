@@ -23,7 +23,7 @@ export const API = {
     RENAME: '/v1.0/project/:id/rename',
     MOVE: '/v1.0/project/:id/move-project',
     BASIC_INFORMATION: '/v1.0/project/:id/basic-information',
-    target: '/v1.0/project/:id/target',
+    TARGET: '/v1.0/project/:id/target',
   },
   FOLDER: {
     DEFAULT: '/v1.0/folder',
@@ -45,6 +45,9 @@ export const API = {
   },
   TRANSLATION: {
     DEFAULT: '/v1.0/translation/{{lng}}/{{ns}}'
+  },
+  TARGET: {
+    DEFAULT: '/v1.0/target/question',
   },
   ADMIN: {
     SOLUTION: {

@@ -142,7 +142,7 @@ const AnswerSuggestionList = memo(({ }: Props) => {
 
   const onRedirectEdit = (item: TargetAnswerSuggestion, lang?: LangSupport) => {
     dispatch(push({
-      pathname: routes.admin.target.question.answerSuggestion.edit.replace(':id', `${questionId}`).replace(':answerId', `${item.id}`),
+      pathname: routes.admin.target.question.answerSuggestion.edit.replace(':id', `${questionId}`).replace(':answerSuggestionId', `${item.id}`),
       search: lang && `?lang=${lang.key}`
     }));
   }

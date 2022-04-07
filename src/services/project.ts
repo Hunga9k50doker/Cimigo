@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, UpdateProjectBasicInformation } from 'models/project';
+import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, UpdateProjectBasicInformation, UpdateTarget } from 'models/project';
 import api from 'services/configApi';
 
 export class ProjectService {
@@ -65,6 +65,16 @@ export class ProjectService {
 
   static async updateProjectBasicInformation(id: number, data: UpdateProjectBasicInformation): Promise<any> {
     return await api.put(API.PROJECT.BASIC_INFORMATION.replace(":id", `${id}`), data)
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async updateTarget(id: number, data: UpdateTarget): Promise<any> {
+    return await api.put(API.PROJECT.TARGET.replace(":id", `${id}`), data)
       .then((res) => {
         return Promise.resolve(res.data)
       })

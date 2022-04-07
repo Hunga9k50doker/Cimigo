@@ -13,7 +13,14 @@ export const routes = {
   project: {
     management: '/project',
     create: '/project/create',
-    detail: '/project/:id',
+    detail: {
+      root: '/project/:id',
+      setupSurvey: '/project/:id/setup-survey',
+      target: '/project/:id/target',
+      quotas: '/project/:id/quotas',
+      paymentBilling: '/project/:id/payment-billing',
+      report: '/project/:id/report',
+    }
   },
   admin: {
     root: '/admin',

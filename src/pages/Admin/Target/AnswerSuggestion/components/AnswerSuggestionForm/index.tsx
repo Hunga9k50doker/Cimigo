@@ -64,7 +64,9 @@ const AnswerSuggestionForm = memo(({ title, questionId, itemEdit, langEdit, onSu
   useEffect(() => {
     if (itemEdit) {
       reset({
-        name: itemEdit.name
+        name: itemEdit.name,
+        answerIds: itemEdit.answers?.map(it => ({ id: it.id, name: it.name })),
+        groupIds: itemEdit.groups?.map(it => ({ id: it.id, name: it.name }))
       })
     }
   }, [reset, itemEdit])

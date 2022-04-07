@@ -9,7 +9,6 @@ import {
 
 import Header from "components/Header";
 import Footer from "components/Footer";
-import TabPanel from "components/TabPanel";
 import SetupSurvey from "./SetupSurvey";
 import Target from "./Target";
 import Quotas from "./Quotas";
@@ -17,50 +16,29 @@ import PaymentBilling from "./PaymentBilling";
 import images from "config/images";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
-import { useParams } from "react-router-dom";
+import { matchPath, Redirect, Route, Switch, useParams } from "react-router-dom";
 import { ReducerType } from "redux/reducers";
-import { OptionItem } from "models/general";
-import QueryString from 'query-string';
 import { routes } from "routers/routes";
 import { push } from "connected-react-router";
 
-export enum ETab {
-  SETUP_SURVEY,
-  TARGET,
-  QUOTAS,
-  PAYMENT_BILLING,
-  REPORT
+interface TabItem {
+  name: string,
+  path: string
 }
 
-const tabs: OptionItem[] = [
-  { id: ETab.SETUP_SURVEY, name: 'Setup survey' },
-  { id: ETab.TARGET, name: 'Target' },
-  { id: ETab.QUOTAS, name: 'Quotas' },
-  { id: ETab.PAYMENT_BILLING, name: 'Payment & Billing' },
-  { id: ETab.REPORT, name: 'Report' },
+const tabs: TabItem[] = [
+  { name: 'Setup survey',path: routes.project.detail.setupSurvey  },
+  { name: 'Target',path: routes.project.detail.target },
+  { name: 'Quotas',path: routes.project.detail.quotas },
+  { name: 'Payment & Billing',path: routes.project.detail.paymentBilling },
+  { name: 'Report',path: routes.project.detail.report }
 ]
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  }; 
-}
 const Survey = () => {
 
   const { id } = useParams<{ id?: string }>()
-  const { tab }: { tab?: string } = QueryString.parse(window.location.search);
   const { project } = useSelector((state: ReducerType) => state.project)
   const dispatch = useDispatch()
-  
-  const [activeTab, setActiveTab] = useState(ETab.SETUP_SURVEY);
-
-  const handleChange = (e: any, newValue: number) => {
-    dispatch(push({
-      pathname: routes.project.detail.replace(":id", id),
-      search: `?tab=${newValue}`
-    }))
-  };
 
   useEffect(() => {
     if (id && !isNaN(Number(id))) {
@@ -68,33 +46,35 @@ const Survey = () => {
     }
   }, [dispatch, id])
 
-  useEffect(() => {
-    if (tab && !isNaN(Number(tab))) {
-      const _tab = Number(tab)
-      const item = tabs.find(it => it.id === _tab)
-      if (item) {
-        setActiveTab(Number(tab))
-      } else {
-        dispatch(push({
-          pathname: routes.project.detail.replace(":id", id),
-          search: `?tab=${activeTab}`
-        }))
-      }
-    }
-  }, [tab])
+  const activeRoute = (routeName: string, exact: boolean = false) => {
+    const match = matchPath(window.location.pathname, {
+      path: routeName,
+      exact: exact
+    })
+    return !!match
+  };
+
+  const getActiveTab = () => {
+    const index = tabs.findIndex(it => activeRoute(it.path))
+    return index
+  }
+
+  const onChangeTab = (_: any, newTab: number) => {
+    dispatch(push(tabs[newTab].path.replace(":id", id)))
+  }
 
   return (
     <Grid>
-      <Header project detail={project?.name}/>
+      <Header project detail={project?.name} />
       <Grid className={classes.rootMobile}>
-        <img src={images.icHomeMobile} alt='' onClick={() => dispatch(push(routes.project.management))}/>
+        <img src={images.icHomeMobile} alt='' onClick={() => dispatch(push(routes.project.management))} />
         <img src={images.icNextMobile} alt='' />
         <p>{project?.name}</p>
       </Grid>
       <Grid className={classes.root}>
         <Tabs
-          value={activeTab}
-          onChange={handleChange}
+          value={getActiveTab()}
+          onChange={onChangeTab}
           variant="scrollable"
           allowScrollButtonsMobile
           classes={{
@@ -116,25 +96,23 @@ const Survey = () => {
                 selected: classes.selectedTab,
                 root: classes.rootTab,
               }}
-              label={item.name} {...a11yProps(index)} />
+              label={item.name}
+              id={`build-tab-${index}`}
+            />
           ))}
         </Tabs>
         <Grid className={classes.bodyTab}>
-          <TabPanel value={activeTab} index={ETab.SETUP_SURVEY}>
-            <SetupSurvey id={Number(id)} />
-          </TabPanel>
-          <TabPanel value={activeTab} index={ETab.TARGET}>
-            <Target />
-          </TabPanel>
-          <TabPanel value={activeTab} index={ETab.QUOTAS}>
-            <Quotas />
-          </TabPanel>
-          <TabPanel value={activeTab} index={ETab.PAYMENT_BILLING}>
-            <PaymentBilling />
-          </TabPanel>
-          <TabPanel value={activeTab} index={ETab.REPORT}>
-            Report
-          </TabPanel>
+          <div className={classes.tabContent}>
+            <Switch>
+              <Route exact path={routes.project.detail.setupSurvey} render={(routeProps) => <SetupSurvey {...routeProps} id={Number(id)}/>}/>
+              <Route exact path={routes.project.detail.target} render={(routeProps) => <Target {...routeProps} projectId={Number(id)}/>}/>
+              <Route exact path={routes.project.detail.quotas} render={(routeProps) => <Quotas/>}/>
+              <Route exact path={routes.project.detail.paymentBilling} render={(routeProps) => <PaymentBilling/>}/>
+              <Route exact path={routes.project.detail.report} render={(routeProps) => { return (<>Report</>) }}/>
+              
+              <Redirect from={routes.project.detail.root} to={routes.project.detail.setupSurvey} />
+            </Switch>
+          </div>
         </Grid>
       </Grid>
       <Footer />

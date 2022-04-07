@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useEffect, useState } from "react";
 import classes from './styles.module.scss';
 import {
   Grid,
@@ -25,12 +25,16 @@ import images from "config/images";
 import PopupLocationMobile from "./components/PopupLocationMobile";
 import PopupEconomicClassMobile from "./components/PopupEconomicClass";
 import PopupAgeCoverageMobile from "./components/PopupAgeCoverageMobile";
+import { useDispatch, useSelector } from "react-redux";
+import { TargetService } from "services/target";
+import { setErrorMess } from "redux/reducers/Status/actionTypes";
+import { TargetAnswer, TargetQuestion, TargetQuestionType } from "models/Admin/target";
+import { ReducerType } from "redux/reducers";
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
+export enum ETab {
+  Location,
+  Economic_Class,
+  Age_Coverage
 }
 
 const dataValue = [
@@ -48,66 +52,132 @@ const dataValue = [
   },
 ]
 
+export interface TabItem {
+  id: ETab,
+  title: string
+}
+
+const listTabs: TabItem[] = [
+  {
+    id: ETab.Location,
+    title: "Location",
+  },
+  {
+    id: ETab.Economic_Class,
+    title: "Economic class",
+  },
+  {
+    id: ETab.Age_Coverage,
+    title: "Age coverage",
+  },
+]
+interface Props {
+  projectId: number
+}
 
 
-const Target = () => {
-  const [alignment, setAlignment] = useState();
-  const [value, setValue] = useState(0);
+
+const Target = memo(({ projectId }: Props) => {
+
+  const dispatch = useDispatch()
+  const [activeTab, setActiveTab] = useState(ETab.Location);
+
+  const { project } = useSelector((state: ReducerType) => state.project)
+
   const [showInput, setShowInput] = useState(false);
   const [onPopupLocation, setOnPopupLocation] = useState(false);
   const [onPopupEconomicClass, setOnPopupEconomicClass] = useState(false);
   const [onPopupAgeCoverage, setOnPopupAgeCoverage] = useState(false);
 
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [questionsLocation, setQuestionsLocation] = useState<TargetQuestion[]>([])
+  const [questionsEconomicClass, setQuestionsEconomicClass] = useState<TargetQuestion[]>([])
+  const [questionsAgeGender, setQuestionsAgeGender] = useState<TargetQuestion[]>([])
+  const [questionsMum, setQuestionsMum] = useState<TargetQuestion[]>([])
 
-  const listTabs = [
-    {
-      choose: <a>Choose location</a>,
-      title: "Location",
-      infor:
-        <li>
-          <p><span>Strata: </span>Urban</p>
-          <p><span>Location: </span>Ho Chi Minh, Dong Nai, Bien Hoa, Vung Tau, Binh Duong.</p>
-        </li>
-    },
-    {
-      choose: <a>Choose economic class</a>,
-      title: "Economic class",
-      infor: <li><p><span>Economic class: </span>Economic class A, Economic class B, Economic class C.</p></li>
-    },
-    {
-      choose: <a>Choose age coverage</a>,
-      title: "Age coverage",
-      infor: <a>Choose age coverage</a>,
-    },
-  ]
+
+  const [selectedIndex, setSelectedIndex] = useState(1);
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
-  const handleChangeTab = (e, newValue: number) => {
-    setValue(newValue);
+  const handleChangeTab = (_: React.SyntheticEvent<Element, Event>, tab: number) => {
+    setActiveTab(tab)
   };
-  const handleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
-  };
-  const handleClick = (val) => {
-    if (val === 'Location') {
-      setOnPopupLocation(true)
-    }
-    else if (val === 'Economic class') {
-      setOnPopupEconomicClass(true)
-    }
-    else if (val === 'Age coverage') {
-      setOnPopupAgeCoverage(true)
+
+  const onShowPopupMobile = (tab: TabItem) => {
+    switch (tab.id) {
+      case ETab.Location:
+        setOnPopupLocation(true)
+        break;
+      case ETab.Economic_Class:
+        setOnPopupEconomicClass(true)
+        break;
+      case ETab.Age_Coverage:
+        setOnPopupAgeCoverage(true)
+        break;
     }
   }
+
+  const renderHeaderTab = (tab: TabItem) => {
+    switch (tab.id) {
+      case ETab.Location:
+        const targetLs = project?.targets?.filter(it => it.targetQuestion?.typeId === TargetQuestionType.Location)
+        if (targetLs?.length) {
+          return (
+            <li>
+              {targetLs.map(it => (
+                <p key={it.id}><span>{it.targetQuestion?.name}: </span>{it.answers.map(it => it.name).join(', ')}.</p>
+              ))}
+            </li>
+          )
+        } else return <a>Choose location</a>
+      case ETab.Economic_Class:
+        const targetECs = project?.targets?.filter(it => it.targetQuestion?.typeId === TargetQuestionType.Economic_Class)
+        if (targetECs?.length) {
+          return (
+            <li>
+              {targetECs.map(it => (
+                <p key={it.id}><span>{it.targetQuestion?.name}: </span>{it.answers.map(it => it.name).join(', ')}.</p>
+              ))}
+            </li>
+          )
+        } else return <a>Choose economic class</a>
+      case ETab.Age_Coverage:
+        const targetACs = project?.targets?.filter(it => [TargetQuestionType.Mums_Only, TargetQuestionType.Gender_And_Age_Quotas].includes(it.targetQuestion?.typeId || 0))
+        if (targetACs?.length) {
+          return (
+            <li>
+              {targetACs.map(it => (
+                <p key={it.id}><span>{it.targetQuestion?.name}: </span>{it.answers.map(it => it.name).join(', ')}.</p>
+              ))}
+            </li>
+          )
+        } else return <a>Choose age coverage</a>
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const questions: TargetQuestion[] = await TargetService.getQuestions({ take: 9999 })
+        .then((res) => res.data)
+        .catch(() => Promise.resolve([]))
+      const _questionsLocation = questions.filter(it => it.typeId === TargetQuestionType.Location)
+      const _questionsEconomicClass = questions.filter(it => it.typeId === TargetQuestionType.Economic_Class)
+      const _questionsAgeGender = questions.filter(it => it.typeId === TargetQuestionType.Gender_And_Age_Quotas)
+      const _questionsMum = questions.filter(it => it.typeId === TargetQuestionType.Mums_Only)
+      setQuestionsLocation(_questionsLocation)
+      setQuestionsEconomicClass(_questionsEconomicClass)
+      setQuestionsAgeGender(_questionsAgeGender)
+      setQuestionsMum(_questionsMum)
+    }
+    fetchData()
+  }, [])
+
   return (
     <Grid classes={{ root: classes.root }}>
       <Grid className={classes.header}>
         <Grid className={classes.size}>
           <p>Choose sample size:</p>
-
           <Grid>
             <List component="nav" aria-label="main mailbox folders" className={classes.toggleButtonGroup}>
               {dataValue.map((item, index) => (
@@ -149,7 +219,7 @@ const Target = () => {
       </Grid>
       <Grid className={classes.body}>
         <Tabs
-          value={value}
+          value={activeTab}
           onChange={handleChangeTab}
           classes={{
             root: classes.rootTabs,
@@ -166,27 +236,39 @@ const Target = () => {
                 root: classes.rootTab,
                 iconWrapper: classes.iconWrapper,
               }}
-              label={value === index ? item.infor : item.choose}
-              {...a11yProps(index)}
+              label={renderHeaderTab(item)}
+              id={`target-tab-${index}`}
             />
           ))}
         </Tabs>
-        <TabPanelImg value={value} index={0}>
-          <Location />
+        <TabPanelImg value={activeTab} index={ETab.Location}>
+          <Location
+            projectId={projectId}
+            project={project}
+            questions={questionsLocation}
+          />
         </TabPanelImg>
-        <TabPanelImg value={value} index={1}>
-          <EconomicClass />
+        <TabPanelImg value={activeTab} index={ETab.Economic_Class}>
+          <EconomicClass
+            projectId={projectId}
+            project={project}
+            questions={questionsEconomicClass}
+          />
         </TabPanelImg>
-        <TabPanelImg value={value} index={2}>
-          <AgeCoverage />
+        <TabPanelImg value={activeTab} index={ETab.Age_Coverage}>
+          <AgeCoverage 
+            projectId={projectId}
+            project={project}
+            questionsAgeGender={questionsAgeGender}
+            questionsMum={questionsMum}
+          />
         </TabPanelImg>
       </Grid>
-
       <Grid className={classes.bodyMobile}>
         <p className={classes.titleMobile}>Target criteria:</p>
         <p className={classes.subTitleMobile}>Choose your target consumers. We'll deliver your survey to the right people that satisfy your criteria.</p>
         {listTabs.map((item, index) => (
-          <Card classes={{ root: classes.cardMobile }} key={index} onClick={() => handleClick(item.title)}>
+          <Card classes={{ root: classes.cardMobile }} key={index} onClick={() => onShowPopupMobile(item)}>
             <CardActionArea title={item.title}>
               <CardMedia
                 component="img"
@@ -195,7 +277,7 @@ const Target = () => {
                 alt="green iguana"
               />
               <div className={classes.bodyCardMobile}>
-                {item.choose}
+                {renderHeaderTab(item)}
               </div>
             </CardActionArea>
           </Card>
@@ -206,6 +288,6 @@ const Target = () => {
       <PopupAgeCoverageMobile onClickOpen={onPopupAgeCoverage} onClickCancel={() => setOnPopupAgeCoverage(false)} />
     </Grid>
   )
-}
+})
 
 export default Target

@@ -13,8 +13,11 @@ export interface TargetQuestion {
   language: string;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date
-  languages?: TargetQuestion[]
+  deletedAt: Date;
+  languages?: TargetQuestion[];
+  targetAnswers?: TargetAnswer[];
+  targetAnswerGroups?: TargetAnswerGroup[];
+  targetAnswerSuggestions?: TargetAnswerSuggestion[];
 }
 
 export interface TargetAnswer {
@@ -104,7 +107,8 @@ export interface TargetAnswerGroup {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-  languages?: TargetAnswerGroup[]
+  languages?: TargetAnswerGroup[];
+  targetAnswers?: TargetAnswer[];
 }
 
 export interface GetAnswerGroupsParams {

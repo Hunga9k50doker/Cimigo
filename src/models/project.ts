@@ -1,6 +1,7 @@
 import { ProjectFolder } from './folder';
 import { OptionItem } from './general';
 import { Solution } from 'models/Admin/solution';
+import { TargetAnswer, TargetQuestion } from './Admin/target';
 export interface CreateProjectData {
   solutionId: number;
   name: string,
@@ -27,7 +28,8 @@ export interface Project {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-  project_folders?: ProjectFolder[]
+  project_folders?: ProjectFolder[];
+  targets: ProjectTarget[]
 }
 
 export enum ProjectStatus {
@@ -73,4 +75,23 @@ export interface UpdateProjectBasicInformation {
   brand?: string,
   variant?: string,
   manufacturer?: string
+}
+
+export interface ProjectTarget {
+  id: number;
+  projectId: string;
+  questionId: number;
+  answerIds: number[];
+  createdAt: Date;
+  updatedAt: Date;
+  answers: TargetAnswer[];
+  targetQuestion?: TargetQuestion;
+}
+
+export interface UpdateTarget {
+  questionTypeId: number,
+  questionSelected: {
+    questionId: number,
+    answerIds: number[]
+  }[]
 }
