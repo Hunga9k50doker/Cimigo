@@ -113,17 +113,17 @@ const PopupMultiChoice = () => {
   const handleChangeQuestion = (e) => {
     setQuestion(e.target.value)
   }
-  const enableBtnSubmit = () => {
-    const onChangeAns = answers.find(({ value }) => value !== '');
-    if (question.length > 0 || onChangeAns !== undefined) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
+  // const enableBtnSubmit = () => {
+  //   const onChangeAns = answers.find(({ value }) => value !== '');
+  //   if (question.length > 0 || onChangeAns !== undefined) {
+  //     return true;
+  //   }
+  //   else {
+  //     return false;
+  //   }
+  // }
 
-  return (<>
+  return (
     <Dialog open={isOpen}
       onClose={togglePopup}
       classes={{ paper: classes.paper }}
@@ -199,12 +199,11 @@ const PopupMultiChoice = () => {
             {/* {errors.inputAns?.message} */}
           </Grid>
           <Grid  >
-            <Button type='submit' disabled={!enableBtnSubmit()} children='Save question' className={classes.btnSave} />
+            <Button type='submit'  children='Save question' className={classes.btnSave} />
           </Grid>
         </form>
       </DialogContent>
     </Dialog>
-  </>
   );
 };
 export default PopupMultiChoice;

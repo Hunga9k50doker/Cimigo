@@ -28,14 +28,7 @@ const PopupAddQuestion = () => {
         setQuestion(e.target.value)
     }
     const onSubmit = (data) => console.log(data);
-    const enableBtnSubmit = () => {
-        if (question.length > 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
+
     return (
         <Dialog
             open={isOpen}
@@ -61,7 +54,7 @@ const PopupAddQuestion = () => {
                             onChange={handleChangeQuestion}
                         />
                         <Grid >
-                            <Button type='submit' disabled={!enableBtnSubmit()} children='Save question' className={classes.btnSave} />
+                            <Button type='submit'  children='Save question' className={classes.btnSave} />
                         </Grid>
                     </form>
                 </Grid>
