@@ -1,59 +1,143 @@
-import { useState, memo } from 'react';
-import { Dialog, Grid, IconButton, Tab, Tabs, FormControlLabel, Checkbox } from '@mui/material';
+import { useState, memo, useEffect } from 'react';
+import { Dialog, Grid, IconButton, Tab, Tabs, FormControlLabel, Checkbox, Tooltip } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
 import Images from "config/images";
 import TabPanelMobile from '../TabPanel';
+import { Project } from 'models/project';
+import { TargetAnswer, TargetQuestion, TargetQuestionType } from 'models/Admin/target';
+import { useDispatch } from 'react-redux';
+import { DataSelected, isDisableSubmit, onToggleAnswer } from '../../models';
+import { ProjectService } from 'services/project';
+import { setErrorMess, setLoading, setSuccessMess } from 'redux/reducers/Status/actionTypes';
+import { getProjectRequest } from 'redux/reducers/Project/actionTypes';
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
+enum ETab {
+  Gender_And_Age_Quotas,
+  Mums_Only
 }
 
-interface PopupAgeCoverageMobileProps {
-  onClickCancel?: () => void,
-  onClickOpen?: boolean,
+interface Props {
+  isOpen: boolean,
+  projectId: number,
+  project: Project,
+  questionsAgeGender: TargetQuestion[],
+  questionsMum: TargetQuestion[],
+  onCancel: () => void
 }
 
-const checkAge = ['15-17', '20-24', '30-34', '40-45', '18-19', '25-29', '35-39'];
-const checkGender = ['Male', 'Female'];
+const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeGender, questionsMum, onCancel }: Props) => {
 
-const checkAgeChild = [
-  '0-12 months (aged less than 1)',
-  '3 to 6 years (aged 3,4,5,6)',
-  '12-24 months (aged 1)',
-  '7 to 9 years (aged 7,8,9)',
-  '25 to 36 months (aged 2)',
-  '10 to 18 years (aged 10 to 18)',
-];
+  const dispatch = useDispatch()
 
-const PopupAgeCoverageMobile = memo((props: PopupAgeCoverageMobileProps) => {
-  const { onClickCancel, onClickOpen } = props;
-  const [value, setValue] = useState(0);
+  const [activeTab, setActiveTab] = useState(ETab.Gender_And_Age_Quotas);
+  const [dataSelectedGenderAge, setDataSelectedGenderAge] = useState<DataSelected>({})
+  const [dataSelectedMum, setDataSelectedMum] = useState<DataSelected>({})
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  useEffect(() => {
+    const _dataSelectedGenderAge: DataSelected = {}
+    const targetGenderAge = project?.targets?.filter(it => it.targetQuestion?.typeId === TargetQuestionType.Gender_And_Age_Quotas) || []
+    targetGenderAge.forEach(item => {
+      _dataSelectedGenderAge[item.questionId] = item.answers
+    })
+    setDataSelectedGenderAge(_dataSelectedGenderAge)
+    const _dataSelectedMun: DataSelected = {}
+    const targetMum = project?.targets?.filter(it => it.targetQuestion?.typeId === TargetQuestionType.Mums_Only) || []
+    targetMum.forEach(item => {
+      _dataSelectedMun[item.questionId] = item.answers
+    })
+    setDataSelectedMum(_dataSelectedMun)
+  }, [project])
+
+  const _onToggleAnswerGenderAge = (questionId: number, answer: TargetAnswer, checked: boolean) => {
+    onToggleAnswer(questionId, answer, checked, dataSelectedGenderAge, setDataSelectedGenderAge)
+  }
+
+  const _onToggleAnswerMum = (questionId: number, answer: TargetAnswer, checked: boolean) => {
+    onToggleAnswer(questionId, answer, checked, dataSelectedMum, setDataSelectedMum)
+  }
+
+  const isDisable = () => {
+    switch (activeTab) {
+      case ETab.Gender_And_Age_Quotas:
+        return isDisableGenderAge()
+      case ETab.Mums_Only:
+        return isDisableMum()
+    }
+  }
+
+  const isDisableGenderAge = () => {
+    return isDisableSubmit(questionsAgeGender, dataSelectedGenderAge)
+  }
+
+  const isDisableMum = () => {
+    return isDisableSubmit(questionsMum, dataSelectedMum)
+  }
+
+  const onChangeTab = (tab: ETab) => {
+    setActiveTab(tab)
+  }
+
+  const onUpdateTargetGenderAge = () => {
+    if (isDisableGenderAge()) return
+    dispatch(setLoading(true))
+    ProjectService.updateTarget(projectId, {
+      questionTypeId: TargetQuestionType.Gender_And_Age_Quotas,
+      questionSelected: Object.keys(dataSelectedGenderAge).map(questionId => ({ questionId: Number(questionId), answerIds: dataSelectedGenderAge[Number(questionId)].map(it => it.id) }))
+    })
+      .then((res) => {
+        dispatch(getProjectRequest(projectId))
+        dispatch(setSuccessMess(res.message))
+        onCancel()
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onUpdateTargetMum = () => {
+    if (isDisableMum()) return
+    dispatch(setLoading(true))
+    ProjectService.updateTarget(projectId, {
+      questionTypeId: TargetQuestionType.Mums_Only,
+      questionSelected: Object.keys(dataSelectedMum).map(questionId => ({ questionId: Number(questionId), answerIds: dataSelectedMum[Number(questionId)].map(it => it.id) }))
+    })
+      .then((res) => {
+        dispatch(getProjectRequest(projectId))
+        dispatch(setSuccessMess(res.message))
+        onCancel()
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onSave = () => {
+    switch (activeTab) {
+      case ETab.Gender_And_Age_Quotas:
+        return onUpdateTargetGenderAge()
+      case ETab.Mums_Only:
+        return onUpdateTargetMum()
+    }
+  }
+
   return (
     <Dialog
-      open={onClickOpen}
+      open={isOpen}
+      onClose={onCancel}
       classes={{ paper: classes.paper }}
     >
       <Grid className={classes.root}>
         <Grid className={classes.header}>
           <p className={classes.title}>Age coverage</p>
-          <IconButton onClick={onClickCancel}>
+          <IconButton onClick={onCancel}>
             <img src={Images.icClose} alt='' />
           </IconButton>
         </Grid>
         <Grid className={classes.body}>
           <Grid className={classes.tabs}>
             <Tabs
-              value={value}
-              onChange={handleChange}
+              value={activeTab}
+              onChange={(_, tab) => onChangeTab(tab)}
               aria-label="basic tabs example"
               classes={{
                 root: classes.rootTabs,
@@ -68,90 +152,82 @@ const PopupAgeCoverageMobile = memo((props: PopupAgeCoverageMobileProps) => {
                   root: classes.rootTab,
                   iconWrapper: classes.iconWrapper,
                 }}
-                {...a11yProps(0)}
-                icon={<img src={value === 0 ? Images.icTabGreen : Images.icTabGray} />}
+                id={`target-tab-gender-and-age`}
+                icon={<img src={activeTab === ETab.Gender_And_Age_Quotas ? Images.icTabGreen : Images.icTabGray} />}
                 iconPosition="start"
               />
               <Tab
                 label="Mum only"
-                {...a11yProps(1)}
+                id={`target-tab-mum-only`}
                 classes={{
                   selected: classes.selectedTab,
                   root: classes.rootTab,
                   iconWrapper: classes.iconWrapper,
                 }}
-                icon={<img src={value === 1 ? Images.icTabGreen : Images.icTabGray} />}
+                icon={<img src={activeTab === ETab.Mums_Only ? Images.icTabGreen : Images.icTabGray} />}
                 iconPosition="start"
               />
             </Tabs>
           </Grid>
-          <TabPanelMobile value={value} index={0}>
-            <Grid>
-              <p className={classes.text}>Choose age</p>
-              <Grid classes={{ root: classes.checkLocation }}>
-                {checkAge.map((item, index) => {
-                  return (
-                    <Grid item xs={6} key={index} >
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            classes={{ root: classes.rootCheckboxLocation }}
-                            icon={<img src={Images.icCheck} alt="" />}
-                            checkedIcon={<img src={Images.icCheckActive} alt="" />} />
-                        }
-                        label={item}
-                      />
-                    </Grid>
-                  )
-                })}
+          <TabPanelMobile value={activeTab} index={ETab.Gender_And_Age_Quotas}>
+            {questionsAgeGender.map(question => (
+              <Grid key={question.id}>
+                <p className={classes.text}>Choose {question.name}</p>
+                <Grid classes={{ root: classes.checkLocation }}>
+                  {question.targetAnswers.map((answer) => {
+                    return (
+                      <Grid item xs={6} key={answer.id}>
+                        <Tooltip title={answer.description}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={!!dataSelectedGenderAge[question.id]?.find(it => it.id === answer.id)}
+                                onChange={(_, checked) => _onToggleAnswerGenderAge(question.id, answer, checked)}
+                                classes={{ root: classes.rootCheckboxLocation }}
+                                icon={<img src={Images.icCheck} alt="" />}
+                                checkedIcon={<img src={Images.icCheckActive} alt="" />} />
+                            }
+                            label={answer.name}
+                          />
+                        </Tooltip>
+                      </Grid>
+                    )
+                  })}
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid>
-              <p className={classes.text}>Choose gender</p>
-              <Grid classes={{ root: classes.checkLocation }}>
-                {checkGender.map((item, index) => {
-                  return (
-                    <Grid item xs={6} key={index} >
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            classes={{ root: classes.rootCheckboxLocation }}
-                            icon={<img src={Images.icCheck} alt="" />}
-                            checkedIcon={<img src={Images.icCheckActive} alt="" />} />
-                        }
-                        label={item}
-                      />
-                    </Grid>
-                  )
-                })}
-              </Grid>
-            </Grid>
+            ))}
           </TabPanelMobile>
-          <TabPanelMobile value={value} index={1}>
-            <Grid>
-              <p className={classes.text}>Choose age of child</p>
-              <Grid classes={{ root: classes.checkAgeOfChild }}>
-                {checkAgeChild.map((item, index) => {
-                  return (
-                    <Grid key={index} >
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            classes={{ root: classes.rootCheckboxLocation }}
-                            icon={<img src={Images.icCheck} alt="" />}
-                            checkedIcon={<img src={Images.icCheckActive} alt="" />} />
-                        }
-                        label={item}
-                      />
-                    </Grid>
-                  )
-                })}
+          <TabPanelMobile value={activeTab} index={ETab.Mums_Only}>
+            {questionsMum.map(question => (
+              <Grid key={question.id}>
+                <p className={classes.text}>Choose {question.name}</p>
+                <Grid classes={{ root: classes.checkAgeOfChild }}>
+                  {question.targetAnswers.map((answer) => {
+                    return (
+                      <Grid key={answer.id}>
+                        <Tooltip title={answer.description}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={!!dataSelectedMum[question.id]?.find(it => it.id === answer.id)}
+                                onChange={(_, checked) => _onToggleAnswerMum(question.id, answer, checked)}
+                                classes={{ root: classes.rootCheckboxLocation }}
+                                icon={<img src={Images.icCheck} alt="" />}
+                                checkedIcon={<img src={Images.icCheckActive} alt="" />} />
+                            }
+                            label={answer.name}
+                          />
+                        </Tooltip>
+                      </Grid>
+                    )
+                  })}
+                </Grid>
               </Grid>
-            </Grid>
+            ))}
           </TabPanelMobile>
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons children="Save" btnType='Blue' padding='13px 16px' onClick={onClickCancel} />
+          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='13px 16px' onClick={onSave} />
         </Grid>
       </Grid>
     </Dialog>

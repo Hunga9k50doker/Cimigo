@@ -330,4 +330,20 @@
     align-items: center;
     height: 90px;
   }
+  li {
+    padding: 5px 15px;
+    display: block;
+    p {
+      text-align: start;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      letter-spacing: 0.015em;
+      color: #1c1c1c;
+      span {
+        font-weight: 600;
+      }
+    }
+  }
 }

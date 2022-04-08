@@ -82,6 +82,18 @@ export class ProjectService {
         return Promise.reject(e?.response?.data);
       })
   }
+
+  static async updateSampleSize(id: number, sampleSize: number): Promise<any> {
+    return await api.put(API.PROJECT.SAMPLE_SIZE.replace(":id", `${id}`), {
+      sampleSize
+    })
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
   
 
 }

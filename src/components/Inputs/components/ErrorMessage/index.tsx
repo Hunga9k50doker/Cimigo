@@ -7,7 +7,7 @@ const ErrorMessage = styled(Typography)`
   font-size: 12px;
   line-height: 140%;
   letter-spacing: 0.015em;
-  color: #af1c10;
+  color: #af1c10 !important;
   padding-top: 5px;
   padding-left: ${(props) => props.align === 'center' ? '0px' : '16px'};
   white-space: initial;

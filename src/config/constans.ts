@@ -24,6 +24,7 @@ export const API = {
     MOVE: '/v1.0/project/:id/move-project',
     BASIC_INFORMATION: '/v1.0/project/:id/basic-information',
     TARGET: '/v1.0/project/:id/target',
+    SAMPLE_SIZE: '/v1.0/project/:id/sample-size'
   },
   FOLDER: {
     DEFAULT: '/v1.0/folder',
@@ -81,7 +82,10 @@ export const API = {
       ANSWER_SUGGESTION: {
         DEFAULT: '/v1.0/admin/target/answer-suggestion',
       }
-    }
+    },
+    SAMPLE_SIZE: {
+      DEFAULT: '/v1.0/admin/sample-size',
+    },
     
   }
 }

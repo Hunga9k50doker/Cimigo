@@ -33,6 +33,11 @@ export const routes = {
       root: '/admin/solution', 
       create: '/admin/solution/create', 
       edit: '/admin/solution/:id/edit',
+      sampleSize: {
+        root: '/admin/solution/:solutionId/sample-size',
+        create: '/admin/solution/:solutionId/sample-size/create',
+        edit: '/admin/solution/:solutionId/sample-size/:sampleSizeId/edit',
+      },
     },
     solutionCategory: {
       root: '/admin/solution-category',

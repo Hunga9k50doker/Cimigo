@@ -1,3 +1,5 @@
+import { SampleSize } from "./sample_size";
+
 export interface SolutionCategory {
   id: number;
   name: string;
@@ -45,6 +47,7 @@ export interface Solution {
   languages?: Solution[];
   category?: SolutionCategory;
   categoryHome?: SolutionCategoryHome;
+  sampleSizes?: SampleSize[];
 }
 
 export interface GetSolutionsParams {

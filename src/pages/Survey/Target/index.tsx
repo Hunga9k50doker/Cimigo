@@ -12,7 +12,6 @@ import {
   CardActionArea,
   Card,
   CardMedia,
-  CardContent,
 } from "@mui/material"
 
 import ImgTab from 'assets/img/img-tab.png';
@@ -27,31 +26,24 @@ import PopupEconomicClassMobile from "./components/PopupEconomicClass";
 import PopupAgeCoverageMobile from "./components/PopupAgeCoverageMobile";
 import { useDispatch, useSelector } from "react-redux";
 import { TargetService } from "services/target";
-import { setErrorMess } from "redux/reducers/Status/actionTypes";
+import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
 import { TargetAnswer, TargetQuestion, TargetQuestionType } from "models/Admin/target";
 import { ReducerType } from "redux/reducers";
+import * as yup from 'yup';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Controller, useForm } from "react-hook-form";
+import ErrorMessage from "components/Inputs/components/ErrorMessage";
+import { ProjectService } from "services/project";
+import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import _ from "lodash";
+import { fCurrency2 } from "utils/formatNumber";
+import { PriceService } from "helpers/price";
 
 export enum ETab {
   Location,
   Economic_Class,
   Age_Coverage
 }
-
-const dataValue = [
-  {
-    value: 100,
-    popular: false
-  },
-  {
-    value: 200,
-    popular: true
-  },
-  {
-    value: 300,
-    popular: true
-  },
-]
-
 export interface TabItem {
   id: ETab,
   title: string
@@ -71,18 +63,58 @@ const listTabs: TabItem[] = [
     title: "Age coverage",
   },
 ]
+
+interface SampleSizeItem {
+  value: number,
+  popular: boolean
+}
+
+const _listSampleSize: SampleSizeItem[] = [
+  { value: 100, popular: false },
+  { value: 200, popular: true },
+  { value: 300, popular: false },
+]
+
+interface CustomSampleSizeForm {
+  sampleSize: number
+}
+
 interface Props {
   projectId: number
 }
 
-
-
 const Target = memo(({ projectId }: Props) => {
+
+  const { project } = useSelector((state: ReducerType) => state.project)
+
+  const getSampleSizeConstConfig = () => {
+    return PriceService.getSampleSizeConstConfig(project)
+  }
+
+  const getMaxSampeSize = () => {
+    return _.maxBy(getSampleSizeConstConfig(), 'limit')?.limit || 0
+  }
+
+  const getMinSampeSize = () => {
+    return _.minBy(getSampleSizeConstConfig(), 'limit')?.limit || 0
+  }
+  
+  const schema = yup.object().shape({
+    sampleSize: yup.number()
+      .typeError('Sample size is required.')
+      .required('Sample size is required.')
+      .min(getMinSampeSize(), `Sample size must be greater than ${getMinSampeSize()}`)
+      .max(getMaxSampeSize(), `Sample size should be less than ${getMaxSampeSize()}`)
+  })
+
+  const { handleSubmit, formState: { errors, isValid }, reset, control, getValues } = useForm<CustomSampleSizeForm>({
+    resolver: yupResolver(schema),
+    mode: 'onChange'
+  });
 
   const dispatch = useDispatch()
   const [activeTab, setActiveTab] = useState(ETab.Location);
-
-  const { project } = useSelector((state: ReducerType) => state.project)
+  const [listSampleSize, setListSampleSize] = useState<SampleSizeItem[]>(_listSampleSize);
 
   const [showInput, setShowInput] = useState(false);
   const [onPopupLocation, setOnPopupLocation] = useState(false);
@@ -94,12 +126,14 @@ const Target = memo(({ projectId }: Props) => {
   const [questionsAgeGender, setQuestionsAgeGender] = useState<TargetQuestion[]>([])
   const [questionsMum, setQuestionsMum] = useState<TargetQuestion[]>([])
 
+  const isValidSampSize = (data: number) => {
+    return data >= getMinSampeSize() && data <= getMaxSampeSize()
+  }
 
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const _onSubmit = (data: CustomSampleSizeForm) => {
+    updateSampleSize(data.sampleSize)
+  }
 
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
-  };
   const handleChangeTab = (_: React.SyntheticEvent<Element, Event>, tab: number) => {
     setActiveTab(tab)
   };
@@ -173,6 +207,39 @@ const Target = memo(({ projectId }: Props) => {
     fetchData()
   }, [])
 
+  useEffect(() => {
+    if (project) {
+      let _listSampleSize = listSampleSize.filter(it => isValidSampSize(it.value))
+      if (project.sampleSize) {
+        const item = _listSampleSize.find(it => it.value === project.sampleSize )
+        if (!item) _listSampleSize.push({ value: project.sampleSize, popular: false })
+      }
+      setListSampleSize(_listSampleSize.sort((a, b) => a.value - b.value))
+    }
+  }, [project])
+
+  const updateSampleSize = (data: number) => {
+    if (!isValidSampSize(data) || data === project?.sampleSize) return
+    dispatch(setLoading(true))
+    ProjectService.updateSampleSize(projectId, data)
+      .then((res) => {
+        dispatch(getProjectRequest(projectId))
+        dispatch(setSuccessMess(res.message))
+        onClearCustomSampleSize()
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const getPrice = () => {
+    return fCurrency2(PriceService.getSampleSizeCost(project))
+  }
+
+  const onClearCustomSampleSize = () => {
+    setShowInput(false)
+    reset({ sampleSize: undefined})
+  }
+
   return (
     <Grid classes={{ root: classes.root }}>
       <Grid className={classes.header}>
@@ -180,41 +247,62 @@ const Target = memo(({ projectId }: Props) => {
           <p>Choose sample size:</p>
           <Grid>
             <List component="nav" aria-label="main mailbox folders" className={classes.toggleButtonGroup}>
-              {dataValue.map((item, index) => (
+              {listSampleSize.map((item, index) => (
                 <ListItemButton
-                  selected={selectedIndex === index}
-                  onClick={(event) => handleListItemClick(event, index)}
+                  selected={project?.sampleSize === item.value}
+                  onClick={() => updateSampleSize(item.value)}
                   key={index}
                   classes={{
                     root: classes.toggleButton,
                     selected: classes.selectedButton,
                   }}
-                ><Badge color="secondary" invisible={item.popular} variant="dot" classes={{ dot: classes.badge }}>
+                >
+                  <Badge color="secondary" invisible={!item.popular} variant="dot" classes={{ dot: classes.badge }}>
                     {item.value}
                   </Badge>
                 </ListItemButton>
               ))}
-              {showInput ?
+              {showInput ? (
                 <Grid classes={{ root: classes.rootButton }}>
-                  <OutlinedInput fullWidth placeholder="Custom" onChange={(e) => {
-                    console.log(e, "sss")
-                  }}></OutlinedInput>
-                  <Button onClick={() => setShowInput(false)} startIcon={<img src={images.icSaveWhite} alt="" />}>Save</Button>
+                  <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
+                    <Controller
+                      name="sampleSize"
+                      control={control}
+                      render={({ field }) => <OutlinedInput
+                        fullWidth
+                        type="number"
+                        placeholder="Custom"
+                        name={field.name}
+                        value={field.value || ''}
+                        onBlur={field.onBlur}
+                        onChange={field.onChange}
+                      />}
+                    />
+                    {isValid ? (
+                      <Button type="submit" startIcon={<img src={images.icSaveWhite} alt="" />}>Save</Button>
+                    ) : (
+                      <Button onClick={onClearCustomSampleSize}>Cancel</Button>
+                    )}
+                  </form>
                 </Grid>
-                :
+              ) : (
                 <ListItemButton
                   classes={{
                     root: classes.toggleButton,
                     selected: classes.selectedButton,
-                  }} onClick={() => setShowInput(true)}>Custom
+                  }} 
+                  onClick={() => setShowInput(true)}
+                >
+                  Custom
                 </ListItemButton>
-              }
+              )}
             </List>
-            <p><span />popular choices.</p>
+            {(errors.sampleSize && showInput) && <ErrorMessage>{errors.sampleSize?.message}</ErrorMessage>}
+            <p>popular choices.</p>
           </Grid>
         </Grid>
         <div className={classes.code}>
-          <p >Sample size cost:</p><span>$1999</span>
+          <p >Sample size cost:</p><span>${getPrice()}</span>
         </div>
       </Grid>
       <Grid className={classes.body}>
@@ -256,7 +344,7 @@ const Target = memo(({ projectId }: Props) => {
           />
         </TabPanelImg>
         <TabPanelImg value={activeTab} index={ETab.Age_Coverage}>
-          <AgeCoverage 
+          <AgeCoverage
             projectId={projectId}
             project={project}
             questionsAgeGender={questionsAgeGender}
@@ -283,9 +371,28 @@ const Target = memo(({ projectId }: Props) => {
           </Card>
         ))}
       </Grid>
-      <PopupLocationMobile onClickOpen={onPopupLocation} onClickCancel={() => setOnPopupLocation(false)} />
-      <PopupEconomicClassMobile onClickOpen={onPopupEconomicClass} onClickCancel={() => setOnPopupEconomicClass(false)} />
-      <PopupAgeCoverageMobile onClickOpen={onPopupAgeCoverage} onClickCancel={() => setOnPopupAgeCoverage(false)} />
+      <PopupLocationMobile
+        isOpen={onPopupLocation}
+        projectId={projectId}
+        project={project}
+        questions={questionsLocation}
+        onCancel={() => setOnPopupLocation(false)}
+      />
+      <PopupEconomicClassMobile
+        isOpen={onPopupEconomicClass}
+        projectId={projectId}
+        project={project}
+        questions={questionsEconomicClass}
+        onCancel={() => setOnPopupEconomicClass(false)}
+      />
+      <PopupAgeCoverageMobile
+        isOpen={onPopupAgeCoverage}
+        projectId={projectId}
+        project={project}
+        questionsAgeGender={questionsAgeGender}
+        questionsMum={questionsMum}
+        onCancel={() => setOnPopupAgeCoverage(false)}
+      />
     </Grid>
   )
 })

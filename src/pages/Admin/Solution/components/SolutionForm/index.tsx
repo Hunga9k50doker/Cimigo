@@ -127,20 +127,37 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     fetchOption()
   }, [dispatch])
 
+  const onRedirectSampleSize = () => {
+    if (!itemEdit) return
+    dispatch(push(routes.admin.solution.sampleSize.root.replace(":solutionId", `${itemEdit.id}`)))
+  }
+
   return (
     <div>
       <Box display="flex" justifyContent="space-between" alignContent="center" mb={4}>
         <Typography component="h2" variant="h6" align="left">
           {title}
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleBack}
-          startIcon={<ArrowBackOutlined />}
-        >
-          Back
-        </Button>
+        <Box display="flex" alignContent="center">
+          {itemEdit && (
+            <Button
+              sx={{ marginRight: 2 }}
+              variant="contained"
+              color="primary"
+              onClick={onRedirectSampleSize}
+            >
+              Sample Size Cost
+            </Button>
+          )}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleBack}
+            startIcon={<ArrowBackOutlined />}
+          >
+            Back
+          </Button>
+        </Box>
       </Box>
       <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
         <Grid container spacing={3}>

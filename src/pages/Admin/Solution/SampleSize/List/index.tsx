@@ -1,46 +1,45 @@
-import { Add, DeleteOutlineOutlined, Done, EditOutlined, ExpandMoreOutlined, HideSource } from "@mui/icons-material";
-import { Box, Button, Grid, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography, Link } from "@mui/material";
+import { Add, ArrowBackOutlined, DeleteOutlineOutlined, EditOutlined, ExpandMoreOutlined } from "@mui/icons-material";
+import { Box, Button, Grid, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
 import clsx from "clsx";
-import InputSearch from "components/InputSearch";
 import WarningModal from "components/Modal/WarningModal";
 import SearchNotFound from "components/SearchNotFound";
-import StatusChip from "components/StatusChip";
 import TableHeader from "components/Table/TableHead";
 import { push } from "connected-react-router";
-import useDebounce from "hooks/useDebounce";
-import { Solution } from "models/Admin/solution"
-import { DataPagination, EStatus, LangSupport, langSupports, TableHeaderLabel } from "models/general";
+import { GetListSampleSize, SampleSize } from "models/Admin/sample_size";
+import { DataPagination, TableHeaderLabel } from "models/general";
 import { memo, useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
-import AdminSolutionService from "services/admin/solution";
+import { AdminSampleSizeService } from "services/admin/sample_size";
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
   { name: 'id', label: 'Id', sortable: false },
-  { name: 'title', label: 'Title', sortable: false },
-  { name: 'description', label: 'Description', sortable: false },
-  { name: 'languages', label: 'Languages', sortable: false },
-  { name: 'status', label: 'Status', sortable: false },
+  { name: 'limit', label: 'Limit', sortable: false },
+  { name: 'price', label: 'Price', sortable: false },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
 
 interface Props {
 }
 
-const List = memo(({ }: Props) => {
+const SampleSizeList = memo(({ }: Props) => {
 
+  const { solutionId } = useParams<{ solutionId: string }>();
   const dispatch = useDispatch()
-  const [keyword, setKeyword] = useState<string>('');
-  const [data, setData] = useState<DataPagination<Solution>>();
-  const [itemAction, setItemAction] = useState<Solution>();
+  const [data, setData] = useState<DataPagination<SampleSize>>();
+  const [itemAction, setItemAction] = useState<SampleSize>();
   const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
-  const [languageAnchor, setLanguageAnchor] = useState<null | HTMLElement>(null);
-  const [itemDelete, setItemDelete] = useState<Solution>(null);
+  const [itemDelete, setItemDelete] = useState<SampleSize>(null);
 
   const handleAdd = () => {
-    dispatch(push(routes.admin.solution.create));
+    dispatch(push(routes.admin.solution.sampleSize.create.replace(":solutionId", solutionId)));
+  }
+
+  const handleBack = () => {
+    dispatch(push(routes.admin.solution.edit.replace(":id", solutionId)));
   }
 
   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => {
@@ -56,29 +55,21 @@ const List = memo(({ }: Props) => {
     })
   };
 
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(e.target.value)
-    _onSearch(e.target.value)
-  }
-
-  const fetchData = (params?: { take?: number, page?: number, keyword?: string }) => {
+  const fetchData = (value?: { take?: number, page?: number, keyword?: string }) => {
     dispatch(setLoading(true))
-    AdminSolutionService.getSolutions({
-      take: params?.take || data?.meta?.take || 10,
-      page: params?.page || data?.meta?.page || 1,
-      keyword: params?.keyword ?? keyword,
-    })
+    const params: GetListSampleSize = {
+      take: value?.take || data?.meta?.take || 10,
+      page: value?.page || data?.meta?.page || 1,
+      solutionId: Number(solutionId)
+    }
+   
+    AdminSampleSizeService.getList(params)
       .then((res) => {
-        setData({
-          data: res.data,
-          meta: res.meta
-        })
+        setData({ data: res.data, meta: res.meta })
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
   }
-
-  const _onSearch = useDebounce((keyword: string) => fetchData({ keyword }), 500)
 
   useEffect(() => {
     fetchData()
@@ -87,7 +78,7 @@ const List = memo(({ }: Props) => {
 
   const handleAction = (
     event: React.MouseEvent<HTMLButtonElement>,
-    item: Solution
+    item: SampleSize
   ) => {
     setItemAction(item)
     setActionAnchor(event.currentTarget);
@@ -96,15 +87,6 @@ const List = memo(({ }: Props) => {
   const onCloseActionMenu = () => {
     setItemAction(null)
     setActionAnchor(null);
-    setLanguageAnchor(null);
-  };
-
-  const onCloseLangAction = () => {
-    setLanguageAnchor(null);
-  }
-
-  const onShowLangAction = (event: React.MouseEvent<HTMLElement>) => {
-    setLanguageAnchor(event.currentTarget);
   };
 
   const onShowConfirm = () => {
@@ -122,7 +104,7 @@ const List = memo(({ }: Props) => {
     if (!itemDelete) return
     onCloseConfirm()
     dispatch(setLoading(true))
-    AdminSolutionService.deleteSolution(itemDelete.id)
+    AdminSampleSizeService.delete(itemDelete.id)
       .then(() => {
         fetchData()
       })
@@ -130,29 +112,9 @@ const List = memo(({ }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const handleLanguageRedirect = (lang?: LangSupport) => {
+  const onRedirectEdit = () => {
     if (!itemAction) return
-    onRedirectEdit(itemAction, lang)
-    onCloseActionMenu();
-  }
-
-  const updateStatus = (status: number) => {
-    if (!itemAction) return
-    onCloseActionMenu()
-    dispatch(setLoading(true))
-    AdminSolutionService.updateSolutionStatus(itemAction.id, status)
-      .then(() => {
-        fetchData()
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
-  }
-
-  const onRedirectEdit = (item: Solution, lang?: LangSupport) => {
-    dispatch(push({
-      pathname: routes.admin.solution.edit.replace(':id', `${item.id}`),
-      search: lang && `?lang=${lang.key}`
-    }));
+    dispatch(push(routes.admin.solution.sampleSize.edit.replace(':solutionId', `${solutionId}`).replace(':sampleSizeId', `${itemAction.id}`)));
   }
 
   return (
@@ -160,13 +122,16 @@ const List = memo(({ }: Props) => {
       <Grid container alignItems="center" justifyContent="space-between">
         <Grid item xs={6}>
           <Typography component="h2" variant="h6" align="left">
-            Solution
+            Sample Size
           </Typography>
         </Grid>
         <Grid item xs={6}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleAdd}>
+            <Button sx={{marginRight: 2}} variant="contained" color="primary" startIcon={<Add />} onClick={handleAdd}>
               Create
+            </Button>
+            <Button variant="contained" color="primary" startIcon={<ArrowBackOutlined />} onClick={handleBack}>
+              Back
             </Button>
           </Box>
         </Grid>
@@ -174,13 +139,6 @@ const List = memo(({ }: Props) => {
       <Grid container justifyContent="center" alignItems="center">
         <Grid item xs={12}>
           <TableContainer component={Paper} sx={{ marginTop: '2rem' }}>
-            <Box display="flex" alignItems="center" m={3}>
-              <InputSearch
-                placeholder="Search ..."
-                value={keyword || ''}
-                onChange={onSearch}
-              />
-            </Box>
             <Table>
               <TableHeader headers={tableHeaders} />
               <TableBody>
@@ -197,16 +155,10 @@ const List = memo(({ }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
-                            <Link onClick={() => onRedirectEdit(item)} component="button">{item.title}</Link>
+                            {item.limit}
                           </TableCell>
                           <TableCell component="th">
-                            {item.description}
-                          </TableCell>
-                          <TableCell component="th">
-                            {item?.languages?.map(it => it.language).join(', ')}
-                          </TableCell>
-                          <TableCell component="th">
-                            <StatusChip status={item.status} />
+                            {item.price}
                           </TableCell>
                           <TableCell component="th">
                             <IconButton
@@ -228,7 +180,7 @@ const List = memo(({ }: Props) => {
                     <TableRow>
                       <TableCell align="center" colSpan={6}>
                         <Box sx={{ py: 3 }}>
-                          <SearchNotFound searchQuery={keyword} />
+                          <SearchNotFound />
                         </Box>
                       </TableCell>
                     </TableRow>
@@ -257,35 +209,13 @@ const List = memo(({ }: Props) => {
           >
             <MenuItem
               sx={{ fontSize: '0.875rem' }}
-              onClick={onShowLangAction}
+              onClick={onRedirectEdit}
             >
               <Box display="flex" alignItems={"center"}>
                 <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                <span>Edit Languages</span>
+                <span>Edit</span>
               </Box>
             </MenuItem>
-            {itemAction && itemAction?.status !== EStatus.Active && (
-                <MenuItem
-                  sx={{ fontSize: '0.875rem' }}
-                  onClick={() => updateStatus(EStatus.Active)}
-                >
-                  <Box display="flex" alignItems={"center"}>
-                    <Done sx={{marginRight: '0.25rem'}} color="success" fontSize="small" />
-                    <span>Active</span>
-                  </Box>
-                </MenuItem>
-              )}
-            {itemAction && itemAction?.status !== EStatus.Coming_Soon && (
-                <MenuItem
-                  sx={{ fontSize: '0.875rem' }}
-                  onClick={() => updateStatus(EStatus.Coming_Soon)}
-                >
-                  <Box display="flex" alignItems={"center"}>
-                    <HideSource sx={{marginRight: '0.25rem'}} color="warning" fontSize="small" />
-                    <span>Coming soon</span>
-                  </Box>
-                </MenuItem>
-              )}
             <MenuItem
               sx={{ fontSize: '0.875rem' }}
               onClick={onShowConfirm}
@@ -295,34 +225,6 @@ const List = memo(({ }: Props) => {
                 <span>Delete</span>
               </Box>
             </MenuItem>
-          </Menu>
-          <Menu
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            anchorEl={languageAnchor}
-            keepMounted
-            open={Boolean(languageAnchor)}
-            onClose={onCloseLangAction}
-          >
-            <MenuItem
-              sx={{ fontSize: '0.875rem' }}
-              onClick={() => { handleLanguageRedirect() }}
-            >
-              <span>Default</span>
-            </MenuItem>
-            {
-              langSupports.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  sx={{ fontSize: '0.875rem' }}
-                  onClick={() => { handleLanguageRedirect(item) }}
-                >
-                  <span>{item.name}</span>
-                </MenuItem>
-              ))
-            }
           </Menu>
           <WarningModal
             title="Confirm"
@@ -338,4 +240,4 @@ const List = memo(({ }: Props) => {
   )
 })
 
-export default List
+export default SampleSizeList
