@@ -1,3 +1,10 @@
+.paper {
+    width: 790px;
+    max-width: 790px;
+    height: 290px;
+    max-height: 290px;
+}
+
 .content {
     background-color: var(--cimigo-blue);
     display: flex;
@@ -11,7 +18,6 @@
         width: 32px;
         height: 32px;
         background-color: white;
-
         display: flex;
         justify-content: center;
         align-items: center;
@@ -49,14 +55,13 @@
     line-height: 22px;
     display: flex;
     align-items: center;
-    color: red;
+
 
     .iconVI {
         color: rgba(28, 28, 28, 0.65);
         background-color: rgba(221, 221, 221, 1);
         font-weight: 500;
         font-size: 12px;
-        //    padding: 3px 6px 3px 6px;
         border-radius: 5px;
         width: 29px;
         height: 22px;
@@ -78,7 +83,7 @@
     }
 
     .title {
-        margin-bottom: 5px;
+        margin-bottom: 4px;
         font-size: 16px;
         font-weight: 500;
     }
@@ -92,192 +97,14 @@
         font-weight: 600;
         line-height: 16px;
         text-transform: none;
-        margin-top: 48px;
-        margin-bottom: 36px;
+        margin-top: 45px;
         position: absolute;
         right: 4%;
-        top: 90%;
     }
 
-    @media only screen and (max-width: 600px) {
-        .btnSave {
-            width: 92%;
-        }
-
-        .iconDotsDragMUI {
-            display: block;
-        }
-
-        .choiceAnswer {
-            display: none;
-        }
+    .btnSave:disabled {
+        color: rgba(0, 0, 0, 0.26);
     }
-}
-
-.boxInputRadio {
-    position: absolute;
-    top: 100%;
-    left: 5%;
-    background-color: cyan;
-    min-height: 200px;
-    display: block;
-    width: 90%;
-    padding-right: 20px;
-}
-
-.addList {
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    font-weight: 500;
-    padding-left: 44px;
-    margin-top: 25px;
-}
-
-.rowRadio:first {
-    margin-top: 30px;
-}
-
-.rowInputAnswer {
-    display: flex;
-    align-items: center;
-    margin-top: 27px;
-    padding-left: 35px;
-    position: relative;
-}
-
-.rowInputAnswerCheckBox {
-    display: flex;
-    position: relative;
-    margin-top: 27px;
-    padding-left: 35px;
-}
-
-.inputanswer {
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    height: 22px;
-    font-size: 16px;
-    font-weight: 400;
-    margin-left: 5px;
-}
-
-.inputanswer:focus-visible {
-    outline: none;
-}
-
-.closeInputAnswer {
-    width: 13px;
-    height: 13px;
-    background-color: transparent;
-    border: none;
-}
-
-.choiceAnswer {
-    height: 20px;
-    width: 20px;
-    margin-right: 16px;
-}
-
-.iconDotsDrag {
-    width: 10px;
-    height: 16px;
-    position: absolute;
-    top: 3px;
-    left: 10px;
-}
-
-.iconDotsDragMUI {
-    display: none;
-    width: 10px;
-    height: 16px;
-    position: absolute;
-    top: 3px;
-    left: 10px;
-}
-
-.addOptions {
-    display: flex;
-    align-items: center;
-    background-color: transparent;
-    border: none;
-    font-weight: 500;
-    font-size: 16px;
-    color: rgba(28, 28, 28, 0.65);
-}
-
-.IconListAdd {
-    width: 30px;
-    height: 25px;
-    margin-right: 15px;
-    margin-left: -12px;
-}
-
-.inputSwitch {
-    width: 0;
-    height: 0;
-    visibility: hidden;
-}
-
-.toggleSwitch {
-    display: block;
-    width: 36px;
-    height: 14px;
-    background-color: rgba(28, 28, 28, 0.4);
-    border-radius: 100px;
-    position: relative;
-    cursor: pointer;
-    transition: 0.5s;
-    box-shadow: 0 0 50px #477a85;
-}
-
-.toggleSwitch::after {
-    content: "";
-    width: 20px;
-    height: 20px;
-    background-color: white;
-    position: absolute;
-    border-radius: 70px;
-    top: 50%;
-    left: 28%;
-    transform: translate(-50%, -50%);
-    transition: 0.5s;
-}
-
-input:checked+.toggleSwitch:after {
-    left: calc(100% - 20px);
-    transform: translateY(-50%);
-    background-color: rgba(124, 153, 17, 1);
-}
-
-input:checked+.toggleSwitch {
-    background-color: rgba(166, 204, 23, 1);
-}
-
-input:checked {
-    .excluOptions {
-        color: rgb(17, 255, 0);
-        font-weight: 500;
-    }
-}
-
-.excluOptions {
-    font-size: 14px;
-    font-weight: 400;
-    margin-left: 8px;
-}
-
-.dialogSigle {
-    padding-bottom: 90px;
-}
-
-.dnd {
-    width: 100%;
-    border-radius: 5px;
-    color: black;
-    display: flex;
-    align-items: center;
 }
 
 @media only screen and (max-width: 500px) {
@@ -295,5 +122,9 @@ input:checked {
 
     .clickAddOption {
         font-size: 14px;
+    }
+
+    .btnSave {
+        width: 92%;
     }
 }
