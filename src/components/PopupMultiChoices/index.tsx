@@ -21,10 +21,9 @@ export interface AttributeFormData {
 
 const PopupMultiChoice = () => {
   const [dragId, setDragId] = useState();
-  const [question, setQuestion] = useState('');
-  const [answers, setBoxes] = useState([
+  const [answers, setAnswers] = useState([
     {
-      id: "1",
+      id: 1,
       title: "Enter answer 1",
       position: 1,
       checked: false,
@@ -32,7 +31,7 @@ const PopupMultiChoice = () => {
       value: ""
     },
     {
-      id: "2",
+      id: 2,
       title: "Enter answer 2",
       position: 2,
       checked: false,
@@ -40,6 +39,10 @@ const PopupMultiChoice = () => {
       value: ""
     },
   ]);
+  const { register, watch, control, handleSubmit, formState: { errors } } = useForm<AttributeFormData>({
+    resolver: yupResolver(schema),
+    mode: "onChange"
+  });
   const handleDrag = (ev) => {
     setDragId(ev.currentTarget.id);
   };
@@ -57,71 +60,59 @@ const PopupMultiChoice = () => {
       }
       return ans;
     });
-    setBoxes(newBoxState);
+    setAnswers(newBoxState);
   };
   const [isOpen, setOpen] = useState(true);
   const togglePopup = () => {
     setOpen(!isOpen);
   }
-  const { register, watch, control, handleSubmit, formState } = useForm<AttributeFormData>({
-    resolver: yupResolver(schema),
-    mode: "onBlur"
-  });
-  const onSubmit = (data) => {
-    console.log(data)
-  };
 
-  const handleChangeStatus = (status, index) => (event) => {
-    let newBoxes = answers.map((item, i) => {
-      if (index == i) {
-        return { ...item, [status]: event.target.checked };
-      }
-      else {
-        return item;
-      }
-    });
-    setBoxes(newBoxes);
-    console.log(newBoxes);
+  const onSubmit = (data) => console.log(data);
+  ;
+  const handleChangeStatus = (status: any, index: number) => () => {
+    const find_pos = answers.findIndex((ans) => ans.id == index)
+    const new_arr = [...answers]
+    new_arr[find_pos][status] = !new_arr[find_pos][status];
+    setAnswers(new_arr);
+  }
+  const checkAllAnsNotValue = () => {
+    const notValue = answers.find(({ value }) => value === '')
+    if (notValue === undefined) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+  const handleChangeInputAns = (value: string, index: number, callback: boolean) => (event) => {
+    const find_pos = answers.findIndex((ans) => ans.id == index)
+    const new_arr = [...answers]
+    new_arr[find_pos][value] = event.target.value;
+    setAnswers(new_arr);
   }
 
-  const handleChangeInputAns = (value, index) => (event) => {
-    let newBoxes = answers.map((ans, i) => {
-      if (index == i) {
-        return { ...ans, [value]: event.target.value };
-      }
-      else {
-        return ans;
-      }
-    });
-    setBoxes(newBoxes);
-  }
   const addInputAns = () => {
+    const maxAnswers = Math.max(...answers.map(ans => ans.id), 0);
+    console.log(maxAnswers);
     const new_inputAns = {
-      id: `${answers.length + 1}`,
-      title: `Enter answer ${answers.length + 1}`,
-      position: answers.length + 1,
+      id: maxAnswers + 1,
+      title: `Enter answer ${maxAnswers + 1}`,
+      position: maxAnswers + 1,
       checked: false,
       switchMode: false,
       value: ""
     }
     if (answers.length > 9) {
-      console.log("Số lượng không được lớn hơn 10");
       return;
     }
-    setBoxes(boxes => [...boxes, new_inputAns])
+    setAnswers(answers => [...answers, new_inputAns])
   }
-  const handleChangeQuestion = (e) => {
-    setQuestion(e.target.value)
+  const deleteInputAns = (id) => () => {
+    const updated_answers = [...answers].filter((ans) => {
+      return ans.id !== id;
+    })
+    setAnswers(updated_answers);
   }
-  // const enableBtnSubmit = () => {
-  //   const onChangeAns = answers.find(({ value }) => value !== '');
-  //   if (question.length > 0 || onChangeAns !== undefined) {
-  //     return true;
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  // }
 
   return (
     <Dialog open={isOpen}
@@ -136,7 +127,7 @@ const PopupMultiChoice = () => {
           </Grid>
           <Grid className={classes.classform}>
             <p className={classes.title}>Question title</p>
-            <Input className={classes.inputQuestion} placeholder="Enter question title"
+            <Inputs className={classes.inputQuestion} placeholder="Enter question title"
               startAdornment={
                 <InputAdornment position="start">
                   <div className={classes.iconVI}>VI</div>
@@ -144,47 +135,53 @@ const PopupMultiChoice = () => {
               }
               name="inputQuestion"
               type="text"
-              onChange={handleChangeQuestion}
+              inputRef={register('inputQues')}
+              errorMessage={errors.inputQues?.message}
             />
             {/* {errors.inputQues?.message:""} */}
-            <Grid sx={{ position: 'relative', marginTop: '43px' }}>
+            <Grid sx={{ position: 'relative', marginTop: '30px' }}>
               <img src={IconDotsDrag} className={classes.iconDotsDrag}></img>
               {
                 answers.sort((a, b) => a.position - b.position)
-                  .map((box, index) => (
-                    <div className={classes.rowInputAnswerCheckBox} key={box.id}>
+                  .map((ans, index) => (
+                    <div className={classes.rowInputAnswerCheckBox} key={ans.id}>
                       <Grid
                         draggable={true}
-                        id={box.title}
+                        id={ans.title}
                         onDragOver={(ev) => ev.preventDefault()}
                         onDragStart={handleDrag}
                         onDrop={handleDrop} sx={{ width: '100%' }}>
-                        <div style={{ 'display': 'flex', 'width': '100%' }}>
+                        <Grid sx={{ display: 'flex', width: '100%' }}>
                           <img src={IconDotsDrag} className={classes.iconDotsDragMUI}></img>
                           <input type="checkbox"
                             name="checkbox_answer"
-                            onChange={handleChangeStatus("checked", index)}
-                            checked={box.checked}
+                            onChange={handleChangeStatus("checked", ans.id)}
+                            checked={ans.checked}
                             className={classes.choiceAnswer}
                           />
-                          <input type="text" placeholder={box.title}
-                            onChange={handleChangeInputAns("value", index)}
-                            className={classes.inputanswer} value={box.value}>
+                          <input type="text" placeholder={ans.title}
+                            onChange={handleChangeInputAns("value", ans.id, checkAllAnsNotValue())}
+                            className={classes.inputanswer} value={ans.value}>
                           </input>
-                          <button type="button" className={classes.closeInputAnswer}>X</button>
-                        </div>
+                          <button type="button" 
+                          className={classes.closeInputAnswer} 
+                          onClick={deleteInputAns(ans.id)}
+                          >X</button>
+                        </Grid>
                         {/* {errors.inputAns?.message} */}
                         <Grid className={classes.rowToggleSwitch}>
-                          <Grid sx={{ marginTop: '15px', display: 'flex', alignItems: 'center' }}>
-                            <input checked={box.switchMode}
-                              onChange={handleChangeStatus("switchMode", index)}
+                          <Grid sx={{ marginTop: '12px', display: 'flex', alignItems: 'center' }}>
+                            <input checked={ans.switchMode}
+                              onChange={handleChangeStatus("switchMode", ans.id)}
                               type="checkbox"
-                              name="toggle_switch" id={box.id}
+                              name="toggle_switch" id={`${String(ans.id)}`}
                               className={classes.inputSwitch}
                             />
-                            <label htmlFor={box.id} className={classes.toggleSwitch}></label>
+                            <label htmlFor={`${String(ans.id)}`} className={classes.toggleSwitch}></label>
                             <span className={classes.excluOptions}>Exclusive option</span>
+
                           </Grid>
+                          <div className={classes.errAns}>{checkAllAnsNotValue() ? errors.inputAns?.message : ""}</div>
                         </Grid>
                       </Grid>
                     </div>
@@ -196,10 +193,10 @@ const PopupMultiChoice = () => {
                 <p className={classes.clickAddOption}>Click to add option</p>
               </button>
             </Grid>
-            {/* {errors.inputAns?.message} */}
+
           </Grid>
           <Grid  >
-            <Button type='submit'  children='Save question' className={classes.btnSave} />
+            <Button type='submit' children='Save question' className={classes.btnSave} />
           </Grid>
         </form>
       </DialogContent>

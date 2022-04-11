@@ -16,7 +16,6 @@ export interface AttributeFormData {
 
 const PopupAddQuestion = () => {
     const [isOpen, setOpen] = useState(true);
-    const [question, setQuestion] = useState('');
     const togglePopup = () => {
         setOpen(!isOpen);
     }
@@ -24,9 +23,6 @@ const PopupAddQuestion = () => {
         resolver: yupResolver(schema),
         mode: 'onChange'
     });
-    const handleChangeQuestion = (e) => {
-        setQuestion(e.target.value)
-    }
     const onSubmit = (data) => console.log(data);
 
     return (
@@ -43,7 +39,7 @@ const PopupAddQuestion = () => {
                 <Grid className={classes.classform}>
                     <form onSubmit={handleSubmit(onSubmit)} className={classes.formControl}>
                         <p className={classes.title}>Question title</p>
-                        <Input className={classes.inputQuestion} placeholder="Enter question title"
+                        <Inputs className={classes.inputQuestion} placeholder="Enter question title"
                             startAdornment={
                                 <InputAdornment position="start">
                                     <div className={classes.iconVI}>VI</div>
@@ -51,10 +47,11 @@ const PopupAddQuestion = () => {
                             }
                             name="inputQuestion"
                             type="text"
-                            onChange={handleChangeQuestion}
+                            inputRef={register('inputQues')}
+                            errorMessage={errors.inputQues?.message}
                         />
                         <Grid >
-                            <Button type='submit'  children='Save question' className={classes.btnSave} />
+                            <Button type='submit' children='Save question' className={classes.btnSave} />
                         </Grid>
                     </form>
                 </Grid>

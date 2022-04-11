@@ -6,6 +6,7 @@ import IconListAdd from 'assets/img/icon/ic-list-add-svgrepo-com.svg';
 import IconDotsDrag from 'assets/img/icon/ic-dots-drag.svg';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
+import Inputs from 'components/Inputs';
 
 
 const schema = yup.object().shape({
@@ -14,21 +15,21 @@ const schema = yup.object().shape({
 })
 export interface AttributeFormData {
   inputQues: string;
-  inputAns: string
+  inputAns: string;
 }
+
 const PopupSingleChoice = () => {
   const [dragId, setDragId] = useState();
-  const [question, setQuestion] = useState('');
-  const [answers, setBoxes] = useState([
+  const [answers, setAnswers] = useState([
     {
-      id: "1",
+      id: 1,
       title: "Enter answer 1",
       position: 1,
       checked: false,
       value: ""
     },
     {
-      id: "2",
+      id: 2,
       title: "Enter answer 2",
       position: 2,
       checked: false,
@@ -51,7 +52,7 @@ const PopupSingleChoice = () => {
       }
       return ans;
     });
-    setBoxes(newBoxState);
+    setAnswers(newBoxState);
   };
   const [isOpen, setOpen] = useState(true);
   const togglePopup = () => { setOpen(!isOpen); }
@@ -59,21 +60,26 @@ const PopupSingleChoice = () => {
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
-  const onSubmit = (data) => console.log(data);
-  const handleChangeInputAns = (value, index) => (event) => {
-    let newBoxes = answers.map((ans, i) => {
-      if (index == i) {
-        return { ...ans, [value]: event.target.value };
-      }
-      else {
-        return ans;
-      }
-    });
-    setBoxes(newBoxes);
 
+  const onSubmit = (data) => console.log(data);
+
+  const checkAllAnsNotValue = () => {
+    const notValue = answers.find(({ value }) => value === '')
+    if (notValue === undefined) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+  const handleChangeInputAns = (value: string, index: number, callback: boolean) => (event) => {
+    const find_pos = answers.findIndex((ans) => ans.id == index)
+    const new_arr = [...answers]
+    new_arr[find_pos][value] = event.target.value;
+    setAnswers(new_arr);
   }
 
-  const handleChangeStatus = (status, index) => (event) => {
+  const handleChangeStatus = (status: any, index: number) => (event) => {
     let newBoxes = answers.map((item, i) => {
       if (index == i) {
         return { ...item, [status]: event.target.checked };
@@ -82,14 +88,16 @@ const PopupSingleChoice = () => {
         return { ...item, [status]: !event.target.checked };
       }
     });
-    setBoxes(newBoxes);
+    setAnswers(newBoxes);
   }
 
   const addInputAns = () => {
+    const maxAnswers = Math.max(...answers.map(ans => ans.id), 0);
+    console.log(maxAnswers);
     const new_inputAns = {
-      id: `${answers.length + 1}`,
-      title: `Enter answer ${answers.length + 1}`,
-      position: answers.length + 1,
+      id: maxAnswers + 1,
+      title: `Enter answer ${maxAnswers + 1}`,
+      position: maxAnswers + 1,
       checked: false,
       value: ""
     }
@@ -97,23 +105,14 @@ const PopupSingleChoice = () => {
       console.log("Số lượng không được lớn hơn 10");
       return;
     }
-    setBoxes(answers => [...answers, new_inputAns])
-    console.log(answers);
+    setAnswers(answers => [...answers, new_inputAns])
   }
-  const handleChangeQuestion = (e) => {
-    setQuestion(e.target.value)
-
+  const deleteInputAns = (id) => () => {
+    const updated_answers = [...answers].filter((ans) => {
+      return ans.id !== id;
+    })
+    setAnswers(updated_answers);
   }
-  // const enableBtnSubmit = () => {
-  //   const onChangeAns = answers.find(({ value }) => value !== '');
-  //   if (question.length > 0 || onChangeAns !== undefined) {
-  //     return true;
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  // }
-
   return (
     <Dialog open={isOpen} onClose={togglePopup} classes={{ paper: classes.paper }}>
       <DialogContent sx={{ padding: '0px' }}>
@@ -124,7 +123,7 @@ const PopupSingleChoice = () => {
           </Grid>
           <Grid className={classes.classform}>
             <p className={classes.title}>Question title</p>
-            <Input className={classes.inputQuestion} placeholder="Enter question title"
+            <Inputs className={classes.inputQuestion} placeholder="Enter question title"
               startAdornment={
                 <InputAdornment position="start">
                   <div className={classes.iconVI}>VI</div>
@@ -132,12 +131,11 @@ const PopupSingleChoice = () => {
               }
               name="inputQuestion"
               type="text"
-              onChange={handleChangeQuestion}
-              value={question}
+              inputRef={register('inputQues')}
+              errorMessage={errors.inputQues?.message}
             />
-            {question.length < 0 ? errors.inputQues?.message : ""}
-            {/* <FormInput></FormInput> */}
-            <Grid sx={{ position: 'relative', marginTop: '43px' }}>
+            {/* {question.length < 0 ? errors.inputQues?.message : ""} */}
+            <Grid sx={{ position: 'relative', marginTop: '30px' }}>
               <img src={IconDotsDrag} className={classes.iconDotsDrag}></img>
               {answers.sort((a, b) => a.position - b.position).map((ans, index) => (
                 <div className={classes.rowInputAnswer} key={ans.id}>
@@ -155,12 +153,18 @@ const PopupSingleChoice = () => {
                         checked={ans.checked}
                         onChange={handleChangeStatus("checked", index)}
                       />
-                      <input type="text" placeholder={ans.title}
+                      <input
+                        type="text" placeholder={ans.title}
+                        name={`name[${index}]`}
                         className={classes.inputanswer} value={ans.value}
-                        onChange={handleChangeInputAns("value", index)}
+                        onChange={handleChangeInputAns("value", ans.id, checkAllAnsNotValue())}
                       />
-                      <button type="button" className={classes.closeInputAnswer}>X</button>
+                      <button type="button" 
+                      className={classes.closeInputAnswer} 
+                      onClick={deleteInputAns(ans.id)}
+                      >X</button>
                     </div>
+                    <div className={classes.errAns}>{checkAllAnsNotValue() ? errors.inputAns?.message : ""}</div>
                   </Grid>
                 </div>
               ))}
@@ -171,10 +175,9 @@ const PopupSingleChoice = () => {
                 <p className={classes.clickAddOptionSigle}>Click to add option</p>
               </button>
             </Grid>
-            {/* {errors.inputAns?.message} */}
           </Grid>
           <Grid >
-            <Button  type='submit' children='Save question' className={classes.btnSave} />
+            <Button type='submit' children='Save question' className={classes.btnSave} />
           </Grid>
         </form>
       </DialogContent>

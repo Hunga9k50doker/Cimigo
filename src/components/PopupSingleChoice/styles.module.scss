@@ -1,8 +1,7 @@
 .paper{
     width: 790px;
     max-width: 790px;
-    height: 450px;
-   
+    min-height: 450px;
 }
 .content {
     background-color: var(--cimigo-blue);
@@ -66,7 +65,7 @@
     font-weight: 500;
     padding-left: 44px;
     margin-top: 25px;
-    margin-bottom: 32px;
+    margin-bottom: 25px;
 }
 
 .rowRadio:first {
@@ -76,7 +75,7 @@
 .rowInputAnswer {
     display: flex;
     align-items: center;
-    margin-top: 27px;
+    margin-top: 20px;
     padding-left: 35px;
     position: relative;
 }
@@ -202,6 +201,13 @@ input:checked {
     display: flex;
     align-items: center;
 }
+.errAns{
+    color:#af1c10;
+    font-size: 12px;
+    padding-left: 40px;
+    white-space: initial;
+    padding-top: 4px;
+}
 .inputQuestion {
     border: 1px solid rgba(0, 0, 0, 0.4);
     border-bottom: none;
@@ -265,17 +271,17 @@ input:checked {
     .btnSave {
         width: 92%;
     }
-
 }
 @media only screen and (max-width: 600px) {
-    
-
     .iconDotsDragMUI {
         display: block;
     }
-
     .choiceAnswer {
         display: none;
+    }
+    .errAns{
+        padding-left: 5px;
+        padding-top: 4px;
     }
 }
 .btnSave {
