@@ -13,7 +13,6 @@ import Container from "components/Container";
 import { useState } from "react";
 import clsx from "clsx";
 
-
 interface FooterProps {
 
 }
@@ -22,7 +21,7 @@ const Footer = memo((props: FooterProps) => {
 
   const [aboutWidgetMobile, setAboutWidgetMobile] = useState<boolean>(false)
   const [contactWidgetMobile, setContactWidgetMobile] = useState<boolean>(false)
-
+  
   const cimigoUrl = process.env.REACT_APP_CIMIGO_URL;
   return (
     <>
