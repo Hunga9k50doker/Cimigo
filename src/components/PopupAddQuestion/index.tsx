@@ -8,7 +8,7 @@ import Inputs from 'components/Inputs';
 
 interface Props {
     isOpen: boolean,
-    togglePopup: () => void,
+    onClose: () => void,
 }
 
 const schema = yup.object().shape({
@@ -19,7 +19,7 @@ export interface AttributeFormData {
 }
 
 const PopupAddQuestion = (props: Props) => {
-    const { togglePopup, isOpen } = props;
+    const { onClose, isOpen } = props;
     const { register, handleSubmit, formState: { errors } } = useForm<AttributeFormData>({
         resolver: yupResolver(schema),
         mode: 'onChange'
@@ -29,13 +29,13 @@ const PopupAddQuestion = (props: Props) => {
     return (
         <Dialog
             open={isOpen}
-            onClose={togglePopup}
+            onClose={onClose}
             classes={{ paper: classes.paper }}
         >
             <DialogContent sx={{ padding: '0px' }}>
                 <Grid className={classes.content}>
                     <div className={classes.titlePopup}>Add open question</div>
-                    <IconButton className={classes.iconClose} onClick={togglePopup}></IconButton>
+                    <IconButton className={classes.iconClose} onClick={onClose}></IconButton>
                 </Grid>
                 <Grid className={classes.classform}>
                     <form onSubmit={handleSubmit(onSubmit)} className={classes.formControl}>

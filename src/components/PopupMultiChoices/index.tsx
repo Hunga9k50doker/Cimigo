@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 interface Props {
   isOpen: boolean,
-  togglePopup: () => void,
+  onClose: () => void,
 }
 const schema = yup.object().shape({
   inputQues: yup.string().required('Question title is required.'),
@@ -22,7 +22,7 @@ export interface AttributeFormData {
   inputAns: string;
 }
 
-const PopupMultiChoice = (props) => {
+const PopupMultiChoice = (props: Props) => {
   const [dragId, setDragId] = useState();
   const [answers, setAnswers] = useState([
     {
@@ -65,7 +65,7 @@ const PopupMultiChoice = (props) => {
     });
     setAnswers(newBoxState);
   };
-  const { togglePopup, isOpen } = props;
+  const { onClose, isOpen } = props;
 
   const onSubmit = (data) => console.log(data);
   ;
@@ -75,15 +75,9 @@ const PopupMultiChoice = (props) => {
     new_arr[find_pos][status] = !new_arr[find_pos][status];
     setAnswers(new_arr);
   }
-  const checkAllAnsNotValue = () => {
-    const notValue = answers.find(({ value }) => value === '')
-    if (notValue === undefined) {
-      return false;
-    }
-    else {
-      return true;
-    }
-  }
+
+  const checkAllAnsNotValue = () => { return !!answers.find(({ value }) => !value) }
+
   const handleChangeInputAns = (value: string, index: number, callback: boolean) => (event) => {
     const find_pos = answers.findIndex((ans) => ans.id == index)
     const new_arr = [...answers]
@@ -93,7 +87,6 @@ const PopupMultiChoice = (props) => {
 
   const addInputAns = () => {
     const maxAnswers = Math.max(...answers.map(ans => ans.id), 0);
-    console.log(maxAnswers);
     const new_inputAns = {
       id: maxAnswers + 1,
       title: `Enter answer ${maxAnswers + 1}`,
@@ -116,14 +109,14 @@ const PopupMultiChoice = (props) => {
 
   return (
     <Dialog open={isOpen}
-      onClose={togglePopup}
+      onClose={onClose}
       classes={{ paper: classes.paper }}
     >
       <DialogContent sx={{ padding: '0px', paddingBottom: '10px' }} >
         <form onSubmit={handleSubmit(onSubmit)} className={classes.formControl}>
           <Grid className={classes.content}>
             <div className={classes.titlePopup}>Add multiple choices</div>
-            <IconButton className={classes.iconClose} onClick={togglePopup}></IconButton>
+            <IconButton className={classes.iconClose} onClick={onClose}></IconButton>
           </Grid>
           <Grid className={classes.classform}>
             <p className={classes.title}>Question title</p>

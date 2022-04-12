@@ -10,8 +10,9 @@ import Inputs from 'components/Inputs';
 
 interface Props {
   isOpen: boolean,
-  togglePopup: () => void,
+  onClose: () => void,
 }
+
 const schema = yup.object().shape({
   inputQues: yup.string().required('Question title is required.'),
   inputAns: yup.string().required('Answer is required.'),
@@ -21,7 +22,7 @@ export interface AttributeFormData {
   inputAns: string;
 }
 
-const PopupSingleChoice = (props) => {
+const PopupSingleChoice = (props:Props) => {
   const [dragId, setDragId] = useState();
   const [answers, setAnswers] = useState([
     {
@@ -57,7 +58,7 @@ const PopupSingleChoice = (props) => {
     });
     setAnswers(newBoxState);
   };
-  const { togglePopup, isOpen } = props;
+  const { onClose, isOpen } = props;
 
   const { register, handleSubmit, formState: { errors } } = useForm<AttributeFormData>({
     resolver: yupResolver(schema),
@@ -66,15 +67,8 @@ const PopupSingleChoice = (props) => {
 
   const onSubmit = (data) => console.log(data);
 
-  const checkAllAnsNotValue = () => {
-    const notValue = answers.find(({ value }) => value === '')
-    if (notValue === undefined) {
-      return false;
-    }
-    else {
-      return true;
-    }
-  }
+  const checkAllAnsNotValue = () => {  return !!answers.find(({ value }) => !value) }
+  
   const handleChangeInputAns = (value: string, index: number, callback: boolean) => (event) => {
     const find_pos = answers.findIndex((ans) => ans.id == index)
     const new_arr = [...answers]
@@ -96,7 +90,6 @@ const PopupSingleChoice = (props) => {
 
   const addInputAns = () => {
     const maxAnswers = Math.max(...answers.map(ans => ans.id), 0);
-    console.log(maxAnswers);
     const new_inputAns = {
       id: maxAnswers + 1,
       title: `Enter answer ${maxAnswers + 1}`,
@@ -105,7 +98,6 @@ const PopupSingleChoice = (props) => {
       value: ""
     }
     if (answers.length > 9) {
-      console.log("Số lượng không được lớn hơn 10");
       return;
     }
     setAnswers(answers => [...answers, new_inputAns])
@@ -117,12 +109,12 @@ const PopupSingleChoice = (props) => {
     setAnswers(updated_answers);
   }
   return (
-    <Dialog open={isOpen} onClose={togglePopup} classes={{ paper: classes.paper }}>
-      <DialogContent sx={{ padding: '0px' }}>
+    <Dialog open={isOpen} onClose={onClose} classes={{ paper: classes.paper }}>
+      <DialogContent sx={{ padding: '0px' , paddingBottom: '10px'}}>
         <form onSubmit={handleSubmit(onSubmit)} className={classes.formControl}>
           <Grid className={classes.content}>
             <div className={classes.titlePopup}>Add single choice</div>
-            <IconButton className={classes.iconClose} onClick={togglePopup}></IconButton>
+            <IconButton className={classes.iconClose} onClick={onClose}></IconButton>
           </Grid>
           <Grid className={classes.classform}>
             <p className={classes.title}>Question title</p>
