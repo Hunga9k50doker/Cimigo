@@ -56,6 +56,7 @@ const Survey = () => {
 
   const getActiveTab = () => {
     const index = tabs.findIndex(it => activeRoute(it.path))
+    if (index === -1) return 0
     return index
   }
 

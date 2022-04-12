@@ -1,7 +1,11 @@
 import { Step, StepConnector, StepLabel, Stepper } from "@mui/material";
+import { push } from "connected-react-router";
+import { ProjectStatus } from "models/project";
 import QontoStepIcon from "pages/ProjectManagement/components/QontoStepIcon";
-import { memo } from "react"
+import { memo, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux";
 import { matchPath, Redirect, Route, Switch } from "react-router-dom";
+import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
 import Payment from "../Payment";
 import ProjectReview from "../ProjectReview";
@@ -22,6 +26,7 @@ interface Props {
 }
 
 const ProjectReviewAndPayment = memo(({ }: Props) => {
+  const dispatch = useDispatch()
 
   const activeRoute = (routeName: string, exact: boolean = false) => {
     const match = matchPath(window.location.pathname, {

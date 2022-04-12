@@ -2,6 +2,7 @@ import { ProjectFolder } from './folder';
 import { OptionItem } from './general';
 import { Solution } from 'models/Admin/solution';
 import { TargetAnswer, TargetQuestion } from './Admin/target';
+import { Payment } from './payment';
 export interface CreateProjectData {
   solutionId: number;
   name: string,
@@ -22,6 +23,7 @@ export interface Project {
   variant: string,
   sampleSize: number;
   status: ProjectStatus;
+  editable: boolean;
   accessToDashboard: string;
   accessToReport: string;
   solution?: Solution;
@@ -29,7 +31,8 @@ export interface Project {
   updatedAt: Date;
   deletedAt: Date;
   project_folders?: ProjectFolder[];
-  targets: ProjectTarget[]
+  targets: ProjectTarget[];
+  payments: Payment[]
 }
 
 export enum ProjectStatus {

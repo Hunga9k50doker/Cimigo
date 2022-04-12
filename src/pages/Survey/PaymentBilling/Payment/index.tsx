@@ -16,6 +16,11 @@ import CountryService from "services/country";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import { PaymentService } from "services/payment";
+import { Payment } from "models/payment";
+import UserService from "services/user";
+import { PaymentInfo } from "models/payment_info";
+import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 
 interface DataForm {
   paymentMethodId: number,
@@ -35,7 +40,7 @@ interface DataForm {
 interface PaymentProps {
 }
 
-const Payment = memo(({ }: PaymentProps) => {
+const PaymentPage = memo(({ }: PaymentProps) => {
 
   const schema = yup.object().shape({
     paymentMethodId: yup.number(),
@@ -98,10 +103,11 @@ const Payment = memo(({ }: PaymentProps) => {
     taxCode: yup.string(),
   });
 
-  const { register, handleSubmit, control, formState: { errors }, watch, clearErrors } = useForm<DataForm>({
+  const { register, handleSubmit, control, formState: { errors }, watch, clearErrors, reset } = useForm<DataForm>({
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
+      saveForLater: false,
       paymentMethodId: EPaymentMethod.MAKE_AN_ORDER
     }
   });
@@ -111,20 +117,49 @@ const Payment = memo(({ }: PaymentProps) => {
   const { user } = useSelector((state: ReducerType) => state.user)
 
   const [countries, setCountries] = useState<OptionItem[]>([])
+  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>()
 
   useEffect(() => {
     const fetchData = async () => {
       dispatch(setLoading(true))
-      const data = await CountryService.getCountries({ take: 9999 })
-        .catch((e) => {
-          dispatch(setErrorMess(e))
-          return null
-        })
-      setCountries(data?.data || [])
+      await Promise.all([
+        CountryService.getCountries({ take: 9999 }),
+        UserService.getPaymentInfo()
+      ])
+      .then(res => {
+        setCountries(res[0].data)
+        setPaymentInfo(res[1])
+      })
       dispatch(setLoading(false))
     }
     fetchData()
   }, [dispatch])
+
+
+  useEffect(() => {
+    if (!paymentInfo && !user) return
+    let countryId: OptionItem = undefined
+    if (user?.country) {
+      countryId = { id: user.country.id, name: user.country.name }
+    }
+    if (paymentInfo?.country) {
+      countryId = { id: paymentInfo.country.id, name: paymentInfo.country.name }
+    }
+    reset({
+      paymentMethodId: EPaymentMethod.MAKE_AN_ORDER,
+      contactName: user?.fullName || '',
+      contactEmail: user?.email || '',
+      contactPhone: user?.phone || '',
+      saveForLater: false,
+      fullName: paymentInfo?.fullName || user?.fullName || '',
+      companyName: paymentInfo?.companyName || user?.company || '',
+      email: paymentInfo?.email || user?.email || '',
+      phone: paymentInfo?.phone || user?.phone || '',
+      countryId: countryId,
+      companyAddress: paymentInfo?.companyAddress || '',
+      taxCode: paymentInfo?.taxCode || ''
+    })
+  }, [paymentInfo, user])
 
   const getPriceSampleSize = () => {
     return PriceService.getSampleSizeCost(project)
@@ -165,7 +200,34 @@ const Payment = memo(({ }: PaymentProps) => {
   }, [watch]);
 
   const onConfirm = (data: DataForm) => {
-    console.log(data, "==data==");
+    if (!project) return
+    dispatch(setLoading(true))
+    PaymentService.checkout({
+      projectId: project.id,
+      paymentMethodId: data.paymentMethodId,
+      contactName: data.contactName,
+      contactEmail: data.contactEmail,
+      contactPhone: data.contactPhone,
+      saveForLater: data.saveForLater,
+      fullName: data.fullName,
+      companyName: data.companyName,
+      email: data.email,
+      phone: data.phone,
+      countryId: data.countryId?.id,
+      companyAddress: data.companyAddress,
+      taxCode: data.taxCode,
+      returnUrl: `${process.env.REACT_APP_BASE_URL}`,
+      againLink: `${process.env.REACT_APP_BASE_URL}`
+    })
+      .then((res: { payment: Payment, checkoutUrl: string }) => {
+        if (res.checkoutUrl) {
+          window.location.href = res.checkoutUrl
+        } else {
+          dispatch(getProjectRequest(project.id))
+        }
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
 
@@ -177,7 +239,10 @@ const Payment = memo(({ }: PaymentProps) => {
         <Controller
           name="paymentMethodId"
           control={control}
-          render={({ field }) => <RadioGroup {...field} classes={{ root: classes.radioGroup }}>
+          render={({ field }) => <RadioGroup 
+            {...field} 
+            classes={{ root: classes.radioGroup }}
+          >
             <FormControlLabel
               value={EPaymentMethod.MAKE_AN_ORDER}
               classes={{ root: classes.lable }}
@@ -186,7 +251,7 @@ const Payment = memo(({ }: PaymentProps) => {
                 <Grid classes={{ root: classes.order }}>
                   <Grid classes={{ root: classes.title }}><img src={images.icOrder} alt="" />Make an order</Grid>
                   <p className={classes.titleSub}>The simplest way to get started, especially if you need consultation. Our professional consultants will contact you using the information provided below.</p>
-                  <form name="order" autoComplete="off" >
+                  <div>
                     <Inputs
                       title="Contact name"
                       name="contactName"
@@ -208,7 +273,7 @@ const Payment = memo(({ }: PaymentProps) => {
                       inputRef={register('contactPhone')}
                       errorMessage={errors.contactPhone?.message}
                     />
-                  </form>
+                  </div>
                 </Grid>
               }
             />
@@ -229,7 +294,7 @@ const Payment = memo(({ }: PaymentProps) => {
         />
         <p>Invoice and contract information <span>(optional)</span></p>
         <span className={classes.titleSub1}>You can update this information later</span>
-        <form name="bank" autoComplete="off">
+        <div>
           <Grid classes={{ root: classes.flex }}>
             <Inputs
               title="Full name"
@@ -308,7 +373,7 @@ const Payment = memo(({ }: PaymentProps) => {
               <img src={images.icTip} alt="" />
             </Tooltip>
           </Grid>
-        </form>
+        </div>
         <Divider className={classes.divider1} />
       </Grid>
       <Grid classes={{ root: classes.right }}>
@@ -357,4 +422,4 @@ const Payment = memo(({ }: PaymentProps) => {
   )
 })
 
-export default Payment;
+export default PaymentPage;

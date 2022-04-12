@@ -9,6 +9,9 @@ export const API = {
     SEND_EMAIL_FORGOT_PASSWORD: '/v1.0/user/send-email-forgot-password',
     FORGOT_PASSWORD: '/v1.0/user/forgot-password',
   },
+  USER: {
+    PAYMENT_INFO: '/v1.0/user/payment-info'
+  },
   COUNTRY: {
     LIST: '/v1.0/country',
     
@@ -54,7 +57,8 @@ export const API = {
     DEFAULT: '/v1.0/quota',
   },
   PAYMENT: {
-    CHECKOUT: '/v1.0/payment/checkout'
+    CHECKOUT: '/v1.0/payment/checkout',
+    CONFIRM: '/v1.0/payment/confirm-payment',
   },
   ADMIN: {
     SOLUTION: {

@@ -70,37 +70,3 @@
 
   }
 }
-.box {
-  display: flex;
-  justify-content: center;
-  padding: 1rem 0 2rem;
-  div {
-    margin: 0px 20px;
-    display: grid;
-    justify-items: center;
-    cursor: pointer;
-    span {
-      width: 66px;
-      height: 66px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #EEF0F2;
-    }
-    p {
-      font-style: italic;
-      text-decoration-line: underline;
-      font-weight: normal;
-      font-size: 14px;
-      line-height: 140%;
-      text-align: center;
-      letter-spacing: 0.015em;
-      color: #1f61a9;
-      margin-top: 5px;
-    }
-  }
-}
-.imgAddPhoto {
-  width: 40px;
-  height: 40px;
-}

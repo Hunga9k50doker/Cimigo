@@ -12,6 +12,7 @@ import { setLoading, setSuccessMess, setErrorMess } from 'redux/reducers/Status/
 import { ProjectService } from 'services/project';
 import { getProjectRequest } from 'redux/reducers/Project/actionTypes';
 import React from 'react';
+import { editableProject } from 'helpers/project';
 
 interface Props {
   isOpen: boolean,
@@ -53,7 +54,7 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
   }, [questions])
 
   const isDisable = () => {
-    return isDisableSubmit(questions, dataSelected)
+    return isDisableSubmit(questions, dataSelected) || !editableProject(project)
   }
 
   const onUpdateTarget = () => {

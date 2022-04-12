@@ -11,6 +11,8 @@ import Container from "components/Container";
 import Buttons from "components/Buttons";
 import { routes } from "routers/routes";
 import images from "config/images";
+import { useDispatch } from "react-redux";
+import { push } from "connected-react-router";
 
 interface HeaderProps {
   project?: boolean;
@@ -20,6 +22,7 @@ interface HeaderProps {
 const Header = memo((props: HeaderProps) => {
   const { project, detail } = props;
   const history = useHistory();
+  const dispatch = useDispatch()
   const { isLoggedIn, logout } = UseAuth();
   const anchorRef = useRef(null);
   const [isOpen, setOpen] = useState(false);
@@ -62,6 +65,11 @@ const Header = memo((props: HeaderProps) => {
     }
   ]
 
+  const onGoHome = () => {
+    if (isLoggedIn) dispatch(push(routes.project.management))
+    else dispatch(push(routes.login))
+  }
+
   return (
     <header className={classes.root}>
       <div className={classes.container}>
@@ -87,7 +95,7 @@ const Header = memo((props: HeaderProps) => {
             ))}
           </Menu>
         </li>
-        <a href={cimigoUrl}>
+        <a onClick={onGoHome}>
           <div className={classes.imgContainer}>
             <img src={cimigoLogo} alt="cimigo" />
           </div>
@@ -95,8 +103,8 @@ const Header = memo((props: HeaderProps) => {
         {isLoggedIn &&
           <div className={classes.linkProject}>
             {project &&
-              <div className={classes.linkTextHome} >
-                <img src={images.icHomeMobile} alt='' onClick={() => history.push(routes.project.management)} />
+              <div className={classes.linkTextHome} onClick={() => history.push(routes.project.management)} >
+                <img src={images.icHomeMobile} alt=''/>
                 <span>Projects</span>
               </div>
             }
@@ -147,10 +155,10 @@ const Header = memo((props: HeaderProps) => {
               </li>
               :
               <li className={classes.item}>
-                <a href={cimigoUrl} className={classes.btnLogin}>
+                <a className={classes.btnLogin}>
                   <Buttons btnType="TransparentBlue" children="Log in" padding="6px 16px" onClick={() => history.push(routes.login)} />
                 </a>
-                <a href={cimigoUrl} className={classes.btnLogout}>
+                <a className={classes.btnLogout}>
                   <Buttons btnType="Blue" children="Register" padding="6px 16px" onClick={() => history.push(routes.register)} />
                 </a>
               </li>

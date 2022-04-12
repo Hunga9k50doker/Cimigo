@@ -26,6 +26,7 @@ export const routes = {
           payment: '/project/:id/payment-billing/preview-and-payment/payment',
         },
         order: '/project/:id/payment-billing/order',
+        waiting: '/project/:id/payment-billing/waiting',
         completed: '/project/:id/payment-billing/completed',
       },
       report: '/project/:id/report',

@@ -87,6 +87,15 @@ export class UserService {
       })
   }
 
+  static async getPaymentInfo() {
+    return await api.get(API.USER.PAYMENT_INFO)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
   
 }
 

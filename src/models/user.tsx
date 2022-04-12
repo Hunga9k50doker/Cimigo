@@ -1,3 +1,4 @@
+import { Country } from "./country";
 import { OptionItem, SocialProvider } from "./general"
 
 export enum EUserStatus {
@@ -38,24 +39,22 @@ export interface User {
     avatar: string,
     firstName: string,
     lastName: string,
+    fullName: string,
     email: string,
+    password: string,
     countryId: string,
-    company: string,
-    status: EUserStatus,
+    status: number,
     isNotify: boolean,
     adminTypeId: number,
+    company: string,
+    phone: string,
     admin_type?: {
         id: number;
         name: string;
         createdAt: Date;
         updatedAt: Date;
     },
-    country?: {
-        id: number;
-        name: string;
-        createdAt: Date;
-        updatedAt: Date;
-    },
+    country?: Country,
     verified: boolean,
     createdAt: Date,
     updatedAt: Date,

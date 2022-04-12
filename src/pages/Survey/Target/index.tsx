@@ -38,6 +38,7 @@ import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import _ from "lodash";
 import { fCurrency2 } from "utils/formatNumber";
 import { PriceService } from "helpers/price";
+import { editableProject } from "helpers/project";
 
 export enum ETab {
   Location,
@@ -98,7 +99,7 @@ const Target = memo(({ projectId }: Props) => {
   const getMinSampeSize = () => {
     return _.minBy(getSampleSizeConstConfig(), 'limit')?.limit || 0
   }
-  
+
   const schema = yup.object().shape({
     sampleSize: yup.number()
       .typeError('Sample size is required.')
@@ -211,7 +212,7 @@ const Target = memo(({ projectId }: Props) => {
     if (project) {
       let _listSampleSize = listSampleSize.filter(it => isValidSampSize(it.value))
       if (project.sampleSize) {
-        const item = _listSampleSize.find(it => it.value === project.sampleSize )
+        const item = _listSampleSize.find(it => it.value === project.sampleSize)
         if (!item) _listSampleSize.push({ value: project.sampleSize, popular: false })
       }
       setListSampleSize(_listSampleSize.sort((a, b) => a.value - b.value))
@@ -219,7 +220,7 @@ const Target = memo(({ projectId }: Props) => {
   }, [project])
 
   const updateSampleSize = (data: number) => {
-    if (!isValidSampSize(data) || data === project?.sampleSize) return
+    if (!isValidSampSize(data) || data === project?.sampleSize || !editableProject(project)) return
     dispatch(setLoading(true))
     ProjectService.updateSampleSize(projectId, data)
       .then((res) => {
@@ -237,7 +238,7 @@ const Target = memo(({ projectId }: Props) => {
 
   const onClearCustomSampleSize = () => {
     setShowInput(false)
-    reset({ sampleSize: undefined})
+    reset({ sampleSize: undefined })
   }
 
   return (
@@ -249,6 +250,7 @@ const Target = memo(({ projectId }: Props) => {
             <List component="nav" aria-label="main mailbox folders" className={classes.toggleButtonGroup}>
               {listSampleSize.map((item, index) => (
                 <ListItemButton
+                  disabled={!editableProject(project)}
                   selected={project?.sampleSize === item.value}
                   onClick={() => updateSampleSize(item.value)}
                   key={index}
@@ -287,11 +289,12 @@ const Target = memo(({ projectId }: Props) => {
                 </Grid>
               ) : (
                 <ListItemButton
+                  disabled={!editableProject(project)}
                   classes={{
                     root: classes.toggleButton,
                     selected: classes.selectedButton,
-                  }} 
-                  onClick={() => setShowInput(true)}
+                  }}
+                  onClick={() => { if (editableProject(project)) setShowInput(true) }}
                 >
                   Custom
                 </ListItemButton>

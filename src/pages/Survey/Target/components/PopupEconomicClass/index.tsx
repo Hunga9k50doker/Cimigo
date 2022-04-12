@@ -12,6 +12,7 @@ import { setLoading, setSuccessMess, setErrorMess } from 'redux/reducers/Status/
 import { ProjectService } from 'services/project';
 import { getProjectRequest } from 'redux/reducers/Project/actionTypes';
 import React from 'react';
+import { editableProject } from 'helpers/project';
 
 interface Props {
   isOpen: boolean,
@@ -36,7 +37,7 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
   }, [project])
 
   const isDisable = () => {
-    return isDisableSubmit(questions, dataSelected)
+    return isDisableSubmit(questions, dataSelected) || !editableProject(project)
   }
 
   const _onToggleAnswer = (questionId: number, answer: TargetAnswer, checked: boolean) => {

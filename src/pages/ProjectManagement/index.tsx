@@ -460,10 +460,10 @@ const ProjectManagement = memo((props: Props) => {
               <img src={Images.icEdit} alt="" />
               <p>Detail</p>
             </MenuItem>
-            <MenuItem className={classes.itemAciton} onClick={() => onShowRenameProject()}>
+            {/* <MenuItem className={classes.itemAciton} onClick={() => onShowRenameProject()}>
               <img src={Images.icRename} alt="" />
               <p>Rename</p>
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem className={classes.itemAciton} onClick={() => onShowMoveProject()}>
               <img src={Images.icMove} alt="" />
               <p>Move</p>
@@ -513,7 +513,7 @@ const ProjectManagement = memo((props: Props) => {
         <Grid classes={{ root: classes.listProject }}>
           {data?.data?.length ? (
             data?.data?.map(item => (
-              <Grid classes={{ root: classes.listItemProject }}>
+              <Grid key={item.id} classes={{ root: classes.listItemProject }}>
                 <div>
                   <p className={classes.itemNameMobile}>{item.name}</p>
                   <LabelStatusMobile typeStatus={item.status} />

@@ -10,6 +10,7 @@ import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/
 import { DataSelected, onToggleAnswer, isDisableSubmit } from "../models";
 import { ProjectService } from "services/project";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import { editableProject } from "helpers/project";
 
 interface Props {
   projectId: number,
@@ -32,7 +33,7 @@ const EconomicClass = memo(({ projectId, project, questions }: Props) => {
   }, [project])
 
   const isDisable = () => {
-    return isDisableSubmit(questions, dataSelected)
+    return isDisableSubmit(questions, dataSelected) || !editableProject(project)
   }
 
   const _onToggleAnswer = (questionId: number, answer: TargetAnswer, checked: boolean) => {

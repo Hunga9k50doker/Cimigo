@@ -12,7 +12,6 @@ import { AdditionalBrand } from "models/additional_brand";
 import { ProjectAttribute } from "models/project_attribute";
 import { UserAttribute } from "models/user_attribute";
 import { PackService } from "services/pack";
-import { setErrorMess } from "redux/reducers/Status/actionTypes";
 import { ProjectAttributeService } from "services/project_attribute";
 import { UserAttributeService } from "services/user_attribute";
 import { AdditionalBrandService } from "services/additional_brand";
@@ -46,44 +45,41 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     dispatch(push(routes.project.detail.target.replace(':id', `${project.id}`)))
   }
 
-  const getPacks = () => {
-    PackService.getPacks({ take: 9999, projectId: project.id })
-      .then(res => {
-        setPacks(res.data)
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-  }
-
-  const getProjectAttributes = () => {
-    ProjectAttributeService.getProjectAttributes({ take: 9999, projectId: project.id })
-      .then((res) => {
-        setProjectAttributes(res.data)
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-  }
-
-  const getUserAttributes = () => {
-    UserAttributeService.getUserAttributes({ take: 9999, projectId: project.id })
-      .then((res) => {
-        setUserAttributes(res.data)
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-  }
-
-  const getAdditionalBrand = () => {
-    AdditionalBrandService.getAdditionalBrandList({ take: 9999, projectId: project.id })
-      .then((res) => {
-        setAdditionalBrand(res.data)
-      })
-      .catch(e => dispatch(setErrorMess(e)))
-  }
-
   useEffect(() => {
     if (project) {
+      let isSubscribed = true
+      const getPacks = () => {
+        PackService.getPacks({ take: 9999, projectId: project.id })
+          .then(res => {
+            if (isSubscribed) setPacks(res.data)
+          })
+      }
+    
+      const getProjectAttributes = () => {
+        ProjectAttributeService.getProjectAttributes({ take: 9999, projectId: project.id })
+          .then((res) => {
+            if (isSubscribed) setProjectAttributes(res.data)
+          })
+      }
+    
+      const getUserAttributes = () => {
+        UserAttributeService.getUserAttributes({ take: 9999, projectId: project.id })
+          .then((res) => {
+            if (isSubscribed) setUserAttributes(res.data)
+          })
+      }
+    
+      const getAdditionalBrand = () => {
+        AdditionalBrandService.getAdditionalBrandList({ take: 9999, projectId: project.id })
+          .then((res) => {
+            if (isSubscribed) setAdditionalBrand(res.data)
+          })
+      }
       getPacks()
       getAdditionalBrand()
       getProjectAttributes()
       getUserAttributes()
+      return () => { isSubscribed = false }
     }
   }, [project])
 
@@ -185,8 +181,8 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       <p className={classes.textBlue1}>Additional materials</p>
       <p className={classes.textSub1}>These materials are here for your reference only, please note that these are not your final invoice or contract.</p>
       <Grid className={classes.box}>
-        <div><span /><p>Invoice</p></div>
-        <div><span /><p>Contract</p></div>
+        <div><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Invoice</p></div>
+        <div><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Contract</p></div>
       </Grid>
       <Grid className={classes.btn}>
         <Buttons disabled={!isValidConfirm()} onClick={onConfirmProject} children={"Confirm project"} btnType="Blue" padding="16px" />

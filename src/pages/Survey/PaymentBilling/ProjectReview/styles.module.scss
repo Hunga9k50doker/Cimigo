@@ -293,13 +293,18 @@
     margin: 0px 20px;
     display: grid;
     justify-items: center;
+    cursor: pointer;
     span {
-      width: 48px;
-      height: 48px;
-      background: #c4c4c4;
+      width: 66px;
+      height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #EEF0F2;
     }
     p {
-      font-style: normal;
+      font-style: italic;
+      text-decoration-line: underline;
       font-weight: normal;
       font-size: 14px;
       line-height: 140%;
@@ -309,6 +314,10 @@
       margin-top: 5px;
     }
   }
+}
+.imgAddPhoto {
+  width: 40px;
+  height: 40px;
 }
 .btn {
   margin-top: 24px;

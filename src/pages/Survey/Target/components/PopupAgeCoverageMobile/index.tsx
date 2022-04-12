@@ -12,6 +12,7 @@ import { DataSelected, isDisableSubmit, onToggleAnswer } from '../../models';
 import { ProjectService } from 'services/project';
 import { setErrorMess, setLoading, setSuccessMess } from 'redux/reducers/Status/actionTypes';
 import { getProjectRequest } from 'redux/reducers/Project/actionTypes';
+import { editableProject } from 'helpers/project';
 
 enum ETab {
   Gender_And_Age_Quotas,
@@ -61,9 +62,9 @@ const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeG
   const isDisable = () => {
     switch (activeTab) {
       case ETab.Gender_And_Age_Quotas:
-        return isDisableGenderAge()
+        return isDisableGenderAge() || !editableProject(project)
       case ETab.Mums_Only:
-        return isDisableMum()
+        return isDisableMum() || !editableProject(project)
     }
   }
 

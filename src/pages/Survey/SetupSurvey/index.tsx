@@ -55,6 +55,7 @@ import { UserAttribute } from "models/user_attribute";
 import { ProjectAttributeService } from "services/project_attribute";
 import { UserAttributeService } from "services/user_attribute";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
+import { editableProject } from "helpers/project";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -192,6 +193,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   }, [id])
 
   const onSubmitBI = (data: BasicInformationFormData) => {
+    if (!editableProject(project)) return
     dispatch(setLoading(true))
     ProjectService.updateProjectBasicInformation(id, data)
       .then(() => {
@@ -242,7 +244,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   }
 
   const enableAdditionalBrand = () => {
-    return maxAdditionalBrand() > additionalBrand?.length
+    return maxAdditionalBrand() > additionalBrand?.length && editableProject(project)
   }
 
   const getAdditionalBrand = () => {
@@ -525,9 +527,11 @@ const SetupSurvey = memo(({ id }: Props) => {
                 <Inputs title="Manufacturer" name="" placeholder="Enter your product manufacturer" inputRef={register('manufacturer')} errorMessage={errors.manufacturer?.message} />
               </Grid>
             </Grid>
-            <Grid className={classes.btnSave}>
-              <Buttons type={"submit"} padding="8px 18px" btnType="TransparentBlue" ><img src={Images.icSave} alt="icon save" />Save</Buttons>
-            </Grid>
+            {editableProject(project) && (
+              <Grid className={classes.btnSave}>
+                <Buttons type={"submit"} padding="8px 18px" btnType="TransparentBlue" ><img src={Images.icSave} alt="icon save" />Save</Buttons>
+              </Grid>
+            )}
           </form>
         </Grid>
         <p className={classes.subTitle} id="upload-packs">2.Upload packs <span>(max {maxPack()})</span></p>
@@ -538,11 +542,14 @@ const SetupSurvey = memo(({ id }: Props) => {
               return (
                 <Grid className={classes.itemPacks} key={index}>
                   <Grid>
-                    <IconButton onClick={(e) => {
-                      setAnchorElPack(e.currentTarget)
-                      setPackAction(item)
-                    }}><MoreVertIcon sx={{ color: "white" }} /></IconButton>
-
+                    {editableProject(project) && (
+                      <IconButton onClick={(e) => {
+                        setAnchorElPack(e.currentTarget)
+                        setPackAction(item)
+                      }}>
+                        <MoreVertIcon sx={{ color: "white" }} />
+                      </IconButton>
+                    )}
                     <img src={item.image} alt="image pack" />
                     <div className={classes.itemInfor}>
                       <div><p style={{ paddingRight: 82 }}>Brand: </p><span>{item.brand}</span></div>
@@ -557,7 +564,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                 </Grid>
               )
             })}
-            {maxPack() > packs?.length && (
+            {(maxPack() > packs?.length && editableProject(project)) && (
               <Grid className={classes.addPack} onClick={() => setAddNewPack(true)}>
                 <img src={Images.icAddPack} alt="" />
                 <p>Add pack</p>
@@ -623,12 +630,14 @@ const SetupSurvey = memo(({ id }: Props) => {
                           <TableCell>{item.variant}</TableCell>
                           <TableCell>{item.manufacturer}</TableCell>
                           <TableCell align="center">
-                            <IconButton onClick={(e) => {
-                              setAnchorElADB(e.currentTarget)
-                              setAdditionalBrandAction(item)
-                            }}>
-                              <MoreHorizIcon />
-                            </IconButton>
+                            {editableProject(project) && (
+                              <IconButton onClick={(e) => {
+                                setAnchorElADB(e.currentTarget)
+                                setAdditionalBrandAction(item)
+                              }}>
+                                <MoreHorizIcon />
+                              </IconButton>
+                            )}
                           </TableCell>
                         </>
                       ) : (
@@ -782,14 +791,16 @@ const SetupSurvey = memo(({ id }: Props) => {
                     <p className={classes.textVariant}>Variant: {item.variant}</p>
                     <p className={classes.textVariant}>Manufacturer: {item.manufacturer}</p>
                   </div>
-                  <IconButton
-                    onClick={(e) => {
-                      setAnchorElADBMobile(e.currentTarget)
-                      setAdditionalBrandAction(item)
-                    }}
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
+                  {editableProject(project) && (
+                    <IconButton
+                      onClick={(e) => {
+                        setAnchorElADBMobile(e.currentTarget)
+                        setAdditionalBrandAction(item)
+                      }}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                  )}
                 </Grid>
               )
             })}
@@ -828,14 +839,18 @@ const SetupSurvey = memo(({ id }: Props) => {
                 classes={{ root: classes.rootListItem }}
                 secondaryAction={
                   <div className={classes.btnAction}>
-                    {item.type === AttributeShowType.User && (
-                      <IconButton onClick={() => onEditUserAttribute(item.data as any)} classes={{ root: classes.iconAction }} edge="end" aria-label="Edit">
-                        <img src={Images.icRename} alt="" />
-                      </IconButton>
+                    {editableProject(project) && (
+                      <>
+                        {item.type === AttributeShowType.User && (
+                          <IconButton onClick={() => onEditUserAttribute(item.data as any)} classes={{ root: classes.iconAction }} edge="end" aria-label="Edit">
+                            <img src={Images.icRename} alt="" />
+                          </IconButton>
+                        )}
+                        <IconButton onClick={() => onShowConfirmDeleteAttribute(item)} classes={{ root: classes.iconAction }} edge="end" aria-label="Delete">
+                          <img src={Images.icDelete} alt="" />
+                        </IconButton>
+                      </>
                     )}
-                    <IconButton onClick={() => onShowConfirmDeleteAttribute(item)} classes={{ root: classes.iconAction }} edge="end" aria-label="Delete">
-                      <img src={Images.icDelete} alt="" />
-                    </IconButton>
                   </div>
                 }
                 disablePadding
@@ -867,8 +882,8 @@ const SetupSurvey = memo(({ id }: Props) => {
                   className={classes.attributesMobile}
                   key={index}
                   onClick={() => {
-                    if (expanded) setExpandedAttribute(null) 
-                    else setExpandedAttribute(uuid) 
+                    if (expanded) setExpandedAttribute(null)
+                    else setExpandedAttribute(uuid)
                   }}
                   style={{ background: expanded ? '#EEEEEE' : '', padding: expanded ? '15px 20px 0px 20px' : '15px 20px' }}
                 >
@@ -883,10 +898,12 @@ const SetupSurvey = memo(({ id }: Props) => {
                         <p>Start: <span>{item.start}</span></p>
                         <p>End: <span>{item.end}</span></p>
                       </div>
-                      <div className={classes.btnActionMobile} onClick={e => e.stopPropagation()}>
-                        {item.type === AttributeShowType.User && <Button onClick={() => onEditUserAttribute(item.data as any)}>Edit</Button>}
-                        <Button onClick={() => onShowConfirmDeleteAttribute(item)}>Delete</Button>
-                      </div>
+                      {editableProject(project) && (
+                        <div className={classes.btnActionMobile} onClick={e => e.stopPropagation()}>
+                          {item.type === AttributeShowType.User && <Button onClick={() => onEditUserAttribute(item.data as any)}>Edit</Button>}
+                          <Button onClick={() => onShowConfirmDeleteAttribute(item)}>Delete</Button>
+                        </div>
+                      )}
                     </Collapse >
                   </Grid>
                   <img style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Images.icShowGray} alt='' />
@@ -899,7 +916,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               <Select
                 variant="outlined"
                 displayEmpty
-                disabled={!enableAdditionalAttributes()}
+                disabled={!enableAdditionalAttributes() || !editableProject(project)}
                 defaultValue={""}
                 classes={{ select: classes.selectType, icon: classes.icSelect }}
                 IconComponent={ExpandIcon}
@@ -1024,7 +1041,7 @@ const SetupSurvey = memo(({ id }: Props) => {
         onCancel={onCloseAddOrEditPack}
         onSubmit={onAddOrEditPack}
       />
-      <PopupConfirmDelete 
+      <PopupConfirmDelete
         isOpen={!!packDelete}
         title="Delete pack?"
         description="Are you sure you want to delete this packed?"
@@ -1044,8 +1061,8 @@ const SetupSurvey = memo(({ id }: Props) => {
         onClose={() => setOpenPopupPreDefined(false)}
         onSubmit={onAddProjectAttribute}
       />
-      <PopupAddOrEditAttribute 
-        isAdd={openPopupAddAttributes} 
+      <PopupAddOrEditAttribute
+        isAdd={openPopupAddAttributes}
         itemEdit={userAttributeEdit}
         onCancel={() => onClosePopupAttribute()}
         onSubmit={onAddOrEditUserAttribute}
@@ -1056,14 +1073,14 @@ const SetupSurvey = memo(({ id }: Props) => {
         onCancel={onClosePopupAddOrEditBrand}
         onSubmit={onAddOrEditBrandMobile}
       />
-      <PopupConfirmDelete 
+      <PopupConfirmDelete
         isOpen={!!brandDelete}
         title="Delete brand?"
         description="Are you sure you want to delete this brand?"
         onCancel={() => onCloseConfirmDeleteBrand()}
         onDelete={onDeleteBrand}
       />
-       <PopupConfirmDelete 
+      <PopupConfirmDelete
         isOpen={!!userAttributeDelete || !!projectAttributeDelete}
         title="Delete attribute?"
         description="Are you sure you want to delete this attribute?"

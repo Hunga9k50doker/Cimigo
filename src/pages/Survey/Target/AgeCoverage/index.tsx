@@ -10,6 +10,7 @@ import { DataSelected, isDisableSubmit, onToggleAnswer } from "../models";
 import { ProjectService } from "services/project";
 import { setLoading, setSuccessMess, setErrorMess } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import { editableProject } from "helpers/project";
 
 enum ETab {
   Main,
@@ -57,11 +58,11 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
   }
 
   const isDisableGenderAge = () => {
-    return isDisableSubmit(questionsAgeGender, dataSelectedGenderAge)
+    return isDisableSubmit(questionsAgeGender, dataSelectedGenderAge) || !editableProject(project)
   }
 
   const isDisableMum = () => {
-    return isDisableSubmit(questionsMum, dataSelectedMum)
+    return isDisableSubmit(questionsMum, dataSelectedMum) || !editableProject(project)
   }
 
   const onChangeTab = (tab: ETab) => {

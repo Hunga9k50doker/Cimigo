@@ -12,6 +12,7 @@ import { ProjectService } from "services/project";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { Project } from "models/project";
 import { DataSelected, onClickSuggestion, onToggleAnswer, isDisableSubmit } from "../models";
+import { editableProject } from "helpers/project";
 
 interface Props {
   projectId: number,
@@ -59,7 +60,7 @@ const Location = memo(({ projectId, project, questions }: Props) => {
   }, [questions])
 
   const isDisable = () => {
-    return isDisableSubmit(questions, dataSelected)
+    return isDisableSubmit(questions, dataSelected) || !editableProject(project)
   }
 
   const onUpdateTarget = () => {
