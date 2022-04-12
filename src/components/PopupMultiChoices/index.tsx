@@ -89,7 +89,6 @@ const PopupMultiChoice = (props: Props) => {
       id: maxAnswers + 1,
       title: `Enter answer ${maxAnswers + 1}`,
       position: maxAnswers + 1,
-      checked: false,
       switchMode: false,
       value: ""
     }
