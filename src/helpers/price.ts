@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { Project } from "models/project";
+import { round } from "utils/formatNumber";
 
 export class PriceService {
   static getSampleSizeConstConfig = (project: Project) => {
@@ -9,6 +10,6 @@ export class PriceService {
     const sampleSize = project?.sampleSize || 0
     const sampleSizeConstConfig = this.getSampleSizeConstConfig(project)
     const unitPrice = sampleSizeConstConfig.find((it, index) => it.limit > sampleSize || (it.limit === sampleSize && index === (sampleSizeConstConfig.length - 1)))?.price || 0
-    return sampleSize * unitPrice
+    return round(sampleSize * unitPrice)
   }
 }

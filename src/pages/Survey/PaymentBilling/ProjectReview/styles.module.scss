@@ -126,7 +126,7 @@
   letter-spacing: 0.015em;
   color: #1f61a9;
   img {
-    width: 11px;
+    width: 24px;
     margin-right: 10px;
   }
 }
@@ -201,6 +201,9 @@
   div {
     display: flex;
     align-items: center;
+    > * {
+      flex: 1
+    }
     a {
       font-style: italic;
       font-weight: normal;
@@ -209,22 +212,6 @@
       letter-spacing: 0.015em;
       text-decoration-line: underline;
       color: #1f61a9;
-    }
-  }
-  div:first-child {
-    p {
-      margin-right: 93px;
-      @media only screen and (max-width: 767px) {
-        margin-right: 80px;
-      }
-    }
-  }
-  div:last-child {
-    p {
-      margin-right: 77px;
-      @media only screen and (max-width: 767px) {
-        margin-right: 64px;
-      }
     }
   }
 }
@@ -332,4 +319,7 @@
   p {
     text-align: center;
   }
+}
+.colorDanger {
+  color: var(--cimigo-danger) !important;
 }

@@ -1,54 +1,28 @@
-import { useState } from "react";
-import { Grid, Stepper, StepConnector, Step, StepLabel } from "@mui/material"
-import classes from './styles.module.scss';
-import QontoStepIcon from "pages/ProjectManagement/components/QontoStepIcon";
-import ProjectReview from "./ProjectReview";
-import Payment from "./Payment";
+import { memo } from "react";
+import { Grid } from "@mui/material"
 import Order from "./Order";
 import Completed from "./Completed";
+import { routes } from "routers/routes";
+import { Redirect, Route, Switch } from "react-router-dom";
+import ProjectReviewAndPayment from "./ProjectReviewAndPayment";
 
-const steps = ['Project review', 'Payment'];
+interface Props {
+  projectId: number
+}
 
-const PaymentBilling = () => {
-  const [activeStep, setActiveStep] = useState(0);
-  const [value, setValue] = useState(0);
-
-  const handleNextStep = () => {
-    steps.map((_, index) => setActiveStep(index))
-  }
+const PaymentBilling = memo(({ projectId }: Props) => {
+  
   return (
     <Grid>
-      {value === 0 &&
-        <>
-          <Stepper
-            alternativeLabel
-            activeStep={activeStep}
-            classes={{ root: classes.rootStepper }}
-            connector={<StepConnector classes={{ root: classes.rootConnector, active: classes.activeConnector }} />}
-          >
-            {steps.map((label, index) => {
-              return (
-                <Step key={index}>
-                  <StepLabel
-                    StepIconComponent={QontoStepIcon}
-                    classes={{
-                      root: classes.rootStepLabel,
-                      completed: classes.rootStepLabelCompleted,
-                      active: classes.rootStepLabelActive,
-                      label: classes.rootStepLabel
-                    }}
-                  >{label}</StepLabel>
-                </Step>
-              );
-            })}
-          </Stepper>
-          {activeStep === 0 ? <ProjectReview onConfirm={() => handleNextStep()} /> : <Payment onConfirm={() => setValue(1)}/>}
-        </>
-      }
-      {value === 1 && <Order/>}
-      {value === 2 && <Completed/>}
+      <Switch>
+        <Route path={routes.project.detail.paymentBilling.previewAndPayment.root} render={(routeProps) => <ProjectReviewAndPayment {...routeProps}/>}/>
+        <Route path={routes.project.detail.paymentBilling.order} render={(routeProps) => <Order {...routeProps}/>}/>
+        <Route path={routes.project.detail.paymentBilling.completed} render={(routeProps) => <Completed {...routeProps}/>}/>
+
+        <Redirect from={routes.project.detail.paymentBilling.root} to={routes.project.detail.paymentBilling.previewAndPayment.preview} />
+      </Switch>
     </Grid>
   )
-}
+})
 
 export default PaymentBilling;

@@ -2,8 +2,13 @@ import { Grid } from "@mui/material"
 import classes from './styles.module.scss';
 import images from "config/images";
 import Buttons from "components/Buttons";
+import { memo } from "react";
 
-const Order = () => {
+interface Props {
+
+}
+
+const Order = memo(({  }: Props) => {
   return (
     <Grid classes={{ root: classes.root }}>
       <img src={images.imgOrder} alt="" />
@@ -94,6 +99,6 @@ const Order = () => {
       <a>Back to projects</a>
     </Grid>
   )
-}
+})
 
 export default Order

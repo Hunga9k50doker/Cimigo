@@ -27,11 +27,11 @@ interface TabItem {
 }
 
 const tabs: TabItem[] = [
-  { name: 'Setup survey',path: routes.project.detail.setupSurvey  },
-  { name: 'Target',path: routes.project.detail.target },
-  { name: 'Quotas',path: routes.project.detail.quotas },
-  { name: 'Payment & Billing',path: routes.project.detail.paymentBilling },
-  { name: 'Report',path: routes.project.detail.report }
+  { name: 'Setup survey', path: routes.project.detail.setupSurvey },
+  { name: 'Target', path: routes.project.detail.target },
+  { name: 'Quotas', path: routes.project.detail.quotas },
+  { name: 'Payment & Billing', path: routes.project.detail.paymentBilling.root },
+  { name: 'Report', path: routes.project.detail.report }
 ]
 
 const Survey = () => {
@@ -104,12 +104,12 @@ const Survey = () => {
         <Grid className={classes.bodyTab}>
           <div className={classes.tabContent}>
             <Switch>
-              <Route exact path={routes.project.detail.setupSurvey} render={(routeProps) => <SetupSurvey {...routeProps} id={Number(id)}/>}/>
-              <Route exact path={routes.project.detail.target} render={(routeProps) => <Target {...routeProps} projectId={Number(id)}/>}/>
-              <Route exact path={routes.project.detail.quotas} render={(routeProps) => <Quotas/>}/>
-              <Route exact path={routes.project.detail.paymentBilling} render={(routeProps) => <PaymentBilling/>}/>
-              <Route exact path={routes.project.detail.report} render={(routeProps) => { return (<>Report</>) }}/>
-              
+              <Route exact path={routes.project.detail.setupSurvey} render={(routeProps) => <SetupSurvey {...routeProps} id={Number(id)} />} />
+              <Route exact path={routes.project.detail.target} render={(routeProps) => <Target {...routeProps} projectId={Number(id)} />} />
+              <Route exact path={routes.project.detail.quotas} render={(routeProps) => <Quotas {...routeProps} projectId={Number(id)} />} />
+              <Route path={routes.project.detail.paymentBilling.root} render={(routeProps) => <PaymentBilling {...routeProps} projectId={Number(id)} />} />
+              <Route exact path={routes.project.detail.report} render={(routeProps) => { return (<>Report</>) }} />
+
               <Redirect from={routes.project.detail.root} to={routes.project.detail.setupSurvey} />
             </Switch>
           </div>

@@ -68,7 +68,7 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
     setActiveTab(tab)
   }
 
-  const onUpdateTargetGenderAge = () => {
+  const onUpdateTargetGenderAge = async () => {
     if (isDisableGenderAge()) return
     dispatch(setLoading(true))
     ProjectService.updateTarget(projectId, {
@@ -76,8 +76,15 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
       questionSelected: Object.keys(dataSelectedGenderAge).map(questionId => ({ questionId: Number(questionId), answerIds: dataSelectedGenderAge[Number(questionId)].map(it => it.id) }))
     })
       .then((res) => {
-        dispatch(getProjectRequest(projectId))
         dispatch(setSuccessMess(res.message))
+        ProjectService.updateTarget(projectId, {
+          questionTypeId: TargetQuestionType.Mums_Only,
+          questionSelected: []
+        })
+          .then(() => {
+            dispatch(getProjectRequest(projectId))
+          })
+          .catch((e) => dispatch(setErrorMess(e)))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -91,8 +98,15 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
       questionSelected: Object.keys(dataSelectedMum).map(questionId => ({ questionId: Number(questionId), answerIds: dataSelectedMum[Number(questionId)].map(it => it.id) }))
     })
       .then((res) => {
-        dispatch(getProjectRequest(projectId))
         dispatch(setSuccessMess(res.message))
+        ProjectService.updateTarget(projectId, {
+          questionTypeId: TargetQuestionType.Gender_And_Age_Quotas,
+          questionSelected: []
+        })
+          .then(() => {
+            dispatch(getProjectRequest(projectId))
+          })
+          .catch((e) => dispatch(setErrorMess(e)))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))

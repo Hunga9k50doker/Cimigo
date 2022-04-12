@@ -164,7 +164,7 @@ const QuestionForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
                     <Inputs
                       title="Order"
                       name="order"
-                      type="text"
+                      type="number"
                       disabled={!!langEdit}
                       inputRef={register('order')}
                       errorMessage={errors.order?.message}

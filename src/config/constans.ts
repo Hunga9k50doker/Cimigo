@@ -50,6 +50,12 @@ export const API = {
   TARGET: {
     DEFAULT: '/v1.0/target/question',
   },
+  QUOTA: {
+    DEFAULT: '/v1.0/quota',
+  },
+  PAYMENT: {
+    CHECKOUT: '/v1.0/payment/checkout'
+  },
   ADMIN: {
     SOLUTION: {
       DEFAULT: '/v1.0/admin/solution',
@@ -86,6 +92,10 @@ export const API = {
     SAMPLE_SIZE: {
       DEFAULT: '/v1.0/admin/sample-size',
     },
-    
+    QUOTA: {
+      TABLE: {
+        DEFAULT: '/v1.0/admin/quota/table',
+      }
+    }
   }
 }

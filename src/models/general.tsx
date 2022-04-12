@@ -111,3 +111,10 @@ export enum EStatus {
   Inactive,
   Coming_Soon
 }
+
+export enum EPaymentMethod {
+  CREDIT_OR_DEBIT = 1,
+  INTERNET_BANKING,
+  BANK_TRANSFER,
+  MAKE_AN_ORDER
+}

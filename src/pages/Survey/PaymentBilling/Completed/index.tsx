@@ -1,8 +1,13 @@
 import { Grid } from "@mui/material";
 import classes from './styles.module.scss';
 import images from "config/images";
+import { memo } from "react";
 
-const Completed = () => {
+interface Props {
+
+}
+
+const Completed = memo(({  }: Props) => {
   return (
     <Grid classes={{ root: classes.root }}>
       <img src={images.imgPayment} alt="" />
@@ -19,6 +24,6 @@ const Completed = () => {
       <p className={classes.subTitle} style={{ marginBottom: 24 }}>If you are in an urgent situation, please send an email to <span style={{ color: "#1F61A9" }}>ask@cimigo.com</span> or contact our phone number  <span style={{ color: "#1F61A9" }}>(+84) 28 3822 7727.</span></p>
     </Grid>
   )
-}
+})
 
 export default Completed;

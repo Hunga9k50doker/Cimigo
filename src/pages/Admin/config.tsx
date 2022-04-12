@@ -2,13 +2,14 @@ import {
   NavItem, 
   routes 
 } from "routers/routes";
-import { Category, FormatListBulleted, GTranslate, Lightbulb, LiveHelp } from '@mui/icons-material';
+import { Category, FormatListBulleted, GTranslate, Lightbulb, LiveHelp, TableView } from '@mui/icons-material';
 import SolutionCategory from "./SolutionCategory";
 import Solution from "./Solution";
 import SolutionCategoryHome from "./SolutionCategoryHome";
 import Attribute from "./Attribute";
 import Translation from "./Translation";
 import Target from "./Target";
+import QuotaTable from "./QuotaTable";
 
 export const adminRouter: NavItem[] = [
   {
@@ -51,6 +52,13 @@ export const adminRouter: NavItem[] = [
     name: 'Target',
     icon: LiveHelp,
     component: Target,
+    layout: "/admin"
+  },
+  {
+    path: routes.admin.quotaTable.root,
+    name: 'Quota table',
+    icon: TableView,
+    component: QuotaTable,
     layout: "/admin"
   },
   // {

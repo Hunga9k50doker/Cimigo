@@ -18,7 +18,16 @@ export const routes = {
       setupSurvey: '/project/:id/setup-survey',
       target: '/project/:id/target',
       quotas: '/project/:id/quotas',
-      paymentBilling: '/project/:id/payment-billing',
+      paymentBilling: {
+        root: '/project/:id/payment-billing',
+        previewAndPayment: {
+          root: '/project/:id/payment-billing/preview-and-payment',
+          preview: '/project/:id/payment-billing/preview-and-payment/preview',
+          payment: '/project/:id/payment-billing/preview-and-payment/payment',
+        },
+        order: '/project/:id/payment-billing/order',
+        completed: '/project/:id/payment-billing/completed',
+      },
       report: '/project/:id/report',
     }
   },
@@ -85,6 +94,11 @@ export const routes = {
           edit: '/admin/target/question/:id/answer-suggestion/:answerSuggestionId/edit',
         }
       },
+    },
+    quotaTable: {
+      root: '/admin/quota-table',
+      create: '/admin/quota-table/create',
+      edit: '/admin/quota-table/:id/edit',
     },
   }
 }
