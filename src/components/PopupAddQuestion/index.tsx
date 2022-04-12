@@ -6,6 +6,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Inputs from 'components/Inputs';
 
+interface Props {
+    isOpen: boolean,
+    togglePopup: () => void,
+}
 
 const schema = yup.object().shape({
     inputQues: yup.string().required('Question title is required.'),
@@ -14,11 +18,8 @@ export interface AttributeFormData {
     inputQues: string;
 }
 
-const PopupAddQuestion = () => {
-    const [isOpen, setOpen] = useState(true);
-    const togglePopup = () => {
-        setOpen(!isOpen);
-    }
+const PopupAddQuestion = (props: Props) => {
+    const { togglePopup, isOpen } = props;
     const { register, handleSubmit, formState: { errors } } = useForm<AttributeFormData>({
         resolver: yupResolver(schema),
         mode: 'onChange'

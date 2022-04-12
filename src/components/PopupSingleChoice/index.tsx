@@ -8,7 +8,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
 import Inputs from 'components/Inputs';
 
-
+interface Props {
+  isOpen: boolean,
+  togglePopup: () => void,
+}
 const schema = yup.object().shape({
   inputQues: yup.string().required('Question title is required.'),
   inputAns: yup.string().required('Answer is required.'),
@@ -18,7 +21,7 @@ export interface AttributeFormData {
   inputAns: string;
 }
 
-const PopupSingleChoice = () => {
+const PopupSingleChoice = (props) => {
   const [dragId, setDragId] = useState();
   const [answers, setAnswers] = useState([
     {
@@ -54,8 +57,8 @@ const PopupSingleChoice = () => {
     });
     setAnswers(newBoxState);
   };
-  const [isOpen, setOpen] = useState(true);
-  const togglePopup = () => { setOpen(!isOpen); }
+  const { togglePopup, isOpen } = props;
+
   const { register, handleSubmit, formState: { errors } } = useForm<AttributeFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
@@ -159,9 +162,9 @@ const PopupSingleChoice = () => {
                         className={classes.inputanswer} value={ans.value}
                         onChange={handleChangeInputAns("value", ans.id, checkAllAnsNotValue())}
                       />
-                      <button type="button" 
-                      className={classes.closeInputAnswer} 
-                      onClick={deleteInputAns(ans.id)}
+                      <button type="button"
+                        className={classes.closeInputAnswer}
+                        onClick={deleteInputAns(ans.id)}
                       >X</button>
                     </div>
                     <div className={classes.errAns}>{checkAllAnsNotValue() ? errors.inputAns?.message : ""}</div>

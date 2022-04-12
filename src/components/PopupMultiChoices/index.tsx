@@ -9,7 +9,10 @@ import * as yup from 'yup';
 import Inputs from 'components/Inputs';
 import { yupResolver } from "@hookform/resolvers/yup";
 
-
+interface Props {
+  isOpen: boolean,
+  togglePopup: () => void,
+}
 const schema = yup.object().shape({
   inputQues: yup.string().required('Question title is required.'),
   inputAns: yup.string().required('Answer is required.'),
@@ -19,7 +22,7 @@ export interface AttributeFormData {
   inputAns: string;
 }
 
-const PopupMultiChoice = () => {
+const PopupMultiChoice = (props) => {
   const [dragId, setDragId] = useState();
   const [answers, setAnswers] = useState([
     {
@@ -62,10 +65,7 @@ const PopupMultiChoice = () => {
     });
     setAnswers(newBoxState);
   };
-  const [isOpen, setOpen] = useState(true);
-  const togglePopup = () => {
-    setOpen(!isOpen);
-  }
+  const { togglePopup, isOpen } = props;
 
   const onSubmit = (data) => console.log(data);
   ;
@@ -163,9 +163,9 @@ const PopupMultiChoice = () => {
                             onChange={handleChangeInputAns("value", ans.id, checkAllAnsNotValue())}
                             className={classes.inputanswer} value={ans.value}>
                           </input>
-                          <button type="button" 
-                          className={classes.closeInputAnswer} 
-                          onClick={deleteInputAns(ans.id)}
+                          <button type="button"
+                            className={classes.closeInputAnswer}
+                            onClick={deleteInputAns(ans.id)}
                           >X</button>
                         </Grid>
                         {/* {errors.inputAns?.message} */}
