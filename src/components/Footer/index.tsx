@@ -12,7 +12,6 @@ import youtubeIcon from 'assets/img/youtube-icon.svg';
 import Container from "components/Container";
 import { useState } from "react";
 import clsx from "clsx";
-
 interface FooterProps {
 
 }
