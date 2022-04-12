@@ -29,14 +29,12 @@ const PopupSingleChoice = (props:Props) => {
       id: 1,
       title: "Enter answer 1",
       position: 1,
-      checked: false,
       value: ""
     },
     {
       id: 2,
       title: "Enter answer 2",
       position: 2,
-      checked: false,
       value: ""
     },
   ]);
@@ -76,18 +74,6 @@ const PopupSingleChoice = (props:Props) => {
     setAnswers(new_arr);
   }
 
-  const handleChangeStatus = (status: any, index: number) => (event) => {
-    let newBoxes = answers.map((item, i) => {
-      if (index == i) {
-        return { ...item, [status]: event.target.checked };
-      }
-      else {
-        return { ...item, [status]: !event.target.checked };
-      }
-    });
-    setAnswers(newBoxes);
-  }
-
   const addInputAns = () => {
     const maxAnswers = Math.max(...answers.map(ans => ans.id), 0);
     const new_inputAns = {
@@ -103,9 +89,7 @@ const PopupSingleChoice = (props:Props) => {
     setAnswers(answers => [...answers, new_inputAns])
   }
   const deleteInputAns = (id) => () => {
-    const updated_answers = [...answers].filter((ans) => {
-      return ans.id !== id;
-    })
+    const updated_answers = [...answers].filter((ans) => ans.id !== id);
     setAnswers(updated_answers);
   }
   return (
@@ -145,8 +129,6 @@ const PopupSingleChoice = (props:Props) => {
                       <img src={IconDotsDrag} className={classes.iconDotsDragMUI}></img>
                       <input type="radio" name="radio_answer"
                         className={classes.choiceAnswer}
-                        checked={ans.checked}
-                        onChange={handleChangeStatus("checked", index)}
                       />
                       <input
                         type="text" placeholder={ans.title}

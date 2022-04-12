@@ -29,7 +29,6 @@ const PopupMultiChoice = (props: Props) => {
       id: 1,
       title: "Enter answer 1",
       position: 1,
-      checked: false,
       switchMode: false,
       value: ""
     },
@@ -37,7 +36,6 @@ const PopupMultiChoice = (props: Props) => {
       id: 2,
       title: "Enter answer 2",
       position: 2,
-      checked: false,
       switchMode: false,
       value: ""
     },
@@ -69,7 +67,7 @@ const PopupMultiChoice = (props: Props) => {
 
   const onSubmit = (data) => console.log(data);
   ;
-  const handleChangeStatus = (status: any, index: number) => () => {
+  const handleChangeSwitch = (status: any, index: number) => () => {
     const find_pos = answers.findIndex((ans) => ans.id == index)
     const new_arr = [...answers]
     new_arr[find_pos][status] = !new_arr[find_pos][status];
@@ -101,9 +99,7 @@ const PopupMultiChoice = (props: Props) => {
     setAnswers(answers => [...answers, new_inputAns])
   }
   const deleteInputAns = (id) => () => {
-    const updated_answers = [...answers].filter((ans) => {
-      return ans.id !== id;
-    })
+    const updated_answers = [...answers].filter((ans) => ans.id !== id);
     setAnswers(updated_answers);
   }
 
@@ -148,8 +144,6 @@ const PopupMultiChoice = (props: Props) => {
                           <img src={IconDotsDrag} className={classes.iconDotsDragMUI}></img>
                           <input type="checkbox"
                             name="checkbox_answer"
-                            onChange={handleChangeStatus("checked", ans.id)}
-                            checked={ans.checked}
                             className={classes.choiceAnswer}
                           />
                           <input type="text" placeholder={ans.title}
@@ -165,7 +159,7 @@ const PopupMultiChoice = (props: Props) => {
                         <Grid className={classes.rowToggleSwitch}>
                           <Grid sx={{ marginTop: '12px', display: 'flex', alignItems: 'center' }}>
                             <input checked={ans.switchMode}
-                              onChange={handleChangeStatus("switchMode", ans.id)}
+                              onChange={handleChangeSwitch("switchMode", ans.id)}
                               type="checkbox"
                               name="toggle_switch" id={`${String(ans.id)}`}
                               className={classes.inputSwitch}
@@ -186,7 +180,6 @@ const PopupMultiChoice = (props: Props) => {
                 <p className={classes.clickAddOption}>Click to add option</p>
               </button>
             </Grid>
-
           </Grid>
           <Grid  >
             <Button type='submit' children='Save question' className={classes.btnSave} />
