@@ -21,7 +21,7 @@ const PopupConfirmCancelOrder = (props: Props) => {
   >
     <Grid>
       <Grid className={classes.header}>
-        <IconButton onClick={onYes} className={classes.shadowIcClose}>
+        <IconButton onClick={onClose} className={classes.shadowIcClose}>
           <img src={Images.icClose} alt='' />
         </IconButton>
       </Grid>
