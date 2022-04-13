@@ -2,7 +2,6 @@ import { Dialog, DialogContent, Grid, IconButton } from "@mui/material"
 import Buttons from "components/Buttons";
 import classes from './styles.module.scss';
 import Images from "config/images";
-
 interface Props {
   isOpen: boolean,
   title: string,
