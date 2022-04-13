@@ -2,7 +2,7 @@ import {
   NavItem, 
   routes 
 } from "routers/routes";
-import { Category, FormatListBulleted, GTranslate, Lightbulb, LiveHelp, TableView } from '@mui/icons-material';
+import { Category, FormatListBulleted, GTranslate, Lightbulb, LiveHelp, Mail, Settings, TableView, Work } from '@mui/icons-material';
 import SolutionCategory from "./SolutionCategory";
 import Solution from "./Solution";
 import SolutionCategoryHome from "./SolutionCategoryHome";
@@ -10,8 +10,19 @@ import Attribute from "./Attribute";
 import Translation from "./Translation";
 import Target from "./Target";
 import QuotaTable from "./QuotaTable";
+import EmailTemplate from "./EmailTemplate";
+import ConfigPage from "./ConfigPage";
+import Project from "./Project";
 
 export const adminRouter: NavItem[] = [
+  
+  {
+    path: routes.admin.project.root,
+    name: 'Project',
+    icon: Work,
+    component: Project,
+    layout: "/admin"
+  },
   {
     path: routes.admin.solution.root,
     name: 'Solution',
@@ -61,6 +72,20 @@ export const adminRouter: NavItem[] = [
     component: QuotaTable,
     layout: "/admin"
   },
+  {
+    path: routes.admin.emailTemplate.root,
+    name: 'Email template',
+    icon: Mail,
+    component: EmailTemplate,
+    layout: "/admin"
+  },
+  {
+    path: routes.admin.config.root,
+    name: 'Config',
+    icon: Settings,
+    component: ConfigPage,
+    layout: "/admin"
+  }
   // {
   //   path: routes.admin.user.root,
   //   name: 'User',
@@ -68,25 +93,4 @@ export const adminRouter: NavItem[] = [
   //   component: User,
   //   layout: "/admin"
   // },
-  // {
-  //   path: routes.admin.project.root,
-  //   name: 'Project',
-  //   icon: Work,
-  //   component: Project,
-  //   layout: "/admin"
-  // },
-  // {
-  //   path: routes.admin.target_question.root,
-  //   name: 'Target Criteria',
-  //   icon: LiveHelp,
-  //   component: TargetQuestion,
-  //   layout: "/admin"
-  // },
-  // {
-  //   path: routes.admin.target_setting,
-  //   name: 'Target Setting',
-  //   icon: SettingsApplications,
-  //   component: TargetSetting,
-  //   layout: "/admin"
-  // }
 ]

@@ -23,7 +23,7 @@ const switchRoutes = (
         return null
       })
     }
-    <Redirect from="/admin" to={routes.admin.solutionCategory.root} />
+    <Redirect from="/admin" to={routes.admin.project.root} />
   </Switch>
 )
 

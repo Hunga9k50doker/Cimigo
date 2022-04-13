@@ -1,25 +1,24 @@
-import { Add, DeleteOutlineOutlined, EditOutlined, ExpandMoreOutlined } from "@mui/icons-material";
-import { Box, Button, Grid, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
+import { EditOutlined, ExpandMoreOutlined } from "@mui/icons-material";
+import { Box, Grid, IconButton, Link, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
 import clsx from "clsx";
 import InputSearch from "components/InputSearch";
-import WarningModal from "components/Modal/WarningModal";
 import SearchNotFound from "components/SearchNotFound";
 import TableHeader from "components/Table/TableHead";
 import { push } from "connected-react-router";
 import useDebounce from "hooks/useDebounce";
-import { GetTranslations, Translation } from "models/Admin/translation";
+import { EmailTemplate, GetEmailTemplates } from "models/Admin/email_template";
 import { DataPagination, TableHeaderLabel } from "models/general";
 import { memo, useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
-import { TranslationService } from "services/admin/translation";
+import { EmailTemplateService } from "services/admin/email_template";
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
   { name: 'id', label: 'Id', sortable: false },
-  { name: 'key', label: 'Key', sortable: false },
-  { name: 'data', label: 'Text', sortable: false },
+  { name: 'key', label: 'Subject', sortable: false },
+  { name: 'emailsTo', label: 'Email to', sortable: false },
   { name: 'language', label: 'Language', sortable: false },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
@@ -31,14 +30,9 @@ const List = memo(({ }: Props) => {
 
   const dispatch = useDispatch()
   const [keyword, setKeyword] = useState<string>('');
-  const [data, setData] = useState<DataPagination<Translation>>();
-  const [itemAction, setItemAction] = useState<Translation>();
+  const [data, setData] = useState<DataPagination<EmailTemplate>>();
+  const [itemAction, setItemAction] = useState<EmailTemplate>();
   const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
-  const [itemDelete, setItemDelete] = useState<Translation>(null);
-
-  const handleAdd = () => {
-    dispatch(push(routes.admin.translation.create));
-  }
 
   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => {
     fetchData({
@@ -60,7 +54,7 @@ const List = memo(({ }: Props) => {
 
   const fetchData = (value?: { take?: number, page?: number, keyword?: string }) => {
     dispatch(setLoading(true))
-    const params: GetTranslations = {
+    const params: GetEmailTemplates = {
       take: value?.take || data?.meta?.take || 10,
       page: value?.page || data?.meta?.page || 1,
       keyword: keyword
@@ -68,7 +62,7 @@ const List = memo(({ }: Props) => {
     if (value?.keyword !== undefined) {
       params.keyword = value.keyword || undefined
     }
-    TranslationService.getTranslations(params)
+    EmailTemplateService.getList(params)
       .then((res) => {
         setData({ data: res.data, meta: res.meta })
       })
@@ -85,7 +79,7 @@ const List = memo(({ }: Props) => {
 
   const handleAction = (
     event: React.MouseEvent<HTMLButtonElement>,
-    item: Translation
+    item: EmailTemplate
   ) => {
     setItemAction(item)
     setActionAnchor(event.currentTarget);
@@ -96,49 +90,23 @@ const List = memo(({ }: Props) => {
     setActionAnchor(null);
   };
 
-  const onShowConfirm = () => {
-    if (!itemAction) return
-    setItemDelete(itemAction)
-  }
-
-  const onCloseConfirm = () => {
-    if (!itemDelete) return
-    setItemDelete(null)
-    onCloseActionMenu()
-  };
-
-  const onDelete = () => {
-    if (!itemDelete) return
-    onCloseConfirm()
-    dispatch(setLoading(true))
-    TranslationService.delete(itemDelete.id)
-      .then(() => {
-        fetchData()
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
-  }
-
   const handleEdit = () => {
     if (!itemAction) return
+    onRedirectEdit(itemAction)
     onCloseActionMenu();
-    dispatch(push(routes.admin.translation.edit.replace(':id', `${itemAction.id}`)));
+  }
+
+  const onRedirectEdit = (item: EmailTemplate) => {
+    dispatch(push(routes.admin.emailTemplate.edit.replace(':id', `${item.id}`)));
   }
 
   return (
     <div>
       <Grid container alignItems="center" justifyContent="space-between">
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Typography component="h2" variant="h6" align="left">
-            Translation
+            Email templates
           </Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleAdd}>
-              Create
-            </Button>
-          </Box>
         </Grid>
       </Grid>
       <Grid container justifyContent="center" alignItems="center">
@@ -167,10 +135,10 @@ const List = memo(({ }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
-                            {item.key}
+                            <Link onClick={() => onRedirectEdit(item)} component="button">{item.subject}</Link>
                           </TableCell>
                           <TableCell component="th">
-                            {item.data}
+                            {item.emailsTo?.join(', ')}
                           </TableCell>
                           <TableCell component="th">
                             {item.language}
@@ -231,24 +199,7 @@ const List = memo(({ }: Props) => {
                 <span>Edit</span>
               </Box>
             </MenuItem>
-            <MenuItem
-              sx={{ fontSize: '0.875rem' }}
-              onClick={onShowConfirm}
-            >
-              <Box display="flex" alignItems={"center"}>
-                <DeleteOutlineOutlined sx={{ marginRight: '0.25rem' }} color="error" fontSize="small" />
-                <span>Delete</span>
-              </Box>
-            </MenuItem>
           </Menu>
-          <WarningModal
-            title="Confirm"
-            isOpen={!!itemDelete}
-            onClose={onCloseConfirm}
-            onYes={onDelete}
-          >
-            Are you sure?
-          </WarningModal>
         </Grid>
       </Grid>
     </div>

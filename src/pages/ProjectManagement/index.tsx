@@ -130,7 +130,7 @@ const ProjectManagement = memo((props: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const _onSearch = useDebounce((keyword: string) => fetchData({ keyword }), 500)
+  const _onSearch = useDebounce((keyword: string) => fetchData({ keyword, page: 1 }), 500)
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value)

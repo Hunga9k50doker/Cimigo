@@ -66,6 +66,7 @@ const List = memo(({ }: Props) => {
     const params: GetAttributesParams = {
       take: value?.take || data?.meta?.take || 10,
       page: value?.page || data?.meta?.page || 1,
+      keyword: keyword
     }
     if (value?.keyword !== undefined) {
       params.keyword = value.keyword || undefined
@@ -78,7 +79,7 @@ const List = memo(({ }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const _onSearch = useDebounce((keyword: string) => fetchData({ keyword }), 500)
+  const _onSearch = useDebounce((keyword: string) => fetchData({ keyword, page: 1 }), 500)
 
   useEffect(() => {
     fetchData()

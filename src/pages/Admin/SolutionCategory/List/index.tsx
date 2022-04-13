@@ -77,7 +77,7 @@ const SolutionCategoryList = memo((props: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const _onSearch = useDebounce((keyword: string) => fetchData({ keyword }), 500)
+  const _onSearch = useDebounce((keyword: string) => fetchData({ keyword, page: 1 }), 500)
 
   useEffect(() => {
     fetchData()

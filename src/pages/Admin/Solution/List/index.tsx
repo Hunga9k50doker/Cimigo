@@ -8,7 +8,7 @@ import StatusChip from "components/StatusChip";
 import TableHeader from "components/Table/TableHead";
 import { push } from "connected-react-router";
 import useDebounce from "hooks/useDebounce";
-import { Solution } from "models/Admin/solution"
+import { GetSolutionsParams, Solution } from "models/Admin/solution"
 import { DataPagination, EStatus, LangSupport, langSupports, TableHeaderLabel } from "models/general";
 import { memo, useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
@@ -61,13 +61,17 @@ const List = memo(({ }: Props) => {
     _onSearch(e.target.value)
   }
 
-  const fetchData = (params?: { take?: number, page?: number, keyword?: string }) => {
+  const fetchData = (value?: { take?: number, page?: number, keyword?: string }) => {
+    const params: GetSolutionsParams = {
+      take: value?.take || data?.meta?.take || 10,
+      page: value?.page || data?.meta?.page || 1,
+      keyword: keyword
+    }
+    if (value?.keyword !== undefined) {
+      params.keyword = value.keyword || undefined
+    }
     dispatch(setLoading(true))
-    AdminSolutionService.getSolutions({
-      take: params?.take || data?.meta?.take || 10,
-      page: params?.page || data?.meta?.page || 1,
-      keyword: params?.keyword ?? keyword,
-    })
+    AdminSolutionService.getSolutions(params)
       .then((res) => {
         setData({
           data: res.data,
@@ -78,7 +82,7 @@ const List = memo(({ }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const _onSearch = useDebounce((keyword: string) => fetchData({ keyword }), 500)
+  const _onSearch = useDebounce((keyword: string) => fetchData({ keyword, page: 1 }), 500)
 
   useEffect(() => {
     fetchData()

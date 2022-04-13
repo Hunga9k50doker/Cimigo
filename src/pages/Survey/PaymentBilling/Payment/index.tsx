@@ -114,7 +114,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
 
   const dispatch = useDispatch()
   const { project } = useSelector((state: ReducerType) => state.project)
-  const { user } = useSelector((state: ReducerType) => state.user)
+  const { user, configs } = useSelector((state: ReducerType) => state.user)
 
   const [countries, setCountries] = useState<OptionItem[]>([])
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>()
@@ -178,7 +178,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
   }
 
   const getTotalVND = () => {
-    return round(getTotal() * 22862)
+    return round(getTotal() * configs.usdToVND)
   }
 
   useEffect(() => {

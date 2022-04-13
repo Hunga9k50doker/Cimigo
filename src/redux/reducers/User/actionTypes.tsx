@@ -1,3 +1,4 @@
+import { ConfigData } from "models/config";
 import { SocialProvider } from "models/general";
 import { User } from "models/user";
 
@@ -21,6 +22,8 @@ export const SEND_EMAIL_FORGOT_PASSWORD_REQUEST = 'SEND_EMAIL_FORGOT_PASSWORD_RE
 export const FORGOT_PASSWORD_REQUEST = 'FORGOT_PASSWORD_REQUEST';
 
 export const SET_PROJECT_STATE_REDUCER = 'SET_PROJECT_STATE_REDUCER';
+
+export const SET_CONFIGS_REDUCER = 'SET_CONFIGS_REDUCER';
 
 export const getMe = () => {
   return {
@@ -57,5 +60,12 @@ export const userLogoutRequest = () => {
 export const userLogoutReducer = () => {
   return {
     type: USER_LOGOUT_REDUCER
+  }
+}
+
+export const setConfigs = (data: ConfigData) => {
+  return {
+    type: SET_CONFIGS_REDUCER,
+    data
   }
 }

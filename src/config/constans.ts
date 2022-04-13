@@ -14,7 +14,9 @@ export const API = {
   },
   COUNTRY: {
     LIST: '/v1.0/country',
-    
+  },
+  CONFIG: {
+    DEFAULT: '/v1.0/config',
   },
   SOLUTION: {
     DEFAULT: '/v1.0/solution',
@@ -100,6 +102,15 @@ export const API = {
       TABLE: {
         DEFAULT: '/v1.0/admin/quota/table',
       }
-    }
+    },
+    EMAIL_TEMPLATE: {
+      DEFAULT: '/v1.0/admin/email-template'
+    },
+    CONFIG: {
+      DEFAULT: '/v1.0/admin/config',
+    },
+    PROJECT: {
+      DEFAULT: '/v1.0/admin/project',
+    },
   }
 }

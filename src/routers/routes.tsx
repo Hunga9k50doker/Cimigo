@@ -59,10 +59,6 @@ export const routes = {
       create: '/admin/solution-category-home/create',
       edit: '/admin/solution-category-home/:id/edit',
     },
-    project: {
-      root: '/admin/project',
-      detail: '/admin/project/:id',
-    },
     attribute: {
       root: '/admin/attribute',
       create: '/admin/attribute/create',
@@ -101,6 +97,19 @@ export const routes = {
       create: '/admin/quota-table/create',
       edit: '/admin/quota-table/:id/edit',
     },
+    emailTemplate: {
+      root: '/admin/email-template',
+      edit: '/admin/email-template/:id/edit',
+    },
+    config: {
+      root: '/admin/config',
+      edit: '/admin/config/:id/edit',
+    },
+    project: {
+      root: '/admin/project',
+      detail: '/admin/project/:id/detail',
+      edit: '/admin/project/:id/edit',
+    }
   }
 }
 

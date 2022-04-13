@@ -69,7 +69,8 @@ const AnswerSuggestionList = memo(({ }: Props) => {
     const params: GetAnswerSuggestionsParams = {
       take: value?.take || data?.meta?.take || 10,
       page: value?.page || data?.meta?.page || 1,
-      questionId: Number(questionId)
+      questionId: Number(questionId),
+      keyword: keyword
     }
     if (value?.keyword !== undefined) {
       params.keyword = value.keyword || undefined
@@ -82,7 +83,7 @@ const AnswerSuggestionList = memo(({ }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const _onSearch = useDebounce((keyword: string) => fetchData({ keyword }), 500)
+  const _onSearch = useDebounce((keyword: string) => fetchData({ keyword, page: 1 }), 500)
 
   useEffect(() => {
     fetchData()

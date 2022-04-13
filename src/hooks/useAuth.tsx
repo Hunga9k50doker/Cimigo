@@ -5,7 +5,7 @@ import { userLogoutRequest } from "redux/reducers/User/actionTypes";
 
 
 export default function UseAuth() {
-  const { user } = useSelector((state: ReducerType) => state.user);
+  const { user, configs } = useSelector((state: ReducerType) => state.user);
   const dispatch = useDispatch()
   const logout = () => {
     dispatch(userLogoutRequest());
@@ -13,6 +13,7 @@ export default function UseAuth() {
 
   return {
     user,
+    configs,
     isLoggedIn: !!user,
     isAdmin: user?.adminTypeId === EAdminType.ADMIN || user?.adminTypeId === EAdminType.SUPER_ADMIN,
     isSuperAdmin: user?.adminTypeId === EAdminType.SUPER_ADMIN,
