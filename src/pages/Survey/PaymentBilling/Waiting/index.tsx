@@ -54,7 +54,9 @@ const Waiting = memo(({  }: Props) => {
           textDecorationLine: "underline",
           color: "#1f61a9"
         }}>Back to bank transfer information.</a></p>
-      <p className={classes.subTitle} style={{ marginBottom: 24 }}>If you are in an urgent situation, please send an email to <span style={{ color: "#1F61A9" }}>ask@cimigo.com</span> or contact our phone number  <span style={{ color: "#1F61A9" }}>(+84) 28 3822 7727.</span></p>
+      <p className={classes.subTitle} style={{ marginBottom: 24 }}>If you are in an urgent situation, please send an email to 
+      <a href="mailto:ask@cimigo.com" className={classes.aLink}> ask@cimigo.com</a> or contact our phone number  
+      <a href="tel:(+84)2838227727"className={classes.aLink}> (+84) 28 3822 7727</a></p>
     </Grid>
   )
 })

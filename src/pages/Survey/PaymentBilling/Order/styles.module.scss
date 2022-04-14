@@ -5,7 +5,7 @@
   @media only screen and (max-width: 767px) {
     padding: 22px 19px;
   }
-  a {
+  a:not(.aLink) {
     margin-top: 55px;
     margin-bottom: 25px;
     font-style: italic;
@@ -19,6 +19,10 @@
     @media only screen and (max-width: 767px) {
       font-size: 14px;
     }
+  }
+  .aLink{
+    color: #1f61a9;
+    text-decoration: none;
   }
 }
 .root > img {
