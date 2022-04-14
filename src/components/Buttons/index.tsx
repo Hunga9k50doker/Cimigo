@@ -1,5 +1,5 @@
-import React, { memo } from "react";
-import { Button } from "@mui/material";
+import { memo } from "react";
+import { Button, ButtonTypeMap, ExtendButtonBase } from "@mui/material";
 import clsx from "clsx";
 import classes from './styles.module.scss';
 
@@ -12,6 +12,7 @@ interface ButtonsProps {
   className?: any;
   width?: string;
   padding?: string;
+  [key: string]: any;
 }
 
 const Buttons = memo((props: ButtonsProps) => {
@@ -19,7 +20,8 @@ const Buttons = memo((props: ButtonsProps) => {
   return (
     <Button
       className={clsx(
-        classes.root, className,
+        classes.root,
+        className,
         btnType === "Blue" ? classes.btnBlue : "",
         btnType === "Red" ? classes.btnRed : "",
         btnType === "TransparentBlue" ? classes.btnTransparentBlue : "",

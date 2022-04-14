@@ -17,6 +17,10 @@ import { UserAttributeService } from "services/user_attribute";
 import { AdditionalBrandService } from "services/additional_brand";
 import clsx from "clsx";
 import { TargetQuestionType } from "models/Admin/target";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import FileSaver from 'file-saver';
+import moment from "moment";
+import { PaymentService } from "services/payment";
 
 interface ProjectReviewProps {
 }
@@ -118,6 +122,21 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     return isValidSampleSize() && !inValidTarget() && isValidPacks() && isValidAdditionalBrand() && isValidAttributes() && isValidBasic()
   }
 
+  const getInvoice = () => {
+    if (!project) return
+    dispatch(setLoading(true))
+    PaymentService.getInvoiceDemo(project.id)
+      .then(res => {
+        FileSaver.saveAs(res.data, `invoice-demo-${moment().format('MM-DD-YYYY-hh:mm:ss')}.pdf`)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const openNewTabContact = () => {
+    window.open(`${process.env.REACT_APP_BASE_API_URL}/static/contract/contract.pdf`, '_blank').focus()
+  }
+
   return (
     <Grid classes={{ root: classes.root }}>
       {
@@ -181,8 +200,8 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       <p className={classes.textBlue1}>Additional materials</p>
       <p className={classes.textSub1}>These materials are here for your reference only, please note that these are not your final invoice or contract.</p>
       <Grid className={classes.box}>
-        <div><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Invoice</p></div>
-        <div><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Contract</p></div>
+        <div onClick={getInvoice}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Invoice</p></div>
+        <div onClick={openNewTabContact}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Contract</p></div>
       </Grid>
       <Grid className={classes.btn}>
         <Buttons disabled={!isValidConfirm()} onClick={onConfirmProject} children={"Confirm project"} btnType="Blue" padding="16px" />

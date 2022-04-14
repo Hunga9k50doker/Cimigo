@@ -22,4 +22,27 @@ export class PaymentService {
       })
   }
 
+  static async getInvoice(projectId: number) {
+    return await api.get(API.PAYMENT.INVOICE, {
+      params: {
+        projectId
+      },
+      responseType: 'blob'
+    })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async getInvoiceDemo(projectId: number) {
+    return await api.get(API.PAYMENT.INVOICE_DEMO, {
+      params: {
+        projectId
+      },
+      responseType: 'blob'
+    })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
 }

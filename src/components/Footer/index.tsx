@@ -1,9 +1,4 @@
-import {
-  Box,
-  Grid,
-  Typography
-} from "@mui/material";
-import React, { memo } from "react";
+import { memo } from "react";
 import classes from './styles.module.scss';
 import facebookIcon from 'assets/img/fb-icon.svg';
 import lnIcon from 'assets/img/ln-icon.svg';
@@ -12,6 +7,8 @@ import youtubeIcon from 'assets/img/youtube-icon.svg';
 import Container from "components/Container";
 import { useState } from "react";
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
+import { routesOutside } from "routers/routes";
 
 
 interface FooterProps {
@@ -19,10 +16,11 @@ interface FooterProps {
 }
 
 const Footer = memo((props: FooterProps) => {
+  const { t, i18n } = useTranslation()
 
   const [aboutWidgetMobile, setAboutWidgetMobile] = useState<boolean>(false)
   const [contactWidgetMobile, setContactWidgetMobile] = useState<boolean>(false)
-  
+
   const cimigoUrl = process.env.REACT_APP_CIMIGO_URL;
   return (
     <>
@@ -60,17 +58,17 @@ const Footer = memo((props: FooterProps) => {
                   </p>
                 </div>
                 <div className={classes.body}>
-                  <a href={`${cimigoUrl}/vi/viec-lam`} className={classes.textLink}>
-                    Working at Cimigo
+                  <a href={routesOutside(i18n.language).homePage} className={classes.textLink}>
+                    Home Page
                   </a>
-                  <a href={`${cimigoUrl}/vi/moi-nguoi`} className={classes.textLink}>
-                    People
+                  <a href={routesOutside(i18n.language).opportunitiesAtCimigo} className={classes.textLink}>
+                    Opportunities at Cimigo
                   </a>
-                  <a href={`${cimigoUrl}/vi/nghien-cuu-tinh-huong`} className={classes.textLink}>
-                    Case studies
+                  <a href={routesOutside(i18n.language).trends} className={classes.textLink}>
+                    Trends
                   </a>
-                  <a href={`${cimigoUrl}/vi/bao-cao`} className={classes.textLink}>
-                    Market research reports
+                  <a href={routesOutside(i18n.language).reports} className={classes.textLink}>
+                    Reports
                   </a>
                 </div>
               </div>

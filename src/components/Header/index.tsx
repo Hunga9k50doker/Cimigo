@@ -1,18 +1,19 @@
-import { Box, IconButton, Menu, MenuItem } from "@mui/material";
-import React, { memo, useEffect, useState, useRef } from "react";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import { memo, useEffect, useState, useRef } from "react";
 import classes from './styles.module.scss';
 import cimigoLogo from 'assets/img/cimigo_logo.svg';
 import iconMenuOpen from 'assets/img/icon/menu-open.svg';
 import clsx from "clsx";
 import UseAuth from "hooks/useAuth";
 import { useHistory } from 'react-router-dom';
-import PopoverMenu from "components/PopoverMenu";
-import Container from "components/Container";
 import Buttons from "components/Buttons";
-import { routes } from "routers/routes";
+import { routes, routesOutside } from "routers/routes";
 import images from "config/images";
 import { useDispatch } from "react-redux";
 import { push } from "connected-react-router";
+import { useTranslation } from "react-i18next";
+import { KeyboardArrowDown } from "@mui/icons-material";
+import { Lang, langSupports } from "models/general";
 
 interface HeaderProps {
   project?: boolean;
@@ -20,6 +21,8 @@ interface HeaderProps {
 }
 
 const Header = memo((props: HeaderProps) => {
+  const { t, i18n } = useTranslation()
+
   const { project, detail } = props;
   const history = useHistory();
   const dispatch = useDispatch()
@@ -28,6 +31,7 @@ const Header = memo((props: HeaderProps) => {
   const [isOpen, setOpen] = useState(false);
   const [isScrolling, setScrolling] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorElLang, setAnchorElLang] = useState<null | HTMLElement>(null);
   const openProfile = Boolean(anchorEl);
 
   const handleClick = (e) => {
@@ -51,23 +55,35 @@ const Header = memo((props: HeaderProps) => {
       window.removeEventListener('scroll', _handleScroll);
     }
   }, [])
-  const cimigoUrl = process.env.REACT_APP_CIMIGO_URL;
 
   const dataList = [
     {
-      name: "Solutions",
+      link: routesOutside(i18n.language).overview,
+      name: "Overview",
     },
     {
-      name: "Pricing",
+      link: routesOutside(i18n.language).howItWorks,
+      name: "How it works",
     },
     {
-      name: "Resources",
+      link: routesOutside(i18n.language).solution,
+      name: "Solution",
+    },
+    {
+      link: routesOutside(i18n.language).faq,
+      name: "FAQ",
     }
   ]
 
   const onGoHome = () => {
     if (isLoggedIn) dispatch(push(routes.project.management))
     else dispatch(push(routes.login))
+  }
+
+  const changeLanguage = (lang: string) => {
+    if (lang === i18n.language) return
+    i18n.changeLanguage(lang)
+    setAnchorElLang(null)
   }
 
   return (
@@ -88,7 +104,7 @@ const Header = memo((props: HeaderProps) => {
           >
             {dataList.map(item => (
               <MenuItem key={item.name}>
-                <a href={cimigoUrl}>
+                <a href={item.link}>
                   {item.name}
                 </a>
               </MenuItem>
@@ -104,7 +120,7 @@ const Header = memo((props: HeaderProps) => {
           <div className={classes.linkProject}>
             {project &&
               <div className={classes.linkTextHome} onClick={() => history.push(routes.project.management)} >
-                <img src={images.icHomeMobile} alt=''/>
+                <img src={images.icHomeMobile} alt='' />
                 <span>Projects</span>
               </div>
             }
@@ -122,13 +138,33 @@ const Header = memo((props: HeaderProps) => {
               <div className={classes.listItem}>
                 {dataList.map(item => (
                   <li key={item.name} className={classes.item}>
-                    <a className={classes.routerItem}>
+                    <a href={item.link} className={classes.routerItem}>
                       {item.name}
                     </a>
                   </li>
                 ))}
               </div>
             }
+            <li className={classes.item}>
+              <Buttons
+                className={classes.btnChangeLang}
+                children={langSupports?.find(it => it.key === i18n.language).name}
+                padding="7px 10px"
+                onClick={(e) => setAnchorElLang(e.currentTarget)} endIcon={<KeyboardArrowDown />}
+              />
+              <Menu
+                anchorEl={anchorElLang}
+                open={Boolean(anchorElLang)}
+                onClose={() => setAnchorElLang(null)}
+                classes={{ paper: clsx(classes.menuProfile, classes.menuLang) }}
+              >
+                {langSupports.map(it => (
+                  <MenuItem key={it.key} onClick={() => changeLanguage(it.key)} className={clsx(classes.itemAciton, {[classes.active]: it.key === i18n.language})}>
+                    <p>{it.name}</p>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </li>
             {isLoggedIn ?
               <li className={classes.item}>
                 <IconButton className={classes.itemBtn}>

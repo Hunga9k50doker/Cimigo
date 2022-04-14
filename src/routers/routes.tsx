@@ -1,3 +1,4 @@
+import { Lang } from "models/general";
 
 
 export const routes = {
@@ -43,8 +44,8 @@ export const routes = {
       edit: '/admin/user/:id/edit',
     },
     solution: {
-      root: '/admin/solution', 
-      create: '/admin/solution/create', 
+      root: '/admin/solution',
+      create: '/admin/solution/create',
       edit: '/admin/solution/:id/edit',
       sampleSize: {
         root: '/admin/solution/:solutionId/sample-size',
@@ -118,13 +119,33 @@ export const routes = {
 
 export const cimigoUrl = process.env.REACT_APP_CIMIGO_URL
 
-export const routesOutside = {
-  cimigoSolutions: `${cimigoUrl}/solutions`,
-  overview: `${cimigoUrl}/solutions/overview`,
-  howItWorks: `${cimigoUrl}/solutions/how-it-works`,
-  solution: `${cimigoUrl}/solutions/solution`,
-  pricingPlans: `${cimigoUrl}/solutions/pricing-plans`,
-  faq: `${cimigoUrl}/solutions/faq`,
+export const routesOutside = (lang: string) => {
+  switch (lang) {
+    case Lang.VI:
+      return {
+        overview: `${cimigoUrl}/vi/solutions/overview`,
+        howItWorks: `${cimigoUrl}/vi/solutions/how-it-works`,
+        solution: `${cimigoUrl}/vi/solutions/solution`,
+        pricingPlans: `${cimigoUrl}/vi/solutions/pricing-plans`,
+        faq: `${cimigoUrl}/vi/solutions/faq`,
+        homePage: `${cimigoUrl}/vi`,
+        opportunitiesAtCimigo: `${cimigoUrl}/vi/viec-lam`,
+        trends: `${cimigoUrl}/vi/xu-huong`,
+        reports: `${cimigoUrl}/vi/bao-cao`,
+      }
+    case Lang.EN:
+      return {
+        overview: `${cimigoUrl}/en/solutions/overview`,
+        howItWorks: `${cimigoUrl}/en/solutions/how-it-works`,
+        solution: `${cimigoUrl}/en/solutions/solution`,
+        pricingPlans: `${cimigoUrl}/en/solutions/pricing-plans`,
+        faq: `${cimigoUrl}/solutions/faq`,
+        homePage: `${cimigoUrl}/en`,
+        opportunitiesAtCimigo: `${cimigoUrl}/en/opportunities-at-cimigo`,
+        trends: `${cimigoUrl}/en/trends`,
+        reports: `${cimigoUrl}/en/research-report`,
+      }
+  }
 }
 
 export interface NavItem {

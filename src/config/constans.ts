@@ -61,6 +61,8 @@ export const API = {
   PAYMENT: {
     CHECKOUT: '/v1.0/payment/checkout',
     CONFIRM: '/v1.0/payment/confirm-payment',
+    INVOICE: '/v1.0/payment/invoice',
+    INVOICE_DEMO: '/v1.0/payment/invoice-demo',
   },
   ATTACHMENT: {
     DOWNLOAD: '/v1.0/attachment/:id/download',
