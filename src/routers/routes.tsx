@@ -5,6 +5,9 @@ export const routes = {
     user: {
       active: '/callback/user/active/:code',
       forgotPassword: '/callback/user/forgot-password/:code',
+    },
+    project: {
+      invoice: '/callback/project/:id/invoice',
     }
   },
   login: '/login',

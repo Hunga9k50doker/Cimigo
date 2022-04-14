@@ -3,6 +3,7 @@ import { OptionItem } from './general';
 import { Solution } from 'models/Admin/solution';
 import { TargetAnswer, TargetQuestion } from './Admin/target';
 import { Payment } from './payment';
+import { Attachment } from './attachment';
 export interface CreateProjectData {
   solutionId: number;
   name: string,
@@ -24,15 +25,15 @@ export interface Project {
   sampleSize: number;
   status: ProjectStatus;
   editable: boolean;
-  accessToDashboard: string;
-  accessToReport: string;
+  dataStudio: string;
   solution?: Solution;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
   project_folders?: ProjectFolder[];
   targets: ProjectTarget[];
-  payments: Payment[]
+  payments: Payment[];
+  reports?: Attachment[]
 }
 
 export enum ProjectStatus {

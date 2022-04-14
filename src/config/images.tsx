@@ -46,9 +46,15 @@ import icTicked from 'assets/img/icon/ic-ticked.svg';
 import icReadMoreGray from 'assets/img/icon/ic-read-more-gray.svg';
 import icTick from 'assets/img/icon/ic-tick.svg';
 import icMore from 'assets/img/icon/ic-more.svg';
+import icPowerPoint from 'assets/img/icon/ic-powerpoint.svg';
+import icExcel from 'assets/img/icon/ic-excel.svg';
+import icWord from 'assets/img/icon/ic-word.svg';
 
 const images = {
   // ===================== Images =========================
+  icPowerPoint,
+  icExcel,
+  icWord,
   icOrder,
   icMore,
   icTicked,

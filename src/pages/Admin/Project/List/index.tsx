@@ -12,7 +12,7 @@ import useDebounce from "hooks/useDebounce";
 import _ from "lodash";
 import { AdminGetProjects } from "models/Admin/project";
 import { Solution } from "models/Admin/solution"
-import { DataPagination, OptionItemT, SortItem, TableHeaderLabel } from "models/general";
+import { DataPagination, OptionItemT, paymentMethods, SortItem, TableHeaderLabel } from "models/general";
 import { Project, projectStatus } from "models/project";
 import moment from "moment";
 import { memo, useEffect, useState } from "react"
@@ -28,6 +28,8 @@ const tableHeaders: TableHeaderLabel[] = [
   { name: 'name', label: 'Name', sortable: true },
   { name: 'status', label: 'Status', sortable: false },
   { name: 'solution', label: 'Solution', sortable: false },
+  { name: 'orderId', label: 'Order Id', sortable: false },
+  { name: 'paymentMethodId', label: 'Payment method', sortable: false },
   { name: 'createdAt', label: 'Created', sortable: true },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
@@ -35,7 +37,7 @@ const tableHeaders: TableHeaderLabel[] = [
 const filterOptions: FilterOption[] = [
   { name: 'Solution', key: 'solutionIds', type: EFilterType.SELECT, placeholder: 'Select solutions' },
   { name: 'Status', key: 'statusIds', type: EFilterType.SELECT, placeholder: 'Select status' },
-  { name: 'Order ID', key: 'orderIds', type: EFilterType.SELECT, placeholder: 'Select Order ID', creatable: true },
+  { name: 'Order ID', key: 'orderIds', type: EFilterType.SELECT, placeholder: 'Select Order Id', creatable: true },
 ]
 
 interface Props {
@@ -267,6 +269,8 @@ const List = memo(({ }: Props) => {
                             <LabelStatus typeStatus={item.status} />
                           </TableCell>
                           <TableCell>{item.solution?.title}</TableCell>
+                          <TableCell>{!!item.payments?.length && item.payments[0].orderId}</TableCell>
+                          <TableCell>{!!item.payments?.length && paymentMethods.find(it => it.id === item.payments[0].paymentMethodId)?.name}</TableCell>
                           <TableCell component="th">
                             {moment(item.createdAt).format('DD-MM-yyyy HH:ss')}
                           </TableCell>
@@ -288,7 +292,7 @@ const List = memo(({ }: Props) => {
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={6}>
+                      <TableCell align="center" colSpan={8}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>

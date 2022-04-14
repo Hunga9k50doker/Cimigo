@@ -21,6 +21,7 @@
     "axios": "^0.25.0",
     "clsx": "^1.1.1",
     "connected-react-router": "^6.9.2",
+    "file-saver": "^2.0.5",
     "framer-motion": "^6.2.4",
     "history": "^4.10.1",
     "i18next": "^21.6.14",
@@ -28,6 +29,7 @@
     "i18next-http-backend": "^1.4.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.34",
     "numeral": "^2.0.6",
     "query-string": "^7.1.1",
     "react": "^17.0.2",
@@ -76,9 +78,11 @@
     ]
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.5",
     "@types/numeral": "^2.0.2",
     "@types/react-router-dom": "^5.3.3",
     "@types/redux-logger": "^3.0.9",
-    "@types/styled-components": "^5.1.23"
+    "@types/styled-components": "^5.1.23",
+    "@types/uuid": "^8.3.4"
   }
 }

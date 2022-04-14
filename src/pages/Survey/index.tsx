@@ -13,6 +13,7 @@ import SetupSurvey from "./SetupSurvey";
 import Target from "./Target";
 import Quotas from "./Quotas";
 import PaymentBilling from "./PaymentBilling";
+import Report from "./Report";
 import images from "config/images";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
@@ -109,7 +110,7 @@ const Survey = () => {
               <Route exact path={routes.project.detail.target} render={(routeProps) => <Target {...routeProps} projectId={Number(id)} />} />
               <Route exact path={routes.project.detail.quotas} render={(routeProps) => <Quotas {...routeProps} projectId={Number(id)} />} />
               <Route path={routes.project.detail.paymentBilling.root} render={(routeProps) => <PaymentBilling {...routeProps} projectId={Number(id)} />} />
-              <Route exact path={routes.project.detail.report} render={(routeProps) => { return (<>Report</>) }} />
+              <Route exact path={routes.project.detail.report} render={(routeProps) => <Report {...routeProps} projectId={Number(id)} />} />
 
               <Redirect from={routes.project.detail.root} to={routes.project.detail.setupSurvey} />
             </Switch>

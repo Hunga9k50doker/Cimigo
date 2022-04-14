@@ -118,3 +118,10 @@ export enum EPaymentMethod {
   BANK_TRANSFER,
   MAKE_AN_ORDER
 }
+
+export const paymentMethods: OptionItem[] = [
+  { id: EPaymentMethod.CREDIT_OR_DEBIT, name: "Credit / Debit Card" },
+  { id: EPaymentMethod.INTERNET_BANKING, name: "ATM card / Bank account" },
+  { id: EPaymentMethod.BANK_TRANSFER, name: "Bank transfer" },
+  { id: EPaymentMethod.MAKE_AN_ORDER, name: "Make an order" }
+]

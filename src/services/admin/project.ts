@@ -23,6 +23,20 @@ export class AdminProjectService {
       })
   }
 
+  static async update(id: number, data: FormData) {
+    return await api.put(`${API.ADMIN.PROJECT.DEFAULT}/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
   static async delete(id: number): Promise<any> {
     return await api.delete(`${API.ADMIN.PROJECT.DEFAULT}/${id}`)
       .then((res) => {

@@ -62,6 +62,9 @@ export const API = {
     CHECKOUT: '/v1.0/payment/checkout',
     CONFIRM: '/v1.0/payment/confirm-payment',
   },
+  ATTACHMENT: {
+    DOWNLOAD: '/v1.0/attachment/:id/download',
+  },
   ADMIN: {
     SOLUTION: {
       DEFAULT: '/v1.0/admin/solution',
