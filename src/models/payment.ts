@@ -1,3 +1,5 @@
+import { OptionItem } from "./general";
+
 export interface CheckoutParams {
   projectId: number,
   returnUrl?: string,
@@ -60,3 +62,10 @@ export enum EPaymentStatus {
   CANCEL,
   FAILED
 }
+
+export const paymentStatuses: OptionItem[] = [
+  { id: EPaymentStatus.NOT_PAID, name: 'Not paid' },
+  { id: EPaymentStatus.PAID, name: 'Paid' },
+  { id: EPaymentStatus.CANCEL, name: 'Cancel' },
+  { id: EPaymentStatus.FAILED, name: 'Failed' },
+]

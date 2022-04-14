@@ -5,6 +5,7 @@ import { ProjectStatus } from "models/project";
 
 interface LabelStatusProps {
   typeStatus: ProjectStatus,
+  className?: string
 }
 
 const LabelStatus = memo((props: LabelStatusProps) => {
@@ -21,22 +22,21 @@ const LabelStatus = memo((props: LabelStatusProps) => {
       default: return typeStatus;
     }
   };
-  const { typeStatus, ...rest } = props;
+  const { typeStatus, className } = props;
 
   return (
     <div
       className={clsx(
         classes.root,
+        className,
         typeStatus === ProjectStatus.AWAIT_PAYMENT ? classes.red : "",
         typeStatus === ProjectStatus.DRAFT ? classes.gray : "",
         typeStatus === ProjectStatus.IN_PROGRESS ? classes.yellow : "",
         typeStatus === ProjectStatus.COMPLETED ? classes.green : "",
-      )
-      }
-      {...rest}
+      )}
     >
       {statusLabel()}
-    </div >
+    </div>
   );
 });
 export default LabelStatus;

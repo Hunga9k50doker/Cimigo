@@ -21,6 +21,7 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
 import { AdminProjectService } from "services/admin/project";
 import AdminSolutionService from "services/admin/solution";
+import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
@@ -30,6 +31,7 @@ const tableHeaders: TableHeaderLabel[] = [
   { name: 'solution', label: 'Solution', sortable: false },
   { name: 'orderId', label: 'Order Id', sortable: false },
   { name: 'paymentMethodId', label: 'Payment method', sortable: false },
+  { name: 'totalAmount', label: 'Total amount', sortable: false },
   { name: 'createdAt', label: 'Created', sortable: true },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
@@ -199,6 +201,10 @@ const List = memo(({ }: Props) => {
     dispatch(push(routes.admin.project.edit.replace(':id', `${item.id}`)));
   }
 
+  const onRedirectDetail = (item: Project) => {
+    dispatch(push(routes.admin.project.detail.replace(':id', `${item.id}`)));
+  }
+
   const onChangeFilter = (value: FilterValue) => {
     setFilterData(value)
     fetchData({ filter: value, page: 1 })
@@ -263,7 +269,7 @@ const List = memo(({ }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
-                            <Link onClick={() => onRedirectEdit(item)} component="button">{item.name}</Link>
+                            <Link onClick={() => onRedirectDetail(item)} component="button">{item.name}</Link>
                           </TableCell>
                           <TableCell component="th">
                             <LabelStatus typeStatus={item.status} />
@@ -271,6 +277,14 @@ const List = memo(({ }: Props) => {
                           <TableCell>{item.solution?.title}</TableCell>
                           <TableCell>{!!item.payments?.length && item.payments[0].orderId}</TableCell>
                           <TableCell>{!!item.payments?.length && paymentMethods.find(it => it.id === item.payments[0].paymentMethodId)?.name}</TableCell>
+                          <TableCell>
+                            {!!item.payments?.length && (
+                              <>
+                                <p className="cimigo-blue">{'$'}{fCurrency2(item.payments[0].totalAmountUSD || 0)}</p>
+                                <p className="cimigo-blue">(Equivalent to {fCurrency2VND(item.payments[0].totalAmount || 0)} VND)</p>
+                              </>
+                            )}
+                          </TableCell>
                           <TableCell component="th">
                             {moment(item.createdAt).format('DD-MM-yyyy HH:ss')}
                           </TableCell>
@@ -292,7 +306,7 @@ const List = memo(({ }: Props) => {
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={8}>
+                      <TableCell align="center" colSpan={9}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>

@@ -4,6 +4,10 @@ import { Solution } from 'models/Admin/solution';
 import { TargetAnswer, TargetQuestion } from './Admin/target';
 import { Payment } from './payment';
 import { Attachment } from './attachment';
+import { Pack } from './pack';
+import { AdditionalBrand } from './additional_brand';
+import { ProjectAttribute } from './project_attribute';
+import { UserAttribute } from './user_attribute';
 export interface CreateProjectData {
   solutionId: number;
   name: string,
@@ -33,7 +37,11 @@ export interface Project {
   project_folders?: ProjectFolder[];
   targets: ProjectTarget[];
   payments: Payment[];
-  reports?: Attachment[]
+  reports?: Attachment[];
+  packs?: Pack[];
+  additionalBrands?: AdditionalBrand[];
+  projectAttributes?: ProjectAttribute[];
+  userAttributes?: UserAttribute[];
 }
 
 export enum ProjectStatus {
