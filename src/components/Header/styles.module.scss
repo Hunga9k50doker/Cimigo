@@ -196,6 +196,7 @@
         background-repeat: no-repeat;
         background-position: left 11px;
       }
+      display: none;
     }
   }
 }
@@ -209,6 +210,7 @@
       &:not(.disable):hover {
         background: none;
       }
+      display: none;
     }
   }
 }
@@ -363,4 +365,84 @@
   font-size: 14px;
   line-height: 24px;
   color: rgba(28, 28, 28, 0.9);
+}
+.btnChangeLang2 {
+  display: none;
+  border: none;
+  margin-right: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  color: rgba(28, 28, 28, 0.9);
+
+}
+
+.itemsOfToggle{
+ 
+  font-size: 16px;
+ 
+  font-weight: 500
+}
+.itemsOfToggle:not(:first-child)> a {
+  color: rgba(28, 28, 28, 0.9);
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+.itemsOfToggle:first-child{
+  border: none;
+  border-left: 4px solid rgba(166, 204, 23, 1);
+  margin-left: 15px;
+  padding: 0px;
+  margin-bottom: 13px;
+  display: flex;
+  align-items: center;
+  padding: 7px 0px 7px 15px ;
+  
+}
+.itemsOfToggle:first-child >a{
+  color: rgba(28, 28, 28, 0.9);
+  text-decoration: none;
+  font-weight: 600;
+}
+.buttonOfToggle{
+   display: block;
+   margin-left: 15px;
+    margin-bottom: 30px;
+}
+
+.icLogin {
+  width: 20px;
+  height: 18px;
+  margin-right: 17px;
+}
+.flexACenter{
+  display: flex;
+  align-items: center;
+}
+.flexACenter span{
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--cimigo-blue);
+}
+.hrofToggle{
+  margin: 0px 24px 17px 24px;
+  border-bottom: 1px solid rgba(28, 28, 28, 0.2);
+}
+.itKey{
+  display: none;
+}
+
+
+@media only screen and (max-width: 767px) {
+  .itKey {
+    display: block;
+  }
+   .btnChangeLang2
+   {
+     display: flex;
+   }
+  .itName, .btnChangeLang {
+    display: none;
+  }
+ 
 }
