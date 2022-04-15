@@ -19,7 +19,7 @@ const Google = () => {
   }
 
   const onFailure = (error: any) => {
-    dispatch(setErrorMess('Social login failed'))
+    dispatch(setErrorMess({message: 'Please log in again'}))
   }
 
   return (

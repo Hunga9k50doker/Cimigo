@@ -16,6 +16,7 @@ import { OptionItem } from "models/general";
 import UserService from "services/user";
 import Popup from "components/Popup";
 import Google from "components/SocialButton/Google";
+import Images from "config/images";
 
 const schema = yup.object().shape({
   firstName: yup.string().required('First name is required.'),
@@ -148,7 +149,7 @@ const Register = () => {
             control={control}
             selectProps={{
               options: countries,
-              placeholder: "Select your country"
+              placeholder: "- Select your country -"
             }}
             errorMessage={(errors.countryId as any)?.id?.message}
           />
@@ -181,13 +182,10 @@ const Register = () => {
                 name="isNotify"
                 control={control}
                 render={({ field }) => <Checkbox
-                  sx={{
-                    color: "rgba(28, 28, 28, 0.2)",
-                    '&.Mui-checked': {
-                      color: "rgba(28, 28, 28, 0.2)",
-                    },
-                  }}
+                  color="secondary"
                   checked={field.value}
+                  icon={<img src={Images.icCheck} alt="" />}
+                  checkedIcon={<img src={Images.icCheckActive}  alt="" />}
                   {...field}
                 />}
               />

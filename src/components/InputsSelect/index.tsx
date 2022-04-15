@@ -16,10 +16,10 @@ const customStyles = (error?: boolean) => ({
   }),
   option: (provided, state) => ({
     ...provided,
-    fontStyle: 400,
+    fontStyle: 'normal',
     fontWeight: 500,
     fontSize: 14,
-    lineHeight: '140%',
+    lineHeight: '20px',
     letterSpacing: '0.015em',
     color: '#1C1C1C',
     padding: '14px 15px',
@@ -27,8 +27,8 @@ const customStyles = (error?: boolean) => ({
   placeholder: (provided) => ({
     ...provided,
     fontSize: 16,
-    fontWeight: 400,
-    color: error ? '#1C1C1C' : "rgba(28, 28, 28, 0.2)",
+    fontWeight: 500,
+    color: error ? '#1C1C1C' : "rgba(28, 28, 28, 0.65)",
     whiteSpace: "nowrap",
   }),
   valueContainer: (provided) => ({

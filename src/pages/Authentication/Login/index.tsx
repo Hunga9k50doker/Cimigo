@@ -97,24 +97,8 @@ const Login = () => {
             errorMessage={errors.password?.message}
           />
           <Grid className={classes.checkbox}>
-            <FormControlLabel
-              classes={{
-                label: classes.labelCheckbox,
-              }}
-              control={
-                <Checkbox
-                  defaultChecked
-                  sx={{
-                    color: "rgba(28, 28, 28, 0.2)",
-                    '&.Mui-checked': {
-                      color: "rgba(28, 28, 28, 0.2)",
-                    },
-                  }}
-                />
-              }
-              label="Keep me logged in"
-            />
-            <a href={routes.forgotPassword} className={classes.linkText}>Forgot your password?</a>
+            <div></div>
+            <Link to={routes.forgotPassword} className={classes.linkText}>Forgot your password?</Link>
           </Grid>
           {
             errorSubmit && (
