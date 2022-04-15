@@ -27,7 +27,7 @@ const schema = yup.object().shape({
     name: yup.string().required()
   }).required(),
   isNotify: yup.bool(),
-  phone: yup.string().matches(/((09|03|07|08|05)+([0-9]{8})\b)/, { message: "Please enter a valid phone number.", excludeEmptyString: true }),
+  phone: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, { message: "Please enter a valid phone number.", excludeEmptyString: true }),
   company: yup.string(),
 });
 

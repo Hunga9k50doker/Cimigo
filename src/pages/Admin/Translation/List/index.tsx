@@ -109,7 +109,6 @@ const List = memo(({ }: Props) => {
 
   const onDelete = () => {
     if (!itemDelete) return
-    onCloseConfirm()
     dispatch(setLoading(true))
     TranslationService.delete(itemDelete.id)
       .then(() => {
@@ -117,6 +116,7 @@ const List = memo(({ }: Props) => {
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+    onCloseConfirm()
   }
 
   const handleEdit = () => {

@@ -117,5 +117,8 @@ export const API = {
     PROJECT: {
       DEFAULT: '/v1.0/admin/project',
     },
+    USER: {
+      DEFAULT: '/v1.0/admin/user',
+    }
   }
 }

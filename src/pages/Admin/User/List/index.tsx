@@ -1,30 +1,39 @@
-import { Add, DeleteOutlineOutlined, EditOutlined, ExpandMoreOutlined } from "@mui/icons-material";
-import { Box, Button, Grid, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
+import { Add, DeleteOutlineOutlined, EditOutlined, ExpandMoreOutlined, FilterAlt } from "@mui/icons-material";
+import { Box, Button, Grid, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography, Link, Avatar } from "@mui/material";
 import clsx from "clsx";
+import FilderModal, { EFilterType, FilterOption, FilterValue } from "components/FilterModal";
 import InputSearch from "components/InputSearch";
 import WarningModal from "components/Modal/WarningModal";
 import SearchNotFound from "components/SearchNotFound";
 import TableHeader from "components/Table/TableHead";
 import { push } from "connected-react-router";
 import useDebounce from "hooks/useDebounce";
-import { Attribute, GetAttributesParams } from "models/Admin/attribute";
-import { DataPagination, LangSupport, langSupports, TableHeaderLabel } from "models/general";
+import _ from "lodash";
+import { GetUsersParams } from "models/Admin/user";
+import { DataPagination, OptionItem, SortItem, TableHeaderLabel } from "models/general";
+import { User } from "models/user";
 import { memo, useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
-import { AdminAttributeService } from "services/admin/attribute";
+import AdminUserService from "services/admin/user";
+import CountryService from "services/country";
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
-  { name: 'id', label: 'Id', sortable: false },
-  { name: 'start', label: 'Start', sortable: false },
-  { name: 'end', label: 'End', sortable: false },
-  { name: 'type', label: 'Type', sortable: false },
-  { name: 'solution', label: 'Solution', sortable: false },
-  { name: 'languages', label: 'Languages', sortable: false },
+  { name: 'id', label: 'Id', sortable: true },
+  { name: 'avatar', label: 'Avatar', sortable: true },
+  { name: 'firstName', label: 'First Name', sortable: true },
+  { name: 'lastName', label: 'Last Name', sortable: true },
+  { name: 'email', label: 'Email', sortable: true },
+  { name: 'country', label: 'Country', sortable: false },
+  { name: 'company', label: 'Company', sortable: true },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
+
+const filterOptions: FilterOption[] = [
+  { name: 'Country', key: 'countryIds', type: EFilterType.SELECT, placeholder: 'Select country' },
+]
 
 interface Props {
 }
@@ -32,16 +41,20 @@ interface Props {
 const List = memo(({ }: Props) => {
 
   const dispatch = useDispatch()
-  const [keyword, setKeyword] = useState<string>('');
-  const [data, setData] = useState<DataPagination<Attribute>>();
-  const [itemAction, setItemAction] = useState<Attribute>();
-  const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
-  const [languageAnchor, setLanguageAnchor] = useState<null | HTMLElement>(null);
-  const [itemDelete, setItemDelete] = useState<Attribute>(null);
 
-  const handleAdd = () => {
-    dispatch(push(routes.admin.attribute.create));
-  }
+  const [sort, setSort] = useState<SortItem>();
+
+  const [keyword, setKeyword] = useState<string>('');
+  const [filterData, setFilterData] = useState<FilterValue>({
+    countryIds: [],
+  });
+  const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false);
+  const [countries, setCountries] = useState<OptionItem[]>([]);
+
+  const [data, setData] = useState<DataPagination<User>>();
+  const [itemAction, setItemAction] = useState<User>();
+  const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
+  const [itemDelete, setItemDelete] = useState<User>(null);
 
   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => {
     fetchData({
@@ -61,19 +74,38 @@ const List = memo(({ }: Props) => {
     _onSearch(e.target.value)
   }
 
-  const fetchData = (value?: { take?: number, page?: number, keyword?: string }) => {
-    dispatch(setLoading(true))
-    const params: GetAttributesParams = {
+  const fetchData = (value?: {
+    take?: number,
+    page?: number,
+    keyword?: string,
+    sort?: SortItem,
+    filter?: FilterValue
+  }) => {
+    const params: GetUsersParams = {
       take: value?.take || data?.meta?.take || 10,
       page: value?.page || data?.meta?.page || 1,
-      keyword: keyword
+      sortedField: sort?.sortedField,
+      isDescending: sort?.isDescending,
+      keyword: keyword,
+      countryIds: filterData?.countryIds?.map(it => it.id),
+    }
+    if (value?.filter !== undefined) {
+      params.countryIds = value.filter?.countryIds?.map(it => it.id)
+    }
+    if (value?.sort !== undefined) {
+      params.sortedField = value?.sort?.sortedField
+      params.isDescending = value?.sort?.isDescending
     }
     if (value?.keyword !== undefined) {
       params.keyword = value.keyword || undefined
     }
-    AdminAttributeService.getAttributes(params)
+    dispatch(setLoading(true))
+    AdminUserService.getUsers(params)
       .then((res) => {
-        setData({ data: res.data, meta: res.meta })
+        setData({
+          data: res.data,
+          meta: res.meta
+        })
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -81,14 +113,38 @@ const List = memo(({ }: Props) => {
 
   const _onSearch = useDebounce((keyword: string) => fetchData({ keyword, page: 1 }), 500)
 
+  const onChangeSort = (name: string) => {
+    let sortItem: SortItem
+    if (sort?.sortedField === name) {
+      sortItem = {
+        ...sort,
+        isDescending: !sort.isDescending
+      }
+    } else {
+      sortItem = {
+        sortedField: name,
+        isDescending: true
+      }
+    }
+    setSort(sortItem)
+    fetchData({ sort: sortItem })
+  }
+
   useEffect(() => {
     fetchData()
+    const fetchOption = () => {
+      CountryService.getCountries({ take: 999 })
+        .then((res) => {
+          setCountries(res.data)
+        })
+    }
+    fetchOption()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleAction = (
     event: React.MouseEvent<HTMLButtonElement>,
-    item: Attribute
+    item: User
   ) => {
     setItemAction(item)
     setActionAnchor(event.currentTarget);
@@ -97,15 +153,6 @@ const List = memo(({ }: Props) => {
   const onCloseActionMenu = () => {
     setItemAction(null)
     setActionAnchor(null);
-    setLanguageAnchor(null);
-  };
-
-  const onCloseLangAction = () => {
-    setLanguageAnchor(null);
-  }
-
-  const onShowLangAction = (event: React.MouseEvent<HTMLElement>) => {
-    setLanguageAnchor(event.currentTarget);
   };
 
   const onShowConfirm = () => {
@@ -122,7 +169,7 @@ const List = memo(({ }: Props) => {
   const onDelete = () => {
     if (!itemDelete) return
     dispatch(setLoading(true))
-    AdminAttributeService.delete(itemDelete.id)
+    AdminUserService.delete(itemDelete.id)
       .then(() => {
         fetchData()
       })
@@ -131,13 +178,31 @@ const List = memo(({ }: Props) => {
     onCloseConfirm()
   }
 
-  const handleLanguageRedirect = (lang?: LangSupport) => {
+  const onEdit = () => {
     if (!itemAction) return
-    onCloseActionMenu();
-    dispatch(push({
-      pathname: routes.admin.attribute.edit.replace(':id', `${itemAction.id}`),
-      search: lang && `?lang=${lang.key}`
-    }));
+    onRedirectEdit(itemAction)
+    onCloseActionMenu()
+  }
+
+  const onRedirectEdit = (item: User) => {
+    dispatch(push(routes.admin.user.edit.replace(':id', `${item.id}`)));
+  }
+
+  const onChangeFilter = (value: FilterValue) => {
+    setFilterData(value)
+    fetchData({ filter: value, page: 1 })
+  }
+
+  const getFilterOption = (name: string) => {
+    switch (name) {
+      case 'countryIds':
+        return countries || []
+    }
+    return []
+  }
+
+  const handleAdd = () => {
+    dispatch(push(routes.admin.user.create));
   }
 
   return (
@@ -145,7 +210,7 @@ const List = memo(({ }: Props) => {
       <Grid container alignItems="center" justifyContent="space-between">
         <Grid item xs={6}>
           <Typography component="h2" variant="h6" align="left">
-            Attribute
+            Users
           </Typography>
         </Grid>
         <Grid item xs={6}>
@@ -159,15 +224,27 @@ const List = memo(({ }: Props) => {
       <Grid container justifyContent="center" alignItems="center">
         <Grid item xs={12}>
           <TableContainer component={Paper} sx={{ marginTop: '2rem' }}>
-            <Box display="flex" alignItems="center" m={3}>
+            <Box display="flex" alignItems="center" justifyContent="space-between" m={3}>
               <InputSearch
                 placeholder="Search ..."
                 value={keyword || ''}
                 onChange={onSearch}
               />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setIsOpenFilter(true)}
+                startIcon={<FilterAlt />}
+              >
+                Filter
+              </Button>
             </Box>
             <Table>
-              <TableHeader headers={tableHeaders} />
+              <TableHeader
+                headers={tableHeaders}
+                sort={sort}
+                onChangeSort={onChangeSort}
+              />
               <TableBody>
                 {
                   data?.data?.length ? (
@@ -178,23 +255,26 @@ const List = memo(({ }: Props) => {
                           tabIndex={-1}
                           key={index}
                         >
-                          <TableCell component="th">
+                          <TableCell>
                             {item.id}
                           </TableCell>
-                          <TableCell component="th">
-                            {item.end}
+                          <TableCell>
+                            {item.avatar && <Avatar alt={item.firstName} src={item.avatar} />}
                           </TableCell>
-                          <TableCell component="th">
-                            {item.start}
+                          <TableCell>
+                            <Link onClick={() => onRedirectEdit(item)} component="button">{item.firstName}</Link>
                           </TableCell>
-                          <TableCell component="th">
-                            {item?.type?.name}
+                          <TableCell>
+                            <Link onClick={() => onRedirectEdit(item)} component="button">{item.lastName}</Link>
                           </TableCell>
-                          <TableCell component="th">
-                            {item?.solution?.title}
+                          <TableCell>
+                            {item.email}
                           </TableCell>
-                          <TableCell component="th">
-                            {item?.languages?.map(it => it.language).join(', ')}
+                          <TableCell>
+                            {item.country?.name}
+                          </TableCell>
+                          <TableCell>
+                            {item.company}
                           </TableCell>
                           <TableCell component="th">
                             <IconButton
@@ -214,7 +294,7 @@ const List = memo(({ }: Props) => {
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={7}>
+                      <TableCell align="center" colSpan={8}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>
@@ -245,11 +325,11 @@ const List = memo(({ }: Props) => {
           >
             <MenuItem
               sx={{ fontSize: '0.875rem' }}
-              onClick={onShowLangAction}
+              onClick={onEdit}
             >
               <Box display="flex" alignItems={"center"}>
                 <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                <span>Edit Languages</span>
+                <span>Edit</span>
               </Box>
             </MenuItem>
             <MenuItem
@@ -262,34 +342,6 @@ const List = memo(({ }: Props) => {
               </Box>
             </MenuItem>
           </Menu>
-          <Menu
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            anchorEl={languageAnchor}
-            keepMounted
-            open={Boolean(languageAnchor)}
-            onClose={onCloseLangAction}
-          >
-            <MenuItem
-              sx={{ fontSize: '0.875rem' }}
-              onClick={() => { handleLanguageRedirect() }}
-            >
-              <span>Default</span>
-            </MenuItem>
-            {
-              langSupports.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  sx={{ fontSize: '0.875rem' }}
-                  onClick={() => { handleLanguageRedirect(item) }}
-                >
-                  <span>{item.name}</span>
-                </MenuItem>
-              ))
-            }
-          </Menu>
           <WarningModal
             title="Confirm"
             isOpen={!!itemDelete}
@@ -298,6 +350,14 @@ const List = memo(({ }: Props) => {
           >
             Are you sure?
           </WarningModal>
+          <FilderModal
+            isOpen={isOpenFilter}
+            filterOptions={filterOptions}
+            filterValue={filterData}
+            onChange={onChangeFilter}
+            onClose={() => setIsOpenFilter(false)}
+            getFilterOption={getFilterOption}
+          />
         </Grid>
       </Grid>
     </div>

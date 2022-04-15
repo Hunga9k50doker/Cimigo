@@ -119,7 +119,6 @@ const QuestionList = memo(({ }: Props) => {
 
   const onDelete = () => {
     if (!itemDelete) return
-    onCloseConfirm()
     dispatch(setLoading(true))
     TargetQuestionService.delete(itemDelete.id)
       .then(() => {
@@ -127,6 +126,7 @@ const QuestionList = memo(({ }: Props) => {
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+    onCloseConfirm()
   }
 
   const handleLanguageRedirect = (lang?: LangSupport) => {

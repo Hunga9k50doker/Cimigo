@@ -102,7 +102,6 @@ const SampleSizeList = memo(({ }: Props) => {
 
   const onDelete = () => {
     if (!itemDelete) return
-    onCloseConfirm()
     dispatch(setLoading(true))
     AdminSampleSizeService.delete(itemDelete.id)
       .then(() => {
@@ -110,6 +109,7 @@ const SampleSizeList = memo(({ }: Props) => {
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+    onCloseConfirm()
   }
 
   const onRedirectEdit = () => {

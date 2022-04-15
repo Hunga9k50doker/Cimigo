@@ -38,11 +38,6 @@ export const routes = {
   },
   admin: {
     root: '/admin',
-    user: {
-      root: '/admin/user',
-      create: '/admin/user/create',
-      edit: '/admin/user/:id/edit',
-    },
     solution: {
       root: '/admin/solution',
       create: '/admin/solution/create',
@@ -113,6 +108,11 @@ export const routes = {
       root: '/admin/project',
       detail: '/admin/project/:id/detail',
       edit: '/admin/project/:id/edit',
+    },
+    user: {
+      root: '/admin/user',
+      create: '/admin/user/:id/create',
+      edit: '/admin/user/:id/edit',
     }
   }
 }

@@ -2,7 +2,7 @@ import {
   NavItem, 
   routes 
 } from "routers/routes";
-import { Category, FormatListBulleted, GTranslate, Lightbulb, LiveHelp, Mail, Settings, TableView, Work } from '@mui/icons-material';
+import { Category, FormatListBulleted, GTranslate, Lightbulb, LiveHelp, Mail, Person, Settings, TableView, Work } from '@mui/icons-material';
 import SolutionCategory from "./SolutionCategory";
 import Solution from "./Solution";
 import SolutionCategoryHome from "./SolutionCategoryHome";
@@ -13,9 +13,16 @@ import QuotaTable from "./QuotaTable";
 import EmailTemplate from "./EmailTemplate";
 import ConfigPage from "./ConfigPage";
 import Project from "./Project";
+import User from "./User";
 
 export const adminRouter: NavItem[] = [
-  
+  {
+    path: routes.admin.user.root,
+    name: 'User',
+    icon: Person,
+    component: User,
+    layout: "/admin"
+  },
   {
     path: routes.admin.project.root,
     name: 'Project',
@@ -86,11 +93,4 @@ export const adminRouter: NavItem[] = [
     component: ConfigPage,
     layout: "/admin"
   }
-  // {
-  //   path: routes.admin.user.root,
-  //   name: 'User',
-  //   icon: Person,
-  //   component: User,
-  //   layout: "/admin"
-  // },
 ]
