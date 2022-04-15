@@ -70,7 +70,9 @@ const Order = memo(({ }: Props) => {
               </Grid>
             </Grid>
             <p className={classes.textBlack}>
-              If you are in an urgent situation, please send an email to <span>ask@cimigo.com</span> or contact our phone number <span>(+84) 28 3822 7727</span>.
+              If you are in an urgent situation, please send an email to 
+              <a href="mailto:ask@cimigo.com" className={classes.aLink}> ask@cimigo.com</a> or contact our phone number 
+              <a href="tel:(+84)2838227727"className={classes.aLink}> (+84) 28 3822 7727</a>.
             </p>
           </>
         )
@@ -134,7 +136,9 @@ const Order = memo(({ }: Props) => {
             </Grid>
             <p className={classes.subTitle} style={{ textAlign: "start", marginBottom: 16 }}>Please note that it takes approximately 1 to 3 days to process your bank transfer, although it normally takes shorter.  Once payment has been settled, we will send an email to notify you.</p>
             <p className={classes.textBlack} style={{ textAlign: "start" }}>
-              If you need any support, please send an email to <span>ask@cimigo.com</span> or contact our phone number <span>(+84) 28 3822 7727</span>.
+              If you need any support, please send an email to 
+              <a href="mailto:ask@cimigo.com" className={classes.aLink}> ask@cimigo.com</a> or contact our phone number 
+              <a href="tel:(+84)2838227727"className={classes.aLink}> (+84) 28 3822 7727</a>.
             </p>
           </>
         )

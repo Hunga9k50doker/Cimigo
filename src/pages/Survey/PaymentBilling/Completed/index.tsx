@@ -51,7 +51,9 @@ const Completed = memo(({ }: Props) => {
         <div onClick={getInvoice}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Invoice</p></div>
         <div onClick={openNewTabContact}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Contract</p></div>
       </Grid>
-      <p className={classes.subTitle} style={{ marginBottom: 24 }}>If you want to receive red invoice please send an email to <span style={{ color: "#1F61A9" }}>ask@cimigo.com</span> or contact our phone number  <span style={{ color: "#1F61A9" }}>(+84) 28 3822 7727.</span></p>
+      <p className={classes.subTitle} style={{ marginBottom: 24 }}>If you want to receive red invoice please send an email to 
+      <a href="mailto:ask@cimigo.com" className={classes.aLink}> ask@cimigo.com</a> or contact our phone number  
+      <a href="tel:(+84)2838227727"className={classes.aLink}> (+84) 28 3822 7727</a>.</p>
     </Grid>
   )
 })
