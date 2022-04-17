@@ -27,7 +27,7 @@ const Header = memo((props: HeaderProps) => {
   const { project, detail } = props;
   const history = useHistory();
   const dispatch = useDispatch()
-  const { isLoggedIn, logout } = UseAuth();
+  const { isLoggedIn, logout,user } = UseAuth();
   const anchorRef = useRef(null);
   const [isOpen, setOpen] = useState(false);
   const [isScrolling, setScrolling] = useState(false);
@@ -56,6 +56,7 @@ const Header = memo((props: HeaderProps) => {
       window.removeEventListener('scroll', _handleScroll);
     }
   }, [])
+
 
   const dataList = [
     {
@@ -87,6 +88,7 @@ const Header = memo((props: HeaderProps) => {
     i18n.changeLanguage(lang)
     setAnchorElLang(null)
   }
+
 
   return (
     <header className={classes.root}>
@@ -194,7 +196,7 @@ const Header = memo((props: HeaderProps) => {
                   <img src={images.icHelp} alt="" />
                 </IconButton>
                 <IconButton onClick={handleClick} className={classes.itemBtn}>
-                  <img src={images.icProfile} alt="" />
+                  <img src={user.avatar.length>0?user.avatar:images.icProfile} alt="" className={classes.avatar}/>
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}
@@ -202,10 +204,10 @@ const Header = memo((props: HeaderProps) => {
                   onClose={handleClose}
                   classes={{ paper: classes.menuProfile }}
                 >
-                  <MenuItem className={classes.itemAciton}>
+                  {/* <MenuItem className={classes.itemAciton}>
                     <img src={images.icProfile} alt="" />
                     <p>My account</p>
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem className={classes.itemAciton} onClick={logout}>
                     <img src={images.icLogout} alt="" />
                     <p>Log out</p>
