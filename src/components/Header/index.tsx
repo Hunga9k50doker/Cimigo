@@ -114,18 +114,18 @@ const Header = memo((props: HeaderProps) => {
               </MenuItem>
             ))}
             <Grid className={classes.hrofToggle} />
-            <a className={classes.buttonOfToggle} onClick={() => history.push(routes.login)}>
+            <button className={classes.buttonOfToggle} onClick={() => history.push(routes.login)}>
               <div className={classes.flexACenter}>
                 <img src={icArrowLogin} alt="" className={classes.icLogin} />
                 <span>Login</span>
               </div>
-            </a>
-            <a className={classes.buttonOfToggle} onClick={() => history.push(routes.login)}>
-              <div className={classes.flexACenter}>
+            </button>
+            <button className={classes.buttonOfToggle}>
+              <div className={classes.flexACenter} onClick={() => history.push(routes.register)}>
                 <img src={icArrowRegister} alt="" className={classes.icLogin} />
                 <span>Register</span>
               </div>
-            </a>
+            </button>
           </Menu>
         </li>
         <a onClick={onGoHome}>
