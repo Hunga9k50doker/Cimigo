@@ -1,5 +1,5 @@
 import { memo, useEffect } from 'react';
-import { Dialog, Grid, IconButton } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
@@ -65,45 +65,45 @@ const PopupAddOrEditBrand = memo((props: Props) => {
 
   return (
     <Dialog
+      scroll="paper"
       open={isAdd || !!itemEdit}
+      onClose={onCancel}
       classes={{ paper: classes.paper }}
     >
-      <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
-        <Grid className={classes.root}>
-          <Grid className={classes.header}>
-            <p className={classes.title}>{itemEdit ? 'Edit brand' : 'Add brand'}</p>
-            <IconButton onClick={onCancel}>
-              <img src={Images.icClose} alt='icon close' />
-            </IconButton>
-          </Grid>
-          <Grid className={classes.body}>
-            <Inputs
-              title="Brand"
-              name="brand"
-              placeholder="Enter product brand"
-              inputRef={register('brand')}
-              errorMessage={errors.brand?.message}
-            />
-            <Inputs
-              title="Variant"
-              name="variant"
-              placeholder="Enter product variant"
-              inputRef={register('variant')}
-              errorMessage={errors.variant?.message}
-            />
-            <Inputs
-              title="Manufacturer"
-              name="manufacturer"
-              placeholder="Enter product manufacturer"
-              inputRef={register('manufacturer')}
-              errorMessage={errors.manufacturer?.message}
-            />
-          </Grid>
-          <Grid className={classes.btn}>
-            <Buttons type={"submit"} children={itemEdit ? 'Edit brand' : 'Add brand'} btnType='Blue' padding='10px 16px'/>
-          </Grid>
-        </Grid>
-      </form>
+      <DialogTitle className={classes.header}>
+        <p className={classes.title}>{itemEdit ? 'Edit brand' : 'Add brand'}</p>
+        <IconButton onClick={onCancel}>
+          <img src={Images.icClose} alt='icon close' />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent className={classes.body} dividers>
+        <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
+          <Inputs
+            title="Brand"
+            name="brand"
+            placeholder="Enter product brand"
+            inputRef={register('brand')}
+            errorMessage={errors.brand?.message}
+          />
+          <Inputs
+            title="Variant"
+            name="variant"
+            placeholder="Enter product variant"
+            inputRef={register('variant')}
+            errorMessage={errors.variant?.message}
+          />
+          <Inputs
+            title="Manufacturer"
+            name="manufacturer"
+            placeholder="Enter product manufacturer"
+            inputRef={register('manufacturer')}
+            errorMessage={errors.manufacturer?.message}
+          />
+        </form>
+      </DialogContent>
+      <DialogActions className={classes.btn}>
+        <Buttons type={"submit"} children={itemEdit ? 'Edit brand' : 'Add brand'} btnType='Blue' padding='10px 16px' />
+      </DialogActions>
     </Dialog>
   );
 });

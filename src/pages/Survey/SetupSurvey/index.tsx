@@ -56,6 +56,7 @@ import { ProjectAttributeService } from "services/project_attribute";
 import { UserAttributeService } from "services/user_attribute";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
 import { editableProject } from "helpers/project";
+import { Check } from "@mui/icons-material";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -529,11 +530,12 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
             {editableProject(project) && (
               <Grid className={classes.btnSave}>
-                <Buttons type={"submit"} padding="8px 18px" btnType="TransparentBlue" ><img src={Images.icSave} alt="icon save" />Save</Buttons>
+                <Buttons type={"submit"} padding="3px 13px" btnType="TransparentBlue" ><img src={Images.icSave} alt="icon save" />Save</Buttons>
               </Grid>
             )}
           </form>
         </Grid>
+        <div className={classes.line}></div>
         <p className={classes.subTitle} id="upload-packs">2.Upload packs <span>(max {maxPack()})</span></p>
         <Grid className={classes.flex}>
           <p>You may test between one and four packs. These would typically include your current pack, 2 new test pack and a key competitor pack.</p>
@@ -552,9 +554,9 @@ const SetupSurvey = memo(({ id }: Props) => {
                     )}
                     <img src={item.image} alt="image pack" />
                     <div className={classes.itemInfor}>
-                      <div><p style={{ paddingRight: 82 }}>Brand: </p><span>{item.brand}</span></div>
-                      <div><p style={{ paddingRight: 72 }}>Variant: </p><span>{item.variant}</span></div>
-                      <div><p style={{ paddingRight: 18 }}>Manufacturer: </p><span>{item.manufacturer}</span></div>
+                      <div><p>Brand: </p><span>{item.brand}</span></div>
+                      <div><p>Variant: </p><span>{item.variant}</span></div>
+                      <div><p>Manufacturer: </p><span>{item.manufacturer}</span></div>
                     </div>
                   </Grid>
                   <Grid className={classes.textPacks}>
@@ -597,9 +599,10 @@ const SetupSurvey = memo(({ id }: Props) => {
             <p>Delete</p>
           </MenuItem>
         </Menu>
+        <div className={classes.line}></div>
         <p className={classes.subTitle} id="additional-brand-list">3.Additional brand list <span>(max {maxAdditionalBrand()})</span></p>
         <Grid className={classes.flex}>
-          <p>In your pack test survey, we will ask consumers some brand use questions. Besides the uploaded pack products. Please add the brand, variant name and manufacturer for top selling products in the category and market in which you are testing.
+          <p>In your pack test survey, we will ask consumers some brand use questions. Besides the uploaded pack products, please add the brand, variant name and manufacturer for top selling products in the category and market in which you are testing.
             <br />Try to include products accounting for at least two-thirds of sales or market share.</p>
           <TableContainer className={classes.table}>
             <Table>
@@ -683,13 +686,13 @@ const SetupSurvey = memo(({ id }: Props) => {
                           </TableCell>
                           <TableCell align="center">
                             <Buttons
-                              padding="7px"
                               width="100%"
+                              className={classes.btnAddBrandInCell}
                               btnType="TransparentBlue"
                               disabled={!enableAddBrand()}
                               onClick={onAddOrEditBrand}
                             >
-                              <img src={Images.icSave} alt="icon save" />Save
+                              <Check fontSize="small" sx={{marginRight: '8px'}}/>Save
                             </Buttons>
                           </TableCell>
                         </>
@@ -740,13 +743,13 @@ const SetupSurvey = memo(({ id }: Props) => {
                     </TableCell>
                     <TableCell align="center">
                       <Buttons
-                        padding="7px"
                         width="100%"
+                        className={classes.btnAddBrandInCell}
                         btnType="TransparentBlue"
                         disabled={!enableAddBrand()}
                         onClick={onAddOrEditBrand}
                       >
-                        <img src={Images.icSave} alt="icon save" />Save
+                        <Check fontSize="small" sx={{marginRight: '8px'}}/>Save
                       </Buttons>
                     </TableCell>
                   </TableRow>
@@ -827,6 +830,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             <p>Delete</p>
           </MenuItem>
         </Menu>
+        <div className={classes.line}></div>
         <p className={classes.subTitle} id="additional-attributes">4.Additional attributes <span>(max {maxAdditionalAttribute()})</span></p>
         <Grid className={classes.flex}>
           <p>We will test your packs associations with some <span onClick={() => setOpenPopupMandatory(true)}>mandatory attributes</span>. You have an option to select further attributes from a pre-defined list or add your own attributes.</p>
@@ -912,14 +916,15 @@ const SetupSurvey = memo(({ id }: Props) => {
             })}
           </Grid>
           <Grid classes={{ root: classes.select }}>
-            <FormControl classes={{ root: classes.rootSelect }}>
+            <FormControl classes={{ root: classes.rootSelect }} disabled={!enableAdditionalAttributes() || !editableProject(project)}>
               <Select
                 variant="outlined"
                 displayEmpty
-                disabled={!enableAdditionalAttributes() || !editableProject(project)}
                 defaultValue={""}
                 classes={{ select: classes.selectType, icon: classes.icSelect }}
-                IconComponent={ExpandIcon}
+                MenuProps={{
+                  className: classes.selectTypeMenu
+                }}
               >
                 <MenuItem disabled value="">Add new attributes</MenuItem>
                 <MenuItem value={20} onClick={() => setOpenPopupPreDefined(true)}>From pre-defined list</MenuItem>
@@ -998,7 +1003,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               </StepLabel>
               <StepContent classes={{ root: classes.rootConnector }}>
                 <ul>
-                  {additionalBrand?.map(it => (<li key={it.id}>{it.variant} ({it.brand})</li>))}
+                  {additionalBrand?.slice(0, 4)?.map(it => (<li key={it.id}>{it.variant} ({it.brand})</li>))}
                 </ul>
                 {additionalBrand?.length > 4 && (
                   <Grid display={"flex"} justifyContent="flex-end">

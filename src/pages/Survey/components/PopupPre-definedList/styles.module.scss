@@ -32,18 +32,20 @@
 .body {
   min-height: 300px;
   padding: 24px;
+  border: none !important;
   @media only screen and (max-width: 767px) {
-    overflow: auto;
-    max-height: 400px;
     padding: 24px 24px 0px 24px;
   }
 }
 .body > p {
   margin: 0;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.015em;
+  color: #000000;
   @media only screen and (max-width: 767px) {
-    font-weight: 400;
+    font-weight: 500;
     font-size: 14px;
     line-height: 140%;
     letter-spacing: 0.015em;
@@ -61,16 +63,28 @@
   justify-content: center;
   align-items: center;
 }
+.listFlexChecked {
+  .listTextLeft > p,
+  .listTextRight > p {
+    color: var(--cimigo-green);
+  }
+  .listNumber div {
+    border-color: var(--cimigo-green);
+    span {
+      color: var(--cimigo-green);
+    }
+  }
+}
 .listTextLeft > p {
   margin: 0;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 12px;
   color: #1c1c1c;
   text-align: end;
 }
 .listTextRight > p {
   margin: 0;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 12px;
   color: #1c1c1c;
   text-align: start;
@@ -91,7 +105,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 400;
+      font-weight: 500;
       font-size: 12px;
       color: rgba(28, 28, 28, 0.65);
     }
@@ -122,6 +136,7 @@
   }
 }
 .btn {
+  padding: 0;
   margin: 24px;
   display: flex;
   justify-content: flex-end;

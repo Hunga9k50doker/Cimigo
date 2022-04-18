@@ -21,10 +21,10 @@ const Buttons = memo((props: ButtonsProps) => {
     <Button
       className={clsx(
         classes.root,
-        className,
         btnType === "Blue" ? classes.btnBlue : "",
         btnType === "Red" ? classes.btnRed : "",
         btnType === "TransparentBlue" ? classes.btnTransparentBlue : "",
+        className
       )}
       classes={{ disabled: classes.btndisabled }}
       type="button"
