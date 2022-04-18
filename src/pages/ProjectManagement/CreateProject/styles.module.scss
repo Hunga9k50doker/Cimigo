@@ -130,9 +130,6 @@
   margin: 12px;
   min-width: 225px;
   flex-direction: column;
-  &:hover {
-    background: #ECF8BF;
-  }
   > div > img {
     margin: 0px auto;
     width: 48px;
@@ -160,6 +157,57 @@
       text-align: start;
     }
   }
+  .icReadMore {
+    display: none;
+  }
+  .icReadMoreGray {
+    display: block;
+  }
+  .ticketBox {
+    display: none;
+  }
+  &.cardSelect,
+  &:hover {
+    background: var(--cimigo-blue);
+    p {
+      color: #fafaff;
+    }
+    span {
+      color: #fafaff;
+    }
+    @media only screen and (max-width: 767px) {
+      .btnReadMoreRoot {
+        background: rgba(8, 24, 42, 0.2);
+        color: rgba(255, 255, 255, 0.8);
+        .icReadMore {
+          display: block;
+        }
+        .icReadMoreGray {
+          display: none;
+        }
+        &:hover {
+          background: rgba(8, 24, 42, 0.2);
+          color: rgba(255, 255, 255, 0.8);
+        }
+      }
+      .ticketBox {
+        position: relative;
+        bottom: -10px;
+        right: -4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img:first-child {
+          position: absolute;
+        }
+        img:last-child {
+          position: absolute;
+          right: -13px;
+          bottom: -10px;
+        }
+      }
+    }
+  }
   @media only screen and (max-width: 767px) {
     max-width: 100%;
     padding: 30px 24px;
@@ -168,21 +216,6 @@
     justify-items: unset;
     align-items: unset;
     justify-content: space-between;
-  }
-}
-.cardSelect {
-  @media only screen and (max-width: 767px) {
-    background: #1f61a9 !important;
-    p {
-      color: #fafaff;
-    }
-    span {
-      color: #fafaff;
-    }
-    button {
-      color: rgba(255, 255, 255, 0.8);
-      background: rgba(8, 24, 42, 0.2);
-    }
   }
 }
 .cardComing {
@@ -260,6 +293,9 @@
   }
 }
 .title {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   font-weight: 500;
   font-size: 40px;
   color: #1f61a9;
@@ -271,7 +307,7 @@
 }
 .textLink {
   cursor: pointer;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 16px;
   color: #1f61a9;
   display: flex;
@@ -285,7 +321,7 @@
   }
 }
 .textInfo {
-  font-weight: 400;
+  font-weight: 500;
   font-size: 16px;
   color: #1f61a9;
   margin: 20px 0px;
@@ -344,7 +380,6 @@
     margin-top: 25px;
   }
 }
-
 .btnReadMoreRoot {
   height: 32px;
   display: flex;
@@ -361,33 +396,6 @@
   white-space: nowrap;
   color: rgba(28, 28, 28, 0.2);
   background: rgba(28, 28, 28, 0.2);
-}
-.btnReadMoreActive {
-  background: rgba(8, 24, 42, 0.2);
-  color: rgba(255, 255, 255, 0.8);
-  &:hover {
-    background: rgba(8, 24, 42, 0.2);
-    color: rgba(255, 255, 255, 0.8);
-  }
-}
-.ticked {
-  position: relative;
-  bottom: -10px;
-  right: -4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  img:first-child {
-    position: absolute;
-  }
-  img:last-child {
-    position: absolute;
-    right: -13px;
-    bottom: -10px;
-  }
-}
-.disable {
-  display: none;
 }
 .btndisabled {
   cursor: not-allowed;

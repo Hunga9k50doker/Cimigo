@@ -9,7 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { routes } from "routers/routes";
 import * as yup from 'yup';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import { OptionItem } from "models/general";
 import classes from './styles.module.scss';
 import InputSelect from "components/InputsSelect";
@@ -22,8 +22,10 @@ import AdminSolutionService from "services/admin/solution";
 
 const modules = {
   toolbar: [
+    [{ 'size': ['small', false, 'large', 'huge'] }],
     ['bold', 'italic', 'underline', 'strike'],
     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    [{ 'indent': '-1'}, { 'indent': '+1' }],
     ['link', 'image'],
     ['clean']
   ],

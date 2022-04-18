@@ -257,14 +257,17 @@ const CreateProject = () => {
                         </div>
                         <Grid className={classes.btnReadMore}>
                           <Button 
-                            className={clsx({[classes.btnReadMoreActive]: selected}, classes.btnReadMoreRoot)} 
+                            className={classes.btnReadMoreRoot} 
                             classes={{ disabled: classes.btndisabled }} disabled={!selected} 
                             onClick={() => setIsReadMore(true)} 
-                            startIcon={<img src={selected ? images.icReadMore : images.icReadMoreGray} alt='' />}
+                            startIcon={<>
+                            <img className={classes.icReadMore} src={images.icReadMore} alt='' />
+                            <img className={classes.icReadMoreGray} src={images.icReadMoreGray} alt='' />
+                            </>}
                           >
                             Read more
                           </Button>
-                          <div className={clsx(selected ? classes.ticked : classes.disable)}>
+                          <div className={classes.ticketBox}>
                             <img src={images.icTicked} alt='' />
                             <img src={images.icTick} alt='' />
                           </div>
