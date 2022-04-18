@@ -2,7 +2,7 @@ import { memo } from 'react';
 import {
   FormControl
 } from '@mui/material';
-import Select, { components, DropdownIndicatorProps } from 'react-select';
+import Select, { components, DropdownIndicatorProps, GroupBase, StylesConfig } from 'react-select';
 import classes from './styles.module.scss';
 import icCaretDown from 'assets/img/icon/ic-caret-down-grey.svg'
 import { Controller } from 'react-hook-form';
@@ -10,7 +10,7 @@ import { StateManagerProps } from 'react-select/dist/declarations/src/stateManag
 import TextTitle from 'components/Inputs/components/TextTitle';
 import ErrorMessage from 'components/Inputs/components/ErrorMessage';
 
-const customStyles = (error?: boolean) => ({
+const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unknown>> => ({
   indicatorSeparator: () => ({
     display: "none",
   }),
@@ -23,6 +23,7 @@ const customStyles = (error?: boolean) => ({
     letterSpacing: '0.015em',
     color: '#1C1C1C',
     padding: '14px 15px',
+    background: state.isSelected || state.isFocused ? '#E8F1FB' : '#ffffff',
   }),
   placeholder: (provided) => ({
     ...provided,

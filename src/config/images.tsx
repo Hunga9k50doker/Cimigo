@@ -49,9 +49,11 @@ import icMore from 'assets/img/icon/ic-more.svg';
 import icPowerPoint from 'assets/img/icon/ic-powerpoint.svg';
 import icExcel from 'assets/img/icon/ic-excel.svg';
 import icWord from 'assets/img/icon/ic-word.svg';
+import icView from 'assets/img/icon/ic-view.svg';
 
 const images = {
   // ===================== Images =========================
+  icView,
   icPowerPoint,
   icExcel,
   icWord,

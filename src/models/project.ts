@@ -1,4 +1,4 @@
-import { ProjectFolder } from './folder';
+import { Folder } from './folder';
 import { OptionItem } from './general';
 import { Solution } from 'models/Admin/solution';
 import { TargetAnswer, TargetQuestion } from './Admin/target';
@@ -31,10 +31,11 @@ export interface Project {
   editable: boolean;
   dataStudio: string;
   solution?: Solution;
+  folderId: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-  project_folders?: ProjectFolder[];
+  folder?: Folder;
   targets: ProjectTarget[];
   payments: Payment[];
   reports?: Attachment[];
@@ -69,17 +70,11 @@ export interface GetMyProjects {
 }
 
 export interface MoveProject {
-  createFolderIds?: number[],
-  deleteFolderIds?: number[],
-  createFolder?: string
+  folderId: number,
 }
 
 export interface RenameProject {
-  name: string,
-  category?: string,
-  brand?: string,
-  variant?: string,
-  manufacturer?: string
+  name: string
 }
 
 export interface UpdateProjectBasicInformation {

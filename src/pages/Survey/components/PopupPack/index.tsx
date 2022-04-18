@@ -271,7 +271,7 @@ const PopupPack = memo((props: Props) => {
             </Grid>
           </Grid>
           <Grid className={classes.btn}>
-            <Buttons type="submit" children={!itemEdit ? "Add pack" : "Update pack"} btnType='Blue' padding='13px 16px' />
+            <Buttons type="submit" children={!itemEdit ? "Add pack" : "Update pack"} btnType='Blue' padding='10px 16px' />
             <Button onClick={onCancel}>Cancel</Button>
           </Grid>
         </Grid>

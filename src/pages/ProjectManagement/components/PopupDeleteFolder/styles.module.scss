@@ -1,18 +1,29 @@
 .paper {
-  padding: 24px;
+  padding: 18px 24px 48px 24px;
   width: 550px;
   max-width: 550px;
 }
 .title {
+  text-align: center;
   margin: 0;
+  margin-bottom: 18px;
+  line-height: 29px;
+  font-size: 24px;
   font-weight: 600;
-  font-size: 22px;
-  color: #08182a;
+  color: rgba(28, 28, 28, 0.9);
+}
+.subTitle {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  text-align: center;
+  letter-spacing: 0.015em;
+  color: rgba(28, 28, 28, 0.9);
 }
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 .btn {
   display: flex;
@@ -35,8 +46,8 @@
 }
 
 .body {
-  margin-top: 24px;
-  margin-bottom: 34px;
+  margin-top: 0;
+  margin-bottom: 32px;
   display: block;
   font-weight: normal;
   color: rgba(28, 28, 28, 0.65);

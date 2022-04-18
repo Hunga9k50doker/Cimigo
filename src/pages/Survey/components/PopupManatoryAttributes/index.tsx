@@ -70,7 +70,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
             ))}
           </Grid>
           <Grid className={classes.btn}>
-            <Buttons children="Close" btnType='Blue' padding='13px 16px' width='25%' onClick={onClose} />
+            <Buttons children="Close" btnType='Blue' padding='10px 16px' width='25%' onClick={onClose} />
           </Grid>
         </Grid>
       </Grid>

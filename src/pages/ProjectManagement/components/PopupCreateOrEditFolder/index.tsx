@@ -57,8 +57,8 @@ const PopupCreateOrEditFolder = memo((props: PopupCreateFolderProps) => {
           }}
         />
         <Grid className={classes.btn}>
-          <Buttons children="Cancel" btnType='TransparentBlue' padding='13px 16px' onClick={_onCancel}/>
-          <Buttons children={'Save'} btnType='Blue' padding='13px 16px' onClick={_onSubmit}/>
+          <Buttons children="Cancel" btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel}/>
+          <Buttons children={'Create folder'} btnType='Blue' padding='10px 16px' onClick={_onSubmit}/>
         </Grid>
       </Grid>
     </Dialog>

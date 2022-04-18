@@ -100,7 +100,7 @@ const PopupAddOrEditBrand = memo((props: Props) => {
             />
           </Grid>
           <Grid className={classes.btn}>
-            <Buttons type={"submit"} children={itemEdit ? 'Edit brand' : 'Add brand'} btnType='Blue' padding='13px 16px'/>
+            <Buttons type={"submit"} children={itemEdit ? 'Edit brand' : 'Add brand'} btnType='Blue' padding='10px 16px'/>
           </Grid>
         </Grid>
       </form>

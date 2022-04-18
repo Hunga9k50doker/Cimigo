@@ -173,7 +173,7 @@ const PopupPreDefinedList = memo((props: Props) => {
           </Grid>
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons children="Add attributes" btnType='Blue' padding='13px 16px' width='25%' onClick={_onSubmit} />
+          <Buttons children="Add attributes" btnType='Blue' padding='10px 16px' width='25%' onClick={_onSubmit} />
         </Grid>
       </Grid>
     </Dialog>

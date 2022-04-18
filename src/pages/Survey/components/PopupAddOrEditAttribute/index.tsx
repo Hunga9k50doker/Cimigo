@@ -141,7 +141,7 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
             </Grid>
           </Grid>
           <Grid className={classes.btn}>
-            <Buttons type="submit" children={itemEdit ? 'Edit attribute' : 'Add attribute'} btnType='Blue' padding='13px 16px' />
+            <Buttons type="submit" children={itemEdit ? 'Edit attribute' : 'Add attribute'} btnType='Blue' padding='10px 16px' />
           </Grid>
         </Grid>
       </form>

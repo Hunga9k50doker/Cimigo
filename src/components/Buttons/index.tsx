@@ -1,10 +1,10 @@
 import { memo } from "react";
-import { Button, ButtonTypeMap, ExtendButtonBase } from "@mui/material";
+import { Button } from "@mui/material";
 import clsx from "clsx";
 import classes from './styles.module.scss';
 
 interface ButtonsProps {
-  btnType?: string;
+  btnType?: "Blue" | "Red" | "TransparentBlue";
   children?: any;
   onClick?: (e?: any) => void;
   type?: any;

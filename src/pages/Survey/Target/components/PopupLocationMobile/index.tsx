@@ -201,7 +201,7 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
           })}
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='13px 16px' onClick={onUpdateTarget} />
+          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='10px 16px' onClick={onUpdateTarget} />
         </Grid>
       </Grid>
     </Dialog>

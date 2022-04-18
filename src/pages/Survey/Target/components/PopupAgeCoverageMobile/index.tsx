@@ -228,7 +228,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeG
           </TabPanelMobile>
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='13px 16px' onClick={onSave} />
+          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='10px 16px' onClick={onSave} />
         </Grid>
       </Grid>
     </Dialog>

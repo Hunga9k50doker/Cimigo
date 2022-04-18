@@ -83,7 +83,7 @@ export interface LangSupport {
 export const langSupports: LangSupport[] = [
   {
     key: Lang.VI,
-    name: 'Việt Nam'
+    name: 'Tiếng Việt'
   },
   {
     key: Lang.EN,
