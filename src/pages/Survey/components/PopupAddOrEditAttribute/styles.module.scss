@@ -8,6 +8,11 @@
     overflow: hidden;
   }
 }
+.form {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
 .title {
   margin: 0;
   font-weight: 600;

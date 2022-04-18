@@ -70,14 +70,14 @@ const PopupAddOrEditBrand = memo((props: Props) => {
       onClose={onCancel}
       classes={{ paper: classes.paper }}
     >
-      <DialogTitle className={classes.header}>
-        <p className={classes.title}>{itemEdit ? 'Edit brand' : 'Add brand'}</p>
-        <IconButton onClick={onCancel}>
-          <img src={Images.icClose} alt='icon close' />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent className={classes.body} dividers>
-        <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
+      <form autoComplete="off" className={classes.form} noValidate onSubmit={handleSubmit(_onSubmit)}>
+        <DialogTitle className={classes.header}>
+          <p className={classes.title}>{itemEdit ? 'Edit brand' : 'Add brand'}</p>
+          <IconButton onClick={onCancel}>
+            <img src={Images.icClose} alt='icon close' />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent className={classes.body} dividers>
           <Inputs
             title="Brand"
             name="brand"
@@ -99,11 +99,11 @@ const PopupAddOrEditBrand = memo((props: Props) => {
             inputRef={register('manufacturer')}
             errorMessage={errors.manufacturer?.message}
           />
-        </form>
-      </DialogContent>
-      <DialogActions className={classes.btn}>
-        <Buttons type={"submit"} children={itemEdit ? 'Edit brand' : 'Add brand'} btnType='Blue' padding='10px 16px' />
-      </DialogActions>
+        </DialogContent>
+        <DialogActions className={classes.btn}>
+          <Buttons type={"submit"} children={itemEdit ? 'Edit brand' : 'Add brand'} btnType='Blue' padding='10px 16px' />
+        </DialogActions>
+      </form>
     </Dialog>
   );
 });

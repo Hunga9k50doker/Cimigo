@@ -142,7 +142,7 @@
   display: none;
   position: absolute;
   bottom: 0px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, #FFFFFF 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, #ffffff 100%);
   width: 100%;
   border-bottom: 1px solid #dddddd;
   padding: 20px 25px;
@@ -301,7 +301,7 @@
   padding: 10px 20px;
   font-size: 14px;
   font-weight: 500;
-  color: #1C1C1C;
+  color: #1c1c1c;
   &::placeholder {
     opacity: 1;
     font-style: italic;
@@ -316,7 +316,7 @@
   align-items: center;
   justify-content: center;
   padding: 6px 12px;
-  &[class~=Mui-disabled] {
+  &[class~="Mui-disabled"] {
     opacity: 1;
     background: #fff;
     color: rgba(28, 28, 28, 0.65);
@@ -504,7 +504,7 @@
   }
 }
 .rootListItem {
-  > [class~=MuiListItemButton-root] {
+  > [class~="MuiListItemButton-root"] {
     display: block;
     padding-right: calc(70px + 16px);
     padding-left: 16px;
@@ -577,7 +577,7 @@
       border: 1px dashed rgba(28, 28, 28, 0.2);
     }
   }
-  [class~=Mui-disabled] {
+  [class~="Mui-disabled"] {
     svg {
       color: rgba(28, 28, 28, 0.4);
     }
@@ -596,9 +596,9 @@
       line-height: 20px;
       letter-spacing: 0.015em;
       color: rgba(28, 28, 28, 0.9);
-      &[class~=Mui-selected],
+      &[class~="Mui-selected"],
       &:hover {
-        background: #E8F1FB;
+        background: #e8f1fb;
       }
     }
   }
@@ -659,6 +659,13 @@
   color: rgba(28, 28, 28, 0.65);
   ul {
     padding-left: 25px;
+    li {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.015em;
+      color: rgba(28, 28, 28, 0.65);
+    }
   }
 }
 .rootStepLabel {

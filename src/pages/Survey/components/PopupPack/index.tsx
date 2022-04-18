@@ -170,14 +170,14 @@ const PopupPack = memo((props: Props) => {
       onClose={onCancel}
       classes={{ paper: classes.paper }}
     >
-      <DialogTitle className={classes.header}>
-        <p className={classes.title}>{!itemEdit ? "Add a new pack" : "Edit Pack"}</p>
-        <IconButton onClick={onCancel}>
-          <img src={Images.icClose} alt='icon close' />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent className={classes.body} dividers>
-        <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
+      <form autoComplete="off" className={classes.form} noValidate onSubmit={handleSubmit(_onSubmit)}>
+        <DialogTitle className={classes.header}>
+          <p className={classes.title}>{!itemEdit ? "Add a new pack" : "Edit Pack"}</p>
+          <IconButton onClick={onCancel}>
+            <img src={Images.icClose} alt='icon close' />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent className={classes.body} dividers>
           <p>{!itemEdit ? "Upload your pack image and enter corresponding information." : "Edit your pack image and enter corresponding information."}</p>
           <Grid className={classes.spacing}>
             <Grid>
@@ -297,12 +297,12 @@ const PopupPack = memo((props: Props) => {
               />
             </Grid>
           </Grid>
-        </form>
-      </DialogContent>
-      <DialogActions className={classes.btn}>
-        <Buttons type="submit" children={!itemEdit ? "Add pack" : "Update pack"} btnType='Blue' padding='11px 64px' />
-        <Button onClick={onCancel}>Cancel</Button>
-      </DialogActions>
+        </DialogContent>
+        <DialogActions className={classes.btn}>
+          <Buttons type="submit" children={!itemEdit ? "Add pack" : "Update pack"} btnType='Blue' padding='11px 64px' />
+          <Button onClick={onCancel}>Cancel</Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 });

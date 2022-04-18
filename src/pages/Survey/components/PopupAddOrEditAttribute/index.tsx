@@ -71,14 +71,14 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
       onClose={onCancel}
       classes={{ paper: classes.paper }}
     >
-      <DialogTitle className={classes.header}>
-        <p className={classes.title}>{itemEdit ? 'Edit your own attribute' : 'Add your own attribute'}</p>
-        <IconButton onClick={onCancel}>
-          <img src={Images.icClose} alt='' />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent className={classes.body} dividers>
-        <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
+      <form autoComplete="off" className={classes.form} noValidate onSubmit={handleSubmit(_onSubmit)}>
+        <DialogTitle className={classes.header}>
+          <p className={classes.title}>{itemEdit ? 'Edit your own attribute' : 'Add your own attribute'}</p>
+          <IconButton onClick={onCancel}>
+            <img src={Images.icClose} alt='' />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent className={classes.body} dividers>
           <p>Your attribute will be asked as a 10-point scales. Please enter the start point label corresponds to 1, and the end point label corresponds to 10 in the boxes below. Also add the local translation for those labels, they will be used in the survey to elicit responses from consumers.</p>
           <Grid className={classes.listNumberMobile}>
             <div className={classes.textMobile}>
@@ -139,11 +139,11 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
               </Collapse>
             </Grid>
           </Grid>
-        </form>
-      </DialogContent>
-      <DialogActions className={classes.btn}>
-        <Buttons type="submit" children={itemEdit ? 'Edit attribute' : 'Add attribute'} btnType='Blue' padding='10px 16px' />
-      </DialogActions>
+        </DialogContent>
+        <DialogActions className={classes.btn}>
+          <Buttons type="submit" children={itemEdit ? 'Edit attribute' : 'Add attribute'} btnType='Blue' padding='10px 16px' />
+        </DialogActions>
+      </form>
     </Dialog>
   );
 });
