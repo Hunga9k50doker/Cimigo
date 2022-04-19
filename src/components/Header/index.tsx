@@ -14,7 +14,6 @@ import { push } from "connected-react-router";
 import { useTranslation } from "react-i18next";
 import { KeyboardArrowDown } from "@mui/icons-material";
 import { Lang, langSupports } from "models/general";
-import { textTransform } from "@mui/system";
 
 interface HeaderProps {
   project?: boolean;
