@@ -524,6 +524,15 @@
     display: none;
   }
 }
+@media only screen and (max-width: 767px) {
+  .itemBtn:first-child{
+    .icHelp{
+      display: none;
+    }
+    display: none;
+  }
+ 
+}
 
 .avatar {
   width: 40px;

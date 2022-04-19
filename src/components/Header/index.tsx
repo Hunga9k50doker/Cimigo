@@ -188,7 +188,7 @@ const Header = memo((props: HeaderProps) => {
             {isLoggedIn ?
               <li className={classes.item}>
                 <IconButton className={classes.itemBtn}>
-                  <img src={images.icHelp} alt="" />
+                  <img src={images.icHelp} alt="" className={classes.icHelp} />
                 </IconButton>
                 <IconButton onClick={handleClick} className={classes.itemBtn}>
                   <img src={user?.avatar || images.icProfile} alt="" className={classes.avatar}/>
