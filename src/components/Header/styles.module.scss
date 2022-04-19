@@ -437,10 +437,10 @@
   line-height: 24px;
   color: rgba(28, 28, 28, 0.9);
   text-transform: uppercase !important;
-}
 
-.btnChangeLang2>span {
-  margin-left: 3px !important;
+  span {
+    margin-left: 3px !important;
+  }
 }
 
 .itemsOfToggle {
@@ -449,38 +449,36 @@
   margin-left: 7px;
   white-space: inherit;
   padding-right: 10px;
-}
 
-.itemsOfToggle>a {
-  color: rgba(28, 28, 28, 0.9);
-  text-decoration: none;
-  margin-bottom: 10px;
-}
+  &:active {
+    border: none;
+    border-left: 4px solid rgba(166, 204, 23, 1);
+    margin-left: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    padding: 7px 5px 7px 15px;
+    margin-left: 24px;
 
-.itemsOfToggle:first-child {
-  margin-top: 7px;
-}
+    &:first-child {
+      margin-top: 15px;
+    }
 
-.itemsOfToggle:active:first-child {
-  margin-top: 15px;
-}
+    a {
+      font-weight: 600;
+      margin: 0px;
+    }
+  }
 
-.itemsOfToggle:active {
-  border: none;
-  border-left: 4px solid rgba(166, 204, 23, 1);
-  margin-left: 15px;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  padding: 7px 5px 7px 15px;
-  margin-left: 24px;
-}
+  a {
+    color: rgba(28, 28, 28, 0.9);
+    text-decoration: none;
+    margin-bottom: 5px;
+  }
 
-.itemsOfToggle:active>a {
-  color: rgba(28, 28, 28, 0.9);
-  text-decoration: none;
-  font-weight: 600;
-  margin-bottom: 0px;
+  :first-child {
+    margin-top: 7px;
+  }
 }
 
 .buttonOfToggle {
@@ -502,27 +500,14 @@
   margin-right: 17px;
 }
 
-.flexACenter {
-  display: flex;
-  align-items: center;
-}
-
-.flexACenter span {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--cimigo-blue);
-}
-
 .lineOfToggle {
-  margin: 0px 24px 17px 24px;
+  margin: 3px 24px 17px 24px;
   border-bottom: 1px solid rgba(28, 28, 28, 0.2);
-  margin-top: -5px;
 }
 
 .itKey {
   display: none;
 }
-
 
 @media only screen and (max-width: 1024px) {
   .itKey {
