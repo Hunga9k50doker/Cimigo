@@ -14,8 +14,8 @@ import { push } from "connected-react-router";
 import { useTranslation } from "react-i18next";
 import { KeyboardArrowDown } from "@mui/icons-material";
 import { Lang, langSupports } from "models/general";
-import icArrowLogin from 'assets/img/icon/ic-arrow-login.svg';
-import icArrowRegister from 'assets/img/icon/ic-arrow-register.svg';
+import { textTransform } from "@mui/system";
+
 interface HeaderProps {
   project?: boolean;
   detail?: string;
@@ -113,18 +113,14 @@ const Header = memo((props: HeaderProps) => {
                 </a>
               </MenuItem>
             ))}
-            <Grid className={classes.hrofToggle} />
+            <Grid className={classes.lineOfToggle} />
             <button className={classes.buttonOfToggle} onClick={() => history.push(routes.login)}>
-              <div className={classes.flexACenter}>
-                <img src={icArrowLogin} alt="" className={classes.icLogin} />
+                <img src={images.icArrowLogin} alt="" className={classes.icButtonOfToggle} />
                 <span>Login</span>
-              </div>
             </button>
-            <button className={classes.buttonOfToggle}>
-              <div className={classes.flexACenter} onClick={() => history.push(routes.register)}>
-                <img src={icArrowRegister} alt="" className={classes.icLogin} />
+            <button className={classes.buttonOfToggle} onClick={() => history.push(routes.register)}>
+                <img src={images.icArrowRegister} alt="" className={classes.icButtonOfToggle} />
                 <span>Register</span>
-              </div>
             </button>
           </Menu>
         </li>
@@ -169,7 +165,7 @@ const Header = memo((props: HeaderProps) => {
                 padding="7px 10px"
                 onClick={(e) => setAnchorElLang(e.currentTarget)} endIcon={<KeyboardArrowDown />}
               />
-              <Buttons
+              <Buttons 
                 className={classes.btnChangeLang2}
                 children={langSupports?.find(it => it.key === i18n.language).key}
                 padding="7px 10px"
@@ -196,7 +192,7 @@ const Header = memo((props: HeaderProps) => {
                   <img src={images.icHelp} alt="" />
                 </IconButton>
                 <IconButton onClick={handleClick} className={classes.itemBtn}>
-                  <img src={user.avatar.length>0?user.avatar:images.icProfile} alt="" className={classes.avatar}/>
+                  <img src={user?.avatar || images.icProfile} alt="" className={classes.avatar}/>
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}
