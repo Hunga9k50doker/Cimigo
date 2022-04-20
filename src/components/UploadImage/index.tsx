@@ -114,7 +114,7 @@ const UploadImage = memo(
               </Box>
             )}
             {fileReview && (
-              <img alt="upload" src={fileReview} className={classes.imgFile} />
+              <img alt="upload" src={fileReview} className={classes.imgFile} referrerPolicy='no-referrer'/>
             )}
             <div
               className={clsx(classes.placeholder, { [classes.hover]: fileReview })}

@@ -259,7 +259,7 @@ const List = memo(({ }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell>
-                            {item.avatar && <Avatar alt={item.firstName} src={item.avatar} />}
+                            {item.avatar && <Avatar alt={item.firstName} src={item.avatar} imgProps={{referrerPolicy: 'no-referrer'}}/>}
                           </TableCell>
                           <TableCell>
                             <Link onClick={() => onRedirectEdit(item)} component="button">{item.firstName}</Link>

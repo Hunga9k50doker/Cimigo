@@ -51,6 +51,9 @@ import icExcel from 'assets/img/icon/ic-excel.svg';
 import icWord from 'assets/img/icon/ic-word.svg';
 import icArrowLogin from 'assets/img/icon/ic-arrow-login.svg';
 import icArrowRegister from 'assets/img/icon/ic-arrow-register.svg';
+import icView from 'assets/img/icon/ic-view.svg';
+
+
 const images = {
   // ===================== Images =========================
   icView,
