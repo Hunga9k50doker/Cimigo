@@ -79,7 +79,7 @@ const Survey = () => {
       <Grid className={classes.rootMobile}>
         <img src={images.icHomeMobile} alt='' onClick={() => dispatch(push(routes.project.management))} />
         <img src={images.icNextMobile} alt='' />
-        <p>{project?.name}</p>
+        <p className={classes.projectName}>{project?.name}</p>
       </Grid>
       <Grid className={classes.root}>
         <Tabs

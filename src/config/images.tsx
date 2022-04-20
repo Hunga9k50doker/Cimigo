@@ -49,8 +49,8 @@ import icMore from 'assets/img/icon/ic-more.svg';
 import icPowerPoint from 'assets/img/icon/ic-powerpoint.svg';
 import icExcel from 'assets/img/icon/ic-excel.svg';
 import icWord from 'assets/img/icon/ic-word.svg';
-import icView from 'assets/img/icon/ic-view.svg';
-
+import icArrowLogin from 'assets/img/icon/ic-arrow-login.svg';
+import icArrowRegister from 'assets/img/icon/ic-arrow-register.svg';
 const images = {
   // ===================== Images =========================
   icView,
@@ -104,7 +104,9 @@ const images = {
   icNext,
   imgOrder,
   imgPayment,
-  icAdditionalAttributes
+  icAdditionalAttributes,
+  icArrowLogin, 
+  icArrowRegister 
 }
 
 export default images
