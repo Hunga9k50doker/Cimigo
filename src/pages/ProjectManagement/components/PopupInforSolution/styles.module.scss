@@ -30,6 +30,7 @@
   }
 }
 .body {
+  border: none !important;
   min-height: 300px;
   padding: 24px;
   font-style: normal;
@@ -47,6 +48,7 @@
     color: #1c1c1c;
   }
   [class~="ql-editor"] {
+    padding: 0px;
     [class~="ql-size-small"] {
       font-size: 12px;
       line-height: unset;
@@ -78,6 +80,8 @@
     width: 100%;
   }
 }
-.btn {
-  margin: 24px;
+.btnBox {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
 }
