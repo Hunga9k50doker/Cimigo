@@ -14,6 +14,8 @@ import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
 import CallbackActiveUser from 'pages/Callback/User/Active';
 import Admin from 'pages/Admin';
+import CallbackInvoice from 'pages/Callback/Project/Invoice';
+import AdminRoute from './AdminRoute';
 
 const Routers = () => {
 
@@ -29,7 +31,8 @@ const Routers = () => {
         <PrivateRoute path={routes.project.detail.root} component={Survey}/>
         <PublicRoute exact path={routes.callback.user.active} component={CallbackActiveUser}/>
         <PublicRoute exact path={routes.callback.user.forgotPassword} component={ResetPassword}/>
-        <PrivateRoute path={routes.admin.root} component={Admin}/>
+        <PrivateRoute exact path={routes.callback.project.invoice} component={CallbackInvoice}/>
+        <AdminRoute path={routes.admin.root} component={Admin}/>
         <Redirect to={routes.login} />
       </Switch>
     </Suspense>

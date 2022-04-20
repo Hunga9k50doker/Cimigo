@@ -6,8 +6,8 @@ export class AttachmentService {
     return await api.get(API.ATTACHMENT.DOWNLOAD.replace(":id", `${id}`), {
       responseType: 'blob'
     })
-      .catch((e) => {
-        return Promise.reject(e?.response?.data);
+      .catch(async (e) => {
+        return Promise.reject(JSON.parse(await e?.response?.data?.text() || '{}'));
       })
   }
 }

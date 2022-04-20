@@ -92,7 +92,8 @@
 .root {
   width: 100%;
   margin: 0 auto;
-  top: -1px;
+  top: 0;
+  position: sticky;
   background: #fff;
   z-index: 99;
   box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
