@@ -3,6 +3,7 @@ import { OptionItem } from 'models/general';
 export interface TargetQuestion {
   id: number;
   name: string;
+  title: string;
   order: number,
   type: OptionItem;
   typeId: number;
@@ -23,6 +24,7 @@ export interface TargetQuestion {
 export interface TargetAnswer {
   id: number;
   name: string;
+  order: number,
   description: string;
   questionId: number;
   groupId: number;
@@ -44,6 +46,7 @@ export interface GetQuestionsParams {
 
 export interface CreateQuestionParams {
   name: string;
+  title: string;
   order: number;
   typeId: number;
   renderTypeId: number;
@@ -52,6 +55,7 @@ export interface CreateQuestionParams {
 
 export interface UpdateQuestionParams {
   name?: string;
+  title?: string;
   order?: number;
   language?: string;
   typeId?: number;
@@ -83,6 +87,7 @@ export interface GetAnswersParams {
 
 export interface CreateAnswerParams {
   name: string;
+  order: number;
   description: string;
   questionId: number;
   groupId: number;
@@ -91,6 +96,7 @@ export interface CreateAnswerParams {
 
 export interface UpdateAnswerParams {
   name?: string;
+  order?: number;
   description?: string;
   questionId?: number;
   groupId?: number;
@@ -101,6 +107,7 @@ export interface UpdateAnswerParams {
 export interface TargetAnswerGroup {
   id: number;
   name: string;
+  order: number,
   questionId: number;
   parentLanguage: string;
   language: string;
@@ -120,11 +127,13 @@ export interface GetAnswerGroupsParams {
 
 export interface CreateAnswerGroupParams {
   name: string;
+  order: number;
   questionId: number;
 }
 
 export interface UpdateAnswerGroupParams {
   name?: string;
+  order?: number;
   questionId?: number;
   language?: string;
 }

@@ -47,7 +47,7 @@ import { FolderService } from "services/folder";
 import { Folder } from "models/folder";
 import clsx from "clsx";
 import PopupDeleteFolder from "./components/PopupDeleteFolder";
-import PopupMoveProject, { MoveProjectData } from "./components/PopupMoveProject";
+import PopupMoveProject from "./components/PopupMoveProject";
 import PopupRenameProject, { RenameProjectFormData } from "./components/PopupRenameProject";
 import LabelStatusMobile from "./components/LableStatusMobile";
 
@@ -249,10 +249,10 @@ const ProjectManagement = memo((props: Props) => {
     setFolderEdit(null)
   }
 
-  const onDeleteFolder = (isDeleteProject: boolean = false) => {
+  const onDeleteFolder = () => {
     if (!folderDelete) return
     dispatch(setLoading(true))
-    FolderService.delete(folderDelete.id, { isDeleteProject })
+    FolderService.delete(folderDelete.id)
       .then(async () => {
         setFolderDelete(null)
         await fetchData()
@@ -272,17 +272,14 @@ const ProjectManagement = memo((props: Props) => {
     setItemMove(null)
   }
 
-  const onMoveProject = (data: MoveProjectData) => {
+  const onMoveProject = (item: Folder) => {
     if (!itemMove) return
     dispatch(setLoading(true))
     ProjectService.moveProject(itemMove.id, {
-      createFolder: data.createFolder || '',
-      createFolderIds: data.createFolderIds || [],
-      deleteFolderIds: data.deleteFolderIds || []
+      folderId: item.id
     })
       .then(async () => {
         await fetchData()
-        getMyFolders()
         onCloseMoveProject()
       })
       .catch((e) => dispatch(setErrorMess(e)))
@@ -308,6 +305,10 @@ const ProjectManagement = memo((props: Props) => {
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onClickRow = (id: number) => {
+    dispatch(push(routes.project.detail.root.replace(":id", `${id}`)))
   }
 
   return (
@@ -340,18 +341,12 @@ const ProjectManagement = memo((props: Props) => {
                 onClick={() => onChangeFolder(item)}
                 secondaryAction={
                   <div className={classes.btnAction}>
-                    {
-                      item.id !== folderId?.id && (
-                        <>
-                          <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); setFolderEdit(item) }} edge="end" aria-label="Edit">
-                            <img src={Images.icRename} alt="" />
-                          </IconButton>
-                          <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); setFolderDelete(item) }} edge="end" aria-label="Delete">
-                            <img src={Images.icDelete} alt="" />
-                          </IconButton>
-                        </>
-                      )
-                    }
+                    <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); setFolderEdit(item) }} edge="end" aria-label="Edit">
+                      <img src={Images.icRename} alt="" />
+                    </IconButton>
+                    <IconButton classes={{ root: classes.iconAction }} onClick={e => { e.stopPropagation(); setFolderDelete(item) }} edge="end" aria-label="Delete">
+                      <img src={Images.icDelete} alt="" />
+                    </IconButton>
                   </div>
                 }
                 disablePadding
@@ -361,7 +356,7 @@ const ProjectManagement = memo((props: Props) => {
                 </ListItemButton>
               </ListItem>
             ))}
-            <Buttons onClick={() => setCreateFolder(true)} children="Create a folder" btnType="TransparentBlue" className={classes.btnFolder} padding="7px 16px" />
+            <Buttons onClick={() => setCreateFolder(true)} children="Create a folder" btnType="TransparentBlue" className={classes.btnFolder}/>
           </List>
         </Grid>
         <Grid className={classes.right}>
@@ -374,6 +369,11 @@ const ProjectManagement = memo((props: Props) => {
                   onChange={(e) => onChangeStatus(e.target.value as number)}
                   classes={{ select: classes.selectType, icon: classes.icSelect }}
                   IconComponent={ExpandIcon}
+                  MenuProps={{
+                    classes: {
+                      paper: classes.selectMenu
+                    }
+                  }}
                 >
                   <MenuItem value={0}>All statuses</MenuItem>
                   {projectStatus.map((item => (
@@ -426,20 +426,20 @@ const ProjectManagement = memo((props: Props) => {
               <TableBody>
                 {data?.data?.length ? (
                   data?.data?.map(item => (
-                    <TableRow hover key={item.id} className={classes.tableBody}>
+                    <TableRow onClick={() => onClickRow(item.id)} key={item.id} className={classes.tableBody}>
                       <TableCell>{item.name}</TableCell>
                       <TableCell><LabelStatus typeStatus={item.status} /></TableCell>
                       <TableCell>{moment(item.updatedAt).format('DD-MM-yyyy')}</TableCell>
                       <TableCell>{item.solution?.title}</TableCell>
                       <TableCell align="center">
-                        <IconButton onClick={(event) => handleAction(event, item)}>
+                        <IconButton onClick={(event) => { event.stopPropagation(); handleAction(event, item) }}>
                           <MoreHorizIcon />
                         </IconButton>
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
-                  <TableRow hover className={classes.tableBody}>
+                  <TableRow className={classes.tableBody}>
                     <TableCell align="center" colSpan={5}>
                       <Box sx={{ py: 3 }}>
                         <SearchNotFound searchQuery={keyword} />
@@ -455,15 +455,17 @@ const ProjectManagement = memo((props: Props) => {
             open={Boolean(actionAnchor)}
             onClose={onCloseActionMenu}
             classes={{ paper: classes.menuAction }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           >
             <MenuItem className={classes.itemAciton} onClick={gotoDetail}>
-              <img src={Images.icEdit} alt="" />
-              <p>Detail</p>
+              <img src={Images.icView} alt="" />
+              <p>View details</p>
             </MenuItem>
-            {/* <MenuItem className={classes.itemAciton} onClick={() => onShowRenameProject()}>
+            <MenuItem className={classes.itemAciton} onClick={() => onShowRenameProject()}>
               <img src={Images.icRename} alt="" />
               <p>Rename</p>
-            </MenuItem> */}
+            </MenuItem>
             <MenuItem className={classes.itemAciton} onClick={() => onShowMoveProject()}>
               <img src={Images.icMove} alt="" />
               <p>Move</p>

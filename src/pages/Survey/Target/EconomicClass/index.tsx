@@ -1,7 +1,6 @@
-import { FormControlLabel, Grid, Checkbox, Tooltip } from "@mui/material"
+import { Grid, Tooltip } from "@mui/material"
 import Buttons from "components/Buttons";
 import classes from './styles.module.scss';
-import Images from "config/images";
 import { Project } from "models/project";
 import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -11,6 +10,8 @@ import { DataSelected, onToggleAnswer, isDisableSubmit } from "../models";
 import { ProjectService } from "services/project";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { editableProject } from "helpers/project";
+import ControlCheckbox from "components/ControlCheckbox";
+import InputCheckbox from "components/InputCheckbox";
 
 interface Props {
   projectId: number,
@@ -59,21 +60,21 @@ const EconomicClass = memo(({ projectId, project, questions }: Props) => {
     <>
       {questions.map(question => (
         <Grid key={question.id} classes={{ root: classes.rootLocation }}>
-          <p>Choose {question.name}</p>
+          <p>{question.title}</p>
           <div>
             <Grid className={classes.rootCheck} container spacing={2}>
               {question.targetAnswers.map((answer) => {
                 return (
                   <Grid item xs={6} key={answer.id}>
                     <Tooltip title={answer.description}>
-                      <FormControlLabel
+                      <ControlCheckbox
+                        hastooltip={answer.description}
                         control={
-                          <Checkbox
+                          <InputCheckbox
                             checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                             onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
                             classes={{ root: classes.rootCheckbox }}
-                            icon={<img src={Images.icCheck} alt="" />}
-                            checkedIcon={<img src={Images.icCheckActive} alt="" />} />
+                          />
                         }
                         label={answer.name}
                       />
@@ -86,7 +87,7 @@ const EconomicClass = memo(({ projectId, project, questions }: Props) => {
         </Grid>
       ))}
       <Grid classes={{ root: classes.rootBtn }}>
-        <Buttons disabled={isDisable()} onClick={onUpdateTarget} btnType="Blue" children={"Save"} padding="16px 56px" />
+        <Buttons disabled={isDisable()} onClick={onUpdateTarget} btnType="Blue" children={"Save"} padding="11px 58px" />
       </Grid>
     </>
 

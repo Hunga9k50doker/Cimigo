@@ -17,8 +17,10 @@ import { TargetQuestionService } from "services/admin/target_question";
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
+  { name: 'order', label: 'Order', sortable: false },
   { name: 'id', label: 'Id', sortable: false },
   { name: 'name', label: 'Name', sortable: false },
+  { name: 'title', label: 'Title', sortable: false },
   { name: 'type', label: 'Type', sortable: false },
   { name: 'languages', label: 'Languages', sortable: false },
   { name: 'actions', label: 'Actions', sortable: false },
@@ -181,10 +183,16 @@ const QuestionList = memo(({ }: Props) => {
                           key={index}
                         >
                           <TableCell component="th">
+                            {item.order}
+                          </TableCell>
+                          <TableCell component="th">
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
                             <Link onClick={() => onRedirectEdit(item)} component="button">{item.name}</Link>
+                          </TableCell>
+                          <TableCell component="th">
+                            {item.title}
                           </TableCell>
                           <TableCell component="th">
                             {item.type?.name}
@@ -210,7 +218,7 @@ const QuestionList = memo(({ }: Props) => {
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={5}>
+                      <TableCell align="center" colSpan={7}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>

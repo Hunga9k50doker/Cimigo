@@ -53,6 +53,7 @@ import icArrowLogin from 'assets/img/icon/ic-arrow-login.svg';
 import icArrowRegister from 'assets/img/icon/ic-arrow-register.svg';
 const images = {
   // ===================== Images =========================
+  icView,
   icPowerPoint,
   icExcel,
   icWord,

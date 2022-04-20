@@ -2,7 +2,7 @@ import { memo } from 'react';
 import {
   FormControl
 } from '@mui/material';
-import Select, { components, DropdownIndicatorProps } from 'react-select';
+import Select, { components, DropdownIndicatorProps, GroupBase, StylesConfig } from 'react-select';
 import classes from './styles.module.scss';
 import icCaretDown from 'assets/img/icon/ic-caret-down-grey.svg'
 import { Controller } from 'react-hook-form';
@@ -10,30 +10,31 @@ import { StateManagerProps } from 'react-select/dist/declarations/src/stateManag
 import TextTitle from 'components/Inputs/components/TextTitle';
 import ErrorMessage from 'components/Inputs/components/ErrorMessage';
 
-const customStyles = (error?: boolean) => ({
+const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unknown>> => ({
   indicatorSeparator: () => ({
     display: "none",
   }),
   option: (provided, state) => ({
     ...provided,
-    fontStyle: 400,
+    fontStyle: 'normal',
     fontWeight: 500,
     fontSize: 14,
-    lineHeight: '140%',
+    lineHeight: '20px',
     letterSpacing: '0.015em',
     color: '#1C1C1C',
     padding: '14px 15px',
+    background: state.isSelected || state.isFocused ? '#E8F1FB' : '#ffffff',
   }),
   placeholder: (provided) => ({
     ...provided,
     fontSize: 16,
-    fontWeight: 400,
-    color: error ? '#1C1C1C' : "rgba(28, 28, 28, 0.2)",
+    fontWeight: 500,
+    color: error ? '#1C1C1C' : "rgba(28, 28, 28, 0.65)",
     whiteSpace: "nowrap",
   }),
   valueContainer: (provided) => ({
     ...provided,
-    padding: "9.25px 13px"
+    padding: "10px 5px 10px 13px"
   }),
   control: (provided: any) => ({
     ...provided,

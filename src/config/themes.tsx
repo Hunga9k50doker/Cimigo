@@ -28,6 +28,17 @@ const defaultTheme = createTheme({
     secondary: {
       main: CIMIGO_GREEN,
     }
+  },
+  components: {
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          'img': {
+            borderRadius: '4px'
+          }
+        }
+      }
+    }
   }
 });
 

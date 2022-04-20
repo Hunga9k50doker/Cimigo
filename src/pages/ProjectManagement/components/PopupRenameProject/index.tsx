@@ -12,19 +12,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 
 const schema = yup.object().shape({
-  name: yup.string().required('Name is required.'),
-  category: yup.string(),
-  brand: yup.string(),
-  variant: yup.string(),
-  manufacturer: yup.string()
+  name: yup.string().required('Name is required.')
 })
 
 export interface RenameProjectFormData {
-  name: string,
-  category: string,
-  brand: string,
-  variant: string,
-  manufacturer: string
+  name: string
 }
 
 interface PopupRenameProjectProps {
@@ -45,10 +37,6 @@ const PopupRenameProject = memo((props: PopupRenameProjectProps) => {
     if (project) {
       reset({
         name: project.name,
-        category: project.category || '',
-        brand: project.brand || '',
-        variant: project.variant || '',
-        manufacturer: project.manufacturer || ''
       })
     }
   }, [project])
@@ -86,42 +74,10 @@ const PopupRenameProject = memo((props: PopupRenameProjectProps) => {
               inputRef={register('name')}
               errorMessage={errors.name?.message}
             />
-            <Inputs
-              name="category"
-              type="text"
-              placeholder="e.g. C7727 On Demand"
-              title="Category"
-              inputRef={register('category')}
-              errorMessage={errors.category?.message}
-            />
-            <Inputs
-              name="brand"
-              type="text"
-              placeholder="Enter your product brand name"
-              title="Brand"
-              inputRef={register('brand')}
-              errorMessage={errors.brand?.message}
-            />
-            <Inputs
-              name="variant"
-              type="text"
-              placeholder="Enter your product variant"
-              title="Variant"
-              inputRef={register('variant')}
-              errorMessage={errors.variant?.message}
-            />
-            <Inputs
-              name="manufacturer"
-              type="text"
-              placeholder="Enter product manufacturer"
-              title="Manufacturer"
-              inputRef={register('manufacturer')}
-              errorMessage={errors.manufacturer?.message}
-            />
           </Box>
           <Box className={classes.btn}>
-            <Buttons children="Cancel" btnType='TransparentBlue' padding='13px 16px' onClick={_onCancel} />
-            <Buttons children={'Save'} type="submit" btnType='Blue' padding='13px 16px' />
+            <Buttons children="Cancel" btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel} />
+            <Buttons children={'Save'} type="submit" btnType='Blue' padding='10px 16px' />
           </Box>
         </Box>
       </form>

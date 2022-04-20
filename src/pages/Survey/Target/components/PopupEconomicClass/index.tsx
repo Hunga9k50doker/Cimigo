@@ -76,7 +76,7 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
         <Grid className={classes.body}>
           {questions.map(question => (
             <React.Fragment key={question.id}>
-              <p>Choose {question.name}:</p>
+              <p>{question.title}:</p>
               <Grid className={classes.rootCheck}>
                 {question.targetAnswers.map((answer) => {
                   return (
@@ -106,7 +106,7 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
           ))}
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='13px 16px' onClick={onUpdateTarget} />
+          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='10px 16px' onClick={onUpdateTarget} />
         </Grid>
       </Grid>
     </Dialog>

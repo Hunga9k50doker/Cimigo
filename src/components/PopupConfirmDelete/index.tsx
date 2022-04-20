@@ -22,6 +22,7 @@ const PopupConfirmDelete = memo((props: Props) => {
   return (
     <Dialog
       open={isOpen}
+      onClose={onCancel}
       classes={{ paper: classes.paper }}
     >
       <Grid>
@@ -35,8 +36,8 @@ const PopupConfirmDelete = memo((props: Props) => {
             <p>{description}</p>
           </Grid>
           <Grid className={classes.btn}>
-            <Buttons children="CANCEL" btnType='TransparentBlue' padding='16px' onClick={onCancel} />
-            <Buttons children="DELETE" btnType='Red' padding='16px' onClick={onDelete}/>
+            <Buttons children="CANCEL" btnType='TransparentBlue' padding='11px 18px' onClick={onCancel} />
+            <Buttons children="DELETE" btnType='Red' padding='11px 20px' onClick={onDelete}/>
           </Grid>
       </Grid>
     </Dialog>

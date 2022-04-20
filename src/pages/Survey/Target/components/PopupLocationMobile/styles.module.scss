@@ -1,6 +1,6 @@
 .paper {
   // display: none;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 1024px) {
     width: 100%;
     margin: 0px !important;
     overflow: hidden;
@@ -31,7 +31,7 @@
 .body {
   min-height: 300px;
   padding: 24px;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 1024px) {
     overflow-y: auto;
     overflow-x: hidden;
     max-height: 400px;
@@ -45,7 +45,7 @@
   button {
     width: 25%;
   }
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 1024px) {
     button {
       width: 100%;
     }
@@ -75,7 +75,7 @@
   margin-right: 24px;
 }
 .rootStrata > span {
-  font-weight: 400;
+  font-weight: 500;
   font-size: 14px;
   line-height: 140%;
   color: #1c1c1c;
@@ -99,7 +99,7 @@
   margin-right: 16px;
 }
 .rootCountry > div > p {
-  font-weight: 400;
+  font-weight: 500;
   font-size: 14px;
   line-height: 140%;
   letter-spacing: 0.025em;
@@ -134,7 +134,7 @@
   padding: 15px;
   p {
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 14px;
     line-height: 140%;
     letter-spacing: 0.025em;
@@ -144,7 +144,7 @@
 }
 .rootListMobile {
   display: none;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 1024px) {
     display: block;
     margin: 24px 0px;
   }
@@ -214,4 +214,8 @@
   img {
     border-radius: 4px;
   }
+}
+.suggestionSeleted {
+  background: #EEF0F2;
+  border: none;
 }

@@ -103,15 +103,11 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   }
 
   const isValidPacks = () => {
-    return !!packs?.length
+    return packs?.length >= 2
   }
 
   const isValidAdditionalBrand = () => {
-    return !!additionalBrand?.length
-  }
-
-  const isValidAttributes = () => {
-    return !!((projectAttributes?.length || 0) + (userAttributes?.length || 0))
+    return additionalBrand?.length >= 2
   }
 
   const isValidBasic = () => {
@@ -119,7 +115,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   }
 
   const isValidConfirm = () => {
-    return isValidSampleSize() && !inValidTarget() && isValidPacks() && isValidAdditionalBrand() && isValidAttributes() && isValidBasic()
+    return isValidSampleSize() && !inValidTarget() && isValidPacks() && isValidAdditionalBrand() && isValidBasic()
   }
 
   const getInvoice = () => {
@@ -127,7 +123,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     dispatch(setLoading(true))
     PaymentService.getInvoiceDemo(project.id)
       .then(res => {
-        FileSaver.saveAs(res.data, `invoice-demo-${moment().format('MM-DD-YYYY-hh:mm:ss')}.pdf`)
+        FileSaver.saveAs(res.data, `invoice-demo-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -171,8 +167,8 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
           </Grid>
           <Grid className={classes.right}>
             <p style={{ marginBottom: 20 }} className={classes.textGreen}>Survey detail<Button onClick={gotoSetupSurvey} classes={{ root: classes.rootbtn }} endIcon={<img src={Images.icNext} alt="" />}>Go to setup</Button></p>
-            <div>
-              <div className={classes.bascInfor}>
+            <div className={classes.tableDetail}>
+              <div>
                 <p className={classes.text}>Basic information</p>
                 <div className={classes.infor}>
                   <div><p>Category <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.category })}> {project?.category || 'None'}</span></div>
@@ -181,15 +177,23 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                   <div><p>Manufacturer <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.manufacturer })}> {project?.manufacturer || 'None'}</span></div>
                 </div>
               </div>
-              <div className={classes.pack}>
+              <div>
                 <p className={classes.text}>Pack</p>
-                <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidPacks() })}>{packs?.length || 0} packs</span>
+                <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidPacks() })}>
+                  {packs?.length || 0} packs<br/>
+                  <span className={classes.smallText}>Required at least 2 packs</span>
+                </span>
               </div>
-              <div className={classes.brandList}>
-                <p className={classes.text}>Brand list</p><span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidAdditionalBrand() })}>{additionalBrand?.length || 0} brands</span>
+              <div>
+                <p className={classes.text}>Brand list</p>
+                <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidAdditionalBrand() })}>
+                  {additionalBrand?.length || 0} brands <br/>
+                  <span className={classes.smallText}>Required at least 2 brands</span>
+                </span>
               </div>
-              <div className={classes.attribute}>
-                <p className={classes.text}>Additional attribute</p><span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidAttributes() })}>{(projectAttributes?.length || 0) + (userAttributes?.length || 0)} attributes</span>
+              <div>
+                <p className={classes.text}>Additional attribute</p>
+                <span className={classes.textBlack}>{(projectAttributes?.length || 0) + (userAttributes?.length || 0)} attributes</span>
               </div>
             </div>
           </Grid>
@@ -204,7 +208,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
         <div onClick={openNewTabContact}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Contract</p></div>
       </Grid>
       <Grid className={classes.btn}>
-        <Buttons disabled={!isValidConfirm()} onClick={onConfirmProject} children={"Confirm project"} btnType="Blue" padding="16px" />
+        <Buttons disabled={!isValidConfirm()} onClick={onConfirmProject} children={"Confirm project"} btnType="Blue" padding="11px 24px" />
         <p className={classes.textSub}>By click “Confirm project”, you agree to our Terms of Service and Privacy Policy.</p>
       </Grid>
     </Grid>

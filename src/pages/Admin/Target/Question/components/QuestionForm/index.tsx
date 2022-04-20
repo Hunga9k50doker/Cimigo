@@ -14,6 +14,7 @@ import { TargetQuestion, targetQuestionRenderTypes, targetQuestionTypes } from "
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required.'),
+  title: yup.string().required('Title is required.'),
   order: yup.number().typeError('Order is required.').required('Order is required.'),
   answerGroupName: yup.string(),
   typeId: yup.object().shape({
@@ -28,6 +29,7 @@ const schema = yup.object().shape({
 
 export interface QuestionFormData {
   name: string;
+  title: string;
   order: number;
   answerGroupName: string;
   typeId: OptionItem;
@@ -64,6 +66,7 @@ const QuestionForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
     if (itemEdit) {
       reset({
         name: itemEdit.name,
+        title: itemEdit.title,
         order: itemEdit.order,
         answerGroupName: itemEdit.answerGroupName,
         typeId: itemEdit.type ? { id: itemEdit.type.id, name: itemEdit.type.name } : undefined,
@@ -149,6 +152,15 @@ const QuestionForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
                       type="text"
                       inputRef={register('name')}
                       errorMessage={errors.name?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Inputs
+                      title="Title"
+                      name="title"
+                      type="text"
+                      inputRef={register('title')}
+                      errorMessage={errors.title?.message}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>

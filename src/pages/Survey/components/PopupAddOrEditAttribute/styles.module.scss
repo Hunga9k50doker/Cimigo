@@ -8,6 +8,11 @@
     overflow: hidden;
   }
 }
+.form {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
 .title {
   margin: 0;
   font-weight: 600;
@@ -32,18 +37,21 @@
 .body {
   min-height: 300px;
   padding: 24px;
+  border: none !important;
   @media only screen and (max-width: 767px) {
     overflow: auto;
-    max-height: 400px;
     padding: 24px 24px 0px 24px;
   }
 }
 .body > p {
   margin: 0;
-  font-weight: 400;
-  font-size: 16px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #1c1c1c;
   @media only screen and (max-width: 767px) {
-    font-weight: 400;
+    font-weight: 500;
     font-size: 14px;
     line-height: 140%;
     letter-spacing: 0.015em;
@@ -205,7 +213,7 @@
 .collapse > div {
   p {
     font-style: normal;
-    font-weight: normal;
+    font-weight: 500;
     font-size: 14px;
     line-height: 140%;
     text-align: justify;
@@ -235,6 +243,7 @@
   letter-spacing: 0.05em;
 }
 .btn {
+  padding: 0;
   margin: 24px;
   display: flex;
   justify-content: flex-end;

@@ -66,7 +66,7 @@ const ResetPassword = () => {
       <form onSubmit={handleSubmit(onSubmit)} name="forgot-password" noValidate autoComplete="off">
         <Grid className={classes.body}>
           <p className={classes.textLogin}>Reset password</p>
-          <p className={classes.subTextLogin}>No worries! Just enter your email and we will send you a reset password link.</p>
+          <p className={classes.subTextLogin}>Create a new password for example@example.com</p>
           <Inputs
             title="New password"
             name="password"

@@ -8,12 +8,10 @@
   a:not(.aLink) {
     margin-top: 55px;
     margin-bottom: 25px;
-    font-style: italic;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 16px;
     line-height: 20px;
     text-align: center;
-    text-decoration-line: underline;
     color: #1f61a9;
     display: block;
     @media only screen and (max-width: 767px) {
@@ -47,7 +45,7 @@
 }
 .subTitle {
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 16px;
   line-height: 140%;
   text-align: center;
@@ -58,9 +56,22 @@
     text-align: start;
   }
 }
+.subTitleMain {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: 0.015em;
+  color: #000000;
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+    text-align: start;
+  }
+}
 .textBlack {
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 16px;
   line-height: 140%;
   text-align: center;

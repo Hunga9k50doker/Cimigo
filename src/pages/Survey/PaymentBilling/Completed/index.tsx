@@ -30,7 +30,7 @@ const Completed = memo(({ }: Props) => {
     dispatch(setLoading(true))
     PaymentService.getInvoice(project.id)
       .then(res => {
-        FileSaver.saveAs(res.data, `invoice-${moment().format('MM-DD-YYYY-hh:mm:ss')}.pdf`)
+        FileSaver.saveAs(res.data, `invoice-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))

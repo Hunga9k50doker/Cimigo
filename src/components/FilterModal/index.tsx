@@ -150,7 +150,7 @@ const FilderModal = memo(({ isOpen, filterOptions, filterValue, onClose, getFilt
           </div>
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons onClick={_onChange} children={'Go'} btnType='Blue' padding='13px 16px' />
+          <Buttons onClick={_onChange} children={'Go'} btnType='Blue' padding='10px 16px' />
         </Grid>
       </Grid>
     </Dialog>

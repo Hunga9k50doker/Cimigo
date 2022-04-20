@@ -5,6 +5,15 @@
     padding: 22px 19px;
   }
 }
+.warningBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 24px;
+  @media only screen and (max-width: 767px) {
+    padding: 22px 19px 0 19px;
+  }
+}
 .left {
   width: 75%;
   @media only screen and (max-width: 1024px) {
@@ -26,6 +35,10 @@
     display: none;
   }
 }
+.line {
+  margin: 30px 24px;
+  border-top: 1px dashed rgba(28, 28, 28, 0.65);
+}
 .flex {
   padding: 0px 24px;
   @media only screen and (max-width: 1024px) {
@@ -33,7 +46,7 @@
   }
 }
 .flex > p {
-  font-weight: normal;
+  font-weight: 500;
   font-size: 14px;
   color: #1c1c1c;
   margin: 0;
@@ -79,7 +92,6 @@
   display: flex;
   justify-content: flex-end;
   padding-right: 20px;
-  padding-bottom: 24px;
   @media only screen and (max-width: 767px) {
     max-width: none;
     justify-content: flex-start;
@@ -90,6 +102,7 @@
   display: flex;
   flex-wrap: wrap;
   margin: 0px -12px;
+  padding-top: 20px;
   max-width: 900px;
   @media only screen and (max-width: 767px) {
     margin: auto;
@@ -110,7 +123,7 @@
   }
 }
 .itemPacks:hover .itemInfor {
-  display: block;
+  display: table;
 }
 .itemPacks > div {
   position: relative;
@@ -127,6 +140,7 @@
 .itemPacks > div > img {
   width: 410px;
   height: 310px;
+  object-fit: cover;
   border-radius: 12px 12px 0px 0px;
   @media only screen and (max-width: 767px) {
     width: 310px;
@@ -140,35 +154,40 @@
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, #ffffff 100%);
   width: 100%;
   border-bottom: 1px solid #dddddd;
-  padding: 10px 20px;
+  padding: 20px 25px;
   max-height: 250px;
   @media only screen and (max-width: 767px) {
     max-height: 150px;
   }
   div {
-    display: flex;
-    padding-bottom: 5px;
-    p {
-      font-weight: 400;
+    display: table-row;
+    &:not(:last-child) {
+      > * {
+        padding-bottom: 15px;
+      }
+    }
+    > p {
+      white-space: nowrap;
+      width: 100px;
+      display: table-cell;
+      font-weight: 500;
       font-size: 16px;
       line-height: 140%;
       letter-spacing: 0.015em;
       color: rgba(28, 28, 28, 0.65);
     }
-    span {
-      font-weight: 400;
+    > span {
+      padding-left: 10px;
+      display: table-cell;
+      font-weight: 500;
       font-size: 16px;
       line-height: 140%;
       letter-spacing: 0.015em;
       color: #1c1c1c;
       overflow: hidden;
       text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      @media only screen and (max-width: 767px) {
-        -webkit-line-clamp: 2;
-      }
+      white-space: nowrap;
+      max-width: 0;
     }
   }
 }
@@ -178,6 +197,7 @@
   align-items: center;
   padding: 12px 24px;
   p {
+    flex: 1;
     font-weight: 400;
     font-size: 14px;
     line-height: 140%;
@@ -185,13 +205,8 @@
     color: #1c1c1c;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    width: 230px;
-    @media only screen and (max-width: 767px) {
-      width: 130px;
-    }
+    white-space: nowrap;
+    padding-right: 10px;
   }
 }
 .addPack {
@@ -266,7 +281,6 @@
   border: 1px solid #dddddd;
   border-radius: 4px;
   margin-top: 35px;
-  margin-bottom: 50px;
   @media only screen and (max-width: 767px) {
     display: none;
   }
@@ -295,11 +309,27 @@
 .inputTextfield {
   padding: 10px 20px;
   font-size: 14px;
-  &.placeholder {
+  font-weight: 500;
+  color: #1c1c1c;
+  &::placeholder {
+    opacity: 1;
     font-style: italic;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 14px;
-    color: #bdbdbd;
+    color: rgba(28, 28, 28, 0.65);
+  }
+}
+.btnAddBrandInCell {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  &[class~="Mui-disabled"] {
+    opacity: 1;
+    background: #fff;
+    color: rgba(28, 28, 28, 0.65);
+    border: 1px solid rgba(28, 28, 28, 0.4);
   }
 }
 .btnAddBrand {
@@ -355,6 +385,7 @@
   color: #1c1c1c;
 }
 .itemBrandMobileAdd {
+  cursor: pointer;
   background: rgba(28, 28, 28, 0.05);
   border: 1px dashed rgba(28, 28, 28, 0.2);
   border-radius: 4px;
@@ -482,7 +513,7 @@
   }
 }
 .rootListItem {
-  > [class~=MuiListItemButton-root] {
+  > [class~="MuiListItemButton-root"] {
     display: block;
     padding-right: calc(70px + 16px);
     padding-left: 16px;
@@ -506,7 +537,8 @@
   }
 }
 .icSelect {
-  right: 15px;
+  right: 7px;
+  color: var(--cimigo-blue);
   @media only screen and (max-width: 767px) {
     // position: unset;
   }
@@ -514,7 +546,7 @@
 .selectType {
   font-weight: 500;
   font-size: 12px;
-  color: #1f61a9;
+  color: var(--cimigo-blue);
 }
 .select {
   display: flex;
@@ -547,11 +579,36 @@
 }
 .rootSelect {
   fieldset {
-    border-color: #1f61a9 !important;
+    border: 1px solid #1f61a9;
     @media only screen and (max-width: 767px) {
-      border-color: rgba(28, 28, 28, 0.2) !important;
+      border-color: rgba(28, 28, 28, 0.2);
       background: rgba(28, 28, 28, 0.05);
       border: 1px dashed rgba(28, 28, 28, 0.2);
+    }
+  }
+  [class~="Mui-disabled"] {
+    svg {
+      color: rgba(28, 28, 28, 0.4);
+    }
+    fieldset {
+      border: 1px solid rgba(28, 28, 28, 0.4) !important;
+    }
+  }
+}
+.selectTypeMenu {
+  ul {
+    padding: 4px 0;
+    li {
+      padding: 14px 16px;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.015em;
+      color: rgba(28, 28, 28, 0.9);
+      &[class~="Mui-selected"],
+      &:hover {
+        background: #e8f1fb;
+      }
     }
   }
 }
@@ -568,7 +625,7 @@
   p {
     margin: 0;
     padding-left: 12px;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 14px;
     color: rgba(28, 28, 28, 0.65);
     border-left: 1px solid rgba(28, 28, 28, 0.4);
@@ -609,6 +666,16 @@
   line-height: 140%;
   letter-spacing: 0.015em;
   color: rgba(28, 28, 28, 0.65);
+  ul {
+    padding-left: 25px;
+    li {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.015em;
+      color: rgba(28, 28, 28, 0.65);
+    }
+  }
 }
 .rootStepLabel {
   cursor: pointer;

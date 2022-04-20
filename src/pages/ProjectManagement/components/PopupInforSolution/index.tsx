@@ -31,9 +31,9 @@ const PopupInforSolution = memo((props: PopupPopupInforSolution) => {
           </IconButton>
         </Grid>
         <Grid className={classes.body}>
-          <div dangerouslySetInnerHTML={{__html: solution?.content || ''}}></div>
+          <div className='ql-editor' dangerouslySetInnerHTML={{__html: solution?.content || ''}}></div>
         </Grid>
-        <Buttons children="Get started" btnType='Blue' padding='13px 16px' width='91%' onClick={onSelect} className={classes.btn}/>
+        <Buttons children="Get started" btnType='Blue' padding='10px 16px' width='91%' onClick={onSelect} className={classes.btn}/>
       </Grid>
     </Dialog>
   );

@@ -18,7 +18,8 @@ const CreateQuestion = memo((props: Props) => {
     dispatch(setLoading(true))
     TargetQuestionService.create({
       name: value.name,
-      order: value.order || 99,
+      title: value.title,
+      order: value.order,
       typeId: value.typeId.id,
       renderTypeId: value.renderTypeId.id,
       answerGroupName: value.answerGroupName,

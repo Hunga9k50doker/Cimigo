@@ -173,7 +173,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeG
           <TabPanelMobile value={activeTab} index={ETab.Gender_And_Age_Quotas}>
             {questionsAgeGender.map(question => (
               <Grid key={question.id}>
-                <p className={classes.text}>Choose {question.name}</p>
+                <p className={classes.text}>{question.title}</p>
                 <Grid classes={{ root: classes.checkLocation }}>
                   {question.targetAnswers.map((answer) => {
                     return (
@@ -201,7 +201,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeG
           <TabPanelMobile value={activeTab} index={ETab.Mums_Only}>
             {questionsMum.map(question => (
               <Grid key={question.id}>
-                <p className={classes.text}>Choose {question.name}</p>
+                <p className={classes.text}>{question.title}</p>
                 <Grid classes={{ root: classes.checkAgeOfChild }}>
                   {question.targetAnswers.map((answer) => {
                     return (
@@ -228,7 +228,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeG
           </TabPanelMobile>
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='13px 16px' onClick={onSave} />
+          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='10px 16px' onClick={onSave} />
         </Grid>
       </Grid>
     </Dialog>

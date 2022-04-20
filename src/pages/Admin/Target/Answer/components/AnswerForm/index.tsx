@@ -17,6 +17,7 @@ import { setErrorMess } from "redux/reducers/Status/actionTypes";
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required.'),
+  order: yup.number().typeError('Order is required.').required('Order is required.'),
   description: yup.string(),
   exclusive: yup.bool(),
   groupId: yup.object().shape({
@@ -27,6 +28,7 @@ const schema = yup.object().shape({
 
 export interface AnswerFormData {
   name: string;
+  order: number;
   description: string;
   groupId: OptionItem;
   exclusive: boolean;
@@ -49,7 +51,8 @@ const AnswerForm = memo(({ title, questionId, itemEdit, langEdit, onSubmit }: Pr
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
-      exclusive: false
+      exclusive: false,
+      order: 99
     }
   });
 
@@ -65,6 +68,7 @@ const AnswerForm = memo(({ title, questionId, itemEdit, langEdit, onSubmit }: Pr
     if (itemEdit) {
       reset({
         name: itemEdit.name,
+        order: itemEdit.order,
         description: itemEdit.description,
         exclusive: itemEdit.exclusive,
         groupId: itemEdit.targetAnswerGroup ? { id: itemEdit.targetAnswerGroup.id, name: itemEdit.targetAnswerGroup.name } : undefined,
@@ -126,6 +130,16 @@ const AnswerForm = memo(({ title, questionId, itemEdit, langEdit, onSubmit }: Pr
                       type="text"
                       inputRef={register('description')}
                       errorMessage={errors.description?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Inputs
+                      title="Order"
+                      name="order"
+                      type="number"
+                      disabled={!!langEdit}
+                      inputRef={register('order')}
+                      errorMessage={errors.order?.message}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import classes from './styles.module.scss';
 import {
   Grid,
@@ -21,6 +21,14 @@ import { matchPath, Redirect, Route, Switch, useParams } from "react-router-dom"
 import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
 import { push } from "connected-react-router";
+
+function a11yProps(index) {
+  return {
+    id: `build-tab--${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
 
 interface TabItem {
   name: string,
@@ -94,12 +102,13 @@ const Survey = () => {
           {tabs.map((item, index) => (
             <Tab
               key={index}
+              value={index}
               classes={{
                 selected: classes.selectedTab,
                 root: classes.rootTab,
               }}
               label={item.name}
-              id={`build-tab-${index}`}
+              {...a11yProps(index)}
             />
           ))}
         </Tabs>

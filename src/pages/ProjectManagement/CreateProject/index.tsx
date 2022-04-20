@@ -16,7 +16,6 @@ import {
 import QontoStepIcon from "../components/QontoStepIcon";
 import Header from "components/Header";
 import Footer from "components/Footer";
-import Container from "components/Container";
 import InputSearch from "components/InputSearch";
 import Inputs from "components/Inputs";
 import Buttons from "components/Buttons";
@@ -38,6 +37,7 @@ import { ProjectService } from "services/project";
 import { Project } from "models/project";
 import images from "config/images";
 import { useHistory } from 'react-router-dom';
+import { UserGetSolutions } from "models/solution";
 
 interface IQueryString {
   solution_id?: string
@@ -74,17 +74,16 @@ const CreateProject = () => {
   const dispatch = useDispatch()
   const history = useHistory();
   const [keyword, setKeyword] = useState<string>('');
+  const [isReadMore, setIsReadMore] = useState<boolean>(false);
   const [category, setCategory] = useState<SolutionCategory>();
   const [solutionShow, setSolutionShow] = useState<Solution>();
   const [solutionSelected, setSolutionSelected] = useState<Solution>();
   const [solution, setSolution] = useState<DataPagination<Solution>>();
-  const [solutionShowMobile, setSolutionShowMobile] = useState<Solution>();
   const [solutionCategory, setSolutionCategory] = useState<DataPagination<SolutionCategory>>();
-  const [selectedIndex, setSelectedIndex] = useState<any>('');
   const [activeStep, setActiveStep] = useState<EStep>(EStep.SELECT_SOLUTION);
   const { solution_id }: IQueryString = QueryString.parse(window.location.search);
   const theme = useTheme();
-
+  
   const isMobile = useMediaQuery(theme.breakpoints.down(767));
 
   const { register, handleSubmit, formState: { errors } } = useForm<CreateProjectFormData>({
@@ -92,36 +91,15 @@ const CreateProject = () => {
     mode: 'onChange'
   });
 
-  const handleClickCollapse = index => {
-    if (selectedIndex === index) {
-      setSelectedIndex("")
-    } else {
-      setSelectedIndex(index)
-    }
+  const hendleSolutionShow = (item: Solution) => {
+    setSolutionShow(item)
   }
-
-  const hendleSolutionShow = (item, index) => {
-    if (!isMobile) {
-      setSolutionShow(item)
-    }
-    else {
-      handleClickCollapse(index)
-      setSolutionShowMobile(item)
-    }
-  }
-  console.log(solutionShowMobile, 'sss');
 
   const handleNextStep = () => {
     if (!solutionShow) return
     setSolutionSelected(solutionShow)
     setSolutionShow(undefined)
-    setActiveStep(EStep.CREATE_PROJECT)
-  }
-
-  const handleNextStepMobile = () => {
-    if (!solutionShowMobile) return
-    setSolutionSelected(solutionShowMobile)
-    setSolutionShowMobile(undefined)
+    setIsReadMore(false)
     setActiveStep(EStep.CREATE_PROJECT)
   }
 
@@ -134,9 +112,20 @@ const CreateProject = () => {
     _onSearch(e.target.value)
   }
 
-  const getSolutions = async (params: { keyword?: string, categoryId?: number }) => {
+  const getSolutions = async (value: { keyword?: string, categoryId?: number }) => {
     dispatch(setLoading(true))
-    SolutionService.getSolutions({ take: 99999, keyword: params?.keyword ?? keyword, categoryId: params?.categoryId !== undefined ? params?.categoryId : category?.id })
+    const params: UserGetSolutions = {
+      take: 99999, 
+      keyword: keyword,
+      categoryId: category?.id || undefined
+    }
+    if (value?.keyword !== undefined) {
+      params.keyword = value.keyword || undefined
+    }
+    if (value.categoryId !== undefined) {
+      params.categoryId = value.categoryId
+    }
+    SolutionService.getSolutions(params)
       .then((res) => {
         setSolution({
           data: res.data,
@@ -190,10 +179,10 @@ const CreateProject = () => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const onChangeCategory = (item: SolutionCategory) => {
-    let data = category?.id === item?.id ? null : item
-    setCategory(data)
-    getSolutions({ categoryId: data?.id || null })
+  const onChangeCategory = (item?: SolutionCategory) => {
+    if (category?.id === item?.id) return
+    setCategory(item)
+    getSolutions({ categoryId: item?.id || null })
   }
 
   useEffect(() => {
@@ -249,24 +238,36 @@ const CreateProject = () => {
               />
             </Grid>
             <Stack direction="row" spacing={1} className={classes.stack}>
+            <Chip label={'All'} className={clsx(classes.category, { [classes.categorySelected]: !category?.id })} clickable variant="outlined" onClick={() => onChangeCategory()} />
               {solutionCategory?.data.map((item) => (
                 <Chip key={item.id} label={item.name} className={clsx(classes.category, { [classes.categorySelected]: item.id === category?.id })} clickable variant="outlined" onClick={() => onChangeCategory(item)} />
               ))}
             </Stack>
             <Grid className={classes.body}>
               {solution?.data.map((item, index) => {
+                const selected = item.id === solutionShow?.id
                 switch (item.status) {
                   case EStatus.Active:
                     return (
-                      <Grid key={index} className={clsx(index === selectedIndex ? classes.cardSelect : "", classes.card)} onClick={() => hendleSolutionShow(item, index)}>
+                      <Grid key={index} className={clsx({[classes.cardSelect]: selected}, classes.card)} onClick={() => hendleSolutionShow(item)}>
                         <div>
                           <img src={item.image} alt="solution image" />
                           <p>{item.title}</p>
                           <span>{item.description}</span>
                         </div>
                         <Grid className={classes.btnReadMore}>
-                          <Button classes={{ disabled: classes.btndisabled }} disabled={index !== selectedIndex} onClick={() => setSolutionShow(item)} startIcon={<img src={index === selectedIndex ? images.icReadMore : images.icReadMoreGray} alt='' />}>Read more</Button>
-                          <div className={clsx(index === selectedIndex ? classes.ticked : classes.disable)}>
+                          <Button 
+                            className={classes.btnReadMoreRoot} 
+                            classes={{ disabled: classes.btndisabled }} disabled={!selected} 
+                            onClick={() => setIsReadMore(true)} 
+                            startIcon={<>
+                            <img className={classes.icReadMore} src={images.icReadMore} alt='' />
+                            <img className={classes.icReadMoreGray} src={images.icReadMoreGray} alt='' />
+                            </>}
+                          >
+                            Read more
+                          </Button>
+                          <div className={classes.ticketBox}>
                             <img src={images.icTicked} alt='' />
                             <img src={images.icTick} alt='' />
                           </div>
@@ -287,16 +288,16 @@ const CreateProject = () => {
             </Grid>
             <Grid className={classes.footerSelected}>
               <Grid>
-                {selectedIndex === '' ?
+                {!solutionShow ?
                   <a>No solution selected</a>
                   :
                   <>
                     <p>Selected solution</p>
-                    <span>{solutionShowMobile?.title}</span>
+                    <span>{solutionShow?.title}</span>
                   </>
                 }
               </Grid>
-              <Buttons onClick={() => handleNextStepMobile()} disabled={selectedIndex === '' ? true : false} children={"Get started"} btnType="Blue" padding="16px" className={classes.btnMobile} />
+              <Buttons onClick={() => handleNextStep()} disabled={!solutionShow} children={"Get started"} btnType="Blue" padding="16px" className={classes.btnMobile} />
             </Grid>
           </>
         ) : (
@@ -353,9 +354,12 @@ const CreateProject = () => {
       </Grid>
       <Footer />
       <PopupInforSolution
-        solution={solutionShow}
+        solution={isMobile && isReadMore || !isMobile ? solutionShow : null}
         onSelect={() => handleNextStep()}
-        onCancel={() => setSolutionShow(undefined)}
+        onCancel={() => {
+          setIsReadMore(false)
+          if (!isMobile) setSolutionShow(undefined)
+        }}
       />
     </Grid>
   );

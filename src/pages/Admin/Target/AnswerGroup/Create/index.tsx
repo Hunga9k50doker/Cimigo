@@ -20,6 +20,7 @@ const CreateAnswerGroup = memo((props: Props) => {
     dispatch(setLoading(true))
     TargetAnswerGroupService.create({
       name: value.name,
+      order: value.order,
       questionId: Number(questionId)
     })
       .then(() => {

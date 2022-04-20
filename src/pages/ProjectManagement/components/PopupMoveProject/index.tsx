@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react';
-import { Box, Checkbox, Dialog, FormControlLabel, IconButton, Typography } from '@mui/material';
+import { Box, Dialog, IconButton } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
@@ -7,77 +7,26 @@ import Images from "config/images";
 import { Folder } from 'models/folder';
 import { Project } from 'models/project';
 import _ from 'lodash';
-import Inputs from 'components/Inputs';
-import { FolderService } from 'services/folder';
-import { useDispatch } from 'react-redux';
-import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
-
-export interface MoveProjectData {
-  selectedFolders: number[];
-  createFolderIds: number[];
-  deleteFolderIds: number[];
-  createFolder: string;
-}
+import InputSelect from 'components/InputsSelect';
 
 interface PopupMoveProjectProps {
   project: Project,
   folders: Folder[]
   onCancel: () => void,
-  onMove: (data: MoveProjectData) => void,
+  onMove: (data: Folder) => void,
 }
 
 const PopupMoveProject = memo((props: PopupMoveProjectProps) => {
   const { onCancel, onMove, project, folders } = props;
 
-  const dispatch = useDispatch()
-  const [moveProject, setMoveProject] = useState<MoveProjectData>(null);
-  const [projectFolders, setProjectFolders] = useState<Folder[]>([]);
+  const [folder, setFolder] = useState<Folder>(null);
 
-  const onChangeProjectFolder = (e: React.ChangeEvent<HTMLInputElement>, item: Folder) => {
-    if (!project) return
-    const moveProjectNew = _.cloneDeep(moveProject)
-    const i = moveProjectNew.selectedFolders.findIndex(it => it === item.id)
-    if (e.target.checked) {
-      if (i !== -1) return
-      const existed = projectFolders?.find(it => it.id === item.id)
-      if (!existed) {
-        moveProjectNew.createFolderIds.push(item.id)
-      }
-      moveProjectNew.deleteFolderIds = moveProjectNew.deleteFolderIds.filter(it => it !== item.id)
-      moveProjectNew.selectedFolders.push(item.id)
-    } else {
-      const existed = projectFolders?.find(it => it.id === item.id)
-      if (existed) {
-        moveProjectNew.deleteFolderIds.push(item.id)
-      }
-      moveProjectNew.createFolderIds = moveProjectNew.createFolderIds.filter(it => it !== item.id)
-      if (i === -1) return
-      moveProjectNew.selectedFolders.splice(i, 1)
-    }
-    setMoveProject(moveProjectNew)
+  const onChangeProject = (item: Folder) => {
+    setFolder(item)
   }
 
   useEffect(() => {
-    if (project) {
-      const fetchData = () => {
-        dispatch(setLoading(true))
-        FolderService.getFolders({
-          projectIds: [project.id]
-        })
-        .then((res) => {
-          setMoveProject({
-            selectedFolders: res.data.map((it: Folder) => it.id),
-            createFolderIds: [],
-            deleteFolderIds: [],
-            createFolder: '',
-          })
-          setProjectFolders(res.data)
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
-      }
-      fetchData()
-    }
+    setFolder(project?.folder)
   }, [project])
 
   const _onCancel = () => {
@@ -85,14 +34,8 @@ const PopupMoveProject = memo((props: PopupMoveProjectProps) => {
   }
 
   const _onMove = () => {
-    if (
-      !moveProject || (
-        !moveProject.createFolder &&
-        !moveProject.createFolderIds?.length &&
-        !moveProject.deleteFolderIds?.length
-      )
-    ) return
-    onMove(moveProject)
+    if (!folder) return
+    onMove(folder)
   }
 
   return (
@@ -109,47 +52,22 @@ const PopupMoveProject = memo((props: PopupMoveProjectProps) => {
           </IconButton>
         </Box>
         <Box className={classes.body}>
-          <p>Where you want to move this project ?</p>
-          {folders?.length && (
-            <Box ml={2} mt={2}>
-              <Typography variant="subtitle1" gutterBottom component="div">
-                Actual folder
-              </Typography>
-              {folders?.map(item => (
-                <FormControlLabel
-                  key={item.id}
-                  sx={{ marginLeft: 1 }}
-                  control={
-                    <Checkbox
-                      checked={!!moveProject?.selectedFolders?.includes(item.id)}
-                      onChange={(e) => onChangeProjectFolder(e, item)}
-                      name={`folder_${item.id}`}
-                      color="primary"
-                    />
-                  }
-                  label={item.name}
-                />
-              ))}
-            </Box>
-          )}
-          <Box ml={2} mt={2}>
-            <Typography variant="subtitle1" gutterBottom component="div">
-              New folder
-            </Typography>
-            <Box ml={1}>
-              <Inputs
-                name="name"
-                type="text"
-                placeholder="Folder name"
-                value={moveProject?.createFolder || ''}
-                onChange={(e: any) => setMoveProject({ ...moveProject, createFolder: e.target.value })}
-              />
-            </Box>
-          </Box>
+          <InputSelect
+            fullWidth
+            title="Choose folder you want to move this project"
+            name=""
+            selectProps={{
+              options: folders,
+              value: folder,
+              menuPosition: 'fixed',
+              placeholder: "Select folder",
+              onChange: (val: any, _: any) => onChangeProject(val)
+            }}
+          />
         </Box>
         <Box className={classes.btn}>
-          <Buttons children="Cancel" btnType='TransparentBlue' padding='13px 16px' onClick={_onCancel} />
-          <Buttons children={'Move'} btnType='Blue' padding='13px 16px' onClick={() => _onMove()} />
+          <Buttons children="Cancel" btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel} />
+          <Buttons disabled={!folder} children={'Move'} btnType='Blue' padding='10px 16px' onClick={() => _onMove()} />
         </Box>
       </Box>
     </Dialog>

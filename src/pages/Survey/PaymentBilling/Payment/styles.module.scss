@@ -69,6 +69,11 @@
     padding: 0px;
   }
 }
+.informationBox {
+  @media only screen and (max-width: 767px) {
+    padding: 0px 19px;
+  }
+}
 .checkRadio {
   color: #a6cc17 !important;
 }
@@ -80,13 +85,18 @@
 .title {
   display: flex;
   align-items: center;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #1f61a9;
   img {
     margin-right: 10px;
   }
 }
 .titleSub {
   font-style: normal;
-  font-weight: normal;
+  font-weight: 500;
   font-size: 14px;
   line-height: 140%;
   letter-spacing: 0.015em;
@@ -102,7 +112,7 @@
   letter-spacing: 0.015em;
   color: rgba(28, 28, 28, 0.65);
   margin-top: 10px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   @media only screen and (max-width: 767px) {
     padding: 0px 19px;
   }
@@ -153,6 +163,17 @@
 }
 .tips {
   display: flex;
+  [class~="MuiFormControlLabel-root"] {
+    margin-right: 5px;
+    [class~="MuiTypography-root"] {
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 120%;
+      letter-spacing: 0.05em;
+      color: rgba(28, 28, 28, 0.65);
+    }
+  }
+ 
 }
 .rootCheckbox {
   padding: 12px;
@@ -173,7 +194,7 @@
   color: rgba(28, 28, 28, 0.65);
 }
 .bodyOrder {
-  padding: 20px 40px;
+  padding: 20px 40px 40px;
   @media only screen and (max-width: 767px) {
     padding: 0px 40px;
   }
@@ -228,7 +249,7 @@
   padding: 4px 0px;
   span {
     font-style: normal;
-    font-weight: normal;
+    font-weight: 500;
     font-size: 16px;
     line-height: 140%;
     letter-spacing: 0.015em;
@@ -242,6 +263,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
   span {
     font-weight: bold;
     font-size: 16px;

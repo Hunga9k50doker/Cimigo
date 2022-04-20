@@ -42,12 +42,13 @@ const EditAnswerGroup = memo((props: Props) => {
   const onSubmit = (data: AnswerGroupFormData) => {
     dispatch(setLoading(true))
     const form: UpdateAnswerGroupParams = {
-      name: data.name
+      name: data.name,
+      order: data.order,
     }
     if (lang) form.language = lang
     TargetAnswerGroupService.update(Number(answerGroupId), form)
       .then(() => {
-        dispatch(push(routes.admin.target.question.answer.root.replace(":id", questionId)))
+        dispatch(push(routes.admin.target.question.answerGroup.root.replace(":id", questionId)))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))

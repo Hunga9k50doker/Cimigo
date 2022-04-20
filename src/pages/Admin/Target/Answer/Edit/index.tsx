@@ -43,6 +43,7 @@ const EditAnswer = memo((props: Props) => {
     dispatch(setLoading(true))
     const form: UpdateAnswerParams = {
       name: data.name,
+      order: data.order,
       description: data.description,
       exclusive: data.exclusive,
       groupId: data.groupId?.id,
