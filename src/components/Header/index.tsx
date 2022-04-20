@@ -139,7 +139,7 @@ const Header = memo((props: HeaderProps) => {
             {detail &&
               <p className={classes.linkTexDetail}>
                 <img src={images.icNextMobile} alt='' />
-                <span>{detail}</span>
+                <span className={classes.detail}>{detail}</span>
               </p>
             }
           </div>

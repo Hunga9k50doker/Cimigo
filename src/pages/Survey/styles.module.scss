@@ -101,3 +101,7 @@
 .scrollButtonsMobile {
   background: linear-gradient(270deg, #ffffff 66.68%, rgba(255, 255, 255, 0) 129.69%);
 }
+.projectName{
+    text-overflow: ellipsis; 
+    overflow: hidden;
+}
