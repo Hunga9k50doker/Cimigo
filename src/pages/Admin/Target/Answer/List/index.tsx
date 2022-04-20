@@ -18,6 +18,7 @@ import { TargetAnswerService } from "services/admin/target_answer";
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
+  { name: 'order', label: 'Order', sortable: false },
   { name: 'id', label: 'Id', sortable: false },
   { name: 'name', label: 'Name', sortable: false },
   { name: 'description', label: 'Description', sortable: false },
@@ -192,6 +193,9 @@ const AnswerList = memo(({ }: Props) => {
                           key={index}
                         >
                           <TableCell component="th">
+                            {item.order}
+                          </TableCell>
+                          <TableCell component="th">
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
@@ -224,7 +228,7 @@ const AnswerList = memo(({ }: Props) => {
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={6}>
+                      <TableCell align="center" colSpan={7}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>

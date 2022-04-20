@@ -79,12 +79,12 @@ const Order = memo(({ }: Props) => {
       case EPaymentMethod.BANK_TRANSFER:
         return (
           <>
-            <p className={classes.textGreen}>Total amount: ${fCurrency2(payment()?.totalAmountUSD || 0)}</p>
+            <p className={classes.textGreen}>Total amount: {`$`}{fCurrency2(payment()?.totalAmountUSD || 0)}</p>
             <p className={classes.textBlue}>(Equivalent to {fCurrency2VND(payment()?.totalAmount || 0)} VND)</p>
-            <p className={classes.subTitle} style={{ textAlign: "center" }}>If you have already paid, please inform us by clicking the button below</p>
-            <Buttons onClick={confirmedPayment} btnType="TransparentBlue" children={'Confirm payment has been made'} padding="16px" className={classes.btn} />
+            <p className={classes.subTitleMain}>If you have already paid, please inform us by clicking the button below</p>
+            <Buttons onClick={confirmedPayment} btnType="TransparentBlue" children={'Confirm payment has been made'} padding="11px 16px" className={classes.btn} />
             <p className={classes.subTitle} style={{ textAlign: "start", marginBottom: 16 }}>The project will be set up whilst we await payment. The project is only launched after payment has been received. Please bank-in cheque/cash to one of following accounts.</p>
-            <p className={classes.subTitle} style={{ textAlign: "start" }}>If you're tranfering money in USD, please send a total of <span style={{ color: "#7C9911", fontWeight: 600 }}>${fCurrency2(payment()?.totalAmountUSD || 0)}</span> to our following bank account:</p>
+            <p className={classes.subTitle} style={{ textAlign: "start" }}>If you're tranfering money in USD, please send a total of <span style={{ color: "#7C9911", fontWeight: 600 }}>{`$`}{fCurrency2(payment()?.totalAmountUSD || 0)}</span> to our following bank account:</p>
             <Grid classes={{ root: classes.box }}>
               <p>Bank name</p>
               <span>Vietnam Technological and Commercial Joint Stock Bank (TCB)</span>

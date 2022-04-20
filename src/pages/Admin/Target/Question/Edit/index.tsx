@@ -43,6 +43,7 @@ const EditQuestion = memo((props: Props) => {
     dispatch(setLoading(true))
     const form: UpdateQuestionParams = {
       name: data.name,
+      title: data.title,
       order: data.order,
       typeId: data.typeId.id,
       renderTypeId: data.renderTypeId.id,

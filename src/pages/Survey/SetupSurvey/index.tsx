@@ -57,6 +57,7 @@ import { UserAttributeService } from "services/user_attribute";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
 import { editableProject } from "helpers/project";
 import { Check } from "@mui/icons-material";
+import Warning from "../components/Warning";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -511,262 +512,323 @@ const SetupSurvey = memo(({ id }: Props) => {
   }
 
   return (
-    <Grid classes={{ root: classes.root }} >
-      <Grid classes={{ root: classes.left }} >
-        <p className={classes.title}>Setup your pack test survey</p>
-        <p className={classes.subTitle} id="basic-information">1.Basic information</p>
-        <Grid className={classes.flex}>
-          <p>These information will be used in the report, enter these correctly would make your report legible.</p>
-          <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmitBI)}>
-            <Grid className={classes.input}>
-              <Grid>
-                <Inputs title="Category" name="category" placeholder="Enter your product category" inputRef={register('category')} errorMessage={errors.category?.message} />
-                <Inputs title="Variant" name="" placeholder="Enter your product variant" inputRef={register('variant')} errorMessage={errors.variant?.message} />
-              </Grid>
-              <Grid>
-                <Inputs title="Brand" name="" placeholder="Enter your product brand" inputRef={register('brand')} errorMessage={errors.brand?.message} />
-                <Inputs title="Manufacturer" name="" placeholder="Enter your product manufacturer" inputRef={register('manufacturer')} errorMessage={errors.manufacturer?.message} />
-              </Grid>
-            </Grid>
-            {editableProject(project) && (
-              <Grid className={classes.btnSave}>
-                <Buttons type={"submit"} padding="3px 13px" btnType="TransparentBlue" ><img src={Images.icSave} alt="icon save" />Save</Buttons>
-              </Grid>
-            )}
-          </form>
+    <>
+      {!editableProject(project) && (
+        <Grid classes={{ root: classes.warningBox }}>
+          <Warning project={project} />
         </Grid>
-        <div className={classes.line}></div>
-        <p className={classes.subTitle} id="upload-packs">2.Upload packs <span>(max {maxPack()})</span></p>
-        <Grid className={classes.flex}>
-          <p>You may test between one and four packs. These would typically include your current pack, 2 new test pack and a key competitor pack.</p>
-          <Grid className={classes.packs}>
-            {packs.map((item, index) => {
-              return (
-                <Grid className={classes.itemPacks} key={index}>
-                  <Grid>
+      )}
+      <Grid classes={{ root: classes.root }}>
+        <Grid classes={{ root: classes.left }} >
+          <p className={classes.title}>Setup your pack test survey</p>
+          <p className={classes.subTitle} id="basic-information">1.Basic information</p>
+          <Grid className={classes.flex}>
+            <p>These information will be used in the report, enter these correctly would make your report legible.</p>
+            <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmitBI)}>
+              <Grid className={classes.input}>
+                <Grid>
+                  <Inputs title="Category" name="category" placeholder="Enter your product category" inputRef={register('category')} errorMessage={errors.category?.message} />
+                  <Inputs title="Variant" name="" placeholder="Enter your product variant" inputRef={register('variant')} errorMessage={errors.variant?.message} />
+                </Grid>
+                <Grid>
+                  <Inputs title="Brand" name="" placeholder="Enter your product brand" inputRef={register('brand')} errorMessage={errors.brand?.message} />
+                  <Inputs title="Manufacturer" name="" placeholder="Enter your product manufacturer" inputRef={register('manufacturer')} errorMessage={errors.manufacturer?.message} />
+                </Grid>
+              </Grid>
+              {editableProject(project) && (
+                <Grid className={classes.btnSave}>
+                  <Buttons type={"submit"} padding="3px 13px" btnType="TransparentBlue" ><img src={Images.icSave} alt="icon save" />Save</Buttons>
+                </Grid>
+              )}
+            </form>
+          </Grid>
+          <div className={classes.line}></div>
+          <p className={classes.subTitle} id="upload-packs">2.Upload packs <span>(max {maxPack()})</span></p>
+          <Grid className={classes.flex}>
+            <p>You may test between one and four packs. These would typically include your current pack, 2 new test pack and a key competitor pack.</p>
+            <Grid className={classes.packs}>
+              {packs.map((item, index) => {
+                return (
+                  <Grid className={classes.itemPacks} key={index}>
+                    <Grid>
+                      {editableProject(project) && (
+                        <IconButton onClick={(e) => {
+                          setAnchorElPack(e.currentTarget)
+                          setPackAction(item)
+                        }}>
+                          <MoreVertIcon sx={{ color: "white" }} />
+                        </IconButton>
+                      )}
+                      <img src={item.image} alt="image pack" />
+                      <div className={classes.itemInfor}>
+                        <div><p>Brand: </p><span>{item.brand}</span></div>
+                        <div><p>Variant: </p><span>{item.variant}</span></div>
+                        <div><p>Manufacturer: </p><span>{item.manufacturer}</span></div>
+                      </div>
+                    </Grid>
+                    <Grid className={classes.textPacks}>
+                      <p>{item.name}</p>
+                      <LabelStatus status={item.packType} />
+                    </Grid>
+                  </Grid>
+                )
+              })}
+              {(maxPack() > packs?.length && editableProject(project)) && (
+                <Grid className={classes.addPack} onClick={() => setAddNewPack(true)}>
+                  <img src={Images.icAddPack} alt="" />
+                  <p>Add pack</p>
+                </Grid>
+              )}
+            </Grid>
+          </Grid>
+          <Menu
+            anchorEl={anchorElPack}
+            open={Boolean(anchorElPack)}
+            onClose={() => setAnchorElPack(null)}
+            classes={{ paper: classes.menuAction }}
+          >
+            <MenuItem className={classes.itemAciton} onClick={() => {
+              if (!packAction) return
+              setPackEdit(packAction)
+              setAnchorElPack(null)
+              setPackAction(null)
+            }}>
+              <img src={Images.icEdit} alt="" />
+              <p>Edit</p>
+            </MenuItem>
+            <MenuItem className={classes.itemAciton} onClick={() => {
+              if (!packAction) return
+              setPackDelete(packAction)
+              setAnchorElPack(null)
+              setPackAction(null)
+            }}>
+              <img src={Images.icDelete} alt="" />
+              <p>Delete</p>
+            </MenuItem>
+          </Menu>
+          <div className={classes.line}></div>
+          <p className={classes.subTitle} id="additional-brand-list">3.Additional brand list <span>(max {maxAdditionalBrand()})</span></p>
+          <Grid className={classes.flex}>
+            <p>In your pack test survey, we will ask consumers some brand use questions. Besides the uploaded pack products, please add the brand, variant name and manufacturer for top selling products in the category and market in which you are testing.
+              <br />Try to include products accounting for at least two-thirds of sales or market share.</p>
+            <TableContainer className={classes.table}>
+              <Table>
+                <TableHead className={classes.tableHead}>
+                  <TableRow>
+                    <TableCell>Brand</TableCell>
+                    <TableCell>Variant</TableCell>
+                    <TableCell>Manufacturer</TableCell>
+                    <TableCell align="center">Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {packs?.map(item => (
+                    <TableRow key={item.id} className={classes.tableBody}>
+                      <TableCell>{item.brand}</TableCell>
+                      <TableCell>{item.variant}</TableCell>
+                      <TableCell>{item.manufacturer}</TableCell>
+                      <TableCell align="center">
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {additionalBrand?.map(item => (
+                    <TableRow key={item.id} className={classes.tableBody}>
+                      {
+                        additionalBrandEdit?.id !== item.id ? (
+                          <>
+                            <TableCell>{item.brand}</TableCell>
+                            <TableCell>{item.variant}</TableCell>
+                            <TableCell>{item.manufacturer}</TableCell>
+                            <TableCell align="center">
+                              {editableProject(project) && (
+                                <IconButton onClick={(e) => {
+                                  setAnchorElADB(e.currentTarget)
+                                  setAdditionalBrandAction(item)
+                                }}>
+                                  <MoreHorizIcon />
+                                </IconButton>
+                              )}
+                            </TableCell>
+                          </>
+                        ) : (
+                          <>
+                            <TableCell>
+                              <OutlinedInput
+                                placeholder="Add text"
+                                value={brandFormData?.brand || ''}
+                                onChange={(e) => {
+                                  setBrandFormData({
+                                    ...brandFormData,
+                                    brand: e.target.value || ''
+                                  })
+                                }}
+                                classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <OutlinedInput
+                                placeholder="Add text"
+                                value={brandFormData?.variant || ''}
+                                onChange={(e) => {
+                                  setBrandFormData({
+                                    ...brandFormData,
+                                    variant: e.target.value || ''
+                                  })
+                                }}
+                                classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <OutlinedInput
+                                placeholder="Add text"
+                                value={brandFormData?.manufacturer || ''}
+                                onChange={(e) => {
+                                  setBrandFormData({
+                                    ...brandFormData,
+                                    manufacturer: e.target.value || ''
+                                  })
+                                }}
+                                classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                              />
+                            </TableCell>
+                            <TableCell align="center">
+                              <Buttons
+                                width="100%"
+                                className={classes.btnAddBrandInCell}
+                                btnType="TransparentBlue"
+                                disabled={!enableAddBrand()}
+                                onClick={onAddOrEditBrand}
+                              >
+                                <Check fontSize="small" sx={{ marginRight: '8px' }} />Save
+                              </Buttons>
+                            </TableCell>
+                          </>
+                        )
+                      }
+                    </TableRow>
+                  ))}
+                  {(addRow && !additionalBrandEdit) &&
+                    <TableRow>
+                      <TableCell>
+                        <OutlinedInput
+                          placeholder="Add text"
+                          value={brandFormData?.brand || ''}
+                          onChange={(e) => {
+                            setBrandFormData({
+                              ...brandFormData,
+                              brand: e.target.value || ''
+                            })
+                          }}
+                          classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <OutlinedInput
+                          placeholder="Add text"
+                          value={brandFormData?.variant || ''}
+                          onChange={(e) => {
+                            setBrandFormData({
+                              ...brandFormData,
+                              variant: e.target.value || ''
+                            })
+                          }}
+                          classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <OutlinedInput
+                          placeholder="Add text"
+                          value={brandFormData?.manufacturer || ''}
+                          onChange={(e) => {
+                            setBrandFormData({
+                              ...brandFormData,
+                              manufacturer: e.target.value || ''
+                            })
+                          }}
+                          classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <Buttons
+                          width="100%"
+                          className={classes.btnAddBrandInCell}
+                          btnType="TransparentBlue"
+                          disabled={!enableAddBrand()}
+                          onClick={onAddOrEditBrand}
+                        >
+                          <Check fontSize="small" sx={{ marginRight: '8px' }} />Save
+                        </Buttons>
+                      </TableCell>
+                    </TableRow>
+                  }
+                  {(enableAdditionalBrand() && !addRow && !additionalBrandEdit) && <TableRow hover className={classes.btnAddBrand} onClick={() => setAddRow(true)}>
+                    <TableCell colSpan={4} variant="footer" align="center" scope="row"><div><img src={Images.icAddBlue} /> Add new brand</div></TableCell>
+                  </TableRow>}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Menu
+              anchorEl={anchorElADB}
+              open={Boolean(anchorElADB)}
+              onClose={onCloseActionADB}
+              classes={{ paper: classes.menuAction }}
+            >
+              <MenuItem className={classes.itemAciton} onClick={() => onEditBrand()}>
+                <img src={Images.icEdit} alt="icon edit" />
+                <p>Edit</p>
+              </MenuItem>
+              <MenuItem className={classes.itemAciton} onClick={() => onShowConfirmDeleteBrand()}>
+                <img src={Images.icDelete} alt="icon delete" />
+                <p>Delete</p>
+              </MenuItem>
+            </Menu>
+            {/* ===================brand list mobile====================== */}
+            <Grid className={classes.brandListMobile}>
+              {packs?.map(item => (
+                <Grid key={item.id} className={classes.itemBrandMobile}>
+                  <div>
+                    <p className={classes.textBrand}>Brand: {item.brand}</p>
+                    <p className={classes.textVariant}>Variant: {item.variant}</p>
+                    <p className={classes.textVariant}>Manufacturer: {item.manufacturer}</p>
+                  </div>
+                </Grid>
+              ))}
+              {additionalBrand?.map((item, index) => {
+                return (
+                  <Grid key={index} className={classes.itemBrandMobile}>
+                    <div>
+                      <p className={classes.textBrand}>Brand: {item.brand}</p>
+                      <p className={classes.textVariant}>Variant: {item.variant}</p>
+                      <p className={classes.textVariant}>Manufacturer: {item.manufacturer}</p>
+                    </div>
                     {editableProject(project) && (
-                      <IconButton onClick={(e) => {
-                        setAnchorElPack(e.currentTarget)
-                        setPackAction(item)
-                      }}>
-                        <MoreVertIcon sx={{ color: "white" }} />
+                      <IconButton
+                        onClick={(e) => {
+                          setAnchorElADBMobile(e.currentTarget)
+                          setAdditionalBrandAction(item)
+                        }}
+                      >
+                        <MoreVertIcon />
                       </IconButton>
                     )}
-                    <img src={item.image} alt="image pack" />
-                    <div className={classes.itemInfor}>
-                      <div><p>Brand: </p><span>{item.brand}</span></div>
-                      <div><p>Variant: </p><span>{item.variant}</span></div>
-                      <div><p>Manufacturer: </p><span>{item.manufacturer}</span></div>
-                    </div>
                   </Grid>
-                  <Grid className={classes.textPacks}>
-                    <p>{item.name}</p>
-                    <LabelStatus status={item.packType} />
-                  </Grid>
+                )
+              })}
+              {enableAdditionalBrand() && (
+                <Grid className={classes.itemBrandMobileAdd} onClick={() => setAddBrandMobile(true)}>
+                  <img src={Images.icAddGray} alt="" />
+                  <p>Add new brand</p>
                 </Grid>
-              )
-            })}
-            {(maxPack() > packs?.length && editableProject(project)) && (
-              <Grid className={classes.addPack} onClick={() => setAddNewPack(true)}>
-                <img src={Images.icAddPack} alt="" />
-                <p>Add pack</p>
-              </Grid>
-            )}
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-        <Menu
-          anchorEl={anchorElPack}
-          open={Boolean(anchorElPack)}
-          onClose={() => setAnchorElPack(null)}
-          classes={{ paper: classes.menuAction }}
-        >
-          <MenuItem className={classes.itemAciton} onClick={() => {
-            if (!packAction) return
-            setPackEdit(packAction)
-            setAnchorElPack(null)
-            setPackAction(null)
-          }}>
-            <img src={Images.icEdit} alt="" />
-            <p>Edit</p>
-          </MenuItem>
-          <MenuItem className={classes.itemAciton} onClick={() => {
-            if (!packAction) return
-            setPackDelete(packAction)
-            setAnchorElPack(null)
-            setPackAction(null)
-          }}>
-            <img src={Images.icDelete} alt="" />
-            <p>Delete</p>
-          </MenuItem>
-        </Menu>
-        <div className={classes.line}></div>
-        <p className={classes.subTitle} id="additional-brand-list">3.Additional brand list <span>(max {maxAdditionalBrand()})</span></p>
-        <Grid className={classes.flex}>
-          <p>In your pack test survey, we will ask consumers some brand use questions. Besides the uploaded pack products, please add the brand, variant name and manufacturer for top selling products in the category and market in which you are testing.
-            <br />Try to include products accounting for at least two-thirds of sales or market share.</p>
-          <TableContainer className={classes.table}>
-            <Table>
-              <TableHead className={classes.tableHead}>
-                <TableRow>
-                  <TableCell>Brand</TableCell>
-                  <TableCell>Variant</TableCell>
-                  <TableCell>Manufacturer</TableCell>
-                  <TableCell align="center">Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {packs?.map(item => (
-                  <TableRow key={item.id} className={classes.tableBody}>
-                    <TableCell>{item.brand}</TableCell>
-                    <TableCell>{item.variant}</TableCell>
-                    <TableCell>{item.manufacturer}</TableCell>
-                    <TableCell align="center">
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {additionalBrand?.map(item => (
-                  <TableRow key={item.id} className={classes.tableBody}>
-                    {
-                      additionalBrandEdit?.id !== item.id ? (
-                        <>
-                          <TableCell>{item.brand}</TableCell>
-                          <TableCell>{item.variant}</TableCell>
-                          <TableCell>{item.manufacturer}</TableCell>
-                          <TableCell align="center">
-                            {editableProject(project) && (
-                              <IconButton onClick={(e) => {
-                                setAnchorElADB(e.currentTarget)
-                                setAdditionalBrandAction(item)
-                              }}>
-                                <MoreHorizIcon />
-                              </IconButton>
-                            )}
-                          </TableCell>
-                        </>
-                      ) : (
-                        <>
-                          <TableCell>
-                            <OutlinedInput
-                              placeholder="Add text"
-                              value={brandFormData?.brand || ''}
-                              onChange={(e) => {
-                                setBrandFormData({
-                                  ...brandFormData,
-                                  brand: e.target.value || ''
-                                })
-                              }}
-                              classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <OutlinedInput
-                              placeholder="Add text"
-                              value={brandFormData?.variant || ''}
-                              onChange={(e) => {
-                                setBrandFormData({
-                                  ...brandFormData,
-                                  variant: e.target.value || ''
-                                })
-                              }}
-                              classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <OutlinedInput
-                              placeholder="Add text"
-                              value={brandFormData?.manufacturer || ''}
-                              onChange={(e) => {
-                                setBrandFormData({
-                                  ...brandFormData,
-                                  manufacturer: e.target.value || ''
-                                })
-                              }}
-                              classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
-                            />
-                          </TableCell>
-                          <TableCell align="center">
-                            <Buttons
-                              width="100%"
-                              className={classes.btnAddBrandInCell}
-                              btnType="TransparentBlue"
-                              disabled={!enableAddBrand()}
-                              onClick={onAddOrEditBrand}
-                            >
-                              <Check fontSize="small" sx={{marginRight: '8px'}}/>Save
-                            </Buttons>
-                          </TableCell>
-                        </>
-                      )
-                    }
-                  </TableRow>
-                ))}
-                {(addRow && !additionalBrandEdit) &&
-                  <TableRow>
-                    <TableCell>
-                      <OutlinedInput
-                        placeholder="Add text"
-                        value={brandFormData?.brand || ''}
-                        onChange={(e) => {
-                          setBrandFormData({
-                            ...brandFormData,
-                            brand: e.target.value || ''
-                          })
-                        }}
-                        classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <OutlinedInput
-                        placeholder="Add text"
-                        value={brandFormData?.variant || ''}
-                        onChange={(e) => {
-                          setBrandFormData({
-                            ...brandFormData,
-                            variant: e.target.value || ''
-                          })
-                        }}
-                        classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <OutlinedInput
-                        placeholder="Add text"
-                        value={brandFormData?.manufacturer || ''}
-                        onChange={(e) => {
-                          setBrandFormData({
-                            ...brandFormData,
-                            manufacturer: e.target.value || ''
-                          })
-                        }}
-                        classes={{ root: classes.rootTextfield, input: classes.inputTextfield }}
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <Buttons
-                        width="100%"
-                        className={classes.btnAddBrandInCell}
-                        btnType="TransparentBlue"
-                        disabled={!enableAddBrand()}
-                        onClick={onAddOrEditBrand}
-                      >
-                        <Check fontSize="small" sx={{marginRight: '8px'}}/>Save
-                      </Buttons>
-                    </TableCell>
-                  </TableRow>
-                }
-                {(enableAdditionalBrand() && !addRow && !additionalBrandEdit) && <TableRow hover className={classes.btnAddBrand} onClick={() => setAddRow(true)}>
-                  <TableCell colSpan={4} variant="footer" align="center" scope="row"><div><img src={Images.icAddBlue} /> Add new brand</div></TableCell>
-                </TableRow>}
-              </TableBody>
-            </Table>
-          </TableContainer>
           <Menu
-            anchorEl={anchorElADB}
-            open={Boolean(anchorElADB)}
+            anchorEl={anchorElADBMobile}
+            open={Boolean(anchorElADBMobile)}
             onClose={onCloseActionADB}
             classes={{ paper: classes.menuAction }}
           >
-            <MenuItem className={classes.itemAciton} onClick={() => onEditBrand()}>
+            <MenuItem className={classes.itemAciton} onClick={() => onShowBrandEditMobile()}>
               <img src={Images.icEdit} alt="icon edit" />
               <p>Edit</p>
             </MenuItem>
@@ -775,324 +837,270 @@ const SetupSurvey = memo(({ id }: Props) => {
               <p>Delete</p>
             </MenuItem>
           </Menu>
-          {/* ===================brand list mobile====================== */}
-          <Grid className={classes.brandListMobile}>
-            {packs?.map(item => (
-              <Grid key={item.id} className={classes.itemBrandMobile}>
-                <div>
-                  <p className={classes.textBrand}>Brand: {item.brand}</p>
-                  <p className={classes.textVariant}>Variant: {item.variant}</p>
-                  <p className={classes.textVariant}>Manufacturer: {item.manufacturer}</p>
-                </div>
-              </Grid>
-            ))}
-            {additionalBrand?.map((item, index) => {
-              return (
-                <Grid key={index} className={classes.itemBrandMobile}>
-                  <div>
-                    <p className={classes.textBrand}>Brand: {item.brand}</p>
-                    <p className={classes.textVariant}>Variant: {item.variant}</p>
-                    <p className={classes.textVariant}>Manufacturer: {item.manufacturer}</p>
-                  </div>
-                  {editableProject(project) && (
-                    <IconButton
-                      onClick={(e) => {
-                        setAnchorElADBMobile(e.currentTarget)
-                        setAdditionalBrandAction(item)
-                      }}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                  )}
-                </Grid>
-              )
-            })}
-            {enableAdditionalBrand() && (
-              <Grid className={classes.itemBrandMobileAdd} onClick={() => setAddBrandMobile(true)}>
-                <img src={Images.icAddGray} alt="" />
-                <p>Add new brand</p>
-              </Grid>
-            )}
-          </Grid>
-        </Grid>
-        <Menu
-          anchorEl={anchorElADBMobile}
-          open={Boolean(anchorElADBMobile)}
-          onClose={onCloseActionADB}
-          classes={{ paper: classes.menuAction }}
-        >
-          <MenuItem className={classes.itemAciton} onClick={() => onShowBrandEditMobile()}>
-            <img src={Images.icEdit} alt="icon edit" />
-            <p>Edit</p>
-          </MenuItem>
-          <MenuItem className={classes.itemAciton} onClick={() => onShowConfirmDeleteBrand()}>
-            <img src={Images.icDelete} alt="icon delete" />
-            <p>Delete</p>
-          </MenuItem>
-        </Menu>
-        <div className={classes.line}></div>
-        <p className={classes.subTitle} id="additional-attributes">4.Additional attributes <span>(max {maxAdditionalAttribute()})</span></p>
-        <Grid className={classes.flex}>
-          <p>We will test your packs associations with some <span onClick={() => setOpenPopupMandatory(true)}>mandatory attributes</span>. You have an option to select further attributes from a pre-defined list or add your own attributes.</p>
-          <Grid container classes={{ root: classes.rootList }}>
-            {getAttributeShow().map((item, index) => (
-              <ListItem
-                alignItems="center"
-                component="div"
-                key={index}
-                classes={{ root: classes.rootListItem }}
-                secondaryAction={
-                  <div className={classes.btnAction}>
-                    {editableProject(project) && (
-                      <>
-                        {item.type === AttributeShowType.User && (
-                          <IconButton onClick={() => onEditUserAttribute(item.data as any)} classes={{ root: classes.iconAction }} edge="end" aria-label="Edit">
-                            <img src={Images.icRename} alt="" />
-                          </IconButton>
-                        )}
-                        <IconButton onClick={() => onShowConfirmDeleteAttribute(item)} classes={{ root: classes.iconAction }} edge="end" aria-label="Delete">
-                          <img src={Images.icDelete} alt="" />
-                        </IconButton>
-                      </>
-                    )}
-                  </div>
-                }
-                disablePadding
-              >
-                <ListItemButton>
-                  <Grid className={classes.listFlex}>
-                    <Grid item xs={4} className={classes.listTextLeft}>
-                      <p>{item.start}</p>
-                    </Grid>
-                    <Grid item xs={4} className={classes.listNumber}>
-                      <div>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
-                    </Grid>
-                    <Grid item xs={4} className={classes.listTextRight}>
-                      <p>{item.end}</p>
-                    </Grid>
-                  </Grid>
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </Grid>
-          {/* ===================Additional attributes mobile====================== */}
-
-          <Grid container classes={{ root: classes.rootListMobile }}>
-            {getAttributeShow().map((item, index) => {
-              const uuid = `${item.id}-${item.type}`
-              const expanded = uuid === expandedAttribute
-              return (
-                <Grid
-                  className={classes.attributesMobile}
+          <div className={classes.line}></div>
+          <p className={classes.subTitle} id="additional-attributes">4.Additional attributes <span>(max {maxAdditionalAttribute()})</span></p>
+          <Grid className={classes.flex}>
+            <p>We will test your packs associations with some <span onClick={() => setOpenPopupMandatory(true)}>mandatory attributes</span>. You have an option to select further attributes from a pre-defined list or add your own attributes.</p>
+            <Grid container classes={{ root: classes.rootList }}>
+              {getAttributeShow().map((item, index) => (
+                <ListItem
+                  alignItems="center"
+                  component="div"
                   key={index}
-                  onClick={() => {
-                    if (expanded) setExpandedAttribute(null)
-                    else setExpandedAttribute(uuid)
-                  }}
-                  style={{ background: expanded ? '#EEEEEE' : '', padding: expanded ? '15px 20px 0px 20px' : '15px 20px' }}
-                >
-                  <Grid style={{ width: "100%" }}>
-                    {!expanded && <p className={classes.titleAttributesMobile}>{item.start}</p>}
-                    <Collapse
-                      in={expanded}
-                      timeout="auto"
-                      unmountOnExit
-                    >
-                      <div className={classes.CollapseAttributesMobile}>
-                        <p>Start: <span>{item.start}</span></p>
-                        <p>End: <span>{item.end}</span></p>
-                      </div>
+                  classes={{ root: classes.rootListItem }}
+                  secondaryAction={
+                    <div className={classes.btnAction}>
                       {editableProject(project) && (
-                        <div className={classes.btnActionMobile} onClick={e => e.stopPropagation()}>
-                          {item.type === AttributeShowType.User && <Button onClick={() => onEditUserAttribute(item.data as any)}>Edit</Button>}
-                          <Button onClick={() => onShowConfirmDeleteAttribute(item)}>Delete</Button>
-                        </div>
+                        <>
+                          {item.type === AttributeShowType.User && (
+                            <IconButton onClick={() => onEditUserAttribute(item.data as any)} classes={{ root: classes.iconAction }} edge="end" aria-label="Edit">
+                              <img src={Images.icRename} alt="" />
+                            </IconButton>
+                          )}
+                          <IconButton onClick={() => onShowConfirmDeleteAttribute(item)} classes={{ root: classes.iconAction }} edge="end" aria-label="Delete">
+                            <img src={Images.icDelete} alt="" />
+                          </IconButton>
+                        </>
                       )}
-                    </Collapse >
+                    </div>
+                  }
+                  disablePadding
+                >
+                  <ListItemButton>
+                    <Grid className={classes.listFlex}>
+                      <Grid item xs={4} className={classes.listTextLeft}>
+                        <p>{item.start}</p>
+                      </Grid>
+                      <Grid item xs={4} className={classes.listNumber}>
+                        <div>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
+                      </Grid>
+                      <Grid item xs={4} className={classes.listTextRight}>
+                        <p>{item.end}</p>
+                      </Grid>
+                    </Grid>
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </Grid>
+            {/* ===================Additional attributes mobile====================== */}
+
+            <Grid container classes={{ root: classes.rootListMobile }}>
+              {getAttributeShow().map((item, index) => {
+                const uuid = `${item.id}-${item.type}`
+                const expanded = uuid === expandedAttribute
+                return (
+                  <Grid
+                    className={classes.attributesMobile}
+                    key={index}
+                    onClick={() => {
+                      if (expanded) setExpandedAttribute(null)
+                      else setExpandedAttribute(uuid)
+                    }}
+                    style={{ background: expanded ? '#EEEEEE' : '', padding: expanded ? '15px 20px 0px 20px' : '15px 20px' }}
+                  >
+                    <Grid style={{ width: "100%" }}>
+                      {!expanded && <p className={classes.titleAttributesMobile}>{item.start}</p>}
+                      <Collapse
+                        in={expanded}
+                        timeout="auto"
+                        unmountOnExit
+                      >
+                        <div className={classes.CollapseAttributesMobile}>
+                          <p>Start: <span>{item.start}</span></p>
+                          <p>End: <span>{item.end}</span></p>
+                        </div>
+                        {editableProject(project) && (
+                          <div className={classes.btnActionMobile} onClick={e => e.stopPropagation()}>
+                            {item.type === AttributeShowType.User && <Button onClick={() => onEditUserAttribute(item.data as any)}>Edit</Button>}
+                            <Button onClick={() => onShowConfirmDeleteAttribute(item)}>Delete</Button>
+                          </div>
+                        )}
+                      </Collapse >
+                    </Grid>
+                    <img style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Images.icShowGray} alt='' />
                   </Grid>
-                  <img style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Images.icShowGray} alt='' />
-                </Grid>
-              )
-            })}
-          </Grid>
-          <Grid classes={{ root: classes.select }}>
-            <FormControl classes={{ root: classes.rootSelect }} disabled={!enableAdditionalAttributes() || !editableProject(project)}>
-              <Select
-                variant="outlined"
-                displayEmpty
-                defaultValue={""}
-                classes={{ select: classes.selectType, icon: classes.icSelect }}
-                MenuProps={{
-                  className: classes.selectTypeMenu
-                }}
-              >
-                <MenuItem disabled value="">Add new attributes</MenuItem>
-                <MenuItem value={20} onClick={() => setOpenPopupPreDefined(true)}>From pre-defined list</MenuItem>
-                <MenuItem value={30} onClick={() => setOpenPopupAddAttributes(true)}>Your own attribute</MenuItem>
-              </Select>
-            </FormControl>
-            {!enableAdditionalAttributes() && <p>You can only add maximum of {maxAdditionalAttribute()} attributes.</p>}
-          </Grid>
-          <Grid classes={{ root: classes.tip }}>
-            <img src={Images.icTipGray} alt="" />
-            <p><span>Tip:</span> We recommend you include attributes that test the brand positioning or messages you wish to communicate to consumers through your pack design. You may also think about what your key competitor is trying to communicate in their pack design.</p>
+                )
+              })}
+            </Grid>
+            <Grid classes={{ root: classes.select }}>
+              <FormControl classes={{ root: classes.rootSelect }} disabled={!enableAdditionalAttributes() || !editableProject(project)}>
+                <Select
+                  variant="outlined"
+                  displayEmpty
+                  defaultValue={""}
+                  classes={{ select: classes.selectType, icon: classes.icSelect }}
+                  MenuProps={{
+                    className: classes.selectTypeMenu
+                  }}
+                >
+                  <MenuItem disabled value="">Add new attributes</MenuItem>
+                  <MenuItem value={20} onClick={() => setOpenPopupPreDefined(true)}>From pre-defined list</MenuItem>
+                  <MenuItem value={30} onClick={() => setOpenPopupAddAttributes(true)}>Your own attribute</MenuItem>
+                </Select>
+              </FormControl>
+              {!enableAdditionalAttributes() && <p>You can only add maximum of {maxAdditionalAttribute()} attributes.</p>}
+            </Grid>
+            <Grid classes={{ root: classes.tip }}>
+              <img src={Images.icTipGray} alt="" />
+              <p><span>Tip:</span> We recommend you include attributes that test the brand positioning or messages you wish to communicate to consumers through your pack design. You may also think about what your key competitor is trying to communicate in their pack design.</p>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid classes={{ root: classes.right }} >
-        <Grid className={classes.summary}>
-          <p className={classes.textSummary}>Summary</p>
-          <Stepper
-            orientation="vertical"
-            classes={{ root: classes.rootSteper }}
-            connector={<StepConnector classes={{ root: classes.rootConnector, active: classes.activeConnector }} />}
-          >
-            <Step active={!!project?.category && !!project?.brand && !!project?.variant && !!project?.manufacturer} expanded>
-              <StepLabel
-                StepIconComponent={ColorlibStepIcon}
-                onClick={() => document.getElementById('basic-information')?.scrollIntoView()}
-                classes={{
-                  root: classes.rootStepLabel,
-                  completed: classes.rootStepLabelCompleted,
-                  active: classes.rootStepLabelActive,
-                  label: classes.rootStepLabel
-                }}
-              >
-                Basic information
-              </StepLabel>
-              <StepContent classes={{ root: classes.rootConnector }}>
-                <ul>
-                  {project?.category && <li>{project.category} (Category)</li>}
-                  {project?.brand && <li>{project.brand} (Brand)</li>}
-                  {project?.variant && <li>{project.variant} (Variant)</li>}
-                  {project?.manufacturer && <li>{project.manufacturer} (Manufacturer)</li>}
-                </ul>
-              </StepContent>
-            </Step>
-            <Step active={packs?.length >= 2} expanded>
-              <StepLabel
-                onClick={() => document.getElementById('upload-packs')?.scrollIntoView()}
-                StepIconComponent={ColorlibStepIcon}
-                classes={{
-                  root: classes.rootStepLabel,
-                  completed: classes.rootStepLabelCompleted,
-                  active: classes.rootStepLabelActive,
-                  label: classes.rootStepLabel
-                }}
-              >
-                Upload your pack
-              </StepLabel>
-              <StepContent classes={{ root: classes.rootConnector }}>
-                <ul>
-                  {packs?.map(it => (<li key={it.id}>{it.name}</li>))}
-                </ul>
-              </StepContent>
-            </Step>
-            <Step active={additionalBrand?.length >= 2} expanded>
-              <StepLabel
-                onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
-                StepIconComponent={ColorlibStepIcon}
-                classes={{
-                  root: classes.rootStepLabel,
-                  completed: classes.rootStepLabelCompleted,
-                  active: classes.rootStepLabelActive,
-                  label: classes.rootStepLabel
-                }}
-              >
-                Additional brand list
-              </StepLabel>
-              <StepContent classes={{ root: classes.rootConnector }}>
-                <ul>
-                  {additionalBrand?.slice(0, 4)?.map(it => (<li key={it.id}>{it.variant} ({it.brand})</li>))}
-                </ul>
-                {additionalBrand?.length > 4 && (
-                  <Grid display={"flex"} justifyContent="flex-end">
-                    <span
-                      className={classes.moreStepContent}
-                      onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
-                    >
-                      {additionalBrand?.length - 4} more
-                    </span>
-                  </Grid>
-                )}
-              </StepContent>
-            </Step>
-            <Step active={!!projectAttributes?.length || !!userAttributes?.length} expanded>
-              <StepLabel
-                onClick={() => document.getElementById('additional-attributes')?.scrollIntoView()}
-                StepIconComponent={ColorlibStepIcon}
-                classes={{
-                  root: classes.rootStepLabel,
-                  completed: classes.rootStepLabelCompleted,
-                  active: classes.rootStepLabelActive,
-                  label: classes.rootStepLabel
-                }}
-              >
-                Additional attributes
-              </StepLabel>
-              <StepContent classes={{ root: classes.rootConnector }}>
-                <ul>
-                  <li>Pre-defined attribute ({projectAttributes?.length || 0})</li>
-                  <li>Custom attribute ({userAttributes?.length || 0})</li>
-                </ul>
-              </StepContent>
-            </Step>
-          </Stepper>
+        <Grid classes={{ root: classes.right }} >
+          <Grid className={classes.summary}>
+            <p className={classes.textSummary}>Summary</p>
+            <Stepper
+              orientation="vertical"
+              classes={{ root: classes.rootSteper }}
+              connector={<StepConnector classes={{ root: classes.rootConnector, active: classes.activeConnector }} />}
+            >
+              <Step active={!!project?.category && !!project?.brand && !!project?.variant && !!project?.manufacturer} expanded>
+                <StepLabel
+                  StepIconComponent={ColorlibStepIcon}
+                  onClick={() => document.getElementById('basic-information')?.scrollIntoView()}
+                  classes={{
+                    root: classes.rootStepLabel,
+                    completed: classes.rootStepLabelCompleted,
+                    active: classes.rootStepLabelActive,
+                    label: classes.rootStepLabel
+                  }}
+                >
+                  Basic information
+                </StepLabel>
+                <StepContent classes={{ root: classes.rootConnector }}>
+                  <ul>
+                    {project?.category && <li>{project.category} (Category)</li>}
+                    {project?.brand && <li>{project.brand} (Brand)</li>}
+                    {project?.variant && <li>{project.variant} (Variant)</li>}
+                    {project?.manufacturer && <li>{project.manufacturer} (Manufacturer)</li>}
+                  </ul>
+                </StepContent>
+              </Step>
+              <Step active={packs?.length >= 2} expanded>
+                <StepLabel
+                  onClick={() => document.getElementById('upload-packs')?.scrollIntoView()}
+                  StepIconComponent={ColorlibStepIcon}
+                  classes={{
+                    root: classes.rootStepLabel,
+                    completed: classes.rootStepLabelCompleted,
+                    active: classes.rootStepLabelActive,
+                    label: classes.rootStepLabel
+                  }}
+                >
+                  Upload your pack
+                </StepLabel>
+                <StepContent classes={{ root: classes.rootConnector }}>
+                  <ul>
+                    {packs?.map(it => (<li key={it.id}>{it.name}</li>))}
+                  </ul>
+                </StepContent>
+              </Step>
+              <Step active={additionalBrand?.length >= 2} expanded>
+                <StepLabel
+                  onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
+                  StepIconComponent={ColorlibStepIcon}
+                  classes={{
+                    root: classes.rootStepLabel,
+                    completed: classes.rootStepLabelCompleted,
+                    active: classes.rootStepLabelActive,
+                    label: classes.rootStepLabel
+                  }}
+                >
+                  Additional brand list
+                </StepLabel>
+                <StepContent classes={{ root: classes.rootConnector }}>
+                  <ul>
+                    {additionalBrand?.slice(0, 4)?.map(it => (<li key={it.id}>{it.variant} ({it.brand})</li>))}
+                  </ul>
+                  {additionalBrand?.length > 4 && (
+                    <Grid display={"flex"} justifyContent="flex-end">
+                      <span
+                        className={classes.moreStepContent}
+                        onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
+                      >
+                        {additionalBrand?.length - 4} more
+                      </span>
+                    </Grid>
+                  )}
+                </StepContent>
+              </Step>
+              <Step active={!!projectAttributes?.length || !!userAttributes?.length} expanded>
+                <StepLabel
+                  onClick={() => document.getElementById('additional-attributes')?.scrollIntoView()}
+                  StepIconComponent={ColorlibStepIcon}
+                  classes={{
+                    root: classes.rootStepLabel,
+                    completed: classes.rootStepLabelCompleted,
+                    active: classes.rootStepLabelActive,
+                    label: classes.rootStepLabel
+                  }}
+                >
+                  Additional attributes
+                </StepLabel>
+                <StepContent classes={{ root: classes.rootConnector }}>
+                  <ul>
+                    <li>Pre-defined attribute ({projectAttributes?.length || 0})</li>
+                    <li>Custom attribute ({userAttributes?.length || 0})</li>
+                  </ul>
+                </StepContent>
+              </Step>
+            </Stepper>
+          </Grid>
         </Grid>
+        <PopupPack
+          isOpen={addNewPack}
+          itemEdit={packEdit}
+          onCancel={onCloseAddOrEditPack}
+          onSubmit={onAddOrEditPack}
+        />
+        <PopupConfirmDelete
+          isOpen={!!packDelete}
+          title="Delete pack?"
+          description="Are you sure you want to delete this packed?"
+          onCancel={() => setPackDelete(null)}
+          onDelete={onDeletePack}
+        />
+        <PopupManatoryAttributes
+          isOpen={openPopupMandatory}
+          project={project}
+          onClose={() => setOpenPopupMandatory(false)}
+        />
+        <PopupPreDefinedList
+          isOpen={openPopupPreDefined}
+          project={project}
+          projectAttributes={projectAttributes}
+          maxSelect={(project?.solution?.maxAdditionalAttribute || 0) - ((projectAttributes?.length || 0) + (userAttributes?.length || 0))}
+          onClose={() => setOpenPopupPreDefined(false)}
+          onSubmit={onAddProjectAttribute}
+        />
+        <PopupAddOrEditAttribute
+          isAdd={openPopupAddAttributes}
+          itemEdit={userAttributeEdit}
+          onCancel={() => onClosePopupAttribute()}
+          onSubmit={onAddOrEditUserAttribute}
+        />
+        <PopupAddOrEditBrand
+          isAdd={addBrandMobile}
+          itemEdit={brandEditMobile}
+          onCancel={onClosePopupAddOrEditBrand}
+          onSubmit={onAddOrEditBrandMobile}
+        />
+        <PopupConfirmDelete
+          isOpen={!!brandDelete}
+          title="Delete brand?"
+          description="Are you sure you want to delete this brand?"
+          onCancel={() => onCloseConfirmDeleteBrand()}
+          onDelete={onDeleteBrand}
+        />
+        <PopupConfirmDelete
+          isOpen={!!userAttributeDelete || !!projectAttributeDelete}
+          title="Delete attribute?"
+          description="Are you sure you want to delete this attribute?"
+          onCancel={() => onCloseConfirmDeleteAttribute()}
+          onDelete={onDeleteAttribute}
+        />
       </Grid>
-      <PopupPack
-        isOpen={addNewPack}
-        itemEdit={packEdit}
-        onCancel={onCloseAddOrEditPack}
-        onSubmit={onAddOrEditPack}
-      />
-      <PopupConfirmDelete
-        isOpen={!!packDelete}
-        title="Delete pack?"
-        description="Are you sure you want to delete this packed?"
-        onCancel={() => setPackDelete(null)}
-        onDelete={onDeletePack}
-      />
-      <PopupManatoryAttributes
-        isOpen={openPopupMandatory}
-        project={project}
-        onClose={() => setOpenPopupMandatory(false)}
-      />
-      <PopupPreDefinedList
-        isOpen={openPopupPreDefined}
-        project={project}
-        projectAttributes={projectAttributes}
-        maxSelect={(project?.solution?.maxAdditionalAttribute || 0) - ((projectAttributes?.length || 0) + (userAttributes?.length || 0))}
-        onClose={() => setOpenPopupPreDefined(false)}
-        onSubmit={onAddProjectAttribute}
-      />
-      <PopupAddOrEditAttribute
-        isAdd={openPopupAddAttributes}
-        itemEdit={userAttributeEdit}
-        onCancel={() => onClosePopupAttribute()}
-        onSubmit={onAddOrEditUserAttribute}
-      />
-      <PopupAddOrEditBrand
-        isAdd={addBrandMobile}
-        itemEdit={brandEditMobile}
-        onCancel={onClosePopupAddOrEditBrand}
-        onSubmit={onAddOrEditBrandMobile}
-      />
-      <PopupConfirmDelete
-        isOpen={!!brandDelete}
-        title="Delete brand?"
-        description="Are you sure you want to delete this brand?"
-        onCancel={() => onCloseConfirmDeleteBrand()}
-        onDelete={onDeleteBrand}
-      />
-      <PopupConfirmDelete
-        isOpen={!!userAttributeDelete || !!projectAttributeDelete}
-        title="Delete attribute?"
-        description="Are you sure you want to delete this attribute?"
-        onCancel={() => onCloseConfirmDeleteAttribute()}
-        onDelete={onDeleteAttribute}
-      />
-    </Grid>
+    </>
   );
 })
 

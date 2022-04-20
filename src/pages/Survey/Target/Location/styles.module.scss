@@ -17,8 +17,8 @@
   margin: 0;
   margin-right: 76px;
 }
-.rootStrata > span {
-  font-weight: normal;
+.rootStrata span {
+  font-weight: 500;
   font-size: 16px;
   line-height: 140%;
   letter-spacing: 0.015em;
@@ -41,7 +41,7 @@
   margin-right: 66px;
 }
 .rootCountry > div > p {
-  font-weight: normal;
+  font-weight: 500;
   font-size: 16px;
   line-height: 140%;
   letter-spacing: 0.015em;
@@ -74,11 +74,11 @@
 .rootTags {
   display: flex;
   align-items: center;
-  padding: 25px 40px;
+  padding: 25px 40px 25px 20px;
   border-bottom: 1px solid rgba(197, 189, 189, 0.48);
   p {
     font-style: normal;
-    font-weight: normal;
+    font-weight: 500;
     font-size: 16px;
     line-height: 140%;
     letter-spacing: 0.015em;
@@ -107,7 +107,7 @@
   padding-right: 30px !important;
 }
 .rootPrimary {
-  font-weight: normal;
+  font-weight: 500;
   font-size: 16px;
   line-height: 140%;
   letter-spacing: 0.015em;
@@ -125,11 +125,16 @@
   margin: 0px 40px;
 }
 .rootLevel > p {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.015em;
+  color: #1c1c1c;
   border-bottom: 1px solid rgba(197, 189, 189, 0.48);
   padding-bottom: 1px;
 }
 .rootSwitch {
-  margin-left: 40px;
+  margin-left: 20px;
 }
 .checkedSwitch {
   color: #7c9911 !important;
@@ -149,4 +154,15 @@
   label {
     margin: 0 !important;
   }
+  [class~="MuiTypography-root"] {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 0.015em;
+    color: #1c1c1c;
+  }
+}
+.suggestionSeleted {
+  background: #EEF0F2;
+  border: none;
 }

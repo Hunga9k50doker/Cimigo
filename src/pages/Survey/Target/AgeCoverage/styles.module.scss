@@ -1,16 +1,22 @@
 .select {
   display: flex;
   justify-content: space-between;
+  
 }
 .switchTab {
   cursor: pointer;
 }
 .selectAge {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: #eef0f2;
   border-radius: 4px;
   padding: 27px 50px;
-  min-width: 380px;
+  flex: 1;
+  &:not(:first-child) {
+    margin-left: 20px;
+  }
   p {
     font-weight: 600;
     font-size: 16px;
@@ -21,7 +27,7 @@
     padding-bottom: 13px;
   }
   span {
-    font-weight: normal;
+    font-weight: 500;
     font-size: 16px;
     line-height: 140%;
     text-align: center;

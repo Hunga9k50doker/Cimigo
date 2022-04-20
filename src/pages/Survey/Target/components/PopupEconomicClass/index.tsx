@@ -76,7 +76,7 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
         <Grid className={classes.body}>
           {questions.map(question => (
             <React.Fragment key={question.id}>
-              <p>Choose {question.name}:</p>
+              <p>{question.title}:</p>
               <Grid className={classes.rootCheck}>
                 {question.targetAnswers.map((answer) => {
                   return (

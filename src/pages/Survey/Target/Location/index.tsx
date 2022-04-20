@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from "react";
-import { Grid, Checkbox, Stack, Chip, ListItem, ListItemButton, ListItemText, Switch, FormControlLabel, Tooltip } from "@mui/material"
+import { Grid, Stack, Chip, ListItem, ListItemButton, ListItemText, Switch, Tooltip } from "@mui/material"
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
@@ -11,8 +11,11 @@ import _ from "lodash";
 import { ProjectService } from "services/project";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { Project } from "models/project";
-import { DataSelected, onClickSuggestion, onToggleAnswer, isDisableSubmit } from "../models";
+import { DataSelected, onClickSuggestion, onToggleAnswer, isDisableSubmit, isSelectedSuggestion } from "../models";
 import { editableProject } from "helpers/project";
+import ControlCheckbox from "components/ControlCheckbox";
+import InputCheckbox from "components/InputCheckbox";
+import clsx from "clsx";
 
 interface Props {
   projectId: number,
@@ -78,6 +81,10 @@ const Location = memo(({ projectId, project, questions }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
+  const _isSelectedSuggestion = (suggestion: TargetAnswerSuggestion) => {
+    return isSelectedSuggestion(suggestion, dataSelected)
+  }
+
   return (
     <>
       <Grid classes={{ root: classes.rootCountry }}>
@@ -92,17 +99,16 @@ const Location = memo(({ projectId, project, questions }: Props) => {
           case TargetQuestionRenderType.Normal:
             return (
               <Grid key={question.id} classes={{ root: classes.rootStrata }}>
-                <p>{question.name}:</p>
+                <p>{question.title}:</p>
                 {question.targetAnswers.map(answer => (
                   <Tooltip key={answer.id} title={answer.description}>
-                    <FormControlLabel
+                    <ControlCheckbox
+                      hastooltip={answer.description}
                       control={
-                        <Checkbox
+                        <InputCheckbox
                           checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                           onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
                           classes={{ root: classes.rootCheckbox }}
-                          icon={<img src={Images.icCheck} alt="" />}
-                          checkedIcon={<img src={Images.icCheckActive} alt="" />}
                         />
                       }
                       label={answer.name}
@@ -114,13 +120,13 @@ const Location = memo(({ projectId, project, questions }: Props) => {
           case TargetQuestionRenderType.Box:
             return (
               <Grid key={question.id} classes={{ root: classes.rootLocation }}>
-                <p>Choose {question.name}:</p>
+                <p>{question.title}:</p>
                 {!!question.targetAnswerSuggestions?.length && (
                   <Grid classes={{ root: classes.rootTags }}>
                     <p>Suggest combination:</p>
                     <Stack direction="row" spacing={1}>
                       {question.targetAnswerSuggestions.map(suggestion => (
-                        <Chip onClick={() => _onClickSuggestion(suggestion)} key={suggestion.id} label={suggestion.name} clickable variant="outlined" />
+                        <Chip className={clsx({[classes.suggestionSeleted]: _isSelectedSuggestion(suggestion)})} onClick={() => _onClickSuggestion(suggestion)} key={suggestion.id} label={suggestion.name} clickable variant="outlined" />
                       ))}
                     </Stack>
                   </Grid>
@@ -140,11 +146,10 @@ const Location = memo(({ projectId, project, questions }: Props) => {
                             onClick={() => onChangeGroupSelected(question.id, group)}
                             classes={{ selected: classes.selected }}
                           >
-                            <Checkbox
+                            <InputCheckbox
                               classes={{ root: classes.rootCheckboxLocation }}
                               checked={!!dataSelected[question.id]?.find(it => !!group.targetAnswers?.find(temp => temp.id === it.id))}
-                              icon={<img src={Images.icCheck} alt="" />}
-                              checkedIcon={<img src={Images.icCheckActive} alt="" />} />
+                            />
                             <ListItemText primary={group.name} classes={{ primary: classes.rootPrimary }} />
                           </ListItemButton>
                         </ListItem>
@@ -170,15 +175,15 @@ const Location = memo(({ projectId, project, questions }: Props) => {
                         return (
                           <Grid item xs={6} key={answer.id}>
                             <Tooltip title={answer.description}>
-                              <FormControlLabel
+                              <ControlCheckbox
+                                hastooltip={answer.description}
                                 control={
-                                  <Checkbox
+                                  <InputCheckbox 
                                     disabled={!!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === answer.groupId)}
                                     checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                                     onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
                                     classes={{ root: classes.rootCheckboxLocation }}
-                                    icon={<img src={Images.icCheck} alt="" />}
-                                    checkedIcon={<img src={Images.icCheckActive} alt="" />} />
+                                  />
                                 }
                                 label={answer.name}
                               />
@@ -195,7 +200,7 @@ const Location = memo(({ projectId, project, questions }: Props) => {
         return
       })}
       <Grid classes={{ root: classes.rootBtn }}>
-        <Buttons onClick={onUpdateTarget} disabled={isDisable()} btnType="Blue" children={"Save"} padding="16px 56px" />
+        <Buttons onClick={onUpdateTarget} disabled={isDisable()} btnType="Blue" children={"Save"} padding="11px 58px" />
       </Grid>
     </>
   )

@@ -12,10 +12,12 @@ import { TargetAnswerGroup } from "models/Admin/target";
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required.'),
+  order: yup.number().typeError('Order is required.').required('Order is required.'),
 })
 
 export interface AnswerGroupFormData {
   name: string;
+  order: number;
 }
 
 interface Props {
@@ -32,6 +34,9 @@ const AnswerGroupForm = memo(({ title, questionId, itemEdit, langEdit, onSubmit 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<AnswerGroupFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange',
+    defaultValues: {
+      order: 99
+    }
   });
 
   const handleBack = () => {
@@ -45,7 +50,8 @@ const AnswerGroupForm = memo(({ title, questionId, itemEdit, langEdit, onSubmit 
   useEffect(() => {
     if (itemEdit) {
       reset({
-        name: itemEdit.name
+        name: itemEdit.name,
+        order: itemEdit.order
       })
     }
   }, [reset, itemEdit])
@@ -83,6 +89,16 @@ const AnswerGroupForm = memo(({ title, questionId, itemEdit, langEdit, onSubmit 
                       type="text"
                       inputRef={register('name')}
                       errorMessage={errors.name?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Inputs
+                      title="Order"
+                      name="order"
+                      type="number"
+                      disabled={!!langEdit}
+                      inputRef={register('order')}
+                      errorMessage={errors.order?.message}
                     />
                   </Grid>
                 </Grid>

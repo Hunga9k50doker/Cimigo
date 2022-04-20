@@ -1,8 +1,7 @@
 import { memo, useEffect, useState } from "react";
-import { FormControlLabel, Grid, Checkbox, Tooltip } from "@mui/material";
+import { Grid, Tooltip } from "@mui/material";
 import Buttons from "components/Buttons";
 import classes from './styles.module.scss';
-import Images from "config/images";
 import { Project } from "models/project";
 import { TargetAnswer, TargetQuestion, TargetQuestionType } from "models/Admin/target";
 import { useDispatch } from "react-redux";
@@ -11,6 +10,8 @@ import { ProjectService } from "services/project";
 import { setLoading, setSuccessMess, setErrorMess } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { editableProject } from "helpers/project";
+import ControlCheckbox from "components/ControlCheckbox";
+import InputCheckbox from "components/InputCheckbox";
 
 enum ETab {
   Main,
@@ -121,12 +122,12 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
             <Grid classes={{ root: classes.selectAge }}>
               <p>Gender and age quotas</p>
               <span>Mums will fall out naturally,<br /> without specific quotas.</span>
-              <Buttons btnType="Blue" children={"Select"} padding="13px 50px" onClick={() => onChangeTab(ETab.Gender_And_Age_Quotas)} />
+              <Buttons btnType="Blue" children={"Select"} padding="11px 52px" onClick={() => onChangeTab(ETab.Gender_And_Age_Quotas)} />
             </Grid>
             <Grid classes={{ root: classes.selectAge }}>
               <p>Mums only</p>
               <span>Mums only with specific quotas <br /> of age for their child.</span>
-              <Buttons btnType="Blue" children={"Select"} padding="13px 50px" onClick={() => onChangeTab(ETab.Mums_Only)} />
+              <Buttons btnType="Blue" children={"Select"} padding="11px 52px" onClick={() => onChangeTab(ETab.Mums_Only)} />
             </Grid>
           </Grid>
         )
@@ -136,20 +137,19 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
             <a className={classes.switchTab} onClick={() => onChangeTab(ETab.Mums_Only)}>Switch to mom only</a>
             {questionsAgeGender.map(question => (
               <Grid key={question.id} classes={{ root: classes.rootLocation }}>
-                <p>Choose {question.name}</p>
+                <p>{question.title}</p>
                 <Grid classes={{ root: classes.checkAge }}>
                   {question.targetAnswers.map((answer) => {
                     return (
                       <Grid item xs={3} key={answer.id}>
                         <Tooltip title={answer.description}>
-                          <FormControlLabel
+                          <ControlCheckbox
+                            hastooltip={answer.description}
                             control={
-                              <Checkbox
+                              <InputCheckbox
                                 checked={!!dataSelectedGenderAge[question.id]?.find(it => it.id === answer.id)}
                                 onChange={(_, checked) => _onToggleAnswerGenderAge(question.id, answer, checked)}
                                 classes={{ root: classes.rootCheckbox }}
-                                icon={<img src={Images.icCheck} alt="" />}
-                                checkedIcon={<img src={Images.icCheckActive} alt="" />}
                               />
                             }
                             label={answer.name}
@@ -162,7 +162,7 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
               </Grid>
             ))}
             <Grid classes={{ root: classes.rootBtn }}>
-              <Buttons disabled={isDisableGenderAge()} onClick={onUpdateTargetGenderAge} btnType="Blue" children={"Save"} padding="16px 56px" />
+              <Buttons disabled={isDisableGenderAge()} onClick={onUpdateTargetGenderAge} btnType="Blue" children={"Save"} padding="11px 58px" />
             </Grid>
           </Grid>
         )
@@ -172,20 +172,19 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
             <a className={classes.switchTab} onClick={() => onChangeTab(ETab.Gender_And_Age_Quotas)}>Switch to gender and age quotas</a>
             {questionsMum.map(question => (
               <Grid key={question.id} classes={{ root: classes.rootLocation }}>
-                <p>Choose {question.name}</p>
+                <p>{question.title}</p>
                 <Grid classes={{ root: classes.checkAgeChild }}>
                   {question.targetAnswers.map((answer) => {
                     return (
                       <Grid item xs={6} key={answer.id}>
                         <Tooltip title={answer.description}>
-                          <FormControlLabel
+                          <ControlCheckbox
+                            hastooltip={answer.description}
                             control={
-                              <Checkbox
+                              <InputCheckbox
                                 checked={!!dataSelectedMum[question.id]?.find(it => it.id === answer.id)}
                                 onChange={(_, checked) => _onToggleAnswerMum(question.id, answer, checked)}
                                 classes={{ root: classes.rootCheckbox }}
-                                icon={<img src={Images.icCheck} alt="" />}
-                                checkedIcon={<img src={Images.icCheckActive} alt="" />}
                               />
                             }
                             label={answer.name}
@@ -198,7 +197,7 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
               </Grid>
             ))}
             <Grid classes={{ root: classes.rootBtn }}>
-              <Buttons disabled={isDisableMum()} onClick={onUpdateTargetMum} btnType="Blue" children={"Save"} padding="16px 56px" />
+              <Buttons disabled={isDisableMum()} onClick={onUpdateTargetMum} btnType="Blue" children={"Save"} padding="11px 58px" />
             </Grid>
           </Grid>
         )

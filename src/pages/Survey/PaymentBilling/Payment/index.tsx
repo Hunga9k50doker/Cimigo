@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from "react";
-import { Checkbox, Divider, FormControlLabel, Grid, Radio, RadioGroup, Tooltip } from "@mui/material"
+import { Box, Checkbox, Divider, FormControlLabel, Grid, Radio, RadioGroup, Tooltip } from "@mui/material"
 import classes from './styles.module.scss';
 import images from "config/images";
 import Inputs from "components/Inputs";
@@ -126,10 +126,10 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         CountryService.getCountries({ take: 9999 }),
         UserService.getPaymentInfo()
       ])
-      .then(res => {
-        setCountries(res[0].data)
-        setPaymentInfo(res[1])
-      })
+        .then(res => {
+          setCountries(res[0].data)
+          setPaymentInfo(res[1])
+        })
       dispatch(setLoading(false))
     }
     fetchData()
@@ -239,8 +239,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         <Controller
           name="paymentMethodId"
           control={control}
-          render={({ field }) => <RadioGroup 
-            {...field} 
+          render={({ field }) => <RadioGroup
+            {...field}
             classes={{ root: classes.radioGroup }}
           >
             <FormControlLabel
@@ -251,29 +251,31 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                 <Grid classes={{ root: classes.order }}>
                   <Grid classes={{ root: classes.title }}><img src={images.icOrder} alt="" />Make an order</Grid>
                   <p className={classes.titleSub}>The simplest way to get started, especially if you need consultation. Our professional consultants will contact you using the information provided below.</p>
-                  <div>
-                    <Inputs
-                      title="Contact name"
-                      name="contactName"
-                      placeholder="Enter contact name"
-                      inputRef={register('contactName')}
-                      errorMessage={errors.contactName?.message}
-                    />
-                    <Inputs
-                      title="Contact email"
-                      name="contactEmail"
-                      placeholder="Enter contact email address"
-                      inputRef={register('contactEmail')}
-                      errorMessage={errors.contactEmail?.message}
-                    />
-                    <Inputs
-                      title="Contact phone"
-                      name="contactPhone"
-                      placeholder="e.g. +84378312333"
-                      inputRef={register('contactPhone')}
-                      errorMessage={errors.contactPhone?.message}
-                    />
-                  </div>
+                  {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
+                    <Box>
+                      <Inputs
+                        title="Contact name"
+                        name="contactName"
+                        placeholder="Enter contact name"
+                        inputRef={register('contactName')}
+                        errorMessage={errors.contactName?.message}
+                      />
+                      <Inputs
+                        title="Contact email"
+                        name="contactEmail"
+                        placeholder="Enter contact email address"
+                        inputRef={register('contactEmail')}
+                        errorMessage={errors.contactEmail?.message}
+                      />
+                      <Inputs
+                        title="Contact phone"
+                        name="contactPhone"
+                        placeholder="e.g. +84378312333"
+                        inputRef={register('contactPhone')}
+                        errorMessage={errors.contactPhone?.message}
+                      />
+                    </Box>
+                  )}
                 </Grid>
               }
             />
@@ -293,8 +295,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
           }
         />
         <p>Invoice and contract information <span>(optional)</span></p>
-        <span className={classes.titleSub1}>You can update this information later</span>
-        <div>
+        <div className={classes.titleSub1}>You can update this information later</div>
+        <div className={classes.informationBox}>
           <Grid classes={{ root: classes.flex }}>
             <Inputs
               title="Full name"
@@ -381,7 +383,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
           <p>Order summary</p>
           <div className={classes.flexOrder}>
             <span>Sample size</span>
-            <span>${fCurrency2(getPriceSampleSize())}</span>
+            <span>{`$`}{fCurrency2(getPriceSampleSize())}</span>
           </div>
           {/* <div className={classes.flexOrder}>
             <span>Eye tracking</span>
@@ -389,34 +391,33 @@ const PaymentPage = memo(({ }: PaymentProps) => {
           </div> */}
           <div className={clsx(classes.flexOrder, classes.isMobile)}>
             <span>VAT (10%)</span>
-            <span>${fCurrency2(getVAT())}</span>
+            <span>{`$`}{fCurrency2(getVAT())}</span>
           </div>
           <Divider />
           <div className={clsx(classes.flexOrder, classes.notMobile)}>
             <span>Sub total</span>
-            <span>${fCurrency2(getSubTotal())}</span>
+            <span>{`$`}{fCurrency2(getSubTotal())}</span>
           </div>
           <div className={clsx(classes.flexOrder, classes.notMobile)}>
             <span>VAT (10%)</span>
-            <span>${fCurrency2(getVAT())}</span>
+            <span>{`$`}{fCurrency2(getVAT())}</span>
           </div>
-
           <Divider className={classes.notMobile} />
           <div className={classes.flexTotal}>
             <span>Total (USD)</span>
-            <a>${fCurrency2(getTotal())}</a>
+            <a>{`$`}{fCurrency2(getTotal())}</a>
           </div>
           <span>({fCurrency2VND(getTotalVND())} VND)</span>
         </Grid>
-        <Buttons type="submit" children={"Place order"} btnType="Blue" width="100%" padding="16px" className={classes.btn} />
+        <Buttons type="submit" children={"Place order"} btnType="Blue" width="100%" padding="11px" className={classes.btn} />
       </Grid>
       <Grid className={classes.flexTotalMobile}>
         <Grid>
           <p>Total (USD)</p>
-          <a>${fCurrency2(getTotal())}</a>
+          <a style={{marginBottom: 4}}>{`$`}{fCurrency2(getTotal())}</a>
           <span>({fCurrency2VND(getTotalVND())} VND)</span>
         </Grid>
-        <Buttons type="submit" children={"Place order"} btnType="Blue" padding="16px" className={classes.btnMobile} />
+        <Buttons type="submit" children={"Place order"} btnType="Blue" padding="11px" className={classes.btnMobile} />
       </Grid>
     </Grid>
   )

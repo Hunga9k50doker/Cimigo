@@ -4,7 +4,7 @@
 }
 .title {
   font-style: normal;
-  font-weight: normal;
+  font-weight: 500;
   font-size: 16px;
   line-height: 140%;
   letter-spacing: 0.015em;
@@ -106,7 +106,7 @@
 }
 .textSub1 {
   font-style: normal;
-  font-weight: normal;
+  font-weight: 500;
   font-size: 14px;
   line-height: 140%;
   letter-spacing: 0.015em;
@@ -220,33 +220,6 @@
   padding-left: 16px;
   margin-left: 10px;
 }
-.right > div > div {
-  display: flex;
-  &:not(:last-child) {
-    margin-bottom: 24px;
-  }
-}
-.bascInfor > p {
-  margin-right: 40px;
-}
-.pack > p {
-  margin-right: 146px;
-  @media only screen and (max-width: 767px) {
-    margin-right: 135px;
-  }
-}
-.brandList > p {
-  margin-right: 108px;
-  @media only screen and (max-width: 767px) {
-    margin-right: 101px;
-  }
-}
-.attribute > p {
-  margin-right: 25px;
-  @media only screen and (max-width: 767px) {
-    margin-right: 27px;
-  }
-}
 .divider {
   display: none;
   @media only screen and (max-width: 767px) {
@@ -303,9 +276,7 @@
       background: #EEF0F2;
     }
     p {
-      font-style: italic;
-      text-decoration-line: underline;
-      font-weight: normal;
+      font-weight: 500;
       font-size: 14px;
       line-height: 140%;
       text-align: center;
@@ -331,4 +302,29 @@
 }
 .colorDanger {
   color: var(--cimigo-danger) !important;
+}
+
+.smallText {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+}
+.tableDetail {
+  display: table;
+  width: 100%;
+  > * {
+    display: table-row !important;
+    > * {
+      &:not(:first-child) {
+        padding-left: 25px;
+      }
+      display: table-cell !important;
+    }
+    &:not(:last-child) {
+      > * {
+        padding-bottom: 24px;
+      }
+    }
+  }
 }

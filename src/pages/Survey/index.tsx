@@ -102,6 +102,7 @@ const Survey = () => {
           {tabs.map((item, index) => (
             <Tab
               key={index}
+              value={index}
               classes={{
                 selected: classes.selectedTab,
                 root: classes.rootTab,

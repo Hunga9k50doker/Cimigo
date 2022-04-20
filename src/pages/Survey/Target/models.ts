@@ -35,11 +35,9 @@ export const onClickSuggestion = (suggestion: TargetAnswerSuggestion, questions:
       if (groups?.length) {
         let answersAdd: TargetAnswer[] = []
         groups.forEach(it => {
-          const exclusiveAnswers = it.targetAnswers?.filter((temp) => temp.exclusive)
-          if (exclusiveAnswers?.length) {
-            answersAdd = answersAdd.concat(exclusiveAnswers)
-          } else {
-            answersAdd = answersAdd.concat(it.targetAnswers || [])
+          const exclusiveAnswer = it.targetAnswers?.find((temp) => temp.exclusive)
+          if (exclusiveAnswer) {
+            answersAdd.push(exclusiveAnswer)
           }
         })
         _answers = _answers.concat(answersAdd)
@@ -52,6 +50,19 @@ export const onClickSuggestion = (suggestion: TargetAnswerSuggestion, questions:
     _answers = _answers.filter(temp => it.questionId !== temp.questionId || it.groupId !== temp.groupId || temp.exclusive)
   })
   setDataSelected(pre => ({ ...pre, [suggestion.questionId]: _answers}))
+}
+
+export const isSelectedSuggestion = (suggestion: TargetAnswerSuggestion, dataSelected: DataSelected) => {
+  if (!dataSelected[suggestion.questionId]?.length) return false
+  if (suggestion.answerIds?.length) {
+    const notSelect = suggestion.answerIds.find(answerId => !dataSelected[suggestion.questionId].find(it => it.id === answerId))
+    if (notSelect) return false
+  }
+  if (suggestion.groupIds?.length) {
+    const notSelect = suggestion.groupIds.find(groupId => !dataSelected[suggestion.questionId].find(it => it.groupId === groupId && it.exclusive))
+    if (notSelect) return false
+  }
+  return true
 }
 
 export const isDisableSubmit = (questions: TargetQuestion[], dataSelected: DataSelected) => {

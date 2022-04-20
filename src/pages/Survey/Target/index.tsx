@@ -19,7 +19,6 @@ import TabPanelImg from "components/TabPanelImg";
 import Location from "./Location";
 import EconomicClass from "./EconomicClass";
 import AgeCoverage from "./AgeCoverage";
-import Buttons from "components/Buttons";
 import images from "config/images";
 import PopupLocationMobile from "./components/PopupLocationMobile";
 import PopupEconomicClassMobile from "./components/PopupEconomicClass";
@@ -27,7 +26,7 @@ import PopupAgeCoverageMobile from "./components/PopupAgeCoverageMobile";
 import { useDispatch, useSelector } from "react-redux";
 import { TargetService } from "services/target";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
-import { TargetAnswer, TargetQuestion, TargetQuestionType } from "models/Admin/target";
+import { TargetQuestion, TargetQuestionType } from "models/Admin/target";
 import { ReducerType } from "redux/reducers";
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -39,6 +38,8 @@ import _ from "lodash";
 import { fCurrency2 } from "utils/formatNumber";
 import { PriceService } from "helpers/price";
 import { editableProject } from "helpers/project";
+import { Edit } from "@mui/icons-material";
+import Warning from "../components/Warning";
 
 export enum ETab {
   Location,
@@ -108,7 +109,7 @@ const Target = memo(({ projectId }: Props) => {
       .max(getMaxSampeSize(), `Sample size should be less than ${getMaxSampeSize()}`)
   })
 
-  const { handleSubmit, formState: { errors, isValid }, reset, control, getValues } = useForm<CustomSampleSizeForm>({
+  const { handleSubmit, formState: { errors, isValid }, reset, control } = useForm<CustomSampleSizeForm>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
@@ -208,13 +209,13 @@ const Target = memo(({ projectId }: Props) => {
     fetchData()
   }, [])
 
+  const isCustomSampleSize = () => {
+    return project?.sampleSize && !listSampleSize.find(it => it.value === project.sampleSize)
+  }
+
   useEffect(() => {
     if (project) {
       let _listSampleSize = listSampleSize.filter(it => isValidSampSize(it.value))
-      if (project.sampleSize) {
-        const item = _listSampleSize.find(it => it.value === project.sampleSize)
-        if (!item) _listSampleSize.push({ value: project.sampleSize, popular: false })
-      }
       setListSampleSize(_listSampleSize.sort((a, b) => a.value - b.value))
     }
   }, [project])
@@ -241,12 +242,27 @@ const Target = memo(({ projectId }: Props) => {
     reset({ sampleSize: undefined })
   }
 
+  const onCustomSampleSize = () => {
+    if (editableProject(project)) {
+      setShowInput(true)
+      if (isCustomSampleSize()) {
+        reset({ sampleSize: project?.sampleSize || 0 })
+      }
+    }
+  }
+
   return (
     <Grid classes={{ root: classes.root }}>
+      {!editableProject(project) && (
+        <Grid className={classes.warningBox}>
+          <Warning project={project} />
+        </Grid>
+      )}
       <Grid className={classes.header}>
         <Grid className={classes.size}>
           <p>Choose sample size:</p>
-          <Grid>
+          <Grid mr={1}>
+            {/* {(errors.sampleSize && showInput) && <ErrorMessage className={classes.errorMessageAppend}>{errors.sampleSize?.message}</ErrorMessage>} */}
             <List component="nav" aria-label="main mailbox folders" className={classes.toggleButtonGroup}>
               {listSampleSize.map((item, index) => (
                 <ListItemButton
@@ -265,48 +281,60 @@ const Target = memo(({ projectId }: Props) => {
                 </ListItemButton>
               ))}
               {showInput ? (
-                <Grid classes={{ root: classes.rootButton }}>
-                  <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
-                    <Controller
-                      name="sampleSize"
-                      control={control}
-                      render={({ field }) => <OutlinedInput
-                        fullWidth
-                        type="number"
-                        placeholder="Custom"
-                        name={field.name}
-                        value={field.value || ''}
-                        onBlur={field.onBlur}
-                        onChange={field.onChange}
-                      />}
-                    />
-                    {isValid ? (
-                      <Button type="submit" startIcon={<img src={images.icSaveWhite} alt="" />}>Save</Button>
-                    ) : (
-                      <Button onClick={onClearCustomSampleSize}>Cancel</Button>
-                    )}
-                  </form>
+                <Grid classes={{ root: classes.rootButton }} component="form" onSubmit={handleSubmit(_onSubmit)} autoComplete="off" noValidate>
+                  <Controller
+                    name="sampleSize"
+                    control={control}
+                    render={({ field }) => <OutlinedInput
+                      fullWidth
+                      type="number"
+                      placeholder="Custom"
+                      name={field.name}
+                      value={field.value || ''}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                    />}
+                  />
+                  {isValid ? (
+                    <Button type="submit" startIcon={<img src={images.icSaveWhite} alt="" />}>Save</Button>
+                  ) : (
+                    <Button onClick={onClearCustomSampleSize}>Cancel</Button>
+                  )}
                 </Grid>
               ) : (
                 <ListItemButton
                   disabled={!editableProject(project)}
+                  selected={isCustomSampleSize()}
                   classes={{
                     root: classes.toggleButton,
                     selected: classes.selectedButton,
                   }}
-                  onClick={() => { if (editableProject(project)) setShowInput(true) }}
+                  onClick={onCustomSampleSize}
                 >
-                  Custom
+                  {isCustomSampleSize() ? (
+                    <>
+                      {project?.sampleSize || 0}
+                      <Edit sx={{ fontSize: '1rem', marginLeft: 0.8 }} />
+                    </>
+                  ) : (
+                    'Custom'
+                  )}
                 </ListItemButton>
               )}
             </List>
-            {(errors.sampleSize && showInput) && <ErrorMessage>{errors.sampleSize?.message}</ErrorMessage>}
-            <p>popular choices.</p>
+            {(errors.sampleSize && showInput) && <ErrorMessage className={classes.errorMessage}>{errors.sampleSize?.message}</ErrorMessage>}
+            <p><span className={classes.iconPopular}></span>popular choices.</p>
           </Grid>
         </Grid>
         <div className={classes.code}>
-          <p >Sample size cost:</p><span>${getPrice()}</span>
+          <p >Sample size cost:</p><span>{`$`}{getPrice()}</span>
         </div>
+      </Grid>
+      <Grid className={classes.titleBox}>
+        <p className={classes.title}>Target criteria:</p>
+        <p className={classes.subTitle}>
+          Choose your target consumers. We'll deliver your survey to the right people that satisfy your criteria.
+        </p>
       </Grid>
       <Grid className={classes.body}>
         <Tabs
@@ -356,8 +384,6 @@ const Target = memo(({ projectId }: Props) => {
         </TabPanelImg>
       </Grid>
       <Grid className={classes.bodyMobile}>
-        <p className={classes.titleMobile}>Target criteria:</p>
-        <p className={classes.subTitleMobile}>Choose your target consumers. We'll deliver your survey to the right people that satisfy your criteria.</p>
         {listTabs.map((item, index) => (
           <Card classes={{ root: classes.cardMobile }} key={index} onClick={() => onShowPopupMobile(item)}>
             <CardActionArea title={item.title}>

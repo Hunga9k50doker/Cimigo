@@ -20,6 +20,7 @@ const CreateAnswer = memo((props: Props) => {
     dispatch(setLoading(true))
     TargetAnswerService.create({
       name: value.name,
+      order: value.order,
       description: value.description,
       exclusive: value.exclusive,
       groupId: value.groupId?.id,

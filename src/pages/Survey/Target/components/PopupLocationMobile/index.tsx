@@ -1,18 +1,20 @@
 import { useState, memo, useEffect } from 'react';
-import { Checkbox, Chip, Dialog, Grid, IconButton, Stack, Collapse, Switch, FormControlLabel, Tooltip } from '@mui/material';
+import { Chip, Dialog, Grid, IconButton, Stack, Collapse, Switch, FormControlLabel, Tooltip } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
 import Images from "config/images";
 import { Project } from 'models/project';
 import { TargetAnswer, TargetAnswerSuggestion, TargetQuestion, TargetQuestionRenderType, TargetQuestionType } from 'models/Admin/target';
-import { DataSelected, isDisableSubmit, onClickSuggestion, onToggleAnswer } from '../../models';
+import { DataSelected, isDisableSubmit, isSelectedSuggestion, onClickSuggestion, onToggleAnswer } from '../../models';
 import { useDispatch } from 'react-redux';
 import { setLoading, setSuccessMess, setErrorMess } from 'redux/reducers/Status/actionTypes';
 import { ProjectService } from 'services/project';
 import { getProjectRequest } from 'redux/reducers/Project/actionTypes';
 import React from 'react';
 import { editableProject } from 'helpers/project';
+import clsx from 'clsx';
+import InputCheckbox from 'components/InputCheckbox';
 
 interface Props {
   isOpen: boolean,
@@ -38,6 +40,10 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
 
   const _onClickSuggestion = (suggestion: TargetAnswerSuggestion) => {
     onClickSuggestion(suggestion, questions, setDataSelected)
+  }
+
+  const _isSelectedSuggestion = (suggestion: TargetAnswerSuggestion) => {
+    return isSelectedSuggestion(suggestion, dataSelected)
   }
 
   useEffect(() => {
@@ -99,17 +105,15 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
               case TargetQuestionRenderType.Normal:
                 return (
                   <Grid key={question.id} classes={{ root: classes.rootStrata }}>
-                    <p>{question.name}:</p>
+                    <p>{question.title}:</p>
                     {question.targetAnswers.map(answer => (
                       <Tooltip key={answer.id} title={answer.description}>
                         <FormControlLabel
                           control={
-                            <Checkbox
+                            <InputCheckbox
                               checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                               onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
                               classes={{ root: classes.rootCheckbox }}
-                              icon={<img src={Images.icCheck} alt="" />}
-                              checkedIcon={<img src={Images.icCheckActive} alt="" />}
                             />
                           }
                           label={answer.name}
@@ -122,13 +126,20 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
                 return (
                   <React.Fragment key={question.id}>
                     <Grid classes={{ root: classes.rootLocation }}>
-                      <p>{question.name}:</p>
+                      <p>{question.title}:</p>
                       {!!question.targetAnswerSuggestions?.length && (
                         <Grid classes={{ root: classes.rootTags }}>
                           <p>Suggest combination:</p>
                           <Stack direction="row" spacing={1}>
                             {question.targetAnswerSuggestions.map((suggestion) => (
-                              <Chip onClick={() => _onClickSuggestion(suggestion)} key={suggestion.id} label={suggestion.name} clickable variant="outlined" />
+                              <Chip
+                                className={clsx({ [classes.suggestionSeleted]: _isSelectedSuggestion(suggestion) })}
+                                onClick={() => _onClickSuggestion(suggestion)}
+                                key={suggestion.id}
+                                label={suggestion.name}
+                                clickable
+                                variant="outlined"
+                              />
                             ))}
                           </Stack>
                         </Grid>
@@ -172,13 +183,12 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
                                           <Tooltip title={answer.description}>
                                             <FormControlLabel
                                               control={
-                                                <Checkbox
+                                                <InputCheckbox
                                                   disabled={!!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === answer.groupId)}
                                                   checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                                                   onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
                                                   classes={{ root: classes.rootCheckboxLocation }}
-                                                  icon={<img src={Images.icCheck} alt="" />}
-                                                  checkedIcon={<img src={Images.icCheckActive} alt="" />} />
+                                                />
                                               }
                                               label={answer.name}
                                             />
