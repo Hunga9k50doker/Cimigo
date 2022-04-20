@@ -1,4 +1,4 @@
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { Grid, IconButton, Menu, MenuItem } from "@mui/material";
 import { memo, useEffect, useState, useRef } from "react";
 import classes from './styles.module.scss';
 import cimigoLogo from 'assets/img/cimigo_logo.svg';
@@ -26,7 +26,7 @@ const Header = memo((props: HeaderProps) => {
   const { project, detail } = props;
   const history = useHistory();
   const dispatch = useDispatch()
-  const { isLoggedIn, logout } = UseAuth();
+  const { isLoggedIn, logout,user } = UseAuth();
   const anchorRef = useRef(null);
   const [isOpen, setOpen] = useState(false);
   const [isScrolling, setScrolling] = useState(false);
@@ -56,6 +56,7 @@ const Header = memo((props: HeaderProps) => {
     }
   }, [])
 
+
   const dataList = [
     {
       link: routesOutside(i18n.language).overview,
@@ -75,6 +76,7 @@ const Header = memo((props: HeaderProps) => {
     }
   ]
 
+
   const onGoHome = () => {
     if (isLoggedIn) dispatch(push(routes.project.management))
     else dispatch(push(routes.login))
@@ -85,6 +87,7 @@ const Header = memo((props: HeaderProps) => {
     i18n.changeLanguage(lang)
     setAnchorElLang(null)
   }
+
 
   return (
     <header className={classes.root}>
@@ -103,12 +106,21 @@ const Header = memo((props: HeaderProps) => {
             classes={{ paper: classes.rootMenu }}
           >
             {dataList.map(item => (
-              <MenuItem key={item.name}>
-                <a href={item.link}>
+              <MenuItem key={item.name} className={classes.itemsOfToggle}>
+                <a href={item.link} >
                   {item.name}
                 </a>
               </MenuItem>
             ))}
+            <Grid className={classes.lineOfToggle} />
+            <button className={classes.buttonOfToggle} onClick={() => history.push(routes.login)}>
+                <img src={images.icArrowLogin} alt="" className={classes.icButtonOfToggle} />
+                <span>Login</span>
+            </button>
+            <button className={classes.buttonOfToggle} onClick={() => history.push(routes.register)}>
+                <img src={images.icArrowRegister} alt="" className={classes.icButtonOfToggle} />
+                <span>Register</span>
+            </button>
           </Menu>
         </li>
         <a onClick={onGoHome}>
@@ -127,7 +139,7 @@ const Header = memo((props: HeaderProps) => {
             {detail &&
               <p className={classes.linkTexDetail}>
                 <img src={images.icNextMobile} alt='' />
-                <span>{detail}</span>
+                <span className={classes.detail}>{detail}</span>
               </p>
             }
           </div>
@@ -152,6 +164,12 @@ const Header = memo((props: HeaderProps) => {
                 padding="7px 10px"
                 onClick={(e) => setAnchorElLang(e.currentTarget)} endIcon={<KeyboardArrowDown />}
               />
+              <Buttons 
+                className={classes.btnChangeLang2}
+                children={langSupports?.find(it => it.key === i18n.language).key}
+                padding="7px 10px"
+                onClick={(e) => setAnchorElLang(e.currentTarget)} endIcon={<KeyboardArrowDown />}
+              />
               <Menu
                 anchorEl={anchorElLang}
                 open={Boolean(anchorElLang)}
@@ -159,8 +177,10 @@ const Header = memo((props: HeaderProps) => {
                 classes={{ paper: clsx(classes.menuProfile, classes.menuLang) }}
               >
                 {langSupports.map(it => (
-                  <MenuItem key={it.key} onClick={() => changeLanguage(it.key)} className={clsx(classes.itemAciton, {[classes.active]: it.key === i18n.language})}>
-                    <p>{it.name}</p>
+                  <MenuItem key={it.key} onClick={() => changeLanguage(it.key)} className={clsx(classes.itemAciton, { [classes.active]: it.key === i18n.language })}>
+                    {/* <p>{it.name}</p> */}
+                    <p className={classes.itName}>{it.name}</p>
+                    <p className={classes.itKey}>{it.key}</p>
                   </MenuItem>
                 ))}
               </Menu>
@@ -168,10 +188,10 @@ const Header = memo((props: HeaderProps) => {
             {isLoggedIn ?
               <li className={classes.item}>
                 <IconButton className={classes.itemBtn}>
-                  <img src={images.icHelp} alt="" />
+                  <img src={images.icHelp} alt="" className={classes.icHelp} />
                 </IconButton>
                 <IconButton onClick={handleClick} className={classes.itemBtn}>
-                  <img src={images.icProfile} alt="" />
+                  <img src={user?.avatar || images.icProfile} alt="" className={classes.avatar}/>
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}
@@ -179,10 +199,10 @@ const Header = memo((props: HeaderProps) => {
                   onClose={handleClose}
                   classes={{ paper: classes.menuProfile }}
                 >
-                  <MenuItem className={classes.itemAciton}>
+                  {/* <MenuItem className={classes.itemAciton}>
                     <img src={images.icProfile} alt="" />
                     <p>My account</p>
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem className={classes.itemAciton} onClick={logout}>
                     <img src={images.icLogout} alt="" />
                     <p>Log out</p>
