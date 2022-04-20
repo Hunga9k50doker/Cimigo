@@ -272,11 +272,11 @@ const ProjectManagement = memo((props: Props) => {
     setItemMove(null)
   }
 
-  const onMoveProject = (item: Folder) => {
+  const onMoveProject = (item?: OptionItem) => {
     if (!itemMove) return
     dispatch(setLoading(true))
     ProjectService.moveProject(itemMove.id, {
-      folderId: item.id
+      folderId: item?.id || null
     })
       .then(async () => {
         await fetchData()

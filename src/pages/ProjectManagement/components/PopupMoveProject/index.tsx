@@ -8,34 +8,46 @@ import { Folder } from 'models/folder';
 import { Project } from 'models/project';
 import _ from 'lodash';
 import InputSelect from 'components/InputsSelect';
+import { OptionItem } from 'models/general';
+
 
 interface PopupMoveProjectProps {
   project: Project,
   folders: Folder[]
   onCancel: () => void,
-  onMove: (data: Folder) => void,
+  onMove: (data?: OptionItem) => void,
 }
 
 const PopupMoveProject = memo((props: PopupMoveProjectProps) => {
   const { onCancel, onMove, project, folders } = props;
+  
+  const allOption: OptionItem = { id: -1, name: 'All projects' }
 
-  const [folder, setFolder] = useState<Folder>(null);
+  const [itemSelected, setItemSelected] = useState<OptionItem>(null);
+  const [options, setOptions] = useState<OptionItem[]>([]);
 
-  const onChangeProject = (item: Folder) => {
-    setFolder(item)
+  const onChangeProject = (item: OptionItem) => {
+    setItemSelected(item)
   }
 
   useEffect(() => {
-    setFolder(project?.folder)
+    setItemSelected(project?.folder ? { id: project.folder.id, name: project.folder.name } : allOption)
   }, [project])
+
+  useEffect(() => {
+    const _options: OptionItem[] = folders?.map(it => ({ id: it.id, name: it.name })) || []
+    _options.unshift(allOption)
+    setOptions(_options)
+  }, [folders])
 
   const _onCancel = () => {
     onCancel()
   }
 
   const _onMove = () => {
-    if (!folder) return
-    onMove(folder)
+    if (!itemSelected) return
+    if (itemSelected.id === -1) onMove()
+    else onMove(itemSelected)
   }
 
   return (
@@ -57,8 +69,8 @@ const PopupMoveProject = memo((props: PopupMoveProjectProps) => {
             title="Choose folder you want to move this project"
             name=""
             selectProps={{
-              options: folders,
-              value: folder,
+              options: options,
+              value: itemSelected,
               menuPosition: 'fixed',
               placeholder: "Select folder",
               onChange: (val: any, _: any) => onChangeProject(val)
@@ -67,7 +79,7 @@ const PopupMoveProject = memo((props: PopupMoveProjectProps) => {
         </Box>
         <Box className={classes.btn}>
           <Buttons children="Cancel" btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel} />
-          <Buttons disabled={!folder} children={'Move'} btnType='Blue' padding='10px 16px' onClick={() => _onMove()} />
+          <Buttons disabled={!itemSelected} children={'Move'} btnType='Blue' padding='10px 16px' onClick={() => _onMove()} />
         </Box>
       </Box>
     </Dialog>

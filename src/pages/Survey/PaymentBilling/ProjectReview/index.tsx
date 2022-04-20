@@ -90,7 +90,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
           .catch((e) => dispatch(setErrorMess(e)))
           .finally(() => dispatch(setLoading(false)))
       }
-      
+
       getPacks()
       getAdditionalBrand()
       getProjectAttributes()
@@ -100,7 +100,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     }
   }, [project])
 
-  const inValidTarget = () => {
+  const inValidTargetMess = () => {
     const mess: string[] = []
     const location = project?.targets.find(it => it.targetQuestion?.typeId === TargetQuestionType.Location)
     if (!location) mess.push('Location')
@@ -108,7 +108,11 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     if (!economicClass) mess.push('Economic class')
     const ageCoverage = project?.targets.find(it => [TargetQuestionType.Mums_Only, TargetQuestionType.Gender_And_Age_Quotas].includes(it.targetQuestion?.typeId || 0))
     if (!ageCoverage) mess.push('Age coverage')
-    return mess.join(', ')
+    return mess
+  }
+
+  const isValidTarget = () => {
+    return !inValidTargetMess()?.length
   }
 
   const isValidSampleSize = () => {
@@ -128,7 +132,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   }
 
   const isValidConfirm = () => {
-    return isValidSampleSize() && !inValidTarget() && isValidPacks() && isValidAdditionalBrand() && isValidBasic()
+    return isValidSampleSize() && isValidTarget() && isValidPacks() && isValidAdditionalBrand() && isValidBasic()
   }
 
   const getInvoice = () => {
@@ -172,10 +176,14 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       <Grid className={classes.body}>
         <Grid className={classes.flex1}>
           <Grid className={classes.left}>
-            <div className={classes.solution}><p className={classes.textGreen}>Solution</p>
+            <div className={classes.solution}>
+              <p className={classes.textGreen}>Solution</p>
               <span className={classes.textBlue}><img src={project?.solution.image || Images.icPack} />{project?.solution?.title}</span>
             </div>
-            <div className={classes.expected}><p className={classes.textGreen}>Expected delivery</p><span className={classes.textBlack}>{project?.sampleSize <= 500 ? 10 : 15} working days</span></div>
+            <div className={classes.expected}>
+              <p className={classes.textGreen}>Expected delivery</p>
+              <span className={classes.textBlack}>{project?.sampleSize <= 500 ? 10 : 15} working days</span>
+            </div>
             <div className={classes.target}>
               <p className={classes.textGreen}>Sample and target<Button onClick={gotoTarget} classes={{ root: classes.rootbtn }} endIcon={<img src={Images.icNext} alt="" />}>Go to setup</Button></p>
               <div className={classes.flex2}>
@@ -183,7 +191,12 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                   <p className={classes.text}>Sample size</p><span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidSampleSize() })}>{project?.sampleSize || 'No sample size'}</span>
                 </div>
                 <div>
-                  <p className={classes.text}>Target criteria</p><a className={clsx(classes.textBlack, { [classes.colorDanger]: !!inValidTarget() })} onClick={gotoTarget}>{inValidTarget() || 'View detail'}</a>
+                  <p className={classes.text}>Target criteria</p>
+                  <a className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidTarget() })} onClick={gotoTarget}>
+                    {!isValidTarget() ? (
+                      <><span className={classes.missing}>Missing setup: </span>{inValidTargetMess().join(', ')}</>
+                    ) : 'View detail'}
+                  </a>
                 </div>
               </div>
             </div>
@@ -204,14 +217,14 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 <p className={classes.text}>Pack</p>
                 <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidPacks() })}>
                   {packs?.length || 0} packs<br />
-                  <span className={classes.smallText}>Required at least 2 packs</span>
+                  {!isValidPacks() && <span className={classes.smallText}>Required at least 2 packs</span>}
                 </span>
               </div>
               <div>
                 <p className={classes.text}>Brand list</p>
                 <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidAdditionalBrand() })}>
                   {additionalBrand?.length || 0} brands <br />
-                  <span className={classes.smallText}>Required at least 2 brands</span>
+                  {!isValidAdditionalBrand() && <span className={classes.smallText}>Required at least 2 brands</span>}
                 </span>
               </div>
               <div>
