@@ -21,6 +21,9 @@ import { Payment } from "models/payment";
 import UserService from "services/user";
 import { PaymentInfo } from "models/payment_info";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import { push } from "connected-react-router";
+import { authPreviewOrPayment } from "../models";
+import { routes } from "routers/routes";
 
 interface DataForm {
   paymentMethodId: number,
@@ -135,7 +138,6 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     fetchData()
   }, [dispatch])
 
-
   useEffect(() => {
     if (!paymentInfo && !user) return
     let countryId: OptionItem = undefined
@@ -229,6 +231,24 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
   }
+
+  const onRedirect = (route: string) => {
+    dispatch(push(route.replace(":id", `${project.id}`)))
+  }
+
+  useEffect(() => {
+    const checkValidConfirm = () => {
+      dispatch(setLoading(true))
+      PaymentService.validConfirm(project.id)
+        .then(res => {
+          if (!res) onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview)
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+    checkValidConfirm()
+    authPreviewOrPayment(project, onRedirect)
+  }, [project])
 
 
   return (

@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import classes from './styles.module.scss';
 import images from "config/images";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { EPaymentStatus } from "models/payment";
@@ -11,6 +11,8 @@ import { PaymentService } from "services/payment";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import FileSaver from 'file-saver';
 import moment from "moment";
+import { push } from "connected-react-router";
+import { authCompleted } from "../models";
 
 interface Props {
 
@@ -39,6 +41,14 @@ const Completed = memo(({ }: Props) => {
   const openNewTabContact = () => {
     window.open(`${process.env.REACT_APP_BASE_API_URL}/static/contract/contract.pdf`, '_blank').focus()
   }
+
+  const onRedirect = (route: string) => {
+    dispatch(push(route.replace(":id", `${project.id}`)))
+  }
+
+  useEffect(() => {
+    authCompleted(project, onRedirect)
+  }, [project])
 
   return (
     <Grid classes={{ root: classes.root }}>

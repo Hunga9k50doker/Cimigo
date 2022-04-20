@@ -22,6 +22,20 @@ export class PaymentService {
       })
   }
 
+  static async validConfirm(projectId: number): Promise<any> {
+    return await api.get(`${API.PAYMENT.VALID_CONFIRM}`, {
+      params: {
+        projectId
+      }
+    })
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+  
   static async getInvoice(projectId: number) {
     return await api.get(API.PAYMENT.INVOICE, {
       params: {

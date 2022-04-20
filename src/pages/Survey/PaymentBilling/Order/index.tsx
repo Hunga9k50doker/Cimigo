@@ -2,7 +2,7 @@ import { Grid } from "@mui/material"
 import classes from './styles.module.scss';
 import images from "config/images";
 import Buttons from "components/Buttons";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
@@ -12,6 +12,7 @@ import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import { PaymentService } from "services/payment";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import { authOrder } from "../models";
 
 interface Props {
 
@@ -47,6 +48,14 @@ const Order = memo(({ }: Props) => {
       return null
     })
   }
+
+  const onRedirect = (route: string) => {
+    dispatch(push(route.replace(":id", `${project.id}`)))
+  }
+
+  useEffect(() => {
+    authOrder(project, onRedirect)
+  }, [project])
 
   const render = () => {
     switch (project?.payments[0]?.paymentMethodId) {

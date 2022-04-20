@@ -21,6 +21,7 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import FileSaver from 'file-saver';
 import moment from "moment";
 import { PaymentService } from "services/payment";
+import { authPreviewOrPayment } from "../models";
 
 interface ProjectReviewProps {
 }
@@ -29,15 +30,14 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const dispatch = useDispatch()
   const { project } = useSelector((state: ReducerType) => state.project)
 
+  const [isValid, setIsValid] = useState<boolean>(false)
   const [packs, setPacks] = useState<Pack[]>([])
   const [additionalBrand, setAdditionalBrand] = useState<AdditionalBrand[]>([])
   const [projectAttributes, setProjectAttributes] = useState<ProjectAttribute[]>([]);
   const [userAttributes, setUserAttributes] = useState<UserAttribute[]>([]);
 
-
-
   const onConfirmProject = () => {
-    if (!isValidConfirm()) return
+    if (!isValid) return
     dispatch(push(routes.project.detail.paymentBilling.previewAndPayment.payment.replace(':id', `${project.id}`)))
   }
 
@@ -58,31 +58,44 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
             if (isSubscribed) setPacks(res.data)
           })
       }
-    
+
       const getProjectAttributes = () => {
         ProjectAttributeService.getProjectAttributes({ take: 9999, projectId: project.id })
           .then((res) => {
             if (isSubscribed) setProjectAttributes(res.data)
           })
       }
-    
+
       const getUserAttributes = () => {
         UserAttributeService.getUserAttributes({ take: 9999, projectId: project.id })
           .then((res) => {
             if (isSubscribed) setUserAttributes(res.data)
           })
       }
-    
+
       const getAdditionalBrand = () => {
         AdditionalBrandService.getAdditionalBrandList({ take: 9999, projectId: project.id })
           .then((res) => {
             if (isSubscribed) setAdditionalBrand(res.data)
           })
       }
+
+      const checkValidConfirm = () => {
+        setIsValid(false)
+        dispatch(setLoading(true))
+        PaymentService.validConfirm(project.id)
+          .then(res => {
+            if (isSubscribed) setIsValid(res)
+          })
+          .catch((e) => dispatch(setErrorMess(e)))
+          .finally(() => dispatch(setLoading(false)))
+      }
+      
       getPacks()
       getAdditionalBrand()
       getProjectAttributes()
       getUserAttributes()
+      checkValidConfirm()
       return () => { isSubscribed = false }
     }
   }, [project])
@@ -133,6 +146,16 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     window.open(`${process.env.REACT_APP_BASE_API_URL}/static/contract/contract.pdf`, '_blank').focus()
   }
 
+  const onRedirect = (route: string) => {
+    dispatch(push(route.replace(":id", `${project.id}`)))
+  }
+
+  useEffect(() => {
+    authPreviewOrPayment(project, onRedirect)
+  }, [project])
+
+
+
   return (
     <Grid classes={{ root: classes.root }}>
       {
@@ -180,14 +203,14 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
               <div>
                 <p className={classes.text}>Pack</p>
                 <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidPacks() })}>
-                  {packs?.length || 0} packs<br/>
+                  {packs?.length || 0} packs<br />
                   <span className={classes.smallText}>Required at least 2 packs</span>
                 </span>
               </div>
               <div>
                 <p className={classes.text}>Brand list</p>
                 <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidAdditionalBrand() })}>
-                  {additionalBrand?.length || 0} brands <br/>
+                  {additionalBrand?.length || 0} brands <br />
                   <span className={classes.smallText}>Required at least 2 brands</span>
                 </span>
               </div>
@@ -208,7 +231,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
         <div onClick={openNewTabContact}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Contract</p></div>
       </Grid>
       <Grid className={classes.btn}>
-        <Buttons disabled={!isValidConfirm()} onClick={onConfirmProject} children={"Confirm project"} btnType="Blue" padding="11px 24px" />
+        <Buttons disabled={!isValid} onClick={onConfirmProject} children={"Confirm project"} btnType="Blue" padding="11px 24px" />
         <p className={classes.textSub}>By click “Confirm project”, you agree to our Terms of Service and Privacy Policy.</p>
       </Grid>
     </Grid>

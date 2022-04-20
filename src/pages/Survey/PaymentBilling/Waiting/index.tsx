@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import classes from './styles.module.scss';
 import images from "config/images";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { PaymentService } from "services/payment";
@@ -9,6 +9,8 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { EPaymentMethod } from "models/general";
 import { fCurrency2VND, fCurrency2 } from "utils/formatNumber";
+import { authWaiting } from "../models";
+import { push } from "connected-react-router";
 
 interface Props {
 
@@ -40,6 +42,14 @@ const Waiting = memo(({  }: Props) => {
   const payment = () => {
     return project?.payments?.find(it => it.paymentMethodId === EPaymentMethod.BANK_TRANSFER)
   }
+
+  const onRedirect = (route: string) => {
+    dispatch(push(route.replace(":id", `${project.id}`)))
+  }
+
+  useEffect(() => {
+    authWaiting(project, onRedirect)
+  }, [project])
 
   return (
     <Grid classes={{ root: classes.root }}>
