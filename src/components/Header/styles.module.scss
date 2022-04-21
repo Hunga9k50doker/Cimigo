@@ -17,6 +17,7 @@
   display: flex;
   padding-right: 30px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .navLogoBox {
@@ -133,15 +134,15 @@
   img {
     width: 100%;
     max-width: 200px;
-
+    min-width: 119px;
     @media only screen and (max-width: 1024px) {
       max-width: 150px;
-      min-width: 60px;
+      // min-width: 60px;
     }
 
     @media only screen and (max-width: 767px) {
       max-width: 85px;
-      min-width: 50px;
+      // min-width: 50px;
     }
   }
 }
@@ -150,6 +151,7 @@
   display: flex;
   margin: 0;
   padding: 0;
+  margin-left: 10px;
 }
 
 .listMenu {
@@ -200,6 +202,7 @@
 
 .btnLogin {
   padding-right: 10px;
+  white-space: nowrap;
 
   @media only screen and (max-width: 767px) {
     button {
@@ -361,12 +364,14 @@
   display: flex;
   align-items: center;
   left: 250px;
-  position: absolute;
-
+  flex-grow: 1;
+  text-overflow: ellipsis; 
+  overflow: hidden;
+  margin-left: 20px;
+  margin-right: 5px;
   @media only screen and (max-width: 1024px) {
     left: 200px;
   }
-
   @media only screen and (max-width: 767px) {
     display: none;
   }
@@ -401,7 +406,6 @@
   img {
     margin-right: 15px;
   }
-
   span {
     font-style: normal;
     font-weight: 600;
@@ -409,6 +413,7 @@
     line-height: 20px;
     letter-spacing: 0.015em;
     color: #53660c;
+    white-space: nowrap;
   }
 }
 
@@ -442,8 +447,8 @@
   margin-left: 7px;
   white-space: inherit;
   padding-right: 10px;
-
-  &:active {
+  
+  &:active, &:hover {
     border: none;
     border-left: 4px solid rgba(166, 204, 23, 1);
     display: flex;
@@ -460,6 +465,7 @@
       margin: 0px;
     }
   }
+ 
 
   a {
     color: rgba(28, 28, 28, 0.9);
@@ -504,7 +510,6 @@
   .itKey {
     display: block;
     text-transform: uppercase;
- 
   }
 
   .btnChangeLang2 {
@@ -521,12 +526,17 @@
     margin-left: 20px;
     white-space: nowrap;
   }
+
+}
+@media only screen and (min-width: 1024px) { 
+  .item > .routerItem{
+    padding: 5px 20px;
+  }
 }
 @media only screen and (max-width: 992px) {
   .listItem{
     padding-right: 10px;
   }
-
 }
 @media only screen and (max-width: 767px) {
   .itemBtn:first-child{
@@ -535,14 +545,31 @@
     }
     display: none;
   }
-  .btnLogin, .btnLogout{
+  .btnLogin, .btnLogout,.btnChangeLang2, .itKey{
     display: none;
   }
- 
+  .itName,
+  .btnChangeLang {
+    display: flex;
+    margin-right: 0;
+  }
+  .container.container{
+    display: flex;
+  }
+  .navBar{
+    margin-left: auto;
+  }
+ .imgContainer img{
+   margin-left: 13px;
+   min-width: 119px;
+ }
 }
 @media only screen and (max-width: 480px) {
-  .imgContainer{
-    margin-left: -70px;
+  .btnChangeLang2, .itKey{
+    display: flex;
+  }
+  .btnChangeLang, .itName{
+    display:none;
   }
 }
 
@@ -550,16 +577,4 @@
   width: 40px;
   height: 40px;
   border-radius: 100%;
-}
-.detail{
-  @media only screen and (max-width: 1024px) {
-  text-overflow: ellipsis; 
-  overflow: hidden;
-  width: 250px;
-  }
-  @media only screen and (min-width: 1024px) {
-    text-overflow: ellipsis; 
-    overflow: hidden;
-    width: 365px;
-  }
 }
