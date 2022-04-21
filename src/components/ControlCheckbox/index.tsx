@@ -12,8 +12,8 @@ const ControlCheckbox = styled(FormControlLabel)<Props>`
     line-height: 22px;
     letter-spacing: 0.015em;
     color: #1C1C1C;
-    text-decoration: ${(props) => !!props.hastooltip ? 'underline' : 'unset'};
-    text-decoration-style: ${(props) => !!props.hastooltip ? 'dashed' : 'unset'};
+    text-decoration: ${(props) => !!props.hastooltip ? 'underline dashed 1px #ccc' : 'unset'};
+    text-underline-position: ${(props) => !!props.hastooltip ? 'under' : 'unset'};
   }
 `
 export default ControlCheckbox

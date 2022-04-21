@@ -27,7 +27,6 @@ import {
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
-// import { routes } from 'routers/routes';
 import Images from "config/images";
 import Inputs from "components/Inputs";
 import PopupPack from "../components/PopupPack";
@@ -72,12 +71,6 @@ interface BasicInformationFormData {
   variant: string,
   manufacturer: string
 }
-
-const ExpandIcon = (props) => {
-  return (
-    <img src={Images.icSelectBlue} alt="" {...props} />
-  )
-};
 
 enum AttributeShowType {
   Project = 1,
