@@ -371,7 +371,14 @@
   overflow: hidden;
   margin-left: 20px;
   margin-right: 5px;
-
+   p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+     span{
+      text-overflow: ellipsis;
+      overflow: hidden;
+     }
+   }
   @media only screen and (max-width: 1024px) {
     left: 200px;
   }
@@ -406,7 +413,6 @@
   display: flex;
   align-items: center;
   margin-top: 5px;
-
   img {
     margin-right: 15px;
   }
@@ -424,7 +430,7 @@
 
 .btnChangeLang {
   border: none;
-  margin-right: 10px;
+  // margin-right: 10px;
   font-weight: 500;
   font-size: 14px;
   line-height: 24px;
@@ -454,12 +460,9 @@
   white-space: inherit;
   padding-right: 10px;
 
-  &:active,
-  &:hover {
+  &:active {
     border: none;
     border-left: 4px solid rgba(166, 204, 23, 1);
-    display: flex;
-    align-items: center;
     padding: 7px 5px 7px 13px;
     margin: 10px 5px 10px 24px;
 
@@ -471,6 +474,14 @@
       font-weight: 600;
       margin: 0px;
     }
+  }
+  &:hover {
+    border: none;
+    border-left: 4px solid rgba(166, 204, 23, 1);
+    font-weight: 600;
+    transition: 0.3s;
+    margin-left: 24px;
+    padding-left: 13px;
   }
 
   a {
@@ -576,7 +587,7 @@
 
   .btnChangeLang2 {
     display: flex;
-    margin-right: -20px;
+    margin-right: -17px;
     font-weight: 500 !important;
   }
 
