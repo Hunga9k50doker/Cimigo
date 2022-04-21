@@ -131,10 +131,12 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+
   img {
     width: 100%;
     max-width: 200px;
     min-width: 119px;
+
     @media only screen and (max-width: 1024px) {
       max-width: 150px;
       // min-width: 60px;
@@ -365,13 +367,15 @@
   align-items: center;
   left: 250px;
   flex-grow: 1;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
   overflow: hidden;
   margin-left: 20px;
   margin-right: 5px;
+
   @media only screen and (max-width: 1024px) {
     left: 200px;
   }
+
   @media only screen and (max-width: 767px) {
     display: none;
   }
@@ -406,6 +410,7 @@
   img {
     margin-right: 15px;
   }
+
   span {
     font-style: normal;
     font-weight: 600;
@@ -448,8 +453,9 @@
   margin-left: 7px;
   white-space: inherit;
   padding-right: 10px;
-  
-  &:active, &:hover {
+
+  &:active,
+  &:hover {
     border: none;
     border-left: 4px solid rgba(166, 204, 23, 1);
     display: flex;
@@ -466,7 +472,6 @@
       margin: 0px;
     }
   }
- 
 
   a {
     color: rgba(28, 28, 28, 0.9);
@@ -503,74 +508,80 @@
   border-bottom: 1px solid rgba(28, 28, 28, 0.2);
 }
 
-.itKey {
-  display: none;
-}
-
 @media only screen and (max-width: 1024px) {
-  .itKey {
-    display: block;
-    text-transform: uppercase;
-  }
-
+  
   .btnChangeLang2 {
     display: flex;
     font-weight: 500 !important;
     margin-right: -15px;
   }
 
-  .itName,
   .btnChangeLang {
     display: none;
   }
-  .btnLogin{
+
+  .btnLogin {
     margin-left: 20px;
     white-space: nowrap;
   }
 
 }
-@media only screen and (min-width: 1024px) { 
-  .item > .routerItem{
+
+@media only screen and (min-width: 1024px) {
+  .item>.routerItem {
     padding: 5px 20px;
   }
 }
+
 @media only screen and (max-width: 992px) {
-  .listItem{
+  .listItem {
     padding-right: 10px;
   }
 }
+
 @media only screen and (max-width: 767px) {
-  .itemBtn:first-child{
-    .icHelp{
+  .itemBtn:first-child {
+    .icHelp {
       display: none;
     }
+
     display: none;
   }
-  .btnLogin, .btnLogout,.btnChangeLang2, .itKey{
+
+  .btnLogin,
+  .btnLogout,
+  .btnChangeLang2,
+  .itKey {
     display: none;
   }
+
   .itName,
   .btnChangeLang {
     display: flex;
     margin-right: 0;
   }
-  .container.container{
+
+  .container.container {
     display: flex;
   }
-  .navBar{
+
+  .navBar {
     margin-left: auto;
   }
- .imgContainer img{
-   margin-left: 13px;
-   min-width: 119px;
- }
-}
-@media only screen and (max-width: 480px) {
-  .btnChangeLang2, .itKey{
-    display: flex;
+
+  .imgContainer img {
+    margin-left: 13px;
+    min-width: 119px;
   }
-  .btnChangeLang, .itName{
-    display:none;
+
+  .btnChangeLang2 {
+    display: flex;
+    margin-right: -20px;
+    font-weight: 500 !important;
+  }
+
+  .btnChangeLang {
+    display: none;
   }
 }
 
