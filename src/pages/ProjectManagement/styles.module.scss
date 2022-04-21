@@ -295,3 +295,38 @@
     height: 8px;
   }
 }
+.successBoxContainer {
+  padding: 50px 64px 0px;
+  max-width: 1240px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  @media only screen and (max-width: 1024px) {
+    padding: 50px 24px ;
+  }
+  .successBox {
+    display: flex;
+    align-items: center;
+    padding: 7px 15px 7px 24px;
+    border: 1px solid #7C9911;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 780px;
+    .successIcon {
+      color: #7C9911;
+      margin-right: 18px;
+    }
+    .successText {
+      flex: 1;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 140%;
+      letter-spacing: 0.015em;
+      color: rgba(28, 28, 28, 0.9);
+    }
+    .successBtn {
+      margin-left: 10px;
+    }
+  }
+}

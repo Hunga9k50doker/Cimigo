@@ -25,6 +25,8 @@ export const SET_PROJECT_STATE_REDUCER = 'SET_PROJECT_STATE_REDUCER';
 
 export const SET_CONFIGS_REDUCER = 'SET_CONFIGS_REDUCER';
 
+export const SET_VERIFIED_SUCCESS_REDUCER = 'SET_VERIFIED_SUCCESS_REDUCER';
+
 export const getMe = () => {
   return {
     type: GET_ME_REQUEST
@@ -66,6 +68,13 @@ export const userLogoutReducer = () => {
 export const setConfigs = (data: ConfigData) => {
   return {
     type: SET_CONFIGS_REDUCER,
+    data
+  }
+}
+
+export const setVerifiedSuccess = (data: boolean) => {
+  return {
+    type: SET_VERIFIED_SUCCESS_REDUCER,
     data
   }
 }

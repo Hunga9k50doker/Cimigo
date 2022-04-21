@@ -33,7 +33,7 @@ import Buttons from "components/Buttons";
 import LabelStatus from "components/LableStatus";
 import InputSearch from "components/InputSearch";
 import PopupCreateOrEditFolder from "./components/PopupCreateOrEditFolder";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { DataPagination, OptionItem, SortItem } from "models/general";
 import { GetMyProjects, Project, projectStatus } from "models/project";
 import { ProjectService } from "services/project";
@@ -50,6 +50,9 @@ import PopupDeleteFolder from "./components/PopupDeleteFolder";
 import PopupMoveProject from "./components/PopupMoveProject";
 import PopupRenameProject, { RenameProjectFormData } from "./components/PopupRenameProject";
 import LabelStatusMobile from "./components/LableStatusMobile";
+import { ReducerType } from "redux/reducers";
+import { setVerifiedSuccess } from "redux/reducers/User/actionTypes";
+import { CheckCircle, Close } from "@mui/icons-material";
 
 const ExpandIcon = (props) => {
   return (
@@ -70,6 +73,8 @@ interface Props {
 const ProjectManagement = memo((props: Props) => {
   const history = useHistory();
   const dispatch = useDispatch()
+
+  const { verifiedSuccess } = useSelector((state: ReducerType) => state.user)
 
   const [keyword, setKeyword] = useState<string>('');
   const [sort, setSort] = useState<SortItem>();
@@ -311,10 +316,24 @@ const ProjectManagement = memo((props: Props) => {
     dispatch(push(routes.project.detail.root.replace(":id", `${id}`)))
   }
 
+  const onClearVerifiedSuccess = () => {
+    dispatch(setVerifiedSuccess(false))
+  }
+
   return (
     <Grid className={classes.root}>
       <Header />
-
+      {verifiedSuccess && (
+        <Grid className={classes.successBoxContainer}>
+          <div className={classes.successBox}>
+            <CheckCircle className={classes.successIcon} />
+            <span className={classes.successText}>Your email address is successfully verified!</span>
+            <IconButton className={classes.successBtn} onClick={onClearVerifiedSuccess}>
+              <Close />
+            </IconButton>
+          </div>
+        </Grid>
+      )}
       <Grid className={classes.container}>
         <Grid className={classes.left}>
           <p className={classes.title}>Projects</p>
@@ -356,7 +375,7 @@ const ProjectManagement = memo((props: Props) => {
                 </ListItemButton>
               </ListItem>
             ))}
-            <Buttons onClick={() => setCreateFolder(true)} children="Create a folder" btnType="TransparentBlue" className={classes.btnFolder}/>
+            <Buttons onClick={() => setCreateFolder(true)} children="Create a folder" btnType="TransparentBlue" className={classes.btnFolder} />
           </List>
         </Grid>
         <Grid className={classes.right}>

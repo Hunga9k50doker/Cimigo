@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
-import { setUserLogin } from "redux/reducers/User/actionTypes"
+import { setUserLogin, setVerifiedSuccess } from "redux/reducers/User/actionTypes"
 import { routes } from "routers/routes"
 import UserService from "services/user"
 
@@ -28,6 +28,7 @@ const CallbackActiveUser = () => {
           localStorage.setItem(EKey.TOKEN, res.token)
           dispatch(setUserLogin(res.user))
           dispatch(push(routes.project.management))
+          dispatch(setVerifiedSuccess(true))
         })
         .catch((e) => {
           dispatch(push(routes.login))
