@@ -467,7 +467,7 @@
     p{
       white-space: pre-wrap;
       border-left: 4px solid rgba(166, 204, 23, 1);
-      padding: 7px 0px 7px 14px;
+      padding: 7px 10px 7px 14px;
       transition: 0.4s;
     }
     p:not(:active,:hover){
@@ -475,9 +475,6 @@
       border: none;
       font-weight: 500;
     }
-  }
-  &:first-child{
-    margin-top: 10px;
   }
 }
 
@@ -580,6 +577,9 @@
   .btnChangeLang {
     display: none;
   }
+}
+.buttonOfToggle:last-child{
+  margin-bottom: 15px;
 }
 
 .avatar {
