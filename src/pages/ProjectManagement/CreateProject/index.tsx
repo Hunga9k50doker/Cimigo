@@ -301,55 +301,59 @@ const CreateProject = () => {
             </Grid>
           </>
         ) : (
-          <Grid className={classes.form}>
-            <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)}>
-              <p className={classes.title}>Solution: {solutionSelected?.title}</p>
+          <>
+            <Grid justifyContent="center">
+              <p className={classes.title}>{solutionSelected?.title}</p>
               <span className={classes.textLink} onClick={handleBackStep}>Choose another solution</span>
-              <Inputs
-                titleRequired
-                name="name"
-                type="text"
-                placeholder="Enter your project name"
-                title="Project name"
-                inputRef={register('name')}
-                errorMessage={errors.name?.message}
-              />
-              <p className={classes.textInfo}>Pack test specific information<span> (optional)</span><br /><a>You may modify these later</a></p>
-              <Inputs
-                name="category"
-                type="text"
-                placeholder="e.g. C7727 On Demand"
-                title="Category"
-                inputRef={register('category')}
-                errorMessage={errors.category?.message}
-              />
-              <Inputs
-                name="brand"
-                type="text"
-                placeholder="Enter your product brand name"
-                title="Brand"
-                inputRef={register('brand')}
-                errorMessage={errors.brand?.message}
-              />
-              <Inputs
-                name="variant"
-                type="text"
-                placeholder="Enter your product variant"
-                title="Variant"
-                inputRef={register('variant')}
-                errorMessage={errors.variant?.message}
-              />
-              <Inputs
-                name="manufacturer"
-                type="text"
-                placeholder="Enter product manufacturer"
-                title="Manufacturer"
-                inputRef={register('manufacturer')}
-                errorMessage={errors.manufacturer?.message}
-              />
-              <Buttons type="submit" children="Create project" btnType="Blue" width="100%" padding="16px" />
-            </form>
-          </Grid>
+            </Grid>
+            <Grid className={classes.form}>
+              <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)}>
+                <Inputs
+                  titleRequired
+                  name="name"
+                  type="text"
+                  placeholder="Enter your project name"
+                  title="Project name"
+                  inputRef={register('name')}
+                  errorMessage={errors.name?.message}
+                />
+                <p className={classes.textInfo}>Pack test specific information<span> (optional)</span><br /><a>You may modify these later</a></p>
+                <Inputs
+                  name="category"
+                  type="text"
+                  placeholder="Enter your product category"
+                  title="Category"
+                  inputRef={register('category')}
+                  errorMessage={errors.category?.message}
+                />
+                <Inputs
+                  name="brand"
+                  type="text"
+                  placeholder="Enter your product brand name"
+                  title="Brand"
+                  inputRef={register('brand')}
+                  errorMessage={errors.brand?.message}
+                />
+                <Inputs
+                  name="variant"
+                  type="text"
+                  placeholder="Enter your product variant"
+                  title="Variant"
+                  inputRef={register('variant')}
+                  errorMessage={errors.variant?.message}
+                />
+                <Inputs
+                  name="manufacturer"
+                  type="text"
+                  placeholder="Enter product manufacturer"
+                  title="Manufacturer"
+                  inputRef={register('manufacturer')}
+                  errorMessage={errors.manufacturer?.message}
+                />
+                <Buttons type="submit" children="Create project" btnType="Blue" width="100%" padding="16px" />
+              </form>
+            </Grid>
+          </>
         )}
       </Grid>
       <Footer />

@@ -461,7 +461,7 @@ const ProjectManagement = memo((props: Props) => {
                   <TableRow className={classes.tableBody}>
                     <TableCell align="center" colSpan={5}>
                       <Box sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={keyword} />
+                        <SearchNotFound searchQuery={keyword} messs="No projects found"/>
                       </Box>
                     </TableCell>
                   </TableRow>
@@ -546,7 +546,7 @@ const ProjectManagement = memo((props: Props) => {
               </Grid>
             ))
           ) : (
-            <SearchNotFound searchQuery={keyword} />
+            <SearchNotFound searchQuery={keyword} messs="No projects found"/>
           )}
         </Grid>
       </Grid>

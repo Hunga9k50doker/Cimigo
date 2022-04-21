@@ -4,13 +4,14 @@ import { Box, Typography } from '@mui/material';
 interface SearchNotFoundProps {
   searchQuery?: string,
   className?: string,
+  messs?: string,
 }
 
-export const SearchNotFound = memo(({ searchQuery = '', className, ...other }: SearchNotFoundProps) => {
+export const SearchNotFound = memo(({ searchQuery = '', messs, className, ...other }: SearchNotFoundProps) => {
   return (
     <Box className={className} {...other}>
       <Typography gutterBottom align="center" variant="subtitle1">
-        Not found
+        {messs || 'Not found'}
       </Typography>
       {
         searchQuery && (
