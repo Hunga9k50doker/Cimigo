@@ -523,7 +523,7 @@ const SetupSurvey = memo(({ id }: Props) => {
           <p className={classes.title}>Setup your pack test survey</p>
           <p className={classes.subTitle} id="basic-information">1.Basic information</p>
           <Grid className={classes.flex}>
-            <p>These information will be used in the report, enter these correctly would make your report legible.</p>
+            <p>Some basic information about your product is necessary, and this information will be used in our survey when we interview the respondents.</p>
             <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmitBI)}>
               <Grid className={classes.input}>
                 <Grid>
