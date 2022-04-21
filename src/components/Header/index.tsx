@@ -178,9 +178,7 @@ const Header = memo((props: HeaderProps) => {
               >
                 {langSupports.map(it => (
                   <MenuItem key={it.key} onClick={() => changeLanguage(it.key)} className={clsx(classes.itemAciton, { [classes.active]: it.key === i18n.language })}>
-                    {/* <p>{it.name}</p> */}
                     <p className={classes.itName}>{it.name}</p>
-                    <p className={classes.itKey}>{it.key}</p>
                   </MenuItem>
                 ))}
               </Menu>
