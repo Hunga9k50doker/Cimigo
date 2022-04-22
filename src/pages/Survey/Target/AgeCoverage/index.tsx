@@ -29,7 +29,7 @@ interface Props {
 
 const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum }: Props) => {
   const { t } = useTranslation()
-  
+
   const dispatch = useDispatch()
 
   const [activeTab, setActiveTab] = useState(ETab.Main);
@@ -122,13 +122,17 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
         return (
           <Grid classes={{ root: classes.select }}>
             <Grid classes={{ root: classes.selectAge }}>
-              <p translation-key="target_sub_tab_age_coverage_tab_gender_and_age">{t('target_sub_tab_age_coverage_tab_gender_and_age')}</p>
-              <span translation-key="target_sub_tab_age_coverage_tab_gender_and_age_sub">{t('target_sub_tab_age_coverage_tab_gender_and_age_sub')}</span>
+              <div>
+                <p translation-key="target_sub_tab_age_coverage_tab_gender_and_age">{t('target_sub_tab_age_coverage_tab_gender_and_age')}</p>
+                <span translation-key="target_sub_tab_age_coverage_tab_gender_and_age_sub">{t('target_sub_tab_age_coverage_tab_gender_and_age_sub')}</span>
+              </div>
               <Buttons btnType="Blue" children={t('common_select')} translation-key="common_select" padding="11px 52px" onClick={() => onChangeTab(ETab.Gender_And_Age_Quotas)} />
             </Grid>
             <Grid classes={{ root: classes.selectAge }}>
-              <p translation-key="target_sub_tab_age_coverage_tab_mum_only">{t('target_sub_tab_age_coverage_tab_mum_only')}</p>
-              <span translation-key="target_sub_tab_age_coverage_tab_mum_only_sub">{t('target_sub_tab_age_coverage_tab_mum_only_sub')}</span>
+              <div>
+                <p translation-key="target_sub_tab_age_coverage_tab_mum_only">{t('target_sub_tab_age_coverage_tab_mum_only')}</p>
+                <span translation-key="target_sub_tab_age_coverage_tab_mum_only_sub">{t('target_sub_tab_age_coverage_tab_mum_only_sub')}</span>
+              </div>
               <Buttons btnType="Blue" children={t('common_select')} translation-key="common_select" padding="11px 52px" onClick={() => onChangeTab(ETab.Mums_Only)} />
             </Grid>
           </Grid>

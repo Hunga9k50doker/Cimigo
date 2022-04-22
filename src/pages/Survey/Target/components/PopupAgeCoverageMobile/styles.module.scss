@@ -51,8 +51,10 @@
   }
 }
 .rootTabs > div {
-  max-height: 35px;
   border-bottom: 1px solid rgba(28, 28, 28, 0.2);
+  [class~="MuiTabs-flexContainer"] {
+    height: 100%;
+  }
 }
 .rootTab {
   width: 50%;
