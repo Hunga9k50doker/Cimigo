@@ -12,6 +12,7 @@ import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { editableProject } from "helpers/project";
 import ControlCheckbox from "components/ControlCheckbox";
 import InputCheckbox from "components/InputCheckbox";
+import { useTranslation } from "react-i18next";
 
 enum ETab {
   Main,
@@ -27,7 +28,8 @@ interface Props {
 }
 
 const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum }: Props) => {
-
+  const { t } = useTranslation()
+  
   const dispatch = useDispatch()
 
   const [activeTab, setActiveTab] = useState(ETab.Main);
@@ -120,21 +122,23 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
         return (
           <Grid classes={{ root: classes.select }}>
             <Grid classes={{ root: classes.selectAge }}>
-              <p>Gender and age quotas</p>
-              <span>Mums will fall out naturally,<br /> without specific quotas.</span>
-              <Buttons btnType="Blue" children={"Select"} padding="11px 52px" onClick={() => onChangeTab(ETab.Gender_And_Age_Quotas)} />
+              <p translation-key="target_sub_tab_age_coverage_tab_gender_and_age">{t('target_sub_tab_age_coverage_tab_gender_and_age')}</p>
+              <span translation-key="target_sub_tab_age_coverage_tab_gender_and_age_sub">{t('target_sub_tab_age_coverage_tab_gender_and_age_sub')}</span>
+              <Buttons btnType="Blue" children={t('common_select')} translation-key="common_select" padding="11px 52px" onClick={() => onChangeTab(ETab.Gender_And_Age_Quotas)} />
             </Grid>
             <Grid classes={{ root: classes.selectAge }}>
-              <p>Mums only</p>
-              <span>Mums only with specific quotas <br /> of age for their child.</span>
-              <Buttons btnType="Blue" children={"Select"} padding="11px 52px" onClick={() => onChangeTab(ETab.Mums_Only)} />
+              <p translation-key="target_sub_tab_age_coverage_tab_mum_only">{t('target_sub_tab_age_coverage_tab_mum_only')}</p>
+              <span translation-key="target_sub_tab_age_coverage_tab_mum_only_sub">{t('target_sub_tab_age_coverage_tab_mum_only_sub')}</span>
+              <Buttons btnType="Blue" children={t('common_select')} translation-key="common_select" padding="11px 52px" onClick={() => onChangeTab(ETab.Mums_Only)} />
             </Grid>
           </Grid>
         )
       case ETab.Gender_And_Age_Quotas:
         return (
           <Grid classes={{ root: classes.age }}>
-            <a className={classes.switchTab} onClick={() => onChangeTab(ETab.Mums_Only)}>Switch to mom only</a>
+            <a className={classes.switchTab} onClick={() => onChangeTab(ETab.Mums_Only)} translation-key="target_sub_tab_age_coverage_switch_mum_only">
+              {t('target_sub_tab_age_coverage_switch_mum_only')}
+            </a>
             {questionsAgeGender.map(question => (
               <Grid key={question.id} classes={{ root: classes.rootLocation }}>
                 <p>{question.title}</p>
@@ -162,14 +166,16 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
               </Grid>
             ))}
             <Grid classes={{ root: classes.rootBtn }}>
-              <Buttons disabled={isDisableGenderAge()} onClick={onUpdateTargetGenderAge} btnType="Blue" children={"Save"} padding="11px 58px" />
+              <Buttons disabled={isDisableGenderAge()} onClick={onUpdateTargetGenderAge} btnType="Blue" children={t('common_save')} translation-key="common_save" padding="11px 58px" />
             </Grid>
           </Grid>
         )
       case ETab.Mums_Only:
         return (
           <Grid classes={{ root: classes.momOnly }}>
-            <a className={classes.switchTab} onClick={() => onChangeTab(ETab.Gender_And_Age_Quotas)}>Switch to gender and age quotas</a>
+            <a className={classes.switchTab} onClick={() => onChangeTab(ETab.Gender_And_Age_Quotas)} translation-key="target_sub_tab_age_coverage_switch_gender_and_age">
+              {t('target_sub_tab_age_coverage_switch_gender_and_age')}
+            </a>
             {questionsMum.map(question => (
               <Grid key={question.id} classes={{ root: classes.rootLocation }}>
                 <p>{question.title}</p>
@@ -197,7 +203,7 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
               </Grid>
             ))}
             <Grid classes={{ root: classes.rootBtn }}>
-              <Buttons disabled={isDisableMum()} onClick={onUpdateTargetMum} btnType="Blue" children={"Save"} padding="11px 58px" />
+              <Buttons disabled={isDisableMum()} onClick={onUpdateTargetMum} btnType="Blue" children={t('common_save')} translation-key="common_save" padding="11px 58px" />
             </Grid>
           </Grid>
         )

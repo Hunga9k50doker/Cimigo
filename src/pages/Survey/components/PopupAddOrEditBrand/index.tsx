@@ -1,5 +1,5 @@
-import { memo, useEffect } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton } from '@mui/material';
+import { memo, useEffect, useMemo } from 'react';
+import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
@@ -9,14 +9,7 @@ import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
 import { AdditionalBrand } from 'models/additional_brand';
-
-
-
-const schema = yup.object().shape({
-  brand: yup.string().required('Brand is required.'),
-  manufacturer: yup.string().required('Manufacturer is required.'),
-  variant: yup.string().required('Variant is required.'),
-})
+import { useTranslation } from 'react-i18next';
 
 export interface BrandFormData {
   brand: string;
@@ -33,6 +26,15 @@ interface Props {
 
 const PopupAddOrEditBrand = memo((props: Props) => {
   const { isAdd, itemEdit, onSubmit, onCancel } = props;
+  const { t, i18n } = useTranslation()
+
+  const schema = useMemo(() =>{
+    return yup.object().shape({
+      brand: yup.string().required(t('setup_survey_add_brand_popup_brand_required')),
+      manufacturer: yup.string().required(t('setup_survey_add_brand_popup_manufacturer_required')),
+      variant: yup.string().required(t('setup_survey_add_brand_popup_variant_required')),
+    })
+  }, [i18n.language])
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<BrandFormData>({
     resolver: yupResolver(schema),
@@ -72,36 +74,52 @@ const PopupAddOrEditBrand = memo((props: Props) => {
     >
       <form autoComplete="off" className={classes.form} noValidate onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle className={classes.header}>
-          <p className={classes.title}>{itemEdit ? 'Edit brand' : 'Add brand'}</p>
+          {itemEdit ? (
+            <p className={classes.title} translation-key="setup_survey_add_brand_popup_edit_title">{t('setup_survey_add_brand_popup_edit_title')}</p>
+          ) : (
+            <p className={classes.title} translation-key="setup_survey_add_brand_popup_add_title">{t('setup_survey_add_brand_popup_add_title')}</p>
+          )}
           <IconButton onClick={onCancel}>
             <img src={Images.icClose} alt='icon close' />
           </IconButton>
         </DialogTitle>
         <DialogContent className={classes.body} dividers>
           <Inputs
-            title="Brand"
+            title={t('setup_survey_add_brand_popup_brand')}
+            translation-key="setup_survey_add_brand_popup_brand"
             name="brand"
-            placeholder="Enter product brand"
+            placeholder={t('setup_survey_add_brand_popup_brand_placeholder')}
+            translation-key-placeholder="setup_survey_add_brand_popup_brand_placeholder"
             inputRef={register('brand')}
             errorMessage={errors.brand?.message}
           />
           <Inputs
-            title="Variant"
+            title={t('setup_survey_add_brand_popup_variant')}
+            translation-key="setup_survey_add_brand_popup_variant"
             name="variant"
-            placeholder="Enter product variant"
+            placeholder={t('setup_survey_add_brand_popup_variant_placeholder')}
+            translation-key-placeholder="setup_survey_add_brand_popup_variant_placeholder"
             inputRef={register('variant')}
             errorMessage={errors.variant?.message}
           />
           <Inputs
-            title="Manufacturer"
+            title={t('setup_survey_add_brand_popup_manufacturer')}
+            translation-key="setup_survey_add_brand_popup_manufacturer"
             name="manufacturer"
-            placeholder="Enter product manufacturer"
+            placeholder={t('setup_survey_add_brand_popup_manufacturer_placeholder')}
+            translation-key-placeholder="setup_survey_add_brand_popup_manufacturer_placeholder"
             inputRef={register('manufacturer')}
             errorMessage={errors.manufacturer?.message}
           />
         </DialogContent>
         <DialogActions className={classes.btn}>
-          <Buttons type={"submit"} children={itemEdit ? 'Edit brand' : 'Add brand'} btnType='Blue' padding='10px 16px' />
+          <Buttons
+            type={"submit"}
+            children={itemEdit ? t('setup_survey_add_brand_popup_edit_btn') : t('setup_survey_add_brand_popup_add_btn')}
+            translation-key={itemEdit ? 'setup_survey_add_brand_popup_edit_btn' : 'setup_survey_add_brand_popup_add_btn'}
+            btnType='Blue'
+            padding='10px 16px'
+          />
         </DialogActions>
       </form>
     </Dialog>

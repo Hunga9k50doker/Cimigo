@@ -37,7 +37,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DataPagination, OptionItem, SortItem } from "models/general";
 import { GetMyProjects, Project, projectStatus } from "models/project";
 import { ProjectService } from "services/project";
-import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import useDebounce from "hooks/useDebounce";
 import moment from "moment";
 import SearchNotFound from "components/SearchNotFound";
@@ -53,6 +53,7 @@ import LabelStatusMobile from "./components/LableStatusMobile";
 import { ReducerType } from "redux/reducers";
 import { setVerifiedSuccess } from "redux/reducers/User/actionTypes";
 import { CheckCircle, Close } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 const ExpandIcon = (props) => {
   return (
@@ -71,6 +72,8 @@ interface Props {
 }
 
 const ProjectManagement = memo((props: Props) => {
+  const { t, i18n } = useTranslation()
+
   const history = useHistory();
   const dispatch = useDispatch()
 
@@ -221,7 +224,6 @@ const ProjectManagement = memo((props: Props) => {
     dispatch(setLoading(true))
     ProjectService.deleteProject(itemDelete.id)
       .then((res) => {
-        dispatch(setSuccessMess(res.message))
         fetchData()
       })
       .catch((e) => dispatch(setErrorMess(e)))
@@ -327,7 +329,9 @@ const ProjectManagement = memo((props: Props) => {
         <Grid className={classes.successBoxContainer}>
           <div className={classes.successBox}>
             <CheckCircle className={classes.successIcon} />
-            <span className={classes.successText}>Your email address is successfully verified!</span>
+            <span className={classes.successText} translation-key="auth_your_email_is_successfully_verified">
+              {t('auth_your_email_is_successfully_verified')}
+            </span>
             <IconButton className={classes.successBtn} onClick={onClearVerifiedSuccess}>
               <Close />
             </IconButton>
@@ -336,12 +340,14 @@ const ProjectManagement = memo((props: Props) => {
       )}
       <Grid className={classes.container}>
         <Grid className={classes.left}>
-          <p className={classes.title}>Projects</p>
+          <p className={classes.title} translation-key="project_mgmt_title">{t('project_mgmt_title')}</p>
           <List
             className={classes.list}
             component="nav"
             subheader={
-              <ListSubheader className={classes.subTitle}>Your folders</ListSubheader>
+              <ListSubheader className={classes.subTitle} translation-key="project_mgmt_your_folders">
+                {t('project_mgmt_your_folders')}
+              </ListSubheader>
             }
           >
             <ListItem
@@ -350,7 +356,7 @@ const ProjectManagement = memo((props: Props) => {
               onClick={() => onChangeFolder()}
             >
               <ListItemButton className={classes.folderListItem}>
-                <ListItemText primary={"All projects"} />
+                <ListItemText primary={t('project_mgmt_all_projects')} translation-key="project_mgmt_all_projects" />
               </ListItemButton>
             </ListItem>
             {folders?.map((item, index) => (
@@ -375,12 +381,12 @@ const ProjectManagement = memo((props: Props) => {
                 </ListItemButton>
               </ListItem>
             ))}
-            <Buttons onClick={() => setCreateFolder(true)} children="Create a folder" btnType="TransparentBlue" className={classes.btnFolder} />
+            <Buttons onClick={() => setCreateFolder(true)} children={t('project_mgmt_create_folder')} translation-key="project_mgmt_create_folder" btnType="TransparentBlue" className={classes.btnFolder} />
           </List>
         </Grid>
         <Grid className={classes.right}>
           <Grid className={classes.header}>
-            <div>
+            <Box sx={{ flex: 1 }}>
               <FormControl classes={{ root: classes.rootSelect }}>
                 <Select
                   variant="outlined"
@@ -394,51 +400,56 @@ const ProjectManagement = memo((props: Props) => {
                     }
                   }}
                 >
-                  <MenuItem value={0}>All statuses</MenuItem>
+                  <MenuItem value={0} translation-key="project_mgmt_status_all_status">{t('project_mgmt_status_all_status')}</MenuItem>
                   {projectStatus.map((item => (
-                    <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
+                    <MenuItem key={item.id} value={item.id} translation-key={item.translation}>
+                      {t(item.translation)}
+                    </MenuItem>
                   )))}
                 </Select>
               </FormControl>
               <InputSearch
-                placeholder="Search"
-                width="55%"
+                placeholder={t('project_mgmt_search')}
+                translation-key="project_mgmt_search"
                 value={keyword || ''}
                 onChange={onSearch}
               />
-            </div>
-            <Buttons onClick={() => history.push(routes.project.create)} btnType="Blue" padding="11px 18px"><img src={Images.icAddWhite} alt="" />Create project</Buttons>
+            </Box>
+            <Buttons onClick={() => history.push(routes.project.create)} btnType="Blue" padding="11px 18px" translation-key="project_mgmt_create_project">
+              <img src={Images.icAddWhite} alt="" />
+              {t('project_mgmt_create_project')}
+            </Buttons>
           </Grid>
           <TableContainer className={classes.table}>
             <Table>
               <TableHead className={classes.tableHead}>
                 <TableRow>
-                  <TableCell>
+                  <TableCell translation-key="project_mgmt_column_name">
                     <TableSortLabel
                       active={sort?.sortedField === SortedField.name}
                       direction={sort?.isDescending ? 'desc' : 'asc'}
                       onClick={() => { onChangeSort(SortedField.name) }}
                     >
-                      Project name
+                      {t('project_mgmt_column_name')}
                     </TableSortLabel>
                   </TableCell>
-                  <TableCell>
-                    Status
+                  <TableCell translation-key="project_mgmt_column_status">
+                    {t('project_mgmt_column_status')}
                   </TableCell>
-                  <TableCell>
+                  <TableCell translation-key="project_mgmt_column_last_modified">
                     <TableSortLabel
                       active={sort?.sortedField === SortedField.updatedAt}
                       direction={sort?.isDescending ? 'desc' : 'asc'}
                       onClick={() => { onChangeSort(SortedField.updatedAt) }}
                     >
-                      Last modified
+                      {t('project_mgmt_column_last_modified')}
                     </TableSortLabel>
                   </TableCell>
-                  <TableCell>
-                    Solution
+                  <TableCell translation-key="project_mgmt_column_solution">
+                    {t('project_mgmt_column_solution')}
                   </TableCell>
-                  <TableCell align="center">
-                    Action
+                  <TableCell align="center" translation-key="project_mgmt_column_action">
+                    {t('project_mgmt_column_action')}
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -461,7 +472,7 @@ const ProjectManagement = memo((props: Props) => {
                   <TableRow className={classes.tableBody}>
                     <TableCell align="center" colSpan={5}>
                       <Box sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={keyword} messs="No projects found"/>
+                        <SearchNotFound messs={t('project_mgmt_project_not_found')} />
                       </Box>
                     </TableCell>
                   </TableRow>
@@ -479,43 +490,44 @@ const ProjectManagement = memo((props: Props) => {
           >
             <MenuItem className={classes.itemAciton} onClick={gotoDetail}>
               <img src={Images.icView} alt="" />
-              <p>View details</p>
+              <p translation-key="project_mgmt_action_view_details">{t('project_mgmt_action_view_details')}</p>
             </MenuItem>
             <MenuItem className={classes.itemAciton} onClick={() => onShowRenameProject()}>
               <img src={Images.icRename} alt="" />
-              <p>Rename</p>
+              <p translation-key="project_mgmt_action_rename">{t('project_mgmt_action_rename')}</p>
             </MenuItem>
             <MenuItem className={classes.itemAciton} onClick={() => onShowMoveProject()}>
               <img src={Images.icMove} alt="" />
-              <p>Move</p>
+              <p translation-key="project_mgmt_action_move">{t('project_mgmt_action_move')}</p>
             </MenuItem>
             <MenuItem className={classes.itemAciton} onClick={onShowConfirmDelete}>
               <img src={Images.icDelete} alt="" />
-              <p>Delete</p>
+              <p translation-key="project_mgmt_action_delete">{t('project_mgmt_action_delete')}</p>
             </MenuItem>
           </Menu>
           <ConfirmDelete
             isOpen={!!itemDelete}
             onCancel={onCloseConfirmDelete}
             onDelete={onDelete}
-            title="Delete project"
-            description="Are you sure you want to delete this project?"
+            title={t('project_mgmt_confirm_delete_title')}
+            description={t('project_mgmt_confirm_delete_sub_title')}
           />
         </Grid>
       </Grid>
       {/* =================================Mobile=============================== */}
 
       <Grid className={classes.containerMobile}>
-        <Buttons onClick={() => history.push(routes.project.create)} children='Create your project' padding='11px' width="100%" btnType="Blue" />
+        <Buttons onClick={() => history.push(routes.project.create)} translation-key="project_mgmt_create_project" children={t('project_mgmt_create_project')} padding='11px' width="100%" btnType="Blue" />
         <InputSearch
-          placeholder="Search project"
+          placeholder={t('project_mgmt_search')}
           width="100%"
+          translation-key="project_mgmt_search"
           value={keyword || ''}
           onChange={onSearch}
           className={classes.inputMobile}
         />
         <Grid className={classes.headerMobile}>
-          <p>Projects</p>
+          <p translation-key="project_mgmt_title">{t('project_mgmt_title')}</p>
           <FormControl classes={{ root: classes.rootSelect }}>
             <Select
               variant="outlined"
@@ -524,9 +536,9 @@ const ProjectManagement = memo((props: Props) => {
               classes={{ select: classes.selectType, icon: classes.icSelect }}
               IconComponent={ExpandIcon}
             >
-              <MenuItem value={0}>All statuses</MenuItem>
+              <MenuItem value={0} translation-key="project_mgmt_status_all_status">{t('project_mgmt_status_all_status')}</MenuItem>
               {projectStatus.map((item => (
-                <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
+                <MenuItem key={item.id} value={item.id} translation-key={item.translation}>{t(item.translation)}</MenuItem>
               )))}
             </Select>
           </FormControl>
@@ -534,19 +546,21 @@ const ProjectManagement = memo((props: Props) => {
         <Grid classes={{ root: classes.listProject }}>
           {data?.data?.length ? (
             data?.data?.map(item => (
-              <Grid key={item.id} classes={{ root: classes.listItemProject }}>
+              <Grid sx={{ cursor: "pointer" }} key={item.id} classes={{ root: classes.listItemProject }} onClick={() => onClickRow(item.id)}>
                 <div>
                   <p className={classes.itemNameMobile}>{item.name}</p>
                   <LabelStatusMobile typeStatus={item.status} />
-                  <span className={classes.itemDateMobile}>Last modified on {moment(item.updatedAt).format('MMM DD, yyyy')}</span>
+                  <span className={classes.itemDateMobile} translation-key="project_mgmt_column_last_modified_mobile">
+                    {t('project_mgmt_column_last_modified_mobile')} {moment(item.updatedAt).locale(i18n.language).format('MMM DD, yyyy')}
+                  </span>
                 </div>
-                <IconButton onClick={(event) => handleAction(event, item)}>
+                <IconButton onClick={(event) => { event.stopPropagation(); handleAction(event, item) }}>
                   <MoreVertIcon />
                 </IconButton>
               </Grid>
             ))
           ) : (
-            <SearchNotFound searchQuery={keyword} messs="No projects found"/>
+            <SearchNotFound messs={t('project_mgmt_project_not_found')} />
           )}
         </Grid>
       </Grid>

@@ -12,6 +12,7 @@ import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { editableProject } from "helpers/project";
 import ControlCheckbox from "components/ControlCheckbox";
 import InputCheckbox from "components/InputCheckbox";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   projectId: number,
@@ -20,7 +21,8 @@ interface Props {
 }
 
 const EconomicClass = memo(({ projectId, project, questions }: Props) => {
-
+  const { t } = useTranslation()
+  
   const dispatch = useDispatch()
   const [dataSelected, setDataSelected] = useState<DataSelected>({})
 
@@ -87,7 +89,7 @@ const EconomicClass = memo(({ projectId, project, questions }: Props) => {
         </Grid>
       ))}
       <Grid classes={{ root: classes.rootBtn }}>
-        <Buttons disabled={isDisable()} onClick={onUpdateTarget} btnType="Blue" children={"Save"} padding="11px 58px" />
+        <Buttons disabled={isDisable()} onClick={onUpdateTarget} btnType="Blue" children={t('common_save')} translation-key="common_save" padding="11px 58px" />
       </Grid>
     </>
 

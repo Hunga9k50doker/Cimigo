@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import images from 'config/images';
 import TextTitle from './components/TextTitle';
 import ErrorMessage from './components/ErrorMessage';
+import { useTranslation } from 'react-i18next';
 
 interface InputsProps extends OutlinedInputProps {
   title?: string,
@@ -25,6 +26,8 @@ interface InputsProps extends OutlinedInputProps {
   infor?: string
 }
 const Inputs = memo((props: InputsProps) => {
+  const { t } = useTranslation()
+
   const [toggleEyes, setToggleEyes] = useState(false);
   const { title,
     placeholder,
@@ -52,10 +55,9 @@ const Inputs = memo((props: InputsProps) => {
   return (
     <FormControl className={classes.root}>
       <TextTitle invalid={errorMessage}>{title}
-      {optional ? <span className={classes.optional}> (optional)</span> : ""}
+      {optional ? <span className={classes.optional}> ({t('common_optional')})</span> : ""}
       {titleRequired ? <span className={classes.titleRequired}> *</span> : ""}
       </TextTitle>
-      {/* <Typography classes={{ root: clsx(!errorMessage ? classes.textTitle : classes.textTitleInvalid) }}>{title} {optional ? <span className={classes.optional}>(optional)</span> : ""}</Typography> */}
       <OutlinedInput
         type={!toggleEyes ? type : 'text'}
         placeholder={placeholder}
@@ -83,7 +85,6 @@ const Inputs = memo((props: InputsProps) => {
       />
       {infor && <p className={classes.textInfor}>{infor}</p>}
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-      {/* {errorMessage && <Typography className={classes.textError}>{errorMessage}</Typography>} */}
     </FormControl>
   );
 });

@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
-import { Box, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Inputs from "components/Inputs";
@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
 import UserService from "services/user";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Popup from "components/Popup";
 import { EKey } from "models/general";
 import { setUserLogin } from "redux/reducers/User/actionTypes";
@@ -21,17 +21,24 @@ import { push } from "connected-react-router";
 import Google from "components/SocialButton/Google";
 import { useTranslation } from 'react-i18next';
 
-const schema = yup.object().shape({
-  email: yup.string().email('Please enter a valid email adress').required('Email is required.'),
-  password: yup.string().required('Password is required.'),
-});
+
 
 const Login = () => {
-  const { t } = useTranslation()
-  
+  const { t, i18n } = useTranslation()
+
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      email: yup.string()
+        .email(t('field_email_vali_email'))
+        .required(t('field_email_vali_required')),
+      password: yup.string()
+        .required(t('field_password_vali_required')),
+    })
+  }, [i18n.language])
+
   const dispatch = useDispatch()
   const [isNotVerified, setIsNotVerified] = useState(false)
-  const [errorSubmit, setErrorSubmit] = useState('')
+  const [errorSubmit, setErrorSubmit] = useState(false)
 
   const { register, handleSubmit, formState: { errors }, getValues, watch } = useForm<LoginForm>({
     resolver: yupResolver(schema),
@@ -40,7 +47,7 @@ const Login = () => {
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      errorSubmit && setErrorSubmit('')
+      errorSubmit && setErrorSubmit(false)
     });
     return () => subscription.unsubscribe();
   }, [watch]);
@@ -55,7 +62,7 @@ const Login = () => {
       })
       .catch(e => {
         if (e.detail === 'notVerified') setIsNotVerified(true)
-        else setErrorSubmit(e.detail || e.message || e.error || "Please enter a correct email and password.")
+        else setErrorSubmit(true)
       })
       .finally(() => dispatch(setLoading(false)))
   };
@@ -67,7 +74,7 @@ const Login = () => {
     dispatch(setLoading(true))
     UserService.sendVerifyEmail(email)
       .then(() => {
-        dispatch(setSuccessMess('Email has been sent successfully, please check your email to verify your account'))
+        dispatch(setSuccessMess(t('auth_verify_email_send_success')))
       })
       .catch(e => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -78,55 +85,59 @@ const Login = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="login" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <p className={classes.textLogin}>{t('login')}</p>
+          <p className={classes.textLogin} translation-key="login_title">{t('login_title')}</p>
           <Inputs
-            title="Email address"
+            title={t('field_email_address')}
+            translation-key="field_email_address"
             name="email"
-            placeholder="Enter your email address"
+            placeholder={t('field_email_placeholder')}
+            translation-key-placeholder="field_email_placeholder"
             type="text"
             inputRef={register('email')}
             errorMessage={errors.email?.message}
           />
           <Inputs
-            title="Password"
+            title={t('field_password')}
+            translation-key="field_password"
             name="password"
             type="password"
             showEyes
-            placeholder="Enter your password"
+            placeholder={t('field_password_placeholder')}
+            translation-key-placeholder="field_password_placeholder"
             inputRef={register('password')}
             errorMessage={errors.password?.message}
           />
           <Grid className={classes.checkbox}>
             <div></div>
-            <Link to={routes.forgotPassword} className={classes.linkText}>Forgot your password?</Link>
+            <Link to={routes.forgotPassword} className={classes.linkText} translation-key="login_redirect_forgot_password">
+              {t('login_redirect_forgot_password')}
+            </Link>
           </Grid>
-          {
-            errorSubmit && (
-              <Typography className={classes.errorText}>
-                Please enter a correct email and password.
-              </Typography>
-            )
-          }
-          <Buttons type={'submit'} children={"LOGIN"} btnType="Blue" padding="16px 0px" />
+          {errorSubmit && (
+            <Typography className={classes.errorText} translation-key="login_invalid_error">
+              {t('login_invalid_error')}
+            </Typography>
+          )}
+          <Buttons type={'submit'} children={t('login_btn_login')} btnType="Blue" padding="16px 0px" translation-key="login_btn_login" />
           <div className={classes.separator}>
-            <span>or login with</span>
+            <span translation-key="login_login_with">{t('login_login_with')}</span>
           </div>
           <Google />
-          <Link className={classes.linkText} to={routes.register} >Don't have an account? Register now!</Link>
+          <Link className={classes.linkText} to={routes.register} translation-key="login_do_not_have_account">{t('login_do_not_have_account')}</Link>
         </Grid>
       </form>
       <Footer />
       <Popup
         open={isNotVerified}
         maxWidth="md"
-        title="Verify your account"
+        title={t('auth_verify_email_title')}
         onClose={() => setIsNotVerified(false)}
       >
-        <Typography variant="subtitle1">
-          Your account has not been verified
+        <Typography variant="subtitle1" translation-key="auth_verify_email_sub_title">
+          {t('auth_verify_email_sub_title')}
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "2rem" }}>
-          <Buttons btnType="Blue" padding="7px 16px" onClick={onSendVerify}>Send email verify</Buttons>
+          <Buttons btnType="Blue" padding="7px 16px" onClick={onSendVerify} translation-key="auth_verify_email_btn_send">{t('auth_verify_email_btn_send')}</Buttons>
         </Box>
       </Popup>
     </Grid>

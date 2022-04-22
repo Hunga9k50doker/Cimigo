@@ -8,7 +8,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import LoadingScreen from 'components/LoadingScreen';
 import 'assets/scss/_variables.scss';
 import 'react-quill/dist/quill.snow.css';
-
+import 'moment/locale/vi'
 
 const { store, persistor } = configureStore();
 

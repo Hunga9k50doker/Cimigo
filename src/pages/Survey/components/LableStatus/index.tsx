@@ -2,7 +2,8 @@ import { memo } from "react";
 import classes from './styles.module.scss';
 import clsx from "clsx";
 import { OptionItem } from "models/general";
-import { PackType } from "models/pack";
+import { PackType, packTypes } from "models/pack";
+import { useTranslation } from "react-i18next";
 
 interface LabelStatusProps {
   status: OptionItem
@@ -11,6 +12,11 @@ interface LabelStatusProps {
 const LabelStatus = memo((props: LabelStatusProps) => {
   
   const { status, ...rest } = props;
+  const { t } = useTranslation()
+
+  const getLabel = () => {
+    return t(packTypes.find(it => it.id === status.id)?.translation || '')
+  }
 
   return (
     <div
@@ -23,7 +29,7 @@ const LabelStatus = memo((props: LabelStatusProps) => {
       }
       {...rest}
     >
-      {status.name}
+      {getLabel()}
     </div >
   );
 });

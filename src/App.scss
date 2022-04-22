@@ -43,3 +43,6 @@ a {
 .cimigo-blue {
   color: var(--cimigo-blue);
 }
+a:-webkit-any-link {
+  text-decoration: unset;
+}

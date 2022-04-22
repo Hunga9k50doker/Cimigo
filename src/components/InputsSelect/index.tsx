@@ -9,6 +9,7 @@ import { Controller } from 'react-hook-form';
 import { StateManagerProps } from 'react-select/dist/declarations/src/stateManager';
 import TextTitle from 'components/Inputs/components/TextTitle';
 import ErrorMessage from 'components/Inputs/components/ErrorMessage';
+import { useTranslation } from 'react-i18next';
 
 const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unknown>> => ({
   indicatorSeparator: () => ({
@@ -23,6 +24,7 @@ const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unk
     letterSpacing: '0.015em',
     color: '#1C1C1C',
     padding: '14px 15px',
+    cursor: state.isDisabled ? "not-allowed" : "pointer",
     background: state.isSelected || state.isFocused ? '#E8F1FB' : '#ffffff',
   }),
   placeholder: (provided) => ({
@@ -36,8 +38,9 @@ const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unk
     ...provided,
     padding: "10px 5px 10px 13px"
   }),
-  control: (provided: any) => ({
+  control: (provided, state) => ({
     ...provided,
+    cursor: state.isDisabled ? "not-allowed" : "pointer",
     background: error ? 'rgba(175, 28, 16, 0.08)' : '#ffffff',
     borderColor: error ? '#af1c10' : 'rgba(28, 28, 28, 0.2)',
   })
@@ -65,10 +68,20 @@ interface InputSelectProps {
 
 const InputSelect = memo((props: InputSelectProps) => {
   const { title, errorMessage, name, control, bindKey, bindLabel, selectProps, fullWidth, optional } = props;
+  const { t } = useTranslation()
+
+  const getOptionLabel = (option: any) => {
+    switch (bindLabel || 'name') {
+      case 'translation':
+        return t(option["translation"])
+      default:
+        return option[bindLabel || 'name']
+    }
+  }
 
   return (
     <FormControl classes={{ root: classes.container }} sx={{ width: fullWidth ? '100%' : 'auto' }}>
-      {title && <TextTitle invalid={errorMessage}>{title} {optional && <span className={classes.optional}>(optional)</span>}</TextTitle>}
+      {title && <TextTitle invalid={errorMessage}>{title} {optional && <span className={classes.optional}>({t('common_optional')})</span>}</TextTitle>}
       {
         control ? (
           <>
@@ -79,7 +92,7 @@ const InputSelect = memo((props: InputSelectProps) => {
                 {...field}
                 styles={customStyles(!!errorMessage)}
                 getOptionValue={(option) => option[bindKey || 'id']}
-                getOptionLabel={(option) => option[bindLabel || 'name']}
+                getOptionLabel={(option) => getOptionLabel(option)}
                 components={{ DropdownIndicator }}
                 {...selectProps}
               />}
@@ -90,7 +103,7 @@ const InputSelect = memo((props: InputSelectProps) => {
             <Select
               styles={customStyles(!!errorMessage)}
               getOptionValue={(option) => option[bindKey || 'id']}
-              getOptionLabel={(option) => option[bindLabel || 'name']}
+              getOptionLabel={(option) => getOptionLabel(option)}
               components={{ DropdownIndicator }}
               {...selectProps}
             />

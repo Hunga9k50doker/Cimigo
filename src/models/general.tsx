@@ -18,11 +18,13 @@ export interface Country {
 export interface OptionItem {
   id: number;
   name: string;
+  translation?: string;
 }
 
 export interface OptionItemT<T> {
   id: T;
   name: string;
+  translation?: string;
 }
 
 export interface PaginationParams {

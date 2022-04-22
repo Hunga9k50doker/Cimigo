@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import classes from './styles.module.scss';
 import {
   Grid,
@@ -38,18 +38,11 @@ import { Project } from "models/project";
 import images from "config/images";
 import { useHistory } from 'react-router-dom';
 import { UserGetSolutions } from "models/solution";
+import { useTranslation } from "react-i18next";
 
 interface IQueryString {
   solution_id?: string
 }
-
-const schema = yup.object().shape({
-  name: yup.string().required('Name is required.'),
-  category: yup.string(),
-  brand: yup.string(),
-  variant: yup.string(),
-  manufacturer: yup.string()
-})
 
 export interface CreateProjectFormData {
   name: string,
@@ -64,12 +57,26 @@ enum EStep {
   CREATE_PROJECT
 }
 
-const steps = [
-  { id: EStep.SELECT_SOLUTION, name: 'Select solution' },
-  { id: EStep.CREATE_PROJECT, name: 'Create project' },
-]
-
 const CreateProject = () => {
+
+  const { t, i18n } = useTranslation()
+
+  const steps = useMemo(() => {
+    return [
+      { id: EStep.SELECT_SOLUTION, name: t('select_solution_title') },
+      { id: EStep.CREATE_PROJECT, name: t('create_project_title') },
+    ]
+  }, [i18n.language])
+
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      name: yup.string().required(t('field_project_name_vali_required')),
+      category: yup.string(),
+      brand: yup.string(),
+      variant: yup.string(),
+      manufacturer: yup.string()
+    })
+  }, [i18n.language])
 
   const dispatch = useDispatch()
   const history = useHistory();
@@ -203,7 +210,7 @@ const CreateProject = () => {
         <div className={classes.linkTextHome} >
           <img src={images.icHomeMobile} alt='' onClick={() => history.push(routes.project.management)} />
           <img src={images.icNextMobile} alt='' />
-          <span>Projects</span>
+          <span translation-key="header_projects">{t('header_projects')}</span>
         </div>
         <Stepper
           alternativeLabel
@@ -230,15 +237,16 @@ const CreateProject = () => {
         {activeStep === EStep.SELECT_SOLUTION ? (
           <>
             <Grid className={classes.header}>
-              <p>Select a solution</p>
+              <p translation-key="select_solution_select_solution">{t('select_solution_select_solution')}</p>
               <InputSearch
-                placeholder="Search solution"
+                placeholder={t('select_solution_search_solution')}
+                translation-key="select_solution_search_solution"
                 value={keyword || ''}
                 onChange={onSearch}
               />
             </Grid>
             <Stack direction="row" spacing={1} className={classes.stack}>
-            <Chip label={'All'} className={clsx(classes.category, { [classes.categorySelected]: !category?.id })} clickable variant="outlined" onClick={() => onChangeCategory()} />
+            <Chip label={t('common_all')} translation-key="common_all" className={clsx(classes.category, { [classes.categorySelected]: !category?.id })} clickable variant="outlined" onClick={() => onChangeCategory()} />
               {solutionCategory?.data.map((item) => (
                 <Chip key={item.id} label={item.name} className={clsx(classes.category, { [classes.categorySelected]: item.id === category?.id })} clickable variant="outlined" onClick={() => onChangeCategory(item)} />
               ))}
@@ -257,6 +265,7 @@ const CreateProject = () => {
                         </div>
                         <Grid className={classes.btnReadMore}>
                           <Button 
+                            translation-key="common_read_more"
                             className={classes.btnReadMoreRoot} 
                             classes={{ disabled: classes.btndisabled }} disabled={!selected} 
                             onClick={() => setIsReadMore(true)} 
@@ -265,7 +274,7 @@ const CreateProject = () => {
                             <img className={classes.icReadMoreGray} src={images.icReadMoreGray} alt='' />
                             </>}
                           >
-                            Read more
+                            {t('common_read_more')}
                           </Button>
                           <div className={classes.ticketBox}>
                             <img src={images.icTicked} alt='' />
@@ -277,7 +286,7 @@ const CreateProject = () => {
                   case EStatus.Coming_Soon:
                     return (
                       <Grid key={index} className={classes.cardComing}>
-                        <div>Coming soon</div>
+                        <div translation-key="select_solution_coming_soon">{t('select_solution_coming_soon')}</div>
                         <img src={item.image} alt="solution image" />
                         <p>{item.title}</p>
                         <span>{item.description}</span>
@@ -289,22 +298,22 @@ const CreateProject = () => {
             <Grid className={classes.footerSelected}>
               <Grid>
                 {!solutionShow ?
-                  <a>No solution selected</a>
+                  <a translation-key="select_solution_no_solution_select">{t('select_solution_no_solution_select')}</a>
                   :
                   <>
-                    <p>Selected solution</p>
+                    <p translation-key="select_solution_selected_solution">{t('select_solution_selected_solution')}</p>
                     <span>{solutionShow?.title}</span>
                   </>
                 }
               </Grid>
-              <Buttons onClick={() => handleNextStep()} disabled={!solutionShow} children={"Get started"} btnType="Blue" padding="16px" className={classes.btnMobile} />
+              <Buttons onClick={() => handleNextStep()} disabled={!solutionShow} children={t('select_solution_get_started')} translation-key="select_solution_get_started" btnType="Blue" padding="16px" className={classes.btnMobile} />
             </Grid>
           </>
         ) : (
           <>
             <Grid justifyContent="center">
               <p className={classes.title}>{solutionSelected?.title}</p>
-              <span className={classes.textLink} onClick={handleBackStep}>Choose another solution</span>
+              <span className={classes.textLink} onClick={handleBackStep} translation-key="create_project_choose_another_solution">{t('create_project_choose_another_solution')}</span>
             </Grid>
             <Grid className={classes.form}>
               <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -312,45 +321,57 @@ const CreateProject = () => {
                   titleRequired
                   name="name"
                   type="text"
-                  placeholder="Enter your project name"
-                  title="Project name"
+                  placeholder={(t('field_project_name_placeholder'))}
+                  translation-key-placeholder="field_project_name_placeholder"
+                  title={t('field_project_name')}
+                  translation-key="field_project_name"
                   inputRef={register('name')}
                   errorMessage={errors.name?.message}
                 />
-                <p className={classes.textInfo}>Pack test specific information<span> (optional)</span><br /><a>You may modify these later</a></p>
+                <p className={classes.textInfo} translation-key="create_project_infor">{t('create_project_infor')}<span translation-key="common_optional"> ({t('common_optional')})</span><br />
+                  <span className={classes.inforSub} translation-key="create_project_sub_infor">{t('create_project_sub_infor')}</span>
+                </p>
                 <Inputs
                   name="category"
                   type="text"
-                  placeholder="Enter your product category"
-                  title="Category"
+                  placeholder={t('field_project_category_placeholder')}
+                  translation-key-placeholder="field_project_category_placeholder"
+                  title={t('field_project_category')}
+                  translation-key="field_project_category"
                   inputRef={register('category')}
                   errorMessage={errors.category?.message}
                 />
                 <Inputs
                   name="brand"
                   type="text"
-                  placeholder="Enter your product brand name"
-                  title="Brand"
+                  placeholder={t('field_project_brand_placeholder')}
+                  translation-key-placeholder="field_project_brand_placeholder"
+                  title={t('field_project_brand')}
+                  translation-key="field_project_brand"
                   inputRef={register('brand')}
                   errorMessage={errors.brand?.message}
                 />
                 <Inputs
                   name="variant"
                   type="text"
-                  placeholder="Enter your product variant"
-                  title="Variant"
+                  placeholder={t('field_project_variant_placeholder')}
+                  translation-key-placeholder="field_project_variant_placeholder"
+                  title={t('field_project_variant')}
+                  translation-key="field_project_variant"
                   inputRef={register('variant')}
                   errorMessage={errors.variant?.message}
                 />
                 <Inputs
                   name="manufacturer"
                   type="text"
-                  placeholder="Enter product manufacturer"
-                  title="Manufacturer"
+                  placeholder={t('field_project_manufacturer_placeholder')}
+                  translation-key-placeholder="field_project_manufacturer_placeholder"
+                  title={t('field_project_manufacturer')}
+                  translation-key="field_project_manufacturer"
                   inputRef={register('manufacturer')}
                   errorMessage={errors.manufacturer?.message}
                 />
-                <Buttons type="submit" children="Create project" btnType="Blue" width="100%" padding="16px" />
+                <Buttons type="submit" children={t('create_project_btn_submit')} translation-key="create_project_btn_submit" btnType="Blue" width="100%" padding="11px 16px" />
               </form>
             </Grid>
           </>

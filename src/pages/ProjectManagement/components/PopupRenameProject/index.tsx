@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { Box, Dialog, IconButton } from '@mui/material';
 import classes from './styles.module.scss';
 
@@ -10,10 +10,9 @@ import Inputs from 'components/Inputs';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { useTranslation } from 'react-i18next';
 
-const schema = yup.object().shape({
-  name: yup.string().required('Name is required.')
-})
+
 
 export interface RenameProjectFormData {
   name: string
@@ -26,6 +25,14 @@ interface PopupRenameProjectProps {
 }
 
 const PopupRenameProject = memo((props: PopupRenameProjectProps) => {
+  const { t, i18n } = useTranslation()
+
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      name: yup.string().required(t('field_project_name_vali_required'))
+    })
+  }, [i18n.language])
+  
   const { onCancel, onSubmit, project } = props;
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<RenameProjectFormData>({
@@ -59,7 +66,7 @@ const PopupRenameProject = memo((props: PopupRenameProjectProps) => {
       <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
         <Box classes={{ root: classes.root }}>
           <Box className={classes.header}>
-            <p className={classes.title}>{'Rename'}</p>
+            <p className={classes.title} translation-key="project_mgmt_rename_title">{t('project_mgmt_rename_title')}</p>
             <IconButton onClick={_onCancel}>
               <img src={Images.icClose} alt='' />
             </IconButton>
@@ -69,15 +76,17 @@ const PopupRenameProject = memo((props: PopupRenameProjectProps) => {
               titleRequired
               name="name"
               type="text"
-              placeholder="Enter your project name"
-              title="Name"
+              placeholder={t('field_project_name_placeholder')}
+              translation-key-placeholder="field_project_name_placeholder"
+              title={t('field_project_name')}
+              translation-key="field_project_name"
               inputRef={register('name')}
               errorMessage={errors.name?.message}
             />
           </Box>
           <Box className={classes.btn}>
-            <Buttons children="Cancel" btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel} />
-            <Buttons children={'Save'} type="submit" btnType='Blue' padding='10px 16px' />
+            <Buttons children={t('common_cancel')} btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel} translation-key="common_cancel"/>
+            <Buttons children={t('common_save')} type="submit" btnType='Blue' padding='10px 16px' translation-key="common_save"/>
           </Box>
         </Box>
       </form>

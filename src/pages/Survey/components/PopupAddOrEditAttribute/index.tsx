@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react';
+import { memo, useState, useEffect, useMemo } from 'react';
 import { Collapse, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, ListItem, ListItemText } from '@mui/material';
 import classes from './styles.module.scss';
 
@@ -9,11 +9,8 @@ import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
 import Inputs from 'components/Inputs';
+import { useTranslation } from 'react-i18next';
 
-const schema = yup.object().shape({
-  start: yup.string().required('Start is required.'),
-  end: yup.string().required('End is required.'),
-})
 
 export interface UserAttributeFormData {
   start: string;
@@ -30,6 +27,16 @@ interface Props {
 
 const PopupAddOrEditAttribute = memo((props: Props) => {
   const { isAdd, itemEdit, onCancel, onSubmit } = props;
+
+  const { t, i18n } = useTranslation()
+
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      start: yup.string().required(t('setup_survey_popup_your_own_att_start_point_label_required')),
+      end: yup.string().required(t('setup_survey_popup_your_own_att_end_point_label_required')),
+    })
+  }, [i18n.language])
+
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
@@ -73,17 +80,21 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
     >
       <form autoComplete="off" className={classes.form} noValidate onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle className={classes.header}>
-          <p className={classes.title}>{itemEdit ? 'Edit your own attribute' : 'Add your own attribute'}</p>
+          {itemEdit ? (
+            <p className={classes.title} translation-key="setup_survey_popup_edit_your_own_att_title">{t('setup_survey_popup_edit_your_own_att_title')}</p>
+          ) : (
+            <p className={classes.title} translation-key="setup_survey_popup_add_your_own_att_title">{t('setup_survey_popup_add_your_own_att_title')}</p>
+          )}
           <IconButton onClick={onCancel}>
             <img src={Images.icClose} alt='' />
           </IconButton>
         </DialogTitle>
         <DialogContent className={classes.body} dividers>
-          <p>Your attribute will be asked as a 10-point scales. Please enter the start point label corresponds to 1, and the end point label corresponds to 10 in the boxes below. Also add the local translation for those labels, they will be used in the survey to elicit responses from consumers.</p>
+          <p translation-key="setup_survey_popup_your_own_att_sub_title">{t('setup_survey_popup_your_own_att_sub_title')}</p>
           <Grid className={classes.listNumberMobile}>
             <div className={classes.textMobile}>
-              <p>Start label</p>
-              <p>End label</p>
+              <p translation-key="setup_survey_add_att_start_label">{t('setup_survey_add_att_start_label')}</p>
+              <p translation-key="setup_survey_add_att_end_label">{t('setup_survey_add_att_end_label')}</p>
             </div>
             <div className={classes.numberMobile}>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
           </Grid>
@@ -98,9 +109,11 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
                 <Grid className={classes.listFlex}>
                   <Grid item xs={4} className={classes.listTextLeft}>
                     <Inputs
-                      title="Start point label"
+                      title={t('setup_survey_popup_your_own_att_start_point_label')}
+                      translation-key="setup_survey_popup_your_own_att_start_point_label"
                       name="start"
-                      placeholder="Enter product brand"
+                      placeholder={t('setup_survey_popup_your_own_att_start_point_label_placeholder')}
+                      translation-key-placeholder="setup_survey_popup_your_own_att_start_point_label_placeholder"
                       inputRef={register('start')}
                       errorMessage={errors.start?.message}
                     />
@@ -110,9 +123,11 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
                   </Grid>
                   <Grid item xs={4} className={classes.listTextRight}>
                     <Inputs
-                      title="End point label"
+                      title={t('setup_survey_popup_your_own_att_end_point_label')}
+                      translation-key="setup_survey_popup_your_own_att_end_point_label"
                       name="end"
-                      placeholder="Enter end point label"
+                      placeholder={t('setup_survey_popup_your_own_att_end_point_label_placeholder')}
+                      translation-key-placeholder="setup_survey_popup_your_own_att_end_point_label_placeholder"
                       inputRef={register('end')}
                       errorMessage={errors.end?.message}
                     />
@@ -131,17 +146,25 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
                   color: expanded ? "rgba(28, 28, 28, 0.65)" : "#1F61A9",
                   fontWeight: expanded ? 600 : 500,
                   marginLeft: expanded ? "0px" : "12px"
-                }}>
-                How to write a good scale question?
+                }}
+                translation-key="setup_survey_popup_your_own_att_tip_title"
+              >
+                {t('setup_survey_popup_your_own_att_tip_title')}
               </p>
               <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <p>Cimigo recommend that as a minimum that you add descriptions to the start and end points. Scales are shown from left (with lowest number) to right (with highest numbers) and we recommend the lowest number being the negative or disagree end of your scale whilst the highest number is the positive agree end of the scale. Alternatively, you may have opposing characteristics anchored at either end of the scale.</p>
+                <p translation-key="setup_survey_popup_your_own_att_tip_sub">{t('setup_survey_popup_your_own_att_tip_sub')}</p>
               </Collapse>
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions className={classes.btn}>
-          <Buttons type="submit" children={itemEdit ? 'Edit attribute' : 'Add attribute'} btnType='Blue' padding='10px 16px' />
+          <Buttons
+            type="submit"
+            children={itemEdit ? t('setup_survey_add_att_btn_edit') : t('setup_survey_add_att_btn_add')}
+            translation-key={itemEdit ? 'setup_survey_add_att_btn_edit' : 'setup_survey_add_att_btn_add'}
+            btnType='Blue'
+            padding='10px 16px'
+          />
         </DialogActions>
       </form>
     </Dialog>

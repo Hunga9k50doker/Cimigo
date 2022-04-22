@@ -16,6 +16,7 @@ import { editableProject } from "helpers/project";
 import ControlCheckbox from "components/ControlCheckbox";
 import InputCheckbox from "components/InputCheckbox";
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   projectId: number,
@@ -24,7 +25,8 @@ interface Props {
 }
 
 const Location = memo(({ projectId, project, questions }: Props) => {
-
+  const { t } = useTranslation()
+  
   const dispatch = useDispatch()
   const [dataSelected, setDataSelected] = useState<DataSelected>({})
   const [groupsSelected, setGroupsSelected] = useState<{ [key: number]: TargetAnswerGroup }>({})
@@ -88,10 +90,10 @@ const Location = memo(({ projectId, project, questions }: Props) => {
   return (
     <>
       <Grid classes={{ root: classes.rootCountry }}>
-        <p>Country:</p>
+        <p translation-key="target_country_title">{t('target_country_title')}:</p>
         <Grid>
           <p>Vietnam</p>
-          <span>*We currently launch this platform only in Vietnam, other countries will be available soon.</span>
+          <span translation-key="target_country_sub_title">{t('target_country_sub_title')}</span>
         </Grid>
       </Grid>
       {questions?.map((question) => {
@@ -123,7 +125,7 @@ const Location = memo(({ projectId, project, questions }: Props) => {
                 <p>{question.title}:</p>
                 {!!question.targetAnswerSuggestions?.length && (
                   <Grid classes={{ root: classes.rootTags }}>
-                    <p>Suggest combination:</p>
+                    <p translation-key="target_suggest_title">{t('target_suggest_title')}:</p>
                     <Stack direction="row" spacing={1}>
                       {question.targetAnswerSuggestions.map(suggestion => (
                         <Chip className={clsx({[classes.suggestionSeleted]: _isSelectedSuggestion(suggestion)})} onClick={() => _onClickSuggestion(suggestion)} key={suggestion.id} label={suggestion.name} clickable variant="outlined" />
@@ -200,7 +202,7 @@ const Location = memo(({ projectId, project, questions }: Props) => {
         return
       })}
       <Grid classes={{ root: classes.rootBtn }}>
-        <Buttons onClick={onUpdateTarget} disabled={isDisable()} btnType="Blue" children={"Save"} padding="11px 58px" />
+        <Buttons onClick={onUpdateTarget} disabled={isDisable()} btnType="Blue" children={t('common_save')} translation-key="common_save" padding="11px 58px" />
       </Grid>
     </>
   )

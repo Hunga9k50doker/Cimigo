@@ -13,6 +13,7 @@ import { ProjectService } from 'services/project';
 import { setErrorMess, setLoading, setSuccessMess } from 'redux/reducers/Status/actionTypes';
 import { getProjectRequest } from 'redux/reducers/Project/actionTypes';
 import { editableProject } from 'helpers/project';
+import { useTranslation } from 'react-i18next';
 
 enum ETab {
   Gender_And_Age_Quotas,
@@ -29,7 +30,8 @@ interface Props {
 }
 
 const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeGender, questionsMum, onCancel }: Props) => {
-
+  const { t } = useTranslation()
+  
   const dispatch = useDispatch()
 
   const [activeTab, setActiveTab] = useState(ETab.Gender_And_Age_Quotas);
@@ -129,7 +131,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeG
     >
       <Grid className={classes.root}>
         <Grid className={classes.header}>
-          <p className={classes.title}>Age coverage</p>
+          <p className={classes.title} translation-key="target_sub_tab_age_coverage">{t('target_sub_tab_age_coverage')}</p>
           <IconButton onClick={onCancel}>
             <img src={Images.icClose} alt='' />
           </IconButton>
@@ -147,7 +149,8 @@ const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeG
               }}
             >
               <Tab
-                label="Gender and age"
+                label={t('target_sub_tab_age_coverage_tab_gender_and_age')}
+                translation-key="target_sub_tab_age_coverage_tab_gender_and_age"
                 classes={{
                   selected: classes.selectedTab,
                   root: classes.rootTab,
@@ -158,7 +161,8 @@ const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeG
                 iconPosition="start"
               />
               <Tab
-                label="Mum only"
+                label={t('target_sub_tab_age_coverage_tab_mum_only')}
+                translation-key="target_sub_tab_age_coverage_tab_mum_only"
                 id={`target-tab-mum-only`}
                 classes={{
                   selected: classes.selectedTab,
@@ -228,7 +232,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeG
           </TabPanelMobile>
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='10px 16px' onClick={onSave} />
+          <Buttons disabled={isDisable()} children={t('common_save')} translation-key="common_save" btnType='Blue' padding='10px 16px' onClick={onSave} />
         </Grid>
       </Grid>
     </Dialog>

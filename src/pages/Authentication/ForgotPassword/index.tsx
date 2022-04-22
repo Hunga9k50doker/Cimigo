@@ -9,20 +9,28 @@ import Header from "components/Header";
 import Footer from "components/Footer";
 import Inputs from "components/Inputs";
 import Buttons from "components/Buttons";
-import {routes} from 'routers/routes';
+import { routes } from 'routers/routes';
 import { useDispatch } from "react-redux";
 import UserService from "services/user";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
-
-const schema = yup.object().shape({
-  email: yup.string().email('Please enter a valid email adress').required('Email is required.'),
-});
+import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 
 interface DataForm {
   email: string
 }
 
 const ForgotPassword = () => {
+  const { t, i18n } = useTranslation()
+
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      email: yup.string()
+        .email(t('field_email_vali_email'))
+        .required(t('field_email_vali_required')),
+    })
+  }, [i18n.language])
+
   const dispatch = useDispatch()
 
   const { register, handleSubmit, formState: { errors } } = useForm<DataForm>({
@@ -34,7 +42,7 @@ const ForgotPassword = () => {
     dispatch(setLoading(true))
     UserService.sendEmailForgotPassword(data.email)
       .then(() => {
-        dispatch(setSuccessMess('Email has been sent successfully, please check your email'))
+        dispatch(setSuccessMess(t('forgot_password_send_success')))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -45,18 +53,22 @@ const ForgotPassword = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="forgot-password" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <p className={classes.textLogin}>Forgot password?</p>
-          <p className={classes.subTextLogin}>No worries! Just enter your email and we will send you a reset password link.</p>
+          <p className={classes.textLogin} translation-key="forgot_password_title">{t('forgot_password_title')}</p>
+          <p className={classes.subTextLogin} translation-key="forgot_password_sub_title">{t('forgot_password_sub_title')}</p>
           <Inputs
-            title="Email address"
+            title={t('field_email_address')}
+            translation-key="field_email_address"
             name="email"
-            placeholder="Enter your email address"
+            placeholder={t('field_email_placeholder')}
+            translation-key-placeholder="field_email_placeholder"
             type="text"
             inputRef={register('email')}
             errorMessage={errors.email?.message}
           />
-          <Buttons type={'submit'} children={"Send recovery email"} btnType="Blue" padding="16px 0px"/>
-          <Link className={classes.linkText} to={routes.login}>Back to login page</Link>
+          <Buttons type={'submit'} translation-key="forgot_password_btn_send" children={t('forgot_password_btn_send')} btnType="Blue" padding="16px 0px" />
+          <Link className={classes.linkText} to={routes.login} translation-key="forgot_password_back_to_login">
+            {t('forgot_password_back_to_login')}
+          </Link>
         </Grid>
       </form>
       <Footer />

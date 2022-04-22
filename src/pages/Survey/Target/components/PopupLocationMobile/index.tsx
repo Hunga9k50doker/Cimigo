@@ -15,6 +15,7 @@ import React from 'react';
 import { editableProject } from 'helpers/project';
 import clsx from 'clsx';
 import InputCheckbox from 'components/InputCheckbox';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   isOpen: boolean,
@@ -25,7 +26,8 @@ interface Props {
 }
 
 const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCancel }: Props) => {
-
+  const { t } = useTranslation()
+  
   const dispatch = useDispatch()
   const [dataSelected, setDataSelected] = useState<DataSelected>({})
   const [groupsExpanded, setGroupsExpanded] = useState<{ [key: number]: boolean }>({})
@@ -87,17 +89,17 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
     >
       <Grid className={classes.root}>
         <Grid className={classes.header}>
-          <p className={classes.title}>Location</p>
+          <p className={classes.title} translation-key="target_sub_tab_location">{t('target_sub_tab_location')}</p>
           <IconButton onClick={onCancel}>
             <img src={Images.icClose} alt='' />
           </IconButton>
         </Grid>
         <Grid className={classes.body}>
           <Grid classes={{ root: classes.rootCountry }}>
-            <p>Country:</p>
+            <p translation-key="target_country_title">{t('target_country_title')}:</p>
             <Grid>
               <p>Vietnam</p>
-              <span>*We currently launch this platform only in Vietnam, other countries will be available soon.</span>
+              <span translation-key="target_country_sub_title">{t('target_country_sub_title')}</span>
             </Grid>
           </Grid>
           {questions.map(question => {
@@ -106,20 +108,22 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
                 return (
                   <Grid key={question.id} classes={{ root: classes.rootStrata }}>
                     <p>{question.title}:</p>
-                    {question.targetAnswers.map(answer => (
-                      <Tooltip key={answer.id} title={answer.description}>
-                        <FormControlLabel
-                          control={
-                            <InputCheckbox
-                              checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
-                              onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
-                              classes={{ root: classes.rootCheckbox }}
-                            />
-                          }
-                          label={answer.name}
-                        />
-                      </Tooltip>
-                    ))}
+                    <div>
+                      {question.targetAnswers.map(answer => (
+                        <Tooltip key={answer.id} title={answer.description}>
+                          <FormControlLabel
+                            control={
+                              <InputCheckbox
+                                checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
+                                onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
+                                classes={{ root: classes.rootCheckbox }}
+                              />
+                            }
+                            label={answer.name}
+                          />
+                        </Tooltip>
+                      ))}
+                    </div>
                   </Grid>
                 )
               case TargetQuestionRenderType.Box:
@@ -129,7 +133,7 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
                       <p>{question.title}:</p>
                       {!!question.targetAnswerSuggestions?.length && (
                         <Grid classes={{ root: classes.rootTags }}>
-                          <p>Suggest combination:</p>
+                          <p translation-key="target_suggest_title">{t('target_suggest_title')}:</p>
                           <Stack direction="row" spacing={1}>
                             {question.targetAnswerSuggestions.map((suggestion) => (
                               <Chip
@@ -211,7 +215,7 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
           })}
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='10px 16px' onClick={onUpdateTarget} />
+          <Buttons disabled={isDisable()} children={t('common_save')} translation-key="common_save" btnType='Blue' padding='10px 16px' onClick={onUpdateTarget} />
         </Grid>
       </Grid>
     </Dialog>

@@ -311,8 +311,6 @@
   justify-content: center;
   margin-top: 10px;
   margin-bottom: 44px;
-  font-style: italic;
-  text-decoration-line: underline;
   @media only screen and (max-width: 767px) {
     font-size: 14px;
   }
@@ -330,7 +328,7 @@
     font-size: 12px;
     color: #7c9911;
   }
-  a {
+  .inforSub {
     font-weight: 500;
     font-size: 12px;
     color: rgba(28, 28, 28, 0.65);
@@ -356,6 +354,9 @@
     margin: 20px 19px 0px 19px;
 
     img {
+      &:first-child {
+        cursor: pointer;
+      }
       margin-right: 15px;
     }
     span {

@@ -4,6 +4,7 @@ import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
 import Images from "config/images";
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -17,6 +18,8 @@ interface ConfirmDeleteProps {
 
 
 const ConfirmDelete = memo((props: ConfirmDeleteProps) => {
+  const { t } = useTranslation()
+
   const { isOpen, onCancel, onDelete, title, description } = props;
 
   return (
@@ -36,8 +39,8 @@ const ConfirmDelete = memo((props: ConfirmDeleteProps) => {
             <p>{description}</p>
           </Grid>
           <Grid className={classes.btn}>
-            <Buttons children="CANCEL" btnType='TransparentBlue' padding='16px' onClick={onCancel} />
-            <Buttons children="DELETE" btnType='Red' padding='16px' onClick={onDelete} />
+            <Buttons children={t('common_cancel')} translation-key="common_cancel" btnType='TransparentBlue' padding='11px 16px' onClick={onCancel} />
+            <Buttons children={t('common_delete')} translation-key="common_delete" btnType='Red' padding='11px 16px' onClick={onDelete} />
           </Grid>
       </Grid>
     </Dialog>

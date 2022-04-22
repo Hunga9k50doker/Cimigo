@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton } from '@mui/material';
 import classes from './styles.module.scss';
 import { useDropzone } from 'react-dropzone';
@@ -16,21 +16,11 @@ import ErrorMessage from 'components/Inputs/components/ErrorMessage';
 import useIsMountedRef from 'hooks/useIsMountedRef';
 import { fData } from 'utils/formatNumber';
 import { CameraAlt } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 const PHOTO_SIZE = 10 * 1000000; // bytes
 const FILE_FORMATS = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
 
-const schema = yup.object().shape({
-  image: yup.mixed().required('Image is required.'),
-  name: yup.string().required('Name is required.'),
-  packTypeId: yup.object().shape({
-    id: yup.number().required('Pack type is required.'),
-    name: yup.string().required()
-  }).required('Pack type is required.'),
-  brand: yup.string().required('Brand is required.'),
-  manufacturer: yup.string().required('Manufacturer is required.'),
-  variant: yup.string().required('Variant is required.'),
-})
 
 export interface PackFormData {
   image: string | File;
@@ -51,6 +41,21 @@ interface Props {
 
 const PopupPack = memo((props: Props) => {
   const { onCancel, onSubmit, isOpen, itemEdit } = props;
+  const { t, i18n } = useTranslation()
+
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      image: yup.mixed().required(t('setup_survey_packs_popup_image_required')),
+      name: yup.string().required(t('setup_survey_packs_popup_pack_name_required')),
+      packTypeId: yup.object().shape({
+        id: yup.number().required(t('setup_survey_packs_popup_pack_type_required')),
+        name: yup.string().required()
+      }).required(t('setup_survey_packs_popup_pack_type_required')),
+      brand: yup.string().required(t('setup_survey_packs_popup_pack_brand_required')),
+      manufacturer: yup.string().required(t('setup_survey_packs_popup_pack_manufacturer_required')),
+      variant: yup.string().required(t('setup_survey_packs_popup_pack_variant_required')),
+    })
+  }, [i18n.language])
 
   const isMountedRef = useIsMountedRef();
   const [fileReview, setFileReview] = useState<string>('');
@@ -138,15 +143,15 @@ const PopupPack = memo((props: Props) => {
     const checkType = FILE_FORMATS.includes(file.type);
     const validSize = await isValidSize(file)
     if (!validSize) {
-      setError('image', { message: `The file has a minimum width and height of 200px` })
+      setError('image', { message: t('setup_survey_packs_popup_image_size') })
       return
     }
     if (!checkSize) {
-      setError('image', { message: `File is larger than ${fData(PHOTO_SIZE)}` })
+      setError('image', { message: t('setup_survey_packs_popup_image_file_size', { size: fData(PHOTO_SIZE) }) })
       return
     }
     if (!checkType) {
-      setError('image', { message: 'File type must be *.jpeg, *.jpg, *.png' })
+      setError('image', { message: t('setup_survey_packs_popup_image_type') })
       return
     }
     setValue('image', file)
@@ -172,13 +177,21 @@ const PopupPack = memo((props: Props) => {
     >
       <form autoComplete="off" className={classes.form} noValidate onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle className={classes.header}>
-          <p className={classes.title}>{!itemEdit ? "Add a new pack" : "Edit Pack"}</p>
+          {!itemEdit ? (
+            <p className={classes.title} translation-key="setup_survey_packs_popup_add_title">{t('setup_survey_packs_popup_add_title')}</p>
+          ) : (
+            <p className={classes.title} translation-key="setup_survey_packs_popup_edit_title">{t('setup_survey_packs_popup_edit_title')}</p>
+          )}
           <IconButton onClick={onCancel}>
             <img src={Images.icClose} alt='icon close' />
           </IconButton>
         </DialogTitle>
         <DialogContent className={classes.body} dividers>
-          <p>{!itemEdit ? "Upload your pack image and enter corresponding information." : "Edit your pack image and enter corresponding information."}</p>
+          {!itemEdit ? (
+            <p translation-key="setup_survey_packs_popup_add_sub_title">{t('setup_survey_packs_popup_add_sub_title')}</p>
+          ) : (
+            <p translation-key="setup_survey_packs_popup_edit_sub_title">{t('setup_survey_packs_popup_edit_sub_title')}</p>
+          )}
           <Grid className={classes.spacing}>
             <Grid>
               <Grid
@@ -200,26 +213,37 @@ const PopupPack = memo((props: Props) => {
                 ) : (
                   <>
                     <img className={classes.imgAddPhoto} src={Images.icAddPhoto} />
-                    <span>Select pack image</span>
+                    <span translation-key="setup_survey_packs_popup_select_image">{t('setup_survey_packs_popup_select_image')}</span>
                   </>
                 )}
               </Grid>
             </Grid>
             <Grid>
-              <p className={classes.textTitle}>Pack image instructions:</p>
-              <div className={classes.textInfo}><p>Your pack image needs to have a&nbsp;<span>white background.</span></p></div>
-              <div className={classes.textInfo}><p>The file must be a&nbsp;<span>jpeg format.</span></p></div>
-              <div className={classes.textInfo}><p>The file size must be&nbsp;<span>less than 10MB.</span></p></div>
-              <div className={classes.textInfo}><p>The pack image should be&nbsp;<span>front facing</span>, as would be seen on a shelf.</p></div>
+              <p className={classes.textTitle} translation-key="setup_survey_packs_popup_image_instruction">{t('setup_survey_packs_popup_image_instruction')}:</p>
+              <div className={classes.textInfo}>
+                <p translation-key="setup_survey_packs_popup_image_instruction_1" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_1') }}></p>
+              </div>
+              <div className={classes.textInfo}>
+                <p translation-key="setup_survey_packs_popup_image_instruction_2" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_2') }}></p>
+              </div>
+              <div className={classes.textInfo}>
+                <p translation-key="setup_survey_packs_popup_image_instruction_3" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_3') }}></p>
+              </div>
+              <div className={classes.textInfo}>
+                <p translation-key="setup_survey_packs_popup_image_instruction_4" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_4') }}></p>
+              </div>
               <Grid container className={classes.input} spacing={1}>
                 <Grid item xs={6}>
                   <Controller
                     name="name"
                     control={control}
                     render={({ field }) => <Inputs
-                      title='Pack Name'
-                      placeholder='Enter custom pack name'
-                      infor='This name will be used in the report'
+                      title={t('setup_survey_packs_popup_pack_name')}
+                      translation-key="setup_survey_packs_popup_pack_name"
+                      placeholder={t('setup_survey_packs_popup_pack_name_placeholder')}
+                      translation-key-placeholder="setup_survey_packs_popup_pack_name_placeholder"
+                      infor={t('setup_survey_packs_popup_pack_name_info')}
+                      translation-key-infor="setup_survey_packs_popup_pack_name_info"
                       errorMessage={errors.name?.message}
                       name={field.name}
                       value={field.value || ''}
@@ -230,12 +254,14 @@ const PopupPack = memo((props: Props) => {
                 </Grid>
                 <Grid item xs={6}>
                   <InputSelect
-                    title='Pack type'
+                    title={t('setup_survey_packs_popup_pack_type')}
                     name="packTypeId"
                     control={control}
+                    bindLabel="translation"
                     selectProps={{
                       options: packTypes,
-                      placeholder: "-- Select a pack type --"
+                      menuPosition: "fixed",
+                      placeholder: t('setup_survey_packs_popup_pack_type_placeholder')
                     }}
                     errorMessage={(errors.packTypeId as any)?.message || errors.packTypeId?.id?.message}
                   />
@@ -249,9 +275,12 @@ const PopupPack = memo((props: Props) => {
               name="name"
               control={control}
               render={({ field }) => <Inputs
-                title='Pack Name'
-                placeholder='Enter custom pack name'
-                infor='This name will be used in the report'
+                title={t('setup_survey_packs_popup_pack_name')}
+                translation-key="setup_survey_packs_popup_pack_name"
+                placeholder={t('setup_survey_packs_popup_pack_name_placeholder')}
+                translation-key-placeholder="setup_survey_packs_popup_pack_name_placeholder"
+                infor={t('setup_survey_packs_popup_pack_name_info')}
+                translation-key-infor="setup_survey_packs_popup_pack_name_info"
                 errorMessage={errors.name?.message}
                 name={field.name}
                 value={field.value || ''}
@@ -260,38 +289,45 @@ const PopupPack = memo((props: Props) => {
               />}
             />
             <InputSelect
-              title='Pack type'
+              title={t('setup_survey_packs_popup_pack_type')}
               name="packTypeId"
               control={control}
               selectProps={{
                 options: packTypes,
-                placeholder: "-- Select a pack type --"
+                menuPosition: "fixed",
+                placeholder: t('setup_survey_packs_popup_pack_type_placeholder')
               }}
               errorMessage={(errors.packTypeId as any)?.id?.message}
             />
           </Grid>
           <Grid className={classes.flex}>
-            <p>Brand-related information on the pack</p>
-            <span>These information will be added in brand use questions in the pack test survey.</span>
+            <p translation-key="setup_survey_packs_popup_brand_related_title">{t('setup_survey_packs_popup_brand_related_title')}</p>
+            <span translation-key="setup_survey_packs_popup_brand_related_sub_title">{t('setup_survey_packs_popup_brand_related_sub_title')}</span>
             <Grid>
               <Inputs
-                title='Brand'
+                title={t('setup_survey_packs_popup_pack_brand')}
+                translation-key="setup_survey_packs_popup_pack_brand"
                 name='brand'
-                placeholder='Enter product brand'
+                placeholder={t('setup_survey_packs_popup_pack_brand_placeholder')}
+                translation-key-placeholder="setup_survey_packs_popup_pack_brand_placeholder"
                 inputRef={register('brand')}
                 errorMessage={errors.brand?.message}
               />
               <Inputs
-                title='Variant'
+                title={t('setup_survey_packs_popup_pack_variant')}
+                translation-key="setup_survey_packs_popup_pack_variant"
                 name='variant'
-                placeholder='Enter product variant'
+                placeholder={t('setup_survey_packs_popup_pack_variant_placeholder')}
+                translation-key-placeholder="setup_survey_packs_popup_pack_variant_placeholder"
                 inputRef={register('variant')}
                 errorMessage={errors.variant?.message}
               />
               <Inputs
-                title='Manufacturer'
+                title={t('setup_survey_packs_popup_pack_manufacturer')}
+                translation-key="setup_survey_packs_popup_pack_manufacturer"
                 name='manufacturer'
-                placeholder='Enter product manufacturer'
+                placeholder={t('setup_survey_packs_popup_pack_manufacturer_placeholder')}
+                translation-key-placeholder="setup_survey_packs_popup_pack_manufacturer_placeholder"
                 inputRef={register('manufacturer')}
                 errorMessage={errors.manufacturer?.message}
               />
@@ -299,8 +335,14 @@ const PopupPack = memo((props: Props) => {
           </Grid>
         </DialogContent>
         <DialogActions className={classes.btn}>
-          <Buttons type="submit" children={!itemEdit ? "Add pack" : "Update pack"} btnType='Blue' padding='11px 64px' />
-          <Button onClick={onCancel}>Cancel</Button>
+          <Buttons
+            type="submit"
+            children={!itemEdit ? t('setup_survey_packs_popup_add_btn') : t('setup_survey_packs_popup_edit_btn')}
+            translation-key={!itemEdit ? "setup_survey_packs_popup_add_btn" : "setup_survey_packs_popup_edit_btn"}
+            btnType='Blue'
+            padding='11px 64px'
+          />
+          <Button onClick={onCancel} translation-key="common_cancel">{t('common_cancel')}</Button>
         </DialogActions>
       </form>
     </Dialog>

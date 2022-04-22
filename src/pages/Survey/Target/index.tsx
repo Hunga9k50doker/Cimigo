@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import classes from './styles.module.scss';
 import {
   Grid,
@@ -40,6 +40,7 @@ import { PriceService } from "helpers/price";
 import { editableProject } from "helpers/project";
 import { Edit } from "@mui/icons-material";
 import Warning from "../components/Warning";
+import { useTranslation } from "react-i18next";
 
 export enum ETab {
   Location,
@@ -50,21 +51,6 @@ export interface TabItem {
   id: ETab,
   title: string
 }
-
-const listTabs: TabItem[] = [
-  {
-    id: ETab.Location,
-    title: "Location",
-  },
-  {
-    id: ETab.Economic_Class,
-    title: "Economic class",
-  },
-  {
-    id: ETab.Age_Coverage,
-    title: "Age coverage",
-  },
-]
 
 interface SampleSizeItem {
   value: number,
@@ -89,6 +75,25 @@ const Target = memo(({ projectId }: Props) => {
 
   const { project } = useSelector((state: ReducerType) => state.project)
 
+  const { t, i18n } = useTranslation()
+
+  const listTabs: TabItem[] = useMemo(() => {
+    return [
+      {
+        id: ETab.Location,
+        title: t('target_sub_tab_location'),
+      },
+      {
+        id: ETab.Economic_Class,
+        title: t('target_sub_tab_economic_class'),
+      },
+      {
+        id: ETab.Age_Coverage,
+        title: t('target_sub_tab_age_coverage'),
+      },
+    ]
+  }, [i18n.language])
+
   const getSampleSizeConstConfig = () => {
     return PriceService.getSampleSizeConstConfig(project)
   }
@@ -101,13 +106,15 @@ const Target = memo(({ projectId }: Props) => {
     return _.minBy(getSampleSizeConstConfig(), 'limit')?.limit || 0
   }
 
-  const schema = yup.object().shape({
-    sampleSize: yup.number()
-      .typeError('Sample size is required.')
-      .required('Sample size is required.')
-      .min(getMinSampeSize(), `Sample size must be greater than ${getMinSampeSize()}`)
-      .max(getMaxSampeSize(), `Sample size should be less than ${getMaxSampeSize()}`)
-  })
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      sampleSize: yup.number()
+        .typeError(t('target_sample_size_required'))
+        .required(t('target_sample_size_required'))
+        .min(getMinSampeSize(), t('target_sample_size_min', { number: getMinSampeSize() }))
+        .max(getMaxSampeSize(), t('target_sample_size_max', { number: getMaxSampeSize() }))
+    })
+  }, [i18n.language, project])
 
   const { handleSubmit, formState: { errors, isValid }, reset, control } = useForm<CustomSampleSizeForm>({
     resolver: yupResolver(schema),
@@ -166,7 +173,7 @@ const Target = memo(({ projectId }: Props) => {
               ))}
             </li>
           )
-        } else return <a>Choose location</a>
+        } else return <a translation-key="target_sub_tab_location_sub">{t('target_sub_tab_location_sub')}</a>
       case ETab.Economic_Class:
         const targetECs = project?.targets?.filter(it => it.targetQuestion?.typeId === TargetQuestionType.Economic_Class)
         if (targetECs?.length) {
@@ -177,7 +184,7 @@ const Target = memo(({ projectId }: Props) => {
               ))}
             </li>
           )
-        } else return <a>Choose economic class</a>
+        } else return <a translation-key="target_sub_tab_economic_class_sub">{t('target_sub_tab_economic_class_sub')}</a>
       case ETab.Age_Coverage:
         const targetACs = project?.targets?.filter(it => [TargetQuestionType.Mums_Only, TargetQuestionType.Gender_And_Age_Quotas].includes(it.targetQuestion?.typeId || 0))
         if (targetACs?.length) {
@@ -188,7 +195,7 @@ const Target = memo(({ projectId }: Props) => {
               ))}
             </li>
           )
-        } else return <a>Choose age coverage</a>
+        } else return <a translation-key="target_sub_tab_age_coverage_sub">{t('target_sub_tab_age_coverage_sub')}</a>
     }
   }
 
@@ -253,14 +260,14 @@ const Target = memo(({ projectId }: Props) => {
 
   return (
     <Grid classes={{ root: classes.root }}>
-      {!editableProject(project) && (
+      {(project && !editableProject(project)) && (
         <Grid className={classes.warningBox}>
           <Warning project={project} />
         </Grid>
       )}
       <Grid className={classes.header}>
         <Grid className={classes.size}>
-          <p>Choose sample size:</p>
+          <p translation-key="target_sample_size_title">{t('target_sample_size_title')}:</p>
           <Grid mr={1}>
             {/* {(errors.sampleSize && showInput) && <ErrorMessage className={classes.errorMessageAppend}>{errors.sampleSize?.message}</ErrorMessage>} */}
             <List component="nav" aria-label="main mailbox folders" className={classes.toggleButtonGroup}>
@@ -288,7 +295,8 @@ const Target = memo(({ projectId }: Props) => {
                     render={({ field }) => <OutlinedInput
                       fullWidth
                       type="number"
-                      placeholder="Custom"
+                      placeholder={t('target_sample_size_placeholder')}
+                      translation-key-placeholder="target_sample_size_placeholder"
                       name={field.name}
                       value={field.value || ''}
                       onBlur={field.onBlur}
@@ -296,9 +304,9 @@ const Target = memo(({ projectId }: Props) => {
                     />}
                   />
                   {isValid ? (
-                    <Button type="submit" startIcon={<img src={images.icSaveWhite} alt="" />}>Save</Button>
+                    <Button type="submit" startIcon={<img src={images.icSaveWhite} alt="" />} translation-key="common_save">{t('common_save')}</Button>
                   ) : (
-                    <Button onClick={onClearCustomSampleSize}>Cancel</Button>
+                    <Button onClick={onClearCustomSampleSize} translation-key="common_cancel">{t('common_cancel')}</Button>
                   )}
                 </Grid>
               ) : (
@@ -310,6 +318,7 @@ const Target = memo(({ projectId }: Props) => {
                     selected: classes.selectedButton,
                   }}
                   onClick={onCustomSampleSize}
+                  translation-key="target_sample_size_custom"
                 >
                   {isCustomSampleSize() ? (
                     <>
@@ -317,23 +326,23 @@ const Target = memo(({ projectId }: Props) => {
                       <Edit sx={{ fontSize: '1rem', marginLeft: 0.8 }} />
                     </>
                   ) : (
-                    'Custom'
+                    t('target_sample_size_custom')
                   )}
                 </ListItemButton>
               )}
             </List>
             {(errors.sampleSize && showInput) && <ErrorMessage className={classes.errorMessage}>{errors.sampleSize?.message}</ErrorMessage>}
-            <p><span className={classes.iconPopular}></span>popular choices.</p>
+            <p translation-key="target_sample_size_popular"><span className={classes.iconPopular}></span>{t('target_sample_size_popular')}</p>
           </Grid>
         </Grid>
         <div className={classes.code}>
-          <p >Sample size cost:</p><span>{`$`}{getPrice()}</span>
+          <p translation-key="target_sample_size_cost">{t('target_sample_size_cost')}:</p><span>{`$`}{getPrice()}</span>
         </div>
       </Grid>
       <Grid className={classes.titleBox}>
-        <p className={classes.title}>Target criteria:</p>
-        <p className={classes.subTitle}>
-          Choose your target consumers. We'll deliver your survey to the right people that satisfy your criteria.
+        <p className={classes.title} translation-key="target_title">{t('target_title')}:</p>
+        <p className={classes.subTitle} translation-key="target_sub_title">
+          {t('target_sub_title')}
         </p>
       </Grid>
       <Grid className={classes.body}>

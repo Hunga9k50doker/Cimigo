@@ -30,7 +30,7 @@ export enum PackType {
 }
 
 export const packTypes: OptionItem[] = [
-  { id: PackType.Current_Pack, name: 'Current pack' },
-  { id: PackType.Test_Pack, name: 'Test pack' },
-  { id: PackType.Competitor_Pack, name: 'Competitor pack' },
+  { id: PackType.Current_Pack, name: 'Current pack', translation: 'setup_survey_pack_type_current_pack' },
+  { id: PackType.Test_Pack, name: 'Test pack', translation: 'setup_survey_pack_type_test_pack' },
+  { id: PackType.Competitor_Pack, name: 'Competitor pack', translation: 'setup_survey_pack_type_competitor_pack' },
 ]

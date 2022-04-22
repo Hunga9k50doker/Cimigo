@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { Box, Dialog, IconButton } from '@mui/material';
 import classes from './styles.module.scss';
 
@@ -9,6 +9,7 @@ import { Project } from 'models/project';
 import _ from 'lodash';
 import InputSelect from 'components/InputsSelect';
 import { OptionItem } from 'models/general';
+import { useTranslation } from 'react-i18next';
 
 
 interface PopupMoveProjectProps {
@@ -19,9 +20,14 @@ interface PopupMoveProjectProps {
 }
 
 const PopupMoveProject = memo((props: PopupMoveProjectProps) => {
+  const { t, i18n } = useTranslation()
+
+
   const { onCancel, onMove, project, folders } = props;
   
-  const allOption: OptionItem = { id: -1, name: 'All projects' }
+  const allOption: OptionItem = useMemo(() => {
+    return { id: -1, name: t('project_mgmt_all_projects') }
+  }, [i18n.language])
 
   const [itemSelected, setItemSelected] = useState<OptionItem>(null);
   const [options, setOptions] = useState<OptionItem[]>([]);
@@ -58,21 +64,21 @@ const PopupMoveProject = memo((props: PopupMoveProjectProps) => {
     >
       <Box classes={{ root: classes.root }}>
         <Box className={classes.header}>
-          <p className={classes.title}>{'Move a project'}</p>
+          <p className={classes.title} translation-key="project_mgmt_move_title">{t('project_mgmt_move_title')}</p>
           <IconButton onClick={_onCancel}>
             <img src={Images.icClose} alt='' />
           </IconButton>
         </Box>
-        <Box className={classes.body}>
+        <Box className={classes.body} translation-key="project_mgmt_move_sub_title">
           <InputSelect
             fullWidth
-            title="Choose folder you want to move this project"
+            title={t('project_mgmt_move_sub_title')}
             name=""
             selectProps={{
               options: options,
               value: itemSelected,
               menuPosition: 'fixed',
-              placeholder: "Select folder",
+              placeholder: '',
               onChange: (val: any, _: any) => onChangeProject(val)
             }}
           />

@@ -71,19 +71,45 @@
     }
   }
 }
-.listTextLeft > p {
-  margin: 0;
-  font-weight: 400;
-  font-size: 12px;
-  color: #1c1c1c;
-  text-align: end;
+.listTextLeft {
+  > p {
+    margin: 0;
+    font-weight: 400;
+    font-size: 12px;
+    color: #1c1c1c;
+    text-align: end;
+  }
+  .listTextRightMoblie {
+    display: none;
+  }
+  @media only screen and (max-width: 767px) {
+    max-width: unset;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    > * {
+      &:not(:first-child) {
+        margin-left: 25px;
+      }
+    }
+    .listTextRightMoblie {
+      display: block;
+    }
+  }
 }
-.listTextRight > p {
-  margin: 0;
-  font-weight: 400;
-  font-size: 12px;
-  color: #1c1c1c;
-  text-align: start;
+
+.listTextRight {
+  > p {
+    margin: 0;
+    font-weight: 400;
+    font-size: 12px;
+    color: #1c1c1c;
+    text-align: start;
+  }
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
 }
 .listNumber {
   margin: auto 35px;

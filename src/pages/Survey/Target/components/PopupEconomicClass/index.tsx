@@ -13,6 +13,7 @@ import { ProjectService } from 'services/project';
 import { getProjectRequest } from 'redux/reducers/Project/actionTypes';
 import React from 'react';
 import { editableProject } from 'helpers/project';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   isOpen: boolean,
@@ -23,6 +24,7 @@ interface Props {
 }
 
 const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, onCancel }: Props) => {
+  const { t } = useTranslation()
 
   const dispatch = useDispatch()
   const [dataSelected, setDataSelected] = useState<DataSelected>({})
@@ -68,7 +70,7 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
     >
       <Grid className={classes.root}>
         <Grid className={classes.header}>
-          <p className={classes.title}>Economic class</p>
+          <p className={classes.title} translation-key="target_sub_tab_economic_class">{t('target_sub_tab_economic_class')}</p>
           <IconButton onClick={onCancel}>
             <img src={Images.icClose} alt='' />
           </IconButton>
@@ -106,7 +108,7 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
           ))}
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons disabled={isDisable()} children="Save" btnType='Blue' padding='10px 16px' onClick={onUpdateTarget} />
+          <Buttons disabled={isDisable()} children={t('common_save')} translation-key="common_save" btnType='Blue' padding='10px 16px' onClick={onUpdateTarget} />
         </Grid>
       </Grid>
     </Dialog>

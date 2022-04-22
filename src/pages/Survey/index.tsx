@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import classes from './styles.module.scss';
 import {
   Grid,
@@ -21,8 +21,9 @@ import { matchPath, Redirect, Route, Switch, useParams } from "react-router-dom"
 import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
 import { push } from "connected-react-router";
+import { useTranslation } from "react-i18next";
 
-function a11yProps(index) {
+function a11yProps(index: number) {
   return {
     id: `build-tab--${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
@@ -32,18 +33,23 @@ function a11yProps(index) {
 
 interface TabItem {
   name: string,
+  translation: string,
   path: string
 }
 
-const tabs: TabItem[] = [
-  { name: 'Setup survey', path: routes.project.detail.setupSurvey },
-  { name: 'Target', path: routes.project.detail.target },
-  { name: 'Quotas', path: routes.project.detail.quotas },
-  { name: 'Payment & Billing', path: routes.project.detail.paymentBilling.root },
-  { name: 'Report', path: routes.project.detail.report }
-]
-
 const Survey = () => {
+
+  const { t, i18n } = useTranslation()
+
+  const tabs: TabItem[] = useMemo(() => {
+    return [
+      { name: t('setup_survey_tab'), path: routes.project.detail.setupSurvey, translation: 'setup_survey_tab' },
+      { name: t('target_tab'), path: routes.project.detail.target, translation: 'target_tab' },
+      { name: 'Quotas', path: routes.project.detail.quotas, translation: 'setup_survey_tab' },
+      { name: 'Payment & Billing', path: routes.project.detail.paymentBilling.root, translation: 'setup_survey_tab' },
+      { name: 'Report', path: routes.project.detail.report, translation: 'setup_survey_tab' }
+    ]
+  }, [i18n.language])
 
   const { id } = useParams<{ id?: string }>()
   const { project } = useSelector((state: ReducerType) => state.project)
@@ -103,6 +109,7 @@ const Survey = () => {
             <Tab
               key={index}
               value={index}
+              translation-key={item.translation}
               classes={{
                 selected: classes.selectedTab,
                 root: classes.rootTab,

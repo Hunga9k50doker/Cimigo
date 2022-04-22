@@ -7,6 +7,7 @@ import Images from "config/images";
 import { AdditionalAttributeService } from 'services/additional_attribute';
 import { Attribute, AttributeType } from 'models/Admin/attribute';
 import { Project } from 'models/project';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   isOpen: boolean,
@@ -17,6 +18,7 @@ interface Props {
 
 const PopupManatoryAttributes = memo((props: Props) => {
   const { isOpen, project, onClose } = props;
+  const { t } = useTranslation()
 
   const [attributes, setAttributes] = useState<Attribute[]>([])
 
@@ -37,13 +39,13 @@ const PopupManatoryAttributes = memo((props: Props) => {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle className={classes.header}>
-        <p className={classes.title}>Manatory attributes</p>
+        <p className={classes.title} translation-key="setup_survey_add_att_popup_m_att_title">{t('setup_survey_add_att_popup_m_att_title')}</p>
         <IconButton onClick={onClose}>
           <img src={Images.icClose} alt='icon close' />
         </IconButton>
       </DialogTitle>
       <DialogContent className={classes.body} dividers>
-        <p>Consumers will be asked their associations with the pack tested to all of the following mandatory attributes.</p>
+        <p translation-key="setup_survey_add_att_popup_m_att_sub_title">{t('setup_survey_add_att_popup_m_att_sub_title')}</p>
         <Grid container classes={{ root: classes.rootList }}>
           {attributes.map((item) => (
             <ListItem
@@ -57,6 +59,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
                 <Grid className={classes.listFlex}>
                   <Grid item xs={12} sm={4} className={classes.listTextLeft}>
                     <p>{item.start}</p>
+                    <p className={classes.listTextRightMoblie}>{item.end}</p>
                   </Grid>
                   <Grid item xs={12} sm={4} className={classes.listNumber}>
                     <div>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
@@ -71,7 +74,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
         </Grid>
       </DialogContent>
       <DialogActions className={classes.btn}>
-        <Buttons children="Close" btnType='Blue' padding='10px 16px' width='25%' onClick={onClose} />
+        <Buttons children={t('common_close')} translation-key="common_close" btnType='Blue' padding='10px 16px' width='25%' onClick={onClose} />
       </DialogActions>
     </Dialog>
   );

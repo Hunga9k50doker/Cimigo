@@ -8,7 +8,7 @@ import Footer from "components/Footer";
 import Inputs from "components/Inputs";
 import InputSelect from "components/InputsSelect";
 import Buttons from "components/Buttons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import CountryService from "services/country";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
@@ -17,20 +17,7 @@ import UserService from "services/user";
 import Popup from "components/Popup";
 import Google from "components/SocialButton/Google";
 import Images from "config/images";
-
-const schema = yup.object().shape({
-  firstName: yup.string().required('First name is required.'),
-  lastName: yup.string().required('Last name is required.'),
-  email: yup.string().email('Please enter a valid email adress').required('Email is required.'),
-  password: yup.string().matches(new RegExp("^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])[a-zA-Z0-9@#$%^&+=]*$"), { message: 'Password must contains at least 8 characters, including at least one letter and one number and a special character.', excludeEmptyString: true }).required('Password is required.'),
-  countryId: yup.object().shape({
-    id: yup.number().required('Country is required.'),
-    name: yup.string().required()
-  }).required(),
-  isNotify: yup.bool(),
-  phone: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, { message: "Please enter a valid phone number.", excludeEmptyString: true }),
-  company: yup.string(),
-});
+import { useTranslation } from "react-i18next";
 
 interface DataForm {
   firstName: string;
@@ -44,6 +31,29 @@ interface DataForm {
 }
 
 const Register = () => {
+  const { t, i18n } = useTranslation()
+
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      firstName: yup.string()
+        .required(t('field_first_name_vali_required')),
+      lastName: yup.string()
+        .required(t('field_last_name_vali_required')),
+      email: yup.string()
+        .email(t('field_email_vali_email'))
+        .required(t('field_email_vali_required')),
+      password: yup.string()
+        .matches(new RegExp("^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])[a-zA-Z0-9@#$%^&+=]*$"), { message: t('field_password_vali_password'), excludeEmptyString: true })
+        .required(t('field_password_vali_required')),
+      countryId: yup.object().shape({
+        id: yup.number().required(t('field_country_vali_required')),
+        name: yup.string().required()
+      }).required(),
+      isNotify: yup.bool(),
+      phone: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }),
+      company: yup.string(),
+    })
+  }, [i18n.language])
 
   const [countries, setCountries] = useState<OptionItem[]>([])
   const [registerSuccess, setRegisterSuccess] = useState(false)
@@ -78,7 +88,7 @@ const Register = () => {
     dispatch(setLoading(true))
     UserService.sendVerifyEmail(email)
       .then(() => {
-        dispatch(setSuccessMess('Email has been sent successfully, please check your email to verify your account'))
+        dispatch(setSuccessMess(t('auth_verify_email_send_success')))
       })
       .catch(e => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -103,13 +113,15 @@ const Register = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="register" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <p className={classes.textLogin}>Create an account</p>
+          <p className={classes.textLogin} translation-key="register_title">{t('register_title')}</p>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Inputs
-                title="First name"
+                title={t('field_first_name')}
+                translation-key="field_first_name"
                 name="firstName"
-                placeholder="Your first name"
+                placeholder={t('field_first_name_placeholder')}
+                translation-key-placeholder="field_first_name_placeholder"
                 type="text"
                 inputRef={register('firstName')}
                 errorMessage={errors.firstName?.message}
@@ -117,9 +129,11 @@ const Register = () => {
             </Grid>
             <Grid item xs={6}>
               <Inputs
-                title="Last name"
+                title={t('field_last_name')}
+                translation-key="field_last_name"
                 name="lastName"
-                placeholder="Your last name"
+                placeholder={t('field_last_name_placeholder')}
+                translation-key-placeholder="field_last_name_placeholder"
                 type="text"
                 inputRef={register('lastName')}
                 errorMessage={errors.lastName?.message}
@@ -127,48 +141,56 @@ const Register = () => {
             </Grid>
           </Grid>
           <Inputs
-            title="Email"
+            title={t('field_email')}
+            translation-key="field_email"
             name="email"
-            placeholder="Enter your email address"
+            placeholder={t('field_email_placeholder')}
+            translation-key-placeholder="field_email_placeholder"
             type="text"
             inputRef={register('email')}
             errorMessage={errors.email?.message}
           />
           <Inputs
-            title="Password"
+            title={t('field_password')}
+            translation-key="field_password"
             name="password"
             type="password"
             showEyes
-            placeholder="Enter your password"
+            placeholder={t('field_password_placeholder')}
+            translation-key-placeholder="field_password_placeholder"
             inputRef={register('password')}
             errorMessage={errors.password?.message}
           />
           <InputSelect
-            title="Country"
+            title={t('field_country')}
             name="countryId"
             control={control}
             selectProps={{
               options: countries,
-              placeholder: "- Select your country -"
+              placeholder: t('field_country_placeholder'),
             }}
             errorMessage={(errors.countryId as any)?.id?.message}
           />
           <Inputs
-            title="Phone number"
+            title={t('field_phone_number')}
+            translation-key="field_phone_number"
             optional
             name="phone"
             type="text"
             inputRef={register('phone')}
-            placeholder="e.g. +84378999121"
+            placeholder={t('field_phone_number_placeholder')}
+            translation-key-placeholder="field_phone_number_placeholder"
             errorMessage={errors.phone?.message}
           />
           <Inputs
-            title="Company"
+            title={t('field_company')}
+            translation-key="field_company"
             name="company"
             type="text"
             optional
             inputRef={register('company')}
-            placeholder="Enter your company name"
+            placeholder={t('field_company_placeholder')}
+            translation-key-placeholder="field_company_placeholder"
             errorMessage={errors.company?.message}
           />
 
@@ -185,32 +207,34 @@ const Register = () => {
                   color="secondary"
                   checked={field.value}
                   icon={<img src={Images.icCheck} alt="" />}
-                  checkedIcon={<img src={Images.icCheckActive}  alt="" />}
+                  checkedIcon={<img src={Images.icCheckActive} alt="" />}
                   {...field}
                 />}
               />
             }
-            label="Receive email updates on new product annoucements"
+            label={<span translation-key="register_notify_checkbox">{t('register_notify_checkbox')}</span>}
           />
-          <Buttons type={"submit"} padding="16px 0px" children={"Create an account"} btnType="Blue" />
+          <Buttons type={"submit"} padding="16px 0px" translation-key="register_btn_register" children={t('register_btn_register')} btnType="Blue" />
           <div className={classes.separator}>
-            <span>or sign up with</span>
+            <span translation-key="register_register_with">{t('register_register_with')}</span>
           </div>
           <Google />
-          <span className={classes.text}>Click "Create an account" to agree to Terms of Service and Privacy Policy.</span>
+          <span className={classes.text} translation-key="register_agree_message">{t('register_agree_message')}</span>
         </Grid>
       </form>
       <Popup
         open={registerSuccess}
         maxWidth="md"
-        title="Register success"
+        title={t('register_success_popup_title')}
         onClose={() => setRegisterSuccess(false)}
       >
-        <Typography variant="subtitle1">
-          Successful account registration, please check your email to verify your account
+        <Typography variant="subtitle1" translation-key="register_success_popup_sub_title">
+          {t('register_success_popup_sub_title')}
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "2rem" }}>
-          <Buttons btnType="Blue" padding="7px 16px" onClick={onSendVerify}>Resend email</Buttons>
+          <Buttons btnType="Blue" padding="7px 16px" onClick={onSendVerify} translation-key="register_success_popup_resend_email">
+            {t('register_success_popup_resend_email')}
+          </Buttons>
         </Box>
       </Popup>
       <Footer />

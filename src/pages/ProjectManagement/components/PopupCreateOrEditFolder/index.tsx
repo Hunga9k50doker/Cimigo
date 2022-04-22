@@ -6,6 +6,7 @@ import Buttons from 'components/Buttons';
 import Inputs from 'components/Inputs';
 import Images from "config/images";
 import { Folder } from 'models/folder';
+import { useTranslation } from 'react-i18next';
 
 interface PopupCreateFolderProps {
   isOpen: boolean,
@@ -16,6 +17,8 @@ interface PopupCreateFolderProps {
 
 
 const PopupCreateOrEditFolder = memo((props: PopupCreateFolderProps) => {
+  const { t } = useTranslation()
+
   const { onCancel, onSubmit, isOpen, itemEdit } = props;
   const [name, setName] = useState<string>('');
 
@@ -27,6 +30,7 @@ const PopupCreateOrEditFolder = memo((props: PopupCreateFolderProps) => {
   }, [itemEdit])
 
   const _onSubmit = () => {
+    if (!name) return
     onSubmit(name, itemEdit?.id)
     setName('')
   }
@@ -43,22 +47,27 @@ const PopupCreateOrEditFolder = memo((props: PopupCreateFolderProps) => {
     >
       <Grid classes={{root: classes.root}}>
         <Grid className={classes.header}>
-          <p className={classes.title}>{ itemEdit ? 'Rename your folder' : 'Create a folder' }</p>
+          {itemEdit ? (
+            <p className={classes.title} translation-key="project_mgmt_rename_folder_title">{ t('project_mgmt_rename_folder_title') }</p>
+          ) : (
+            <p className={classes.title} translation-key="project_mgmt_create_folder_title">{ t('project_mgmt_create_folder_title') }</p>
+          )}
           <IconButton onClick={_onCancel}>
             <img src={Images.icClose} alt=''/>
           </IconButton>
         </Grid>
         <Inputs 
           name='name' 
-          placeholder='Enter folder name'
+          placeholder={t('project_mgmt_create_folder_placeholder')}
+          translation-key-placeholder="project_mgmt_create_folder_placeholder"
           value={name}
           onChange={(e: any) => {
             setName(e.target.value || '')
           }}
         />
         <Grid className={classes.btn}>
-          <Buttons children="Cancel" btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel}/>
-          <Buttons children={'Create folder'} btnType='Blue' padding='10px 16px' onClick={_onSubmit}/>
+          <Buttons children={t('common_cancel')} translation-key="common_cancel" btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel}/>
+          <Buttons disabled={!name} children={t('project_mgmt_create_folder_btn')} translation-key="project_mgmt_create_folder_btn" btnType='Blue' padding='10px 16px' onClick={_onSubmit}/>
         </Grid>
       </Grid>
     </Dialog>

@@ -8,6 +8,7 @@ import { Pack } from './pack';
 import { AdditionalBrand } from './additional_brand';
 import { ProjectAttribute } from './project_attribute';
 import { UserAttribute } from './user_attribute';
+import i18n from 'locales';
 export interface CreateProjectData {
   solutionId: number;
   name: string,
@@ -53,10 +54,10 @@ export enum ProjectStatus {
 }
 
 export const projectStatus: OptionItem[] = [
-  { id: ProjectStatus.DRAFT, name: 'Draft' },
-  { id: ProjectStatus.AWAIT_PAYMENT, name: 'Await payment' },
-  { id: ProjectStatus.IN_PROGRESS, name: 'In progress' },
-  { id: ProjectStatus.COMPLETED, name: 'Completed' }
+  { id: ProjectStatus.DRAFT, name: 'Draft', translation: 'project_status_draft' },
+  { id: ProjectStatus.AWAIT_PAYMENT, name: 'Await payment', translation: 'project_status_await_payment' },
+  { id: ProjectStatus.IN_PROGRESS, name: 'In progress', translation: 'project_status_in_progress' },
+  { id: ProjectStatus.COMPLETED, name: 'Completed', translation: 'project_status_completed' }
 ]
 
 export interface GetMyProjects {

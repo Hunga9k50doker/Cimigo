@@ -2,6 +2,7 @@ import { memo } from "react";
 import classes from './styles.module.scss';
 import clsx from "clsx";
 import { ProjectStatus } from "models/project";
+import { useTranslation } from "react-i18next";
 
 interface LabelStatusProps {
   typeStatus: ProjectStatus,
@@ -9,16 +10,18 @@ interface LabelStatusProps {
 }
 
 const LabelStatus = memo((props: LabelStatusProps) => {
+  const { t } = useTranslation()
+
   const statusLabel = () => {
     switch (typeStatus) {
       case ProjectStatus.AWAIT_PAYMENT:
-        return "Await Payment";
+        return t('project_status_await_payment')
       case ProjectStatus.DRAFT:
-        return "Draft";
+        return t('project_status_draft')
       case ProjectStatus.IN_PROGRESS:
-        return "In Progress";
+        return t('project_status_in_progress')
       case ProjectStatus.COMPLETED:
-        return "Completed";
+        return t('project_status_completed')
       default: return typeStatus;
     }
   };

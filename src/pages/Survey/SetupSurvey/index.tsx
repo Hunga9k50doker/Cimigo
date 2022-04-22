@@ -57,6 +57,7 @@ import PopupConfirmDelete from "components/PopupConfirmDelete";
 import { editableProject } from "helpers/project";
 import { Check } from "@mui/icons-material";
 import Warning from "../components/Warning";
+import { useTranslation } from "react-i18next";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -90,6 +91,7 @@ interface Props {
 }
 
 const SetupSurvey = memo(({ id }: Props) => {
+  const { t, i18n } = useTranslation()
 
   const dispatch = useDispatch()
   const { project } = useSelector((state: ReducerType) => state.project)
@@ -115,7 +117,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [brandFormData, setBrandFormData] = useState<{ brand: string; manufacturer: string; variant: string }>()
   const [additionalBrandAction, setAdditionalBrandAction] = useState<AdditionalBrand>();
   const [additionalBrandEdit, setAdditionalBrandEdit] = useState<AdditionalBrand>();
-  // const [additionalBrandDelete, setAdditionalBrandDelete] = useState<AdditionalBrand>();
+
   const [anchorElADB, setAnchorElADB] = useState<null | HTMLElement>(null);
   const [anchorElADBMobile, setAnchorElADBMobile] = useState<null | HTMLElement>(null);
   const [addBrandMobile, setAddBrandMobile] = useState<boolean>(false);
@@ -506,39 +508,77 @@ const SetupSurvey = memo(({ id }: Props) => {
 
   return (
     <>
-      {!editableProject(project) && (
+      {(project && !editableProject(project)) && (
         <Grid classes={{ root: classes.warningBox }}>
           <Warning project={project} />
         </Grid>
       )}
       <Grid classes={{ root: classes.root }}>
         <Grid classes={{ root: classes.left }} >
-          <p className={classes.title}>Setup your pack test survey</p>
-          <p className={classes.subTitle} id="basic-information">1.Basic information</p>
+          <p className={classes.title} translation-key="setup_survey_title">{t('setup_survey_title')}</p>
+          <p className={classes.subTitle} id="basic-information" translation-key="setup_survey_basic_infor_title">
+            1. {t('setup_survey_basic_infor_title')}
+          </p>
           <Grid className={classes.flex}>
-            <p>Some basic information about your product is necessary, and this information will be used in our survey when we interview the respondents.</p>
+            <p translation-key="setup_survey_basic_infor_sub_title">{t('setup_survey_basic_infor_sub_title')}</p>
             <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmitBI)}>
               <Grid className={classes.input}>
                 <Grid>
-                  <Inputs title="Category" name="category" placeholder="Enter your product category" inputRef={register('category')} errorMessage={errors.category?.message} />
-                  <Inputs title="Variant" name="" placeholder="Enter your product variant" inputRef={register('variant')} errorMessage={errors.variant?.message} />
+                  <Inputs
+                    title={t('field_project_category')}
+                    translation-key="field_project_category"
+                    name="category"
+                    placeholder={t('field_project_category_placeholder')}
+                    translation-key-placeholder="field_project_category_placeholder"
+                    inputRef={register('category')}
+                    errorMessage={errors.category?.message}
+                  />
+                  <Inputs
+                    title={t('field_project_variant')}
+                    translation-key="field_project_variant"
+                    name=""
+                    placeholder={t('field_project_variant_placeholder')}
+                    translation-key-placeholder="field_project_variant_placeholder"
+                    inputRef={register('variant')}
+                    errorMessage={errors.variant?.message}
+                  />
                 </Grid>
                 <Grid>
-                  <Inputs title="Brand" name="" placeholder="Enter your product brand" inputRef={register('brand')} errorMessage={errors.brand?.message} />
-                  <Inputs title="Manufacturer" name="" placeholder="Enter your product manufacturer" inputRef={register('manufacturer')} errorMessage={errors.manufacturer?.message} />
+                  <Inputs
+                    title={t('field_project_brand')}
+                    translation-key="field_project_brand"
+                    name=""
+                    placeholder={t('field_project_brand_placeholder')}
+                    translation-key-placeholder="field_project_brand_placeholder"
+                    inputRef={register('brand')}
+                    errorMessage={errors.brand?.message}
+                  />
+                  <Inputs
+                    title={t('field_project_manufacturer')}
+                    translation-key="field_project_manufacturer"
+                    name=""
+                    placeholder={t('field_project_manufacturer_placeholder')}
+                    translation-key-placeholder="field_project_manufacturer_placeholder"
+                    inputRef={register('manufacturer')}
+                    errorMessage={errors.manufacturer?.message}
+                  />
                 </Grid>
               </Grid>
               {editableProject(project) && (
                 <Grid className={classes.btnSave}>
-                  <Buttons type={"submit"} padding="3px 13px" btnType="TransparentBlue" ><img src={Images.icSave} alt="icon save" />Save</Buttons>
+                  <Buttons type={"submit"} padding="3px 13px" btnType="TransparentBlue" translation-key="common_save">
+                    <img src={Images.icSave} alt="icon save" />{t('common_save')}
+                  </Buttons>
                 </Grid>
               )}
             </form>
           </Grid>
           <div className={classes.line}></div>
-          <p className={classes.subTitle} id="upload-packs">2.Upload packs <span>(max {maxPack()})</span></p>
+          <p className={classes.subTitle} id="upload-packs" translation-key="setup_survey_packs_title">
+            2. {t('setup_survey_packs_title')} <span translation-key="common_max">({t('common_max')} {maxPack()})</span>
+          </p>
           <Grid className={classes.flex}>
-            <p>You may test between one and four packs. These would typically include your current pack, 2 new test pack and a key competitor pack.</p>
+            <p translation-key="setup_survey_packs_sub_title"> {t('setup_survey_packs_sub_title')} </p>
             <Grid className={classes.packs}>
               {packs.map((item, index) => {
                 return (
@@ -554,9 +594,9 @@ const SetupSurvey = memo(({ id }: Props) => {
                       )}
                       <img src={item.image} alt="image pack" />
                       <div className={classes.itemInfor}>
-                        <div><p>Brand: </p><span>{item.brand}</span></div>
-                        <div><p>Variant: </p><span>{item.variant}</span></div>
-                        <div><p>Manufacturer: </p><span>{item.manufacturer}</span></div>
+                        <div><p translation-key="project_brand">{t('project_brand')}: </p><span>{item.brand}</span></div>
+                        <div><p translation-key="project_variant">{t('project_variant')}: </p><span>{item.variant}</span></div>
+                        <div><p translation-key="project_manufacturer">{t('project_manufacturer')}: </p><span>{item.manufacturer}</span></div>
                       </div>
                     </Grid>
                     <Grid className={classes.textPacks}>
@@ -569,7 +609,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               {(maxPack() > packs?.length && editableProject(project)) && (
                 <Grid className={classes.addPack} onClick={() => setAddNewPack(true)}>
                   <img src={Images.icAddPack} alt="" />
-                  <p>Add pack</p>
+                  <p translation-key="setup_survey_packs_add"> {t('setup_survey_packs_add')} </p>
                 </Grid>
               )}
             </Grid>
@@ -587,7 +627,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               setPackAction(null)
             }}>
               <img src={Images.icEdit} alt="" />
-              <p>Edit</p>
+              <p translation-key="common_edit">{t('common_edit')}</p>
             </MenuItem>
             <MenuItem className={classes.itemAciton} onClick={() => {
               if (!packAction) return
@@ -596,22 +636,21 @@ const SetupSurvey = memo(({ id }: Props) => {
               setPackAction(null)
             }}>
               <img src={Images.icDelete} alt="" />
-              <p>Delete</p>
+              <p translation-key="common_delete">{t('common_delete')}</p>
             </MenuItem>
           </Menu>
           <div className={classes.line}></div>
-          <p className={classes.subTitle} id="additional-brand-list">3.Additional brand list <span>(max {maxAdditionalBrand()})</span></p>
+          <p className={classes.subTitle} id="additional-brand-list" translation-key="setup_survey_add_brand_title">3. {t('setup_survey_add_brand_title')} <span>({t('common_max')} {maxAdditionalBrand()})</span></p>
           <Grid className={classes.flex}>
-            <p>In your pack test survey, we will ask consumers some brand use questions. Besides the uploaded pack products, please add the brand, variant name and manufacturer for top selling products in the category and market in which you are testing.
-              <br />Try to include products accounting for at least two-thirds of sales or market share.</p>
+            <p translation-key="setup_survey_add_brand_sub_title" dangerouslySetInnerHTML={{ __html: t('setup_survey_add_brand_sub_title') }}></p>
             <TableContainer className={classes.table}>
               <Table>
                 <TableHead className={classes.tableHead}>
                   <TableRow>
-                    <TableCell>Brand</TableCell>
-                    <TableCell>Variant</TableCell>
-                    <TableCell>Manufacturer</TableCell>
-                    <TableCell align="center">Action</TableCell>
+                    <TableCell translation-key="project_brand">{t('project_brand')}</TableCell>
+                    <TableCell translation-key="project_variant">{t('project_variant')}</TableCell>
+                    <TableCell translation-key="project_manufacturer">{t('project_manufacturer')}</TableCell>
+                    <TableCell align="center" translation-key="common_action">{t('common_action')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -647,7 +686,8 @@ const SetupSurvey = memo(({ id }: Props) => {
                           <>
                             <TableCell>
                               <OutlinedInput
-                                placeholder="Add text"
+                                placeholder={t('setup_survey_add_brand_brand_placeholder')}
+                                translation-key-placeholder="setup_survey_add_brand_brand_placeholder"
                                 value={brandFormData?.brand || ''}
                                 onChange={(e) => {
                                   setBrandFormData({
@@ -660,7 +700,8 @@ const SetupSurvey = memo(({ id }: Props) => {
                             </TableCell>
                             <TableCell>
                               <OutlinedInput
-                                placeholder="Add text"
+                                placeholder={t('setup_survey_add_brand_variant_placeholder')}
+                                translation-key-placeholder="setup_survey_add_brand_variant_placeholder"
                                 value={brandFormData?.variant || ''}
                                 onChange={(e) => {
                                   setBrandFormData({
@@ -673,7 +714,8 @@ const SetupSurvey = memo(({ id }: Props) => {
                             </TableCell>
                             <TableCell>
                               <OutlinedInput
-                                placeholder="Add text"
+                                placeholder={t('setup_survey_add_brand_manufacturer_placeholder')}
+                                translation-key-placeholder="setup_survey_add_brand_manufacturer_placeholder"
                                 value={brandFormData?.manufacturer || ''}
                                 onChange={(e) => {
                                   setBrandFormData({
@@ -691,8 +733,9 @@ const SetupSurvey = memo(({ id }: Props) => {
                                 btnType="TransparentBlue"
                                 disabled={!enableAddBrand()}
                                 onClick={onAddOrEditBrand}
+                                translation-key="common_save"
                               >
-                                <Check fontSize="small" sx={{ marginRight: '8px' }} />Save
+                                <Check fontSize="small" sx={{ marginRight: '8px' }} />{t('common_save')}
                               </Buttons>
                             </TableCell>
                           </>
@@ -704,7 +747,8 @@ const SetupSurvey = memo(({ id }: Props) => {
                     <TableRow>
                       <TableCell>
                         <OutlinedInput
-                          placeholder="Add text"
+                          placeholder={t('setup_survey_add_brand_brand_placeholder')}
+                          translation-key-placeholder="setup_survey_add_brand_brand_placeholder"
                           value={brandFormData?.brand || ''}
                           onChange={(e) => {
                             setBrandFormData({
@@ -717,7 +761,8 @@ const SetupSurvey = memo(({ id }: Props) => {
                       </TableCell>
                       <TableCell>
                         <OutlinedInput
-                          placeholder="Add text"
+                          placeholder={t('setup_survey_add_brand_variant_placeholder')}
+                          translation-key-placeholder="setup_survey_add_brand_variant_placeholder"
                           value={brandFormData?.variant || ''}
                           onChange={(e) => {
                             setBrandFormData({
@@ -730,7 +775,8 @@ const SetupSurvey = memo(({ id }: Props) => {
                       </TableCell>
                       <TableCell>
                         <OutlinedInput
-                          placeholder="Add text"
+                          placeholder={t('setup_survey_add_brand_manufacturer_placeholder')}
+                          translation-key-placeholder="setup_survey_add_brand_manufacturer_placeholder"
                           value={brandFormData?.manufacturer || ''}
                           onChange={(e) => {
                             setBrandFormData({
@@ -748,14 +794,17 @@ const SetupSurvey = memo(({ id }: Props) => {
                           btnType="TransparentBlue"
                           disabled={!enableAddBrand()}
                           onClick={onAddOrEditBrand}
+                          translation-key="common_save"
                         >
-                          <Check fontSize="small" sx={{ marginRight: '8px' }} />Save
+                          <Check fontSize="small" sx={{ marginRight: '8px' }} />{t('common_save')}
                         </Buttons>
                       </TableCell>
                     </TableRow>
                   }
                   {(enableAdditionalBrand() && !addRow && !additionalBrandEdit) && <TableRow hover className={classes.btnAddBrand} onClick={() => setAddRow(true)}>
-                    <TableCell colSpan={4} variant="footer" align="center" scope="row"><div><img src={Images.icAddBlue} /> Add new brand</div></TableCell>
+                    <TableCell colSpan={4} variant="footer" align="center" scope="row">
+                      <div translation-key="setup_survey_add_brand_btn_add"><img src={Images.icAddBlue} /> {t('setup_survey_add_brand_btn_add')}</div>
+                    </TableCell>
                   </TableRow>}
                 </TableBody>
               </Table>
@@ -768,11 +817,11 @@ const SetupSurvey = memo(({ id }: Props) => {
             >
               <MenuItem className={classes.itemAciton} onClick={() => onEditBrand()}>
                 <img src={Images.icEdit} alt="icon edit" />
-                <p>Edit</p>
+                <p translation-key="common_edit">{t('common_edit')}</p>
               </MenuItem>
               <MenuItem className={classes.itemAciton} onClick={() => onShowConfirmDeleteBrand()}>
                 <img src={Images.icDelete} alt="icon delete" />
-                <p>Delete</p>
+                <p translation-key="common_delete">{t('common_delete')}</p>
               </MenuItem>
             </Menu>
             {/* ===================brand list mobile====================== */}
@@ -780,9 +829,9 @@ const SetupSurvey = memo(({ id }: Props) => {
               {packs?.map(item => (
                 <Grid key={item.id} className={classes.itemBrandMobile}>
                   <div>
-                    <p className={classes.textBrand}>Brand: {item.brand}</p>
-                    <p className={classes.textVariant}>Variant: {item.variant}</p>
-                    <p className={classes.textVariant}>Manufacturer: {item.manufacturer}</p>
+                    <p className={classes.textBrand} translation-key="project_brand">{t('project_brand')}: {item.brand}</p>
+                    <p className={classes.textVariant} translation-key="project_variant">{t('project_variant')}: {item.variant}</p>
+                    <p className={classes.textVariant} translation-key="project_manufacturer">{t('project_manufacturer')}: {item.manufacturer}</p>
                   </div>
                 </Grid>
               ))}
@@ -790,9 +839,9 @@ const SetupSurvey = memo(({ id }: Props) => {
                 return (
                   <Grid key={index} className={classes.itemBrandMobile}>
                     <div>
-                      <p className={classes.textBrand}>Brand: {item.brand}</p>
-                      <p className={classes.textVariant}>Variant: {item.variant}</p>
-                      <p className={classes.textVariant}>Manufacturer: {item.manufacturer}</p>
+                      <p className={classes.textBrand} translation-key="project_brand">{t('project_brand')}: {item.brand}</p>
+                      <p className={classes.textVariant} translation-key="project_variant">{t('project_variant')}: {item.variant}</p>
+                      <p className={classes.textVariant} translation-key="project_manufacturer">{t('project_manufacturer')}: {item.manufacturer}</p>
                     </div>
                     {editableProject(project) && (
                       <IconButton
@@ -810,7 +859,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               {enableAdditionalBrand() && (
                 <Grid className={classes.itemBrandMobileAdd} onClick={() => setAddBrandMobile(true)}>
                   <img src={Images.icAddGray} alt="" />
-                  <p>Add new brand</p>
+                  <p translation-key="setup_survey_add_brand_btn_add">{t('setup_survey_add_brand_btn_add')}</p>
                 </Grid>
               )}
             </Grid>
@@ -823,17 +872,17 @@ const SetupSurvey = memo(({ id }: Props) => {
           >
             <MenuItem className={classes.itemAciton} onClick={() => onShowBrandEditMobile()}>
               <img src={Images.icEdit} alt="icon edit" />
-              <p>Edit</p>
+              <p translation-key="common_edit">{t('common_edit')}</p>
             </MenuItem>
             <MenuItem className={classes.itemAciton} onClick={() => onShowConfirmDeleteBrand()}>
               <img src={Images.icDelete} alt="icon delete" />
-              <p>Delete</p>
+              <p translation-key="common_delete">{t('common_delete')}</p>
             </MenuItem>
           </Menu>
           <div className={classes.line}></div>
-          <p className={classes.subTitle} id="additional-attributes">4.Additional attributes <span>(max {maxAdditionalAttribute()})</span></p>
+          <p className={classes.subTitle} id="additional-attributes" translation-key="setup_survey_add_att_title">4. {t('setup_survey_add_att_title')} <span>({t('common_max')} {maxAdditionalAttribute()})</span></p>
           <Grid className={classes.flex}>
-            <p>We will test your packs associations with some <span onClick={() => setOpenPopupMandatory(true)}>mandatory attributes</span>. You have an option to select further attributes from a pre-defined list or add your own attributes.</p>
+            <p translation-key="setup_survey_add_att_sub_title_1">{t('setup_survey_add_att_sub_title_1')} <span onClick={() => setOpenPopupMandatory(true)}>{t('setup_survey_add_att_sub_title_2')}</span>. {t('setup_survey_add_att_sub_title_3')}</p>
             <Grid container classes={{ root: classes.rootList }}>
               {getAttributeShow().map((item, index) => (
                 <ListItem
@@ -899,13 +948,13 @@ const SetupSurvey = memo(({ id }: Props) => {
                         unmountOnExit
                       >
                         <div className={classes.CollapseAttributesMobile}>
-                          <p>Start: <span>{item.start}</span></p>
-                          <p>End: <span>{item.end}</span></p>
+                          <p translation-key="setup_survey_add_att_start_label">{t('setup_survey_add_att_start_label')}: <span>{item.start}</span></p>
+                          <p translation-key="setup_survey_add_att_end_label">{t('setup_survey_add_att_end_label')}: <span>{item.end}</span></p>
                         </div>
                         {editableProject(project) && (
                           <div className={classes.btnActionMobile} onClick={e => e.stopPropagation()}>
-                            {item.type === AttributeShowType.User && <Button onClick={() => onEditUserAttribute(item.data as any)}>Edit</Button>}
-                            <Button onClick={() => onShowConfirmDeleteAttribute(item)}>Delete</Button>
+                            {item.type === AttributeShowType.User && <Button onClick={() => onEditUserAttribute(item.data as any)} translation-key="common_edit">{t('common_edit')}</Button>}
+                            <Button onClick={() => onShowConfirmDeleteAttribute(item)} translation-key="common_delete">{t('common_delete')}</Button>
                           </div>
                         )}
                       </Collapse >
@@ -926,22 +975,28 @@ const SetupSurvey = memo(({ id }: Props) => {
                     className: classes.selectTypeMenu
                   }}
                 >
-                  <MenuItem disabled value="">Add new attributes</MenuItem>
-                  <MenuItem value={20} onClick={() => setOpenPopupPreDefined(true)}>From pre-defined list</MenuItem>
-                  <MenuItem value={30} onClick={() => setOpenPopupAddAttributes(true)}>Your own attribute</MenuItem>
+                  <MenuItem disabled value="" translation-key="setup_survey_add_att_menu_action_placeholder">
+                    {t('setup_survey_add_att_menu_action_placeholder')}
+                  </MenuItem>
+                  <MenuItem value={20} onClick={() => setOpenPopupPreDefined(true)} translation-key="setup_survey_add_att_menu_action_from_pre_defined_list">
+                  {t('setup_survey_add_att_menu_action_from_pre_defined_list')}
+                  </MenuItem>
+                  <MenuItem value={30} onClick={() => setOpenPopupAddAttributes(true)} translation-key="setup_survey_add_att_menu_action_your_own_attribute">
+                  {t('setup_survey_add_att_menu_action_your_own_attribute')}
+                  </MenuItem>
                 </Select>
               </FormControl>
-              {!enableAdditionalAttributes() && <p>You can only add maximum of {maxAdditionalAttribute()} attributes.</p>}
+              {!enableAdditionalAttributes() && <p translation-key="setup_survey_add_att_error_max">{t('setup_survey_add_att_error_max', { max: maxAdditionalAttribute() })}</p>}
             </Grid>
             <Grid classes={{ root: classes.tip }}>
               <img src={Images.icTipGray} alt="" />
-              <p><span>Tip:</span> We recommend you include attributes that test the brand positioning or messages you wish to communicate to consumers through your pack design. You may also think about what your key competitor is trying to communicate in their pack design.</p>
+              <p translation-key="setup_survey_add_att_tip" dangerouslySetInnerHTML={{__html: t('setup_survey_add_att_tip')}}></p>
             </Grid>
           </Grid>
         </Grid>
-        <Grid classes={{ root: classes.right }} >
+        <Grid classes={{ root: classes.right }}>
           <Grid className={classes.summary}>
-            <p className={classes.textSummary}>Summary</p>
+            <p className={classes.textSummary} translation-key="setup_survey_summary_title">{t('setup_survey_summary_title')}</p>
             <Stepper
               orientation="vertical"
               classes={{ root: classes.rootSteper }}
@@ -957,15 +1012,16 @@ const SetupSurvey = memo(({ id }: Props) => {
                     active: classes.rootStepLabelActive,
                     label: classes.rootStepLabel
                   }}
+                  translation-key="setup_survey_summary_basic_infor"
                 >
-                  Basic information
+                  {t('setup_survey_summary_basic_infor')}
                 </StepLabel>
                 <StepContent classes={{ root: classes.rootConnector }}>
                   <ul>
-                    {project?.category && <li>{project.category} (Category)</li>}
-                    {project?.brand && <li>{project.brand} (Brand)</li>}
-                    {project?.variant && <li>{project.variant} (Variant)</li>}
-                    {project?.manufacturer && <li>{project.manufacturer} (Manufacturer)</li>}
+                    {project?.category && <li translation-key="project_category">{project.category} ({t('project_category')})</li>}
+                    {project?.brand && <li translation-key="project_brand">{project.brand} ({t('project_brand')})</li>}
+                    {project?.variant && <li translation-key="project_variant">{project.variant} ({t('project_variant')})</li>}
+                    {project?.manufacturer && <li translation-key="project_manufacturer">{project.manufacturer} ({t('project_manufacturer')})</li>}
                   </ul>
                 </StepContent>
               </Step>
@@ -979,8 +1035,9 @@ const SetupSurvey = memo(({ id }: Props) => {
                     active: classes.rootStepLabelActive,
                     label: classes.rootStepLabel
                   }}
+                  translation-key="setup_survey_summary_pack"
                 >
-                  Upload your pack
+                  {t('setup_survey_summary_pack')}
                 </StepLabel>
                 <StepContent classes={{ root: classes.rootConnector }}>
                   <ul>
@@ -998,8 +1055,9 @@ const SetupSurvey = memo(({ id }: Props) => {
                     active: classes.rootStepLabelActive,
                     label: classes.rootStepLabel
                   }}
+                  translation-key="setup_survey_summary_add_brand"
                 >
-                  Additional brand list
+                  {t('setup_survey_summary_add_brand')}
                 </StepLabel>
                 <StepContent classes={{ root: classes.rootConnector }}>
                   <ul>
@@ -1010,8 +1068,9 @@ const SetupSurvey = memo(({ id }: Props) => {
                       <span
                         className={classes.moreStepContent}
                         onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
+                        translation-key="setup_survey_summary_add_brand_more"
                       >
-                        {additionalBrand?.length - 4} more
+                        {t('setup_survey_summary_add_brand_more', { number: (additionalBrand?.length - 4) })}
                       </span>
                     </Grid>
                   )}
@@ -1027,13 +1086,14 @@ const SetupSurvey = memo(({ id }: Props) => {
                     active: classes.rootStepLabelActive,
                     label: classes.rootStepLabel
                   }}
+                  translation-key="setup_survey_summary_add_attr"
                 >
-                  Additional attributes
+                  {t('setup_survey_summary_add_attr')}
                 </StepLabel>
                 <StepContent classes={{ root: classes.rootConnector }}>
                   <ul>
-                    <li>Pre-defined attribute ({projectAttributes?.length || 0})</li>
-                    <li>Custom attribute ({userAttributes?.length || 0})</li>
+                    <li translation-key="setup_survey_summary_add_attr_pre_defined">{t('setup_survey_summary_add_attr_pre_defined')} ({projectAttributes?.length || 0})</li>
+                    <li translation-key="setup_survey_summary_add_attr_custom">{t('setup_survey_summary_add_attr_custom')} ({userAttributes?.length || 0})</li>
                   </ul>
                 </StepContent>
               </Step>
@@ -1048,8 +1108,8 @@ const SetupSurvey = memo(({ id }: Props) => {
         />
         <PopupConfirmDelete
           isOpen={!!packDelete}
-          title="Delete pack?"
-          description="Are you sure you want to delete this packed?"
+          title={t('setup_survey_pack_confirm_delete_title')}
+          description={t('setup_survey_pack_confirm_delete_sub_title')}
           onCancel={() => setPackDelete(null)}
           onDelete={onDeletePack}
         />
@@ -1080,15 +1140,15 @@ const SetupSurvey = memo(({ id }: Props) => {
         />
         <PopupConfirmDelete
           isOpen={!!brandDelete}
-          title="Delete brand?"
-          description="Are you sure you want to delete this brand?"
+          title={t('setup_survey_add_brand_confirm_delete_title')}
+          description={t('setup_survey_add_brand_confirm_delete_sub_title')}
           onCancel={() => onCloseConfirmDeleteBrand()}
           onDelete={onDeleteBrand}
         />
         <PopupConfirmDelete
           isOpen={!!userAttributeDelete || !!projectAttributeDelete}
-          title="Delete attribute?"
-          description="Are you sure you want to delete this attribute?"
+          title={t('setup_survey_add_att_confirm_delete_title')}
+          description={t('setup_survey_add_att_confirm_delete_sub')}
           onCancel={() => onCloseConfirmDeleteAttribute()}
           onDelete={onDeleteAttribute}
         />

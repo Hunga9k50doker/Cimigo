@@ -9,6 +9,7 @@ import { AdditionalAttributeService } from 'services/additional_attribute';
 import { Project } from 'models/project';
 import { ProjectAttribute } from 'models/project_attribute';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   isOpen: boolean,
@@ -21,6 +22,8 @@ interface Props {
 
 const PopupPreDefinedList = memo((props: Props) => {
   const { isOpen, project, maxSelect, projectAttributes, onClose, onSubmit } = props;
+
+  const { t } = useTranslation()
 
   const [expanded, setExpanded] = useState<number>()
   const [attributes, setAttributes] = useState<Attribute[]>([])
@@ -84,17 +87,17 @@ const PopupPreDefinedList = memo((props: Props) => {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle className={classes.header}>
-        <p className={classes.title}>Add attributes</p>
+        <p className={classes.title} translation-key="setup_survey_add_att_popup_pre_defined_title">{t('setup_survey_add_att_popup_pre_defined_title')}</p>
         <IconButton onClick={onClose}>
           <img src={Images.icClose} alt='' />
         </IconButton>
       </DialogTitle>
       <DialogContent className={classes.body} dividers>
-        <p>The following list of attributes are pre-defined by Cimigo over projects. Your may select the attributes that might be relevant to your project.</p>
+        <p translation-key="setup_survey_add_att_popup_pre_defined_sub_title">{t('setup_survey_add_att_popup_pre_defined_sub_title')}</p>
         <Grid className={classes.listNumberMobile}>
           <div className={classes.textMobile}>
-            <p>Start point label</p>
-            <p>End point label</p>
+            <p translation-key="setup_survey_add_att_start_point_label">{t('setup_survey_add_att_start_point_label')}</p>
+            <p translation-key="setup_survey_add_att_end_point_label">{t('setup_survey_add_att_end_point_label')}</p>
           </div>
           <div className={classes.numberMobile}>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
         </Grid>
@@ -127,8 +130,8 @@ const PopupPreDefinedList = memo((props: Props) => {
                   unmountOnExit
                 >
                   <div className={classes.CollapseAttributesMobile}>
-                    <p>Start label: <span>{item.start}</span></p>
-                    <p>End label: <span>{item.end}</span></p>
+                    <p translation-key="setup_survey_add_att_start_label">{t('setup_survey_add_att_start_label')}: <span>{item.start}</span></p>
+                    <p translation-key="setup_survey_add_att_end_label">{t('setup_survey_add_att_end_label')}: <span>{item.end}</span></p>
                   </div>
                 </Collapse >
               </Grid>
@@ -174,7 +177,7 @@ const PopupPreDefinedList = memo((props: Props) => {
         </Grid>
       </DialogContent>
       <DialogActions className={classes.btn}>
-        <Buttons children="Add attributes" btnType='Blue' padding='10px 16px' width='25%' onClick={_onSubmit} />
+        <Buttons children={t('setup_survey_add_att_btn_add')} translation-key="setup_survey_add_att_btn_add" btnType='Blue' padding='10px 16px' width='25%' onClick={_onSubmit} />
       </DialogActions>
     </Dialog>
   );
