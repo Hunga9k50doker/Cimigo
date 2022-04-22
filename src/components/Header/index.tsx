@@ -106,7 +106,7 @@ const Header = memo((props: HeaderProps) => {
             classes={{ paper: classes.rootMenu }}
           >
             {dataList.map(item => (
-              <MenuItem key={item.name} className={classes.itemsOfToggle} sx={{maxHeight:'36px !important'}}>
+              <MenuItem key={item.name} className={classes.itemsOfToggle}>
                 <a href={item.link} >
                   <p>{item.name}</p>
                 </a>
