@@ -52,7 +52,7 @@ import icWord from 'assets/img/icon/ic-word.svg';
 import icArrowLogin from 'assets/img/icon/ic-arrow-login.svg';
 import icArrowRegister from 'assets/img/icon/ic-arrow-register.svg';
 import icView from 'assets/img/icon/ic-view.svg';
-
+import imgPaymentFailed from 'assets/img/img-payment-failed.svg';
 
 const images = {
   // ===================== Images =========================
@@ -109,7 +109,8 @@ const images = {
   imgPayment,
   icAdditionalAttributes,
   icArrowLogin, 
-  icArrowRegister 
+  icArrowRegister,
+  imgPaymentFailed 
 }
 
 export default images
