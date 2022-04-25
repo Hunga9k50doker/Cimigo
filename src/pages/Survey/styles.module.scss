@@ -22,7 +22,7 @@
 }
 
 .tabContent {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 30px 48px;
   border-radius: 4px;
   @media only screen and (max-width: 1024px) {
@@ -31,7 +31,7 @@
   @media only screen and (max-width: 767px) {
     padding: 0px;
     position: relative;
-  } 
+  }
 }
 // ================= Tabs =================
 
@@ -101,7 +101,29 @@
 .scrollButtonsMobile {
   background: linear-gradient(270deg, #ffffff 66.68%, rgba(255, 255, 255, 0) 129.69%);
 }
-.projectName{
-    text-overflow: ellipsis; 
-    overflow: hidden;
+.projectName {
+  cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.editBox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  [class~="MuiFormControl-root"] {
+    max-width: 300px;
+    padding: 0px;
+    margin-right: 10px;
+    input {
+      padding: 5px 5px 5px 10px;
+    }
+  }
+  button {
+    max-width: unset;
+    min-width: unset;
+    img {
+      margin: 0;
+      padding: 0;
+    }
+  }
 }

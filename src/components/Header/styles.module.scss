@@ -370,14 +370,6 @@
   overflow: hidden;
   margin-left: 20px;
   margin-right: 5px;
-  p {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    span {
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-  }
   @media only screen and (max-width: 1024px) {
     left: 200px;
   }
@@ -413,7 +405,9 @@
   display: flex;
   align-items: center;
   margin-top: 5px;
-  img {
+  overflow: hidden;
+  flex: 1;
+  > img {
     margin-right: 15px;
   }
 
@@ -585,4 +579,25 @@
   width: 40px;
   height: 40px;
   border-radius: 100%;
+}
+.editBox {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  [class~="MuiFormControl-root"] {
+    max-width: 350px;
+    padding: 0px;
+    margin-right: 15px;
+    input {
+      padding: 5px 5px 5px 10px;
+    }
+  }
+  button {
+    max-width: unset;
+    min-width: unset;
+    img {
+      margin: 0;
+      padding: 0;
+    }
+  }
 }

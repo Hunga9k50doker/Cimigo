@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import classes from './styles.module.scss';
 import {
   Grid,
@@ -22,6 +22,10 @@ import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
 import { push } from "connected-react-router";
 import { useTranslation } from "react-i18next";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { ProjectService } from "services/project";
+import Inputs from "components/Inputs";
+import Buttons from "components/Buttons";
 
 function a11yProps(index: number) {
   return {
@@ -53,6 +57,9 @@ const Survey = () => {
 
   const { id } = useParams<{ id?: string }>()
   const { project } = useSelector((state: ReducerType) => state.project)
+  const [isEditName, setIsEditName] = useState(false);
+  const [projectName, setProjectName] = useState<string>('');
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -79,13 +86,66 @@ const Survey = () => {
     dispatch(push(tabs[newTab].path.replace(":id", id)))
   }
 
+  const handleEditProjectName = () => {
+    setIsEditName(true)
+    setProjectName(project.name)
+  }
+
+  const isValidProjectName = () => {
+    return projectName && project && projectName !== project.name
+  }
+
+  const onCloseChangeProjectName = () => {
+    setProjectName('')
+    setIsEditName(false)
+  }
+
+  const onChangeProjectName = () => {
+    if (!isValidProjectName()) {
+      onCloseChangeProjectName()
+      return
+    }
+    dispatch(setLoading(true))
+    ProjectService.renameProject(Number(id), {
+      name: projectName
+    })
+      .then(() => {
+        onCloseChangeProjectName()
+        dispatch(getProjectRequest(Number(id)))
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(true)))
+  }
+
   return (
     <Grid>
       <Header project detail={project} />
       <Grid className={classes.rootMobile}>
         <img src={images.icHomeMobile} alt='' onClick={() => dispatch(push(routes.project.management))} />
         <img src={images.icNextMobile} alt='' />
-        <p className={classes.projectName}>{project?.name}</p>
+        {!isEditName ? (
+          <p className={classes.projectName} onClick={handleEditProjectName}>{project?.name}</p>
+        ) : (
+          <div className={classes.editBox}>
+            <Inputs
+              name=""
+              size="small"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
+              placeholder={t('field_project_name_placeholder')}
+              translation-key-placeholder="field_project_name_placeholder"
+            />
+            <Buttons
+              nowrap
+              btnType="Blue"
+              translation-key="common_save"
+              children={t('common_save')}
+              padding="3px 13px"
+              startIcon={<img src={images.icSaveWhite} alt="" />}
+              onClick={onChangeProjectName}
+            />
+          </div>
+        )}
       </Grid>
       <Grid className={classes.root}>
         <Tabs

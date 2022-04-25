@@ -15,6 +15,10 @@ import { useTranslation } from "react-i18next";
 import { KeyboardArrowDown } from "@mui/icons-material";
 import { langSupports } from "models/general";
 import { Project } from "models/project";
+import Inputs from "components/Inputs";
+import { ProjectService } from "services/project";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 
 interface HeaderProps {
   project?: boolean;
@@ -79,6 +83,36 @@ const Header = memo((props: HeaderProps) => {
     })
   }
 
+  const handleEditProjectName = () => {
+    setIsEdit(true)
+    setProjectName(detail.name)
+  }
+
+  const isValidProjectName = () => {
+    return projectName && detail && projectName !== detail.name
+  }
+
+  const onCloseChangeProjectName = () => {
+    setProjectName('')
+    setIsEdit(false)
+  }
+
+  const onChangeProjectName = () => {
+    if (!isValidProjectName()) {
+      onCloseChangeProjectName()
+      return
+    }
+    dispatch(setLoading(true))
+    ProjectService.renameProject(detail.id, {
+      name: projectName
+    })
+      .then(() => {
+        onCloseChangeProjectName()
+        dispatch(getProjectRequest(detail.id))
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(true)))
+  }
 
   return (
     <header className={classes.root}>
@@ -128,10 +162,32 @@ const Header = memo((props: HeaderProps) => {
               </div>
             }
             {detail &&
-              <p className={classes.linkTexDetail}>
+              <div className={classes.linkTexDetail}>
                 <img src={images.icNextMobile} alt='' />
-                <a className={classes.detail}>{detail.name}</a>
-              </p>
+                {!isEdit ? (
+                  <a className={classes.detail} onClick={handleEditProjectName}>{detail.name}</a>
+                ) : (
+                  <div className={classes.editBox}>
+                    <Inputs
+                      name=""
+                      size="small"
+                      value={projectName}
+                      onChange={(e) => setProjectName(e.target.value)}
+                      placeholder={t('field_project_name_placeholder')}
+                      translation-key-placeholder="field_project_name_placeholder"
+                    />
+                    <Buttons
+                      nowrap
+                      btnType="Blue"
+                      translation-key="common_save"
+                      children={t('common_save')}
+                      padding="3px 13px"
+                      startIcon={<img src={images.icSaveWhite} alt="" />}
+                      onClick={onChangeProjectName}
+                    />
+                  </div>
+                )}
+              </div>
             }
           </div>
         }

@@ -228,13 +228,16 @@ const Target = memo(({ projectId }: Props) => {
   }, [project])
 
   const updateSampleSize = (data: number) => {
-    if (!isValidSampSize(data) || data === project?.sampleSize || !editableProject(project)) return
+    if (!isValidSampSize(data) || data === project?.sampleSize || !editableProject(project)) {
+      onClearCustomSampleSize()
+      return
+    }
     dispatch(setLoading(true))
     ProjectService.updateSampleSize(projectId, data)
       .then((res) => {
         dispatch(getProjectRequest(projectId))
         dispatch(setSuccessMess(res.message))
-        onClearCustomSampleSize()
+        
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
