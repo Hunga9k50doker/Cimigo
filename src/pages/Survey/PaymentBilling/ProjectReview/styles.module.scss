@@ -107,6 +107,11 @@
   @media only screen and (max-width: 767px) {
     padding: 0px 19px;
   }
+  a {
+    font-weight: 500;
+    cursor: pointer;
+    color: #1f61a9;
+  }
 }
 .textSub1 {
   font-style: normal;
@@ -343,4 +348,9 @@
 }
 .missing {
   font-weight: 600;
+}
+.titleDanger {
+  span {
+    color: var(--cimigo-danger) !important;
+  }
 }

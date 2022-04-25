@@ -28,7 +28,7 @@ const CallbackInvoice = () => {
           dispatch(setErrorMess(e))
         })
         .finally(() => {
-          dispatch(push(routes.project.detail.setupSurvey.replace(':id', id)))
+          dispatch(push(routes.project.detail.paymentBilling.root.replace(':id', id)))
           dispatch(setLoading(false))
         })
     }

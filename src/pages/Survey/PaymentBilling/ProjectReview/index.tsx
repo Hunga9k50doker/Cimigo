@@ -22,11 +22,14 @@ import FileSaver from 'file-saver';
 import moment from "moment";
 import { PaymentService } from "services/payment";
 import { authPreviewOrPayment } from "../models";
+import { useTranslation } from "react-i18next";
 
 interface ProjectReviewProps {
 }
 
 const ProjectReview = memo(({ }: ProjectReviewProps) => {
+  const { t } = useTranslation()
+
   const dispatch = useDispatch()
   const { project } = useSelector((state: ReducerType) => state.project)
 
@@ -81,6 +84,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       }
 
       const checkValidConfirm = () => {
+        if (!project) return
         setIsValid(false)
         dispatch(setLoading(true))
         PaymentService.validConfirm(project.id)
@@ -103,11 +107,11 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const inValidTargetMess = () => {
     const mess: string[] = []
     const location = project?.targets.find(it => it.targetQuestion?.typeId === TargetQuestionType.Location)
-    if (!location) mess.push('Location')
+    if (!location) mess.push(t('target_sub_tab_location'))
     const economicClass = project?.targets.find(it => it.targetQuestion?.typeId === TargetQuestionType.Economic_Class)
-    if (!economicClass) mess.push('Economic class')
+    if (!economicClass) mess.push(t('target_sub_tab_economic_class'))
     const ageCoverage = project?.targets.find(it => [TargetQuestionType.Mums_Only, TargetQuestionType.Gender_And_Age_Quotas].includes(it.targetQuestion?.typeId || 0))
-    if (!ageCoverage) mess.push('Age coverage')
+    if (!ageCoverage) mess.push(t('target_sub_tab_age_coverage'))
     return mess
   }
 
@@ -146,9 +150,9 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const openNewTabContact = () => {
-    window.open(`${process.env.REACT_APP_BASE_API_URL}/static/contract/contract.pdf`, '_blank').focus()
-  }
+  // const openNewTabContact = () => {
+  //   window.open(`${process.env.REACT_APP_BASE_API_URL}/static/contract/contract.pdf`, '_blank').focus()
+  // }
 
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)))
@@ -164,88 +168,85 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     <Grid classes={{ root: classes.root }}>
       {
         isValidConfirm() ? (
-          <p className={classes.title}>Please review your project setup and confirm to continue with payment. Note that after placing an order in the next step,
-            you <span>can not modify</span> what you have set up.
-          </p>
+          <p className={classes.title} dangerouslySetInnerHTML={{__html: t('payment_billing_sub_tab_preview_sub_title_success')}} translation-key="payment_billing_sub_tab_preview_sub_title_success"></p>
         ) : (
-          <p className={classes.title}>
-            Your project specifications <span className={classes.colorDanger}>do not satisfy the minimum requirement</span>. Please review the following table then modify project specifications to continuing.
-          </p>
+          <p className={clsx(classes.title, classes.titleDanger)} dangerouslySetInnerHTML={{__html: t('payment_billing_sub_tab_preview_sub_title_error')}} translation-key="payment_billing_sub_tab_preview_sub_title_error"></p>
         )
       }
       <Grid className={classes.body}>
         <Grid className={classes.flex1}>
           <Grid className={classes.left}>
             <div className={classes.solution}>
-              <p className={classes.textGreen}>Solution</p>
+              <p className={classes.textGreen} translation-key="payment_billing_sub_tab_preview_solution">{t('payment_billing_sub_tab_preview_solution')}</p>
               <span className={classes.textBlue}><img src={project?.solution.image || Images.icPack} />{project?.solution?.title}</span>
             </div>
             <div className={classes.expected}>
-              <p className={classes.textGreen}>Expected delivery</p>
-              <span className={classes.textBlack}>{project?.sampleSize <= 500 ? 10 : 15} working days</span>
+              <p className={classes.textGreen} translation-key="payment_billing_sub_tab_preview_expected_delivery">{t('payment_billing_sub_tab_preview_expected_delivery')}</p>
+              <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_working_days">{project?.sampleSize <= 500 ? 10 : 15} {t('payment_billing_sub_tab_preview_working_days')}</span>
             </div>
             <div className={classes.target}>
-              <p className={classes.textGreen}>Sample and target<Button onClick={gotoTarget} classes={{ root: classes.rootbtn }} endIcon={<img src={Images.icNext} alt="" />}>Go to setup</Button></p>
+              <p className={classes.textGreen} translation-key="payment_billing_sub_tab_preview_sample_size_and_target">{t('payment_billing_sub_tab_preview_sample_size_and_target')}<Button onClick={gotoTarget} classes={{ root: classes.rootbtn }} endIcon={<img src={Images.icNext} alt="" />} translation-key="payment_billing_sub_tab_preview_go_to_setup">{t('payment_billing_sub_tab_preview_go_to_setup')}</Button></p>
               <div className={classes.flex2}>
                 <div>
-                  <p className={classes.text}>Sample size</p><span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidSampleSize() })}>{project?.sampleSize || 'No sample size'}</span>
+                  <p className={classes.text} translation-key="payment_billing_sub_tab_preview_sample_size">{t('payment_billing_sub_tab_preview_sample_size')}</p>
+                  <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidSampleSize() })} translation-key="payment_billing_sub_tab_preview_no_sample_size">{project?.sampleSize || t('payment_billing_sub_tab_preview_no_sample_size')}</span>
                 </div>
                 <div>
-                  <p className={classes.text}>Target criteria</p>
-                  <a className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidTarget() })} onClick={gotoTarget}>
+                  <p className={classes.text} translation-key="payment_billing_sub_tab_preview_target_criteria">{t('payment_billing_sub_tab_preview_target_criteria')}</p>
+                  <a className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidTarget() })} onClick={gotoTarget} translation-key="payment_billing_sub_tab_preview_view_detail">
                     {!isValidTarget() ? (
-                      <><span className={classes.missing}>Missing setup: </span>{inValidTargetMess().join(', ')}</>
-                    ) : 'View detail'}
+                      <><span className={classes.missing} translation-key="payment_billing_sub_tab_preview_solution">{t('payment_billing_sub_tab_preview_missing_setup')}: </span>{inValidTargetMess().join(', ')}</>
+                    ) : t('payment_billing_sub_tab_preview_view_detail')}
                   </a>
                 </div>
               </div>
             </div>
           </Grid>
           <Grid className={classes.right}>
-            <p style={{ marginBottom: 20 }} className={classes.textGreen}>Survey detail<Button onClick={gotoSetupSurvey} classes={{ root: classes.rootbtn }} endIcon={<img src={Images.icNext} alt="" />}>Go to setup</Button></p>
+            <p style={{ marginBottom: 20 }} className={classes.textGreen} translation-key="payment_billing_sub_tab_preview_survey_detail">{t('payment_billing_sub_tab_preview_survey_detail')}<Button onClick={gotoSetupSurvey} classes={{ root: classes.rootbtn }} endIcon={<img src={Images.icNext} alt="" />} translation-key="payment_billing_sub_tab_preview_go_to_setup">{t('payment_billing_sub_tab_preview_go_to_setup')}</Button></p>
             <div className={classes.tableDetail}>
               <div>
-                <p className={classes.text}>Basic information</p>
+                <p className={classes.text} translation-key="payment_billing_sub_tab_preview_basic_information">{t('payment_billing_sub_tab_preview_basic_information')}</p>
                 <div className={classes.infor}>
-                  <div><p>Category <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.category })}> {project?.category || 'None'}</span></div>
-                  <div><p>Brand <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.brand })}> {project?.brand || 'None'}</span></div>
-                  <div><p>Variant <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.variant })}> {project?.variant || 'None'}</span></div>
-                  <div><p>Manufacturer <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.manufacturer })}> {project?.manufacturer || 'None'}</span></div>
+                  <div><p translation-key="project_category">{t('project_category')} <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.category })} translation-key="payment_billing_sub_tab_preview_none"> {project?.category || t('payment_billing_sub_tab_preview_none')}</span></div>
+                  <div><p translation-key="project_brand">{t('project_brand')} <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.brand })} translation-key="payment_billing_sub_tab_preview_none"> {project?.brand || t('payment_billing_sub_tab_preview_none')}</span></div>
+                  <div><p translation-key="project_variant">{t('project_variant')} <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.variant })} translation-key="payment_billing_sub_tab_preview_none"> {project?.variant || t('payment_billing_sub_tab_preview_none')}</span></div>
+                  <div><p translation-key="project_manufacturer">{t('project_manufacturer')} <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.manufacturer })} translation-key="payment_billing_sub_tab_preview_none"> {project?.manufacturer || t('payment_billing_sub_tab_preview_none')}</span></div>
                 </div>
               </div>
               <div>
-                <p className={classes.text}>Pack</p>
-                <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidPacks() })}>
-                  {packs?.length || 0} packs<br />
-                  {!isValidPacks() && <span className={classes.smallText}>Required at least 2 packs</span>}
+                <p className={classes.text} translation-key="payment_billing_sub_tab_preview_pack">{t('payment_billing_sub_tab_preview_pack')}</p>
+                <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidPacks() })} translation-key="payment_billing_sub_tab_preview_packs">
+                  {packs?.length || 0} {t('payment_billing_sub_tab_preview_packs')}<br />
+                  {!isValidPacks() && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_packs_required">{t('payment_billing_sub_tab_preview_packs_required')}</span>}
                 </span>
               </div>
               <div>
-                <p className={classes.text}>Brand list</p>
-                <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidAdditionalBrand() })}>
-                  {additionalBrand?.length || 0} brands <br />
-                  {!isValidAdditionalBrand() && <span className={classes.smallText}>Required at least 2 brands</span>}
+                <p className={classes.text} translation-key="payment_billing_sub_tab_preview_brand_list">{t('payment_billing_sub_tab_preview_brand_list')}</p>
+                <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidAdditionalBrand() })} translation-key="payment_billing_sub_tab_preview_brands">
+                  {additionalBrand?.length || 0} {t('payment_billing_sub_tab_preview_brands')} <br />
+                  {!isValidAdditionalBrand() && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_brands_required">{t('payment_billing_sub_tab_preview_brands_required')}</span>}
                 </span>
               </div>
               <div>
-                <p className={classes.text}>Additional attribute</p>
-                <span className={classes.textBlack}>{(projectAttributes?.length || 0) + (userAttributes?.length || 0)} attributes</span>
+                <p className={classes.text} translation-key="payment_billing_sub_tab_preview_additional_attribute">{t('payment_billing_sub_tab_preview_additional_attribute')}</p>
+                <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_attributes">{(projectAttributes?.length || 0) + (userAttributes?.length || 0)} {t('payment_billing_sub_tab_preview_attributes')}</span>
               </div>
             </div>
           </Grid>
         </Grid>
       </Grid>
-      <p className={classes.textSub}>*Expected working days to results delivery after payment has been received.</p>
+      <p className={classes.textSub} translation-key="payment_billing_sub_tab_preview_expected">{t('payment_billing_sub_tab_preview_expected')}</p>
       <Divider className={classes.divider} />
-      <p className={classes.textBlue1}>Additional materials</p>
-      <p className={classes.textSub1}>These materials are here for your reference only, please note that these are not your final invoice or contract.</p>
+      <p className={classes.textBlue1} translation-key="payment_billing_sub_tab_preview_materials">{t('payment_billing_sub_tab_preview_materials')}</p>
+      <p className={classes.textSub1} translation-key="payment_billing_sub_tab_preview_materials_sub">{t('payment_billing_sub_tab_preview_materials_sub')}</p>
       <Grid className={classes.box}>
-        <div onClick={getInvoice}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Invoice</p></div>
-        <div onClick={openNewTabContact}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p>Contract</p></div>
+        <div onClick={getInvoice}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p translation-key="payment_billing_sub_tab_preview_materials_invoice">{t('payment_billing_sub_tab_preview_materials_invoice')}</p></div>
+        {/* <div onClick={openNewTabContact}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p translation-key="payment_billing_sub_tab_preview_materials_contract">{t('payment_billing_sub_tab_preview_materials_contract')}</p></div> */}
       </Grid>
       <Grid className={classes.btn}>
-        <Buttons disabled={!isValid} onClick={onConfirmProject} children={"Confirm project"} btnType="Blue" padding="11px 24px" />
-        <p className={classes.textSub}>By click “Confirm project”, you agree to our Terms of Service and Privacy Policy.</p>
+        <Buttons disabled={!isValid} onClick={onConfirmProject} children={t('payment_billing_sub_tab_preview_confirm')} translation-key="payment_billing_sub_tab_preview_confirm" btnType="Blue" padding="11px 24px" />
+        <p className={classes.textSub}><span translation-key="payment_billing_sub_tab_preview_confirm_des_1">{t('payment_billing_sub_tab_preview_confirm_des_1')}</span> <a translation-key="payment_billing_sub_tab_preview_confirm_des_2">{t('payment_billing_sub_tab_preview_confirm_des_2')}</a><span translation-key="payment_billing_sub_tab_preview_confirm_des_3">{t('payment_billing_sub_tab_preview_confirm_des_3')}</span></p>
       </Grid>
     </Grid>
   )

@@ -45,9 +45,9 @@ const Survey = () => {
     return [
       { name: t('setup_survey_tab'), path: routes.project.detail.setupSurvey, translation: 'setup_survey_tab' },
       { name: t('target_tab'), path: routes.project.detail.target, translation: 'target_tab' },
-      { name: 'Quotas', path: routes.project.detail.quotas, translation: 'setup_survey_tab' },
-      { name: 'Payment & Billing', path: routes.project.detail.paymentBilling.root, translation: 'setup_survey_tab' },
-      { name: 'Report', path: routes.project.detail.report, translation: 'setup_survey_tab' }
+      { name: t('quotas_tab'), path: routes.project.detail.quotas, translation: 'quotas_tab' },
+      { name: t('payment_billing_tab'), path: routes.project.detail.paymentBilling.root, translation: 'payment_billing_tab' },
+      { name: t('report_tab'), path: routes.project.detail.report, translation: 'report_tab' }
     ]
   }, [i18n.language])
 
@@ -81,7 +81,7 @@ const Survey = () => {
 
   return (
     <Grid>
-      <Header project detail={project?.name} />
+      <Header project detail={project} />
       <Grid className={classes.rootMobile}>
         <img src={images.icHomeMobile} alt='' onClick={() => dispatch(push(routes.project.management))} />
         <img src={images.icNextMobile} alt='' />

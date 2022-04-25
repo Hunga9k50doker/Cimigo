@@ -10,6 +10,7 @@ import { Quota, QuotaTableRow } from 'models/quota';
 import { QuotaService } from 'services/quota';
 import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   projectId: number,
@@ -19,6 +20,7 @@ const Quotas = memo(({ projectId }: Props) => {
 
   const theme = useTheme();
   const dispatch = useDispatch()
+  const { t } = useTranslation()
 
 
   const { project } = useSelector((state: ReducerType) => state.project)
@@ -60,9 +62,9 @@ const Quotas = memo(({ projectId }: Props) => {
       {
         !!quotas?.length ? (
           <Grid classes={{ root: classes.root }}>
-            <p className={classes.title}>Quotas</p>
-            <p className={classes.subTitle}>The following quota tables are suggested by Cimigo, based on your selection of target criteria. The sample design is automatically allocated in proportion to the population for the best result.</p>
-            <p className={classes.subTitle}>We recommend that you leave these unchanged unless you have compelling reasons to change them.</p>
+            <p className={classes.title} translation-key="quotas_title">{t('quotas_title')}</p>
+            <p className={classes.subTitle} translation-key="quotas_sub_title_1">{t('quotas_sub_title_1')}</p>
+            <p className={classes.subTitle} translation-key="quotas_sub_title_2">{t('quotas_sub_title_2')}</p>
             {quotas.map(quota => {
               let totalCell = 0
               let totalCellGroup = 0
@@ -84,7 +86,7 @@ const Quotas = memo(({ projectId }: Props) => {
                           </React.Fragment>
                         )
                       })}
-                      <TableCell align='center'>Representative sample size</TableCell>
+                      <TableCell align='center' translation-key="quotas_representative_sample_size">{t('quotas_representative_sample_size')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody className={classes.tableBody}>
@@ -104,7 +106,7 @@ const Quotas = memo(({ projectId }: Props) => {
                       </TableRow>
                     ))}
                     <TableRow className={classes.rowTotal}>
-                      <TableCell align="right" colSpan={isMobile ? totalCell - totalCellGroup : totalCell}>Total</TableCell>
+                      <TableCell align="right" colSpan={isMobile ? totalCell - totalCellGroup : totalCell} translation-key="common_total">{t('common_total')}</TableCell>
                       <TableCell align="center">{getTotalSampleSize(quota.rows)}</TableCell>
                     </TableRow>
                   </TableBody>
@@ -115,9 +117,9 @@ const Quotas = memo(({ projectId }: Props) => {
         ) : (
           <Grid className={classes.noSetup}>
             <img src={Images.icSad} alt="" />
-            <p>No target setup</p>
-            <span>You need to specify your target consumers to see the quotas setup table.</span>
-            <a onClick={onSetupTarget}>Set up target</a>
+            <p translation-key="quotas_no_target_title">{t('quotas_no_target_title')}</p>
+            <span translation-key="quotas_no_target_sub_title">{t('quotas_no_target_sub_title')}</span>
+            <a onClick={onSetupTarget} translation-key="quotas_no_target_btn">{t('quotas_no_target_btn')}</a>
           </Grid>
         )
       }

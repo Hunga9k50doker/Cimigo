@@ -5,22 +5,21 @@
   @media only screen and (max-width: 767px) {
     padding: 22px 19px;
   }
-  a:not(.aLink) {
-    margin-top: 55px;
-    margin-bottom: 25px;
+  a {
+    margin: 0;
     font-weight: 500;
     font-size: 16px;
     line-height: 20px;
     text-align: center;
     color: #1f61a9;
-    display: block;
     @media only screen and (max-width: 767px) {
       font-size: 14px;
     }
-  }
-  .aLink{
-    color: #1f61a9;
-    text-decoration: none;
+    &.aLink {
+      display: block;
+      margin-top: 55px;
+      margin-bottom: 25px;
+    }
   }
 }
 .root > img {
@@ -169,5 +168,11 @@
   display: block;
   @media only screen and (max-width: 767px) {
     margin: 16px auto 24px auto;
+  }
+}
+.subTitleSpan {
+  > span {
+    color: #7c9911;
+    font-weight: 600;
   }
 }

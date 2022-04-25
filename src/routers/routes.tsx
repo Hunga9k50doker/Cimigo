@@ -132,6 +132,7 @@ export const routesOutside = (lang: string) => {
         opportunitiesAtCimigo: `${cimigoUrl}/vi/viec-lam`,
         trends: `${cimigoUrl}/vi/xu-huong`,
         reports: `${cimigoUrl}/vi/bao-cao`,
+        privacyPolicy: `${cimigoUrl}/vi/chinh-sach-bao-mat`,
       }
     case Lang.EN:
       return {
@@ -144,8 +145,10 @@ export const routesOutside = (lang: string) => {
         opportunitiesAtCimigo: `${cimigoUrl}/en/opportunities-at-cimigo`,
         trends: `${cimigoUrl}/en/trends`,
         reports: `${cimigoUrl}/en/research-report`,
+        privacyPolicy: `${cimigoUrl}/en/privacy`,
       }
   }
+  return {}
 }
 
 export interface NavItem {

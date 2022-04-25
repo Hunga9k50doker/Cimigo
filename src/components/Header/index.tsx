@@ -1,5 +1,5 @@
 import { Grid, IconButton, Menu, MenuItem } from "@mui/material";
-import { memo, useEffect, useState, useRef } from "react";
+import { memo, useEffect, useState, useRef, useMemo } from "react";
 import classes from './styles.module.scss';
 import cimigoLogo from 'assets/img/cimigo_logo.svg';
 import iconMenuOpen from 'assets/img/icon/menu-open.svg';
@@ -13,11 +13,12 @@ import { useDispatch } from "react-redux";
 import { push } from "connected-react-router";
 import { useTranslation } from "react-i18next";
 import { KeyboardArrowDown } from "@mui/icons-material";
-import { Lang, langSupports } from "models/general";
+import { langSupports } from "models/general";
+import { Project } from "models/project";
 
 interface HeaderProps {
   project?: boolean;
-  detail?: string;
+  detail?: Project;
 }
 
 const Header = memo((props: HeaderProps) => {
@@ -26,55 +27,43 @@ const Header = memo((props: HeaderProps) => {
   const { project, detail } = props;
   const history = useHistory();
   const dispatch = useDispatch()
-  const { isLoggedIn, logout,user } = UseAuth();
+  const { isLoggedIn, logout, user } = UseAuth();
   const anchorRef = useRef(null);
   const [isOpen, setOpen] = useState(false);
-  const [isScrolling, setScrolling] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [anchorElLang, setAnchorElLang] = useState<null | HTMLElement>(null);
   const openProfile = Boolean(anchorEl);
+  const [isEdit, setIsEdit] = useState(false);
+  const [projectName, setProjectName] = useState<string>('');
 
-  const handleClick = (e) => {
+  const handleClick = (e: any) => {
     setAnchorEl(e.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleScroll = () => {
-    setScrolling(window.scrollY !== 0)
-  }
 
-  function _handleScroll(e: any) {
-    handleScroll();
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', _handleScroll);
-    return () => {
-      window.removeEventListener('scroll', _handleScroll);
-    }
-  }, [])
-
-
-  const dataList = [
-    {
-      link: routesOutside(i18n.language).overview,
-      name: "Overview",
-    },
-    {
-      link: routesOutside(i18n.language).howItWorks,
-      name: "How it works",
-    },
-    {
-      link: routesOutside(i18n.language).solution,
-      name: "Solution",
-    },
-    {
-      link: routesOutside(i18n.language).faq,
-      name: "FAQ",
-    }
-  ]
+  const dataList = useMemo(() => {
+    return [
+      {
+        link: routesOutside(i18n.language)?.overview,
+        name: t('header_menu_overview'),
+      },
+      {
+        link: routesOutside(i18n.language)?.howItWorks,
+        name: t('header_menu_how_it_works'),
+      },
+      {
+        link: routesOutside(i18n.language)?.solution,
+        name: t('header_menu_solution'),
+      },
+      {
+        link: routesOutside(i18n.language)?.faq,
+        name: t('header_menu_FAQ'),
+      }
+    ]
+  }, [i18n.language])
 
 
   const onGoHome = () => {
@@ -83,9 +72,11 @@ const Header = memo((props: HeaderProps) => {
   }
 
   const changeLanguage = (lang: string) => {
-    if (lang === i18n.language) return
-    i18n.changeLanguage(lang)
     setAnchorElLang(null)
+    if (lang === i18n.language) return
+    i18n.changeLanguage(lang, () => {
+      window.location.reload()
+    })
   }
 
 
@@ -114,12 +105,12 @@ const Header = memo((props: HeaderProps) => {
             ))}
             <Grid className={classes.lineOfToggle} />
             <button className={classes.buttonOfToggle} onClick={() => history.push(routes.login)}>
-                <img src={images.icArrowLogin} alt="" className={classes.icButtonOfToggle} />
-                <span>Login</span>
+              <img src={images.icArrowLogin} alt="" className={classes.icButtonOfToggle} />
+              <span translation-key="header_login">{t('header_login')}</span>
             </button>
             <button className={classes.buttonOfToggle} onClick={() => history.push(routes.register)}>
-                <img src={images.icArrowRegister} alt="" className={classes.icButtonOfToggle} />
-                <span>Register</span>
+              <img src={images.icArrowRegister} alt="" className={classes.icButtonOfToggle} />
+              <span translation-key="header_register">{t('header_register')}</span>
             </button>
           </Menu>
         </li>
@@ -133,13 +124,13 @@ const Header = memo((props: HeaderProps) => {
             {project &&
               <div className={classes.linkTextHome} onClick={() => history.push(routes.project.management)} >
                 <img src={images.icHomeMobile} alt='' />
-                <span>Projects</span>
+                <span translation-key="header_projects">{t('header_projects')}</span>
               </div>
             }
             {detail &&
               <p className={classes.linkTexDetail}>
                 <img src={images.icNextMobile} alt='' />
-                <span className={classes.detail}>{detail}</span>
+                <a className={classes.detail}>{detail.name}</a>
               </p>
             }
           </div>
@@ -164,7 +155,7 @@ const Header = memo((props: HeaderProps) => {
                 padding="7px 10px"
                 onClick={(e) => setAnchorElLang(e.currentTarget)} endIcon={<KeyboardArrowDown />}
               />
-              <Buttons 
+              <Buttons
                 className={classes.btnChangeLang2}
                 children={langSupports?.find(it => it.key === i18n.language).key}
                 padding="7px 10px"
@@ -199,21 +190,21 @@ const Header = memo((props: HeaderProps) => {
                 >
                   {/* <MenuItem className={classes.itemAciton}>
                     <img src={images.icProfile} alt="" />
-                    <p>My account</p>
+                    <p translation-key="auth_my_account">{t('auth_my_account')}</p>
                   </MenuItem> */}
                   <MenuItem className={classes.itemAciton} onClick={logout}>
                     <img src={images.icLogout} alt="" />
-                    <p>Log out</p>
+                    <p translation-key="auth_log_out">{t('auth_log_out')}</p>
                   </MenuItem>
                 </Menu>
               </li>
               :
               <li className={classes.item}>
                 <a className={classes.btnLogin}>
-                  <Buttons btnType="TransparentBlue" children="Log in" padding="6px 16px" onClick={() => history.push(routes.login)} />
+                  <Buttons btnType="TransparentBlue" children={t('header_login')} translation-key="header_login" padding="6px 16px" onClick={() => history.push(routes.login)} />
                 </a>
                 <a className={classes.btnLogout}>
-                  <Buttons btnType="Blue" children="Register" padding="6px 16px" onClick={() => history.push(routes.register)} />
+                  <Buttons btnType="Blue" children={t('header_register')} translation-key="header_register" padding="6px 16px" onClick={() => history.push(routes.register)} />
                 </a>
               </li>
             }

@@ -10,6 +10,7 @@ import { Download } from '@mui/icons-material';
 import { AttachmentService } from 'services/attachment';
 import FileSaver from 'file-saver';
 import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
+import { t } from 'i18next';
 
 interface Props {
   projectId: number,
@@ -41,7 +42,7 @@ const Report = memo(({ projectId }: Props) => {
       {hasReport() ? (
         <Grid classes={{ root: classes.root }}>
           <Box display={"flex"} justifyContent="flex-end">
-            <Buttons onClick={onDownLoad} btnType="Blue" padding="11px 18px"><Download sx={{ marginRight: 1 }} /> Download report</Buttons>
+            <Buttons onClick={onDownLoad} btnType="Blue" padding="11px 18px" translation-key="report_btn_download"><Download sx={{ marginRight: 1 }} /> {t('report_btn_download')}</Buttons>
           </Box>
           <Box mt={2}>
             <iframe
@@ -58,8 +59,8 @@ const Report = memo(({ projectId }: Props) => {
       ) : (
         <Grid className={classes.noSetup}>
           <img src={Images.icSad} alt="" />
-          <p>Coming soon</p>
-          <span>No report setup.</span>
+          <p translation-key="report_coming_soon">{t('report_coming_soon')}</p>
+          <span translation-key="report_no_report_setup">{t('report_no_report_setup')}</span>
         </Grid>
       )}
     </>

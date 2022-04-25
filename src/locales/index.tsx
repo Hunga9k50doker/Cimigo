@@ -7,8 +7,8 @@ i18n
   .use(Backend)
   .use(LanguageDetector)
   .init({
-    //lng: localStorage.getItem('lang') || 'vi',
     load: 'languageOnly',
+    lowerCaseLng: true,
     fallbackLng: 'vi',
     ns: ['common'],
     defaultNS: 'common',

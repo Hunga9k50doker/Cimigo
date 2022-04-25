@@ -33,6 +33,10 @@ const App = ({ history, dispatch }: AppProps) => {
     dispatch(getMe())
   }, [dispatch])
 
+  useEffect(() => {
+    if (i18n.language && i18n.languages.length && !i18n.languages.includes(i18n.language)) i18n.changeLanguage(i18n.languages[0])
+  }, [i18n.language])
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
