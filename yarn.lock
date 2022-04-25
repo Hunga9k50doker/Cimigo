@@ -2140,6 +2140,11 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-gtm-module@^2.0.1":
+  "integrity" "sha512-T/DN9gAbCYk5wJ1nxf4pSwmXz4d1iVjM++OoG+mwMfz9STMAotGjSb65gJHOS5bPvl6vLSsJnuC+y/43OQrltg=="
+  "resolved" "https://registry.npmjs.org/@types/react-gtm-module/-/react-gtm-module-2.0.1.tgz"
+  "version" "2.0.1"
+
 "@types/react-is@^16.7.1 || ^17.0.0":
   "integrity" "sha512-aBTIWg1emtu95bLTLx0cpkxwGW3ueZv71nE2YFBpL8k/z5czEW8yYpOo8Dp+UUAFAtKwNaOsh/ioSeQnWlZcfw=="
   "resolved" "https://registry.npmjs.org/@types/react-is/-/react-is-17.0.3.tgz"
@@ -7999,6 +8004,11 @@
   dependencies:
     "@types/react" "*"
     "prop-types" "^15.6.0"
+
+"react-gtm-module@^2.0.11":
+  "integrity" "sha512-8gyj4TTxeP7eEyc2QKawEuQoAZdjKvMY4pgWfycGmqGByhs17fR+zEBs0JUDq4US/l+vbTl+6zvUIx27iDo/Vw=="
+  "resolved" "https://registry.npmjs.org/react-gtm-module/-/react-gtm-module-2.0.11.tgz"
+  "version" "2.0.11"
 
 "react-hook-form@^7.0.0", "react-hook-form@^7.26.1":
   "integrity" "sha512-/Qw/7IsCCVfYSGryJAMcouEpIDgWZJPeHR15J0IFSgo1BgofcfnY+AeUDcYD1E3yzzXYpR7NHyJehhkBKvjdMg=="

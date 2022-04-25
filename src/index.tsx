@@ -9,6 +9,11 @@ import LoadingScreen from 'components/LoadingScreen';
 import 'assets/scss/_variables.scss';
 import 'react-quill/dist/quill.snow.css';
 import 'moment/locale/vi'
+import TagManager from 'react-gtm-module'
+
+TagManager.initialize({
+  gtmId: 'GTM-PHMMH2G'
+})
 
 const { store, persistor } = configureStore();
 
