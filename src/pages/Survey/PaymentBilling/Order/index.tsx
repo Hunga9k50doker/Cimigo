@@ -71,15 +71,15 @@ const Order = memo(({ }: Props) => {
             </p>
             <Grid classes={{ root: classes.box }} style={{ maxWidth: 450 }}>
               <p translation-key="payment_billing_name">{t('payment_billing_name')}:</p>
-              <span>Hoang Thi Anh Nguyen</span>
+              <span>{payment()?.contactName}</span>
               <Grid classes={{ root: classes.flex }}>
                 <div>
                   <p translation-key="payment_billing_phone">{t('payment_billing_phone')}:</p>
-                  <span>0977 348 125</span>
+                  <span>{payment()?.contactPhone}</span>
                 </div>
                 <div>
                   <p translation-key="payment_billing_email">{t('payment_billing_email')}:</p>
-                  <span>anhnguyen@cimigo.com</span>
+                  <span>{payment()?.contactEmail}</span>
                 </div>
               </Grid>
             </Grid>

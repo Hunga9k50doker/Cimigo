@@ -33,6 +33,8 @@ export interface Project {
   dataStudio: string;
   solution?: Solution;
   folderId: number;
+  invoiceDemoId: number;
+  invoiceDemo: Attachment;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;

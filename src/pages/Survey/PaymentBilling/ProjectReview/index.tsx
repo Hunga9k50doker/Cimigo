@@ -5,7 +5,7 @@ import Images from "config/images";
 import Buttons from "components/Buttons";
 import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
-import { routes } from "routers/routes";
+import { routes, routesOutside } from "routers/routes";
 import { ReducerType } from "redux/reducers";
 import { Pack } from "models/pack";
 import { AdditionalBrand } from "models/additional_brand";
@@ -23,12 +23,13 @@ import moment from "moment";
 import { PaymentService } from "services/payment";
 import { authPreviewOrPayment } from "../models";
 import { useTranslation } from "react-i18next";
+import { AttachmentService } from "services/attachment";
 
 interface ProjectReviewProps {
 }
 
 const ProjectReview = memo(({ }: ProjectReviewProps) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const dispatch = useDispatch()
   const { project } = useSelector((state: ReducerType) => state.project)
@@ -141,13 +142,23 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
 
   const getInvoice = () => {
     if (!project) return
-    dispatch(setLoading(true))
-    PaymentService.getInvoiceDemo(project.id)
-      .then(res => {
-        FileSaver.saveAs(res.data, `invoice-demo-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
+    if (project.invoiceDemoId) {
+      dispatch(setLoading(true))
+      AttachmentService.download(project.invoiceDemoId)
+        .then((res) => {
+          FileSaver.saveAs(res.data, `invoice-demo-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true))
+      PaymentService.getInvoiceDemo(project.id)
+        .then(res => {
+          FileSaver.saveAs(res.data, `invoice-demo-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
   }
 
   // const openNewTabContact = () => {
@@ -168,9 +179,9 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     <Grid classes={{ root: classes.root }}>
       {
         isValidConfirm() ? (
-          <p className={classes.title} dangerouslySetInnerHTML={{__html: t('payment_billing_sub_tab_preview_sub_title_success')}} translation-key="payment_billing_sub_tab_preview_sub_title_success"></p>
+          <p className={classes.title} dangerouslySetInnerHTML={{ __html: t('payment_billing_sub_tab_preview_sub_title_success') }} translation-key="payment_billing_sub_tab_preview_sub_title_success"></p>
         ) : (
-          <p className={clsx(classes.title, classes.titleDanger)} dangerouslySetInnerHTML={{__html: t('payment_billing_sub_tab_preview_sub_title_error')}} translation-key="payment_billing_sub_tab_preview_sub_title_error"></p>
+          <p className={clsx(classes.title, classes.titleDanger)} dangerouslySetInnerHTML={{ __html: t('payment_billing_sub_tab_preview_sub_title_error') }} translation-key="payment_billing_sub_tab_preview_sub_title_error"></p>
         )
       }
       <Grid className={classes.body}>
@@ -241,12 +252,12 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       <p className={classes.textBlue1} translation-key="payment_billing_sub_tab_preview_materials">{t('payment_billing_sub_tab_preview_materials')}</p>
       <p className={classes.textSub1} translation-key="payment_billing_sub_tab_preview_materials_sub">{t('payment_billing_sub_tab_preview_materials_sub')}</p>
       <Grid className={classes.box}>
-        <div onClick={getInvoice}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p translation-key="payment_billing_sub_tab_preview_materials_invoice">{t('payment_billing_sub_tab_preview_materials_invoice')}</p></div>
+        <div onClick={getInvoice}><span><img className={classes.imgAddPhoto} src={Images.icInvoice} /></span><p translation-key="payment_billing_sub_tab_preview_materials_invoice">{t('payment_billing_sub_tab_preview_materials_invoice')}</p></div>
         {/* <div onClick={openNewTabContact}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p translation-key="payment_billing_sub_tab_preview_materials_contract">{t('payment_billing_sub_tab_preview_materials_contract')}</p></div> */}
       </Grid>
       <Grid className={classes.btn}>
         <Buttons disabled={!isValid} onClick={onConfirmProject} children={t('payment_billing_sub_tab_preview_confirm')} translation-key="payment_billing_sub_tab_preview_confirm" btnType="Blue" padding="11px 24px" />
-        <p className={classes.textSub}><span translation-key="payment_billing_sub_tab_preview_confirm_des_1">{t('payment_billing_sub_tab_preview_confirm_des_1')}</span> <a translation-key="payment_billing_sub_tab_preview_confirm_des_2">{t('payment_billing_sub_tab_preview_confirm_des_2')}</a><span translation-key="payment_billing_sub_tab_preview_confirm_des_3">{t('payment_billing_sub_tab_preview_confirm_des_3')}</span></p>
+        <p className={classes.textSub}><span translation-key="payment_billing_sub_tab_preview_confirm_des_1">{t('payment_billing_sub_tab_preview_confirm_des_1')}</span> <a href={routesOutside(i18n.language)?.rapidsurveyTermsOfService} translation-key="payment_billing_sub_tab_preview_confirm_des_2">{t('payment_billing_sub_tab_preview_confirm_des_2')}</a><span translation-key="payment_billing_sub_tab_preview_confirm_des_3">{t('payment_billing_sub_tab_preview_confirm_des_3')}</span></p>
       </Grid>
     </Grid>
   )

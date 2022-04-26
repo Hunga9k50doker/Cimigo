@@ -133,6 +133,7 @@ export const routesOutside = (lang: string) => {
         trends: `${cimigoUrl}/vi/xu-huong`,
         reports: `${cimigoUrl}/vi/bao-cao`,
         privacyPolicy: `${cimigoUrl}/vi/chinh-sach-bao-mat`,
+        rapidsurveyTermsOfService: `${cimigoUrl}/vi/rapidsurvey-terms-of-service`,
       }
     case Lang.EN:
       return {
@@ -146,6 +147,7 @@ export const routesOutside = (lang: string) => {
         trends: `${cimigoUrl}/en/trends`,
         reports: `${cimigoUrl}/en/research-report`,
         privacyPolicy: `${cimigoUrl}/en/privacy`,
+        rapidsurveyTermsOfService: `${cimigoUrl}/en/rapidsurvey-terms-of-service`,
       }
   }
   return {}

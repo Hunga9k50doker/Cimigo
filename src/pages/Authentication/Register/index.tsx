@@ -18,6 +18,7 @@ import Popup from "components/Popup";
 import Google from "components/SocialButton/Google";
 import Images from "config/images";
 import { useTranslation } from "react-i18next";
+import { routesOutside } from "routers/routes";
 
 interface DataForm {
   firstName: string;
@@ -219,7 +220,9 @@ const Register = () => {
             <span translation-key="register_register_with">{t('register_register_with')}</span>
           </div>
           <Google />
-          <span className={classes.text} translation-key="register_agree_message">{t('register_agree_message')}</span>
+          <span className={classes.text}>
+            <span translation-key="register_agree_message_1">{t('register_agree_message_1')}</span> <a href={routesOutside(i18n.language)?.rapidsurveyTermsOfService} translation-key="register_agree_message_2">{t('register_agree_message_2')}</a>
+          </span>
         </Grid>
       </form>
       <Popup

@@ -24,7 +24,7 @@ const Report = memo(({ projectId }: Props) => {
   const { project } = useSelector((state: ReducerType) => state.project)
 
   const hasReport = () => {
-    return project && project.reports?.length && project.dataStudio && project.status === ProjectStatus.COMPLETED
+    return project && (project.reports?.length || project.dataStudio) && project.status === ProjectStatus.COMPLETED
   }
 
   const onDownLoad = () => {
@@ -41,26 +41,29 @@ const Report = memo(({ projectId }: Props) => {
     <>
       {hasReport() ? (
         <Grid classes={{ root: classes.root }}>
-          <Box display={"flex"} justifyContent="flex-end">
-            <Buttons onClick={onDownLoad} btnType="Blue" padding="11px 18px" translation-key="report_btn_download"><Download sx={{ marginRight: 1 }} /> {t('report_btn_download')}</Buttons>
-          </Box>
-          <Box mt={2}>
-            <iframe
-              width="100%"
-              height="800"
-              src={project.dataStudio}
-              allowFullScreen
-              frameBorder={0}
-              className={classes.iframe}
-            >
-            </iframe>
+          {!!project.reports?.length && (
+            <Box display={"flex"} justifyContent="flex-end">
+              <Buttons onClick={onDownLoad} btnType="Blue" padding="11px 18px" translation-key="report_btn_download"><Download sx={{ marginRight: 1 }} /> {t('report_btn_download')}</Buttons>
+            </Box>
+          )}
+          <Box mt={2} sx={{ minHeight: '600px' }}>
+            {!!project.dataStudio && (
+              <iframe
+                width="100%"
+                height="800"
+                src={project.dataStudio}
+                allowFullScreen
+                frameBorder={0}
+                className={classes.iframe}
+              >
+              </iframe>
+            )}
           </Box>
         </Grid>
       ) : (
         <Grid className={classes.noSetup}>
           <img src={Images.icSad} alt="" />
           <p translation-key="report_coming_soon">{t('report_coming_soon')}</p>
-          <span translation-key="report_no_report_setup">{t('report_no_report_setup')}</span>
         </Grid>
       )}
     </>

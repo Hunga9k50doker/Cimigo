@@ -67,6 +67,7 @@ export const API = {
   },
   ATTACHMENT: {
     DOWNLOAD: '/v1.0/attachment/:id/download',
+    DOWNLOAD_BY_URL: '/v1.0/attachment/download',
   },
   ADMIN: {
     SOLUTION: {

@@ -281,17 +281,15 @@
   display: flex;
   justify-content: center;
   div {
-    margin: 0px 20px;
     display: grid;
     justify-items: center;
     cursor: pointer;
     span {
-      width: 66px;
-      height: 66px;
+      width: 50px;
+      height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #EEF0F2;
     }
     p {
       font-weight: 500;
@@ -305,8 +303,8 @@
   }
 }
 .imgAddPhoto {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
 }
 .btn {
   margin-top: 24px;

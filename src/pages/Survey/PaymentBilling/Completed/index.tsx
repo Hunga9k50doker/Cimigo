@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import classes from './styles.module.scss';
 import images from "config/images";
-import { memo, useEffect } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { EPaymentStatus } from "models/payment";
@@ -60,7 +60,7 @@ const Completed = memo(({ }: Props) => {
       <p className={classes.textBlue} translation-key="payment_billing_equivalent_to">({t('payment_billing_equivalent_to')} {fCurrency2VND(payment()?.totalAmount || 0)} VND)</p>
       <p className={classes.subTitle} style={{ marginBottom: 24 }} translation-key="payment_billing_completed_sub_1">{t('payment_billing_completed_sub_1')}</p>
       <Grid className={classes.box}>
-        <div onClick={getInvoice}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p translation-key="payment_billing_completed_invoice">{t('payment_billing_completed_invoice')}</p></div>
+        <div onClick={getInvoice}><span><img className={classes.imgAddPhoto} src={Images.icInvoice} /></span><p translation-key="payment_billing_completed_invoice">{t('payment_billing_completed_invoice')}</p></div>
       </Grid>
       <p className={classes.subTitle} style={{ marginBottom: 24 }} translation-key="payment_billing_completed_sub_2"
         dangerouslySetInnerHTML={{__html: t('payment_billing_completed_sub_2')}}

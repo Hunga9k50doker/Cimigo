@@ -237,7 +237,7 @@ const Target = memo(({ projectId }: Props) => {
       .then((res) => {
         dispatch(getProjectRequest(projectId))
         dispatch(setSuccessMess(res.message))
-        
+        onClearCustomSampleSize()
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))

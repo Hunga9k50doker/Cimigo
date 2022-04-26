@@ -578,6 +578,7 @@
 .avatar {
   width: 40px;
   height: 40px;
+  object-fit: contain;
   border-radius: 100%;
 }
 .editBox {
@@ -600,4 +601,9 @@
       padding: 0;
     }
   }
+}
+.avatarEmpty {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }

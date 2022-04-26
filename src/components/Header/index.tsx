@@ -236,7 +236,7 @@ const Header = memo((props: HeaderProps) => {
                   <img src={images.icHelp} alt="" className={classes.icHelp} />
                 </IconButton>
                 <IconButton onClick={handleClick} className={classes.itemBtn}>
-                  <img src={user?.avatar || images.icProfile} alt="" className={classes.avatar} referrerPolicy="no-referrer" />
+                  <img src={user?.avatar || images.icProfile} alt="" className={clsx(classes.avatar, {[classes.avatarEmpty]: !user?.avatar})} referrerPolicy="no-referrer" />
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}
