@@ -17,6 +17,7 @@ import { routes } from "routers/routes";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import QueryString from 'query-string';
+import { VALIDATION } from "config/constans";
 
 
 interface IQueryString {
@@ -40,7 +41,7 @@ const ResetPassword = () => {
   const schema = useMemo(() => {
     return yup.object().shape({
       password: yup.string()
-        .matches(new RegExp("^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])[a-zA-Z0-9@#$%^&+=]*$"), { message: t('field_new_password_vali_password'), excludeEmptyString: true })
+        .matches(VALIDATION.password, { message: t('field_new_password_vali_password'), excludeEmptyString: true })
         .required(t('field_new_password_vali_required')),
       confirmPassword: yup.string()
         .oneOf([yup.ref('password')], t('field_confirm_new_password_vali_password_do_not_match'))

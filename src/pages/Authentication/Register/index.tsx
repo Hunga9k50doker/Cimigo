@@ -19,6 +19,7 @@ import Google from "components/SocialButton/Google";
 import Images from "config/images";
 import { useTranslation } from "react-i18next";
 import { routesOutside } from "routers/routes";
+import { VALIDATION } from "config/constans";
 
 interface DataForm {
   firstName: string;
@@ -44,14 +45,14 @@ const Register = () => {
         .email(t('field_email_vali_email'))
         .required(t('field_email_vali_required')),
       password: yup.string()
-        .matches(new RegExp("^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])[a-zA-Z0-9@#$%^&+=]*$"), { message: t('field_password_vali_password'), excludeEmptyString: true })
+        .matches(VALIDATION.password, { message: t('field_password_vali_password'), excludeEmptyString: true })
         .required(t('field_password_vali_required')),
       countryId: yup.object().shape({
         id: yup.number().required(t('field_country_vali_required')),
         name: yup.string().required()
       }).required(),
       isNotify: yup.bool(),
-      phone: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }),
+      phone: yup.string().matches(VALIDATION.phone, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }),
       company: yup.string(),
     })
   }, [i18n.language])

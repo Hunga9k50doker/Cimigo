@@ -25,6 +25,7 @@ import { push } from "connected-react-router";
 import { authPreviewOrPayment } from "../models";
 import { routes } from "routers/routes";
 import { useTranslation } from "react-i18next";
+import { VALIDATION } from "config/constans";
 
 interface DataForm {
   paymentMethodId: number,
@@ -65,8 +66,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       contactPhone: yup.string()
         .when('paymentMethodId', {
           is: (val: number) => val === EPaymentMethod.MAKE_AN_ORDER,
-          then: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, { message: t('field_contact_phone_number_vali_phone'), excludeEmptyString: true }).required(t('field_contact_phone_vali_required')),
-          otherwise: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, { message: t('field_contact_phone_number_vali_phone'), excludeEmptyString: true })
+          then: yup.string().matches(VALIDATION.phone, { message: t('field_contact_phone_number_vali_phone'), excludeEmptyString: true }).required(t('field_contact_phone_vali_required')),
+          otherwise: yup.string().matches(VALIDATION.phone, { message: t('field_contact_phone_number_vali_phone'), excludeEmptyString: true })
         }),
 
       saveForLater: yup.bool(),
@@ -91,8 +92,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       phone: yup.string()
         .when('saveForLater', {
           is: (val: boolean) => val,
-          then: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }).required(t('field_phone_number_vali_required')),
-          otherwise: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true })
+          then: yup.string().matches(VALIDATION.phone, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }).required(t('field_phone_number_vali_required')),
+          otherwise: yup.string().matches(VALIDATION.phone, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true })
         }),
       countryId: yup.object()
         .when('saveForLater', {

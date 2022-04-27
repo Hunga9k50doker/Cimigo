@@ -1,5 +1,5 @@
 import { Add, DeleteOutlineOutlined, EditOutlined, ExpandMoreOutlined } from "@mui/icons-material";
-import { Box, Button, Grid, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
+import { Box, Button, Grid, IconButton, Link, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
 import clsx from "clsx";
 import InputSearch from "components/InputSearch";
 import WarningModal from "components/Modal/WarningModal";
@@ -133,9 +133,13 @@ const List = memo(({ }: Props) => {
 
   const handleLanguageRedirect = (lang?: LangSupport) => {
     if (!itemAction) return
+    onRedirectEdit(itemAction, lang)
     onCloseActionMenu();
+  }
+
+  const onRedirectEdit = (item: Attribute, lang?: LangSupport) => {
     dispatch(push({
-      pathname: routes.admin.attribute.edit.replace(':id', `${itemAction.id}`),
+      pathname: routes.admin.attribute.edit.replace(':id', `${item.id}`),
       search: lang && `?lang=${lang.key}`
     }));
   }
@@ -182,10 +186,10 @@ const List = memo(({ }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
-                            {item.end}
+                            <Link onClick={() => onRedirectEdit(item)}>{item.end}</Link>
                           </TableCell>
                           <TableCell component="th">
-                            {item.start}
+                            <Link onClick={() => onRedirectEdit(item)}>{item.start}</Link>
                           </TableCell>
                           <TableCell component="th">
                             {item?.type?.name}

@@ -1,5 +1,5 @@
 import { Add, DeleteOutlineOutlined, Done, EditOutlined, ExpandMoreOutlined, HideSource } from "@mui/icons-material";
-import { Box, Button, Grid, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
+import { Box, Button, Grid, IconButton, Link, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
 import clsx from "clsx";
 import InputSearch from "components/InputSearch";
 import WarningModal from "components/Modal/WarningModal";
@@ -131,11 +131,8 @@ const List = memo(({ }: Props) => {
 
   const handleLanguageRedirect = (lang?: LangSupport) => {
     if (!itemAction) return
+    onRedirectEdit(itemAction, lang)
     onCloseActionMenu();
-    dispatch(push({
-      pathname: routes.admin.solutionCategoryHome.edit.replace(':id', `${itemAction.id}`),
-      search: lang && `?lang=${lang.key}`
-    }));
   }
 
   const updateStatus = (status: number) => {
@@ -148,6 +145,13 @@ const List = memo(({ }: Props) => {
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onRedirectEdit = (item: SolutionCategoryHome, lang?: LangSupport) => {
+    dispatch(push({
+      pathname: routes.admin.solutionCategoryHome.edit.replace(':id', `${item.id}`),
+      search: lang && `?lang=${lang.key}`
+    }));
   }
 
   return (
@@ -192,7 +196,7 @@ const List = memo(({ }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
-                            {item.name}
+                            <Link onClick={() => onRedirectEdit(item)}>{item.name}</Link>
                           </TableCell>
                           <TableCell component="th">
                             {item?.languages?.map(it => it.language).join(', ')}

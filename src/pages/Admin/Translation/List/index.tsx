@@ -1,5 +1,5 @@
 import { Add, DeleteOutlineOutlined, EditOutlined, ExpandMoreOutlined } from "@mui/icons-material";
-import { Box, Button, Grid, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
+import { Box, Button, Grid, IconButton, Link, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
 import clsx from "clsx";
 import InputSearch from "components/InputSearch";
 import WarningModal from "components/Modal/WarningModal";
@@ -121,8 +121,12 @@ const List = memo(({ }: Props) => {
 
   const handleEdit = () => {
     if (!itemAction) return
+    onRedirectEdit(itemAction)
     onCloseActionMenu();
-    dispatch(push(routes.admin.translation.edit.replace(':id', `${itemAction.id}`)));
+  }
+
+  const onRedirectEdit = (item: Translation) => {
+    dispatch(push(routes.admin.translation.edit.replace(':id', `${item.id}`)));
   }
 
   return (
@@ -167,7 +171,7 @@ const List = memo(({ }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
-                            {item.key}
+                            <Link onClick={() => onRedirectEdit(item)}>{item.key}</Link>
                           </TableCell>
                           <TableCell component="th">
                             {item.data}
