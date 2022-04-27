@@ -83,20 +83,6 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
     fetchOption()
   }, [dispatch])
 
-  useEffect(() => {
-    if (itemEdit && calculationsData?.length) {
-      const _calculationsData = calculationsData.map(item => {
-        const answerIds = item.answers.map(it => it.id).sort()
-        const config = itemEdit.quotaCalculations.find(temp => _.isEqual(temp.answerIds.sort(), answerIds))
-        return {
-          ...item,
-          original: config?.original || 0
-        }
-      })
-      setCalculationsData(_calculationsData)
-    }
-  }, [itemEdit, calculationsData])
-
   const questionsSelected = watch("questionIds")
 
   useEffect(() => {
@@ -119,7 +105,16 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
               res[i].forEach(item => {
                 if (res[i + 1]) {
                   getCalculationsData([...answers, item], i + 1)
-                } else _calculationsData.push({ answers: [...answers, item], original: 0 })
+                } else {
+                  if (itemEdit) {
+                    const answersTemp = [...answers, item]
+                    const answerIds = answersTemp.map(it => it.id).sort()
+                    const config = itemEdit.quotaCalculations.find(temp => _.isEqual(temp.answerIds.sort(), answerIds))
+                    _calculationsData.push({ answers: [...answers, item], original: config?.original || 0 })
+                  } else {
+                    _calculationsData.push({ answers: [...answers, item], original: 0 })
+                  }
+                }
               })
             }
             getCalculationsData()
@@ -135,7 +130,7 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
   const onChangeOriginal = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
     const _calculationsData = [...calculationsData]
     let original = null
-    if (e.target.value !== '' && Number(e.target.value) > 0) original = Number(e.target.value)
+    if (e.target.value !== '' && Number(e.target.value) >= 0) original = Number(e.target.value)
     _calculationsData[index].original = original
     setCalculationsData(_calculationsData)
   }
@@ -150,7 +145,7 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
       ...data,
       calculations: calculationsData.map(it => ({
         answerIds: it.answers?.map(temp => temp.id),
-        original: it.original
+        original: it.original || 0
       }))
     })
   }
