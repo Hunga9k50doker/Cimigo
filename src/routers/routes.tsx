@@ -9,8 +9,10 @@ export const routes = {
     },
     project: {
       invoice: '/callback/project/:id/invoice',
+      create: '/callback/project/create',
     }
   },
+  homePage: '/',
   login: '/login',
   register: '/register',
   forgotPassword: '/forgot-password',

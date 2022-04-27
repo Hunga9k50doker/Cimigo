@@ -10,7 +10,7 @@ import Buttons from "components/Buttons";
 import { routes } from 'routers/routes';
 import { LoginForm } from "models/user";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
 import UserService from "services/user";
 import { useEffect, useMemo, useState } from "react";
@@ -20,6 +20,7 @@ import { setUserLogin } from "redux/reducers/User/actionTypes";
 import { push } from "connected-react-router";
 import Google from "components/SocialButton/Google";
 import { useTranslation } from 'react-i18next';
+import { ReducerType } from "redux/reducers";
 
 
 
@@ -35,6 +36,8 @@ const Login = () => {
         .required(t('field_password_vali_required')),
     })
   }, [i18n.language])
+
+  const { solutionId } = useSelector((state: ReducerType) => state.project)
 
   const dispatch = useDispatch()
   const [isNotVerified, setIsNotVerified] = useState(false)
@@ -58,7 +61,9 @@ const Login = () => {
       .then((res) => {
         localStorage.setItem(EKey.TOKEN, res.token)
         dispatch(setUserLogin(res.user))
-        dispatch(push(routes.project.management))
+        if (solutionId) {
+          dispatch(push(routes.project.create));
+        }
       })
       .catch(e => {
         if (e.detail === 'notVerified') setIsNotVerified(true)

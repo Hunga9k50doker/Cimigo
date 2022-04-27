@@ -134,11 +134,11 @@ const List = memo(({ }: Props) => {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleAdd}>
               Create
             </Button>
-          </Box>
+          </Box> */}
         </Grid>
       </Grid>
       <Grid container justifyContent="center" alignItems="center">

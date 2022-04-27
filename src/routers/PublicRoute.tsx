@@ -19,6 +19,7 @@ const PublicRoute = ({component: Component, ...rest }: PublicRouteProps) => {
           {...rest}
           render={props => {
             if(!isLoggedIn) return ( <Component {...props}/> )
+            if ((props.location.state as any)?.from) return <Redirect to={(props.location.state as any)?.from} />
             return <Redirect to={routes.project.management} />
           }}
         />

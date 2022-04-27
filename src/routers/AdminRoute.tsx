@@ -12,7 +12,12 @@ const AdminRoute = ({component: Component, ...rest }: PrivateRouteProps) => {
           {...rest}
           render={props => {
             if(isLoggedIn && (isAdmin || isSuperAdmin)) return ( <Component {...props}/> )
-            return <Redirect to={routes.login} />
+            return <Redirect to={{
+              pathname: routes.login,
+              state: {
+                from: props.location
+              }
+            }} />
           }}
         />
     );
