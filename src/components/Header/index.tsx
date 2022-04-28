@@ -232,9 +232,9 @@ const Header = memo((props: HeaderProps) => {
             </li>
             {isLoggedIn ?
               <li className={classes.item}>
-                <IconButton className={classes.itemBtn}>
+                {/* <IconButton className={classes.itemBtn}>
                   <img src={images.icHelp} alt="" className={classes.icHelp} />
-                </IconButton>
+                </IconButton> */}
                 <IconButton onClick={handleClick} className={classes.itemBtn}>
                   <img src={user?.avatar || images.icProfile} alt="" className={clsx(classes.avatar, {[classes.avatarEmpty]: !user?.avatar})} referrerPolicy="no-referrer" />
                 </IconButton>

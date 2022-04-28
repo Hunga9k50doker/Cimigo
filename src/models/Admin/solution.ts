@@ -41,6 +41,7 @@ export interface Solution {
   maxPack: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;
+  maxCustomQuestion: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;

@@ -173,8 +173,10 @@
     border-bottom: none;
     padding: 12px 15px;
   }
-  &:hover,
   &:nth-child(even) {
+    background: #F9F9F9;
+  }
+  &:hover {
     background: #eef0f2;
   }
 }

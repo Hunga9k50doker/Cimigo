@@ -36,6 +36,7 @@ export interface Project {
   folderId: number;
   invoiceDemoId: number;
   invoiceDemo: Attachment;
+  enableCustomQuestion: boolean;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;

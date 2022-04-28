@@ -69,6 +69,9 @@ export const API = {
     DOWNLOAD: '/v1.0/attachment/:id/download',
     DOWNLOAD_BY_URL: '/v1.0/attachment/download',
   },
+  CUSTOM_QUESTION_TYPE: {
+    DEFAULT: '/v1.0/custom-question-type',
+  },
   ADMIN: {
     SOLUTION: {
       DEFAULT: '/v1.0/admin/solution',
@@ -121,7 +124,10 @@ export const API = {
     },
     USER: {
       DEFAULT: '/v1.0/admin/user',
-    }
+    },
+    CUSTOM_QUESTION_TYPE: {
+      DEFAULT: '/v1.0/admin/custom-question-type',
+    },
   }
 }
 

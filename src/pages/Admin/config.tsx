@@ -2,7 +2,7 @@ import {
   NavItem, 
   routes 
 } from "routers/routes";
-import { Category, FormatListBulleted, GTranslate, Lightbulb, LiveHelp, Mail, Person, Settings, TableView, Work } from '@mui/icons-material';
+import { Category, FormatListBulleted, GTranslate, HelpOutline, Lightbulb, LiveHelp, Mail, Person, Settings, TableView, Work } from '@mui/icons-material';
 import SolutionCategory from "./SolutionCategory";
 import Solution from "./Solution";
 import SolutionCategoryHome from "./SolutionCategoryHome";
@@ -14,6 +14,7 @@ import EmailTemplate from "./EmailTemplate";
 import ConfigPage from "./ConfigPage";
 import Project from "./Project";
 import User from "./User";
+import CustomQuestionType from "./CustomQuestionType";
 
 export const adminRouter: NavItem[] = [
   {
@@ -84,6 +85,13 @@ export const adminRouter: NavItem[] = [
     name: 'Email template',
     icon: Mail,
     component: EmailTemplate,
+    layout: "/admin"
+  },
+  {
+    path: routes.admin.customQuestionType.root,
+    name: 'Custom question type',
+    icon: HelpOutline,
+    component: CustomQuestionType,
     layout: "/admin"
   },
   {

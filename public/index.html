@@ -39,15 +39,15 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  <iframe style="display:none;" src="https://staging.cimigo.com/getlocalstorage.html" id="ifr"></iframe>
+  <iframe style="display:none;" src="%REACT_APP_CIMIGO_URL%/getlocalstorage.html" id="ifr"></iframe>
   <script>
     window.postCrossDomainMessage = function (msg) {
       var win = document.getElementById('ifr').contentWindow;
-      win.postMessage(msg, "https://staging.cimigo.com")
+      win.postMessage(msg, "%REACT_APP_CIMIGO_URL%")
     }
     function postCrossDomainMessage(msg) {
       var win = document.getElementById('ifr').contentWindow;
-      win.postMessage(msg, "https://staging.cimigo.com")
+      win.postMessage(msg, "%REACT_APP_CIMIGO_URL%")
     }
     window.onload = function () {
       var auth = { auth: { token: localStorage.getItem('token') } }; postCrossDomainMessage(auth)

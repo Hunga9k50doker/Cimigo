@@ -43,6 +43,7 @@ export const AppStatus = () => {
           variant="filled"
           onClose={() => dispach(setSuccessMess(undefined))}
           severity="success"
+          sx={{ backgroundColor: "var(--cimigo-green)", color: '#293306', fontWeight: 500 }}
         >
           {status.success}
         </Alert>

@@ -114,6 +114,11 @@ export enum EStatus {
   Coming_Soon
 }
 
+export const statuses: OptionItem[] = [
+  { id: EStatus.Active, name: "Active" },
+  { id: EStatus.Inactive, name: "Inactive" },
+]
+
 export enum EPaymentMethod {
   CREDIT_OR_DEBIT = 1,
   INTERNET_BANKING,
