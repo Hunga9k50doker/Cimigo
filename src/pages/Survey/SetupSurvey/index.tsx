@@ -506,6 +506,13 @@ const SetupSurvey = memo(({ id }: Props) => {
     }
   }
 
+  const scrollToElement = (id: string) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    const headerHeight = document.getElementById('header')?.offsetHeight || 0
+    window.scrollTo({ behavior: 'smooth', top: el.offsetTop - headerHeight - 10 })
+  }
+
   return (
     <>
       {(project && !editableProject(project)) && (
@@ -1005,7 +1012,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               <Step active={!!project?.category && !!project?.brand && !!project?.variant && !!project?.manufacturer} expanded>
                 <StepLabel
                   StepIconComponent={ColorlibStepIcon}
-                  onClick={() => document.getElementById('basic-information')?.scrollIntoView()}
+                  onClick={() => scrollToElement('basic-information')}
                   classes={{
                     root: classes.rootStepLabel,
                     completed: classes.rootStepLabelCompleted,
@@ -1027,7 +1034,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               </Step>
               <Step active={packs?.length >= 2} expanded>
                 <StepLabel
-                  onClick={() => document.getElementById('upload-packs')?.scrollIntoView()}
+                  onClick={() => scrollToElement('upload-packs')}
                   StepIconComponent={ColorlibStepIcon}
                   classes={{
                     root: classes.rootStepLabel,
@@ -1047,7 +1054,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               </Step>
               <Step active={additionalBrand?.length >= 2} expanded>
                 <StepLabel
-                  onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
+                  onClick={() => scrollToElement('additional-brand-list')}
                   StepIconComponent={ColorlibStepIcon}
                   classes={{
                     root: classes.rootStepLabel,
@@ -1067,7 +1074,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                     <Grid display={"flex"} justifyContent="flex-end">
                       <span
                         className={classes.moreStepContent}
-                        onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
+                        onClick={() => scrollToElement('additional-brand-list')}
                         translation-key="setup_survey_summary_add_brand_more"
                       >
                         {t('setup_survey_summary_add_brand_more', { number: (additionalBrand?.length - 4) })}
@@ -1078,7 +1085,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               </Step>
               <Step active={!!projectAttributes?.length || !!userAttributes?.length} expanded>
                 <StepLabel
-                  onClick={() => document.getElementById('additional-attributes')?.scrollIntoView()}
+                  onClick={() => scrollToElement('additional-attributes')}
                   StepIconComponent={ColorlibStepIcon}
                   classes={{
                     root: classes.rootStepLabel,

@@ -115,7 +115,7 @@ const Header = memo((props: HeaderProps) => {
   }
 
   return (
-    <header className={classes.root}>
+    <header className={classes.root} id="header">
       <div className={classes.container}>
         <li className={clsx(classes.item, classes.menuAction)}>
           <IconButton
