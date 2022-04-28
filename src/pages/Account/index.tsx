@@ -83,7 +83,7 @@ const Account = () => {
                 </div>
                 <div className={classes.content}>
                     <Switch>
-                        <Route exact path={routes.account.userProfile} render={(routeProps) => <UserProfile {...routeProps} dataMenu={dataMenuList} />} />
+                        <Route exact path={routes.account.userProfile} render={(routeProps) => <UserProfile {...routeProps} />} />
                         <Redirect from={routes.account.root} to={routes.account.userProfile} />
                     </Switch>
                     <div className={classes.toggleMenu}>

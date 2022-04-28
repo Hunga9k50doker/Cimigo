@@ -26,10 +26,7 @@ export interface AttributeFormData {
 }
 
 const UserProfile = (props) => {
-    const {  logout,user } = UseAuth();
-    const [isOpen, setOpen] = useState(false);
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const anchorRef = useRef(null);
+    const { user } = UseAuth();
     const [country, setCountry] = useState("Vietnam");
     const handleChangeSelect = event => {
         setCountry(event.target.value);
@@ -124,5 +121,4 @@ const UserProfile = (props) => {
                 </form>
     )
 }
-
 export default UserProfile
