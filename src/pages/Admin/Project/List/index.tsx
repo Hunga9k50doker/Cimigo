@@ -15,7 +15,7 @@ import { Solution } from "models/Admin/solution"
 import { DataPagination, OptionItemT, paymentMethods, SortItem, TableHeaderLabel } from "models/general";
 import { Project, projectStatus } from "models/project";
 import moment from "moment";
-import { memo, useEffect, useState } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
 import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
@@ -28,6 +28,7 @@ const tableHeaders: TableHeaderLabel[] = [
   { name: 'id', label: 'Id', sortable: true },
   { name: 'name', label: 'Name', sortable: true },
   { name: 'status', label: 'Status', sortable: false },
+  { name: 'user', label: 'User', sortable: false },
   { name: 'solution', label: 'Solution', sortable: false },
   { name: 'orderId', label: 'Order Id', sortable: false },
   { name: 'paymentMethodId', label: 'Payment method', sortable: false },
@@ -43,24 +44,23 @@ const filterOptions: FilterOption[] = [
 ]
 
 interface Props {
+  sort: SortItem,
+  setSort: React.Dispatch<React.SetStateAction<SortItem>>,
+  keyword: string,
+  setKeyword: React.Dispatch<React.SetStateAction<string>>,
+  data: DataPagination<Project>,
+  setData: React.Dispatch<React.SetStateAction<DataPagination<Project>>>,
+  filterData: FilterValue,
+  setFilterData: React.Dispatch<React.SetStateAction<FilterValue>>,
 }
 
-const List = memo(({ }: Props) => {
+const List = memo(({ sort, setSort, keyword, setKeyword, data, setData, filterData, setFilterData }: Props) => {
 
   const dispatch = useDispatch()
 
-  const [sort, setSort] = useState<SortItem>();
-
-  const [keyword, setKeyword] = useState<string>('');
-  const [filterData, setFilterData] = useState<FilterValue>({
-    solutionIds: [],
-    statusIds: [],
-    orderIds: [],
-  });
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false);
   const [solutions, setSolutions] = useState<Solution[]>([]);
 
-  const [data, setData] = useState<DataPagination<Project>>();
   const [itemAction, setItemAction] = useState<Project>();
   const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
   const [itemDelete, setItemDelete] = useState<Project>(null);
@@ -205,6 +205,11 @@ const List = memo(({ }: Props) => {
     dispatch(push(routes.admin.project.detail.replace(':id', `${item.id}`)));
   }
 
+  const onRedirectUserDetail = (item: Project) => {
+    if (!item.user) return
+    dispatch(push(routes.admin.user.edit.replace(':id', `${item.user.id}`)));
+  }
+
   const onChangeFilter = (value: FilterValue) => {
     setFilterData(value)
     fetchData({ filter: value, page: 1 })
@@ -221,6 +226,23 @@ const List = memo(({ }: Props) => {
     }
     return []
   }
+
+  const inValidPage = () => {
+    if (!data) return false
+    return data.meta.page > 1 && Math.ceil(data.meta.itemCount / data.meta.take) < data.meta.page
+  }
+
+  const pageIndex = useMemo(() => {
+    if (!data) return 0
+    if (inValidPage()) return data.meta.page - 2
+    return data.meta.page - 1
+  }, [data])
+
+  useEffect(() => {
+    if (inValidPage()) {
+      handleChangePage(null, data.meta.page - 2)
+    }
+  }, [data])
 
   return (
     <div>
@@ -269,10 +291,13 @@ const List = memo(({ }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
-                            <Link onClick={() => onRedirectDetail(item)} component="button">{item.name}</Link>
+                            <Link onClick={() => onRedirectDetail(item)}>{item.name}</Link>
                           </TableCell>
                           <TableCell component="th">
                             <LabelStatus typeStatus={item.status} />
+                          </TableCell>
+                          <TableCell component="th">
+                            {item.user && <Link onClick={() => onRedirectUserDetail(item)}>{item.user.fullName}</Link>}
                           </TableCell>
                           <TableCell>{item.solution?.title}</TableCell>
                           <TableCell>{!!item.payments?.length && item.payments[0].orderId}</TableCell>
@@ -306,7 +331,7 @@ const List = memo(({ }: Props) => {
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={9}>
+                      <TableCell align="center" colSpan={10}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>
@@ -320,7 +345,7 @@ const List = memo(({ }: Props) => {
               component="div"
               count={data?.meta?.itemCount || 0}
               rowsPerPage={data?.meta?.take || 10}
-              page={data?.meta?.page ? data?.meta?.page - 1 : 0}
+              page={pageIndex}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />

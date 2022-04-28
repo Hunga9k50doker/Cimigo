@@ -17,6 +17,7 @@ import ControlCheckbox from "components/ControlCheckbox";
 import InputCheckbox from "components/InputCheckbox";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import { Check } from "@mui/icons-material";
 
 interface Props {
   projectId: number,
@@ -126,7 +127,7 @@ const Location = memo(({ projectId, project, questions }: Props) => {
                 {!!question.targetAnswerSuggestions?.length && (
                   <Grid classes={{ root: classes.rootTags }}>
                     <p translation-key="target_suggest_title">{t('target_suggest_title')}:</p>
-                    <Stack direction="row" spacing={1}>
+                    <Stack direction="row" spacing={0} flexWrap="wrap" className={classes.listTag}>
                       {question.targetAnswerSuggestions.map(suggestion => (
                         <Chip className={clsx({[classes.suggestionSeleted]: _isSelectedSuggestion(suggestion)})} onClick={() => _onClickSuggestion(suggestion)} key={suggestion.id} label={suggestion.name} clickable variant="outlined" />
                       ))}
@@ -148,10 +149,13 @@ const Location = memo(({ projectId, project, questions }: Props) => {
                             onClick={() => onChangeGroupSelected(question.id, group)}
                             classes={{ selected: classes.selected }}
                           >
-                            <InputCheckbox
+                            <div className={classes.boxSelecGroup}>
+                              {!!dataSelected[question.id]?.find(it => !!group.targetAnswers?.find(temp => temp.id === it.id)) && <Check />}
+                            </div>
+                            {/* <InputCheckbox
                               classes={{ root: classes.rootCheckboxLocation }}
                               checked={!!dataSelected[question.id]?.find(it => !!group.targetAnswers?.find(temp => temp.id === it.id))}
-                            />
+                            /> */}
                             <ListItemText primary={group.name} classes={{ primary: classes.rootPrimary }} />
                           </ListItemButton>
                         </ListItem>
