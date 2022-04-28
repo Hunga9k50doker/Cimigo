@@ -1,0 +1,223 @@
+.root {
+    background: #eef0f2;
+}
+.main {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 60px;
+    margin-top: 10px;
+    @media only screen and (max-width: 767px) {
+        margin-bottom: 0px ;
+        margin-top: 0px;
+    }
+    .content {
+        background-color: white;
+        width: 764px;
+        max-width: 764px;
+        margin-bottom: 10px;
+        position: relative;
+        .toggleMenu {
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            width: 227px;
+            max-width: 227px;
+            display: flex;
+            justify-content: end;
+            @media only screen and (min-width: 1024px) {
+                display: none;
+            }
+            .btnArrow {
+                background-color: rgba(221, 221, 221, 1);
+                border-radius: 0%;
+                max-width: 28px;
+                max-height: 28px;
+                margin-top: 12px;
+            }
+        }
+        .positionPopper {
+            .btnOfMenuToggle {
+                transition: 0.4s;
+                padding-left: 0px;
+                svg,
+                p {
+                    color: rgba(28, 28, 28, 0.65);
+                    text-transform: none;
+                }
+                p {
+                    margin-left: 12px;
+                    font-size: 16px;
+                }
+                &:hover,
+                &:focus {
+                    border-left: 3px solid rgba(166, 204, 23, 1);
+                    border-radius: 0%;
+                    svg {
+                        margin-left: 16px;
+                        color: rgba(28, 28, 28, 1);
+                    }
+                    p {
+                        color: rgba(28, 28, 28, 1);
+                    }
+                }
+            }
+            position: absolute !important;
+            right: 0% !important;
+            top: 100% !important;
+            .lineOfMenuToggle {
+                border: 1px solid rgba(28, 28, 28, 0.2);
+                margin-top: -7px;
+                margin-bottom: 13px;
+            }
+            >div {
+                padding: 5px 10px 10px 10px;
+            }
+            ul li {
+                transition: 0.4s;
+                margin-bottom: 20px;
+                a {
+                    color: rgba(28, 28, 28, 0.65);
+                    font-weight: 500;
+
+                    p {
+                        margin-left: 15px;
+                    }
+
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+                &:not(:active, :focus) {
+                    padding-left: 0px;
+                }
+
+                &:hover,
+                &:focus {
+                    a {
+                        margin-left: 15px;
+                        color: rgba(28, 28, 28, 1);
+                    }
+
+                    border: none !important;
+                    border-left: 3px solid rgba(166, 204, 23, 1) !important;
+                }
+            }
+            .borderActive {
+                a {
+                    margin-left: 15px;
+
+                    p {
+                        margin-left: 15px;
+                    }
+                }
+                border: none !important;
+                border-left: 3px solid rgba(166, 204, 23, 1) !important;
+            }
+        }
+    }
+}
+
+.aItemMenuList {
+    display: flex;
+    align-items: center;
+    border: none;
+    font-size: 16px;
+    white-space: pre-wrap;
+    line-height: 22px;
+    font-weight: 500;
+}
+
+.menuList {
+    margin-top: 0px;
+    width: 240px;
+    max-width: 240px;
+    background-color: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(28, 28, 28, 0.05);
+    padding: 10px 0px 0px 0px;
+    margin-bottom: 10px;
+
+    .icon {
+        margin-right: 16px;
+        width: 20px;
+    }
+
+    .lineOfMenuList {
+        border: 1px solid rgba(28, 28, 28, 0.2);
+        margin-top: -10px;
+        margin-bottom: 10px;
+    }
+    .aItemMenuList {
+        color: rgba(28, 28, 28, 1);
+        font-weight: 500;
+        svg {
+            width: 20px;
+        }
+    }
+    .border {
+        margin-left: 15px;
+        border: none;
+        border-right: 3px solid rgba(166, 204, 23, 1);
+        margin-bottom: 20px;
+        color: rgba(28, 28, 28, 1);
+        transition: 0.4s;
+        background-color: transparent;
+        &:not(:hover, :active) {
+            border: none;
+            a {
+
+                color: rgba(28, 28, 28, 0.65);
+            }
+        }
+    }
+
+    .btnOfMenuList {
+        display: flex;
+        justify-content: start;
+        color: rgba(28, 28, 28, 0.65);
+        font-size: 16px;
+        font-weight: 500;
+        text-transform: none;
+        border-radius: 0%;
+        transition: 0.4s;
+        width: 100%;
+        padding-left: 31px;
+        margin-top: 6px;
+        background-color: transparent;
+        &:hover,
+        &active {
+            border-right: 3px solid rgba(166, 204, 23, 1);
+            color: rgba(28, 28, 28, 1);
+        }
+        svg {
+            width: 20px;
+            margin-right: 18px;
+        }
+
+        p {
+            margin-left: -2px;
+        }
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .menuList {
+        display: none;
+    }
+
+}
+
+.borderActive {
+    border-right: 3px solid rgba(166, 204, 23, 1) !important;
+    a {
+        color: rgba(28, 28, 28, 1) !important;
+    }
+    &:hover,
+    &active {
+        border-right: 3px solid rgba(166, 204, 23, 1) !important;
+        a {
+            color: rgba(28, 28, 28, 1) !important;
+            font-weight: 600;
+        }
+    }
+}

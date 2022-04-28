@@ -1,22 +1,10 @@
 .root {
     background: #eef0f2;
 }
-
 .rootMenu {
     width: 227px;
     max-width: 227px;
     padding: 5px 17px;
-
-    .aItemMenu {
-        color: rgba(28, 28, 28, 0.9);
-    }
-
-    .lineOfMenu {
-        border: 1px solid rgba(28, 28, 28, 0.2);
-        margin-top: -7px;
-        margin-bottom: 3px;
-    }
-
     .btnOfMenu {
         margin-left: -8px;
         margin-top: 5px;
@@ -24,7 +12,6 @@
         transition: 0.4s;
         color: rgba(28, 28, 28, 0.65);
         background-color: transparent;
-
         &:hover,
         &:active {
             border-left: 3px solid rgba(166, 204, 23, 1);
@@ -35,190 +22,52 @@
                 color: rgba(28, 28, 28, 0.9);
             }
         }
-
         svg {
             margin-right: 17px;
             width: 20px;
             height: 18px;
             color: rgba(28, 28, 28, 0.65);
         }
-
         p {
-            // color: rgba(28, 28, 28, 0.9);
             font-size: 16px;
             font-weight: 500;
             text-transform: none;
         }
     }
-
-    .itemsOfToggle {
-        border-left: 3px solid rgba(166, 204, 23, 1);
-        padding: 0px;
-        margin-bottom: 15px;
-        padding: 7px 0px 7px 10px;
-        min-height: 0px;
-        transition: 0.4s;
-        background-color: transparent;
-
-        a {
-            color: rgba(28, 28, 28, 1) !important;
-        }
-
-        &:not(:hover, :active) {
-            padding-left: 0px;
-            border: none;
-
-            a {
-                color: rgba(28, 28, 28, 0.65) !important;
-            }
-        }
-    }
-
 }
 
-.toggleMenu {
-    position: absolute;
-    right: 0%;
-    top: 24px;
-    background-color: rgba(221, 221, 221, 1);
-    width: 28px;
-    height: 28px;
-    border-radius: 0%;
-    color: rgba(28, 28, 28, 0.65);
-
-    &:hover,
-    &:active,&:visited {
-        background-color: rgba(221, 221, 221, 1);
-
-    }
-
+.rowInfo {
+    display: flex;
+    margin-bottom: 43px;
 }
 
 .form {
     background-color: rgba(255, 255, 255, 1);
     padding: 35px 100px 35px 100px;
-    width: 764px;
     max-width: 764px;
-}
-
-.main {
-    display: flex;
-    justify-content: center;
-
-}
-
-.aItemMenuList,
-.aItemMenu {
-    display: flex;
-    align-items: center;
-    border: none;
-    font-size: 16px;
-    white-space: pre-wrap;
-    line-height: 22px;
-    font-weight: 500;
-}
-
-.icon {
-    margin-right: 16px;
-    width: 20px;
-
-}
-
-.menuList {
-    width: 240px;
-    max-width: 240px;
-    background-color: rgba(255, 255, 255, 1);
-    border: 1px solid rgba(28, 28, 28, 0.05);
-    padding: 5px 0px 10px 0px;
-
-    .lineOfMenuList {
-        border: 1px solid rgba(28, 28, 28, 0.2);
-        margin-top: -20px;
-        margin-bottom: 4px;
-    }
-
-    .aItemMenuList {
-        color: rgba(28, 28, 28, 1);
-        font-weight: 500;
-
-        svg {
-            width: 20px;
-        }
-    }
-
-    .border {
-        margin-left: 15px;
-        border: none;
-        border-right: 3px solid rgba(166, 204, 23, 1);
-        margin-bottom: 20px;
-        color: rgba(28, 28, 28, 1);
-        transition: 0.4s;
-        background-color: transparent;
-
-        &:not(:hover, :active) {
-            border: none;
-
-            a {
-
-                color: rgba(28, 28, 28, 0.65);
-            }
-        }
-    }
-
-    .btnOfMenuList {
-        display: flex;
-        justify-content: start;
-        color: rgba(28, 28, 28, 0.65);
-        font-size: 16px;
-        font-weight: 500;
-        text-transform: none;
-        // margin-left: 23px;
-        border-radius: 0%;
-        transition: 0.4s;
-        width: 100%;
-        padding-left: 31px;
-        margin-top: 6px;
-        background-color: transparent;
-
-        &:hover,
-        &active {
-            border-right: 3px solid rgba(166, 204, 23, 1);
-            color: rgba(28, 28, 28, 1);
-        }
-
-        svg {
-            width: 20px;
-            margin-right: 18px;
-        }
-
-        p {
-            margin-left: -2px;
-        }
-    }
+    height: 100%;
+    width: 100%;
 }
 
 .personalImage {
-
     width: 120px;
     max-width: 120px;
     height: 120px;
+    min-width: 120px;
     max-height: 120px;
     position: relative;
-    object-fit: cover;
-    .avatar{
+    .avatar {
         object-fit: cover;
-
         position: absolute;
         top: 0;
         left: 0;
-       width: 100%;
+        width: 100%;
         height: 100%;
         border-radius: 100%;
     }
     input[type="file"] {
         display: none;
     }
-
     .uploadAvatar {
         position: absolute;
         right: 0%;
@@ -231,7 +80,6 @@
         align-items: center;
         border-radius: 50%;
         background-color: rgba(238, 240, 242, 1);
-
         svg {
             width: 17px;
             height: 16px;
@@ -242,7 +90,6 @@
 
 .personalInfo {
     margin: 10px 10px 0px 35px;
-
     .name {
         font-size: 24px;
         line-height: 30px;
@@ -250,7 +97,6 @@
         margin-bottom: 6px;
         margin-top: 5px;
     }
-
     .country {
         font-size: 14px;
         font-weight: 500;
@@ -264,26 +110,19 @@
     margin-bottom: 10px;
     display: flex;
     margin-left: -10px;
-
     div:first-child {
         margin-right: 10px;
         margin-left: 10px;
     }
-
     p {
         margin-left: -15px !important;
-
     }
-
     input {
         min-width: 270px;
-
     }
-
 }
 
 .inputFull {
-
     margin-bottom: 15px;
 
     p {
@@ -300,7 +139,12 @@
     text-transform: none;
     line-height: 16px;
     float: right;
-
+    margin-bottom: 36px;
+    margin-top: 6px;
+    @media only screen and (max-width: 767px) {
+        margin-bottom: 24px;
+        margin-top: -6px;
+    }
     &:hover {
         background-color: rgba(31, 97, 169, 1);
     }
@@ -315,10 +159,8 @@
         color: rgba(28, 28, 28, 0.9);
         margin-top: 2px;
     }
-
     &:first-child {
         margin-left: 0px !important;
-
     }
 }
 
@@ -327,20 +169,18 @@
     height: 14px;
     color: rgba(50, 50, 50, 1);
 }
-@media only screen and (min-width: 1024px) { 
-    .inputFlex{
-        img{
+
+@media only screen and (min-width: 1024px) {
+    .inputFlex {
+        img {
             margin-left: -45px;
         }
     }
 }
+
 @media only screen and (max-width: 1024px) {
     .menuList {
         display: none;
-    }
-
-    .form {
-        position: relative;
     }
     .form {
         padding: 30px 24px 25px 24px;
@@ -352,7 +192,6 @@
         font-size: 14px !important;
         font-weight: 400;
     }
-
     .inputFlex {
         display: initial;
         font-size: 14px !important;
@@ -360,49 +199,42 @@
         div:first-child {
             margin-top: -15px;
         }
-
         img {
             margin-left: -30px;
         }
     }
-
     .selectOfForm {
         margin-top: -2px !important;
         margin-bottom: 15px;
-
         div:first-child {
             margin: auto;
             padding-top: 15px;
         }
     }
-
     .btnSave {
         width: 100%;
     }
-
     .personalImage {
-
-        max-height: 64px;
-        max-width: 64px;
-
+        max-height: 64px !important;
+        max-width: 64px !important;
+        min-width: 64px !important;
         .uploadAvatar {
             max-width: 18px;
             max-height: 18px;
-
             svg {
                 max-width: 10px;
                 max-height: 10px;
             }
         }
     }
-
     .personalInfo {
-        margin: 0px 10px 0px 24px;
-
+        margin: 5px 10px 0px 24px;
         .name {
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 0px;
+            line-height: 19px;
+            margin-bottom: 4px;
         }
         .country {
             font-size: 14px;
@@ -412,8 +244,7 @@
     .form {
         padding: 30px 24px 25px 24px;
     }
-    .iconReport{
+    .iconReport {
         display: none;
     }
-
 }

@@ -1,24 +1,14 @@
-import { Button, Grid, Icon, IconButton, Menu, MenuItem, MenuList, FormControl, InputAdornment, Select } from "@mui/material"
-import Footer from "components/Footer"
-import Header from "components/Header"
+import { Button, Grid, MenuItem,  FormControl, InputAdornment, Select } from "@mui/material"
 import { useRef, useState } from "react";
 import classes from './styles.module.scss';
-import icUserProfile from '@mui/icons-material/PersonOutline';
-import icChangePassword from '@mui/icons-material/Loop';
-import iconMenuOpen from 'assets/img/icon/menu-open.svg';
-import icPaymentInfo from '@mui/icons-material/Payment';
-import icLogout from '@mui/icons-material/Logout';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import icDoubleArrowLeft from '@mui/icons-material/KeyboardDoubleArrowLeft';
-import icReport from '@mui/icons-material/Report';
-import clsx from "clsx";
-import SvgIcon from '@mui/material/SvgIcon';
+import{CameraAlt,Report}  from '@mui/icons-material';
 import Inputs from "components/Inputs";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import UseAuth from "hooks/useAuth";
 import images from "config/images";
+
 
 const schema = yup.object().shape({
     firstName: yup.string().required('First name is required.'),
@@ -34,13 +24,13 @@ export interface AttributeFormData {
     phone: string;
     company: string
 }
-const Profile = () => {
 
+const UserProfile = (props) => {
     const {  logout,user } = UseAuth();
     const [isOpen, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const anchorRef = useRef(null);
-    const [country, setCountry] = useState("Vietnam");// <--------------(Like this).
+    const [country, setCountry] = useState("Vietnam");
     const handleChangeSelect = event => {
         setCountry(event.target.value);
     };
@@ -49,76 +39,12 @@ const Profile = () => {
         mode: 'onChange'
     });
     const onSubmit = (data) => console.log(data);
-    const dataMenuList = [
-        {
-            icon: icUserProfile,
-            link: "",
-            name: "User profile",
-        },
-        {
-            icon: icChangePassword,
-            link: "",
-            name: "Change password",
-        },
-        {
-            icon: icPaymentInfo,
-            link: "",
-            name: "Payment info",
-        },
-    ]
-    return (
-        <Grid className={classes.root}>
-            <Header project />
-            <Grid className={classes.main}>
-                <Menu open={isOpen}
-                    onClose={() => setOpen(false)}
-                    anchorEl={anchorRef.current}
-                    classes={{ paper: classes.rootMenu }}
-                >
-                    {dataMenuList.map(item => (
-                        <MenuItem key={item.name} className={classes.itemsOfToggle}>
-                            <a href={item.link} className={classes.aItemMenu}>
-                                <SvgIcon component={item.icon} className={classes.icon}></SvgIcon>
-                                <p>{item.name}</p>
-                            </a>
-                        </MenuItem>
-                    ))}
-                    <Grid className={classes.lineOfMenu}></Grid>
-                    <Button className={classes.btnOfMenu} onClick={logout}>
-                        <Icon component={icLogout}></Icon>
-                        <p>Logout</p>
-                    </Button>
-                </Menu>
-                <div className={classes.menuList}>
-                    <MenuList >
-                        {dataMenuList.map(item => (
-                            <MenuItem key={item.name} className={classes.border}>
-                                <a href={item.link} className={classes.aItemMenuList}>
-                                    <SvgIcon component={item.icon} className={classes.icon}></SvgIcon>
-                                    <p>{item.name}</p>
-                                </a>
-                            </MenuItem>
-                        ))}
-                    </MenuList>
-                    <Grid className={classes.lineOfMenuList}></Grid>
-                    <Button className={classes.btnOfMenuList} onClick={logout}>
-                        <Icon component={icLogout}></Icon>
-                        <p>Logout</p>
-                    </Button>
-                </div>
-                <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
-                     <IconButton className={classes.toggleMenu}
-                        ref={anchorRef}
-                        onClick={() => setOpen(true)}
-                    >
-                        <SvgIcon component={icDoubleArrowLeft} ></SvgIcon>
-                    </IconButton> 
-                  
-                    <Grid sx={{ display: 'flex', marginBottom: "35px" }}>
+    return ( <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
+                    <Grid className={classes.rowInfo}>
                         <div className={classes.personalImage}>
                             <img src={user?.avatar || images.icProfile} alt="" className={classes.avatar}/>
                             <label htmlFor="upload-photo" className={classes.uploadAvatar}>
-                                <CameraAltIcon></CameraAltIcon>
+                                <CameraAlt></CameraAlt>
                             </label>
                             <input type="file" id="upload-photo" />
                         </div>
@@ -173,7 +99,6 @@ const Profile = () => {
                                     onChange={handleChangeSelect}
                                     sx={{ maxHeight: "48px" }}
                                 >
-                                    {/* map */}
                                     <MenuItem value="Vietnam">Vietnam</MenuItem>
                                     <MenuItem value="English">English</MenuItem>
                                 </Select>
@@ -188,7 +113,7 @@ const Profile = () => {
                             placeholder="Cimigo"
                             endAdornment={
                                 <InputAdornment position="end">
-                                    <SvgIcon component={icReport} className={classes.iconReport}></SvgIcon>
+                                    <Report className={classes.iconReport}></Report>
                                 </InputAdornment>
                             }
                             inputRef={register('company')}
@@ -197,10 +122,7 @@ const Profile = () => {
                     </Grid>
                     <Button type='submit' children='Save changes' className={classes.btnSave} />
                 </form>
-            </Grid>
-            <Footer />
-        </Grid>
     )
 }
 
-export default Profile
+export default UserProfile
