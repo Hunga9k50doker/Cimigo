@@ -84,6 +84,7 @@ const Account = () => {
                 <div className={classes.content}>
                     <Switch>
                         <Route exact path={routes.account.userProfile} render={(routeProps) => <UserProfile {...routeProps} />} />
+                        <Route exact path={routes.account.changePassword} render={(routeProps) => <ChangePassword {...routeProps} />} />
                         <Redirect from={routes.account.root} to={routes.account.userProfile} />
                     </Switch>
                     <div className={classes.toggleMenu}>
