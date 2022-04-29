@@ -102,7 +102,7 @@ const ResetPassword = () => {
             inputRef={register('confirmPassword')}
             errorMessage={errors.confirmPassword?.message}
           />
-          <Buttons type={"submit"} children={t('reset_password_btn_submit')} translation-key="reset_password_btn_submit" btnType="Blue" padding="16px 0px" />
+          <Buttons type={"submit"} children={t('reset_password_btn_submit')} translation-key="reset_password_btn_submit" btnType="Blue" padding="11px 16px" />
         </Grid>
       </form>
       <Footer />

@@ -123,7 +123,7 @@ const Login = () => {
               {t('login_invalid_error')}
             </Typography>
           )}
-          <Buttons type={'submit'} children={t('login_btn_login')} btnType="Blue" padding="16px 0px" translation-key="login_btn_login" />
+          <Buttons type={'submit'} children={t('login_btn_login')} btnType="Blue" padding="11px 16px" translation-key="login_btn_login" />
           <div className={classes.separator}>
             <span translation-key="login_login_with">{t('login_login_with')}</span>
           </div>

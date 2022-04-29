@@ -216,7 +216,7 @@ const Register = () => {
             }
             label={<span translation-key="register_notify_checkbox">{t('register_notify_checkbox')}</span>}
           />
-          <Buttons type={"submit"} padding="16px 0px" translation-key="register_btn_register" children={t('register_btn_register')} btnType="Blue" />
+          <Buttons type={"submit"} padding="11px 16px" translation-key="register_btn_register" children={t('register_btn_register')} btnType="Blue" />
           <div className={classes.separator}>
             <span translation-key="register_register_with">{t('register_register_with')}</span>
           </div>

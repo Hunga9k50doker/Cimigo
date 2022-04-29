@@ -8,6 +8,7 @@ export const API = {
     ACTIVE: '/v1.0/user/active',
     SEND_EMAIL_FORGOT_PASSWORD: '/v1.0/user/send-email-forgot-password',
     FORGOT_PASSWORD: '/v1.0/user/forgot-password',
+    CHECK_ISVALID_CODE: '/v1.0/user/check-isvalid-code'
   },
   USER: {
     PAYMENT_INFO: '/v1.0/user/payment-info'

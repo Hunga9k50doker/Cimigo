@@ -16,6 +16,10 @@ import { TargetQuestionType } from "models/Admin/target"
 import LabelStatus from "components/LableStatus"
 import { paymentStatuses } from "models/payment"
 import { EPaymentMethod, paymentMethods } from "models/general"
+import { Pack } from "models/pack"
+import { AttachmentService } from "services/attachment"
+import FileSaver from 'file-saver';
+import { getUrlExtension } from "utils/image"
 
 
 interface Props {
@@ -57,6 +61,17 @@ const Detail = memo((props: Props) => {
 
   const payment = () => {
     return (project?.payments || [])[0]
+  }
+
+  const onDownloadPackImage = (pack: Pack) => {
+    dispatch(setLoading(true))
+    AttachmentService.downloadByUrl(pack.image)
+      .then((res) => {
+        const ext = getUrlExtension(pack.image)
+        FileSaver.saveAs(res.data, `${pack.name}.${ext}`)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
   return (
@@ -152,7 +167,7 @@ const Detail = memo((props: Props) => {
                   <Box className={classes.packBox}>
                     {project?.packs?.map(item => (
                       <Paper key={item.id} className={classes.packItem}>
-                        <img src={item.image} alt="" />
+                        <img src={item.image} alt="" onClick={() => onDownloadPackImage(item)} />
                         <div className={classes.infor}>
                           <div className={classes.inforItem}>Pack Name: <strong>{item.name}</strong></div>
                           <div className={classes.inforItem}>Pack type: <strong>{item.packType?.name}</strong></div>

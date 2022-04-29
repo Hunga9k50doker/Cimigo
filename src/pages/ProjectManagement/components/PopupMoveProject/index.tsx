@@ -84,8 +84,8 @@ const PopupMoveProject = memo((props: PopupMoveProjectProps) => {
           />
         </Box>
         <Box className={classes.btn}>
-          <Buttons children="Cancel" btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel} />
-          <Buttons disabled={!itemSelected} children={'Move'} btnType='Blue' padding='10px 16px' onClick={() => _onMove()} />
+          <Buttons children="Cancel" btnType='TransparentBlue' padding='11px 16px' onClick={_onCancel} />
+          <Buttons disabled={!itemSelected} children={'Move'} btnType='Blue' padding='11px 16px' onClick={() => _onMove()} />
         </Box>
       </Box>
     </Dialog>

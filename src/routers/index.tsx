@@ -17,6 +17,8 @@ import Admin from 'pages/Admin';
 import CallbackInvoice from 'pages/Callback/Project/Invoice';
 import AdminRoute from './AdminRoute';
 import CallbackCreateProject from 'pages/Callback/Project/Create';
+import InvalidResetPassword from 'pages/Authentication/InvalidResetPassword';
+import CallbackForgotPassword from 'pages/Callback/User/ForgotPassword';
 // import HomePage from 'pages/Home';
 
 const Routers = () => {
@@ -29,11 +31,14 @@ const Routers = () => {
         <PublicRoute exact path={routes.login} component={Login}/>
         <PublicRoute exact path={routes.register} component={Register}/>
         <PublicRoute exact path={routes.forgotPassword} component={ForgotPassword}/>
+        <PublicRoute exact path={routes.resetPassword} component={ResetPassword}/>
+        <PublicRoute exact path={routes.invalidResetPassword} component={InvalidResetPassword}/>
+        <PublicRoute exact path={routes.callback.user.forgotPassword} component={CallbackForgotPassword}/>
+        <PublicRoute exact path={routes.callback.user.active} component={CallbackActiveUser}/>
+
         <PrivateRoute exact path={routes.project.management} component={ProjectManagement}/>
         <PrivateRoute exact path={routes.project.create} component={CreateProject}/>
         <PrivateRoute path={routes.project.detail.root} component={Survey}/>
-        <PublicRoute exact path={routes.callback.user.active} component={CallbackActiveUser}/>
-        <PublicRoute exact path={routes.callback.user.forgotPassword} component={ResetPassword}/>
         <PrivateRoute exact path={routes.callback.project.invoice} component={CallbackInvoice}/>
         <AdminRoute path={routes.admin.root} component={Admin}/>
         {/* <PublicRoute exact path={routes.homePage} component={HomePage}/> */}

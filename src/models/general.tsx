@@ -132,3 +132,8 @@ export const paymentMethods: OptionItem[] = [
   { id: EPaymentMethod.BANK_TRANSFER, name: "Bank transfer" },
   { id: EPaymentMethod.MAKE_AN_ORDER, name: "Make an order" }
 ]
+
+export enum ETypeVerifyCode {
+  VERIFY_EMAIL = 1,
+  RESET_PASSWORD = 2
+}

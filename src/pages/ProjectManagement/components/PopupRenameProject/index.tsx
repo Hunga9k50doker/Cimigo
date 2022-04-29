@@ -85,8 +85,8 @@ const PopupRenameProject = memo((props: PopupRenameProjectProps) => {
             />
           </Box>
           <Box className={classes.btn}>
-            <Buttons children={t('common_cancel')} btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel} translation-key="common_cancel"/>
-            <Buttons children={t('common_save')} type="submit" btnType='Blue' padding='10px 16px' translation-key="common_save"/>
+            <Buttons children={t('common_cancel')} btnType='TransparentBlue' padding='11px 16px' onClick={_onCancel} translation-key="common_cancel"/>
+            <Buttons children={t('common_save')} type="submit" btnType='Blue' padding='11px 16px' translation-key="common_save"/>
           </Box>
         </Box>
       </form>
