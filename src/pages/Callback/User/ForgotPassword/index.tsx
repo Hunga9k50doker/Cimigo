@@ -6,6 +6,11 @@ import { useParams } from "react-router-dom"
 import { setLoading } from "redux/reducers/Status/actionTypes"
 import { routes } from "routers/routes"
 import UserService from "services/user"
+import QueryString from 'query-string';
+
+interface IQueryString {
+  email?: string
+}
 
 interface Params {
   code: string
@@ -13,6 +18,8 @@ interface Params {
 
 const CallbackForgotPassword = () => {
   const { code } = useParams<Params>()
+  const { email }: IQueryString = QueryString.parse(window.location.search);
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -27,7 +34,10 @@ const CallbackForgotPassword = () => {
         type: ETypeVerifyCode.RESET_PASSWORD
       })
         .then(() => {
-          dispatch(push(routes.resetPassword.replace(":code", code)))
+          dispatch(push({
+            pathname: routes.resetPassword.replace(":code", code),
+            search: email && `?email=${email}`
+          }));
         })
         .catch(() => {
           dispatch(push(routes.invalidResetPassword))
