@@ -137,15 +137,19 @@ const Header = memo((props: HeaderProps) => {
                 </a>
               </MenuItem>
             ))}
-            <Grid className={classes.lineOfToggle} />
-            <button className={classes.buttonOfToggle} onClick={() => history.push(routes.login)}>
-              <img src={images.icArrowLogin} alt="" className={classes.icButtonOfToggle} />
-              <span translation-key="header_login">{t('header_login')}</span>
-            </button>
-            <button className={classes.buttonOfToggle} onClick={() => history.push(routes.register)}>
-              <img src={images.icArrowRegister} alt="" className={classes.icButtonOfToggle} />
-              <span translation-key="header_register">{t('header_register')}</span>
-            </button>
+            {!isLoggedIn && (
+              <>
+                <Grid className={classes.lineOfToggle} />
+                <button className={classes.buttonOfToggle} onClick={() => history.push(routes.login)}>
+                  <img src={images.icArrowLogin} alt="" className={classes.icButtonOfToggle} />
+                  <span translation-key="header_login">{t('header_login')}</span>
+                </button>
+                <button className={classes.buttonOfToggle} onClick={() => history.push(routes.register)}>
+                  <img src={images.icArrowRegister} alt="" className={classes.icButtonOfToggle} />
+                  <span translation-key="header_register">{t('header_register')}</span>
+                </button>
+              </>
+            )}
           </Menu>
         </li>
         <a onClick={onGoHome}>
@@ -236,12 +240,15 @@ const Header = memo((props: HeaderProps) => {
                   <img src={images.icHelp} alt="" className={classes.icHelp} />
                 </IconButton> */}
                 <IconButton onClick={handleClick} className={classes.itemBtn}>
-                  <img src={user?.avatar || images.icProfile} alt="" className={clsx(classes.avatar, {[classes.avatarEmpty]: !user?.avatar})} referrerPolicy="no-referrer" />
+                  <img src={user?.avatar || images.icProfile} alt="" className={clsx(classes.avatar, { [classes.avatarEmpty]: !user?.avatar })} referrerPolicy="no-referrer" />
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}
                   open={openProfile}
                   onClose={handleClose}
+                  MenuListProps={{
+                    sx: { padding: 0 }
+                  }}
                   classes={{ paper: classes.menuProfile }}
                 >
                   {/* <MenuItem className={classes.itemAciton}>
