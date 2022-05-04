@@ -109,18 +109,15 @@
   position: relative;
   margin: 0 auto;
   box-sizing: border-box;
-  max-width: 1240px !important;
   padding-left: 64px;
   padding-right: 64px;
 
   @media only screen and (max-width: 1024px) {
-    max-width: 1024px !important;
     padding-left: 24px;
     padding-right: 24px;
   }
 
   @media only screen and (max-width: 767px) {
-    max-width: 550px !important;
     padding-left: 10px;
     padding-right: 19px;
     height: 58px;
@@ -206,7 +203,9 @@
 .btnLogin {
   padding-right: 10px;
   white-space: nowrap;
-
+  button {
+    white-space: nowrap;
+  }
   @media only screen and (max-width: 767px) {
     button {
       border: unset;
@@ -226,6 +225,9 @@
 }
 
 .btnLogout {
+  button {
+    white-space: nowrap;
+  }
   @media only screen and (max-width: 767px) {
     button {
       border: unset;

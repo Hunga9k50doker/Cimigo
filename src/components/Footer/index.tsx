@@ -4,7 +4,6 @@ import facebookIcon from 'assets/img/fb-icon.svg';
 import lnIcon from 'assets/img/ln-icon.svg';
 import twitterIcon from 'assets/img/twitter-icon.svg';
 import youtubeIcon from 'assets/img/youtube-icon.svg';
-import Container from "components/Container";
 import { useState } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
@@ -25,7 +24,7 @@ const Footer = memo((props: FooterProps) => {
     <>
       <footer className={classes.root}>
         <div className={classes.footerWidget1}>
-          <Container className={classes.containerWidget1}>
+          <div className={classes.containerWidget1}>
             <a href={`mailto:ask@cimigo.com`} className={classes.emailContact} translation-key="footer_contact_us_at">
               {t('footer_contact_us_at')}
             </a>
@@ -45,10 +44,10 @@ const Footer = memo((props: FooterProps) => {
                 </a>
               </div>
             </div>
-          </Container>
+          </div>
         </div>
         <div className={classes.footerWidget2}>
-          <Container className={classes.containerWidget2}>
+          <div className={classes.containerWidget2}>
             <div className={classes.leftContainer}>
               <div className={classes.aboutWidget}>
                 <div className={classes.header}>
@@ -148,14 +147,14 @@ const Footer = memo((props: FooterProps) => {
                 />
               </div>
             </div>
-          </Container>
+          </div>
         </div>
         <div className={classes.footerWidget3}>
-          <Container className={classes.containerWidget3}>
+          <div className={classes.containerWidget3}>
             <div className={classes.textCopyRight}>Copyright@2021.Cimigo</div>
             &nbsp; | &nbsp;
             <a href={routesOutside(i18n.language)?.privacyPolicy} className={classes.textPrivacy} translation-key="footer_privacy_policy">{t('footer_privacy_policy')}</a>
-          </Container>
+          </div>
         </div>
       </footer>
     </>
