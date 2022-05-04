@@ -75,10 +75,10 @@ const Account = () => {
         );
       })}
       <Grid className={classes.lineList}></Grid>
-       <Button className={classes.btnLogout} onClick={logout}>
-            <Icon component={Logout}></Icon>
-            <p>Logout</p>
-          </Button>
+      <Button className={classes.btnLogout} onClick={logout}>
+        <Icon component={Logout}></Icon>
+        <p>Logout</p>
+      </Button>
     </List>
   );
   return (
