@@ -74,6 +74,11 @@ const Account = () => {
           </NavLink>
         );
       })}
+      <Grid className={classes.lineList}></Grid>
+       <Button className={classes.btnLogout} onClick={logout}>
+            <Icon component={Logout}></Icon>
+            <p>Logout</p>
+          </Button>
     </List>
   );
   return (
@@ -82,11 +87,6 @@ const Account = () => {
       <Grid className={classes.main}>
         <div className={classes.menuList}>
           {links}
-          <Grid className={classes.lineOfMenuList}></Grid>
-          <Button className={classes.btnOfMenuList} onClick={logout}>
-            <Icon component={Logout}></Icon>
-            <p>Logout</p>
-          </Button>
         </div>
         <div className={classes.content}>
           <Switch>
@@ -117,11 +117,6 @@ const Account = () => {
                     aria-labelledby="composition-button"
                   >
                     {links}
-                    <Grid className={classes.lineOfMenuToggle}></Grid>
-                    <Button className={classes.btnOfMenuToggle} onClick={logout}>
-                      <Icon component={Logout}></Icon>
-                      <p>Logout</p>
-                    </Button>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
