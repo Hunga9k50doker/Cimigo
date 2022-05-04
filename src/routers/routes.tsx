@@ -131,17 +131,17 @@ export const routesOutside = (lang: string) => {
   switch (lang) {
     case Lang.VI:
       return {
-        overview: `${cimigoUrl}/vi/solutions/overview`,
-        howItWorks: `${cimigoUrl}/vi/solutions/how-it-works`,
-        solution: `${cimigoUrl}/vi/solutions/solution`,
-        pricingPlans: `${cimigoUrl}/vi/solutions/pricing-plans`,
-        faq: `${cimigoUrl}/vi/solutions/faq`,
+        overview: `${cimigoUrl}/vi/cac-giai-phap/tong-quan`,
+        howItWorks: `${cimigoUrl}/vi/cac-giai-phap/how-it-works`,
+        solution: `${cimigoUrl}/vi/cac-giai-phap/solution`,
+        pricingPlans: `${cimigoUrl}/vi/cac-giai-phap/pricing`,
+        faq: `${cimigoUrl}/vi/cac-giai-phap/faq`,
         homePage: `${cimigoUrl}/vi`,
         opportunitiesAtCimigo: `${cimigoUrl}/vi/viec-lam`,
         trends: `${cimigoUrl}/vi/xu-huong`,
         reports: `${cimigoUrl}/vi/bao-cao`,
         privacyPolicy: `${cimigoUrl}/vi/chinh-sach-bao-mat`,
-        rapidsurveyTermsOfService: `${cimigoUrl}/vi/rapidsurvey-terms-of-service`,
+        rapidsurveyTermsOfService: `${cimigoUrl}/vi/rapidsurvey-dieu-khoan-dich-vu`,
       }
     case Lang.EN:
       return {
