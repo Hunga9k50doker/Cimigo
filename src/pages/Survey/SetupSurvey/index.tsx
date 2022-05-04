@@ -55,7 +55,7 @@ import { ProjectAttributeService } from "services/project_attribute";
 import { UserAttributeService } from "services/user_attribute";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
 import { editableProject } from "helpers/project";
-import { Check } from "@mui/icons-material";
+import { Check, Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
 
@@ -574,7 +574,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               {editableProject(project) && (
                 <Grid className={classes.btnSave}>
                   <Buttons type={"submit"} padding="3px 13px" btnType="TransparentBlue" translation-key="common_save">
-                    <img src={Images.icSave} alt="icon save" />{t('common_save')}
+                    <Save fontSize="small" sx={{marginRight: "8px"}}/>{t('common_save')}
                   </Buttons>
                 </Grid>
               )}
@@ -742,7 +742,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                                 onClick={onAddOrEditBrand}
                                 translation-key="common_save"
                               >
-                                <Check fontSize="small" sx={{ marginRight: '8px' }} />{t('common_save')}
+                                <Save fontSize="small" sx={{marginRight: "8px"}}/>{t('common_save')}
                               </Buttons>
                             </TableCell>
                           </>
@@ -803,7 +803,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                           onClick={onAddOrEditBrand}
                           translation-key="common_save"
                         >
-                          <Check fontSize="small" sx={{ marginRight: '8px' }} />{t('common_save')}
+                          <Save fontSize="small" sx={{marginRight: "8px"}}/>{t('common_save')}
                         </Buttons>
                       </TableCell>
                     </TableRow>
