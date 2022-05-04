@@ -19,14 +19,14 @@ const schema = yup.object().shape({
   status: yup.object().required('Status is required.'),
   dataStudio: yup.string().nullable().notRequired(),
   report: yup.mixed().nullable().notRequired(),
-  invoiceDemo: yup.mixed().nullable().notRequired(),
+  invoice: yup.mixed().nullable().notRequired(),
 })
 
 export interface ProjectFormData {
   dataStudio: string,
   report: FileUpload,
   status: OptionItem,
-  invoiceDemo: FileUpload;
+  invoice: FileUpload;
 }
 
 interface Props {
@@ -53,8 +53,8 @@ const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
     if (data.dataStudio) form.append('dataStudio', data.dataStudio)
     if (data.report?.file) form.append('reports', data.report.file)
     if (!data.report || data.report?.file) form.append('deleteReport', 'true')
-    if (data.invoiceDemo?.file) form.append('invoiceDemo', data.invoiceDemo.file)
-    if (!data.invoiceDemo || data.invoiceDemo?.file) form.append('deleteInvoiceDemo', 'true')
+    if (data.invoice?.file) form.append('invoice', data.invoice.file)
+    if (!data.invoice || data.invoice?.file) form.append('deleteInvoice', 'true')
     if (itemEdit.status !== data.status.id) {
       form.append('status', `${data.status.id}`)
     }
@@ -73,21 +73,21 @@ const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
           url: itemEdit.reports[0].url,
         }
       }
-      let invoiceDemo: FileUpload
-      if (itemEdit.invoiceDemo) {
-        invoiceDemo = {
-          id: itemEdit.invoiceDemo.id,
-          fileName: itemEdit.invoiceDemo.fileName,
-          fileSize: itemEdit.invoiceDemo.fileSize,
-          mimeType: itemEdit.invoiceDemo.mimeType,
-          url: itemEdit.invoiceDemo.url,
+      let invoice: FileUpload
+      if (itemEdit.invoice) {
+        invoice = {
+          id: itemEdit.invoice.id,
+          fileName: itemEdit.invoice.fileName,
+          fileSize: itemEdit.invoice.fileSize,
+          mimeType: itemEdit.invoice.mimeType,
+          url: itemEdit.invoice.url,
         }
       }
       reset({
         dataStudio: itemEdit.dataStudio,
         status: projectStatus.find(it =>it.id === itemEdit.status),
         report: report,
-        invoiceDemo: invoiceDemo
+        invoice: invoice
       })
     }
   }, [reset, itemEdit])
@@ -154,16 +154,16 @@ const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <TextTitle>Invoice demo</TextTitle>
+                    <TextTitle>Invoice</TextTitle>
                     <Controller
-                      name="invoiceDemo"
+                      name="invoice"
                       control={control}
                       render={({ field }) => <UploadFile
                         value={field.value}
                         caption="Allowed pdf"
                         typeInvalidMess="File type must be pdf"
                         fileFormats={['application/pdf']}
-                        errorMessage={(errors.invoiceDemo as any)?.message}
+                        errorMessage={(errors.invoice as any)?.message}
                         onChange={(value) => field.onChange(value)}
                       />}
                     />

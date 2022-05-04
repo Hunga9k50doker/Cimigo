@@ -34,8 +34,8 @@ export interface Project {
   dataStudio: string;
   solution?: Solution;
   folderId: number;
-  invoiceDemoId: number;
-  invoiceDemo: Attachment;
+  invoiceId: number;
+  invoice: Attachment;
   enableCustomQuestion: boolean;
   createdAt: Date;
   updatedAt: Date;

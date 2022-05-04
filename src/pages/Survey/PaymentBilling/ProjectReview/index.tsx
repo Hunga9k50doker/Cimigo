@@ -23,7 +23,6 @@ import moment from "moment";
 import { PaymentService } from "services/payment";
 import { authPreviewOrPayment } from "../models";
 import { useTranslation } from "react-i18next";
-import { AttachmentService } from "services/attachment";
 
 interface ProjectReviewProps {
 }
@@ -142,23 +141,13 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
 
   const getInvoice = () => {
     if (!project) return
-    if (project.invoiceDemoId) {
-      dispatch(setLoading(true))
-      AttachmentService.download(project.invoiceDemoId)
-        .then((res) => {
-          FileSaver.saveAs(res.data, `invoice-demo-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
-    } else {
-      dispatch(setLoading(true))
-      PaymentService.getInvoiceDemo(project.id)
-        .then(res => {
-          FileSaver.saveAs(res.data, `invoice-demo-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
-    }
+    dispatch(setLoading(true))
+    PaymentService.getInvoiceDemo(project.id)
+      .then(res => {
+        FileSaver.saveAs(res.data, `invoice-demo-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
   // const openNewTabContact = () => {
