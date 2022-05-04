@@ -1,5 +1,5 @@
 import { Button, Grid, MenuItem, FormControl, InputAdornment, Select } from "@mui/material"
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import classes from './styles.module.scss';
 import { CameraAlt, Report } from '@mui/icons-material';
 import Inputs from "components/Inputs";
@@ -14,8 +14,8 @@ import { useTranslation } from "react-i18next";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { useDispatch } from "react-redux";
 import CountryService from "services/country";
-
-export interface AttributeFormData {
+import { VALIDATION } from "config/constans";
+export interface DataForm {
     firstName: string;
     lastName: string;
     email: string;
@@ -27,22 +27,24 @@ export interface AttributeFormData {
 const UserProfile = (props) => {
 
     const { t, i18n } = useTranslation()
-    const schema = yup.object().shape({
-        firstName: yup.string()
-        .required(t('field_first_name_vali_required')),
-        lastName: yup.string()
-        .required(t('field_last_name_vali_required')),
-        email: yup.string()
-        .email(t('field_email_vali_email'))
-        .required(t('field_email_vali_required')),
-        phone: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, 
-        { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }),
-        company: yup.string(),
-        countryId: yup.object().shape({
-            id: yup.number().required(t('field_country_vali_required')),
-            name: yup.string().required()
-          }).required(),
-    })
+    const schema = useMemo(()=>{
+        return yup.object().shape({
+            firstName: yup.string()
+            .required(t('field_first_name_vali_required')),
+            lastName: yup.string()
+            .required(t('field_last_name_vali_required')),
+            email: yup.string()
+            .email(t('field_email_vali_email'))
+            .required(t('field_email_vali_required')),
+            phone: yup.string().matches(VALIDATION.phone, 
+            { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }),
+            company: yup.string(),
+            countryId: yup.object().shape({
+                id: yup.number().required(t('field_country_vali_required')),
+                name: yup.string().required()
+              }).required(),
+        })
+    }, [i18n.language])
     const dispatch = useDispatch()
     useEffect(() => {
         const fetchData = async () => {
@@ -60,7 +62,7 @@ const UserProfile = (props) => {
 
     const { user } = UseAuth();
     const [countries, setCountries] = useState<OptionItem[]>([])
-    const { register, handleSubmit, control, formState: { errors } } = useForm<AttributeFormData>({
+    const { register, handleSubmit, control, formState: { errors } } = useForm<DataForm>({
         resolver: yupResolver(schema),
         mode: 'onChange'
     });
@@ -81,16 +83,18 @@ const UserProfile = (props) => {
         </Grid>
         <Grid className={classes.inputFlex}>
             <Inputs
-                title="First name"
-                name="First name"
+                title={t('field_first_name')}
+                translation-key="field_first_name"
+                name="firstName"
                 type="text"
                 placeholder="Nguyen"
                 inputRef={register('firstName')}
                 errorMessage={errors.firstName?.message}
             />
             <Inputs
-                title="Last name"
-                name="Last name"
+                title={t('field_last_name')}
+                translation-key="field_last_name"
+                name="lastName"
                 type="text"
                 placeholder="Anh"
                 inputRef={register('lastName')}
@@ -99,8 +103,9 @@ const UserProfile = (props) => {
         </Grid>
         <Grid className={classes.inputFull}>
             <Inputs
-                title="Email"
-                name="Email"
+                title={t('field_email')}
+                translation-key="field_email"
+                name="email"
                 type="text"
                 placeholder="anhnguyen@cimigo.com"
                 inputRef={register('email')}
@@ -109,29 +114,33 @@ const UserProfile = (props) => {
         </Grid>
         <Grid className={classes.inputFlex}>
             <Inputs
-                title="Phone number"
-                name="Phone number"
+                title={t('field_phone_number')}
+                name="phone"
+                optional
                 type="text"
-                placeholder="+8477348125"
+                placeholder={t('field_phone_number_placeholder')}
+                translation-key-placeholder="field_phone_number_placeholder"
                 inputRef={register('phone')}
                 errorMessage={errors.phone?.message}
             />
             <InputSelect
-                title="Country"
+                title={t('field_country')}
                 name="countryId"
                 control={control}
                 selectProps={{
                     options: countries,
                     className: classes.customSelect,
-                    placeholder: t('field_country_placeholder'),
+                    placeholder:"Vietnam",
                 }}
                 errorMessage={(errors.countryId as any)?.id?.message}
             />
         </Grid>
         <Grid className={classes.inputFull}>
             <Inputs
-                title="Company"
-                name="Company"
+                title={t('field_company')}
+                translation-key="field_company"
+                optional
+                name="company"
                 type="text"
                 placeholder="Cimigo"
                 endAdornment={
