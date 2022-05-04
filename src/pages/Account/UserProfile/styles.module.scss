@@ -180,8 +180,8 @@
             img{
                 margin-left: -22px !important;
             }
-           
         }
+        
     }
 }
 
@@ -192,6 +192,14 @@
     .form {
         padding: 30px 24px 25px 24px;
     }
+    .inputFlex {
+        .customSelect{
+            div:first-child{
+                font-size: 14px !important;
+            }
+        }
+    }
+ 
 }
 
 @media only screen and (max-width: 767px) {

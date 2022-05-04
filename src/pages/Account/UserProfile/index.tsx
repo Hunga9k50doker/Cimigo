@@ -1,5 +1,5 @@
 import { Button, Grid, MenuItem, FormControl, InputAdornment, Select } from "@mui/material"
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import classes from './styles.module.scss';
 import { CameraAlt, Report } from '@mui/icons-material';
 import Inputs from "components/Inputs";
@@ -10,18 +10,11 @@ import UseAuth from "hooks/useAuth";
 import images from "config/images";
 import { OptionItem } from "models/general";
 import InputSelect from "components/InputsSelect";
+import { useTranslation } from "react-i18next";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { useDispatch } from "react-redux";
+import CountryService from "services/country";
 
-const schema = yup.object().shape({
-    firstName: yup.string().required('First name is required.'),
-    lastName: yup.string().required('Last name is required.'),
-    email: yup.string().email('Please enter a valid email address').required('Email is required.'),
-    phone: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, { message: "Please enter a valid phone number.", excludeEmptyString: true }).required('Phone is required.'),
-    company: yup.string().required('Company is required.'),
-    countryId: yup.object().shape({
-        id: yup.number().required("Country is required"),
-        name: yup.string().required()
-    }).required(),
-})
 export interface AttributeFormData {
     firstName: string;
     lastName: string;
@@ -32,6 +25,39 @@ export interface AttributeFormData {
 }
 
 const UserProfile = (props) => {
+
+    const { t, i18n } = useTranslation()
+    const schema = yup.object().shape({
+        firstName: yup.string()
+        .required(t('field_first_name_vali_required')),
+        lastName: yup.string()
+        .required(t('field_last_name_vali_required')),
+        email: yup.string()
+        .email(t('field_email_vali_email'))
+        .required(t('field_email_vali_required')),
+        phone: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, 
+        { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }),
+        company: yup.string(),
+        countryId: yup.object().shape({
+            id: yup.number().required(t('field_country_vali_required')),
+            name: yup.string().required()
+          }).required(),
+    })
+    const dispatch = useDispatch()
+    useEffect(() => {
+        const fetchData = async () => {
+          dispatch(setLoading(true))
+          const data = await CountryService.getCountries({ take: 9999 })
+            .catch((e) => {
+              dispatch(setErrorMess(e))
+              return null
+            })
+          setCountries(data?.data || [])
+          dispatch(setLoading(false))
+        }
+        fetchData()
+      }, [dispatch])
+
     const { user } = UseAuth();
     const [countries, setCountries] = useState<OptionItem[]>([])
     const { register, handleSubmit, control, formState: { errors } } = useForm<AttributeFormData>({
@@ -94,11 +120,10 @@ const UserProfile = (props) => {
                 title="Country"
                 name="countryId"
                 control={control}
-
                 selectProps={{
                     options: countries,
-                    placeholder: "Vietnam",
-                    className: classes.customSelect
+                    className: classes.customSelect,
+                    placeholder: t('field_country_placeholder'),
                 }}
                 errorMessage={(errors.countryId as any)?.id?.message}
             />
