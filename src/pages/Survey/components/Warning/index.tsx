@@ -17,9 +17,9 @@ const Warning = memo(({ project }: Props) => {
       case ProjectStatus.AWAIT_PAYMENT:
         return <span translation-key="project_cannot_edit_await_payment">{t('project_cannot_edit_await_payment')}</span>
       case ProjectStatus.COMPLETED:
-        return <span translation-key="project_cannot_edit_in_progress">{t('project_cannot_edit_in_progress')}</span>
-      case ProjectStatus.IN_PROGRESS:
         return <span translation-key="project_cannot_edit_completed">{t('project_cannot_edit_completed')}</span>
+      case ProjectStatus.IN_PROGRESS:
+        return <span translation-key="project_cannot_edit_in_progress">{t('project_cannot_edit_in_progress')}</span>
     }
   }
 
