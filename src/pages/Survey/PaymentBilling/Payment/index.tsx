@@ -61,7 +61,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         .when('paymentMethodId', {
           is: (val: number) => val === EPaymentMethod.MAKE_AN_ORDER,
           then: yup.string().email(t('field_contact_email_vali_email')).required(t('field_contact_email_vali_required')),
-          otherwise: yup.string().email('Please enter a valid email adress')
+          otherwise: yup.string().email(t('field_contact_email_vali_email'))
         }),
       contactPhone: yup.string()
         .when('paymentMethodId', {
@@ -86,8 +86,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       email: yup.string()
         .when('saveForLater', {
           is: (val: boolean) => val,
-          then: yup.string().email('Please enter a valid email adress').required('Email is required.'),
-          otherwise: yup.string().email('Please enter a valid email adress')
+          then: yup.string().email(t('field_email_vali_email')).required(t('field_email_vali_required')),
+          otherwise: yup.string().email(t('field_email_vali_email'))
         }),
       phone: yup.string()
         .when('saveForLater', {

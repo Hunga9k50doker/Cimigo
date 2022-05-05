@@ -122,6 +122,10 @@ export const routes = {
       root: '/admin/custom-question-type',
       edit: '/admin/custom-question-type/:id/edit',
     },
+    payment: {
+      root: '/admin/payment',
+      edit: '/admin/payment/:id/edit',
+    },
   }
 }
 

@@ -300,12 +300,25 @@
   border-radius: 50px;
   max-height: 32px;
   fieldset {
-    border: none;
+    border: none !important;
+    border-width: 0px !important;
   }
   div {
     background: #FFFFFF;
     width: 110px;
     border-radius: 50px 0px 0px 50px;
+    &[class~="Mui-focused"] {
+      border: none !important;
+      border-width: 0px !important;
+    }
+    &:hover {
+      fieldset {
+        &[class~="MuiOutlinedInput-notchedOutline"] {
+          border: none !important;
+          border-width: 0px !important;
+        }
+      }
+    }
     @media only screen and (max-width: 1024px) {
       width: 75px;
     }
@@ -317,6 +330,7 @@
     line-height: 140%;
     letter-spacing: 0.015em;
     color: #1c1c1c;
+    border: none !important;
     &::placeholder {
       opacity: 1;
       font-weight: 500;

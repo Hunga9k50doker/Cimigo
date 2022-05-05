@@ -129,6 +129,9 @@ export const API = {
     CUSTOM_QUESTION_TYPE: {
       DEFAULT: '/v1.0/admin/custom-question-type',
     },
+    PAYMENT: {
+      DEFAULT: '/v1.0/admin/payment',
+    },
   }
 }
 

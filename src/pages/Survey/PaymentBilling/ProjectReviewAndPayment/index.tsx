@@ -13,11 +13,6 @@ interface StepItem {
   path: string
 }
 
-const steps: StepItem[] = [
-  { name: 'Project review', path: routes.project.detail.paymentBilling.previewAndPayment.preview },
-  { name: 'Payment', path: routes.project.detail.paymentBilling.previewAndPayment.payment },
-]
-
 interface Props {
 
 }
