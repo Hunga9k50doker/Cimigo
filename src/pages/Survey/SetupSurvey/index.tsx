@@ -55,7 +55,7 @@ import { ProjectAttributeService } from "services/project_attribute";
 import { UserAttributeService } from "services/user_attribute";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
 import { editableProject } from "helpers/project";
-import { Check, Save } from "@mui/icons-material";
+import { Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
 
@@ -86,6 +86,17 @@ interface AttributeShow {
   type: AttributeShowType
 }
 
+enum SECTION {
+  basic_information = 'basic-information',
+  upload_packs = 'upload-packs',
+  additional_brand_list = 'additional-brand-list',
+  additional_attributes = 'additional-attributes'
+}
+
+interface IQueryString {
+  section?: string
+}
+
 interface Props {
   id: number
 }
@@ -103,7 +114,6 @@ const SetupSurvey = memo(({ id }: Props) => {
 
   const [openPopupMandatory, setOpenPopupMandatory] = useState(false)
   const [openPopupPreDefined, setOpenPopupPreDefined] = useState(false)
-  const [isScrolling, setScrolling] = useState(false);
 
   const [packs, setPacks] = useState<Pack[]>([]);
   const [addNewPack, setAddNewPack] = useState<boolean>(false);
@@ -131,21 +141,6 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [userAttributeEdit, setUserAttributeEdit] = useState<UserAttribute>()
   const [userAttributeDelete, setUserAttributeDelete] = useState<UserAttribute>()
   const [projectAttributeDelete, setProjectAttributeDelete] = useState<ProjectAttribute>()
-
-  const handleScroll = () => {
-    setScrolling(window.scrollY !== 0)
-  }
-
-  function _handleScroll(e: any) {
-    handleScroll();
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', _handleScroll);
-    return () => {
-      window.removeEventListener('scroll', _handleScroll);
-    }
-  }, [])
 
   useEffect(() => {
     if (project) {
@@ -523,7 +518,7 @@ const SetupSurvey = memo(({ id }: Props) => {
       <Grid classes={{ root: classes.root }}>
         <Grid classes={{ root: classes.left }} >
           <p className={classes.title} translation-key="setup_survey_title">{t('setup_survey_title')}</p>
-          <p className={classes.subTitle} id="basic-information" translation-key="setup_survey_basic_infor_title">
+          <p className={classes.subTitle} id={SECTION.basic_information} translation-key="setup_survey_basic_infor_title">
             1. {t('setup_survey_basic_infor_title')}
           </p>
           <Grid className={classes.flex}>
@@ -581,7 +576,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             </form>
           </Grid>
           <div className={classes.line}></div>
-          <p className={classes.subTitle} id="upload-packs" translation-key="setup_survey_packs_title">
+          <p className={classes.subTitle} id={SECTION.upload_packs} translation-key="setup_survey_packs_title">
             2. {t('setup_survey_packs_title')} <span translation-key="common_max">({t('common_max')} {maxPack()})</span>
           </p>
           <Grid className={classes.flex}>
@@ -647,7 +642,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             </MenuItem>
           </Menu>
           <div className={classes.line}></div>
-          <p className={classes.subTitle} id="additional-brand-list" translation-key="setup_survey_add_brand_title">3. {t('setup_survey_add_brand_title')} <span>({t('common_max')} {maxAdditionalBrand()})</span></p>
+          <p className={classes.subTitle} id={SECTION.additional_brand_list} translation-key="setup_survey_add_brand_title">3. {t('setup_survey_add_brand_title')} <span>({t('common_max')} {maxAdditionalBrand()})</span></p>
           <Grid className={classes.flex}>
             <p translation-key="setup_survey_add_brand_sub_title" dangerouslySetInnerHTML={{ __html: t('setup_survey_add_brand_sub_title') }}></p>
             <TableContainer className={classes.table}>
@@ -887,7 +882,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             </MenuItem>
           </Menu>
           <div className={classes.line}></div>
-          <p className={classes.subTitle} id="additional-attributes" translation-key="setup_survey_add_att_title">4. {t('setup_survey_add_att_title')} <span>({t('common_max')} {maxAdditionalAttribute()})</span></p>
+          <p className={classes.subTitle} id={SECTION.additional_attributes} translation-key="setup_survey_add_att_title">4. {t('setup_survey_add_att_title')} <span>({t('common_max')} {maxAdditionalAttribute()})</span></p>
           <Grid className={classes.flex}>
             <p translation-key="setup_survey_add_att_sub_title_1">{t('setup_survey_add_att_sub_title_1')} <span onClick={() => setOpenPopupMandatory(true)}>{t('setup_survey_add_att_sub_title_2')}</span>. {t('setup_survey_add_att_sub_title_3')}</p>
             <Grid container classes={{ root: classes.rootList }}>

@@ -292,15 +292,18 @@
   padding-bottom: 21px;
 }
 .rootButton {
+  overflow: hidden;
   display: flex;
   align-items: center;
   border: 1px solid #1f61a9;
+  background: #1f61a9;
   border-radius: 50px;
   max-height: 32px;
   fieldset {
     border: none;
   }
   div {
+    background: #FFFFFF;
     width: 110px;
     border-radius: 50px 0px 0px 50px;
     @media only screen and (max-width: 1024px) {

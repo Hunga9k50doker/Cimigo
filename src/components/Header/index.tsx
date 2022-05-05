@@ -19,6 +19,7 @@ import Inputs from "components/Inputs";
 import { ProjectService } from "services/project";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import React from "react";
 
 interface HeaderProps {
   project?: boolean;
@@ -138,7 +139,7 @@ const Header = memo((props: HeaderProps) => {
               </MenuItem>
             ))}
             {!isLoggedIn && (
-              <>
+              <div>
                 <Grid className={classes.lineOfToggle} />
                 <button className={classes.buttonOfToggle} onClick={() => history.push(routes.login)}>
                   <img src={images.icArrowLogin} alt="" className={classes.icButtonOfToggle} />
@@ -148,7 +149,7 @@ const Header = memo((props: HeaderProps) => {
                   <img src={images.icArrowRegister} alt="" className={classes.icButtonOfToggle} />
                   <span translation-key="header_register">{t('header_register')}</span>
                 </button>
-              </>
+              </div>
             )}
           </Menu>
         </li>

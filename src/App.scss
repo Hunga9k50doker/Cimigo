@@ -36,13 +36,12 @@ input:-webkit-autofill:focus {
 }
 a {
   cursor: pointer;
+  font-style: normal;
+  text-decoration: unset;
 }
 .cimigo-green {
   color: var(--cimigo-green);
 }
 .cimigo-blue {
   color: var(--cimigo-blue);
-}
-a:-webkit-any-link {
-  text-decoration: unset;
 }

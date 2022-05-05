@@ -216,14 +216,26 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
               </div>
               <div>
                 <p className={classes.text} translation-key="payment_billing_sub_tab_preview_pack">{t('payment_billing_sub_tab_preview_pack')}</p>
-                <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidPacks() })} translation-key="payment_billing_sub_tab_preview_packs">
+                <span 
+                  className={clsx(classes.textBlack, { [clsx(classes.colorDanger, classes.pointer)]: !isValidPacks() })} 
+                  translation-key="payment_billing_sub_tab_preview_packs"
+                  onClick={() => {
+                    if (!isValidPacks())onRedirect(routes.project.detail.setupSurvey)
+                  }}
+                >
                   {packs?.length || 0} {t('payment_billing_sub_tab_preview_packs')}<br />
                   {!isValidPacks() && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_packs_required">{t('payment_billing_sub_tab_preview_packs_required')}</span>}
                 </span>
               </div>
               <div>
                 <p className={classes.text} translation-key="payment_billing_sub_tab_preview_brand_list">{t('payment_billing_sub_tab_preview_brand_list')}</p>
-                <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidAdditionalBrand() })} translation-key="payment_billing_sub_tab_preview_brands">
+                <span 
+                  className={clsx(classes.textBlack, { [clsx(classes.colorDanger, classes.pointer)]: !isValidAdditionalBrand() })} 
+                  translation-key="payment_billing_sub_tab_preview_brands"
+                  onClick={() => {
+                    if (!isValidAdditionalBrand())onRedirect(routes.project.detail.setupSurvey)
+                  }}
+                >
                   {additionalBrand?.length || 0} {t('payment_billing_sub_tab_preview_brands')} <br />
                   {!isValidAdditionalBrand() && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_brands_required">{t('payment_billing_sub_tab_preview_brands_required')}</span>}
                 </span>
