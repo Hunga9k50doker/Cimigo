@@ -50,7 +50,7 @@ const PopupPack = memo((props: Props) => {
       packTypeId: yup.object().shape({
         id: yup.number().required(t('setup_survey_packs_popup_pack_type_required')),
         name: yup.string().required()
-      }).required(t('setup_survey_packs_popup_pack_type_required')),
+      }).required(t('setup_survey_packs_popup_pack_type_required')).nullable(),
       brand: yup.string().required(t('setup_survey_packs_popup_pack_brand_required')),
       manufacturer: yup.string().required(t('setup_survey_packs_popup_pack_manufacturer_required')),
       variant: yup.string().required(t('setup_survey_packs_popup_pack_variant_required')),
@@ -80,7 +80,7 @@ const PopupPack = memo((props: Props) => {
     if (!isOpen && !itemEdit) reset({
       image: undefined,
       name: '',
-      packTypeId: undefined,
+      packTypeId: null,
       brand: '',
       manufacturer: '',
       variant: ''
@@ -107,7 +107,7 @@ const PopupPack = memo((props: Props) => {
       reset({
         image: itemEdit.image,
         name: itemEdit.name,
-        packTypeId: itemEdit.packType ? { id: itemEdit.packType.id, name: itemEdit.packType.name } : null,
+        packTypeId: itemEdit.packType || null,
         brand: itemEdit.brand,
         manufacturer: itemEdit.manufacturer,
         variant: itemEdit.variant,
@@ -297,7 +297,7 @@ const PopupPack = memo((props: Props) => {
                 menuPosition: "fixed",
                 placeholder: t('setup_survey_packs_popup_pack_type_placeholder')
               }}
-              errorMessage={(errors.packTypeId as any)?.id?.message}
+              errorMessage={(errors.packTypeId as any)?.message || errors.packTypeId?.id?.message}
             />
           </Grid>
           <Grid className={classes.flex}>
