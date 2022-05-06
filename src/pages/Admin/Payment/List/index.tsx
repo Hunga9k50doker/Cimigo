@@ -181,7 +181,7 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
           <TableContainer component={Paper} sx={{ marginTop: '2rem' }}>
             <Box display="flex" alignItems="center" justifyContent="space-between" m={3}>
               <InputSearch
-                placeholder="Search ..."
+                placeholder="Search by order ID"
                 value={keyword || ''}
                 onChange={onSearch}
               />
