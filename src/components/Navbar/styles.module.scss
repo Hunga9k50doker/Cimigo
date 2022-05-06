@@ -50,8 +50,22 @@
 }
 
 .itemBtn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
   background-color: rgba(28, 28, 28, 0.05);
   margin-left: 15px;
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 100%;
+}
+.avatarEmpty {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 .menuProfile {
   width: 140px;
