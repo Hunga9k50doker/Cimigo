@@ -55,6 +55,11 @@ import icArrowRegister from 'assets/img/icon/ic-arrow-register.svg';
 import icView from 'assets/img/icon/ic-view.svg';
 import icInvoice from 'assets/img/icon/ic-invoice.svg';
 import imgPaymentFailed from 'assets/img/img-payment-failed.svg';
+import icEditQuestion from 'assets/img/icon/ic-edit-question.svg';
+import icDrag from 'assets/img/icon/ic-drag.svg';
+import icOpenQuestion from 'assets/img/icon/ic-open-question.svg';
+import icSingleChoice from 'assets/img/icon/ic-single-choice.svg';
+import icMultipleChoices from 'assets/img/icon/ic-multiple-choices.svg';
 
 const images = {
   // ===================== Images =========================
@@ -114,7 +119,12 @@ const images = {
   icAdditionalAttributes,
   icArrowLogin, 
   icArrowRegister,
-  imgPaymentFailed 
+  imgPaymentFailed,
+  icEditQuestion,
+  icDrag,
+  icOpenQuestion,
+  icSingleChoice,
+  icMultipleChoices,
 }
 
 export default images

@@ -155,7 +155,11 @@
   display: none;
   position: absolute;
   bottom: 0px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, #ffffff 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    #ffffff 100%
+  );
   width: 100%;
   border-bottom: 1px solid #dddddd;
   padding: 20px 25px;
@@ -655,7 +659,7 @@
   top: 100px;
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 100px - 10px)
+  max-height: calc(100vh - 100px - 10px);
 }
 .textSummary {
   background: #bed7f3;
@@ -722,4 +726,90 @@
   font-style: italic;
   color: #1f61a9;
   text-decoration-line: underline;
+}
+
+.customQuestionsTitle {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1C1C1C;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  @media only screen and (max-width: 767px) {
+    color: #1f61a9;
+  }
+  span {
+    color: #7c9911;
+  }
+}
+.customQuestionsPrice {
+  font-weight: 400;
+  font-size: 12px;
+  padding: 4px 16px;
+  margin-left: auto;
+  margin-right: 10px;
+  color: #FAFAFF !important;
+  background-color: #7C9911;
+  border-radius: 30px;
+}
+.customQuestionsTitleDisabled {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1C1C1C66;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  @media only screen and (max-width: 767px) {
+    color: #1f61a9;
+  }
+  span {
+    color: #1C1C1C66;
+  }
+}
+.customQuestionsPriceDisabled {
+  font-weight: 400;
+  font-size: 12px;
+  padding: 4px 16px;
+  margin-left: auto;
+  margin-right: 10px;
+  background-color: #1C1C1C33;
+  border-radius: 30px;
+}
+.customQuestionsSubTitleDisabled {
+  color: #1C1C1C66 !important;
+}
+.customQuestionsList {
+  padding: 20px 0 20px 20px;
+}
+.questionType {
+  width: 215px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  > div {
+    display: flex;
+    gap: 15px;
+  }
+  > div > p {
+    color: #1C1C1CE5;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  > span {
+    font-weight: 400;
+    font-size: 12px;
+    color: #1C1C1CA6;
+  }
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
+}
+.displayNone {
+  display: none;
 }

@@ -22,7 +22,7 @@ import {
   StepContent,
   StepConnector,
   Collapse,
-  Button
+  Button,
 } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -54,10 +54,13 @@ import { UserAttribute } from "models/user_attribute";
 import { ProjectAttributeService } from "services/project_attribute";
 import { UserAttributeService } from "services/user_attribute";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
+import PopupMultiChoice from "components/PopupMultiChoices";
 import { editableProject } from "helpers/project";
 import { Check, Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
+import Toggle from "components/Toggle";
+import CustomQuestionsDragList, { Question } from "components/CustomQuestionDragList";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -131,6 +134,22 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [userAttributeEdit, setUserAttributeEdit] = useState<UserAttribute>()
   const [userAttributeDelete, setUserAttributeDelete] = useState<UserAttribute>()
   const [projectAttributeDelete, setProjectAttributeDelete] = useState<ProjectAttribute>()
+
+  const [activeCustomQuestions, setActiveCustomQuestions] = useState<boolean>(false);
+  const [questions, setQuestions] = useState<Question[]>([
+    {
+      id: 1,
+      content: "How many country in Asean?",
+    },
+    {
+      id: 2,
+      content: "Which country largest in the world?",
+    },
+    {
+      id: 3,
+      content: "Who is the president of Viet Nam?",
+    }
+  ]);
 
   const handleScroll = () => {
     setScrolling(window.scrollY !== 0)
@@ -504,6 +523,10 @@ const SetupSurvey = memo(({ id }: Props) => {
         .catch(e => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)))
     }
+  }
+
+  const toggleCustomQuestions = () => {
+    setActiveCustomQuestions(!activeCustomQuestions);
   }
 
   const scrollToElement = (id: string) => {
@@ -998,6 +1021,67 @@ const SetupSurvey = memo(({ id }: Props) => {
             <Grid classes={{ root: classes.tip }}>
               <img src={Images.icTipGray} alt="" />
               <p translation-key="setup_survey_add_att_tip" dangerouslySetInnerHTML={{__html: t('setup_survey_add_att_tip')}}></p>
+            </Grid>
+          </Grid>
+          <div className={classes.line}></div>
+          <div className={activeCustomQuestions ? classes.customQuestionsTitle : classes.customQuestionsTitleDisabled} id="custom-questions" translation-key="setup_survey_custom_questions_title">5. Custom questions <span translation-key="common_max">({t('common_max')} 4)</span> <Toggle onChange={toggleCustomQuestions} /> <span className={activeCustomQuestions ? classes.customQuestionsPrice: classes.customQuestionsPriceDisabled}>Extra cost</span></div>
+          <Grid className={classes.flex}>
+            <p className={activeCustomQuestions ? `` : classes.customQuestionsSubTitleDisabled} translation-key="setup_survey_custom_questions_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
+            <Grid className={activeCustomQuestions ? classes.customQuestionsList : classes.displayNone}>
+              <CustomQuestionsDragList questions={questions} setQuestions={setQuestions} />
+            </Grid>
+            <Grid className={activeCustomQuestions ? classes.select : classes.displayNone}>
+              <FormControl classes={{ root: classes.rootSelect }} disabled={!enableAdditionalAttributes() || !editableProject(project)}>
+                <Select
+                  variant="outlined"
+                  displayEmpty
+                  defaultValue={""}
+                  classes={{ select: classes.selectType, icon: classes.icSelect }}
+                  MenuProps={{
+                    className: classes.selectTypeMenu, 
+                    anchorOrigin: {
+                      vertical: "bottom",
+                      horizontal: "left"
+                    },
+                    transformOrigin: {
+                      vertical: "top",
+                      horizontal: "left"
+                    }
+                  }}
+                >
+                  <MenuItem disabled value="" translation-key="setup_survey_custom_questions_menu_action_placeholder">
+                    Add custom question
+                  </MenuItem>
+                  <MenuItem value={20} translation-key="setup_survey_custom_questions_menu_action_from_pre_defined_list">
+                    <div className={classes.questionType}>
+                      <div>
+                        <img src={Images.icOpenQuestion} alt="" />
+                        <p>Open question</p>
+                      </div>
+                      <span>$353</span>
+                    </div>
+                  </MenuItem>
+                  <MenuItem value={30} translation-key="setup_survey_custom_questions_menu_action_your_own_attribute">
+                    <div className={classes.questionType}>
+                      <div>
+                        <img src={Images.icSingleChoice} alt="" />
+                        <p>Single choice</p>
+                      </div>
+                      <span>$353</span>
+                    </div>
+                  </MenuItem>
+                  <MenuItem value={40} translation-key="setup_survey_custom_questions_menu_action_from_pre_defined_list">
+                    <div className={classes.questionType}>
+                      <div>
+                        <img src={Images.icMultipleChoices} alt="" />
+                        <p>Multiple choices</p>
+                      </div>
+                      <span>$353</span>
+                    </div>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+              {!enableAdditionalAttributes() && <p translation-key="setup_survey_custom_question_error_max">{t('setup_survey_custom_question_error_max', { max: 4 })}</p>}
             </Grid>
           </Grid>
         </Grid>
