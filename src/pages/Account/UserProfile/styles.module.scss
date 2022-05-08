@@ -6,6 +6,7 @@
     width: 227px;
     max-width: 227px;
     padding: 5px 17px;
+
     .btnOfMenu {
         margin-left: -8px;
         margin-top: 5px;
@@ -13,21 +14,25 @@
         transition: 0.4s;
         color: rgba(28, 28, 28, 0.65);
         background-color: transparent;
+
         &:hover,
         &:active {
             border-left: 3px solid rgba(166, 204, 23, 1);
             margin-left: 0px;
             color: rgba(28, 28, 28, 0.9);
+
             svg {
                 color: rgba(28, 28, 28, 0.9);
             }
         }
+
         svg {
             margin-right: 17px;
             width: 20px;
             height: 18px;
             color: rgba(28, 28, 28, 0.65);
         }
+
         p {
             font-size: 16px;
             font-weight: 500;
@@ -56,18 +61,38 @@
     min-width: 120px;
     max-height: 120px;
     position: relative;
-    .avatar {
-        object-fit: cover;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 100%;
-    }
-    input[type="file"] {
+
+    span {
         display: none;
     }
+
+    div {
+        border: none !important;
+        z-index: 1;
+        border-radius: 100%;
+        cursor: auto;
+
+        >div {
+            border-radius: 0%;
+            cursor: auto !important;
+        }
+
+        div {
+
+            position: absolute !important;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            border: none;
+            opacity: 1;
+            background-color: transparent;
+
+            border-radius: 100%;
+
+        }
+    }
+
     .uploadAvatar {
         position: absolute;
         right: 0%;
@@ -80,6 +105,8 @@
         align-items: center;
         border-radius: 50%;
         background-color: rgba(238, 240, 242, 1);
+        z-index: 2;
+
         svg {
             width: 17px;
             height: 16px;
@@ -90,6 +117,7 @@
 
 .personalInfo {
     margin: 10px 10px 0px 35px;
+
     .name {
         font-size: 24px;
         line-height: 30px;
@@ -97,6 +125,7 @@
         margin-bottom: 6px;
         margin-top: 5px;
     }
+
     .country {
         font-size: 14px;
         font-weight: 500;
@@ -110,14 +139,17 @@
     margin-bottom: 10px;
     display: flex;
     margin-left: -10px;
+
     div:first-child {
         margin-right: 10px;
         margin-left: 10px;
         padding-left: 0px;
     }
+
     p {
         margin-left: -15px !important;
     }
+
     input {
         min-width: 270px;
     }
@@ -142,10 +174,12 @@
     float: right;
     margin-bottom: 36px;
     margin-top: 6px;
+
     @media only screen and (max-width: 767px) {
         margin-bottom: 24px;
         margin-top: -6px;
     }
+
     &:hover {
         background-color: rgba(31, 97, 169, 1);
     }
@@ -160,6 +194,7 @@
         color: rgba(28, 28, 28, 0.9);
         margin-top: 2px;
     }
+
     &:first-child {
         margin-left: 0px !important;
     }
@@ -176,12 +211,13 @@
         img {
             margin-left: -45px;
         }
-        .customSelect{
-            img{
+
+        .customSelect {
+            img {
                 margin-left: -22px !important;
             }
         }
-        
+
     }
 }
 
@@ -189,17 +225,18 @@
     .menuList {
         display: none;
     }
+
     .form {
         padding: 30px 24px 25px 24px;
     }
+
     .inputFlex {
-        .customSelect{
-            div:first-child{
+        .customSelect {
+            div:first-child {
                 font-size: 14px !important;
             }
         }
     }
- 
 }
 
 @media only screen and (max-width: 767px) {
@@ -207,49 +244,56 @@
         font-size: 14px !important;
         font-weight: 400;
     }
+
     .inputFlex {
         display: initial;
         font-size: 14px !important;
-
         >div:first-child {
             margin-top: -15px;
         }
         img {
             margin-left: -30px;
         }
-        .customSelect{
-            img{
+        .customSelect {
+            img {
                 margin-left: -24px !important;
             }
-           
         }
     }
+
     .selectOfForm {
         margin-top: -2px !important;
         margin-bottom: 15px;
+
         div:first-child {
             margin: auto;
             padding-top: 15px;
         }
     }
+
     .btnSave {
         width: 100%;
     }
+
     .personalImage {
         max-height: 64px !important;
         max-width: 64px !important;
         min-width: 64px !important;
+
         .uploadAvatar {
             max-width: 18px;
             max-height: 18px;
+
             svg {
                 max-width: 10px;
                 max-height: 10px;
             }
         }
     }
+
     .personalInfo {
         margin: 5px 10px 0px 24px;
+
         .name {
             font-size: 16px;
             font-weight: 600;
@@ -257,14 +301,17 @@
             line-height: 19px;
             margin-bottom: 4px;
         }
+
         .country {
             font-size: 14px;
             font-weight: 500;
         }
     }
+
     .form {
         padding: 30px 24px 25px 24px;
     }
+
     .iconReport {
         display: none;
     }

@@ -107,7 +107,7 @@ const UploadImage = memo(
             })}
             {...getRootProps()}
           >
-            <input {...getInputProps()} />
+            <input {...getInputProps()}  id="upload"/>
             {isLoading && (
               <Box className={classes.loading}>
                 <CircularProgress size={32} thickness={2.4} />
