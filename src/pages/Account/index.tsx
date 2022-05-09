@@ -2,13 +2,13 @@ import classes from './styles.module.scss';
 import Header from "components/Header";
 import Footer from "components/Footer";
 import { PersonOutline, Loop, Logout, Payment, CameraAlt, KeyboardDoubleArrowLeft } from '@mui/icons-material';
-import { Button, Grid, Icon, MenuItem, ListItem, MenuList,  Popper, ClickAwayListener, Paper, IconButton, List, ListItemText } from "@mui/material"
+import { Button, Grid, Icon, MenuItem, ListItem, MenuList, Popper, ClickAwayListener, Paper, IconButton, List, ListItemText } from "@mui/material"
 import UseAuth from "hooks/useAuth";
-import { matchPath, Redirect, Route, Switch,  NavLink } from "react-router-dom";
+import { matchPath, Redirect, Route, Switch, NavLink } from "react-router-dom";
 import UserProfile from './UserProfile';
 import { routes } from "routers/routes";
 import clsx from 'clsx';
-import { useState, useRef} from 'react';
+import { useState, useRef } from 'react';
 
 
 const Account = () => {
@@ -16,21 +16,18 @@ const Account = () => {
   const [isOpen, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
   const activeRoute = (routeName: string, exact: boolean = false) => {
-     const match = matchPath(window.location.pathname, {
-       path: routeName,
-       exact: exact
-     })
-     return !!match
-   };
+    const match = matchPath(window.location.pathname, {
+      path: routeName,
+      exact: exact
+    })
+    return !!match
+  };
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
 
   const handleClose = (event: Event | React.SyntheticEvent) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
       return;
     }
     setOpen(false);
@@ -61,13 +58,9 @@ const Account = () => {
         return (
           <NavLink to={route.path} key={key} activeClassName="active" onClick={handleClose}>
             <ListItem button className={clsx(classes.border, { [classes.borderActive]: active })} >
-              {typeof route.icon === 'string' ? (
-                <Icon>
-                  {route.icon}
-                </Icon>) :
-                (<route.icon />)
-              }
-              <ListItemText className={classes.routeName}
+              {typeof route.icon === 'string' ? (<Icon>{route.icon}</Icon>) : (<route.icon />)}
+              <ListItemText 
+                className={classes.routeName}
                 primary={route.name}
                 disableTypography={true}
               />
@@ -112,9 +105,7 @@ const Account = () => {
             >
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList autoFocusItem={isOpen}>
-                    {links}
-                  </MenuList>
+                  <MenuList autoFocusItem={isOpen}>{links}</MenuList>
                 </ClickAwayListener>
               </Paper>
             </Popper>

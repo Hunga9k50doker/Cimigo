@@ -88,7 +88,7 @@ const UserProfile = memo((props: Props) => {
                 phone: user.phone || '',
             })
         }
-    }, [user,reset])
+    }, [user, reset])
     const _onSubmit = (data: DataForm) => {
         const form = new FormData()
         form.append('firstName', data.firstName)
@@ -110,7 +110,8 @@ const UserProfile = memo((props: Props) => {
             .finally(() => dispatch(setLoading(false)))
     }
 
-    return (<form onSubmit={handleSubmit(_onSubmit)} className={classes.form} >
+    return (
+    <form onSubmit={handleSubmit(_onSubmit)} className={classes.form} >
         <Grid className={classes.rowInfo}>
             <div className={classes.personalImage} >
                 <Controller
@@ -127,7 +128,7 @@ const UserProfile = memo((props: Props) => {
                 </label>
             </div>
             <div className={classes.personalInfo}>
-                <p className={classes.name} >{user?.fullName || ''}</p>
+                <p className={classes.name}>{user?.fullName || ''}</p>
                 <p className={classes.country}>{user?.company || ''}</p>
             </div>
         </Grid>
