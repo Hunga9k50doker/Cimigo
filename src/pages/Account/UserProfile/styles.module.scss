@@ -149,7 +149,11 @@
     p {
         margin-left: -15px !important;
     }
-
+    .customSelect{
+        div > div {
+            margin-left: 7px;
+        }
+    }
 }
 
 .inputFull {
@@ -232,6 +236,7 @@
             div:first-child {
                 font-size: 14px !important;
             }
+       
         }
     }
 }

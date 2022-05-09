@@ -1,4 +1,4 @@
-import { Button, Grid,  InputAdornment } from "@mui/material"
+import { Button, Grid, InputAdornment } from "@mui/material"
 import { memo, useEffect, useMemo, useState } from "react";
 import classes from './styles.module.scss';
 import { CameraAlt, Report } from '@mui/icons-material';
@@ -16,7 +16,7 @@ import CountryService from "services/country";
 import { VALIDATION } from "config/constans";
 import UploadImage from "components/UploadImage";
 import UserService from "services/user";
-import { getMe} from "redux/reducers/User/actionTypes";
+import { getMe } from "redux/reducers/User/actionTypes";
 import UseAuth from "hooks/useAuth";
 
 export interface DataForm {
@@ -30,7 +30,10 @@ export interface DataForm {
     fullName: string;
 }
 
-const UserProfile = memo((props) => {
+interface Props {
+
+}
+const UserProfile = memo((props: Props) => {
     const dispatch = useDispatch()
     const { t, i18n } = useTranslation()
     const { user } = UseAuth();
@@ -100,12 +103,12 @@ const UserProfile = memo((props) => {
     const onSubmit = (data) => {
         dispatch(setLoading(true))
         UserService.update(data)
-          .then(() => {
-              dispatch(getMe())
-          })
-          .catch((e) => dispatch(setErrorMess(e)))
-          .finally(() => dispatch(setLoading(false)))
-      }
+            .then(() => {
+                dispatch(getMe())
+            })
+            .catch((e) => dispatch(setErrorMess(e)))
+            .finally(() => dispatch(setLoading(false)))
+    }
 
     return (<form onSubmit={handleSubmit(_onSubmit)} className={classes.form} >
         <Grid className={classes.rowInfo}>
@@ -177,7 +180,6 @@ const UserProfile = memo((props) => {
                 title={t('field_country')}
                 name="countryId"
                 control={control}
-
                 selectProps={{
                     options: countries,
                     className: classes.customSelect,
@@ -193,7 +195,8 @@ const UserProfile = memo((props) => {
                 optional
                 name="company"
                 type="text"
-                placeholder="Cimigo"
+                placeholder={t('field_company_placeholder')}
+                translation-key-placeholder="field_company_placeholder"
                 endAdornment={
                     <InputAdornment position="end">
                         <Report className={classes.iconReport}></Report>
