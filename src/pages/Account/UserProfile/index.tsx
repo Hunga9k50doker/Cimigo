@@ -1,7 +1,7 @@
-import { Button, Grid, MenuItem, FormControl, InputAdornment, Select } from "@mui/material"
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { Button, Grid,  InputAdornment } from "@mui/material"
+import { memo, useEffect, useMemo, useState } from "react";
 import classes from './styles.module.scss';
-import { Camera, CameraAlt, Report } from '@mui/icons-material';
+import { CameraAlt, Report } from '@mui/icons-material';
 import Inputs from "components/Inputs";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -15,7 +15,9 @@ import { useDispatch } from "react-redux";
 import CountryService from "services/country";
 import { VALIDATION } from "config/constans";
 import UploadImage from "components/UploadImage";
-import { User } from "models/user"
+import UserService from "services/user";
+import { getMe} from "redux/reducers/User/actionTypes";
+import UseAuth from "hooks/useAuth";
 
 export interface DataForm {
     avatar: File | string;
@@ -28,14 +30,10 @@ export interface DataForm {
     fullName: string;
 }
 
-interface Props {
-    itemEdit?: User;
-    onSubmit: (data: FormData) => void
-}
-
-const UserProfile = memo(({ itemEdit, onSubmit }: Props) => {
+const UserProfile = memo((props) => {
     const dispatch = useDispatch()
     const { t, i18n } = useTranslation()
+    const { user } = UseAuth();
     const schema = useMemo(() => {
         return yup.object().shape({
             avatar: yup.mixed(),
@@ -76,15 +74,15 @@ const UserProfile = memo(({ itemEdit, onSubmit }: Props) => {
     }, [dispatch])
 
     useEffect(() => {
-        if (itemEdit !== null) {
+        if (user !== null) {
             reset({
-                avatar: itemEdit.avatar || '',
-                firstName: itemEdit.firstName || '',
-                lastName: itemEdit.lastName || '',
-                email: itemEdit.email || '',
-                countryId: itemEdit.country ? { id: itemEdit.country.id, name: itemEdit.country.name } : undefined,
-                company: itemEdit.company || '',
-                phone: itemEdit.phone || '',
+                avatar: user.avatar || '',
+                firstName: user.firstName || '',
+                lastName: user.lastName || '',
+                email: user.email || '',
+                countryId: user.country ? { id: user.country.id, name: user.country.name } : undefined,
+                company: user.company || '',
+                phone: user.phone || '',
             })
         }
     }, [reset])
@@ -99,6 +97,15 @@ const UserProfile = memo(({ itemEdit, onSubmit }: Props) => {
         if (typeof data.avatar === 'object') form.append('avatar', data.avatar)
         onSubmit(form)
     }
+    const onSubmit = (data) => {
+        dispatch(setLoading(true))
+        UserService.update(data)
+          .then(() => {
+              dispatch(getMe())
+          })
+          .catch((e) => dispatch(setErrorMess(e)))
+          .finally(() => dispatch(setLoading(false)))
+      }
 
     return (<form onSubmit={handleSubmit(_onSubmit)} className={classes.form} >
         <Grid className={classes.rowInfo}>
@@ -107,7 +114,7 @@ const UserProfile = memo(({ itemEdit, onSubmit }: Props) => {
                     name="avatar"
                     control={control}
                     render={({ field }) => <UploadImage
-                        file={field.value || itemEdit?.avatar || images.icProfile}
+                        file={field.value || user?.avatar || images.icProfile}
                         errorMessage={errors.avatar?.message}
                         onChange={(value) => field.onChange(value)}
                     />}
@@ -117,8 +124,8 @@ const UserProfile = memo(({ itemEdit, onSubmit }: Props) => {
                 </label>
             </div>
             <div className={classes.personalInfo}>
-                <p className={classes.name} >{itemEdit?.fullName || ''}</p>
-                <p className={classes.country}>{itemEdit?.company || ''}</p>
+                <p className={classes.name} >{user?.fullName || ''}</p>
+                <p className={classes.country}>{user?.company || ''}</p>
             </div>
         </Grid>
         <Grid className={classes.inputFlex}>

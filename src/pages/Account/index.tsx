@@ -1,27 +1,20 @@
 import classes from './styles.module.scss';
 import Header from "components/Header";
 import Footer from "components/Footer";
-import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
-import { PersonOutline, Loop, Logout, Payment, CameraAlt, KeyboardDoubleArrowLeft, Report } from '@mui/icons-material';
-import { Button, Grid, Icon, MenuItem, ListItem, MenuList, Menu, Popper, Grow, ClickAwayListener, Paper, IconButton, List, ListItemText } from "@mui/material"
+import { PersonOutline, Loop, Logout, Payment, CameraAlt, KeyboardDoubleArrowLeft } from '@mui/icons-material';
+import { Button, Grid, Icon, MenuItem, ListItem, MenuList,  Popper, ClickAwayListener, Paper, IconButton, List, ListItemText } from "@mui/material"
 import UseAuth from "hooks/useAuth";
-import { matchPath, Redirect, Route, Switch, useParams, Link, NavLink } from "react-router-dom";
+import { matchPath, Redirect, Route, Switch,  NavLink } from "react-router-dom";
 import UserProfile from './UserProfile';
 import { routes } from "routers/routes";
 import clsx from 'clsx';
-import { useState, useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import UserService from 'services/user';
-import { User } from 'models/user';
-import { push } from 'connected-react-router';
-import { setUserLogin } from 'redux/reducers/User/actionTypes';
+import { useState, useRef} from 'react';
+
 
 const Account = () => {
-  const { user } = UseAuth();
+  const { logout } = UseAuth();
   const [isOpen, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const [itemEdit, setItemEdit] = useState<User>(user);
-  const { logout } = UseAuth();
   const activeRoute = (routeName: string, exact: boolean = false) => {
      const match = matchPath(window.location.pathname, {
        path: routeName,
@@ -29,32 +22,6 @@ const Account = () => {
      })
      return !!match
    };
-  const dispatch = useDispatch()
-  // useEffect(() => {
-  //   console.log("RUN")
-  //     const fetchData = async () => {
-  //       dispatch(setLoading(true))
-  //       UserService.getMe()
-  //         .then((res) => {
-  //           console.log("RES",res);
-  //           setItemEdit(res)
-  //         })
-  //         .catch((e) => dispatch(setErrorMess(e)))
-  //         .finally(() => dispatch(setLoading(false)))
-  //     }
-  //     fetchData()
-  // },[])
-  const onSubmit = (data) => {
-    dispatch(setLoading(true))
-    UserService.update(data)
-      .then((res) => {
-        setItemEdit(res.data)
-        dispatch(setUserLogin(res.data))
-        dispatch(push(routes.account.userProfile))
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
-  }
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -85,7 +52,6 @@ const Account = () => {
       path: routes.account.paymentInfo,
       name: "Payment",
     },
-
   ]
 
   const links = (
@@ -125,7 +91,7 @@ const Account = () => {
         </div>
         <div className={classes.content}>
           <Switch>
-            <Route exact path={routes.account.userProfile} render={(routeProps) => <UserProfile onSubmit={onSubmit} itemEdit={itemEdit} {...routeProps} />} />
+            <Route exact path={routes.account.userProfile} render={(routeProps) => <UserProfile {...routeProps} />} />
             <Redirect from={routes.account.root} to={routes.account.userProfile} />
           </Switch>
           <div className={classes.toggleMenu}>
@@ -146,11 +112,7 @@ const Account = () => {
             >
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList
-                    autoFocusItem={isOpen}
-                    id="composition-menu"
-                    aria-labelledby="composition-button"
-                  >
+                  <MenuList autoFocusItem={isOpen}>
                     {links}
                   </MenuList>
                 </ClickAwayListener>
