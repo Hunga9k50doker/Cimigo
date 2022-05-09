@@ -149,11 +149,11 @@ export const routesOutside = (lang: string) => {
       }
     case Lang.EN:
       return {
-        overview: `${cimigoUrl}/en/solutions/overview`,
-        howItWorks: `${cimigoUrl}/en/solutions/how-it-works`,
-        solution: `${cimigoUrl}/en/solutions/solution`,
+        overview: `${cimigoUrl}/en/rapid-survey/overview`,
+        howItWorks: `${cimigoUrl}/en/rapid-survey/how-it-works`,
+        solution: `${cimigoUrl}/en/rapid-survey/solution`,
         pricingPlans: `${cimigoUrl}/en/solutions/pricing-plans`,
-        faq: `${cimigoUrl}/solutions/faq`,
+        faq: `${cimigoUrl}/rapid-survey/faq`,
         homePage: `${cimigoUrl}/en`,
         opportunitiesAtCimigo: `${cimigoUrl}/en/opportunities-at-cimigo`,
         trends: `${cimigoUrl}/en/trends`,
