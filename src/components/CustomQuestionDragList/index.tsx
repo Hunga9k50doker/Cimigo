@@ -6,6 +6,7 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import Images from "config/images";
+import { IconButton } from "@mui/material";
 import classes from "./styles.module.scss";
 
 export interface Question {
@@ -66,13 +67,13 @@ const CustomQuestionsDragList = memo((props: CustomQuestionsDragListProps) => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <div className={classes.listItemLeft}>
+                    <div className={classes.listItemContent}>
                       <img
                         className={classes.hide}
                         src={Images.icDrag}
                         alt=""
                       />
-                      <div className={classes.content}>
+                      <div className={classes.question}>
                         <img
                           src={
                             item.id === 1
@@ -87,26 +88,25 @@ const CustomQuestionsDragList = memo((props: CustomQuestionsDragListProps) => {
                         <span className={classes.hide}>$353</span>
                       </div>
                     </div>
-                    <div className={classes.listItemRight}>
-                      <div
-                        className={classes.buttonContainer}
-                        onClick={handleEditQuestion}
-                      >
-                        <img
-                          className={classes.hide}
-                          src={Images.icEditQuestion}
-                          alt=""
-                        />
-                      </div>
-                      <div
-                        className={classes.buttonContainer}
-                        onClick={handleDeleteQuestion}
-                      >
-                        <img
-                          className={classes.hide}
-                          src={Images.icDelete}
-                          alt=""
-                        />
+                    <div>
+                      <div className={classes.btnAction}>
+                        <IconButton
+                          onClick={handleEditQuestion}
+                          className={classes.iconAction}
+                          edge="end"
+                          aria-label="Edit"
+                        >
+                          <img src={Images.icRename} alt="" />
+                        </IconButton>
+
+                        <IconButton
+                          onClick={handleDeleteQuestion}
+                          className={classes.iconAction}
+                          edge="end"
+                          aria-label="Delete"
+                        >
+                          <img src={Images.icDelete} alt="" />
+                        </IconButton>
                       </div>
                     </div>
                   </div>

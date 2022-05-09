@@ -61,6 +61,7 @@ import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
 import Toggle from "components/Toggle";
 import CustomQuestionsDragList, { Question } from "components/CustomQuestionDragList";
+import clsx from "clsx";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -1024,13 +1025,13 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
           </Grid>
           <div className={classes.line}></div>
-          <div className={activeCustomQuestions ? classes.customQuestionsTitle : classes.customQuestionsTitleDisabled} id="custom-questions" translation-key="setup_survey_custom_questions_title">5. Custom questions <span translation-key="common_max">({t('common_max')} 4)</span> <Toggle onChange={toggleCustomQuestions} /> <span className={activeCustomQuestions ? classes.customQuestionsPrice: classes.customQuestionsPriceDisabled}>Extra cost</span></div>
+          <div className={clsx(classes.customQuestionsTitle, {[classes.customQuestionsTitleDisabled]: !activeCustomQuestions})} id="custom-questions" translation-key="setup_survey_custom_questions_title">5. Custom questions <span translation-key="common_max">({t('common_max')} 4)</span> <Toggle onChange={toggleCustomQuestions} /> <span className={clsx(classes.customQuestionsPrice, {[classes.customQuestionsPriceDisabled]: !activeCustomQuestions})}>Extra cost</span></div>
           <Grid className={classes.flex}>
-            <p className={activeCustomQuestions ? `` : classes.customQuestionsSubTitleDisabled} translation-key="setup_survey_custom_questions_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
-            <Grid className={activeCustomQuestions ? classes.customQuestionsList : classes.displayNone}>
+            <p className={clsx({[classes.customQuestionsSubTitleDisabled]: !activeCustomQuestions})} translation-key="setup_survey_custom_questions_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
+            <Grid className={clsx(classes.customQuestionsList, {[classes.displayNone]: !activeCustomQuestions})}>
               <CustomQuestionsDragList questions={questions} setQuestions={setQuestions} />
             </Grid>
-            <Grid className={activeCustomQuestions ? classes.select : classes.displayNone}>
+            <Grid className={clsx(classes.select, {[classes.displayNone]: !activeCustomQuestions})}>
               <FormControl classes={{ root: classes.rootSelect }} disabled={!enableAdditionalAttributes() || !editableProject(project)}>
                 <Select
                   variant="outlined"

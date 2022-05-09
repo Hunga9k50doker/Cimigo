@@ -2,10 +2,7 @@ import Switch, { SwitchProps } from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
 import { memo } from "react";
 
-interface ToggleProps extends SwitchProps {
-  checked?: boolean;
-  onChange?: () => void;
-}
+interface ToggleProps extends SwitchProps {}
 
 const CustomSwitch = styled(Switch)((props) => ({
   "& .MuiSwitch-switchBase .MuiSwitch-thumb": {
@@ -19,12 +16,13 @@ const CustomSwitch = styled(Switch)((props) => ({
   },
 }));
 
-const label = { inputProps: { "aria-label": "Toggle" } };
-
-const Toggle = memo((props: ToggleProps) => {
-  const { checked, onChange } = props;
-
-  return <CustomSwitch {...label} checked={checked} onChange={onChange} />;
+const Toggle = memo(({...props}: ToggleProps) => {
+  return (
+    <CustomSwitch
+      inputProps={{ "aria-label": "Toggle" }}
+      {...props}
+    />
+  );
 });
 
 export default Toggle;
