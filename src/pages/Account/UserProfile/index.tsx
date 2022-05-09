@@ -77,7 +77,7 @@ const UserProfile = memo((props: Props) => {
     }, [dispatch])
 
     useEffect(() => {
-        if (user !== null) {
+        if (user) {
             reset({
                 avatar: user.avatar || '',
                 firstName: user.firstName || '',
@@ -88,7 +88,7 @@ const UserProfile = memo((props: Props) => {
                 phone: user.phone || '',
             })
         }
-    }, [reset])
+    }, [user,reset])
     const _onSubmit = (data: DataForm) => {
         const form = new FormData()
         form.append('firstName', data.firstName)

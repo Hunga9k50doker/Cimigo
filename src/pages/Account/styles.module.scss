@@ -120,6 +120,10 @@
     border: 1px solid rgba(28, 28, 28, 0.2);
     margin-top: -7px;
     margin-bottom: 10px;
+    @media only screen and (max-width: 1024px) { 
+        margin-top: -4px;
+        margin-bottom: 13px;
+    }
 }
 .btnLogout{
     width: 100%;

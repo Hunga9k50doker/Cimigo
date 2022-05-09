@@ -135,11 +135,10 @@
 }
 
 .inputFlex {
-    margin-top: -7px;
+    margin-top: -5px;
     margin-bottom: 10px;
     display: flex;
     margin-left: -10px;
-
     div:first-child {
         margin-right: 10px;
         margin-left: 10px;
@@ -234,7 +233,7 @@
     .inputFlex {
         .customSelect {
             div:first-child {
-                font-size: 14px !important;
+                font-size: 16px !important;
             }
        
         }
@@ -242,14 +241,25 @@
 }
 
 @media only screen and (max-width: 767px) {
-    input::placeholder {
+    .rowInfo{
+        margin-bottom: 47px;   
+        margin-left: -8px;
+    }
+    input {
         font-size: 14px !important;
         font-weight: 400;
     }
-
+    .inputFull{
+        p {
+            margin-left: 0px !important;
+        }
+    }
     .inputFlex {
         display: initial;
         font-size: 14px !important;
+        p {
+            margin-left: 0px !important;
+        }
         >div:first-child {
             margin-top: -15px;
         }
@@ -259,6 +269,9 @@
         .customSelect {
             img {
                 margin-left: -24px !important;
+            }
+            div:first-child {
+                font-size: 14px !important;
             }
         }
     }
