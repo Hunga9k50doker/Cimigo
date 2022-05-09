@@ -33,6 +33,7 @@ export interface DataForm {
 interface Props {
 
 }
+
 const UserProfile = memo((props: Props) => {
     const dispatch = useDispatch()
     const { t, i18n } = useTranslation()
@@ -77,7 +78,7 @@ const UserProfile = memo((props: Props) => {
     }, [dispatch])
 
     useEffect(() => {
-        if (user) {
+        if(user) {
             reset({
                 avatar: user.avatar || '',
                 firstName: user.firstName || '',
@@ -124,7 +125,7 @@ const UserProfile = memo((props: Props) => {
                     />}
                 />
                 <label htmlFor="upload" className={classes.uploadAvatar}>
-                    <CameraAlt></CameraAlt>
+                    <CameraAlt/>
                 </label>
             </div>
             <div className={classes.personalInfo}>
@@ -200,7 +201,7 @@ const UserProfile = memo((props: Props) => {
                 translation-key-placeholder="field_company_placeholder"
                 endAdornment={
                     <InputAdornment position="end">
-                        <Report className={classes.iconReport}></Report>
+                        <Report className={classes.iconReport}/>
                     </InputAdornment>
                 }
                 inputRef={register('company')}

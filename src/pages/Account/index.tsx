@@ -47,7 +47,7 @@ const Account = () => {
     {
       icon: Payment,
       path: routes.account.paymentInfo,
-      name: "Payment",
+      name: "Payment info",
     },
   ]
 
@@ -70,7 +70,7 @@ const Account = () => {
       })}
       <Grid className={classes.lineList}></Grid>
       <Button className={classes.btnLogout} onClick={logout}>
-        <Icon component={Logout}></Icon>
+        <Logout/>
         <p>Logout</p>
       </Button>
     </List>
@@ -93,7 +93,7 @@ const Account = () => {
               onClick={handleToggle}
               className={classes.btnArrow}
             >
-              <KeyboardDoubleArrowLeft></KeyboardDoubleArrowLeft>
+              <KeyboardDoubleArrowLeft/>
             </IconButton>
             <Popper className={classes.positionPopper}
               open={isOpen}
