@@ -125,8 +125,3 @@ export const API = {
     }
   }
 }
-
-export const VALIDATION = {
-  password: new RegExp("^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])[a-zA-Z0-9@#$%^&+=]*$"),
-  phone: /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/
-}

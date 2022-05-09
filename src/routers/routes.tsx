@@ -11,13 +11,6 @@ export const routes = {
       invoice: '/callback/project/:id/invoice',
     }
   },
-  account:{
-    root: '/account',
-    userProfile:'/account/user-profile',
-    changePassword: '/account/change-password',
-    paymentInfo: '/account/payment-info',
-
-  },
   login: '/login',
   register: '/register',
   forgotPassword: '/forgot-password',
