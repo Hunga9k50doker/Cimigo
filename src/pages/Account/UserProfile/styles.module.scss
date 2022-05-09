@@ -55,6 +55,9 @@
     input[name="firstName"], input[name="lastName"],  input[name="company"]{
         padding-right: 12px;
     }
+    input[name="email"]{
+        padding-right: 14px;
+    }
 }
 
 .personalImage {
