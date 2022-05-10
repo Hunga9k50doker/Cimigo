@@ -1,6 +1,6 @@
 import api from './configApi';
 import { API } from 'config/constans';
-import { ForgotPasswordData, LoginForm, RegisterData, SocialLoginData,User } from 'models/user';
+import { ForgotPasswordData, LoginForm, RegisterData, SocialLoginData} from 'models/user';
 
 export class UserService {
   static async login(data: LoginForm): Promise<any> {
@@ -21,7 +21,7 @@ export class UserService {
         return Promise.reject(e?.response?.data);
       })
   }
-  static async update(data: User): Promise<any> {
+  static async update(data: FormData): Promise<any> {
     return await api.put(`${API.USER.UPDATE_PROFILE}`, data, {
       headers: {
         'Content-Type': 'multipart/form-data'
