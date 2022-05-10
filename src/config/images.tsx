@@ -54,10 +54,14 @@ import icArrowLogin from 'assets/img/icon/ic-arrow-login.svg';
 import icArrowRegister from 'assets/img/icon/ic-arrow-register.svg';
 import icView from 'assets/img/icon/ic-view.svg';
 import icInvoice from 'assets/img/icon/ic-invoice.svg';
+import icRestore from 'assets/img/icon/ic-restore.svg';
+import icEditCell from 'assets/img/icon/ic-edit-cell.svg';
 import imgPaymentFailed from 'assets/img/img-payment-failed.svg';
 
 const images = {
   // ===================== Images =========================
+  icEditCell,
+  icRestore,
   icInvoice,
   icPdf,
   icView,

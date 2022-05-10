@@ -38,3 +38,11 @@
   color: rgba(28, 28, 28, 0.2);
   font-weight: 600;
 }
+.btnGreen {
+  background: #7C9911;
+  border: none;
+  color: white;
+  &:hover {
+    background: #7C9911;
+  }
+}

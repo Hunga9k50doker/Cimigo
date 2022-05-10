@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, UpdateProjectBasicInformation, UpdateTarget } from 'models/project';
+import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, ResetQuota, UpdateProjectBasicInformation, UpdateQuota, UpdateTarget } from 'models/project';
 import api from 'services/configApi';
 
 export class ProjectService {
@@ -94,6 +94,37 @@ export class ProjectService {
         return Promise.reject(e?.response?.data);
       })
   }
-  
+
+  static async getQuota(id: number, sampleSize: number): Promise<any> {
+    return await api.put(API.PROJECT.QUOTA.GET.replace(":id", `${id}`), {
+      sampleSize
+    })
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async updateQuota(id: number, data: UpdateQuota): Promise<any> {
+    return await api.put(API.PROJECT.QUOTA.UPDATE.replace(":id", `${id}`), data)
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async resetQuota(id: number, data: ResetQuota): Promise<any> {
+    return await api.put(API.PROJECT.QUOTA.RESET.replace(":id", `${id}`), data)
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
 
 }

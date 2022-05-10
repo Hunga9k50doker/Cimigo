@@ -30,7 +30,12 @@ export const API = {
     MOVE: '/v1.0/project/:id/move-project',
     BASIC_INFORMATION: '/v1.0/project/:id/basic-information',
     TARGET: '/v1.0/project/:id/target',
-    SAMPLE_SIZE: '/v1.0/project/:id/sample-size'
+    SAMPLE_SIZE: '/v1.0/project/:id/sample-size',
+    QUOTA: {
+      GET: '/v1.0/project/:id/quota',
+      RESET: '/v1.0/project/:id/reset-quota',
+      UPDATE: '/v1.0/project/:id/update-quota'
+    }
   },
   FOLDER: {
     DEFAULT: '/v1.0/folder',

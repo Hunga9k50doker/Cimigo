@@ -108,3 +108,15 @@ export interface UpdateTarget {
     answerIds: number[]
   }[]
 }
+
+export interface UpdateQuota {
+  quotaTableId: number
+  quotas: {
+    sampleSize: number,
+    answerIds: number[]
+  }[]
+}
+
+export interface ResetQuota {
+  quotaTableId: number
+}
