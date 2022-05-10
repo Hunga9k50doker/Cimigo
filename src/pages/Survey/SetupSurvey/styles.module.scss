@@ -806,8 +806,31 @@
   }
   @media screen and (max-width: 767px) {
     width: 100%;
+    img,
+    span {
+      display: none;
+    }
   }
 }
 .displayNone {
   display: none;
+}
+
+.summaryCustomQuestions {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.summaryCustomQuestionsPrice {
+  width: fit-content;
+  font-weight: 400;
+  font-size: 12px;
+  padding: 1px 16px;
+  color: #fafaff;
+  background-color: #7c9911;
+  border-radius: 30px;
+}
+.summaryCustomQuestionsPriceDisabled {
+  color: #1c1c1c66 !important;
+  background-color: #1c1c1c33 !important;
 }

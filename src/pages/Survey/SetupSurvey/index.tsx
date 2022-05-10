@@ -1202,6 +1202,31 @@ const SetupSurvey = memo(({ id }: Props) => {
                   </ul>
                 </StepContent>
               </Step>
+              <Step active={questions?.length >= 1 && activeCustomQuestions} expanded>
+                <StepLabel
+                  onClick={() => scrollToElement('custom-questions')}
+                  StepIconComponent={ColorlibStepIcon}
+                  classes={{
+                    root: classes.rootStepLabel,
+                    completed: classes.rootStepLabelCompleted,
+                    active: classes.rootStepLabelActive,
+                    label: classes.rootStepLabel
+                  }}
+                  translation-key="setup_survey_summary_custom_questions"
+                >
+                  <div className={classes.summaryCustomQuestions}>
+                    <span>Custom question</span>
+                    <span className={clsx(classes.summaryCustomQuestionsPrice, {[classes.summaryCustomQuestionsPriceDisabled]: !activeCustomQuestions})}>$150</span>
+                  </div>
+                </StepLabel>
+                <StepContent classes={{ root: classes.rootConnector }}>
+                  <ul>
+                    <li translation-key="setup_survey_summary_open_question">Open question (01)</li>
+                    <li translation-key="setup_survey_summary_single_choice">Single choice (01)</li>
+                    <li translation-key="setup_survey_summary_multiple_choices">Multiple choices (01)</li>
+                  </ul>
+                </StepContent>
+              </Step>
             </Stepper>
           </Grid>
         </Grid>
