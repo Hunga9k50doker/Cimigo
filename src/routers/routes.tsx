@@ -114,7 +114,13 @@ export const routes = {
       create: '/admin/user/:id/create',
       edit: '/admin/user/:id/edit',
     }
-  }
+  },
+  account:{
+    root: '/account',
+    userProfile:'/account/user-profile',
+    changePassword: '/account/change-password',
+    paymentInfo: '/account/payment-info',
+  },
 }
 
 export const cimigoUrl = process.env.REACT_APP_CIMIGO_URL
