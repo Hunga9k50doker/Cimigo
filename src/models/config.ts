@@ -1,5 +1,6 @@
 export interface ConfigData {
-  usdToVND: number
+  usdToVND: number,
+  vat: number
 }
 
 export interface ConfigAttributes {
