@@ -7,12 +7,12 @@ import {
 } from "react-beautiful-dnd";
 import Images from "config/images";
 import { IconButton } from "@mui/material";
-import { Question } from "models/custom_question";
+import { CustomQuestion } from "models/custom_question";
 import classes from "./styles.module.scss";
 
 interface CustomQuestionsDragListProps {
-  questions: Question[];
-  setQuestions: Dispatch<SetStateAction<Question[]>>;
+  questions: CustomQuestion[];
+  setQuestions: Dispatch<SetStateAction<CustomQuestion[]>>;
   handleEditQuestion: (event: SyntheticEvent<EventTarget>) => void;
   handleDeleteQuestion: (event: SyntheticEvent<EventTarget>) => void;
 }
@@ -22,7 +22,7 @@ const CustomQuestionsDragList = memo((props: CustomQuestionsDragListProps) => {
     props;
 
   const reorder = (items, startIndex, endIndex) => {
-    const result: Question[] = Array.from(items);
+    const result: CustomQuestion[] = Array.from(items);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
     return result;
@@ -32,7 +32,7 @@ const CustomQuestionsDragList = memo((props: CustomQuestionsDragListProps) => {
     if (!destination) {
       return;
     }
-    const result: Question[] = reorder(
+    const result: CustomQuestion[] = reorder(
       questions,
       source.index,
       destination.index

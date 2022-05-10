@@ -5,15 +5,15 @@ import {
   SyntheticEvent,
   useState,
 } from "react";
-import { Question } from "models/custom_question";
+import { CustomQuestion } from "models/custom_question";
 import Images from "config/images";
 import classes from "./styles.module.scss";
 import { Button, Collapse, Grid } from "@mui/material";
 import clsx from "clsx";
 
 interface CustomQuestionsListMobileProps {
-  questions: Question[];
-  setQuestions: Dispatch<SetStateAction<Question[]>>;
+  questions: CustomQuestion[];
+  setQuestions: Dispatch<SetStateAction<CustomQuestion[]>>;
   handleEditQuestion: (event: SyntheticEvent<EventTarget>) => void;
   handleDeleteQuestion: (event: SyntheticEvent<EventTarget>) => void;
 }

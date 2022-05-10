@@ -63,7 +63,7 @@ import Toggle from "components/Toggle";
 import CustomQuestionsDragList from "components/CustomQuestionsDragList";
 import clsx from "clsx";
 import CustomQuestionsListMobile from "components/CustomQuestionsListMobile";
-import { Question } from "models/custom_question";
+import { CustomQuestion } from "models/custom_question";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -139,7 +139,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [projectAttributeDelete, setProjectAttributeDelete] = useState<ProjectAttribute>()
 
   const [activeCustomQuestions, setActiveCustomQuestions] = useState<boolean>(false);
-  const [questions, setQuestions] = useState<Question[]>([
+  const [questions, setQuestions] = useState<CustomQuestion[]>([
     {
       id: 1,
       content: "How many country in Asean?",
