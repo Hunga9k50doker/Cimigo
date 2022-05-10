@@ -237,6 +237,9 @@
 
     .form {
         padding: 30px 24px 25px 24px;
+        .iconReport{
+            margin-left: -17px;
+        }
     }
 
     .inputFlex {
@@ -252,6 +255,7 @@
             padding-right: 35px;
         }
     }
+  
 }
 
 @media only screen and (max-width: 767px) {
