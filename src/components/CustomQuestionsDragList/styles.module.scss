@@ -1,3 +1,9 @@
+.container {
+  padding: 20px 0 20px 20px;
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
+}
 .listItem {
   display: flex;
   flex-direction: row;

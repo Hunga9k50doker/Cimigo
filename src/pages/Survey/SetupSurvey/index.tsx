@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo, SyntheticEvent } from "react";
 import classes from './styles.module.scss';
 import {
   FormControl,
@@ -60,8 +60,10 @@ import { Check, Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
 import Toggle from "components/Toggle";
-import CustomQuestionsDragList, { Question } from "components/CustomQuestionDragList";
+import CustomQuestionsDragList from "components/CustomQuestionsDragList";
 import clsx from "clsx";
+import CustomQuestionsListMobile from "components/CustomQuestionsListMobile";
+import { Question } from "models/custom_question";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -529,6 +531,14 @@ const SetupSurvey = memo(({ id }: Props) => {
   const toggleCustomQuestions = () => {
     setActiveCustomQuestions(!activeCustomQuestions);
   }
+
+  const handleEditQuestion = (event: SyntheticEvent<EventTarget>) => {
+    event.stopPropagation();
+  };
+
+  const handleDeleteQuestion = (event: SyntheticEvent<EventTarget>) => {
+    event.stopPropagation();
+  };
 
   const scrollToElement = (id: string) => {
     const el = document.getElementById(id)
@@ -1026,10 +1036,13 @@ const SetupSurvey = memo(({ id }: Props) => {
           </Grid>
           <div className={classes.line}></div>
           <div className={clsx(classes.customQuestionsTitle, {[classes.customQuestionsTitleDisabled]: !activeCustomQuestions})} id="custom-questions" translation-key="setup_survey_custom_questions_title">5. Custom questions <span translation-key="common_max">({t('common_max')} 4)</span> <Toggle onChange={toggleCustomQuestions} /> <span className={clsx(classes.customQuestionsPrice, {[classes.customQuestionsPriceDisabled]: !activeCustomQuestions})}>Extra cost</span></div>
+          <div><span className={clsx(classes.customQuestionsPriceMobile, {[classes.customQuestionsPriceDisabled]: !activeCustomQuestions})}>50$ per question</span></div>
           <Grid className={classes.flex}>
             <p className={clsx({[classes.customQuestionsSubTitleDisabled]: !activeCustomQuestions})} translation-key="setup_survey_custom_questions_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
-            <Grid className={clsx(classes.customQuestionsList, {[classes.displayNone]: !activeCustomQuestions})}>
-              <CustomQuestionsDragList questions={questions} setQuestions={setQuestions} />
+            <Grid className={clsx({[classes.displayNone]: !activeCustomQuestions})}>
+              <CustomQuestionsDragList questions={questions} setQuestions={setQuestions} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
+              {/* ===================Custom questions mobile====================== */}
+              <CustomQuestionsListMobile questions={questions} setQuestions={setQuestions} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
             </Grid>
             <Grid className={clsx(classes.select, {[classes.displayNone]: !activeCustomQuestions})}>
               <FormControl classes={{ root: classes.rootSelect }} disabled={!enableAdditionalAttributes() || !editableProject(project)}>

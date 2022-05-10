@@ -731,7 +731,7 @@
 .customQuestionsTitle {
   font-weight: 600;
   font-size: 16px;
-  color: #1C1C1C;
+  color: #1c1c1c;
   margin: 0;
   display: flex;
   flex-wrap: wrap;
@@ -744,31 +744,44 @@
     color: #7c9911;
   }
 }
+.customQuestionsTitleDisabled {
+  color: #1c1c1c66 !important;
+  span:first-child {
+    color: #1c1c1c66 !important;
+  }
+}
 .customQuestionsPrice {
   font-weight: 400;
   font-size: 12px;
   padding: 4px 16px;
   margin-left: auto;
   margin-right: 10px;
-  color: #FAFAFF;
-  background-color: #7C9911;
+  color: #fafaff;
+  background-color: #7c9911;
   border-radius: 30px;
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
 }
-.customQuestionsTitleDisabled {
-  color: #1C1C1C66 !important;
-  span:first-child {
-    color: #1C1C1C66 !important;
+.customQuestionsPriceMobile {
+  font-weight: 400;
+  font-size: 12px;
+  padding: 4px 16px;
+  margin: 0 auto 10px 18px;
+  color: #fafaff;
+  background-color: #7c9911;
+  border-radius: 30px;
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: inline-block;
   }
 }
 .customQuestionsPriceDisabled {
-  color: #1C1C1C66 !important;
-  background-color: #1C1C1C33 !important;
+  color: #1c1c1c66 !important;
+  background-color: #1c1c1c33 !important;
 }
 .customQuestionsSubTitleDisabled {
-  color: #1C1C1C66 !important;
-}
-.customQuestionsList {
-  padding: 20px 0 20px 20px;
+  color: #1c1c1c66 !important;
 }
 .questionType {
   width: 215px;
@@ -782,14 +795,14 @@
     gap: 15px;
   }
   > div > p {
-    color: #1C1C1CE5;
+    color: #1c1c1ce5;
     font-weight: 500;
     font-size: 12px;
   }
   > span {
     font-weight: 400;
     font-size: 12px;
-    color: #1C1C1CA6;
+    color: #1c1c1ca6;
   }
   @media screen and (max-width: 767px) {
     width: 100%;
