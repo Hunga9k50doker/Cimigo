@@ -22,6 +22,20 @@ export class UserService {
         return Promise.reject(e?.response?.data);
       })
   }
+  
+  static async update(data: FormData): Promise<any> {
+    return await api.put(`${API.USER.UPDATE_PROFILE}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
 
   static async sendVerifyEmail(email: string) {
     return await api.post(API.AUTH.SEND_VERIFY_EMAIL, { email })
