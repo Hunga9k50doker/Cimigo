@@ -198,7 +198,7 @@ const Header = memo((props: HeaderProps) => {
         }
         <nav className={classes.navBar}>
           <ul className={classes.listMenu}>
-            {isLoggedIn ? "" :
+            {!isLoggedIn && (
               <div className={classes.listItem}>
                 {dataList.map(item => (
                   <li key={item.name} className={classes.item}>
@@ -208,8 +208,8 @@ const Header = memo((props: HeaderProps) => {
                   </li>
                 ))}
               </div>
-            }
-            <li className={classes.item}>
+            )}
+            <li className={clsx(classes.item, {[classes.clearMargin]: !isLoggedIn})}>
               <Buttons
                 className={classes.btnChangeLang}
                 children={langSupports?.find(it => it.key === i18n.language).name}

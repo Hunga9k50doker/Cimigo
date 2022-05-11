@@ -141,11 +141,11 @@ export const routesOutside = (lang: string) => {
   switch (lang) {
     case Lang.VI:
       return {
-        overview: `${cimigoUrl}/vi/giai-phap/rapid-survey-introduction`,
-        howItWorks: `${cimigoUrl}/vi/giai-phap/how-it-works`,
-        solution: `${cimigoUrl}/vi/giai-phap/rapidsurvey-solutions`,
+        overview: `${cimigoUrl}/vi/rapid-survey/tong-quan`,
+        howItWorks: `${cimigoUrl}/vi/rapid-survey/cach-hoat-dong`,
+        solution: `${cimigoUrl}/vi/rapid-survey/giai-phap`,
         pricingPlans: `${cimigoUrl}/vi/cac-giai-phap/pricing`,
-        faq: `${cimigoUrl}/vi/giai-phap/faq`,
+        faq: `${cimigoUrl}/vi/rapid-survey/hoi-dap`,
         homePage: `${cimigoUrl}/vi`,
         opportunitiesAtCimigo: `${cimigoUrl}/vi/viec-lam`,
         trends: `${cimigoUrl}/vi/xu-huong`,
@@ -155,11 +155,11 @@ export const routesOutside = (lang: string) => {
       }
     case Lang.EN:
       return {
-        overview: `${cimigoUrl}/en/rapid-survey/rapid-survey-introduction`,
-        howItWorks: `${cimigoUrl}/en/rapid-survey/how-rapid-survey-works`,
-        solution: `${cimigoUrl}/en/rapid-survey/rapidsurvey`,
+        overview: `${cimigoUrl}/en/rapid-survey/overview`,
+        howItWorks: `${cimigoUrl}/en/rapid-survey/how-it-workss`,
+        solution: `${cimigoUrl}/en/rapid-survey/solutions`,
         pricingPlans: `${cimigoUrl}/en/solutions/pricing-plans`,
-        faq: `${cimigoUrl}/en/rapid-survey/rapid-survey-faq`,
+        faq: `${cimigoUrl}/en/rapid-survey/faq`,
         homePage: `${cimigoUrl}/en`,
         opportunitiesAtCimigo: `${cimigoUrl}/en/opportunities-at-cimigo`,
         trends: `${cimigoUrl}/en/trends`,
