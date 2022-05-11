@@ -55,7 +55,7 @@ import { ProjectAttributeService } from "services/project_attribute";
 import { UserAttributeService } from "services/user_attribute";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
 import { editableProject } from "helpers/project";
-import { Check } from "@mui/icons-material";
+import { Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
 
@@ -86,6 +86,17 @@ interface AttributeShow {
   type: AttributeShowType
 }
 
+enum SECTION {
+  basic_information = 'basic-information',
+  upload_packs = 'upload-packs',
+  additional_brand_list = 'additional-brand-list',
+  additional_attributes = 'additional-attributes'
+}
+
+interface IQueryString {
+  section?: string
+}
+
 interface Props {
   id: number
 }
@@ -103,7 +114,6 @@ const SetupSurvey = memo(({ id }: Props) => {
 
   const [openPopupMandatory, setOpenPopupMandatory] = useState(false)
   const [openPopupPreDefined, setOpenPopupPreDefined] = useState(false)
-  const [isScrolling, setScrolling] = useState(false);
 
   const [packs, setPacks] = useState<Pack[]>([]);
   const [addNewPack, setAddNewPack] = useState<boolean>(false);
@@ -131,21 +141,6 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [userAttributeEdit, setUserAttributeEdit] = useState<UserAttribute>()
   const [userAttributeDelete, setUserAttributeDelete] = useState<UserAttribute>()
   const [projectAttributeDelete, setProjectAttributeDelete] = useState<ProjectAttribute>()
-
-  const handleScroll = () => {
-    setScrolling(window.scrollY !== 0)
-  }
-
-  function _handleScroll(e: any) {
-    handleScroll();
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', _handleScroll);
-    return () => {
-      window.removeEventListener('scroll', _handleScroll);
-    }
-  }, [])
 
   useEffect(() => {
     if (project) {
@@ -506,6 +501,13 @@ const SetupSurvey = memo(({ id }: Props) => {
     }
   }
 
+  const scrollToElement = (id: string) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    const headerHeight = document.getElementById('header')?.offsetHeight || 0
+    window.scrollTo({ behavior: 'smooth', top: el.offsetTop - headerHeight - 10 })
+  }
+
   return (
     <>
       {(project && !editableProject(project)) && (
@@ -516,7 +518,7 @@ const SetupSurvey = memo(({ id }: Props) => {
       <Grid classes={{ root: classes.root }}>
         <Grid classes={{ root: classes.left }} >
           <p className={classes.title} translation-key="setup_survey_title">{t('setup_survey_title')}</p>
-          <p className={classes.subTitle} id="basic-information" translation-key="setup_survey_basic_infor_title">
+          <p className={classes.subTitle} id={SECTION.basic_information} translation-key="setup_survey_basic_infor_title">
             1. {t('setup_survey_basic_infor_title')}
           </p>
           <Grid className={classes.flex}>
@@ -567,14 +569,14 @@ const SetupSurvey = memo(({ id }: Props) => {
               {editableProject(project) && (
                 <Grid className={classes.btnSave}>
                   <Buttons type={"submit"} padding="3px 13px" btnType="TransparentBlue" translation-key="common_save">
-                    <img src={Images.icSave} alt="icon save" />{t('common_save')}
+                    <Save fontSize="small" sx={{marginRight: "8px"}}/>{t('common_save')}
                   </Buttons>
                 </Grid>
               )}
             </form>
           </Grid>
           <div className={classes.line}></div>
-          <p className={classes.subTitle} id="upload-packs" translation-key="setup_survey_packs_title">
+          <p className={classes.subTitle} id={SECTION.upload_packs} translation-key="setup_survey_packs_title">
             2. {t('setup_survey_packs_title')} <span translation-key="common_max">({t('common_max')} {maxPack()})</span>
           </p>
           <Grid className={classes.flex}>
@@ -640,7 +642,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             </MenuItem>
           </Menu>
           <div className={classes.line}></div>
-          <p className={classes.subTitle} id="additional-brand-list" translation-key="setup_survey_add_brand_title">3. {t('setup_survey_add_brand_title')} <span>({t('common_max')} {maxAdditionalBrand()})</span></p>
+          <p className={classes.subTitle} id={SECTION.additional_brand_list} translation-key="setup_survey_add_brand_title">3. {t('setup_survey_add_brand_title')} <span>({t('common_max')} {maxAdditionalBrand()})</span></p>
           <Grid className={classes.flex}>
             <p translation-key="setup_survey_add_brand_sub_title" dangerouslySetInnerHTML={{ __html: t('setup_survey_add_brand_sub_title') }}></p>
             <TableContainer className={classes.table}>
@@ -735,7 +737,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                                 onClick={onAddOrEditBrand}
                                 translation-key="common_save"
                               >
-                                <Check fontSize="small" sx={{ marginRight: '8px' }} />{t('common_save')}
+                                <Save fontSize="small" sx={{marginRight: "8px"}}/>{t('common_save')}
                               </Buttons>
                             </TableCell>
                           </>
@@ -796,7 +798,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                           onClick={onAddOrEditBrand}
                           translation-key="common_save"
                         >
-                          <Check fontSize="small" sx={{ marginRight: '8px' }} />{t('common_save')}
+                          <Save fontSize="small" sx={{marginRight: "8px"}}/>{t('common_save')}
                         </Buttons>
                       </TableCell>
                     </TableRow>
@@ -880,7 +882,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             </MenuItem>
           </Menu>
           <div className={classes.line}></div>
-          <p className={classes.subTitle} id="additional-attributes" translation-key="setup_survey_add_att_title">4. {t('setup_survey_add_att_title')} <span>({t('common_max')} {maxAdditionalAttribute()})</span></p>
+          <p className={classes.subTitle} id={SECTION.additional_attributes} translation-key="setup_survey_add_att_title">4. {t('setup_survey_add_att_title')} <span>({t('common_max')} {maxAdditionalAttribute()})</span></p>
           <Grid className={classes.flex}>
             <p translation-key="setup_survey_add_att_sub_title_1">{t('setup_survey_add_att_sub_title_1')} <span onClick={() => setOpenPopupMandatory(true)}>{t('setup_survey_add_att_sub_title_2')}</span>. {t('setup_survey_add_att_sub_title_3')}</p>
             <Grid container classes={{ root: classes.rootList }}>
@@ -1005,7 +1007,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               <Step active={!!project?.category && !!project?.brand && !!project?.variant && !!project?.manufacturer} expanded>
                 <StepLabel
                   StepIconComponent={ColorlibStepIcon}
-                  onClick={() => document.getElementById('basic-information')?.scrollIntoView()}
+                  onClick={() => scrollToElement('basic-information')}
                   classes={{
                     root: classes.rootStepLabel,
                     completed: classes.rootStepLabelCompleted,
@@ -1027,7 +1029,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               </Step>
               <Step active={packs?.length >= 2} expanded>
                 <StepLabel
-                  onClick={() => document.getElementById('upload-packs')?.scrollIntoView()}
+                  onClick={() => scrollToElement('upload-packs')}
                   StepIconComponent={ColorlibStepIcon}
                   classes={{
                     root: classes.rootStepLabel,
@@ -1047,7 +1049,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               </Step>
               <Step active={additionalBrand?.length >= 2} expanded>
                 <StepLabel
-                  onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
+                  onClick={() => scrollToElement('additional-brand-list')}
                   StepIconComponent={ColorlibStepIcon}
                   classes={{
                     root: classes.rootStepLabel,
@@ -1067,7 +1069,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                     <Grid display={"flex"} justifyContent="flex-end">
                       <span
                         className={classes.moreStepContent}
-                        onClick={() => document.getElementById('additional-brand-list')?.scrollIntoView()}
+                        onClick={() => scrollToElement('additional-brand-list')}
                         translation-key="setup_survey_summary_add_brand_more"
                       >
                         {t('setup_survey_summary_add_brand_more', { number: (additionalBrand?.length - 4) })}
@@ -1078,7 +1080,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               </Step>
               <Step active={!!projectAttributes?.length || !!userAttributes?.length} expanded>
                 <StepLabel
-                  onClick={() => document.getElementById('additional-attributes')?.scrollIntoView()}
+                  onClick={() => scrollToElement('additional-attributes')}
                   StepIconComponent={ColorlibStepIcon}
                   classes={{
                     root: classes.rootStepLabel,

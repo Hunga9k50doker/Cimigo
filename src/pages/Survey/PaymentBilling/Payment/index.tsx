@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { Box, Checkbox, Divider, FormControlLabel, Grid, Radio, RadioGroup, Tooltip } from "@mui/material"
 import classes from './styles.module.scss';
 import images from "config/images";
@@ -24,6 +24,8 @@ import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { push } from "connected-react-router";
 import { authPreviewOrPayment } from "../models";
 import { routes } from "routers/routes";
+import { useTranslation } from "react-i18next";
+import { VALIDATION } from "config/constans";
 
 interface DataForm {
   paymentMethodId: number,
@@ -44,67 +46,71 @@ interface PaymentProps {
 }
 
 const PaymentPage = memo(({ }: PaymentProps) => {
+  const { t, i18n } = useTranslation()
 
-  const schema = yup.object().shape({
-    paymentMethodId: yup.number(),
-    contactName: yup.string()
-      .when('paymentMethodId', {
-        is: (val: number) => val === EPaymentMethod.MAKE_AN_ORDER,
-        then: yup.string().required('Contact name is required.'),
-        otherwise: yup.string()
-      }),
-    contactEmail: yup.string().email()
-      .when('paymentMethodId', {
-        is: (val: number) => val === EPaymentMethod.MAKE_AN_ORDER,
-        then: yup.string().email('Please enter a valid email adress').required('Contact email is required.'),
-        otherwise: yup.string().email('Please enter a valid email adress')
-      }),
-    contactPhone: yup.string()
-      .when('paymentMethodId', {
-        is: (val: number) => val === EPaymentMethod.MAKE_AN_ORDER,
-        then: yup.string().matches(/((09|03|07|08|05)+([0-9]{8})\b)/, { message: "Please enter a valid phone number.", excludeEmptyString: true }).required('Contact phone is required.'),
-        otherwise: yup.string().matches(/((09|03|07|08|05)+([0-9]{8})\b)/, { message: "Please enter a valid phone number.", excludeEmptyString: true })
-      }),
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      paymentMethodId: yup.number(),
+      contactName: yup.string()
+        .when('paymentMethodId', {
+          is: (val: number) => val === EPaymentMethod.MAKE_AN_ORDER,
+          then: yup.string().required(t('field_contact_name_vali_required')),
+          otherwise: yup.string()
+        }),
+      contactEmail: yup.string().email()
+        .when('paymentMethodId', {
+          is: (val: number) => val === EPaymentMethod.MAKE_AN_ORDER,
+          then: yup.string().email(t('field_contact_email_vali_email')).required(t('field_contact_email_vali_required')),
+          otherwise: yup.string().email(t('field_contact_email_vali_email'))
+        }),
+      contactPhone: yup.string()
+        .when('paymentMethodId', {
+          is: (val: number) => val === EPaymentMethod.MAKE_AN_ORDER,
+          then: yup.string().matches(VALIDATION.phone, { message: t('field_contact_phone_number_vali_phone'), excludeEmptyString: true }).required(t('field_contact_phone_vali_required')),
+          otherwise: yup.string().matches(VALIDATION.phone, { message: t('field_contact_phone_number_vali_phone'), excludeEmptyString: true })
+        }),
 
-    saveForLater: yup.bool(),
-    fullName: yup.string()
-      .when('saveForLater', {
-        is: (val: boolean) => val,
-        then: yup.string().required('Full name is required.'),
-        otherwise: yup.string()
-      }),
-    companyName: yup.string()
-      .when('saveForLater', {
-        is: (val: boolean) => val,
-        then: yup.string().required('Company name is required.'),
-        otherwise: yup.string()
-      }),
-    email: yup.string()
-      .when('saveForLater', {
-        is: (val: boolean) => val,
-        then: yup.string().email('Please enter a valid email adress').required('Email is required.'),
-        otherwise: yup.string().email('Please enter a valid email adress')
-      }),
-    phone: yup.string()
-      .when('saveForLater', {
-        is: (val: boolean) => val,
-        then: yup.string().matches(/((09|03|07|08|05)+([0-9]{8})\b)/, { message: "Please enter a valid phone number.", excludeEmptyString: true }).required('Phone is required.'),
-        otherwise: yup.string().matches(/((09|03|07|08|05)+([0-9]{8})\b)/, { message: "Please enter a valid phone number.", excludeEmptyString: true })
-      }),
-    countryId: yup.object()
-      .when('saveForLater', {
-        is: (val: boolean) => val,
-        then: yup.object().required('Country is required.'),
-        otherwise: yup.object()
-      }),
-    companyAddress: yup.string()
-      .when('saveForLater', {
-        is: (val: boolean) => val,
-        then: yup.string().required('Company address is required.'),
-        otherwise: yup.string()
-      }),
-    taxCode: yup.string(),
-  });
+      saveForLater: yup.bool(),
+      fullName: yup.string()
+        .when('saveForLater', {
+          is: (val: boolean) => val,
+          then: yup.string().required(t('field_full_name_vali_required')),
+          otherwise: yup.string()
+        }),
+      companyName: yup.string()
+        .when('saveForLater', {
+          is: (val: boolean) => val,
+          then: yup.string().required(t('field_company_vali_required')),
+          otherwise: yup.string()
+        }),
+      email: yup.string()
+        .when('saveForLater', {
+          is: (val: boolean) => val,
+          then: yup.string().email(t('field_email_vali_email')).required(t('field_email_vali_required')),
+          otherwise: yup.string().email(t('field_email_vali_email'))
+        }),
+      phone: yup.string()
+        .when('saveForLater', {
+          is: (val: boolean) => val,
+          then: yup.string().matches(VALIDATION.phone, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }).required(t('field_phone_number_vali_required')),
+          otherwise: yup.string().matches(VALIDATION.phone, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true })
+        }),
+      countryId: yup.object()
+        .when('saveForLater', {
+          is: (val: boolean) => val,
+          then: yup.object().required(t('field_country_vali_required')),
+          otherwise: yup.object()
+        }),
+      companyAddress: yup.string()
+        .when('saveForLater', {
+          is: (val: boolean) => val,
+          then: yup.string().required(t('field_company_address_vali_required')),
+          otherwise: yup.string()
+        }),
+      taxCode: yup.string(),
+    })
+  }, [i18n.language])
+
 
   const { register, handleSubmit, control, formState: { errors }, watch, clearErrors, reset } = useForm<DataForm>({
     resolver: yupResolver(schema),
@@ -163,25 +169,10 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     })
   }, [paymentInfo, user])
 
-  const getPriceSampleSize = () => {
-    return PriceService.getSampleSizeCost(project)
-  }
-
-  const getSubTotal = () => {
-    return round(getPriceSampleSize())
-  }
-
-  const getVAT = () => {
-    return round(getSubTotal() * 0.1)
-  }
-
-  const getTotal = () => {
-    return round(getSubTotal() + getVAT())
-  }
-
-  const getTotalVND = () => {
-    return round(getTotal() * configs.usdToVND)
-  }
+  const price = useMemo(() => {
+    if (!project || !configs) return null
+    return PriceService.getTotal(project, configs)
+  }, [project, configs])
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -238,6 +229,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
 
   useEffect(() => {
     const checkValidConfirm = () => {
+      if (!project) return
       dispatch(setLoading(true))
       PaymentService.validConfirm(project.id)
         .then(res => {
@@ -255,7 +247,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     <Grid component={'form'} classes={{ root: classes.root }} onSubmit={handleSubmit(onConfirm)} noValidate autoComplete="off">
       <Divider className={classes.divider1} />
       <Grid classes={{ root: classes.left }}>
-        <p>Payment method:</p>
+        <p translation-key="payment_billing_sub_tab_payment_method">{t('payment_billing_sub_tab_payment_method')}:</p>
         <Controller
           name="paymentMethodId"
           control={control}
@@ -269,28 +261,38 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
               label={
                 <Grid classes={{ root: classes.order }}>
-                  <Grid classes={{ root: classes.title }}><img src={images.icOrder} alt="" />Make an order</Grid>
-                  <p className={classes.titleSub}>The simplest way to get started, especially if you need consultation. Our professional consultants will contact you using the information provided below.</p>
+                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_make_an_order"><img src={images.icOrder} alt="" />
+                    {t('payment_billing_sub_tab_payment_method_make_an_order')}
+                  </Grid>
+                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_make_an_order_sub">
+                    {t('payment_billing_sub_tab_payment_method_make_an_order_sub')}
+                  </p>
                   {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
                     <Box>
                       <Inputs
-                        title="Contact name"
+                        title={t('field_contact_name')}
+                        translation-key="field_contact_name"
                         name="contactName"
-                        placeholder="Enter contact name"
+                        placeholder={t('field_contact_name_placeholder')}
+                        translation-key-placeholder="field_contact_name_placeholder"
                         inputRef={register('contactName')}
                         errorMessage={errors.contactName?.message}
                       />
                       <Inputs
-                        title="Contact email"
+                        title={t('field_contact_email')}
+                        translation-key="field_contact_email"
                         name="contactEmail"
-                        placeholder="Enter contact email address"
+                        placeholder={t('field_contact_email_placeholder')}
+                        translation-key-placeholder="field_contact_email_placeholder"
                         inputRef={register('contactEmail')}
                         errorMessage={errors.contactEmail?.message}
                       />
                       <Inputs
-                        title="Contact phone"
+                        title={t('field_contact_phone')}
+                        translation-key="field_contact_phone"
                         name="contactPhone"
-                        placeholder="e.g. +84378312333"
+                        placeholder={t('field_contact_phone_placeholder')}
+                        translation-key-placeholder="field_contact_phone_placeholder"
                         inputRef={register('contactPhone')}
                         errorMessage={errors.contactPhone?.message}
                       />
@@ -305,8 +307,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
               label={
                 <Grid classes={{ root: classes.order }}>
-                  <Grid classes={{ root: classes.title }}><img src={images.icBank} alt="" />Bank transfer</Grid>
-                  <p className={classes.titleSub}>The direct transfer of funds from your bank account into our business bank account. The details of our bank account will be provided in the next step.</p>
+                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_bank_transfer"><img src={images.icBank} alt="" />{t('payment_billing_sub_tab_payment_method_bank_transfer')}</Grid>
+                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_bank_transfer_sub">{t('payment_billing_sub_tab_payment_method_bank_transfer_sub')}</p>
                 </Grid>
               }
             />
@@ -314,61 +316,74 @@ const PaymentPage = memo(({ }: PaymentProps) => {
           </RadioGroup>
           }
         />
-        <p>Invoice and contract information <span>(optional)</span></p>
-        <div className={classes.titleSub1}>You can update this information later</div>
+        <p translation-key="payment_billing_sub_tab_payment_invoice_and_contract_info">{t('payment_billing_sub_tab_payment_invoice_and_contract_info')} <span translation-key="common_optional">({t('common_optional')})</span></p>
+        <div className={classes.titleSub1} translation-key="payment_billing_sub_tab_payment_invoice_and_contract_info_sub">{t('payment_billing_sub_tab_payment_invoice_and_contract_info_sub')}</div>
         <div className={classes.informationBox}>
           <Grid classes={{ root: classes.flex }}>
             <Inputs
-              title="Full name"
-              placeholder="e.g. John Smith"
+              title={t('field_full_name')}
+              translation-key="field_full_name"
+              placeholder={t('field_full_name_placeholder')}
+              translation-key-placeholder="field_full_name_placeholder"
               name="fullName"
               inputRef={register('fullName')}
               errorMessage={errors.fullName?.message}
             />
             <Inputs
-              title="Company name"
-              placeholder="Enter conpany name"
+              title={t('field_company')}
+              translation-key="field_company"
+              placeholder={t('field_company_placeholder')}
+              translation-key-placeholder="field_company_placeholder"
               name="companyName"
               inputRef={register('companyName')}
               errorMessage={errors.companyName?.message}
             />
           </Grid>
           <Inputs
-            title="Email"
-            placeholder="e.g. John Smith"
+            title={t('field_email')}
+            translation-key="field_email"
+            placeholder={t('field_email_placeholder')}
+            translation-key-placeholder="field_email_placeholder"
             name="email"
             inputRef={register('email')}
             errorMessage={errors.email?.message}
           />
           <Grid classes={{ root: classes.flex }}>
             <Inputs
-              title="Phone"
-              placeholder="e.g. John Smith"
+              title={t('field_phone_number')}
+              translation-key="field_phone_number"
+              placeholder={t('field_phone_number_placeholder')}
+              translation-key-placeholder="field_phone_number_placeholder"
               name="phone"
               inputRef={register('phone')}
               errorMessage={errors.phone?.message}
             />
             <InputSelect
-              title="Country"
+              title={t('field_country')}
               name="countryId"
               control={control}
               errorMessage={(errors.countryId as any)?.message}
               selectProps={{
                 options: countries,
-                placeholder: "Enter country"
+                placeholder: t('field_country_placeholder')
               }}
             />
           </Grid>
           <Inputs
-            title="Company address"
-            placeholder="e.g. John Smith"
+            title={t('field_company_address')}
+            translation-key="field_company_address"
+            placeholder={t('field_company_address_placeholder')}
+            translation-key-placeholder="field_company_address_placeholder"
             name="companyAddress"
             inputRef={register('companyAddress')}
             errorMessage={errors.companyAddress?.message}
           />
           <Inputs
-            title="Tax code for invoice (optional)"
-            placeholder="Enter tax code"
+            optional
+            title={t('field_tax_code_for_invoice')}
+            translation-key="field_tax_code_for_invoice"
+            placeholder={t('field_tax_code_for_invoice_placeholder')}
+            translation-key-placeholder="field_tax_code_for_invoice_placeholder"
             name="taxCode"
             inputRef={register('taxCode')}
             errorMessage={errors.taxCode?.message}
@@ -389,9 +404,10 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                     />}
                 />
               }
-              label="Save for later"
+              translation-key="payment_billing_sub_tab_payment_save_for_later"
+              label={<>{t('payment_billing_sub_tab_payment_save_for_later')}</>}
             />
-            <Tooltip classes={{ tooltip: classes.popper }} placement="right" title="This information will be used to automatically fill out the form in subsequent payments.">
+            <Tooltip classes={{ tooltip: classes.popper }} placement="right" title={t('payment_billing_sub_tab_payment_save_for_later_tip')} translation-key="payment_billing_sub_tab_payment_save_for_later_tip">
               <img src={images.icTip} alt="" />
             </Tooltip>
           </Grid>
@@ -400,44 +416,44 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       </Grid>
       <Grid classes={{ root: classes.right }}>
         <Grid classes={{ root: classes.bodyOrder }}>
-          <p>Order summary</p>
+          <p translation-key="payment_billing_sub_tab_payment_summary">{t('payment_billing_sub_tab_payment_summary')}</p>
           <div className={classes.flexOrder}>
-            <span>Sample size</span>
-            <span>{`$`}{fCurrency2(getPriceSampleSize())}</span>
+            <span translation-key="payment_billing_sub_tab_payment_summary_sample_size">{t('payment_billing_sub_tab_payment_summary_sample_size')}</span>
+            <span>{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</span>
           </div>
           {/* <div className={classes.flexOrder}>
             <span>Eye tracking</span>
             <span>$99</span>
           </div> */}
           <div className={clsx(classes.flexOrder, classes.isMobile)}>
-            <span>VAT (10%)</span>
-            <span>{`$`}{fCurrency2(getVAT())}</span>
+            <span translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</span>
+            <span>{`$`}{fCurrency2(price?.vatUSD || 0)}</span>
           </div>
           <Divider />
           <div className={clsx(classes.flexOrder, classes.notMobile)}>
-            <span>Sub total</span>
-            <span>{`$`}{fCurrency2(getSubTotal())}</span>
+            <span translation-key="common_sub_total">{t('common_sub_total')}</span>
+            <span>{`$`}{fCurrency2(price?.amountUSD || 0)}</span>
           </div>
           <div className={clsx(classes.flexOrder, classes.notMobile)}>
-            <span>VAT (10%)</span>
-            <span>{`$`}{fCurrency2(getVAT())}</span>
+            <span translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</span>
+            <span>{`$`}{fCurrency2(price?.vatUSD || 0)}</span>
           </div>
           <Divider className={classes.notMobile} />
           <div className={classes.flexTotal}>
-            <span>Total (USD)</span>
-            <a>{`$`}{fCurrency2(getTotal())}</a>
+            <span translation-key="common_total">{t('common_total')} (USD)</span>
+            <a>{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</a>
           </div>
-          <span>({fCurrency2VND(getTotalVND())} VND)</span>
+          <span>({fCurrency2VND(price?.totalAmount || 0)} VND)</span>
         </Grid>
-        <Buttons type="submit" children={"Place order"} btnType="Blue" width="100%" padding="11px" className={classes.btn} />
+        <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
       </Grid>
       <Grid className={classes.flexTotalMobile}>
         <Grid>
-          <p>Total (USD)</p>
-          <a style={{marginBottom: 4}}>{`$`}{fCurrency2(getTotal())}</a>
-          <span>({fCurrency2VND(getTotalVND())} VND)</span>
+          <p translation-key="common_total">{t('common_total')} (USD)</p>
+          <a style={{ marginBottom: 4 }}>{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</a>
+          <span>({fCurrency2VND(price?.totalAmount || 0)} VND)</span>
         </Grid>
-        <Buttons type="submit" children={"Place order"} btnType="Blue" padding="11px" className={classes.btnMobile} />
+        <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" padding="11px" className={classes.btnMobile} />
       </Grid>
     </Grid>
   )

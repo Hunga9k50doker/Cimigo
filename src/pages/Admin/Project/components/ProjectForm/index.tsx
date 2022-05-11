@@ -10,31 +10,23 @@ import { routes } from "routers/routes";
 import * as yup from 'yup';
 import { OptionItem } from "models/general";
 import InputSelect from "components/InputsSelect";
-import { Project, ProjectStatus, projectStatus } from "models/project";
+import { Project, projectStatus } from "models/project";
 import { FileUpload } from "models/attachment";
 import TextTitle from "components/Inputs/components/TextTitle";
 import UploadFile from "../UploadFile";
 
 const schema = yup.object().shape({
   status: yup.object().required('Status is required.'),
-  dataStudio: yup.string()
-  .when("status", {
-    is: (val: OptionItem) => val?.id === ProjectStatus.COMPLETED,
-    then: yup.string().url('Data studio must be a URL.').required('Data studio is required.'),
-    otherwise: yup.string().url('Data studio must be a URL.').nullable().notRequired()
-  }),
-  report: yup.mixed()
-  .when("status", {
-    is: (val: OptionItem) => val?.id === ProjectStatus.COMPLETED,
-    then: yup.mixed().required('Report is required.'),
-    otherwise: yup.mixed().nullable().notRequired()
-  }),
+  dataStudio: yup.string().nullable().notRequired(),
+  report: yup.mixed().nullable().notRequired(),
+  invoice: yup.mixed().nullable().notRequired(),
 })
 
 export interface ProjectFormData {
   dataStudio: string,
   report: FileUpload,
-  status: OptionItem
+  status: OptionItem,
+  invoice: FileUpload;
 }
 
 interface Props {
@@ -61,6 +53,8 @@ const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
     if (data.dataStudio) form.append('dataStudio', data.dataStudio)
     if (data.report?.file) form.append('reports', data.report.file)
     if (!data.report || data.report?.file) form.append('deleteReport', 'true')
+    if (data.invoice?.file) form.append('invoice', data.invoice.file)
+    if (!data.invoice || data.invoice?.file) form.append('deleteInvoice', 'true')
     if (itemEdit.status !== data.status.id) {
       form.append('status', `${data.status.id}`)
     }
@@ -79,10 +73,21 @@ const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
           url: itemEdit.reports[0].url,
         }
       }
+      let invoice: FileUpload
+      if (itemEdit.invoice) {
+        invoice = {
+          id: itemEdit.invoice.id,
+          fileName: itemEdit.invoice.fileName,
+          fileSize: itemEdit.invoice.fileSize,
+          mimeType: itemEdit.invoice.mimeType,
+          url: itemEdit.invoice.url,
+        }
+      }
       reset({
         dataStudio: itemEdit.dataStudio,
+        status: projectStatus.find(it =>it.id === itemEdit.status),
         report: report,
-        status: projectStatus.find(it =>it.id === itemEdit.status)
+        invoice: invoice
       })
     }
   }, [reset, itemEdit])
@@ -144,6 +149,21 @@ const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
                       render={({ field }) => <UploadFile
                         value={field.value}
                         errorMessage={(errors.report as any)?.message}
+                        onChange={(value) => field.onChange(value)}
+                      />}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextTitle>Invoice</TextTitle>
+                    <Controller
+                      name="invoice"
+                      control={control}
+                      render={({ field }) => <UploadFile
+                        value={field.value}
+                        caption="Allowed pdf"
+                        typeInvalidMess="File type must be pdf"
+                        fileFormats={['application/pdf']}
+                        errorMessage={(errors.invoice as any)?.message}
                         onChange={(value) => field.onChange(value)}
                       />}
                     />

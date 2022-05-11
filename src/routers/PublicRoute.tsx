@@ -1,6 +1,7 @@
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { routes } from './routes';
 import useAuth from 'hooks/useAuth';
+import TagManager from 'react-gtm-module'
 
 interface PublicRouteProps extends RouteProps {
   
@@ -8,11 +9,17 @@ interface PublicRouteProps extends RouteProps {
 
 const PublicRoute = ({component: Component, ...rest }: PublicRouteProps) => {
     const { isLoggedIn } = useAuth()
+
+    TagManager.dataLayer({
+      dataLayerName: "PublicPage"
+    })
+
     return (
         <Route
           {...rest}
           render={props => {
             if(!isLoggedIn) return ( <Component {...props}/> )
+            if ((props.location.state as any)?.from) return <Redirect to={(props.location.state as any)?.from} />
             return <Redirect to={routes.project.management} />
           }}
         />

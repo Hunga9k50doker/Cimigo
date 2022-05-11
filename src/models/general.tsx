@@ -10,10 +10,10 @@ export interface TableHeaderLabel {
   | 'right'
 }
 
-export interface Country {
-  formattedName: string;
-  rawName: string;
-}
+// export interface Country {
+//   formattedName: string;
+//   rawName: string;
+// }
 
 export interface OptionItem {
   id: number;
@@ -114,6 +114,11 @@ export enum EStatus {
   Coming_Soon
 }
 
+export const statuses: OptionItem[] = [
+  { id: EStatus.Active, name: "Active" },
+  { id: EStatus.Inactive, name: "Inactive" },
+]
+
 export enum EPaymentMethod {
   CREDIT_OR_DEBIT = 1,
   INTERNET_BANKING,
@@ -127,3 +132,8 @@ export const paymentMethods: OptionItem[] = [
   { id: EPaymentMethod.BANK_TRANSFER, name: "Bank transfer" },
   { id: EPaymentMethod.MAKE_AN_ORDER, name: "Make an order" }
 ]
+
+export enum ETypeVerifyCode {
+  VERIFY_EMAIL = 1,
+  RESET_PASSWORD = 2
+}

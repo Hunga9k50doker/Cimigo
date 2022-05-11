@@ -41,8 +41,8 @@ const PopupDeleteFolder = memo((props: PopupDeleteFolderProps) => {
           <p className={classes.subTitle}>Are you sure you want to delete this folder?</p>
         </Grid>
         <Grid className={classes.btn}>
-          <Buttons children="Cancel" btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel} />
-          <Buttons children={'Delete'} btnType='Red' padding='10px 16px' onClick={() => onDelete()} />
+          <Buttons children="Cancel" btnType='TransparentBlue' padding='11px 16px' onClick={_onCancel} />
+          <Buttons children={'Delete'} btnType='Red' padding='11px 16px' onClick={() => onDelete()} />
         </Grid>
       </Grid>
     </Dialog>

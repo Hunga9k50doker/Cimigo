@@ -49,13 +49,17 @@ import icMore from 'assets/img/icon/ic-more.svg';
 import icPowerPoint from 'assets/img/icon/ic-powerpoint.svg';
 import icExcel from 'assets/img/icon/ic-excel.svg';
 import icWord from 'assets/img/icon/ic-word.svg';
+import icPdf from 'assets/img/icon/ic-pdf.svg';
 import icArrowLogin from 'assets/img/icon/ic-arrow-login.svg';
 import icArrowRegister from 'assets/img/icon/ic-arrow-register.svg';
 import icView from 'assets/img/icon/ic-view.svg';
+import icInvoice from 'assets/img/icon/ic-invoice.svg';
 import imgPaymentFailed from 'assets/img/img-payment-failed.svg';
 
 const images = {
   // ===================== Images =========================
+  icInvoice,
+  icPdf,
   icView,
   icPowerPoint,
   icExcel,

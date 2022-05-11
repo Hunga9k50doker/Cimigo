@@ -2,7 +2,7 @@ import { memo } from 'react';
 import {
   FormControl
 } from '@mui/material';
-import Select, { components, DropdownIndicatorProps, GroupBase, StylesConfig } from 'react-select';
+import Select, { components, DropdownIndicatorProps, GroupBase, OptionProps, SingleValueProps, StylesConfig } from 'react-select';
 import classes from './styles.module.scss';
 import icCaretDown from 'assets/img/icon/ic-caret-down-grey.svg'
 import { Controller } from 'react-hook-form';
@@ -10,6 +10,7 @@ import { StateManagerProps } from 'react-select/dist/declarations/src/stateManag
 import TextTitle from 'components/Inputs/components/TextTitle';
 import ErrorMessage from 'components/Inputs/components/ErrorMessage';
 import { useTranslation } from 'react-i18next';
+import images from 'config/images';
 
 const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unknown>> => ({
   indicatorSeparator: () => ({
@@ -17,6 +18,8 @@ const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unk
   }),
   option: (provided, state) => ({
     ...provided,
+    display: "flex",
+    alignItems: "center",
     fontStyle: 'normal',
     fontWeight: 500,
     fontSize: 14,
@@ -38,6 +41,11 @@ const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unk
     ...provided,
     padding: "10px 5px 10px 13px"
   }),
+  singleValue: (provided) => ({
+    ...provided,
+    display: "flex",
+    alignItems: "center",
+  }),
   control: (provided, state) => ({
     ...provided,
     cursor: state.isDisabled ? "not-allowed" : "pointer",
@@ -53,6 +61,20 @@ const DropdownIndicator = (props: DropdownIndicatorProps) => {
     </components.DropdownIndicator>
   );
 };
+
+const Option = ({ children, ...props }: OptionProps<any>) => (
+  <components.Option {...props}>
+    {props.data?.img && <img src={images.icProfile} alt="" className={classes.iconOption} />}
+    {children}
+  </components.Option>
+)
+
+const SingleValue = ({ children, ...props }: SingleValueProps<any>) => (
+  <components.SingleValue {...props}>
+    {props.data?.img && <img src={images.icProfile} alt="" className={classes.iconValue} />}
+    {children}
+  </components.SingleValue>
+);
 
 interface InputSelectProps {
   title?: string,
@@ -93,7 +115,7 @@ const InputSelect = memo((props: InputSelectProps) => {
                 styles={customStyles(!!errorMessage)}
                 getOptionValue={(option) => option[bindKey || 'id']}
                 getOptionLabel={(option) => getOptionLabel(option)}
-                components={{ DropdownIndicator }}
+                components={{ DropdownIndicator, Option, SingleValue }}
                 {...selectProps}
               />}
             />
@@ -104,7 +126,7 @@ const InputSelect = memo((props: InputSelectProps) => {
               styles={customStyles(!!errorMessage)}
               getOptionValue={(option) => option[bindKey || 'id']}
               getOptionLabel={(option) => getOptionLabel(option)}
-              components={{ DropdownIndicator }}
+              components={{ DropdownIndicator, Option, SingleValue }}
               {...selectProps}
             />
           </>

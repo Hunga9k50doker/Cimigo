@@ -37,8 +37,7 @@
   border-radius: 4px;
   border: 1px solid #dddddd;
   border-collapse: unset !important;
-  margin-top: 30px;
-  margin-bottom: 40px;
+  margin-top: 40px;
 }
 .tableHead {
   th {
@@ -138,14 +137,14 @@
     }
   }
   a {
-    font-style: italic;
-    font-weight: normal;
+    font-weight: 500;
     font-size: 16px;
     line-height: 140%;
     text-align: center;
     letter-spacing: 0.015em;
-    text-decoration-line: underline;
     color: #1f61a9;
+    text-underline-position: under;
+    text-decoration: underline !important;
     @media only screen and (max-width: 767px) {
       font-size: 14px;
     }

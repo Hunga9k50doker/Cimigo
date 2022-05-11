@@ -115,9 +115,13 @@
   }
 }
 .rootListItem {
+  cursor: pointer;
   &:nth-child(even) {
     background: #eef0f2;
   }
+}
+.disabled {
+  cursor: not-allowed;
 }
 .rootListItem > div {
   &:first-child {

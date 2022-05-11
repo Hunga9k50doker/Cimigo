@@ -10,4 +10,16 @@ export class AttachmentService {
         return Promise.reject(JSON.parse(await e?.response?.data?.text() || '{}'));
       })
   }
+
+  static async downloadByUrl(url: string) {
+    return await api.get(API.ATTACHMENT.DOWNLOAD_BY_URL, {
+      params: {
+        url
+      },
+      responseType: "blob"
+    })
+      .catch(async (e) => {
+        return Promise.reject(JSON.parse(await e?.response?.data?.text() || '{}'));
+      })
+  }
 }

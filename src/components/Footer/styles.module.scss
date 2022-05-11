@@ -5,16 +5,13 @@
 .containerWidget1.containerWidget1 {
   display: flex;
   justify-content: space-between;
-  max-width: 1240px !important;
   padding-left: 64px;
   padding-right: 64px;
   @media only screen and (max-width: 1024px) {
-    max-width: 1024px !important;
     padding-left: 24px;
     padding-right: 24px;
   }
   @media only screen and (max-width: 767px) {
-    max-width: 550px !important;
     padding-left: 19px;
     padding-right: 19px;
   }
@@ -57,11 +54,9 @@
 .containerWidget2.containerWidget2 {
   display: flex;
   flex-direction: row;
-  max-width: 1240px !important;
   padding-left: 64px;
   padding-right: 64px;
   @media only screen and (max-width: 1024px) {
-    max-width: 1024px !important;
     padding-left: 24px;
     padding-right: 24px;
   }

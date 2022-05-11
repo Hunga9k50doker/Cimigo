@@ -1,6 +1,7 @@
 import { Step, StepConnector, StepLabel, Stepper } from "@mui/material";
 import QontoStepIcon from "pages/ProjectManagement/components/QontoStepIcon";
-import { memo } from "react"
+import { memo, useMemo } from "react"
+import { useTranslation } from "react-i18next";
 import { matchPath, Redirect, Route, Switch } from "react-router-dom";
 import { routes } from "routers/routes";
 import Payment from "../Payment";
@@ -12,16 +13,20 @@ interface StepItem {
   path: string
 }
 
-const steps: StepItem[] = [
-  { name: 'Project review', path: routes.project.detail.paymentBilling.previewAndPayment.preview },
-  { name: 'Payment', path: routes.project.detail.paymentBilling.previewAndPayment.payment },
-]
-
 interface Props {
 
 }
 
 const ProjectReviewAndPayment = memo(({ }: Props) => {
+  const { t, i18n } = useTranslation()
+
+  const steps = useMemo(() => {
+    return [
+      { name: t('payment_billing_sub_tab_preview'), path: routes.project.detail.paymentBilling.previewAndPayment.preview },
+      { name: t('payment_billing_sub_tab_payment'), path: routes.project.detail.paymentBilling.previewAndPayment.payment }
+    ]
+  }, [i18n.language])
+
   
   const activeRoute = (routeName: string, exact: boolean = false) => {
     const match = matchPath(window.location.pathname, {
@@ -61,8 +66,8 @@ const ProjectReviewAndPayment = memo(({ }: Props) => {
         })}
       </Stepper>
       <Switch>
-        <Route exact path={routes.project.detail.paymentBilling.previewAndPayment.preview} render={(routeProps) => <ProjectReview {...routeProps}/>}/>
-        <Route exact path={routes.project.detail.paymentBilling.previewAndPayment.payment} render={(routeProps) => <Payment {...routeProps}/>}/>
+        <Route exact path={routes.project.detail.paymentBilling.previewAndPayment.preview} render={(routeProps) => <ProjectReview {...routeProps} />} />
+        <Route exact path={routes.project.detail.paymentBilling.previewAndPayment.payment} render={(routeProps) => <Payment {...routeProps} />} />
 
         <Redirect from={routes.project.detail.paymentBilling.previewAndPayment.root} to={routes.project.detail.paymentBilling.previewAndPayment.preview} />
       </Switch>

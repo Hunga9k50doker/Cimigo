@@ -6,9 +6,11 @@ import { SocialProvider } from 'models/general';
 import classes from './styles.module.scss';
 import icGoogle from 'assets/img/icon/ic-google.svg';
 import { Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const Google = () => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   
   const onSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     const userInfo = res as GoogleLoginResponse
@@ -19,7 +21,7 @@ const Google = () => {
   }
 
   const onFailure = (error: any) => {
-    dispatch(setErrorMess({message: 'Please log in again'}))
+    dispatch(setErrorMess({message: t('auth_login_again')}))
   }
 
   return (

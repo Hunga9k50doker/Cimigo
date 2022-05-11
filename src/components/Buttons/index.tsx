@@ -12,11 +12,12 @@ interface ButtonsProps {
   className?: any;
   width?: string;
   padding?: string;
+  nowrap?: boolean;
   [key: string]: any;
 }
 
 const Buttons = memo((props: ButtonsProps) => {
-  const { width, padding, className, btnType, children, disabled, onClick, ...rest } = props;
+  const { width, padding, className, btnType, children, disabled, onClick, nowrap, ...rest } = props;
   return (
     <Button
       className={clsx(
@@ -31,7 +32,7 @@ const Buttons = memo((props: ButtonsProps) => {
       {...rest}
       onClick={onClick}
       disabled={disabled}
-      sx={{minWidth: width, padding: padding}}
+      sx={{minWidth: width, padding: padding, whiteSpace: nowrap ? "nowrap" : "unset"}}
     >
       {children}
     </Button>

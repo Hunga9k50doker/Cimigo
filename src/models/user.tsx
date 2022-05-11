@@ -100,3 +100,8 @@ export interface ForgotPasswordData {
     password: string,
     confirmPassword: string
 }
+
+export interface CheckIsValidCode {
+    code: string,
+    type: number
+}

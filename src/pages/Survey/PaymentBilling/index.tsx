@@ -5,7 +5,6 @@ import Completed from "./Completed";
 import { routes } from "routers/routes";
 import { Redirect, Route, Switch } from "react-router-dom";
 import ProjectReviewAndPayment from "./ProjectReviewAndPayment";
-import { useDispatch } from "react-redux";
 import Waiting from "./Waiting";
 
 interface Props {
@@ -13,7 +12,6 @@ interface Props {
 }
 
 const PaymentBilling = memo(({ projectId }: Props) => {
-
 
   return (
     <Grid>

@@ -65,7 +65,7 @@ const ForgotPassword = () => {
             inputRef={register('email')}
             errorMessage={errors.email?.message}
           />
-          <Buttons type={'submit'} translation-key="forgot_password_btn_send" children={t('forgot_password_btn_send')} btnType="Blue" padding="16px 0px" />
+          <Buttons type={'submit'} translation-key="forgot_password_btn_send" children={t('forgot_password_btn_send')} btnType="Blue" padding="11px 16px" />
           <Link className={classes.linkText} to={routes.login} translation-key="forgot_password_back_to_login">
             {t('forgot_password_back_to_login')}
           </Link>

@@ -20,7 +20,7 @@ import InputSearch from "components/InputSearch";
 import Inputs from "components/Inputs";
 import Buttons from "components/Buttons";
 import PopupInforSolution from "../components/PopupInforSolution";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { SolutionService } from "services/solution";
 import useDebounce from "hooks/useDebounce";
@@ -30,7 +30,6 @@ import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
-import QueryString from 'query-string';
 import { routes } from "routers/routes";
 import { push } from "connected-react-router";
 import { ProjectService } from "services/project";
@@ -39,10 +38,9 @@ import images from "config/images";
 import { useHistory } from 'react-router-dom';
 import { UserGetSolutions } from "models/solution";
 import { useTranslation } from "react-i18next";
+import { ReducerType } from "redux/reducers";
+import { setSolutionCreateProject } from "redux/reducers/Project/actionTypes";
 
-interface IQueryString {
-  solution_id?: string
-}
 
 export interface CreateProjectFormData {
   name: string,
@@ -78,6 +76,8 @@ const CreateProject = () => {
     })
   }, [i18n.language])
 
+  const { solutionId } = useSelector((state: ReducerType) => state.project)
+
   const dispatch = useDispatch()
   const history = useHistory();
   const [keyword, setKeyword] = useState<string>('');
@@ -88,7 +88,6 @@ const CreateProject = () => {
   const [solution, setSolution] = useState<DataPagination<Solution>>();
   const [solutionCategory, setSolutionCategory] = useState<DataPagination<SolutionCategory>>();
   const [activeStep, setActiveStep] = useState<EStep>(EStep.SELECT_SOLUTION);
-  const { solution_id }: IQueryString = QueryString.parse(window.location.search);
   const theme = useTheme();
   
   const isMobile = useMediaQuery(theme.breakpoints.down(767));
@@ -193,15 +192,15 @@ const CreateProject = () => {
   }
 
   useEffect(() => {
-    if (solution_id && !isNaN(Number(solution_id))) {
-      SolutionService.getSolution(Number(solution_id))
+    if (solutionId) {
+      SolutionService.getSolution(solutionId)
         .then((res) => {
-          dispatch(push(routes.project.create))
           setSolutionSelected(res)
           setActiveStep(EStep.CREATE_PROJECT)
         })
+      dispatch(setSolutionCreateProject(null))
     }
-  }, [solution_id])
+  }, [solutionId])
 
   return (
     <Grid className={classes.root}>

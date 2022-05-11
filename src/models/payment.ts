@@ -1,4 +1,7 @@
+import { Country } from "./country";
 import { OptionItem } from "./general";
+import { Project } from "./project";
+import { User } from "./user";
 
 export interface CheckoutParams {
   projectId: number,
@@ -49,6 +52,9 @@ export interface Payment {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
+  country: Country;
+  user: User;
+  project: Project;
 }
 
 export interface UpdateConfirmPayment {

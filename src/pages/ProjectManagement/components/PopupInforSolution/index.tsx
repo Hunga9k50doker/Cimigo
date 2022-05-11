@@ -36,7 +36,7 @@ const PopupInforSolution = memo((props: PopupPopupInforSolution) => {
         <div className='ql-editor' dangerouslySetInnerHTML={{ __html: solution?.content || '' }}></div>
       </DialogContent>
       <DialogActions className={classes.btnBox}>
-        <Buttons children={t('select_solution_get_started')} translation-key="select_solution_get_started" btnType='Blue' padding='10px 16px' width='100%' onClick={onSelect}/>
+        <Buttons children={t('select_solution_get_started')} translation-key="select_solution_get_started" btnType='Blue' padding='11px 16px' width='100%' onClick={onSelect}/>
       </DialogActions>
     </Dialog>
   );

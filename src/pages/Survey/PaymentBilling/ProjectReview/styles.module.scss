@@ -107,6 +107,13 @@
   @media only screen and (max-width: 767px) {
     padding: 0px 19px;
   }
+  a {
+    font-weight: 500;
+    cursor: pointer;
+    color: #1f61a9;
+    text-underline-position: under;
+    text-decoration: underline !important;
+  }
 }
 .textSub1 {
   font-style: normal;
@@ -132,6 +139,7 @@
   img {
     width: 24px;
     margin-right: 10px;
+    object-fit: contain;
   }
 }
 .textBlue1 {
@@ -276,17 +284,15 @@
   display: flex;
   justify-content: center;
   div {
-    margin: 0px 20px;
     display: grid;
     justify-items: center;
     cursor: pointer;
     span {
-      width: 66px;
-      height: 66px;
+      width: 50px;
+      height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #EEF0F2;
     }
     p {
       font-weight: 500;
@@ -300,8 +306,8 @@
   }
 }
 .imgAddPhoto {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
 }
 .btn {
   margin-top: 24px;
@@ -343,4 +349,12 @@
 }
 .missing {
   font-weight: 600;
+}
+.titleDanger {
+  span {
+    color: var(--cimigo-danger) !important;
+  }
+}
+.pointer {
+  cursor: pointer;
 }

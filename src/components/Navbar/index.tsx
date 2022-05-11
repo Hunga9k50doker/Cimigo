@@ -4,6 +4,7 @@ import { memo, useState } from 'react';
 import classes from './styles.module.scss';
 import images from "config/images";
 import UseAuth from 'hooks/useAuth';
+import clsx from 'clsx';
 
 interface NavbarProps {
   handleDrawerToggle: () => void;
@@ -12,10 +13,10 @@ interface NavbarProps {
 const Navbar = memo((props: NavbarProps) => {
   const { handleDrawerToggle } = props;
 
-  const { logout } = UseAuth();
+  const { logout, user } = UseAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setAnchorEl(e.currentTarget);
   };
 
@@ -35,7 +36,7 @@ const Navbar = memo((props: NavbarProps) => {
         <div className={classes.boxRight}>
           <div className={classes.item}>
             <IconButton onClick={handleClick} className={classes.itemBtn}>
-              <img src={images.icProfile} alt="" />
+              <img src={user?.avatar || images.icProfile} alt="avatar" className={clsx(classes.avatar, { [classes.avatarEmpty]: !user?.avatar })} referrerPolicy="no-referrer"/>
             </IconButton>
             <Menu
               anchorEl={anchorEl}

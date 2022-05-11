@@ -11,7 +11,6 @@
   margin: auto;
   display: flex;
   padding: 50px 64px;
-  max-width: 1240px;
   width: 100%;
   @media only screen and (max-width: 1024px) {
     padding: 50px 24px;
@@ -22,9 +21,10 @@
 }
 // ---------------------Left------------------
 .left {
+  min-width: 300px;
   min-height: 200px;
-  width: 30%;
-  padding-right: 18px;
+  max-width: 300px;
+  margin-right: 18px;
 }
 .title {
   font-style: normal;
@@ -74,6 +74,7 @@
   display: none;
 }
 .folderListItem {
+  padding-right: 92px !important;
   span {
     font-weight: 500;
     font-size: 16px;
@@ -128,7 +129,9 @@
 // --------------------Right--------------------
 
 .right {
-  width: 80%;
+  flex: 1;
+  min-width: 0;
+  min-width: 0;
 }
 .header {
   display: flex;
@@ -173,8 +176,10 @@
     border-bottom: none;
     padding: 12px 15px;
   }
-  &:hover,
   &:nth-child(even) {
+    background: #F9F9F9;
+  }
+  &:hover {
     background: #eef0f2;
   }
 }

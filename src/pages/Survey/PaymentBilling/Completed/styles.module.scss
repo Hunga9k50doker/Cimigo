@@ -62,7 +62,7 @@
   text-align: center;
   letter-spacing: 0.015em;
   color: #1c1c1c;
-  .aLink{
+  > a {
     color: #1f61a9;
     text-decoration: none;
   }
@@ -79,17 +79,15 @@
   justify-content: center;
   padding: 1rem 0 2rem;
   div {
-    margin: 0px 20px;
     display: grid;
     justify-items: center;
     cursor: pointer;
     span {
-      width: 66px;
-      height: 66px;
+      width: 50px;
+      height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #EEF0F2;
     }
     p {
       font-weight: 500;
@@ -103,6 +101,6 @@
   }
 }
 .imgAddPhoto {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
 }

@@ -9,7 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { routes } from "routers/routes";
 import * as yup from 'yup';
-import ReactQuill, { Quill } from 'react-quill';
+import ReactQuill from 'react-quill';
 import { OptionItem } from "models/general";
 import classes from './styles.module.scss';
 import InputSelect from "components/InputsSelect";
@@ -25,7 +25,7 @@ const modules = {
     [{ 'size': ['small', false, 'large', 'huge'] }],
     ['bold', 'italic', 'underline', 'strike'],
     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-    [{ 'indent': '-1'}, { 'indent': '+1' }],
+    [{ 'indent': '-1' }, { 'indent': '+1' }],
     ['link', 'image'],
     ['clean']
   ],
@@ -44,9 +44,22 @@ const schema = yup.object().shape({
     id: yup.number(),
     name: yup.string()
   }).nullable(),
-  maxPack: yup.number().typeError('Max Pack is required.').positive('Max Pack must be a positive number').required('Max Pack is required.'),
-  maxAdditionalBrand: yup.number().typeError('Max Additional Brand is required.').positive('Max Additional Brand must be a positive number').required('Max Additional Brand is required.'),
-  maxAdditionalAttribute: yup.number().typeError('Max Additional Attribute is required.').positive('Max Additional Attribute must be a positive number').required('Max Additional Attribute is required.')
+  maxPack: yup.number()
+    .typeError('Max Pack is required.')
+    .positive('Max Pack must be a positive number')
+    .required('Max Pack is required.'),
+  maxAdditionalBrand: yup.number()
+    .typeError('Max Additional Brand is required.')
+    .positive('Max Additional Brand must be a positive number')
+    .required('Max Additional Brand is required.'),
+  maxAdditionalAttribute: yup.number()
+    .typeError('Max Additional Attribute is required.')
+    .positive('Max Additional Attribute must be a positive number')
+    .required('Max Additional Attribute is required.'),
+  maxCustomQuestion: yup.number()
+    .typeError('Max Custom Question is required.')
+    .positive('Max Custom Question must be a positive number')
+    .required('Max Custom Question is required.')
 })
 
 export interface SolutionFormData {
@@ -59,6 +72,7 @@ export interface SolutionFormData {
   maxPack: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;
+  maxCustomQuestion: number;
 }
 
 interface SolutionFormProps {
@@ -91,6 +105,7 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     formData.append('maxPack', `${data.maxPack}`)
     formData.append('maxAdditionalBrand', `${data.maxAdditionalBrand}`)
     formData.append('maxAdditionalAttribute', `${data.maxAdditionalAttribute}`)
+    formData.append('maxCustomQuestion', `${data.maxCustomQuestion}`)
     if (data.image && typeof data.image === 'object') formData.append('image', data.image)
     if (data?.categoryHomeId?.id) formData.append('categoryHomeId', `${data.categoryHomeId.id}`)
     if (langEdit) formData.append('language', langEdit)
@@ -109,7 +124,8 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         categoryHomeId: itemEdit.categoryHome ? { id: itemEdit.categoryHome.id, name: itemEdit.categoryHome.name } : null,
         maxPack: itemEdit.maxPack,
         maxAdditionalBrand: itemEdit.maxAdditionalBrand,
-        maxAdditionalAttribute: itemEdit.maxAdditionalAttribute
+        maxAdditionalAttribute: itemEdit.maxAdditionalAttribute,
+        maxCustomQuestion: itemEdit.maxCustomQuestion,
       })
     }
   }, [reset, itemEdit])
@@ -275,6 +291,16 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                       disabled={!!langEdit}
                       inputRef={register('maxAdditionalAttribute')}
                       errorMessage={errors.maxAdditionalAttribute?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Inputs
+                      title="Max Custom Question"
+                      name="maxCustomQuestion"
+                      type="number"
+                      disabled={!!langEdit}
+                      inputRef={register('maxCustomQuestion')}
+                      errorMessage={errors.maxCustomQuestion?.message}
                     />
                   </Grid>
                 </Grid>

@@ -45,19 +45,19 @@ const PopupCreateOrEditFolder = memo((props: PopupCreateFolderProps) => {
       onClose={_onCancel}
       classes={{ paper: classes.paper }}
     >
-      <Grid classes={{root: classes.root}}>
+      <Grid classes={{ root: classes.root }}>
         <Grid className={classes.header}>
           {itemEdit ? (
-            <p className={classes.title} translation-key="project_mgmt_rename_folder_title">{ t('project_mgmt_rename_folder_title') }</p>
+            <p className={classes.title} translation-key="project_mgmt_rename_folder_title">{t('project_mgmt_rename_folder_title')}</p>
           ) : (
-            <p className={classes.title} translation-key="project_mgmt_create_folder_title">{ t('project_mgmt_create_folder_title') }</p>
+            <p className={classes.title} translation-key="project_mgmt_create_folder_title">{t('project_mgmt_create_folder_title')}</p>
           )}
           <IconButton onClick={_onCancel}>
-            <img src={Images.icClose} alt=''/>
+            <img src={Images.icClose} alt='' />
           </IconButton>
         </Grid>
-        <Inputs 
-          name='name' 
+        <Inputs
+          name='name'
           placeholder={t('project_mgmt_create_folder_placeholder')}
           translation-key-placeholder="project_mgmt_create_folder_placeholder"
           value={name}
@@ -66,8 +66,15 @@ const PopupCreateOrEditFolder = memo((props: PopupCreateFolderProps) => {
           }}
         />
         <Grid className={classes.btn}>
-          <Buttons children={t('common_cancel')} translation-key="common_cancel" btnType='TransparentBlue' padding='10px 16px' onClick={_onCancel}/>
-          <Buttons disabled={!name} children={t('project_mgmt_create_folder_btn')} translation-key="project_mgmt_create_folder_btn" btnType='Blue' padding='10px 16px' onClick={_onSubmit}/>
+          <Buttons children={t('common_cancel')} translation-key="common_cancel" btnType='TransparentBlue' padding='11px 16px' onClick={_onCancel} />
+          <Buttons
+            disabled={!name}
+            children={itemEdit ? t('common_save') : t('project_mgmt_create_folder_btn')}
+            translation-key={itemEdit ? 'common_save' : 'project_mgmt_create_folder_btn'}
+            btnType='Blue'
+            padding='11px 16px'
+            onClick={_onSubmit}
+          />
         </Grid>
       </Grid>
     </Dialog>

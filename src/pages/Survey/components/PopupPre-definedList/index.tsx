@@ -147,8 +147,9 @@ const PopupPreDefinedList = memo((props: Props) => {
               alignItems="center"
               component="div"
               key={index}
-              classes={{ root: classes.rootListItem }}
+              classes={{ root: clsx(classes.rootListItem, {[classes.disabled]: isDisabled(item)}) }}
               disablePadding
+              onClick={() => onChange(item)}
             >
               <ListItemText>
                 <Grid className={clsx(classes.listFlex, { [classes.listFlexChecked]: attributesSelected.includes(item.id) })}>
@@ -156,7 +157,6 @@ const PopupPreDefinedList = memo((props: Props) => {
                     <Checkbox
                       disabled={isDisabled(item)}
                       checked={attributesSelected.includes(item.id)}
-                      onChange={(e) => onChange(item)}
                       classes={{ root: classes.rootCheckbox }}
                       icon={<img src={Images.icCheck} alt="" />}
                       checkedIcon={<img src={Images.icCheckActive} alt="" />} />

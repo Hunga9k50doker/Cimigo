@@ -1,0 +1,49 @@
+.root {
+  background-color: #FAFAFF;
+  @media only screen and (max-width: 767px) {
+    background-color: #fff;
+  }
+}
+.body {
+  background-color: #FFF;
+  height: auto;
+  max-width: 470px;
+  margin: 70px auto 180px;
+  display: grid;
+  padding: 80px 48px;
+  @media only screen and (max-width: 767px) {
+    margin: 40px auto 40px;
+    padding: 24px;
+  }
+}
+.textLogin {
+  color: #1F61A9;
+  font-weight: 700;
+  font-size: 24px;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 30px;
+}
+.subTextLogin {
+  color: rgba(28, 28, 28, 0.9);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 65px;
+}
+.linkText {
+  font-weight: 500;
+  font-size: 12px;
+  color: #1F61A9;
+  text-align: center;
+  padding-top: 25px;
+  text-underline-position: under;
+  text-decoration: underline !important;
+}
+.labelCheckbox {
+  font-size: 12px !important;
+  color: rgba(28, 28, 28, 0.65);
+  font-weight: 300; 
+}

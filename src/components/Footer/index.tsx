@@ -4,7 +4,6 @@ import facebookIcon from 'assets/img/fb-icon.svg';
 import lnIcon from 'assets/img/ln-icon.svg';
 import twitterIcon from 'assets/img/twitter-icon.svg';
 import youtubeIcon from 'assets/img/youtube-icon.svg';
-import Container from "components/Container";
 import { useState } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
@@ -21,14 +20,13 @@ const Footer = memo((props: FooterProps) => {
   const [aboutWidgetMobile, setAboutWidgetMobile] = useState<boolean>(false)
   const [contactWidgetMobile, setContactWidgetMobile] = useState<boolean>(false)
 
-  const cimigoUrl = process.env.REACT_APP_CIMIGO_URL;
   return (
     <>
       <footer className={classes.root}>
         <div className={classes.footerWidget1}>
-          <Container className={classes.containerWidget1}>
-            <a href={`mailto:ask@cimigo.com`} className={classes.emailContact}>
-              Contact us at ask@cimigo.com
+          <div className={classes.containerWidget1}>
+            <a href={`mailto:ask@cimigo.com`} className={classes.emailContact} translation-key="footer_contact_us_at">
+              {t('footer_contact_us_at')}
             </a>
             <div className={classes.linkSocial}>
               <div className={classes.socialContact}>
@@ -46,92 +44,92 @@ const Footer = memo((props: FooterProps) => {
                 </a>
               </div>
             </div>
-          </Container>
+          </div>
         </div>
         <div className={classes.footerWidget2}>
-          <Container className={classes.containerWidget2}>
+          <div className={classes.containerWidget2}>
             <div className={classes.leftContainer}>
               <div className={classes.aboutWidget}>
                 <div className={classes.header}>
-                  <p className={classes.textDescription}>
-                    About Cimigo
+                  <p className={classes.textDescription} translation-key="footer_about_title">
+                    {t('footer_about_title')}
                   </p>
                 </div>
                 <div className={classes.body}>
-                  <a href={routesOutside(i18n.language).homePage} className={classes.textLink}>
-                    Home Page
+                  <a href={routesOutside(i18n.language)?.homePage} className={classes.textLink} translation-key="footer_about_home_page">
+                    {t('footer_about_home_page')}
                   </a>
-                  <a href={routesOutside(i18n.language).opportunitiesAtCimigo} className={classes.textLink}>
-                    Opportunities at Cimigo
+                  <a href={routesOutside(i18n.language)?.opportunitiesAtCimigo} className={classes.textLink} translation-key="footer_about_opportunities_at_cimigo">
+                    {t('footer_about_opportunities_at_cimigo')}
                   </a>
-                  <a href={routesOutside(i18n.language).trends} className={classes.textLink}>
-                    Trends
+                  <a href={routesOutside(i18n.language)?.trends} className={classes.textLink} translation-key="footer_about_trends">
+                    {t('footer_about_trends')}
                   </a>
-                  <a href={routesOutside(i18n.language).reports} className={classes.textLink}>
-                    Reports
+                  <a href={routesOutside(i18n.language)?.reports} className={classes.textLink} translation-key="footer_about_reports">
+                    {t('footer_about_reports')}
                   </a>
                 </div>
               </div>
               <div className={classes.contactWidget}>
                 <div className={classes.header}>
-                  <p className={classes.textDescription}>
-                    Contact us
+                  <p className={classes.textDescription} translation-key="footer_contact_us_title">
+                    {t('footer_contact_us_title')}
                   </p>
                 </div>
                 <div className={classes.body}>
-                  <a href={`tel:+(84)2838227727`} className={classes.textLink}>
-                    Phone: (84) 28 3822 7727
+                  <a href={`tel:+(84)2838227727`} className={classes.textLink} translation-key="footer_contact_us_phone">
+                    {t('footer_contact_us_phone')}
                   </a>
-                  <a className={classes.textLink}>
-                    Address: 217 Dien Bien Phu Street, Binh Thanh District, Ho Chi Minh City, Viet Nam
+                  <a className={classes.textLink} translation-key="footer_contact_us_address">
+                    {t('footer_contact_us_address')}
                   </a>
-                  <a href={`mailto:ask@cimigo.com`} className={classes.textLink}>
-                    Email: ask@cimigo.com
+                  <a href={`mailto:ask@cimigo.com`} className={classes.textLink} translation-key="footer_contact_us_email">
+                    {t('footer_contact_us_email')}
                   </a>
                 </div>
               </div>
               <div className={classes.aboutWidgetMobile}>
                 <button className={classes.headerMobile} onClick={() => setAboutWidgetMobile(!aboutWidgetMobile)}>
-                  <p className={classes.textDescriptionMobile}>
-                    About Cimigo
+                  <p className={classes.textDescriptionMobile} translation-key="footer_about_title">
+                    {t('footer_about_title')}
                   </p>
                   <div className={classes.iconOpen}></div>
                 </button>
                 <div className={clsx(classes.bodyMobile, {
                   [classes.bodyActive]: aboutWidgetMobile
                 })}>
-                  <a href={`${cimigoUrl}/vi/viec-lam`} className={classes.textLink}>
-                    Làm việc với Cimigo
+                  <a href={routesOutside(i18n.language)?.homePage} className={classes.textLink} translation-key="footer_about_home_page">
+                    {t('footer_about_home_page')}
                   </a>
-                  <a href={`${cimigoUrl}/vi/moi-nguoi`} className={classes.textLink}>
-                    Mọi người
+                  <a href={routesOutside(i18n.language)?.opportunitiesAtCimigo} className={classes.textLink} translation-key="footer_about_opportunities_at_cimigo">
+                    {t('footer_about_opportunities_at_cimigo')}
                   </a>
-                  <a href={`${cimigoUrl}/vi/nghien-cuu-tinh-huong`} className={classes.textLink}>
-                    Nghiên Cứu Tình Huống
+                  <a href={routesOutside(i18n.language)?.trends} className={classes.textLink} translation-key="footer_about_trends">
+                    {t('footer_about_trends')}
                   </a>
-                  <a href={`${cimigoUrl}/vi/bao-cao`} className={classes.textLink}>
-                    Nghiên Cứu & Báo Cáo
+                  <a href={routesOutside(i18n.language)?.reports} className={classes.textLink} translation-key="footer_about_reports">
+                    {t('footer_about_reports')}
                   </a>
                 </div>
               </div>
               <div className={classes.contactWidgetMobile}>
                 <button className={classes.headerMobile} onClick={() => setContactWidgetMobile(!contactWidgetMobile)}>
-                  <p className={classes.textDescriptionMobile}>
-                    Contact us
+                  <p className={classes.textDescriptionMobile} translation-key="footer_contact_us_title">
+                    {t('footer_contact_us_title')}
                   </p>
                   <div className={classes.iconOpen}></div>
                 </button>
                 <div className={clsx(classes.bodyMobile, {
                   [classes.bodyActive]: contactWidgetMobile
                 })}>
-                  <a href={`tel:+(84)2838227727`} className={classes.textLink}>
-                    Phone: (84) 28 3822 7727
+                  <a href={`tel:+(84)2838227727`} className={classes.textLink} translation-key="footer_contact_us_phone">
+                    {t('footer_contact_us_phone')}
                   </a>
-                  <a className={classes.textLink}>
-                    Address: 217 Dien Bien Phu Street, Binh Thanh District, Ho Chi Minh City, Viet Nam
+                  <a className={classes.textLink} translation-key="footer_contact_us_address">
+                    {t('footer_contact_us_address')}
                   </a>
-                  <a href={`mailto:ask@cimigo.com`} className={classes.textLink}>
-                    Email: ask@cimigo.com
+                  <a href={`mailto:ask@cimigo.com`} className={classes.textLink} translation-key="footer_contact_us_email">
+                    {t('footer_contact_us_email')}
                   </a>
                 </div>
               </div>
@@ -149,14 +147,14 @@ const Footer = memo((props: FooterProps) => {
                 />
               </div>
             </div>
-          </Container>
+          </div>
         </div>
         <div className={classes.footerWidget3}>
-          <Container className={classes.containerWidget3}>
+          <div className={classes.containerWidget3}>
             <div className={classes.textCopyRight}>Copyright@2021.Cimigo</div>
             &nbsp; | &nbsp;
-            <a className={classes.textPrivacy}>Privacy policy</a>
-          </Container>
+            <a href={routesOutside(i18n.language)?.privacyPolicy} className={classes.textPrivacy} translation-key="footer_privacy_policy">{t('footer_privacy_policy')}</a>
+          </div>
         </div>
       </footer>
     </>

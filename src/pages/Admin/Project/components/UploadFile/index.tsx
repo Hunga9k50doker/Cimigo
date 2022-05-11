@@ -25,12 +25,15 @@ const FILE_FORMATS = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'application/msword',
   'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  'application/vnd.ms-powerpoint'
+  'application/vnd.ms-powerpoint',
+  'application/pdf'
 ];
 
 interface UploadFileProps {
   disabled?: boolean;
+  caption?: string;
   errorMessage?: string;
+  typeInvalidMess?: string;
   value?: FileUpload | FileUpload[];
   onChange?: (value?: FileUpload | FileUpload[]) => void;
   className?: string;
@@ -41,6 +44,8 @@ interface UploadFileProps {
 
 const UploadFile = memo(({
   disabled,
+  caption,
+  typeInvalidMess,
   errorMessage,
   value,
   onChange,
@@ -82,6 +87,8 @@ const UploadFile = memo(({
       case 'ppt':
       case 'pptx':
         return <img alt="upload" src={Images.icPowerPoint} className={classes.imgFile} />
+      case 'pdf':
+        return <img alt="upload" src={Images.icPdf} className={classes.imgFile} />
     }
   }
 
@@ -173,7 +180,7 @@ const UploadFile = memo(({
             <div className={classes.placeholder}>
               <FileUploadIcon />
               <Typography variant="caption">Upload file</Typography>
-              <Typography variant="caption">Allowed ppt, pptx, doc, docx, xls, xlsx</Typography>
+              <Typography variant="caption">{caption || 'Allowed ppt, pptx, doc, docx, xls, xlsx, pdf'}</Typography>
               <Typography variant="caption">Max size of {fData(fileSize)}</Typography>
             </div>
           </div>
@@ -185,7 +192,7 @@ const UploadFile = memo(({
         </div>
       </div>
       {isError === 'size-invalid' && <Box display={"flex"} justifyContent="center"><ErrorMessage>{`File is larger than ${fData(fileSize)}`}</ErrorMessage></Box>}
-      {isError === 'type-invalid' && <Box display={"flex"} justifyContent="center"><ErrorMessage>File type must be ppt, pptx, doc, docx, xls, xlsx</ErrorMessage></Box>}
+      {isError === 'type-invalid' && <Box display={"flex"} justifyContent="center"><ErrorMessage>{typeInvalidMess || 'File type must be ppt, pptx, doc, docx, xls, xlsx, pdf' }</ErrorMessage></Box>}
       {errorMessage && <Box display={"flex"} justifyContent="center"><ErrorMessage>{errorMessage}</ErrorMessage></Box>}
     </>
   );

@@ -9,6 +9,7 @@ import { AdditionalBrand } from './additional_brand';
 import { ProjectAttribute } from './project_attribute';
 import { UserAttribute } from './user_attribute';
 import i18n from 'locales';
+import { User } from './user';
 export interface CreateProjectData {
   solutionId: number;
   name: string,
@@ -33,6 +34,9 @@ export interface Project {
   dataStudio: string;
   solution?: Solution;
   folderId: number;
+  invoiceId: number;
+  invoice: Attachment;
+  enableCustomQuestion: boolean;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
@@ -44,6 +48,7 @@ export interface Project {
   additionalBrands?: AdditionalBrand[];
   projectAttributes?: ProjectAttribute[];
   userAttributes?: UserAttribute[];
+  user?: User;
 }
 
 export enum ProjectStatus {

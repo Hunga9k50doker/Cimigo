@@ -54,10 +54,12 @@ const Inputs = memo((props: InputsProps) => {
 
   return (
     <FormControl className={classes.root}>
-      <TextTitle invalid={errorMessage}>{title}
-      {optional ? <span className={classes.optional}> ({t('common_optional')})</span> : ""}
-      {titleRequired ? <span className={classes.titleRequired}> *</span> : ""}
-      </TextTitle>
+      {title && (
+        <TextTitle invalid={errorMessage}>{title}
+          {optional ? <span className={classes.optional}> ({t('common_optional')})</span> : ""}
+          {titleRequired ? <span className={classes.titleRequired}> *</span> : ""}
+        </TextTitle>
+      )}
       <OutlinedInput
         type={!toggleEyes ? type : 'text'}
         placeholder={placeholder}
@@ -69,19 +71,19 @@ const Inputs = memo((props: InputsProps) => {
         classes={{ root: clsx(!errorMessage ? classes.inputTextfield : classes.inputInvalid) }}
         className={className}
         autoComplete={autoComplete}
-        endAdornment={ !errorMessage ?
-        showEyes && <InputAdornment position="end">
-          <IconButton
-            aria-label="toggle password visibility"
-            onClick={handleClick}
-            className={classes.iconEye}>
-            {toggleEyes ? <img src={iconEyeOpen} alt="eye-close" /> : <VisibilityOffIcon />}
-          </IconButton>
-        </InputAdornment> : <img src={images.icError} alt="error" />
-      }
-      {...inputProps}
-      inputRef={refInput}
-      {...rest}
+        endAdornment={!errorMessage ?
+          showEyes && <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={handleClick}
+              className={classes.iconEye}>
+              {toggleEyes ? <img src={iconEyeOpen} alt="eye-close" /> : <VisibilityOffIcon />}
+            </IconButton>
+          </InputAdornment> : <img src={images.icError} alt="error" />
+        }
+        {...inputProps}
+        inputRef={refInput}
+        {...rest}
       />
       {infor && <p className={classes.textInfor}>{infor}</p>}
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}

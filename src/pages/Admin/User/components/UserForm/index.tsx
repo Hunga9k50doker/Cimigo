@@ -3,7 +3,7 @@ import { ArrowBackOutlined, Save } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
-import { memo, useEffect, useState } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { routes } from "routers/routes";
@@ -14,6 +14,7 @@ import { adminTypes, EAdminType, User } from "models/user";
 import UploadImage from "components/UploadImage";
 import CountryService from "services/country";
 import { setErrorMess } from "redux/reducers/Status/actionTypes";
+import { VALIDATION } from "config/constans";
 
 
 export interface UserFormData {
@@ -37,24 +38,26 @@ interface Props {
 
 const UserForm = memo(({ itemEdit, onSubmit }: Props) => {
 
-  const schema = yup.object().shape({
-    avatar: yup.mixed(),
-    firstName: yup.string().required('First name is required.'),
-    lastName: yup.string().required('Last name is required.'),
-    email: yup.string().email('Please enter a valid email adress').required('Email is required.'),
-    password: itemEdit ?
-      yup.string() :
-      yup.string().matches(new RegExp("^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])[a-zA-Z0-9@#$%^&+=]*$"), {
-        message: 'Password must contains at least 8 characters, including at least one letter and one number and a special character.', excludeEmptyString: true
-      })
-        .required('Password is required.'),
-    countryId: yup.object().required('Country is required.'),
-    isNotify: yup.boolean(),
-    adminTypeId: yup.object().required('Admin type is required.'),
-    verified: yup.boolean(),
-    company: yup.string().notRequired(),
-    phone: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, { message: "Please enter a valid phone number.", excludeEmptyString: true }).notRequired()
-  })
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      avatar: yup.mixed(),
+      firstName: yup.string().required('First name is required.'),
+      lastName: yup.string().required('Last name is required.'),
+      email: yup.string().email('Please enter a valid email adress').required('Email is required.'),
+      password: itemEdit ?
+        yup.string() :
+        yup.string().matches(VALIDATION.password, {
+          message: 'Password must contains at least 8 characters, including at least one letter and one number and a special character.', excludeEmptyString: true
+        })
+          .required('Password is required.'),
+      countryId: yup.object().required('Country is required.'),
+      isNotify: yup.boolean(),
+      adminTypeId: yup.object().required('Admin type is required.'),
+      verified: yup.boolean(),
+      company: yup.string().notRequired(),
+      phone: yup.string().matches(VALIDATION.phone, { message: "Please enter a valid phone number.", excludeEmptyString: true }).notRequired()
+    })
+  }, [itemEdit])
 
   const dispatch = useDispatch();
   const [countries, setCountries] = useState<OptionItem[]>([])

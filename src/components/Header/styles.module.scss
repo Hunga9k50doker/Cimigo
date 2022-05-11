@@ -109,18 +109,15 @@
   position: relative;
   margin: 0 auto;
   box-sizing: border-box;
-  max-width: 1240px !important;
   padding-left: 64px;
   padding-right: 64px;
 
   @media only screen and (max-width: 1024px) {
-    max-width: 1024px !important;
     padding-left: 24px;
     padding-right: 24px;
   }
 
   @media only screen and (max-width: 767px) {
-    max-width: 550px !important;
     padding-left: 10px;
     padding-right: 19px;
     height: 58px;
@@ -206,7 +203,9 @@
 .btnLogin {
   padding-right: 10px;
   white-space: nowrap;
-
+  button {
+    white-space: nowrap;
+  }
   @media only screen and (max-width: 767px) {
     button {
       border: unset;
@@ -221,12 +220,14 @@
         background-repeat: no-repeat;
         background-position: left 11px;
       }
-
     }
   }
 }
 
 .btnLogout {
+  button {
+    white-space: nowrap;
+  }
   @media only screen and (max-width: 767px) {
     button {
       border: unset;
@@ -237,7 +238,6 @@
       &:not(.disable):hover {
         background: none;
       }
-
     }
   }
 }
@@ -342,7 +342,7 @@
 
       &.active,
       &:hover {
-        background: #E8F1FB;
+        background: #e8f1fb;
       }
     }
   }
@@ -372,14 +372,6 @@
   overflow: hidden;
   margin-left: 20px;
   margin-right: 5px;
-   p {
-    text-overflow: ellipsis;
-    overflow: hidden;
-     span{
-      text-overflow: ellipsis;
-      overflow: hidden;
-     }
-   }
   @media only screen and (max-width: 1024px) {
     left: 200px;
   }
@@ -400,6 +392,7 @@
   }
 
   span {
+    white-space: nowrap;
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -414,11 +407,13 @@
   display: flex;
   align-items: center;
   margin-top: 5px;
-  img {
+  overflow: hidden;
+  flex: 1;
+  > img {
     margin-right: 15px;
   }
 
-  span {
+  .detail {
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -426,6 +421,8 @@
     letter-spacing: 0.015em;
     color: #53660c;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -458,18 +455,19 @@
   margin-left: 8px;
   background-color: transparent !important;
   width: 100%;
-  a{
+  a {
+    width: 100%;
     font-size: 16px;
     text-decoration: none;
     font-weight: 600;
     color: rgba(28, 28, 28, 0.9);
-    p{
+    p {
       white-space: pre-wrap;
       border-left: 4px solid rgba(166, 204, 23, 1);
       padding: 7px 10px 7px 14px;
       transition: 0.4s;
     }
-    p:not(:active,:hover){
+    p:not(:active, :hover) {
       padding-left: 0px;
       border: none;
       font-weight: 500;
@@ -502,7 +500,6 @@
 }
 
 @media only screen and (max-width: 1024px) {
-  
   .btnChangeLang2 {
     display: flex;
     font-weight: 500 !important;
@@ -517,11 +514,10 @@
     margin-left: 20px;
     white-space: nowrap;
   }
-
 }
 
 @media only screen and (min-width: 1024px) {
-  .item>.routerItem {
+  .item > .routerItem {
     padding: 5px 20px;
   }
 }
@@ -537,8 +533,6 @@
     .icHelp {
       display: none;
     }
-
-    display: none;
   }
 
   .btnLogin,
@@ -577,12 +571,39 @@
     display: none;
   }
 }
-.buttonOfToggle:last-child{
+.buttonOfToggle:last-child {
   margin-bottom: 15px;
 }
 
 .avatar {
   width: 40px;
   height: 40px;
+  object-fit: contain;
   border-radius: 100%;
+}
+.editBox {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  [class~="MuiFormControl-root"] {
+    max-width: 350px;
+    padding: 0px;
+    margin-right: 15px;
+    input {
+      padding: 5px 5px 5px 10px;
+    }
+  }
+  button {
+    max-width: unset;
+    min-width: unset;
+    img {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+.avatarEmpty {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }

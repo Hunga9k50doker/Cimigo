@@ -18,6 +18,8 @@ import Popup from "components/Popup";
 import Google from "components/SocialButton/Google";
 import Images from "config/images";
 import { useTranslation } from "react-i18next";
+import { routesOutside } from "routers/routes";
+import { VALIDATION } from "config/constans";
 
 interface DataForm {
   firstName: string;
@@ -43,14 +45,14 @@ const Register = () => {
         .email(t('field_email_vali_email'))
         .required(t('field_email_vali_required')),
       password: yup.string()
-        .matches(new RegExp("^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])[a-zA-Z0-9@#$%^&+=]*$"), { message: t('field_password_vali_password'), excludeEmptyString: true })
+        .matches(VALIDATION.password, { message: t('field_password_vali_password'), excludeEmptyString: true })
         .required(t('field_password_vali_required')),
       countryId: yup.object().shape({
         id: yup.number().required(t('field_country_vali_required')),
         name: yup.string().required()
       }).required(),
       isNotify: yup.bool(),
-      phone: yup.string().matches(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }),
+      phone: yup.string().matches(VALIDATION.phone, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }),
       company: yup.string(),
     })
   }, [i18n.language])
@@ -214,12 +216,14 @@ const Register = () => {
             }
             label={<span translation-key="register_notify_checkbox">{t('register_notify_checkbox')}</span>}
           />
-          <Buttons type={"submit"} padding="16px 0px" translation-key="register_btn_register" children={t('register_btn_register')} btnType="Blue" />
+          <Buttons type={"submit"} padding="11px 16px" translation-key="register_btn_register" children={t('register_btn_register')} btnType="Blue" />
           <div className={classes.separator}>
             <span translation-key="register_register_with">{t('register_register_with')}</span>
           </div>
           <Google />
-          <span className={classes.text} translation-key="register_agree_message">{t('register_agree_message')}</span>
+          <span className={classes.text}>
+            <span translation-key="register_agree_message_1">{t('register_agree_message_1')}</span> <a href={routesOutside(i18n.language)?.rapidsurveyTermsOfService} translation-key="register_agree_message_2">{t('register_agree_message_2')}</a>
+          </span>
         </Grid>
       </form>
       <Popup

@@ -10,7 +10,7 @@ import { push } from "connected-react-router";
 import useDebounce from "hooks/useDebounce";
 import { GetSolutionsParams, Solution } from "models/Admin/solution"
 import { DataPagination, EStatus, LangSupport, langSupports, TableHeaderLabel } from "models/general";
-import { memo, useEffect, useState } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
 import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
@@ -27,13 +27,15 @@ const tableHeaders: TableHeaderLabel[] = [
 ];
 
 interface Props {
+  keyword: string,
+  setKeyword: React.Dispatch<React.SetStateAction<string>>,
+  data: DataPagination<Solution>,
+  setData: React.Dispatch<React.SetStateAction<DataPagination<Solution>>>,
 }
 
-const List = memo(({ }: Props) => {
+const List = memo(({ keyword, setKeyword, data, setData }: Props) => {
 
   const dispatch = useDispatch()
-  const [keyword, setKeyword] = useState<string>('');
-  const [data, setData] = useState<DataPagination<Solution>>();
   const [itemAction, setItemAction] = useState<Solution>();
   const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
   const [languageAnchor, setLanguageAnchor] = useState<null | HTMLElement>(null);
@@ -159,6 +161,23 @@ const List = memo(({ }: Props) => {
     }));
   }
 
+  const inValidPage = () => {
+    if (!data) return false
+    return data.meta.page > 1 && Math.ceil(data.meta.itemCount / data.meta.take) < data.meta.page
+  }
+
+  const pageIndex = useMemo(() => {
+    if (!data) return 0
+    if (inValidPage()) return data.meta.page - 2
+    return data.meta.page - 1
+  }, [data])
+
+  useEffect(() => {
+    if (inValidPage()) {
+      handleChangePage(null, data.meta.page - 2)
+    }
+  }, [data])
+
   return (
     <div>
       <Grid container alignItems="center" justifyContent="space-between">
@@ -244,7 +263,7 @@ const List = memo(({ }: Props) => {
               component="div"
               count={data?.meta?.itemCount || 0}
               rowsPerPage={data?.meta?.take || 10}
-              page={data?.meta?.page ? data?.meta?.page - 1 : 0}
+              page={pageIndex}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
