@@ -8,6 +8,7 @@ export const API = {
     ACTIVE: '/v1.0/user/active',
     SEND_EMAIL_FORGOT_PASSWORD: '/v1.0/user/send-email-forgot-password',
     FORGOT_PASSWORD: '/v1.0/user/forgot-password',
+    CHECK_ISVALID_CODE: '/v1.0/user/check-isvalid-code'
   },
   USER: {
     DEFAULT: '/v1.0/user',
@@ -69,6 +70,10 @@ export const API = {
   },
   ATTACHMENT: {
     DOWNLOAD: '/v1.0/attachment/:id/download',
+    DOWNLOAD_BY_URL: '/v1.0/attachment/download',
+  },
+  CUSTOM_QUESTION_TYPE: {
+    DEFAULT: '/v1.0/custom-question-type',
   },
   ADMIN: {
     SOLUTION: {
@@ -122,6 +127,17 @@ export const API = {
     },
     USER: {
       DEFAULT: '/v1.0/admin/user',
-    }
+    },
+    CUSTOM_QUESTION_TYPE: {
+      DEFAULT: '/v1.0/admin/custom-question-type',
+    },
+    PAYMENT: {
+      DEFAULT: '/v1.0/admin/payment',
+    },
   }
+}
+
+export const VALIDATION = {
+  password: new RegExp("^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])[a-zA-Z0-9@#$%^&+=]*$"),
+  phone: /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/
 }

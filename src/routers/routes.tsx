@@ -113,6 +113,14 @@ export const routes = {
       root: '/admin/user',
       create: '/admin/user/:id/create',
       edit: '/admin/user/:id/edit',
+    },
+    customQuestionType: {
+      root: '/admin/custom-question-type',
+      edit: '/admin/custom-question-type/:id/edit',
+    },
+    payment: {
+      root: '/admin/payment',
+      edit: '/admin/payment/:id/edit',
     }
   },
   account:{
