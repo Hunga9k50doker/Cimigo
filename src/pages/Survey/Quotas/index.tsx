@@ -101,7 +101,11 @@ const Quotas = memo(({ projectId }: Props) => {
                 <Box key={quota.quotaTable.id} className={clsx(classes.tableBox, { [classes.tableBoxEditing]: editing })}>
                   <Box className={classes.toolbar}>
                     <Box className={classes.tableTitle}>
-                      Economic class sample setup {editing ? <span className={classes.sub}>(In editing mode)</span> : <span className={classes.sub}>(Edited)</span>}
+                      Economic class sample setup {editing ? (
+                        <span className={classes.sub}>(In editing mode)</span>
+                      ) : (
+                        quota.edited && <span className={classes.sub}>(Edited)</span>
+                      )}
                     </Box>
                     <Box className={classes.tableActions}>
                       {editing ? (
@@ -113,9 +117,11 @@ const Quotas = memo(({ projectId }: Props) => {
                         </>
                       ) : (
                         <>
-                          <IconButton onClick={onRestore}>
-                            <img src={Images.icRestore} alt='' />
-                          </IconButton>
+                          {quota.edited && (
+                            <IconButton onClick={onRestore}>
+                              <img src={Images.icRestore} alt='' />
+                            </IconButton>
+                          )}
                           <IconButton onClick={() => onStartEdit(quota.quotaTable.id)}>
                             <img src={Images.icEditCell} alt='' />
                           </IconButton>
@@ -132,7 +138,11 @@ const Quotas = memo(({ projectId }: Props) => {
                             <TableCell>{item.name}</TableCell>
                           </React.Fragment>
                         ))}
-                        <TableCell align="center">Your adjusted sample size</TableCell>
+                        {(quota.edited || editing) ? (
+                          <TableCell align="center">Your adjusted sample size</TableCell>
+                        ) : (
+                          <TableCell align="center">Representative sample size</TableCell>
+                        )}
                         {editing && <TableCell align="center">Your population weights</TableCell>}
                       </TableRow>
                     </TableHead>
