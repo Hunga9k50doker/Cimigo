@@ -11,7 +11,9 @@ export const API = {
     CHECK_ISVALID_CODE: '/v1.0/user/check-isvalid-code'
   },
   USER: {
-    PAYMENT_INFO: '/v1.0/user/payment-info'
+    DEFAULT: '/v1.0/user',
+    PAYMENT_INFO: '/v1.0/user/payment-info',
+    UPDATE_PROFILE: '/v1.0/user/update-profile',
   },
   COUNTRY: {
     LIST: '/v1.0/country',

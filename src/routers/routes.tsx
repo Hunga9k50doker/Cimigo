@@ -125,8 +125,14 @@ export const routes = {
     payment: {
       root: '/admin/payment',
       edit: '/admin/payment/:id/edit',
-    },
-  }
+    }
+  },
+  account:{
+    root: '/account',
+    userProfile:'/account/user-profile',
+    changePassword: '/account/change-password',
+    paymentInfo: '/account/payment-info',
+  },
 }
 
 export const cimigoUrl = process.env.REACT_APP_CIMIGO_URL
@@ -135,11 +141,11 @@ export const routesOutside = (lang: string) => {
   switch (lang) {
     case Lang.VI:
       return {
-        overview: `${cimigoUrl}/vi/cac-giai-phap/tong-quan`,
-        howItWorks: `${cimigoUrl}/vi/cac-giai-phap/how-it-works`,
-        solution: `${cimigoUrl}/vi/cac-giai-phap/solution`,
+        overview: `${cimigoUrl}/vi/giai-phap/rapid-survey-introduction`,
+        howItWorks: `${cimigoUrl}/vi/giai-phap/how-it-works`,
+        solution: `${cimigoUrl}/vi/giai-phap/rapidsurvey-solutions`,
         pricingPlans: `${cimigoUrl}/vi/cac-giai-phap/pricing`,
-        faq: `${cimigoUrl}/vi/cac-giai-phap/faq`,
+        faq: `${cimigoUrl}/vi/giai-phap/faq`,
         homePage: `${cimigoUrl}/vi`,
         opportunitiesAtCimigo: `${cimigoUrl}/vi/viec-lam`,
         trends: `${cimigoUrl}/vi/xu-huong`,
@@ -149,11 +155,11 @@ export const routesOutside = (lang: string) => {
       }
     case Lang.EN:
       return {
-        overview: `${cimigoUrl}/en/rapid-survey/overview`,
-        howItWorks: `${cimigoUrl}/en/rapid-survey/how-it-works`,
-        solution: `${cimigoUrl}/en/rapid-survey/solution`,
+        overview: `${cimigoUrl}/en/rapid-survey/rapid-survey-introduction`,
+        howItWorks: `${cimigoUrl}/en/rapid-survey/how-rapid-survey-works`,
+        solution: `${cimigoUrl}/en/rapid-survey/rapidsurvey`,
         pricingPlans: `${cimigoUrl}/en/solutions/pricing-plans`,
-        faq: `${cimigoUrl}/rapid-survey/faq`,
+        faq: `${cimigoUrl}/en/rapid-survey/rapid-survey-faq`,
         homePage: `${cimigoUrl}/en`,
         opportunitiesAtCimigo: `${cimigoUrl}/en/opportunities-at-cimigo`,
         trends: `${cimigoUrl}/en/trends`,
