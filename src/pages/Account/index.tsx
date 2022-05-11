@@ -10,7 +10,6 @@ import { routes } from "routers/routes";
 import clsx from 'clsx';
 import { useState, useRef } from 'react';
 
-
 const Account = () => {
   const { logout } = UseAuth();
   const [isOpen, setOpen] = useState(false);
