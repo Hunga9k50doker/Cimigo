@@ -160,6 +160,16 @@
   align-items: center;
   margin: 0;
   padding: 0;
+  > .item {
+    &:not(:last-child) {
+      margin-right: 10px;
+      @media only screen and (max-width: 767px) {
+        &.clearMargin {
+          margin-right: 0;
+        }
+      }
+    }
+  }
 }
 
 .item {
@@ -201,7 +211,7 @@
 }
 
 .btnLogin {
-  padding-right: 10px;
+  margin-right: 10px;
   white-space: nowrap;
   button {
     white-space: nowrap;
@@ -313,9 +323,11 @@
 
 .itemBtn {
   background-color: rgba(28, 28, 28, 0.05);
-  margin-left: 15px;
   width: 40px;
   height: 40px;
+  &:not(:first-child) {
+    margin-left: 10px;
+  }
 }
 
 .menuProfile {
@@ -439,7 +451,6 @@
 .btnChangeLang2 {
   display: none;
   border: none;
-  margin-right: 10px;
   font-weight: 500;
   font-size: 14px;
   line-height: 24px;
@@ -503,7 +514,6 @@
   .btnChangeLang2 {
     display: flex;
     font-weight: 500 !important;
-    margin-right: -15px;
   }
 
   .btnChangeLang {
@@ -511,7 +521,6 @@
   }
 
   .btnLogin {
-    margin-left: 20px;
     white-space: nowrap;
   }
 }
@@ -563,7 +572,6 @@
 
   .btnChangeLang2 {
     display: flex;
-    margin-right: -17px;
     font-weight: 500 !important;
   }
 
