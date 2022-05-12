@@ -43,6 +43,7 @@ const EditQuotaTable = memo((props: Props) => {
     dispatch(setLoading(true))
     const form: UpdateQuotaTableParams = {
       title: data.title,
+      titleCell: data.titleCell,
       order: data.order,
       questionIds: data.questionIds.map(it => it.id),
       calculations: data.calculations

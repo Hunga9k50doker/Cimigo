@@ -3,6 +3,7 @@ import { TargetAnswer, TargetQuestion } from "./target";
 export interface QuotaTable {
   id: number;
   title: string;
+  titleCell: string;
   questionIds: number[];
   order: number;
   parentLanguage: string;
@@ -32,6 +33,7 @@ export interface GetQuotaTablesParams {
 
 export interface CreateQuotaTableParams {
   title: string;
+  titleCell: string;
   order: number;
   questionIds: number[];
   calculations: {
@@ -42,6 +44,7 @@ export interface CreateQuotaTableParams {
 
 export interface UpdateQuotaTableParams {
   title?: string;
+  titleCell?: string;
   order?: number;
   questionIds?: number[];
   calculations?: {

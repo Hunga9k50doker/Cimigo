@@ -113,6 +113,7 @@ export interface UpdateQuota {
   quotaTableId: number
   quotas: {
     sampleSize: number,
+    populationWeight: number,
     answerIds: number[]
   }[]
 }

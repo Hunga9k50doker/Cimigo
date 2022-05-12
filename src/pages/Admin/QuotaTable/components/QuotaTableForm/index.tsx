@@ -19,6 +19,7 @@ import _ from "lodash";
 
 const schema = yup.object().shape({
   title: yup.string().required('Title is required.'),
+  titleCell: yup.string().required('Title cell is required.'),
   order: yup.number().typeError('Order is required.').required('Order is required.'),
   questionIds: yup.array(yup.object().shape({
     id: yup.number(),
@@ -33,6 +34,7 @@ export interface CalculationItem {
 
 export interface QuotaTableFormData {
   title: string;
+  titleCell: string;
   order: number;
   questionIds: OptionItem[];
   calculations: {
@@ -181,6 +183,15 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
                       type="text"
                       inputRef={register('title')}
                       errorMessage={errors.title?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Inputs
+                      title="Title cell"
+                      name="titleCell"
+                      type="text"
+                      inputRef={register('titleCell')}
+                      errorMessage={errors.titleCell?.message}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>

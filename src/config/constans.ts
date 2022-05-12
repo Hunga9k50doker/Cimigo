@@ -146,3 +146,10 @@ export const VALIDATION = {
   password: new RegExp("^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])[a-zA-Z0-9@#$%^&+=]*$"),
   phone: /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/
 }
+
+export const PROJECT = {
+  QUOTA: {
+    MIN_POPULATION_WEIGHT: 0.5,
+    MAX_POPULATION_WEIGHT: 1.5,
+  }
+}
