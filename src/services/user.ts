@@ -1,6 +1,6 @@
 import api from './configApi';
 import { API } from 'config/constans';
-import { CheckIsValidCode, ForgotPasswordData, LoginForm, RegisterData, SocialLoginData } from 'models/user';
+import { CheckIsValidCode, ForgotPasswordData, LoginForm, RegisterData, SocialLoginData, ChangePassword  } from 'models/user';
 
 export class UserService {
   static async login(data: LoginForm): Promise<any> {
@@ -24,7 +24,7 @@ export class UserService {
   }
   
   static async update(data: FormData): Promise<any> {
-    return await api.put(`${API.USER.UPDATE_PROFILE}`, data, {
+    return await api.put(`${API.ACCOUNT.UPDATE_PROFILE}`, data, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -36,12 +36,8 @@ export class UserService {
         return Promise.reject(e?.response?.data);
       })
   }
-  static async changePassword(data: FormData): Promise<any> {
-    return await api.put(`${API.USER.CHANGE_PASSWORD}`, data, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+  static async changePassword(data: ChangePassword): Promise<any> {
+    return await api.put(`${API.ACCOUNT.CHANGE_PASSWORD}`, data)
       .then((res) => {
         return Promise.resolve(res.data)
       })
@@ -115,7 +111,7 @@ export class UserService {
   }
 
   static async getPaymentInfo() {
-    return await api.get(API.USER.PAYMENT_INFO)
+    return await api.get(API.ACCOUNT.PAYMENT_INFO)
       .then((res) => {
         return Promise.resolve(res.data.data)
       })

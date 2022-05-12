@@ -10,11 +10,11 @@ export const API = {
     FORGOT_PASSWORD: '/v1.0/user/forgot-password',
     CHECK_ISVALID_CODE: '/v1.0/user/check-isvalid-code'
   },
-  USER: {
-    DEFAULT: '/v1.0/user',
-    PAYMENT_INFO: '/v1.0/user/payment-info',
-    UPDATE_PROFILE: '/v1.0/user/update-profile',
-    CHANGE_PASSWORD: '/v1.0/user/change-password',
+  ACCOUNT: {
+    DEFAULT: '/v1.0/account',
+    PAYMENT_INFO: '/v1.0/account/payment-info',
+    UPDATE_PROFILE: '/v1.0/account/update-profile',
+    CHANGE_PASSWORD: '/v1.0/account/change-password',
   },
   COUNTRY: {
     LIST: '/v1.0/country',

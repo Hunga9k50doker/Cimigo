@@ -105,3 +105,8 @@ export interface CheckIsValidCode {
     code: string,
     type: number
 }
+export interface ChangePassword {
+    currentPassword: string,
+    newPassword: string,
+    confirmPassword: string,
+}

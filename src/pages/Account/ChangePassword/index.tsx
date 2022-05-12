@@ -38,18 +38,14 @@ const ChangePassword = memo((props: Props) => {
                 .required(t('field_confirm_new_password_vali_required')),
         })
     }, [i18n.language])
-    const { register, handleSubmit, formState: { errors },reset } = useForm<DataForm>({
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<DataForm>({
         resolver: yupResolver(schema),
         mode: 'onChange'
     });
  
     const onSubmit = (data: DataForm) => {
-        const form = new FormData()
-        form.append('currentPassword', data.currentPassword)
-        form.append('newPassword', data.newPassword)
-        form.append('confirmPassword', data.confirmPassword)
         dispatch(setLoading(true))
-        UserService.changePassword(form)
+        UserService.changePassword(data)
             .then((res) => {
                 dispatch(setSuccessMess(res.message))
                 reset({ currentPassword:'', newPassword:'', confirmPassword:'', })
@@ -101,7 +97,14 @@ const ChangePassword = memo((props: Props) => {
                     inputRef={register('confirmPassword')}
                     errorMessage={errors.confirmPassword?.message}
                 />
-                <Buttons type={"submit"} children={t('reset_password_btn_submit')} translation-key="reset_password_btn_submit" btnType="Blue" padding="16px 89px" />
+                <Buttons 
+                type={"submit"} 
+                children={t('reset_password_btn_submit')} 
+                translation-key="reset_password_btn_submit" 
+                btnType="Blue" 
+                padding="12px 10px"
+                className={classes.btnSubmit} 
+                />
             </form>
         </Grid>
     )
