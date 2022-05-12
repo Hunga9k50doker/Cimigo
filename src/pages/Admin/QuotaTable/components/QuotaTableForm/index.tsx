@@ -68,6 +68,7 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
     if (itemEdit) {
       reset({
         title: itemEdit.title,
+        titleCell: itemEdit.titleCell,
         order: itemEdit.order,
         questionIds: itemEdit.targetQuestions.map(it => ({ id: it.id, name: it.name }))
       })
