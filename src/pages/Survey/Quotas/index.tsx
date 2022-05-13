@@ -172,17 +172,17 @@ const Quotas = memo(({ projectId }: Props) => {
                   <Box className={classes.toolbar}>
                     <Box className={classes.tableTitle}>
                       {quota.quotaTable.title} {editing ? (
-                        <span className={classes.sub}>(In editing mode)</span>
+                        <span className={classes.sub} translate-key="common_in_editing_mode">({t('common_in_editing_mode')})</span>
                       ) : (
-                        quota.edited && <span className={classes.sub}>(Edited)</span>
+                        quota.edited && <span className={classes.sub} translation-key="common_edited">({t('common_edited')})</span>
                       )}
                     </Box>
                     <Box className={classes.tableActions}>
                       {editing ? (
                         <>
-                          <Buttons children="Cancel" className={classes.btnCancel} onClick={onCancel} />
-                          <Buttons btnType="Green" className={classes.btnSave} onClick={onEdit}>
-                            <Check sx={{ marginRight: 2 }} />Save changes
+                          <Buttons children={t('common_cancel')} translation-key="common_cancel" className={classes.btnCancel} onClick={onCancel} />
+                          <Buttons btnType="Green" className={classes.btnSave} onClick={onEdit} translate-key="common_save_changes">
+                            <Check sx={{ marginRight: 2 }} />{t('common_save_changes')}
                           </Buttons>
                         </>
                       ) : (
@@ -207,8 +207,8 @@ const Quotas = memo(({ projectId }: Props) => {
                         {isMobile ? (
                           <>
                             <TableCell>{quota.quotaTable.titleCell}</TableCell>
-                            <TableCell align="center">
-                              Sample size
+                            <TableCell align="center" translation-key="quotas_sample_size">
+                              {t('quotas_sample_size')}
                             </TableCell>
                           </>
                         ) : (
@@ -220,8 +220,8 @@ const Quotas = memo(({ projectId }: Props) => {
                               </React.Fragment>
                             ))}
                             {(quota.edited || editing) ? (
-                              <TableCell align="center">
-                                Your adjusted sample size
+                              <TableCell align="center" translation-key="quotas_your_adjusted_sample_size">
+                                {t('quotas_your_adjusted_sample_size')}
                               </TableCell>
                             ) : (
                               <TableCell align="center" translation-key="quotas_representative_sample_size">
@@ -231,15 +231,15 @@ const Quotas = memo(({ projectId }: Props) => {
                           </>
                         )}
                         {editing && (
-                          <TableCell align="center">
+                          <TableCell align="center" translation-key="quotas_your_population_weights">
                             {isMobile ? (
-                              <TooltipCustom title="A safe range for weighting (your adjusted sample divided by the proportionate sample) the sample by quota falls between 0.5 and 1.5. Beyond this range, may result in unreliable data at the weighted total result.">
-                                <span className={classes.tooltip}>Weight</span>
+                              <TooltipCustom title={t('quotas_weight_tooltip')} translation-key="quotas_weight_tooltip">
+                                <span className={classes.tooltip} translation-key="quotas_weight">{t('quotas_weight')}</span>
                               </TooltipCustom>
                             ) : (
                               <>
-                                Your population weights
-                                <TooltipCustom title="A safe range for weighting (your adjusted sample divided by the proportionate sample) the sample by quota falls between 0.5 and 1.5. Beyond this range, may result in unreliable data at the weighted total result.">
+                                {t('quotas_your_population_weights')}
+                                <TooltipCustom title={t('quotas_weight_tooltip')} translation-key="quotas_weight_tooltip">
                                   <InfoOutlined className={classes.iconTooltip} />
                                 </TooltipCustom>
                               </>
