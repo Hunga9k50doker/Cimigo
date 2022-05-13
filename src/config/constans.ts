@@ -14,6 +14,7 @@ export const API = {
     DEFAULT: '/v1.0/user',
     PAYMENT_INFO: '/v1.0/user/payment-info',
     UPDATE_PROFILE: '/v1.0/user/update-profile',
+    CHANGE_PASSWORD: '/v1.0/user/change-password',
   },
   COUNTRY: {
     LIST: '/v1.0/country',
