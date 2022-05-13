@@ -108,3 +108,7 @@ export interface UpdateTarget {
     answerIds: number[]
   }[]
 }
+
+export interface UpdateEnableCustomQuestion {
+  enableCustomQuestion: boolean;
+}

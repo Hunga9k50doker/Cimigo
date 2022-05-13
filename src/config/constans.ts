@@ -30,7 +30,8 @@ export const API = {
     MOVE: '/v1.0/project/:id/move-project',
     BASIC_INFORMATION: '/v1.0/project/:id/basic-information',
     TARGET: '/v1.0/project/:id/target',
-    SAMPLE_SIZE: '/v1.0/project/:id/sample-size'
+    SAMPLE_SIZE: '/v1.0/project/:id/sample-size',
+    UPDATE_ENABLE_CUSTOM_QUESTION: '/v1.0/project/:id/update-enable-custom-question',
   },
   FOLDER: {
     DEFAULT: '/v1.0/folder',
@@ -49,6 +50,11 @@ export const API = {
   },
   USER_ATTRIBUTE: {
     DEFAULT: '/v1.0/user-attribute',
+  },
+  CUSTOM_QUESTION: {
+    DEFAULT: '/v1.0/custom-question',
+    UPDATE_ORDER: '/v1.0/custom-question/update-order',
+    GET_TYPES: '/v1.0/custom-question/type', 
   },
   TRANSLATION: {
     DEFAULT: '/v1.0/translation/{{lng}}/{{ns}}'

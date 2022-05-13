@@ -11,15 +11,15 @@ import classes from "./styles.module.scss";
 import { Button, Collapse, Grid } from "@mui/material";
 import clsx from "clsx";
 
-interface CustomQuestionsListMobileProps {
+interface CustomQuestionListMobileProps {
   questions: CustomQuestion[];
   setQuestions: Dispatch<SetStateAction<CustomQuestion[]>>;
   handleEditQuestion: (event: SyntheticEvent<EventTarget>) => void;
   handleDeleteQuestion: (event: SyntheticEvent<EventTarget>) => void;
 }
 
-const CustomQuestionsListMobile = memo(
-  (props: CustomQuestionsListMobileProps) => {
+const CustomQuestionListMobile = memo(
+  (props: CustomQuestionListMobileProps) => {
     const {
       questions,
       setQuestions,
@@ -57,7 +57,7 @@ const CustomQuestionsListMobile = memo(
                       }
                       alt=""
                     />
-                    <p>{item.content}</p>
+                    <p>{item.title}</p>
                   </div>
                 )}
                 <Collapse in={isExpanded} timeout="auto" unmountOnExit>
@@ -72,7 +72,7 @@ const CustomQuestionsListMobile = memo(
                       }
                       alt=""
                     />
-                    <p>{item.content}</p>
+                    <p>{item.title}</p>
                   </div>
                   <div className={classes.buttons}>
                     <Button
@@ -100,4 +100,4 @@ const CustomQuestionsListMobile = memo(
   }
 );
 
-export default CustomQuestionsListMobile;
+export default CustomQuestionListMobile;

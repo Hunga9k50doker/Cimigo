@@ -10,14 +10,14 @@ import { IconButton } from "@mui/material";
 import { CustomQuestion } from "models/custom_question";
 import classes from "./styles.module.scss";
 
-interface CustomQuestionsDragListProps {
+interface CustomQuestionDragListProps {
   questions: CustomQuestion[];
   setQuestions: Dispatch<SetStateAction<CustomQuestion[]>>;
   handleEditQuestion: (event: SyntheticEvent<EventTarget>) => void;
   handleDeleteQuestion: (event: SyntheticEvent<EventTarget>) => void;
 }
 
-const CustomQuestionsDragList = memo((props: CustomQuestionsDragListProps) => {
+const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
   const { questions, setQuestions, handleEditQuestion, handleDeleteQuestion } =
     props;
 
@@ -76,7 +76,7 @@ const CustomQuestionsDragList = memo((props: CustomQuestionsDragListProps) => {
                             }
                             alt=""
                           />
-                          <p>{item.content}</p>
+                          <p>{item.title}</p>
                           <span className={classes.hide}>$353</span>
                         </div>
                       </div>
@@ -114,4 +114,4 @@ const CustomQuestionsDragList = memo((props: CustomQuestionsDragListProps) => {
   );
 });
 
-export default CustomQuestionsDragList;
+export default CustomQuestionDragList;

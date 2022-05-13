@@ -728,7 +728,7 @@
   text-decoration-line: underline;
 }
 
-.customQuestionsTitle {
+.customQuestionTitle {
   font-weight: 600;
   font-size: 16px;
   color: #1c1c1c;
@@ -744,13 +744,13 @@
     color: #7c9911;
   }
 }
-.customQuestionsTitleDisabled {
+.customQuestionTitleDisabled {
   color: #1c1c1c66 !important;
   span:first-child {
     color: #1c1c1c66 !important;
   }
 }
-.customQuestionsPrice {
+.customQuestionPrice {
   font-weight: 400;
   font-size: 12px;
   padding: 4px 16px;
@@ -763,7 +763,7 @@
     display: none;
   }
 }
-.customQuestionsPriceMobile {
+.customQuestionPriceMobile {
   font-weight: 400;
   font-size: 12px;
   padding: 4px 16px;
@@ -776,11 +776,11 @@
     display: inline-block;
   }
 }
-.customQuestionsPriceDisabled {
+.customQuestionPriceDisabled {
   color: #1c1c1c66 !important;
   background-color: #1c1c1c33 !important;
 }
-.customQuestionsSubTitleDisabled {
+.customQuestionSubTitleDisabled {
   color: #1c1c1c66 !important;
 }
 .questionType {
@@ -816,12 +816,12 @@
   display: none;
 }
 
-.summaryCustomQuestions {
+.summaryCustomQuestion {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
-.summaryCustomQuestionsPrice {
+.summaryCustomQuestionPrice {
   width: fit-content;
   font-weight: 400;
   font-size: 12px;
@@ -830,7 +830,7 @@
   background-color: #7c9911;
   border-radius: 30px;
 }
-.summaryCustomQuestionsPriceDisabled {
+.summaryCustomQuestionPriceDisabled {
   color: #1c1c1c66 !important;
   background-color: #1c1c1c33 !important;
 }

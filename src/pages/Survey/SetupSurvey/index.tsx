@@ -1,5 +1,6 @@
 import { useState, useEffect, memo, SyntheticEvent } from "react";
 import classes from './styles.module.scss';
+import clsx from "clsx";
 import {
   FormControl,
   Grid,
@@ -23,6 +24,7 @@ import {
   StepConnector,
   Collapse,
   Button,
+  breadcrumbsClasses,
 } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -60,10 +62,12 @@ import { Check, Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
 import Toggle from "components/Toggle";
-import CustomQuestionsDragList from "components/CustomQuestionsDragList";
-import clsx from "clsx";
-import CustomQuestionsListMobile from "components/CustomQuestionsListMobile";
-import { CustomQuestion } from "models/custom_question";
+import { Create, CustomQuestion, CustomQuestionType } from "models/custom_question";
+import { CustomQuestionService } from "services/custom_question";
+import CustomQuestionDragList from "components/CustomQuestionDragList";
+import CustomQuestionListMobile from "components/CustomQuestionListMobile";
+import PopupAddQuestion from "components/PopupAddQuestion";
+import PopupSingleChoice from "components/PopupSingleChoice";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -92,6 +96,12 @@ interface AttributeShow {
   type: AttributeShowType
 }
 
+export enum ECustomQuestionType {
+  Open_Question = 1,
+  Single_Choice = 2,
+  Multiple_Choices = 3,
+}
+
 interface Props {
   id: number
 }
@@ -109,6 +119,9 @@ const SetupSurvey = memo(({ id }: Props) => {
 
   const [openPopupMandatory, setOpenPopupMandatory] = useState(false)
   const [openPopupPreDefined, setOpenPopupPreDefined] = useState(false)
+  const [openPopupAddQuestion, setOpenPopupAddQuestion] = useState(false)
+  const [openPopupSingChoice, setOpenPopupSingleChoice] = useState(false)
+  const [openPopupMultiChoice, setOpenPopupMultiChoice] = useState(false)
   const [isScrolling, setScrolling] = useState(false);
 
   const [packs, setPacks] = useState<Pack[]>([]);
@@ -138,19 +151,23 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [userAttributeDelete, setUserAttributeDelete] = useState<UserAttribute>()
   const [projectAttributeDelete, setProjectAttributeDelete] = useState<ProjectAttribute>()
 
-  const [activeCustomQuestions, setActiveCustomQuestions] = useState<boolean>(false);
+  const [activeCustomQuestion, setActiveCustomQuestion] = useState<boolean>(false);
+  const [customQuestionType, setCustomQuestionType] = useState<CustomQuestionType[]>([]);
   const [questions, setQuestions] = useState<CustomQuestion[]>([
     {
       id: 1,
-      content: "How many country in Asean?",
+      title: "How many country in Asean?",
+      typeId: ECustomQuestionType.Open_Question,
     },
     {
       id: 2,
-      content: "Which country largest in the world?",
+      title: "Which country largest in the world?",
+      typeId: ECustomQuestionType.Single_Choice,
     },
     {
       id: 3,
-      content: "Who is the president of Viet Nam?",
+      title: "Who is the president of Viet Nam?",
+      typeId: ECustomQuestionType.Multiple_Choices,
     }
   ]);
 
@@ -177,6 +194,7 @@ const SetupSurvey = memo(({ id }: Props) => {
         variant: project.variant,
         manufacturer: project.manufacturer
       })
+      setActiveCustomQuestion(project.enableCustomQuestion);
     }
   }, [project])
 
@@ -204,11 +222,20 @@ const SetupSurvey = memo(({ id }: Props) => {
       .catch((e) => dispatch(setErrorMess(e)))
   }
 
+  const getCustomQuestionType = () => {
+    CustomQuestionService.getTypes({ take: 99 })
+      .then((res) => {
+        setCustomQuestionType(res.data);
+      })
+      .catch(e => dispatch(setErrorMess(e)));
+  }
+
   useEffect(() => {
     getPacks()
     getAdditionalBrand()
     getProjectAttributes()
     getUserAttributes()
+    getCustomQuestionType()
   }, [id])
 
   const onSubmitBI = (data: BasicInformationFormData) => {
@@ -528,8 +555,55 @@ const SetupSurvey = memo(({ id }: Props) => {
     }
   }
 
-  const toggleCustomQuestions = () => {
-    setActiveCustomQuestions(!activeCustomQuestions);
+  const onToggleCustomQuestion = () => {
+    dispatch(setLoading(true))
+    ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: !activeCustomQuestion })
+      .then(() => {
+        setActiveCustomQuestion(!activeCustomQuestion);
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const handleClickAddCustomQuestion = (type: ECustomQuestionType) => {
+    switch (type) {
+      case ECustomQuestionType.Open_Question:
+        {
+          setOpenPopupAddQuestion(true);
+          break;
+        }
+      case ECustomQuestionType.Single_Choice:
+        {
+          setOpenPopupSingleChoice(true);
+          break;
+        }
+      case ECustomQuestionType.Multiple_Choices:
+        {
+          setOpenPopupMultiChoice(true);
+          break;
+        }
+      default:
+        {
+          break;
+        }
+    }
+  }
+
+  const onAddCustomQuestion = (data: CustomQuestion) => {
+    dispatch(setLoading(true));
+    const params: Create = {
+      projectId: id,
+      title: data.title,
+      typeId: data.typeId,
+      answers: data.answers,
+    }
+    CustomQuestionService.create(params)
+      .then(() => {
+        getAdditionalBrand()
+        onClosePopupAddOrEditBrand()
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
   const handleEditQuestion = (event: SyntheticEvent<EventTarget>) => {
@@ -1035,16 +1109,16 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
           </Grid>
           <div className={classes.line}></div>
-          <div className={clsx(classes.customQuestionsTitle, {[classes.customQuestionsTitleDisabled]: !activeCustomQuestions})} id="custom-questions" translation-key="setup_survey_custom_questions_title">5. Custom questions <span translation-key="common_max">({t('common_max')} 4)</span> <Toggle onChange={toggleCustomQuestions} /> <span className={clsx(classes.customQuestionsPrice, {[classes.customQuestionsPriceDisabled]: !activeCustomQuestions})}>Extra cost</span></div>
-          <div><span className={clsx(classes.customQuestionsPriceMobile, {[classes.customQuestionsPriceDisabled]: !activeCustomQuestions})}>50$ per question</span></div>
+          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !activeCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. Custom questions <span translation-key="common_max">({t('common_max')} 4)</span> <Toggle checked={activeCustomQuestion} onChange={onToggleCustomQuestion} /> <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !activeCustomQuestion})}>Extra cost</span></div>
+          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !activeCustomQuestion})}>50$ per question</span></div>
           <Grid className={classes.flex}>
-            <p className={clsx({[classes.customQuestionsSubTitleDisabled]: !activeCustomQuestions})} translation-key="setup_survey_custom_questions_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
-            <Grid className={clsx({[classes.displayNone]: !activeCustomQuestions})}>
-              <CustomQuestionsDragList questions={questions} setQuestions={setQuestions} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
+            <p className={clsx({[classes.customQuestionSubTitleDisabled]: !activeCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
+            <Grid className={clsx({[classes.displayNone]: !activeCustomQuestion})}>
+              <CustomQuestionDragList questions={questions} setQuestions={setQuestions} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
               {/* ===================Custom questions mobile====================== */}
-              <CustomQuestionsListMobile questions={questions} setQuestions={setQuestions} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
+              <CustomQuestionListMobile questions={questions} setQuestions={setQuestions} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
             </Grid>
-            <Grid className={clsx(classes.select, {[classes.displayNone]: !activeCustomQuestions})}>
+            <Grid className={clsx(classes.select, {[classes.displayNone]: !activeCustomQuestion})}>
               <FormControl classes={{ root: classes.rootSelect }} disabled={!enableAdditionalAttributes() || !editableProject(project)}>
                 <Select
                   variant="outlined"
@@ -1063,36 +1137,24 @@ const SetupSurvey = memo(({ id }: Props) => {
                     }
                   }}
                 >
-                  <MenuItem disabled value="" translation-key="setup_survey_custom_questions_menu_action_placeholder">
+                  <MenuItem disabled value="" translation-key="setup_survey_custom_question_menu_action_placeholder">
                     Add custom question
                   </MenuItem>
-                  <MenuItem value={20} translation-key="setup_survey_custom_questions_menu_action_from_pre_defined_list">
-                    <div className={classes.questionType}>
-                      <div>
-                        <img src={Images.icOpenQuestion} alt="" />
-                        <p>Open question</p>
-                      </div>
-                      <span>$353</span>
-                    </div>
-                  </MenuItem>
-                  <MenuItem value={30} translation-key="setup_survey_custom_questions_menu_action_your_own_attribute">
-                    <div className={classes.questionType}>
-                      <div>
-                        <img src={Images.icSingleChoice} alt="" />
-                        <p>Single choice</p>
-                      </div>
-                      <span>$353</span>
-                    </div>
-                  </MenuItem>
-                  <MenuItem value={40} translation-key="setup_survey_custom_questions_menu_action_from_pre_defined_list">
-                    <div className={classes.questionType}>
-                      <div>
-                        <img src={Images.icMultipleChoices} alt="" />
-                        <p>Multiple choices</p>
-                      </div>
-                      <span>$353</span>
-                    </div>
-                  </MenuItem>
+                  {customQuestionType.map((item, index) => {
+                    const value = (index + 2) * 10;
+                    const image = item.id === ECustomQuestionType.Open_Question ? Images.icOpenQuestion : item.id === ECustomQuestionType.Single_Choice ? Images.icSingleChoice : item.id === ECustomQuestionType.Multiple_Choices ? Images.icMultipleChoices : null;
+                    return (
+                      <MenuItem value={value} onClick={() => handleClickAddCustomQuestion(item.id)} key={item.id}>
+                        <div className={classes.questionType}>
+                          <div>
+                            <img src={image} alt="" />
+                            <p>{item.title}</p>
+                          </div>
+                          <span>${item.price}</span>
+                        </div>
+                      </MenuItem>
+                    )
+                  })}
                 </Select>
               </FormControl>
               {!enableAdditionalAttributes() && <p translation-key="setup_survey_custom_question_error_max">{t('setup_survey_custom_question_error_max', { max: 4 })}</p>}
@@ -1202,7 +1264,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   </ul>
                 </StepContent>
               </Step>
-              <Step active={questions?.length >= 1 && activeCustomQuestions} expanded>
+              <Step active={questions?.length >= 1 && activeCustomQuestion} expanded>
                 <StepLabel
                   onClick={() => scrollToElement('custom-questions')}
                   StepIconComponent={ColorlibStepIcon}
@@ -1212,11 +1274,11 @@ const SetupSurvey = memo(({ id }: Props) => {
                     active: classes.rootStepLabelActive,
                     label: classes.rootStepLabel
                   }}
-                  translation-key="setup_survey_summary_custom_questions"
+                  translation-key="setup_survey_summary_custom_question"
                 >
-                  <div className={classes.summaryCustomQuestions}>
+                  <div className={classes.summaryCustomQuestion}>
                     <span>Custom question</span>
-                    <span className={clsx(classes.summaryCustomQuestionsPrice, {[classes.summaryCustomQuestionsPriceDisabled]: !activeCustomQuestions})}>$150</span>
+                    <span className={clsx(classes.summaryCustomQuestionPrice, {[classes.summaryCustomQuestionPriceDisabled]: !activeCustomQuestion})}>$150</span>
                   </div>
                 </StepLabel>
                 <StepContent classes={{ root: classes.rootConnector }}>
@@ -1281,6 +1343,21 @@ const SetupSurvey = memo(({ id }: Props) => {
           description={t('setup_survey_add_att_confirm_delete_sub')}
           onCancel={() => onCloseConfirmDeleteAttribute()}
           onDelete={onDeleteAttribute}
+        />
+        <PopupAddQuestion 
+          isOpen={openPopupAddQuestion} 
+          onClose={() => setOpenPopupAddQuestion(false)}
+          onSubmit={onAddCustomQuestion}
+        />
+        <PopupSingleChoice
+          isOpen={openPopupSingChoice}
+          onClose={() => setOpenPopupSingleChoice(false)}
+          onSubmit={onAddCustomQuestion}
+        />
+        <PopupMultiChoice
+          isOpen={openPopupMultiChoice}
+          onClose={() => setOpenPopupMultiChoice(false)}
+          onSubmit={onAddCustomQuestion}
         />
       </Grid>
     </>
