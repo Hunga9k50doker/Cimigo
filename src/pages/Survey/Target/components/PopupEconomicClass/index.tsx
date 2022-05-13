@@ -14,6 +14,7 @@ import { getProjectRequest } from 'redux/reducers/Project/actionTypes';
 import React from 'react';
 import { editableProject } from 'helpers/project';
 import { useTranslation } from 'react-i18next';
+import PopupConfirmChange from 'pages/Survey/components/PopupConfirmChange';
 
 interface Props {
   isOpen: boolean,
@@ -28,6 +29,7 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
 
   const dispatch = useDispatch()
   const [dataSelected, setDataSelected] = useState<DataSelected>({})
+  const [confirmChangeTarget, setConfirmChangeTarget] = useState<boolean>(false)
 
   useEffect(() => {
     const _dataSelected: DataSelected = {}
@@ -46,8 +48,7 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
     onToggleAnswer(questionId, answer, checked, dataSelected, setDataSelected)
   }
 
-  const onUpdateTarget = () => {
-    if (isDisable()) return
+  const onUpdateTargetRequest = () => {
     dispatch(setLoading(true))
     ProjectService.updateTarget(projectId, {
       questionTypeId: TargetQuestionType.Economic_Class,
@@ -60,6 +61,30 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onUpdateTarget = () => {
+    if (isDisable()) return
+    ProjectService.getQuota(projectId)
+      .then((res) => {
+        if (res?.length) setConfirmChangeTarget(true)
+        else onUpdateTargetRequest()
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+  }
+
+  const onCloseComfirmTarget = () => {
+    setConfirmChangeTarget(false)
+  }
+
+  const onConfimedChangeTarget = () => {
+    if (isDisable()) return
+    ProjectService.resetQuota(projectId)
+      .then(() => {
+        onUpdateTargetRequest()
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => onCloseComfirmTarget())
   }
 
   return (
@@ -90,7 +115,7 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
                             onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
                             classes={{ root: classes.rootCheckbox }}
                             icon={<img src={Images.icCheck} alt="" />}
-                            checkedIcon={<img src={Images.icCheckActive} alt="" />} 
+                            checkedIcon={<img src={Images.icCheckActive} alt="" />}
                           />
                         }
                         label={
@@ -106,6 +131,14 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
               </Grid>
             </React.Fragment>
           ))}
+          <PopupConfirmChange
+            isOpen={confirmChangeTarget}
+            title={t('target_confirm_change_target_title')}
+            content={t('target_confirm_change_target_sub_1')}
+            contentSub={t('target_confirm_change_target_sub_2')}
+            onCancel={onCloseComfirmTarget}
+            onSubmit={onConfimedChangeTarget}
+          />
         </Grid>
         <Grid className={classes.btn}>
           <Buttons disabled={isDisable()} children={t('common_save')} translation-key="common_save" btnType='Blue' padding='10px 16px' onClick={onUpdateTarget} />

@@ -34,9 +34,7 @@ export const API = {
     TARGET: '/v1.0/project/:id/target',
     SAMPLE_SIZE: '/v1.0/project/:id/sample-size',
     QUOTA: {
-      GET: '/v1.0/project/:id/quota',
-      RESET: '/v1.0/project/:id/reset-quota',
-      UPDATE: '/v1.0/project/:id/update-quota'
+      DEFAULT: '/v1.0/project/:id/quota',
     }
   },
   FOLDER: {

@@ -95,12 +95,10 @@ export class ProjectService {
       })
   }
 
-  static async getQuota(id: number, sampleSize: number): Promise<any> {
-    return await api.put(API.PROJECT.QUOTA.GET.replace(":id", `${id}`), {
-      sampleSize
-    })
+  static async getQuota(id: number): Promise<any> {
+    return await api.get(API.PROJECT.QUOTA.DEFAULT.replace(":id", `${id}`))
       .then((res) => {
-        return Promise.resolve(res.data)
+        return Promise.resolve(res.data.data)
       })
       .catch((e) => {
         return Promise.reject(e?.response?.data);
@@ -108,7 +106,7 @@ export class ProjectService {
   }
 
   static async updateQuota(id: number, data: UpdateQuota): Promise<any> {
-    return await api.put(API.PROJECT.QUOTA.UPDATE.replace(":id", `${id}`), data)
+    return await api.put(API.PROJECT.QUOTA.DEFAULT.replace(":id", `${id}`), data)
       .then((res) => {
         return Promise.resolve(res.data)
       })
@@ -117,8 +115,10 @@ export class ProjectService {
       })
   }
 
-  static async resetQuota(id: number, data: ResetQuota): Promise<any> {
-    return await api.put(API.PROJECT.QUOTA.RESET.replace(":id", `${id}`), data)
+  static async resetQuota(id: number, data?: ResetQuota): Promise<any> {
+    return await api.delete(API.PROJECT.QUOTA.DEFAULT.replace(":id", `${id}`), {
+      params: data
+    })
       .then((res) => {
         return Promise.resolve(res.data)
       })
