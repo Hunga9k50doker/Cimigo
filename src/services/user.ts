@@ -24,7 +24,7 @@ export class UserService {
   }
   
   static async update(data: FormData): Promise<any> {
-    return await api.put(`${API.ACCOUNT.UPDATE_PROFILE}`, data, {
+    return await api.put(`${API.USER.UPDATE_PROFILE}`, data, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -37,7 +37,7 @@ export class UserService {
       })
   }
   static async changePassword(data: ChangePassword): Promise<any> {
-    return await api.put(`${API.ACCOUNT.CHANGE_PASSWORD}`, data)
+    return await api.put(`${API.USER.CHANGE_PASSWORD}`, data)
       .then((res) => {
         return Promise.resolve(res.data)
       })
@@ -111,7 +111,7 @@ export class UserService {
   }
 
   static async getPaymentInfo() {
-    return await api.get(API.ACCOUNT.PAYMENT_INFO)
+    return await api.get(API.USER.PAYMENT_INFO)
       .then((res) => {
         return Promise.resolve(res.data.data)
       })
