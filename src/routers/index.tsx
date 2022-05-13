@@ -20,6 +20,7 @@ import CallbackCreateProject from 'pages/Callback/Project/Create';
 import InvalidResetPassword from 'pages/Authentication/InvalidResetPassword';
 import CallbackForgotPassword from 'pages/Callback/User/ForgotPassword';
 import HomePage from 'pages/Home';
+import AccountPage from 'pages/Account';
 
 const Routers = () => {
 
@@ -36,6 +37,7 @@ const Routers = () => {
         <PublicRoute exact path={routes.callback.user.forgotPassword} component={CallbackForgotPassword}/>
         <PublicRoute exact path={routes.callback.user.active} component={CallbackActiveUser}/>
 
+        <PrivateRoute path={routes.account.root} component={AccountPage}/>
         <PrivateRoute exact path={routes.project.management} component={ProjectManagement}/>
         <PrivateRoute exact path={routes.project.create} component={CreateProject}/>
         <PrivateRoute path={routes.project.detail.root} component={Survey}/>
