@@ -156,7 +156,7 @@ export const routesOutside = (lang: string) => {
     case Lang.EN:
       return {
         overview: `${cimigoUrl}/en/rapid-survey/overview`,
-        howItWorks: `${cimigoUrl}/en/rapid-survey/how-it-workss`,
+        howItWorks: `${cimigoUrl}/en/rapid-survey/how-it-works`,
         solution: `${cimigoUrl}/en/rapid-survey/solutions`,
         pricingPlans: `${cimigoUrl}/en/solutions/pricing-plans`,
         faq: `${cimigoUrl}/en/rapid-survey/faq`,
