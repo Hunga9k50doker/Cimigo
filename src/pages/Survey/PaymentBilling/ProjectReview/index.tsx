@@ -249,13 +249,12 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
         </Grid>
       </Grid>
       <p className={classes.textSub} translation-key="payment_billing_sub_tab_preview_expected">{t('payment_billing_sub_tab_preview_expected')}</p>
-      <Divider className={classes.divider} />
+      {/* <Divider className={classes.divider} />
       <p className={classes.textBlue1} translation-key="payment_billing_sub_tab_preview_materials">{t('payment_billing_sub_tab_preview_materials')}</p>
       <p className={classes.textSub1} translation-key="payment_billing_sub_tab_preview_materials_sub">{t('payment_billing_sub_tab_preview_materials_sub')}</p>
       <Grid className={classes.box}>
         <div onClick={getInvoice}><span><img className={classes.imgAddPhoto} src={Images.icInvoice} /></span><p translation-key="payment_billing_sub_tab_preview_materials_invoice">{t('payment_billing_sub_tab_preview_materials_invoice')}</p></div>
-        {/* <div onClick={openNewTabContact}><span><img className={classes.imgAddPhoto} src={Images.icAddPhoto} /></span><p translation-key="payment_billing_sub_tab_preview_materials_contract">{t('payment_billing_sub_tab_preview_materials_contract')}</p></div> */}
-      </Grid>
+      </Grid> */}
       <Grid className={classes.btn}>
         <Buttons disabled={!isValid} onClick={onConfirmProject} children={t('payment_billing_sub_tab_preview_confirm')} translation-key="payment_billing_sub_tab_preview_confirm" btnType="Blue" padding="11px 24px" />
         <p className={classes.textSub}><span translation-key="payment_billing_sub_tab_preview_confirm_des_1">{t('payment_billing_sub_tab_preview_confirm_des_1')}</span> <a href={routesOutside(i18n.language)?.rapidsurveyTermsOfService} translation-key="payment_billing_sub_tab_preview_confirm_des_2">{t('payment_billing_sub_tab_preview_confirm_des_2')}</a><span translation-key="payment_billing_sub_tab_preview_confirm_des_3">{t('payment_billing_sub_tab_preview_confirm_des_3')}</span></p>
