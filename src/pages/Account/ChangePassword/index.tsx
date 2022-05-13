@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material"
+import { Divider, Grid } from "@mui/material"
 import { memo, useEffect, useMemo } from "react"
 import classes from './styles.module.scss';
 import { useForm } from "react-hook-form";
@@ -57,7 +57,7 @@ const ChangePassword = memo((props: Props) => {
         <Grid className={classes.root}>
             <p className={classes.title}>Change password</p>
             <p className={classes.subTitle}>You should use a strong password that you have not used anywhere else.</p>
-            <Grid className={classes.lineRow}></Grid>
+            <Divider className={classes.divider} />
             <form onSubmit={handleSubmit(onSubmit)} 
             name="change-password" 
             noValidate 

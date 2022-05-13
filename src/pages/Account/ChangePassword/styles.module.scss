@@ -25,8 +25,7 @@
         color:rgba(0, 0, 0, 1);
     }
 }
-.lineRow{
-    border: 1px solid rgba(28, 28, 28, 0.2);
+.divider{
     @media only screen and (max-width: 767px) { 
         display: none;
     }
@@ -35,12 +34,6 @@
     padding: 32px 168px 190px 168px;
     @media only screen and (max-width: 767px) { 
        padding: 10px 0px 29px 0px;
-    }
-    >div{
-        margin-bottom: 9px;
-        @media only screen and (max-width: 767px) { 
-            margin-bottom: 1px;
-        }
     }
     .btnSubmit{
         margin-top: 8px;

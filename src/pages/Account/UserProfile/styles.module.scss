@@ -1,49 +1,6 @@
-.root {
-    background: #eef0f2;
-}
-
-.rootMenu {
-    width: 227px;
-    max-width: 227px;
-    padding: 5px 17px;
-
-    .btnOfMenu {
-        margin-left: -8px;
-        margin-top: 5px;
-        border-radius: 0%;
-        transition: 0.4s;
-        color: rgba(28, 28, 28, 0.65);
-        background-color: transparent;
-
-        &:hover,
-        &:active {
-            border-left: 3px solid rgba(166, 204, 23, 1);
-            margin-left: 0px;
-            color: rgba(28, 28, 28, 0.9);
-
-            svg {
-                color: rgba(28, 28, 28, 0.9);
-            }
-        }
-
-        svg {
-            margin-right: 17px;
-            width: 20px;
-            height: 18px;
-            color: rgba(28, 28, 28, 0.65);
-        }
-
-        p {
-            font-size: 16px;
-            font-weight: 500;
-            text-transform: none;
-        }
-    }
-}
-
 .rowInfo {
     display: flex;
-    margin-bottom: 43px;
+    margin-bottom: 34px;
 }
 
 .form {
@@ -52,10 +9,14 @@
     max-width: 764px;
     height: 100%;
     width: 100%;
-    input[name="firstName"], input[name="lastName"],  input[name="company"]{
+
+    input[name="firstName"],
+    input[name="lastName"],
+    input[name="company"] {
         padding-right: 12px;
     }
-    input[name="email"]{
+
+    input[name="email"] {
         padding-right: 14px;
     }
 }
@@ -67,20 +28,26 @@
     min-width: 120px;
     max-height: 120px;
     position: relative;
-
     span {
         display: none;
+      
     }
-
+    p{
+        white-space: nowrap !important;
+        margin-top: -20px;
+        @media only screen and (max-width: 767px) {
+            margin-top: -75px;
+        }
+    }
     div {
         border: none !important;
         z-index: 1;
         border-radius: 100%;
-        cursor: auto;
+        cursor: pointer !important;
 
         >div {
             border-radius: 0%;
-            cursor: auto !important;
+            cursor: pointer !important;
         }
 
         div {
@@ -109,6 +76,7 @@
         border-radius: 50%;
         background-color: rgba(238, 240, 242, 1);
         z-index: 2;
+
         svg {
             width: 17px;
             height: 16px;
@@ -136,37 +104,6 @@
     }
 }
 
-.inputFlex {
-    margin-top: -5px;
-    margin-bottom: 10px;
-    display: flex;
-    margin-left: -10px;
-
-    div:first-child {
-        margin-right: 10px;
-        margin-left: 10px;
-        padding-left: 0px;
-    }
-
-    p {
-        margin-left: -15px !important;
-    }
-
-    .customSelect {
-        div>div {
-            margin-left: 8px;
-        }
-    }
-}
-
-.inputFull {
-    margin-bottom: 15px;
-
-    p {
-        margin-left: -15px !important;
-    }
-}
-
 .btnSave {
     background-color: rgba(31, 97, 169, 1);
     color: rgba(250, 250, 255, 1);
@@ -176,31 +113,14 @@
     text-transform: none;
     line-height: 16px;
     float: right;
-    margin-bottom: 36px;
-    margin-top: 6px;
+    margin: 28px 0 36px 0px;
 
     @media only screen and (max-width: 767px) {
-        margin-bottom: 24px;
-        margin-top: -6px;
+        margin: 24px 0 24px 0px;
     }
 
     &:hover {
         background-color: rgba(31, 97, 169, 1);
-    }
-}
-
-.selectOfForm {
-    p {
-        margin-left: 0px !important;
-        margin-bottom: 5px;
-        font-size: 14px;
-        font-weight: 500;
-        color: rgba(28, 28, 28, 0.9);
-        margin-top: 2px;
-    }
-
-    &:first-child {
-        margin-left: 0px !important;
     }
 }
 
@@ -211,22 +131,9 @@
     margin-left: -15px;
 }
 
-@media only screen and (min-width: 1024px) {
-    .inputFlex {
-        img {
-            margin-left: -45px;
-        }
-
-        .customSelect {
-            img {
-                margin-left: -22px !important;
-            }
-        }
-
-        input[name="phone"] {
-            padding-right: 50px;
-        }
-
+.customSelect {
+    img {
+        margin-left: -22px !important;
     }
 }
 
@@ -237,69 +144,22 @@
 
     .form {
         padding: 30px 24px 25px 24px;
-        .iconReport{
+
+        .iconReport {
             margin-left: -17px;
         }
     }
-
-    .inputFlex {
-        .customSelect {
-            div:first-child {
-                font-size: 16px !important;
-            }
-            img {
-                margin-left: -24px !important;
-            }
-        }
-        input[name="phone"] {
-            padding-right: 35px;
-        }
-    }
-  
 }
 
 @media only screen and (max-width: 767px) {
     .rowInfo {
-        margin-bottom: 47px;
+
         margin-left: -8px;
     }
 
     input {
         font-size: 14px !important;
         font-weight: 400;
-    }
-
-    .inputFull {
-        p {
-            margin-left: 0px !important;
-        }
-    }
-
-    .inputFlex {
-        display: initial;
-        font-size: 14px !important;
-
-        p {
-            margin-left: 0px !important;
-        }
-
-        >div:first-child {
-            margin-top: -15px;
-        }
-
-        img {
-            margin-left: -30px;
-        }
-
-        .customSelect {
-            img {
-                margin-left: -24px !important;
-            }
-
-            div:first-child {
-                font-size: 14px !important;
-            }
-        }
     }
 
     .selectOfForm {
@@ -320,6 +180,7 @@
         max-height: 64px !important;
         max-width: 64px !important;
         min-width: 64px !important;
+
         .uploadAvatar {
             max-width: 18px;
             max-height: 18px;
@@ -341,7 +202,6 @@
             line-height: 19px;
             margin-bottom: 4px;
         }
-
         .country {
             font-size: 14px;
             font-weight: 500;
@@ -354,5 +214,15 @@
 
     .iconReport {
         display: none;
+    }
+}
+
+.customMargin {
+    >div >div {
+        padding-bottom: 8px;
+
+        @media only screen and (max-width: 767px) {
+            padding-bottom: 0px;
+        }
     }
 }

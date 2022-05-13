@@ -19,9 +19,9 @@
         margin-bottom: 10px;
         position: relative;
         .toggleMenu {
-            position: absolute;
+            position: fixed;
             right: 0px;
-            top: 0px;
+            top: 60px;
             width: 227px;
             max-width: 227px;
             display: flex;
@@ -48,7 +48,7 @@
             }
             ul {
                 padding-top: 5px !important;
-                >a>div {
+                >a >div {
                     background-color: transparent !important;
                     transition: 0.4s;
                     margin-left: 17px;
@@ -90,41 +90,36 @@
     border: 1px solid rgba(28, 28, 28, 0.05);
     margin-bottom: 10px;
     transition: 0.4s;
-    ul>a>div {
-        border: none;
-        margin-bottom: 15px;
-        color: rgba(28, 28, 28, 0.65);
-        font-weight: 500;
-        font-size: 16px;
-        padding: 5px 0px 5px 17px;
-        svg {
-            height: 20px;
-            width: 20px;
-            margin-right: 14px;
-            margin-left: 20px;
-        }
-
-        &.borderActive {
-            border-right: 3px solid rgba(166, 204, 23, 1) !important;
-            color: rgba(28, 28, 28, 1);
-        }
-
-        &:hover,
-        &:active {
-            border-right: 3px solid rgba(166, 204, 23, 1) !important;
-            color: rgba(28, 28, 28, 1);
+    ul {
+        padding: 0px;
+        >a{
+            >div {
+                position: relative;
+                border: none;
+                color: rgba(28, 28, 28, 0.65);
+                font-weight: 500;
+                font-size: 16px;
+                padding: 14px 20px 14px 34px;
+                svg {
+                    height: 20px;
+                    width: 20px;
+                    margin-right: 13px;
+                }
+                &.borderActive {
+                    color: rgba(28, 28, 28, 1);
+                    &::after{
+                        content: "";
+                        position: absolute;
+                        right: 0px;
+                        height: 36px;
+                        border-right: 3px solid rgba(166, 204, 23, 1) !important;
+                    }
+                }
+            }
         }
     }
 }
-.lineList{
-    border: 1px solid rgba(28, 28, 28, 0.2);
-    margin-top: -7px;
-    margin-bottom: 10px;
-    @media only screen and (max-width: 1024px) { 
-        margin-top: -4px;
-        margin-bottom: 13px;
-    }
-}
+
 .btnLogout{
     width: 100%;
     color: rgba(28, 28, 28, 0.65);
@@ -133,14 +128,10 @@
     transition: 0.4s;
     display: flex;
     align-items: center;
-    &:hover,&:active{
-        border-right: 3px solid rgba(166, 204, 23, 1);
-        color: rgba(28, 28, 28, 1);
-    }
     svg{
         width: 20px;
         height: 20px;
-        margin-left: 38px;
+        margin-left: 34px;
     }
     p{
         margin-left: 9px;
@@ -154,12 +145,15 @@
         line-height: 20px;
         @media only screen and (min-width: 1024px) {
             padding-right: 10px !important;
-            margin-left: 7px !important;
+            margin-left: 6px !important;
         }
+    }
+    @media only screen and (min-width: 1024px) {
+       padding: 15px 0px;
     }
     @media only screen and (max-width: 1024px) {
         margin-left: 17px;
-        margin-top: -3px;
+        margin-top: 12px;
         &:hover,&:active{
             color: rgba(28, 28, 28, 1);
             background-color: transparent;
