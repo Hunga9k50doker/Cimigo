@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Button,
-  IconButton,
-  Grid,
-  Dialog,
-  DialogContent,
-} from "@mui/material";
+import { Button, IconButton, Grid, Dialog, DialogContent } from "@mui/material";
 import classes from "./styles.module.scss";
 import IconListAdd from "assets/img/icon/ic-list-add-svgrepo-com.svg";
 import IconDotsDrag from "assets/img/icon/ic-dots-drag.svg";
@@ -14,7 +8,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import * as yup from "yup";
 import Inputs from "components/Inputs";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CustomAnswer, CustomQuestion } from "models/custom_question";
+import { CustomQuestion, CustomQuestionFormData } from "models/custom_question";
 import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 
 interface Props {
@@ -34,11 +28,6 @@ const schema = yup.object().shape({
     )
     .required(),
 });
-
-export interface AttributeFormData {
-  inputQues: string;
-  inputAns: CustomAnswer[];
-}
 
 const PopupMultiChoice = (props: Props) => {
   const [dragId, setDragId] = useState();
@@ -65,7 +54,7 @@ const PopupMultiChoice = (props: Props) => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<AttributeFormData>({
+  } = useForm<CustomQuestionFormData>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
@@ -91,7 +80,7 @@ const PopupMultiChoice = (props: Props) => {
   };
   const { onClose, isOpen, onSubmit } = props;
 
-  const _onSubmit = (data: AttributeFormData) => {
+  const _onSubmit = (data: CustomQuestionFormData) => {
     if (answers.length !== 0) {
       const question: CustomQuestion = {
         typeId: ECustomQuestionType.Multiple_Choices,
@@ -99,8 +88,30 @@ const PopupMultiChoice = (props: Props) => {
         answers: data.inputAns,
       };
       onSubmit(question);
+      clearForm();
       onClose();
     }
+  };
+
+  const clearForm = () => {
+    reset();
+    setAnswers([
+      {
+        id: 1,
+        title: "Enter answer 1",
+        position: 1,
+        switchMode: false,
+        value: "",
+      },
+      {
+        id: 2,
+        title: "Enter answer 2",
+        position: 2,
+        switchMode: false,
+        value: "",
+      },
+    ]);
+    setIsFirstRender(true);
   };
 
   const handleChangeSwitch = (status: any, index: number) => () => {
@@ -256,8 +267,10 @@ const PopupMultiChoice = (props: Props) => {
                           </span>
                         </Grid>
                         <div className={classes.errAns}>
-                          {!ans.value && !isFirstRender && "Answer is required."}
-                      </div>
+                          {!ans.value &&
+                            !isFirstRender &&
+                            "Answer is required."}
+                        </div>
                       </Grid>
                     </Grid>
                   </div>

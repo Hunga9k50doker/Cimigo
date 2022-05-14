@@ -36,6 +36,11 @@ export interface CustomAnswer {
   updatedAt?: Date;
 }
 
+export interface CustomQuestionFormData {
+  inputQues: string;
+  inputAns?: CustomAnswer[];
+}
+
 export interface Create {
   projectId: number;
   title: string;

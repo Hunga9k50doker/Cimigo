@@ -6,13 +6,12 @@ import {
   Dialog,
   DialogContent,
   InputAdornment,
-  Input,
 } from "@mui/material";
 import classes from "./styles.module.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Inputs from "components/Inputs";
-import { CustomQuestion } from "models/custom_question";
+import { CustomQuestion, CustomQuestionFormData } from "models/custom_question";
 import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 
 interface Props {
@@ -24,9 +23,6 @@ interface Props {
 const schema = yup.object().shape({
   inputQues: yup.string().required("Question title is required."),
 });
-export interface AttributeFormData {
-  inputQues: string;
-}
 
 const PopupAddQuestion = (props: Props) => {
   const { onClose, isOpen, onSubmit } = props;
@@ -34,17 +30,19 @@ const PopupAddQuestion = (props: Props) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AttributeFormData>({
+    reset,
+  } = useForm<CustomQuestionFormData>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
 
-  const _onSubmit = (data: AttributeFormData) => {
+  const _onSubmit = (data: CustomQuestionFormData) => {
     const question: CustomQuestion = {
       typeId: ECustomQuestionType.Open_Question,
       title: data.inputQues,
     };
     onSubmit(question);
+    reset();
     onClose();
   };
 
@@ -90,4 +88,5 @@ const PopupAddQuestion = (props: Props) => {
     </Dialog>
   );
 };
+
 export default PopupAddQuestion;

@@ -14,7 +14,7 @@ import IconDotsDrag from "assets/img/icon/ic-dots-drag.svg";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Inputs from "components/Inputs";
-import { CustomAnswer, CustomQuestion } from "models/custom_question";
+import { CustomQuestion, CustomQuestionFormData } from "models/custom_question";
 import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 
 interface Props {
@@ -34,11 +34,6 @@ const schema = yup.object().shape({
     )
     .required(),
 });
-
-export interface AttributeFormData {
-  inputQues: string;
-  inputAns: CustomAnswer[];
-}
 
 const PopupSingleChoice = (props: Props) => {
   const [dragId, setDragId] = useState();
@@ -63,7 +58,7 @@ const PopupSingleChoice = (props: Props) => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<AttributeFormData>({
+  } = useForm<CustomQuestionFormData>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
@@ -89,7 +84,7 @@ const PopupSingleChoice = (props: Props) => {
   };
   const { onClose, isOpen, onSubmit } = props;
 
-  const _onSubmit = (data: AttributeFormData) => {
+  const _onSubmit = (data: CustomQuestionFormData) => {
     if (answers.length !== 0) {
       const question: CustomQuestion = {
         typeId: ECustomQuestionType.Single_Choice,
@@ -97,8 +92,28 @@ const PopupSingleChoice = (props: Props) => {
         answers: data.inputAns,
       };
       onSubmit(question);
+      clearForm();
       onClose();
     }
+  };
+
+  const clearForm = () => {
+    reset();
+    setAnswers([
+      {
+        id: 1,
+        title: "Enter answer 1",
+        position: 1,
+        value: "",
+      },
+      {
+        id: 2,
+        title: "Enter answer 2",
+        position: 2,
+        value: "",
+      },
+    ]);
+    setIsFirstRender(true);
   };
 
   const checkAllAnsNotValue = () => {
