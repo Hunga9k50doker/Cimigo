@@ -81,7 +81,7 @@ const UserProfile = memo((props: Props) => {
     useEffect(() => {
         if (user) {
             reset({
-                avatar: user.avatar || '',
+                avatar: user.avatar || images.icProfile ||  '',
                 firstName: user.firstName || '',
                 lastName: user.lastName || '',
                 email: user.email || '',
@@ -115,9 +115,10 @@ const UserProfile = memo((props: Props) => {
                         name="avatar"
                         control={control}
                         render={({ field }) => <UploadImage
-                            file={field.value || user?.avatar || images.icProfile}
+                            file={field.value}
                             errorMessage={errors.avatar?.message}
                             onChange={(value) => field.onChange(value)}
+                            className={classes.avatar}
                         />}
                     />
                     <label htmlFor="upload" className={classes.uploadAvatar}>
@@ -125,8 +126,8 @@ const UserProfile = memo((props: Props) => {
                     </label>
                 </div>
                 <div className={classes.personalInfo}>
-                    <p className={classes.name}>{user?.fullName || ''}</p>
-                    <p className={classes.country}>{user?.company || ''}</p>
+                    <p className={classes.name}>{user?.fullName}</p>
+                    <p className={classes.country}>{user?.company}</p>
                 </div>
             </Grid>
             <Grid container spacing={isMobile ? 0 : 1} className={classes.customMargin}>
