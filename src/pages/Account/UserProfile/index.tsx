@@ -1,4 +1,4 @@
-import { Button, Grid, InputAdornment } from "@mui/material"
+import { Button, Grid, InputAdornment, useMediaQuery, useTheme } from "@mui/material"
 import { memo, useEffect, useMemo, useState } from "react";
 import classes from './styles.module.scss';
 import { CameraAlt, Report } from '@mui/icons-material';
@@ -36,7 +36,9 @@ interface Props {
 
 const UserProfile = memo((props: Props) => {
     const dispatch = useDispatch()
+    const theme = useTheme();
     const { t, i18n } = useTranslation()
+    const isMobile = useMediaQuery(theme.breakpoints.down(600));
     const { user } = UseAuth();
     const schema = useMemo(() => {
         return yup.object().shape({
@@ -127,7 +129,7 @@ const UserProfile = memo((props: Props) => {
                     <p className={classes.country}>{user?.company || ''}</p>
                 </div>
             </Grid>
-            <Grid container spacing={2} className={classes.customMargin}>
+            <Grid container spacing={isMobile ? 0 : 1} className={classes.customMargin}>
                 <Grid item xs={12} sm={6}>
                     <Inputs
                         title={t('field_first_name')}
@@ -184,7 +186,6 @@ const UserProfile = memo((props: Props) => {
                         control={control}
                         selectProps={{
                             options: countries,
-                            className: classes.customSelect,
                             placeholder: t('field_country_placeholder'),
                         }}
                         errorMessage={(errors.countryId as any)?.id?.message}

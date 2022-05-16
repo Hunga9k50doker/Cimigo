@@ -10,15 +10,6 @@
     height: 100%;
     width: 100%;
 
-    input[name="firstName"],
-    input[name="lastName"],
-    input[name="company"] {
-        padding-right: 12px;
-    }
-
-    input[name="email"] {
-        padding-right: 14px;
-    }
 }
 
 .personalImage {
@@ -30,26 +21,22 @@
     position: relative;
     span {
         display: none;
-      
     }
     p{
-        white-space: nowrap !important;
-        margin-top: -20px;
-        @media only screen and (max-width: 767px) {
-            margin-top: -75px;
-        }
+       white-space: nowrap !important;
+       position: absolute;
+       top: 105%;
+       left: 0%;
     }
     div {
         border: none !important;
         z-index: 1;
         border-radius: 100%;
         cursor: pointer !important;
-
         >div {
             border-radius: 0%;
             cursor: pointer !important;
         }
-
         div {
             position: absolute !important;
             top: 0;
@@ -62,7 +49,6 @@
             border-radius: 100%;
         }
     }
-
     .uploadAvatar {
         position: absolute;
         right: 0%;
@@ -76,7 +62,6 @@
         border-radius: 50%;
         background-color: rgba(238, 240, 242, 1);
         z-index: 2;
-
         svg {
             width: 17px;
             height: 16px;
@@ -87,7 +72,6 @@
 
 .personalInfo {
     margin: 10px 10px 0px 35px;
-
     .name {
         font-size: 24px;
         line-height: 30px;
@@ -113,10 +97,10 @@
     text-transform: none;
     line-height: 16px;
     float: right;
-    margin: 28px 0 36px 0px;
+    margin: 21px 0 36px 0px;
 
     @media only screen and (max-width: 767px) {
-        margin: 24px 0 24px 0px;
+        margin: 9px 0 24px 0px;
     }
 
     &:hover {
@@ -128,42 +112,28 @@
     width: 14px;
     height: 14px;
     color: rgba(50, 50, 50, 1);
-    margin-left: -15px;
+    position: absolute;
+    right: 10px;
 }
-
-.customSelect {
-    img {
-        margin-left: -22px !important;
-    }
-}
-
 @media only screen and (max-width: 1024px) {
     .menuList {
         display: none;
     }
-
     .form {
         padding: 30px 24px 25px 24px;
 
-        .iconReport {
-            margin-left: -17px;
-        }
     }
 }
-
 @media only screen and (max-width: 767px) {
     .rowInfo {
-
-        margin-left: -8px;
+       margin-left: -8px;
     }
 
     input {
         font-size: 14px !important;
         font-weight: 400;
     }
-
     .selectOfForm {
-        margin-top: -2px !important;
         margin-bottom: 15px;
 
         div:first-child {
@@ -171,11 +141,9 @@
             padding-top: 15px;
         }
     }
-
     .btnSave {
         width: 100%;
     }
-
     .personalImage {
         max-height: 64px !important;
         max-width: 64px !important;
@@ -191,10 +159,8 @@
             }
         }
     }
-
     .personalInfo {
         margin: 5px 10px 0px 24px;
-
         .name {
             font-size: 16px;
             font-weight: 600;
@@ -207,22 +173,11 @@
             font-weight: 500;
         }
     }
-
     .form {
         padding: 30px 24px 25px 24px;
     }
-
     .iconReport {
         display: none;
     }
 }
 
-.customMargin {
-    >div >div {
-        padding-bottom: 8px;
-
-        @media only screen and (max-width: 767px) {
-            padding-bottom: 0px;
-        }
-    }
-}
