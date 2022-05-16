@@ -1,3 +1,4 @@
+import images from "config/images";
 
 export interface TableHeaderLabel {
   name: string;
@@ -79,17 +80,20 @@ export enum Lang {
 
 export interface LangSupport {
   key: Lang,
-  name: string
+  name: string,
+  img: string
 }
 
 export const langSupports: LangSupport[] = [
   {
     key: Lang.VI,
-    name: 'Tiếng Việt'
+    name: 'Tiếng Việt',
+    img: images.imgLangVi
   },
   {
     key: Lang.EN,
-    name: 'English'
+    name: 'English',
+    img: images.imgLangEn
   }
 ]
 

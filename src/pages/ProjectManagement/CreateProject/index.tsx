@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { SolutionService } from "services/solution";
 import useDebounce from "hooks/useDebounce";
-import { DataPagination, EStatus } from "models/general";
+import { DataPagination, EStatus, langSupports, OptionItemT } from "models/general";
 import { Solution, SolutionCategory } from "models/Admin/solution";
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -40,10 +40,12 @@ import { UserGetSolutions } from "models/solution";
 import { useTranslation } from "react-i18next";
 import { ReducerType } from "redux/reducers";
 import { setSolutionCreateProject } from "redux/reducers/Project/actionTypes";
+import InputSelect from "components/InputsSelect";
 
 
 export interface CreateProjectFormData {
   name: string,
+  surveyLanguage: OptionItemT<string>,
   category: string,
   brand: string,
   variant: string,
@@ -69,6 +71,9 @@ const CreateProject = () => {
   const schema = useMemo(() => {
     return yup.object().shape({
       name: yup.string().required(t('field_project_name_vali_required')),
+      surveyLanguage: yup.object({
+        id: yup.string().required(t('field_survey_language_vali_required')),
+      }).required(t('field_survey_language_vali_required')),
       category: yup.string(),
       brand: yup.string(),
       variant: yup.string(),
@@ -92,7 +97,7 @@ const CreateProject = () => {
   
   const isMobile = useMediaQuery(theme.breakpoints.down(767));
 
-  const { register, handleSubmit, formState: { errors } } = useForm<CreateProjectFormData>({
+  const { register, handleSubmit, formState: { errors }, control } = useForm<CreateProjectFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
@@ -173,6 +178,7 @@ const CreateProject = () => {
     ProjectService.createProject({
       solutionId: solutionSelected.id,
       name: data.name,
+      surveyLanguage: data.surveyLanguage.id,
       category: data.category || '',
       brand: data.brand || '',
       variant: data.variant || '',
@@ -317,7 +323,6 @@ const CreateProject = () => {
             <Grid className={classes.form}>
               <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)}>
                 <Inputs
-                  titleRequired
                   name="name"
                   type="text"
                   placeholder={(t('field_project_name_placeholder'))}
@@ -326,6 +331,16 @@ const CreateProject = () => {
                   translation-key="field_project_name"
                   inputRef={register('name')}
                   errorMessage={errors.name?.message}
+                />
+                <InputSelect
+                  title={t('field_survey_language')}
+                  name="surveyLanguage"
+                  control={control}
+                  selectProps={{
+                    options: langSupports.map(it => ({ id: it.key, name: it.name, img: it.img  })),
+                    placeholder: t('field_survey_language_placeholder'),
+                  }}
+                  errorMessage={(errors.surveyLanguage as any)?.message || errors.surveyLanguage?.id?.message}
                 />
                 <p className={classes.textInfo} translation-key="create_project_infor">{t('create_project_infor')}<span translation-key="common_optional"> ({t('common_optional')})</span><br />
                   <span className={classes.inforSub} translation-key="create_project_sub_infor">{t('create_project_sub_infor')}</span>

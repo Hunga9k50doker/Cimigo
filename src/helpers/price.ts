@@ -9,14 +9,14 @@ export class PriceService {
   }
   static getSampleSizeCost = (project: Project) => {
     const sampleSize = project?.sampleSize || 0
-    const sampleSizeConstConfig = this.getSampleSizeConstConfig(project)
+    const sampleSizeConstConfig = PriceService.getSampleSizeConstConfig(project)
     const unitPrice = sampleSizeConstConfig.find((it, index) => it.limit > sampleSize || (it.limit === sampleSize && index === (sampleSizeConstConfig.length - 1)))?.price || 0
     return round(sampleSize * unitPrice)
   }
   static getTotal = (project: Project, configs: ConfigData) => {
     const sampleSize: number = project.sampleSize;
   
-    const sampleSizeCostUSD: number = this.getSampleSizeCost(project);
+    const sampleSizeCostUSD: number = PriceService.getSampleSizeCost(project);
     const amountUSD = sampleSizeCostUSD
     const vatUSD = Math.round(amountUSD * configs.vat * 100) / 100;
     const totalAmountUSD = Math.round((amountUSD + vatUSD) * 100) / 100

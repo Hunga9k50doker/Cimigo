@@ -10,7 +10,6 @@ import { StateManagerProps } from 'react-select/dist/declarations/src/stateManag
 import TextTitle from 'components/Inputs/components/TextTitle';
 import ErrorMessage from 'components/Inputs/components/ErrorMessage';
 import { useTranslation } from 'react-i18next';
-import images from 'config/images';
 
 const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unknown>> => ({
   indicatorSeparator: () => ({
@@ -64,14 +63,14 @@ const DropdownIndicator = (props: DropdownIndicatorProps) => {
 
 const Option = ({ children, ...props }: OptionProps<any>) => (
   <components.Option {...props}>
-    {props.data?.img && <img src={images.icProfile} alt="" className={classes.iconOption} />}
+    {props.data?.img && <img src={props.data.img} alt="" className={classes.iconOption} />}
     {children}
   </components.Option>
 )
 
 const SingleValue = ({ children, ...props }: SingleValueProps<any>) => (
   <components.SingleValue {...props}>
-    {props.data?.img && <img src={images.icProfile} alt="" className={classes.iconValue} />}
+    {props.data?.img && <img src={props.data.img} alt="" className={classes.iconValue} />}
     {children}
   </components.SingleValue>
 );

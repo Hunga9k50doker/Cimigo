@@ -8,11 +8,11 @@ import { Pack } from './pack';
 import { AdditionalBrand } from './additional_brand';
 import { ProjectAttribute } from './project_attribute';
 import { UserAttribute } from './user_attribute';
-import i18n from 'locales';
 import { User } from './user';
 export interface CreateProjectData {
   solutionId: number;
   name: string,
+  surveyLanguage: string,
   category?: string,
   brand?: string,
   variant?: string,
@@ -37,6 +37,7 @@ export interface Project {
   invoiceId: number;
   invoice: Attachment;
   enableCustomQuestion: boolean;
+  surveyLanguage: string,
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;

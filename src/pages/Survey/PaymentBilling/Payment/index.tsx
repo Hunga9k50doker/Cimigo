@@ -20,12 +20,15 @@ import { PaymentService } from "services/payment";
 import { Payment } from "models/payment";
 import UserService from "services/user";
 import { PaymentInfo } from "models/payment_info";
-import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import { getProjectRequest, setCancelPayment } from "redux/reducers/Project/actionTypes";
 import { push } from "connected-react-router";
 import { authPreviewOrPayment } from "../models";
 import { routes } from "routers/routes";
 import { useTranslation } from "react-i18next";
 import { VALIDATION } from "config/constans";
+import { InfoOutlined } from "@mui/icons-material";
+import TooltipCustom from "components/Tooltip";
+import PopupConfirmInvoiceInfo from "pages/Survey/components/PopupConfirmInvoiceInfo";
 
 interface DataForm {
   paymentMethodId: number,
@@ -127,7 +130,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
 
   const [countries, setCountries] = useState<OptionItem[]>([])
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>()
-
+  const [showSkipInfor, setShowSkipInfor] = useState<DataForm>()
+  
   useEffect(() => {
     const fetchData = async () => {
       dispatch(setLoading(true))
@@ -192,8 +196,14 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  const onConfirm = (data: DataForm) => {
-    if (!project) return
+  const checkHaveShowSkipInfor = (data: DataForm) => {
+    if ([EPaymentMethod.INTERNET_BANKING, EPaymentMethod.CREDIT_OR_DEBIT].includes(data.paymentMethodId)) {
+      return !data.fullName || !data.companyName || !data.email || !data.phone || !data.countryId || !data.companyAddress
+    }
+    return false
+  }
+
+  const onCheckout = (data: DataForm) => {
     dispatch(setLoading(true))
     PaymentService.checkout({
       projectId: project.id,
@@ -223,6 +233,15 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
+  const onConfirm = (data: DataForm) => {
+    if (!project) return
+    if (checkHaveShowSkipInfor(data)) {
+      setShowSkipInfor(data)
+      return
+    }
+    onCheckout(data)
+  }
+
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)))
   }
@@ -242,6 +261,27 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     authPreviewOrPayment(project, onRedirect)
   }, [project])
 
+  const onCancelPayment = () => {
+    dispatch(setCancelPayment(true))
+    onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview)
+  }
+
+  const onSkipUpdateInfo = () => {
+    if (!showSkipInfor) return
+    onCheckout(showSkipInfor)
+  }
+
+  const onUpdateInfo = () => {
+    setShowSkipInfor(null)
+    scrollToElement('payment_invoice_and_contract_info')
+  }
+
+  const scrollToElement = (id: string) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    const headerHeight = document.getElementById('header')?.offsetHeight || 0
+    window.scrollTo({ behavior: 'smooth', top: el.offsetTop - headerHeight - 10 })
+  }
 
   return (
     <Grid component={'form'} classes={{ root: classes.root }} onSubmit={handleSubmit(onConfirm)} noValidate autoComplete="off">
@@ -312,11 +352,48 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                 </Grid>
               }
             />
+            <FormControlLabel
+              value={EPaymentMethod.INTERNET_BANKING}
+              classes={{ root: classes.lable }}
+              control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
+              label={
+                <Grid classes={{ root: classes.order }}>
+                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_bank_transfer">
+                    <img src={images.icInternetBanking} alt="" />ATM card / Bank account (Vietnam only)
+                  </Grid>
+                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_bank_transfer_sub">
+                    Use your ATM card or bank account with internet banking supported to pay. You will be redirected to Onepay to complete your purchase securely.
+                  </p>
+                </Grid>
+              }
+            />
+            <FormControlLabel
+              value={EPaymentMethod.CREDIT_OR_DEBIT}
+              classes={{ root: classes.lable }}
+              control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
+              label={
+                <Grid classes={{ root: classes.order }}>
+                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_bank_transfer">
+                    <img src={images.icCreditDebit} alt="" />Credit / Debit Card
+                  </Grid>
+                  <Grid className={classes.methodImg}>
+                    <img src={images.imgVisa} alt="" />
+                    <img src={images.imgMastercard} alt="" />
+                    <img src={images.imgAmericanExpress} alt="" />
+                    <img src={images.imgJCB} alt="" />
+                    <img src={images.imgUnionpay} alt="" />
+                  </Grid>
+                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_bank_transfer_sub">
+                    You will be redirected to Onepay to complete your purchase securely.
+                  </p>
+                </Grid>
+              }
+            />
             <Divider />
           </RadioGroup>
           }
         />
-        <p translation-key="payment_billing_sub_tab_payment_invoice_and_contract_info">{t('payment_billing_sub_tab_payment_invoice_and_contract_info')} <span translation-key="common_optional">({t('common_optional')})</span></p>
+        <p id="payment_invoice_and_contract_info" translation-key="payment_billing_sub_tab_payment_invoice_and_contract_info">{t('payment_billing_sub_tab_payment_invoice_and_contract_info')} <span translation-key="common_optional">({t('common_optional')})</span></p>
         <div className={classes.titleSub1} translation-key="payment_billing_sub_tab_payment_invoice_and_contract_info_sub">{t('payment_billing_sub_tab_payment_invoice_and_contract_info_sub')}</div>
         <div className={classes.informationBox}>
           <Grid classes={{ root: classes.flex }}>
@@ -415,37 +492,45 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         <Divider className={classes.divider1} />
       </Grid>
       <Grid classes={{ root: classes.right }}>
-        <Grid classes={{ root: classes.bodyOrder }}>
-          <p translation-key="payment_billing_sub_tab_payment_summary">{t('payment_billing_sub_tab_payment_summary')}</p>
-          <div className={classes.flexOrder}>
-            <span translation-key="payment_billing_sub_tab_payment_summary_sample_size">{t('payment_billing_sub_tab_payment_summary_sample_size')}</span>
-            <span>{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</span>
-          </div>
-          {/* <div className={classes.flexOrder}>
+        <Grid classes={{ root: classes.sumaryBox }}>
+          <Grid classes={{ root: classes.bodyOrder }}>
+            <p translation-key="payment_billing_sub_tab_payment_summary">{t('payment_billing_sub_tab_payment_summary')}</p>
+            <div className={classes.flexOrder}>
+              <span translation-key="payment_billing_sub_tab_payment_summary_sample_size">{t('payment_billing_sub_tab_payment_summary_sample_size')}</span>
+              <span>{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</span>
+            </div>
+            {/* <div className={classes.flexOrder}>
             <span>Eye tracking</span>
             <span>$99</span>
           </div> */}
-          <div className={clsx(classes.flexOrder, classes.isMobile)}>
-            <span translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</span>
-            <span>{`$`}{fCurrency2(price?.vatUSD || 0)}</span>
-          </div>
-          <Divider />
-          <div className={clsx(classes.flexOrder, classes.notMobile)}>
-            <span translation-key="common_sub_total">{t('common_sub_total')}</span>
-            <span>{`$`}{fCurrency2(price?.amountUSD || 0)}</span>
-          </div>
-          <div className={clsx(classes.flexOrder, classes.notMobile)}>
-            <span translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</span>
-            <span>{`$`}{fCurrency2(price?.vatUSD || 0)}</span>
-          </div>
-          <Divider className={classes.notMobile} />
-          <div className={classes.flexTotal}>
-            <span translation-key="common_total">{t('common_total')} (USD)</span>
-            <a>{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</a>
-          </div>
-          <span>({fCurrency2VND(price?.totalAmount || 0)} VND)</span>
+            <div className={clsx(classes.flexOrder, classes.isMobile)}>
+              <span translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</span>
+              <span>{`$`}{fCurrency2(price?.vatUSD || 0)}</span>
+            </div>
+            <Divider />
+            <div className={clsx(classes.flexOrder, classes.notMobile)}>
+              <span translation-key="common_sub_total">{t('common_sub_total')}</span>
+              <span>{`$`}{fCurrency2(price?.amountUSD || 0)}</span>
+            </div>
+            <div className={clsx(classes.flexOrder, classes.notMobile)}>
+              <span translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</span>
+              <span>{`$`}{fCurrency2(price?.vatUSD || 0)}</span>
+            </div>
+            <Divider className={classes.notMobile} />
+            <div className={classes.flexTotal}>
+              <span translation-key="common_total">{t('common_total')} (USD)</span>
+              <a>{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</a>
+            </div>
+            <span>({fCurrency2VND(price?.totalAmount || 0)} VND)</span>
+            <div className={classes.chargedBy}>Your card will be charged in VND
+              <TooltipCustom popperClass={classes.popperClass} title="The US$ rate shown is approximate and may differ by the exhange rate used by your credit card issuer.">
+                <InfoOutlined />
+              </TooltipCustom>
+            </div>
+          </Grid>
+          <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
         </Grid>
-        <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
+        <div className={classes.cancelPayment} onClick={onCancelPayment}>Want to edit project? Cancel payment.</div>
       </Grid>
       <Grid className={classes.flexTotalMobile}>
         <Grid>
@@ -455,6 +540,11 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         </Grid>
         <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" padding="11px" className={classes.btnMobile} />
       </Grid>
+      <PopupConfirmInvoiceInfo 
+        isOpen={!!showSkipInfor}
+        onClose={onUpdateInfo}
+        onYes={onSkipUpdateInfo}
+      />
     </Grid>
   )
 })

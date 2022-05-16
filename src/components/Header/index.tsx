@@ -19,7 +19,6 @@ import Inputs from "components/Inputs";
 import { ProjectService } from "services/project";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
-import React from "react";
 
 interface HeaderProps {
   project?: boolean;
