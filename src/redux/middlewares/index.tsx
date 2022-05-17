@@ -4,5 +4,9 @@ import sagaMiddleware from "redux/middlewares/saga";
 import { History } from "history";
 
 export default (history: History) => {
-  return [routerMiddleware(history), loggerMiddleware, sagaMiddleware];
+  if (process.env.NODE_ENV !== 'production') {
+    return [routerMiddleware(history), loggerMiddleware, sagaMiddleware];
+  } else {
+    return [routerMiddleware(history), sagaMiddleware];
+  }
 };

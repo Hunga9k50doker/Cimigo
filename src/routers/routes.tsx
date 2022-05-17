@@ -122,7 +122,17 @@ export const routes = {
       root: '/admin/custom-question-type',
       edit: '/admin/custom-question-type/:id/edit',
     },
-  }
+    payment: {
+      root: '/admin/payment',
+      edit: '/admin/payment/:id/edit',
+    }
+  },
+  account:{
+    root: '/account',
+    userProfile:'/account/user-profile',
+    changePassword: '/account/change-password',
+    paymentInfo: '/account/payment-info',
+  },
 }
 
 export const cimigoUrl = process.env.REACT_APP_CIMIGO_URL
@@ -131,11 +141,11 @@ export const routesOutside = (lang: string) => {
   switch (lang) {
     case Lang.VI:
       return {
-        overview: `${cimigoUrl}/vi/cac-giai-phap/tong-quan`,
-        howItWorks: `${cimigoUrl}/vi/cac-giai-phap/how-it-works`,
-        solution: `${cimigoUrl}/vi/cac-giai-phap/solution`,
+        overview: `${cimigoUrl}/vi/rapid-survey/tong-quan`,
+        howItWorks: `${cimigoUrl}/vi/rapid-survey/cach-hoat-dong`,
+        solution: `${cimigoUrl}/vi/rapid-survey/giai-phap`,
         pricingPlans: `${cimigoUrl}/vi/cac-giai-phap/pricing`,
-        faq: `${cimigoUrl}/vi/cac-giai-phap/faq`,
+        faq: `${cimigoUrl}/vi/rapid-survey/hoi-dap`,
         homePage: `${cimigoUrl}/vi`,
         opportunitiesAtCimigo: `${cimigoUrl}/vi/viec-lam`,
         trends: `${cimigoUrl}/vi/xu-huong`,
@@ -145,11 +155,11 @@ export const routesOutside = (lang: string) => {
       }
     case Lang.EN:
       return {
-        overview: `${cimigoUrl}/en/solutions/overview`,
-        howItWorks: `${cimigoUrl}/en/solutions/how-it-works`,
-        solution: `${cimigoUrl}/en/solutions/solution`,
+        overview: `${cimigoUrl}/en/rapid-survey/overview`,
+        howItWorks: `${cimigoUrl}/en/rapid-survey/how-it-works`,
+        solution: `${cimigoUrl}/en/rapid-survey/solutions`,
         pricingPlans: `${cimigoUrl}/en/solutions/pricing-plans`,
-        faq: `${cimigoUrl}/solutions/faq`,
+        faq: `${cimigoUrl}/en/rapid-survey/faq`,
         homePage: `${cimigoUrl}/en`,
         opportunitiesAtCimigo: `${cimigoUrl}/en/opportunities-at-cimigo`,
         trends: `${cimigoUrl}/en/trends`,

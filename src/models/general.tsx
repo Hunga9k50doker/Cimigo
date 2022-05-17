@@ -10,10 +10,10 @@ export interface TableHeaderLabel {
   | 'right'
 }
 
-export interface Country {
-  formattedName: string;
-  rawName: string;
-}
+// export interface Country {
+//   formattedName: string;
+//   rawName: string;
+// }
 
 export interface OptionItem {
   id: number;

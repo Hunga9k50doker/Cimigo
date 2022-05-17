@@ -14,7 +14,6 @@ import {
   CardMedia,
 } from "@mui/material"
 
-import ImgTab from 'assets/img/img-tab.png';
 import TabPanelImg from "components/TabPanelImg";
 import Location from "./Location";
 import EconomicClass from "./EconomicClass";
@@ -41,6 +40,10 @@ import { editableProject } from "helpers/project";
 import { Edit } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
+import imgTabLocation from 'assets/img/target-tab-location.jpg';
+import imgTabAC from 'assets/img/target-tab-ac.jpg';
+import imgTabEC from 'assets/img/target-tab-ec.jpg';
+
 
 export enum ETab {
   Location,
@@ -49,7 +52,8 @@ export enum ETab {
 }
 export interface TabItem {
   id: ETab,
-  title: string
+  title: string,
+  img: string
 }
 
 interface SampleSizeItem {
@@ -82,14 +86,17 @@ const Target = memo(({ projectId }: Props) => {
       {
         id: ETab.Location,
         title: t('target_sub_tab_location'),
+        img: imgTabLocation
       },
       {
         id: ETab.Economic_Class,
         title: t('target_sub_tab_economic_class'),
+        img: imgTabEC
       },
       {
         id: ETab.Age_Coverage,
         title: t('target_sub_tab_age_coverage'),
+        img: imgTabAC
       },
     ]
   }, [i18n.language])
@@ -360,7 +367,7 @@ const Target = memo(({ projectId }: Props) => {
           {listTabs.map((item, index) => (
             <Tab
               title={item.title}
-              icon={<img src={ImgTab} alt="" />}
+              icon={<img src={item.img} alt="" />}
               key={index}
               classes={{
                 selected: classes.selectedTab,
@@ -402,7 +409,7 @@ const Target = memo(({ projectId }: Props) => {
               <CardMedia
                 component="img"
                 height="140"
-                image={ImgTab}
+                image={item.img}
                 alt="green iguana"
               />
               <div className={classes.bodyCardMobile}>

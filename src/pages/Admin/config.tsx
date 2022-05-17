@@ -2,7 +2,7 @@ import {
   NavItem, 
   routes 
 } from "routers/routes";
-import { Category, FormatListBulleted, GTranslate, HelpOutline, Lightbulb, LiveHelp, Mail, Person, Settings, TableView, Work } from '@mui/icons-material';
+import { Category, FormatListBulleted, GTranslate, HelpOutline, Lightbulb, LiveHelp, Mail, Paid, Person, Settings, TableView, Work } from '@mui/icons-material';
 import SolutionCategory from "./SolutionCategory";
 import Solution from "./Solution";
 import SolutionCategoryHome from "./SolutionCategoryHome";
@@ -15,6 +15,7 @@ import ConfigPage from "./ConfigPage";
 import Project from "./Project";
 import User from "./User";
 import CustomQuestionType from "./CustomQuestionType";
+import PaymentPage from "./Payment";
 
 export const adminRouter: NavItem[] = [
   {
@@ -29,6 +30,13 @@ export const adminRouter: NavItem[] = [
     name: 'Project',
     icon: Work,
     component: Project,
+    layout: "/admin"
+  },
+  {
+    path: routes.admin.payment.root,
+    name: 'Order',
+    icon: Paid,
+    component: PaymentPage,
     layout: "/admin"
   },
   {

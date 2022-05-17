@@ -61,7 +61,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         .when('paymentMethodId', {
           is: (val: number) => val === EPaymentMethod.MAKE_AN_ORDER,
           then: yup.string().email(t('field_contact_email_vali_email')).required(t('field_contact_email_vali_required')),
-          otherwise: yup.string().email('Please enter a valid email adress')
+          otherwise: yup.string().email(t('field_contact_email_vali_email'))
         }),
       contactPhone: yup.string()
         .when('paymentMethodId', {
@@ -86,8 +86,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       email: yup.string()
         .when('saveForLater', {
           is: (val: boolean) => val,
-          then: yup.string().email('Please enter a valid email adress').required('Email is required.'),
-          otherwise: yup.string().email('Please enter a valid email adress')
+          then: yup.string().email(t('field_email_vali_email')).required(t('field_email_vali_required')),
+          otherwise: yup.string().email(t('field_email_vali_email'))
         }),
       phone: yup.string()
         .when('saveForLater', {
@@ -169,25 +169,10 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     })
   }, [paymentInfo, user])
 
-  const getPriceSampleSize = () => {
-    return PriceService.getSampleSizeCost(project)
-  }
-
-  const getSubTotal = () => {
-    return round(getPriceSampleSize())
-  }
-
-  const getVAT = () => {
-    return round(getSubTotal() * 0.1)
-  }
-
-  const getTotal = () => {
-    return round(getSubTotal() + getVAT())
-  }
-
-  const getTotalVND = () => {
-    return round(getTotal() * configs.usdToVND)
-  }
+  const price = useMemo(() => {
+    if (!project || !configs) return null
+    return PriceService.getTotal(project, configs)
+  }, [project, configs])
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -434,39 +419,39 @@ const PaymentPage = memo(({ }: PaymentProps) => {
           <p translation-key="payment_billing_sub_tab_payment_summary">{t('payment_billing_sub_tab_payment_summary')}</p>
           <div className={classes.flexOrder}>
             <span translation-key="payment_billing_sub_tab_payment_summary_sample_size">{t('payment_billing_sub_tab_payment_summary_sample_size')}</span>
-            <span>{`$`}{fCurrency2(getPriceSampleSize())}</span>
+            <span>{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</span>
           </div>
           {/* <div className={classes.flexOrder}>
             <span>Eye tracking</span>
             <span>$99</span>
           </div> */}
           <div className={clsx(classes.flexOrder, classes.isMobile)}>
-            <span translation-key="common_vat">{t('common_vat')}</span>
-            <span>{`$`}{fCurrency2(getVAT())}</span>
+            <span translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</span>
+            <span>{`$`}{fCurrency2(price?.vatUSD || 0)}</span>
           </div>
           <Divider />
           <div className={clsx(classes.flexOrder, classes.notMobile)}>
             <span translation-key="common_sub_total">{t('common_sub_total')}</span>
-            <span>{`$`}{fCurrency2(getSubTotal())}</span>
+            <span>{`$`}{fCurrency2(price?.amountUSD || 0)}</span>
           </div>
           <div className={clsx(classes.flexOrder, classes.notMobile)}>
-            <span translation-key="common_vat">{t('common_vat')}</span>
-            <span>{`$`}{fCurrency2(getVAT())}</span>
+            <span translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</span>
+            <span>{`$`}{fCurrency2(price?.vatUSD || 0)}</span>
           </div>
           <Divider className={classes.notMobile} />
           <div className={classes.flexTotal}>
             <span translation-key="common_total">{t('common_total')} (USD)</span>
-            <a>{`$`}{fCurrency2(getTotal())}</a>
+            <a>{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</a>
           </div>
-          <span>({fCurrency2VND(getTotalVND())} VND)</span>
+          <span>({fCurrency2VND(price?.totalAmount || 0)} VND)</span>
         </Grid>
         <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
       </Grid>
       <Grid className={classes.flexTotalMobile}>
         <Grid>
           <p translation-key="common_total">{t('common_total')} (USD)</p>
-          <a style={{ marginBottom: 4 }}>{`$`}{fCurrency2(getTotal())}</a>
-          <span>({fCurrency2VND(getTotalVND())} VND)</span>
+          <a style={{ marginBottom: 4 }}>{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</a>
+          <span>({fCurrency2VND(price?.totalAmount || 0)} VND)</span>
         </Grid>
         <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" padding="11px" className={classes.btnMobile} />
       </Grid>

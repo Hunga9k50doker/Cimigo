@@ -2,7 +2,7 @@ import { Grid } from "@mui/material"
 import classes from './styles.module.scss';
 import images from "config/images";
 import Buttons from "components/Buttons";
-import { memo, useEffect } from "react";
+import { memo, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
@@ -12,8 +12,7 @@ import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import { PaymentService } from "services/payment";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
-import { authOrder } from "../models";
-import { t } from "i18next";
+import { authOrder, getPayment } from "../models";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 
@@ -29,9 +28,7 @@ const Order = memo(({ }: Props) => {
 
   const { project } = useSelector((state: ReducerType) => state.project)
 
-  const payment = () => {
-    return project?.payments[0]
-  }
+  const payment = useMemo(() => getPayment(project?.payments), [project])
 
   const onBackToProjects = () => {
     dispatch(push(routes.project.management))
@@ -63,7 +60,7 @@ const Order = memo(({ }: Props) => {
   }, [project])
 
   const render = () => {
-    switch (project?.payments[0]?.paymentMethodId) {
+    switch (payment?.paymentMethodId) {
       case EPaymentMethod.MAKE_AN_ORDER:
         return (
           <>
@@ -71,15 +68,15 @@ const Order = memo(({ }: Props) => {
             </p>
             <Grid classes={{ root: classes.box }} style={{ maxWidth: 450 }}>
               <p translation-key="payment_billing_name">{t('payment_billing_name')}:</p>
-              <span>{payment()?.contactName}</span>
+              <span>{payment?.contactName}</span>
               <Grid classes={{ root: classes.flex }}>
                 <div>
                   <p translation-key="payment_billing_phone">{t('payment_billing_phone')}:</p>
-                  <span>{payment()?.contactPhone}</span>
+                  <span>{payment?.contactPhone}</span>
                 </div>
                 <div>
                   <p translation-key="payment_billing_email">{t('payment_billing_email')}:</p>
-                  <span>{payment()?.contactEmail}</span>
+                  <span>{payment?.contactEmail}</span>
                 </div>
               </Grid>
             </Grid>
@@ -89,13 +86,13 @@ const Order = memo(({ }: Props) => {
       case EPaymentMethod.BANK_TRANSFER:
         return (
           <>
-            <p className={classes.textGreen} translation-key="payment_billing_total_amount">{t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment()?.totalAmountUSD || 0)}</p>
-            <p className={classes.textBlue} translation-key="payment_billing_equivalent_to">({t('payment_billing_equivalent_to')} {fCurrency2VND(payment()?.totalAmount || 0)} VND)</p>
+            <p className={classes.textGreen} translation-key="payment_billing_total_amount">{t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}</p>
+            <p className={classes.textBlue} translation-key="payment_billing_equivalent_to">({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)</p>
             <p className={classes.subTitleMain} translation-key="payment_billing_order_bank_transfer_sub_1">{t('payment_billing_order_bank_transfer_sub_1')}</p>
             <Buttons onClick={confirmedPayment} btnType="TransparentBlue" children={t('payment_billing_order_bank_transfer_btn_confirm')} translation-key="payment_billing_order_bank_transfer_btn_confirm" padding="11px 16px" className={classes.btn} />
             <p className={classes.subTitle} style={{ textAlign: "start", marginBottom: 16 }} translation-key="payment_billing_order_bank_transfer_sub_2">{t('payment_billing_order_bank_transfer_sub_2')}</p>
             <p className={clsx(classes.subTitle, classes.subTitleSpan)} style={{ textAlign: "start" }} translation-key="payment_billing_order_bank_transfer_sub_3" 
-              dangerouslySetInnerHTML={{__html: t('payment_billing_order_bank_transfer_sub_3', { total: fCurrency2(payment()?.totalAmountUSD || 0) })}}
+              dangerouslySetInnerHTML={{__html: t('payment_billing_order_bank_transfer_sub_3', { total: fCurrency2(payment?.totalAmountUSD || 0) })}}
             >
             </p>
             <Grid classes={{ root: classes.box }}>
@@ -122,12 +119,12 @@ const Order = memo(({ }: Props) => {
                 </div>
                 <div>
                   <p translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</p>
-                  <span>{payment()?.orderId}</span>
+                  <span>{payment?.orderId}</span>
                 </div>
               </Grid>
             </Grid>
             <p className={clsx(classes.subTitle, classes.subTitleSpan)} style={{ textAlign: "start" }} translation-key="payment_billing_order_bank_transfer_sub_4"
-              dangerouslySetInnerHTML={{__html: t('payment_billing_order_bank_transfer_sub_4', { total: fCurrency2VND(payment()?.totalAmount || 0) })}}
+              dangerouslySetInnerHTML={{__html: t('payment_billing_order_bank_transfer_sub_4', { total: fCurrency2VND(payment?.totalAmount || 0) })}}
             >
             </p>
             <Grid classes={{ root: classes.box }}>
@@ -148,7 +145,7 @@ const Order = memo(({ }: Props) => {
                 </div>
               </Grid>
               <p translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</p>
-              <span>{payment()?.orderId}</span>
+              <span>{payment?.orderId}</span>
             </Grid>
             <p className={classes.subTitle} style={{ textAlign: "start", marginBottom: 16 }} translation-key="payment_billing_order_bank_transfer_sub_5">{t('payment_billing_order_bank_transfer_sub_5')}</p>
             <p className={classes.textBlack} style={{ textAlign: "start" }} translation-key="payment_billing_order_bank_transfer_sub_6"

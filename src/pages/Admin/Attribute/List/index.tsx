@@ -205,10 +205,10 @@ const List = memo(({ keyword, setKeyword, data, setData }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
-                            <Link onClick={() => onRedirectEdit(item)}>{item.end}</Link>
+                            <Link onClick={() => onRedirectEdit(item)}>{item.start}</Link>
                           </TableCell>
                           <TableCell component="th">
-                            <Link onClick={() => onRedirectEdit(item)}>{item.start}</Link>
+                            <Link onClick={() => onRedirectEdit(item)}>{item.end}</Link>
                           </TableCell>
                           <TableCell component="th">
                             {item?.type?.name}

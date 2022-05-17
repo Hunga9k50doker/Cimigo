@@ -36,6 +36,8 @@ input:-webkit-autofill:focus {
 }
 a {
   cursor: pointer;
+  font-style: normal;
+  text-decoration: unset;
 }
 .cimigo-green {
   color: var(--cimigo-green);
@@ -43,6 +45,11 @@ a {
 .cimigo-blue {
   color: var(--cimigo-blue);
 }
-a:-webkit-any-link {
-  text-decoration: unset;
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
