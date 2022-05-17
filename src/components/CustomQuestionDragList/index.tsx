@@ -14,12 +14,19 @@ import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 interface CustomQuestionDragListProps {
   questions: CustomQuestion[];
   setQuestions: Dispatch<SetStateAction<CustomQuestion[]>>;
+  onUpdateOrderQuestion: (newList: CustomQuestion[]) => void;
   handleEditQuestion: (event: SyntheticEvent<EventTarget>) => void;
   handleDeleteQuestion: (event: SyntheticEvent<EventTarget>) => void;
 }
 
 const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
-  const { questions, setQuestions, handleEditQuestion, handleDeleteQuestion } = props;
+  const {
+    questions,
+    setQuestions,
+    onUpdateOrderQuestion,
+    handleEditQuestion,
+    handleDeleteQuestion,
+  } = props;
 
   const reorder = (items, startIndex, endIndex) => {
     const result: CustomQuestion[] = Array.from(items);
@@ -38,6 +45,7 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
       destination.index
     );
     setQuestions(result);
+    onUpdateOrderQuestion(result);
   };
 
   const handleIcon = (typeId: number) => {

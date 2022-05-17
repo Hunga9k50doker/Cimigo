@@ -154,7 +154,6 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [activeCustomQuestion, setActiveCustomQuestion] = useState<boolean>(false);
   const [customQuestionType, setCustomQuestionType] = useState<CustomQuestionType[]>([]);
   const [questions, setQuestions] = useState<CustomQuestion[]>([]);
-  const [updateOrder, setUpdateOrder] = useState<boolean>(false);
 
   const handleScroll = () => {
     setScrolling(window.scrollY !== 0)
@@ -182,13 +181,6 @@ const SetupSurvey = memo(({ id }: Props) => {
       setActiveCustomQuestion(project.enableCustomQuestion);
     }
   }, [project]);
-
-  useEffect(() => {
-    if (updateOrder && questions.length !== 0) {
-      updateOrderQuestion();
-      setUpdateOrder(false);
-    }
-  }, [questions])
 
   const getPacks = () => {
     PackService.getPacks({ take: 9999, projectId: id })
@@ -226,7 +218,6 @@ const SetupSurvey = memo(({ id }: Props) => {
     CustomQuestionService.findAll({ take: 9999, projectId: id })
       .then((res) => {
         setQuestions(res.data);
-        setUpdateOrder(true);
       })
       .catch(e => dispatch(setErrorMess(e)));
   }
@@ -607,10 +598,10 @@ const SetupSurvey = memo(({ id }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const updateOrderQuestion = () => {
+  const onUpdateOrderQuestion = (newList: CustomQuestion[]) => {
     const params: UpdateOrderQuestionParams = {
       projectId: id,
-      questions: questions.map((item, index) => {
+      questions: newList.map((item, index) => {
         return {
           id: item.id,
           order: index + 1,
@@ -1132,7 +1123,7 @@ const SetupSurvey = memo(({ id }: Props) => {
           <Grid className={classes.flex}>
             <p className={clsx({[classes.customQuestionSubTitleDisabled]: !activeCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
             <Grid className={clsx({[classes.displayNone]: !activeCustomQuestion})}>
-              <CustomQuestionDragList questions={questions} setQuestions={setQuestions} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
+              <CustomQuestionDragList questions={questions} setQuestions={setQuestions} onUpdateOrderQuestion={onUpdateOrderQuestion} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
               {/* ===================Custom questions mobile====================== */}
               <CustomQuestionListMobile questions={questions} setQuestions={setQuestions} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
             </Grid>
