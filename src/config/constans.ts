@@ -55,9 +55,10 @@ export const API = {
     DEFAULT: '/v1.0/custom-question',
     UPDATE_ORDER: '/v1.0/custom-question/update-order',
     GET_TYPES: '/v1.0/custom-question/type', 
+    QUESTION: '/v1.0/custom-question/:id',
   },
   TRANSLATION: {
-    DEFAULT: '/v1.0/translation/{{lng}}/{{ns}}'
+    DEFAULT: '/v1.0/translation/{{lng}}/{{ns}}',
   },
   TARGET: {
     DEFAULT: '/v1.0/target/question',

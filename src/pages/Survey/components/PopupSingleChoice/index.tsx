@@ -19,8 +19,9 @@ import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 
 interface Props {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (type: ECustomQuestionType) => void;
   onSubmit: (data: CustomQuestion) => void;
+  questionEdit: CustomQuestion;
 }
 
 const schema = yup.object().shape({
@@ -36,6 +37,7 @@ const schema = yup.object().shape({
 });
 
 const PopupSingleChoice = (props: Props) => {
+  const { onClose, isOpen, onSubmit, questionEdit } = props;
   const [dragId, setDragId] = useState();
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const [answers, setAnswers] = useState([
@@ -52,7 +54,6 @@ const PopupSingleChoice = (props: Props) => {
       value: "",
     },
   ]);
-
   const {
     register,
     handleSubmit,
@@ -63,9 +64,40 @@ const PopupSingleChoice = (props: Props) => {
     mode: "onChange",
   });
 
+  useEffect(() => {
+    if (questionEdit) {
+      reset({
+        inputQues: questionEdit?.title,
+        inputAns: questionEdit?.answers,
+      });
+      const answerList = questionEdit?.answers.map((item, index) => {
+        return {
+          id: index + 1,
+          title: item.title,
+          position: index + 1,
+          value: item.title,
+        };
+      });
+      setAnswers(answerList);
+    } else {
+      clearForm();
+    }
+  }, [questionEdit]);
+
+  useEffect(() => {
+    reset({
+      inputAns: answers.map((item) => {
+        return {
+          title: item.value,
+        };
+      }),
+    });
+  }, [answers]);
+
   const handleDrag = (ev) => {
     setDragId(ev.currentTarget.id);
   };
+
   const handleDrop = (ev) => {
     const dragBox = answers.find((ans) => ans.title === dragId);
     const dropBox = answers.find((ans) => ans.title === ev.currentTarget.id);
@@ -82,7 +114,6 @@ const PopupSingleChoice = (props: Props) => {
     });
     setAnswers(newBoxState);
   };
-  const { onClose, isOpen, onSubmit } = props;
 
   const _onSubmit = (data: CustomQuestionFormData) => {
     if (answers.length !== 0) {
@@ -92,13 +123,16 @@ const PopupSingleChoice = (props: Props) => {
         answers: data.inputAns,
       };
       onSubmit(question);
+      onClose(ECustomQuestionType.Single_Choice);
       clearForm();
-      onClose();
     }
   };
 
   const clearForm = () => {
-    reset();
+    reset({
+      inputQues: "",
+      inputAns: [],
+    });
     setAnswers([
       {
         id: 1,
@@ -122,7 +156,7 @@ const PopupSingleChoice = (props: Props) => {
 
   const handleChangeInputAns =
     (value: string, index: number, callback: boolean) => (event) => {
-      const find_pos = answers.findIndex((ans) => ans.id == index);
+      const find_pos = answers.findIndex((ans) => ans.id === index);
       const new_arr = [...answers];
       new_arr[find_pos][value] = event.target.value;
       setAnswers(new_arr);
@@ -147,18 +181,12 @@ const PopupSingleChoice = (props: Props) => {
     setAnswers(updated_answers);
   };
 
-  useEffect(() => {
-    reset({
-      inputAns: answers.map((item) => {
-        return {
-          title: item.value,
-        };
-      }),
-    });
-  }, [answers]);
-
   return (
-    <Dialog open={isOpen} onClose={onClose} classes={{ paper: classes.paper }}>
+    <Dialog
+      open={isOpen}
+      onClose={() => onClose(ECustomQuestionType.Single_Choice)}
+      classes={{ paper: classes.paper }}
+    >
       <DialogContent sx={{ padding: "0px", paddingBottom: "10px" }}>
         <form
           onSubmit={handleSubmit(_onSubmit)}
@@ -168,7 +196,7 @@ const PopupSingleChoice = (props: Props) => {
             <div className={classes.titlePopup}>Add single choice</div>
             <IconButton
               className={classes.iconClose}
-              onClick={onClose}
+              onClick={() => onClose(ECustomQuestionType.Single_Choice)}
             ></IconButton>
           </Grid>
           <Grid className={classes.classform}>
@@ -192,7 +220,7 @@ const PopupSingleChoice = (props: Props) => {
             />
             {/* {question.length < 0 ? errors.inputQues?.message : ""} */}
             <Grid sx={{ position: "relative", marginTop: "30px" }}>
-              <img src={IconDotsDrag} className={classes.iconDotsDrag}></img>
+              <img src={IconDotsDrag} className={classes.iconDotsDrag} alt="" />
               {answers
                 .sort((a, b) => a.position - b.position)
                 .map((ans, index) => (
@@ -209,7 +237,8 @@ const PopupSingleChoice = (props: Props) => {
                         <img
                           src={IconDotsDrag}
                           className={classes.iconDotsDragMUI}
-                        ></img>
+                          alt=""
+                        />
                         <input
                           type="radio"
                           name="radio_answer"
@@ -253,7 +282,7 @@ const PopupSingleChoice = (props: Props) => {
                 onClick={addInputAns}
                 className={classes.addOptions}
               >
-                <img src={IconListAdd} className={classes.IconListAdd} />
+                <img src={IconListAdd} className={classes.IconListAdd} alt="" />
                 <p className={classes.clickAddOptionSigle}>
                   Click to add option
                 </p>

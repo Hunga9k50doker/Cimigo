@@ -69,3 +69,8 @@ export interface UpdateOrderQuestionParams {
   projectId: number;
   questions: QuestionOrder[];
 }
+
+export interface UpdateQuestionParams {
+  title?: string;
+  answers?: CustomAnswer[];
+}

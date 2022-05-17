@@ -13,11 +13,13 @@ import * as yup from "yup";
 import Inputs from "components/Inputs";
 import { CustomQuestion, CustomQuestionFormData } from "models/custom_question";
 import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
+import { useEffect } from "react";
 
 interface Props {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (type: ECustomQuestionType) => void;
   onSubmit: (data: CustomQuestion) => void;
+  questionEdit: CustomQuestion;
 }
 
 const schema = yup.object().shape({
@@ -25,7 +27,7 @@ const schema = yup.object().shape({
 });
 
 const PopupAddQuestion = (props: Props) => {
-  const { onClose, isOpen, onSubmit } = props;
+  const { onClose, isOpen, onSubmit, questionEdit } = props;
   const {
     register,
     handleSubmit,
@@ -36,24 +38,40 @@ const PopupAddQuestion = (props: Props) => {
     mode: "onChange",
   });
 
+  useEffect(() => {
+    if (questionEdit) {
+      reset({
+        inputQues: questionEdit?.title,
+      });
+    } else {
+      clearForm();
+    }
+  }, [questionEdit]);
+
   const _onSubmit = (data: CustomQuestionFormData) => {
     const question: CustomQuestion = {
       typeId: ECustomQuestionType.Open_Question,
       title: data.inputQues,
     };
     onSubmit(question);
-    reset();
-    onClose();
+    onClose(ECustomQuestionType.Open_Question);
+    clearForm();
   };
 
+  const clearForm = () => {
+    reset({
+      inputQues: "",
+    });
+  }
+
   return (
-    <Dialog open={isOpen} onClose={onClose} classes={{ paper: classes.paper }}>
+    <Dialog open={isOpen} onClose={() => onClose(ECustomQuestionType.Open_Question)} classes={{ paper: classes.paper }}>
       <DialogContent sx={{ padding: "0px" }}>
         <Grid className={classes.content}>
           <div className={classes.titlePopup}>Add open question</div>
           <IconButton
             className={classes.iconClose}
-            onClick={onClose}
+            onClick={() => onClose(ECustomQuestionType.Open_Question)}
           ></IconButton>
         </Grid>
         <Grid className={classes.classform}>

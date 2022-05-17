@@ -15,8 +15,8 @@ interface CustomQuestionDragListProps {
   questions: CustomQuestion[];
   setQuestions: Dispatch<SetStateAction<CustomQuestion[]>>;
   onUpdateOrderQuestion: (newList: CustomQuestion[]) => void;
-  handleEditQuestion: (event: SyntheticEvent<EventTarget>) => void;
-  handleDeleteQuestion: (event: SyntheticEvent<EventTarget>) => void;
+  onEditQuestion: (question: CustomQuestion) => void;
+  onShowConfirmDeleteQuestion: (question: CustomQuestion) => void;
 }
 
 const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
@@ -24,8 +24,8 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
     questions,
     setQuestions,
     onUpdateOrderQuestion,
-    handleEditQuestion,
-    handleDeleteQuestion,
+    onEditQuestion,
+    onShowConfirmDeleteQuestion,
   } = props;
 
   const reorder = (items, startIndex, endIndex) => {
@@ -65,6 +65,16 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
     }
   };
 
+  const handleEditQuestion = (e: SyntheticEvent<EventTarget>, question: CustomQuestion) => {
+    e.stopPropagation();
+    onEditQuestion(question);
+  }
+
+  const handleDeleteQuestion = (e: SyntheticEvent<EventTarget>, question: CustomQuestion) => {
+    e.stopPropagation();
+    onShowConfirmDeleteQuestion(question);
+  }
+
   return (
     <div className={classes.container}>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -99,7 +109,7 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                       <div>
                         <div className={classes.btnAction}>
                           <IconButton
-                            onClick={handleEditQuestion}
+                            onClick={(e) => handleEditQuestion(e, item)}
                             className={classes.iconAction}
                             edge="end"
                             aria-label="Edit"
@@ -108,7 +118,7 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                           </IconButton>
 
                           <IconButton
-                            onClick={handleDeleteQuestion}
+                            onClick={(e) => handleDeleteQuestion(e, item)}
                             className={classes.iconAction}
                             edge="end"
                             aria-label="Delete"

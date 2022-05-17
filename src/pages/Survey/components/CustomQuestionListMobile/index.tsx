@@ -15,8 +15,8 @@ import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 interface CustomQuestionListMobileProps {
   questions: CustomQuestion[];
   setQuestions: Dispatch<SetStateAction<CustomQuestion[]>>;
-  handleEditQuestion: (event: SyntheticEvent<EventTarget>) => void;
-  handleDeleteQuestion: (event: SyntheticEvent<EventTarget>) => void;
+  onEditQuestion: (question: CustomQuestion) => void;
+  onShowConfirmDeleteQuestion: (question: CustomQuestion) => void;
 }
 
 const CustomQuestionListMobile = memo(
@@ -24,8 +24,8 @@ const CustomQuestionListMobile = memo(
     const {
       questions,
       setQuestions,
-      handleEditQuestion,
-      handleDeleteQuestion,
+      onEditQuestion,
+      onShowConfirmDeleteQuestion,
     } = props;
     const [expandId, setExpandId] = useState<number>();
 
@@ -49,6 +49,16 @@ const CustomQuestionListMobile = memo(
         }
       }
     };
+
+    const handleEditQuestion = (e: SyntheticEvent<EventTarget>, question: CustomQuestion) => {
+      e.stopPropagation();
+      onEditQuestion(question);
+    }
+  
+    const handleDeleteQuestion = (e: SyntheticEvent<EventTarget>, question: CustomQuestion) => {
+      e.stopPropagation();
+      onShowConfirmDeleteQuestion(question);
+    }
 
     return (
       <div className={classes.container}>
@@ -86,14 +96,14 @@ const CustomQuestionListMobile = memo(
                   <div className={classes.buttons}>
                     <Button
                       className={classes.editButton}
-                      onClick={handleEditQuestion}
+                      onClick={(e) => handleEditQuestion(e, item)}
                       translation-key="common_edit"
                     >
                       Edit
                     </Button>
                     <Button
                       className={classes.deleteButton}
-                      onClick={handleDeleteQuestion}
+                      onClick={(e) => handleDeleteQuestion(e, item)}
                       translation-key="common_delete"
                     >
                       Delete

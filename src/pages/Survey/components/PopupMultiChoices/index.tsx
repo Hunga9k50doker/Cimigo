@@ -13,8 +13,9 @@ import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 
 interface Props {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (type: ECustomQuestionType) => void;
   onSubmit: (data: CustomQuestion) => void;
+  questionEdit: CustomQuestion;
 }
 
 const schema = yup.object().shape({
@@ -30,6 +31,7 @@ const schema = yup.object().shape({
 });
 
 const PopupMultiChoice = (props: Props) => {
+  const { onClose, isOpen, onSubmit, questionEdit } = props;
   const [dragId, setDragId] = useState();
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const [answers, setAnswers] = useState([
@@ -48,7 +50,6 @@ const PopupMultiChoice = (props: Props) => {
       value: "",
     },
   ]);
-
   const {
     register,
     handleSubmit,
@@ -59,9 +60,42 @@ const PopupMultiChoice = (props: Props) => {
     mode: "onChange",
   });
 
+  useEffect(() => {
+    if (questionEdit) {
+      reset({
+        inputQues: questionEdit?.title,
+        inputAns: questionEdit?.answers,
+      });
+      const answerList = questionEdit?.answers.map((item, index) => {
+        return {
+          id: index + 1,
+          title: item.title,
+          position: index + 1,
+          switchMode: item.exclusive,
+          value: item.title,
+        };
+      });
+      setAnswers(answerList);
+    } else {
+      clearForm();
+    }
+  }, [questionEdit]);
+
+  useEffect(() => {
+    reset({
+      inputAns: answers.map((item) => {
+        return {
+          title: item.value,
+          exclusive: item.switchMode,
+        };
+      }),
+    });
+  }, [answers]);
+
   const handleDrag = (ev) => {
     setDragId(ev.currentTarget.id);
   };
+
   const handleDrop = (ev) => {
     const dragBox = answers.find((ans) => ans.title === dragId);
     const dropBox = answers.find((ans) => ans.title === ev.currentTarget.id);
@@ -78,7 +112,6 @@ const PopupMultiChoice = (props: Props) => {
     });
     setAnswers(newBoxState);
   };
-  const { onClose, isOpen, onSubmit } = props;
 
   const _onSubmit = (data: CustomQuestionFormData) => {
     if (answers.length !== 0) {
@@ -88,13 +121,16 @@ const PopupMultiChoice = (props: Props) => {
         answers: data.inputAns,
       };
       onSubmit(question);
+      onClose(ECustomQuestionType.Multiple_Choices);
       clearForm();
-      onClose();
     }
   };
 
   const clearForm = () => {
-    reset();
+    reset({
+      inputQues: "",
+      inputAns: [],
+    });
     setAnswers([
       {
         id: 1,
@@ -115,7 +151,7 @@ const PopupMultiChoice = (props: Props) => {
   };
 
   const handleChangeSwitch = (status: any, index: number) => () => {
-    const find_pos = answers.findIndex((ans) => ans.id == index);
+    const find_pos = answers.findIndex((ans) => ans.id === index);
     const new_arr = [...answers];
     new_arr[find_pos][status] = !new_arr[find_pos][status];
     setAnswers(new_arr);
@@ -127,7 +163,7 @@ const PopupMultiChoice = (props: Props) => {
 
   const handleChangeInputAns =
     (value: string, index: number, callback: boolean) => (event) => {
-      const find_pos = answers.findIndex((ans) => ans.id == index);
+      const find_pos = answers.findIndex((ans) => ans.id === index);
       const new_arr = [...answers];
       new_arr[find_pos][value] = event.target.value;
       setAnswers(new_arr);
@@ -153,19 +189,12 @@ const PopupMultiChoice = (props: Props) => {
     setAnswers(updated_answers);
   };
 
-  useEffect(() => {
-    reset({
-      inputAns: answers.map((item) => {
-        return {
-          title: item.value,
-          exclusive: item.switchMode,
-        };
-      }),
-    });
-  }, [answers]);
-
   return (
-    <Dialog open={isOpen} onClose={onClose} classes={{ paper: classes.paper }}>
+    <Dialog
+      open={isOpen}
+      onClose={() => onClose(ECustomQuestionType.Multiple_Choices)}
+      classes={{ paper: classes.paper }}
+    >
       <DialogContent sx={{ padding: "0px", paddingBottom: "10px" }}>
         <form
           onSubmit={handleSubmit(_onSubmit)}
@@ -175,7 +204,7 @@ const PopupMultiChoice = (props: Props) => {
             <div className={classes.titlePopup}>Add multiple choices</div>
             <IconButton
               className={classes.iconClose}
-              onClick={onClose}
+              onClick={() => onClose(ECustomQuestionType.Multiple_Choices)}
             ></IconButton>
           </Grid>
           <Grid className={classes.classform}>
@@ -199,10 +228,10 @@ const PopupMultiChoice = (props: Props) => {
             />
             {/* {errors.inputQues?.message:""} */}
             <Grid sx={{ position: "relative", marginTop: "30px" }}>
-              <img src={IconDotsDrag} className={classes.iconDotsDrag}></img>
+              <img src={IconDotsDrag} className={classes.iconDotsDrag} alt="" />
               {answers
                 .sort((a, b) => a.position - b.position)
-                .map((ans, index) => (
+                .map((ans) => (
                   <div className={classes.rowInputAnswerCheckBox} key={ans.id}>
                     <Grid
                       draggable={true}
@@ -216,7 +245,8 @@ const PopupMultiChoice = (props: Props) => {
                         <img
                           src={IconDotsDrag}
                           className={classes.iconDotsDragMUI}
-                        ></img>
+                          alt=""
+                        />
                         <input
                           type="checkbox"
                           name="checkbox_answer"
@@ -287,7 +317,7 @@ const PopupMultiChoice = (props: Props) => {
                 className={classes.addOptions}
                 onClick={addInputAns}
               >
-                <img src={IconListAdd} className={classes.IconListAdd} />
+                <img src={IconListAdd} className={classes.IconListAdd} alt="" />
                 <p className={classes.clickAddOption}>Click to add option</p>
               </button>
             </Grid>

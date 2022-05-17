@@ -1,4 +1,4 @@
-import { useState, useEffect, memo, SyntheticEvent } from "react";
+import { useState, useEffect, memo } from "react";
 import classes from './styles.module.scss';
 import clsx from "clsx";
 import {
@@ -56,18 +56,18 @@ import { UserAttribute } from "models/user_attribute";
 import { ProjectAttributeService } from "services/project_attribute";
 import { UserAttributeService } from "services/user_attribute";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
-import PopupMultiChoice from "components/PopupMultiChoices";
 import { editableProject } from "helpers/project";
 import { Check, Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
 import Toggle from "components/Toggle";
-import { CreateQuestionParams, CustomQuestion, CustomQuestionType, UpdateOrderQuestionParams } from "models/custom_question";
+import { CreateQuestionParams, CustomQuestion, CustomQuestionType, UpdateOrderQuestionParams, UpdateQuestionParams } from "models/custom_question";
 import { CustomQuestionService } from "services/custom_question";
-import CustomQuestionDragList from "components/CustomQuestionDragList";
-import CustomQuestionListMobile from "components/CustomQuestionListMobile";
-import PopupAddQuestion from "components/PopupAddQuestion";
-import PopupSingleChoice from "components/PopupSingleChoice";
+import CustomQuestionDragList from "../components/CustomQuestionDragList";
+import CustomQuestionListMobile from "../components/CustomQuestionListMobile";
+import PopupAddQuestion from "../components/PopupAddQuestion";
+import PopupSingleChoice from "../components/PopupSingleChoice";
+import PopupMultiChoice from "../components/PopupMultiChoices";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -154,6 +154,8 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [activeCustomQuestion, setActiveCustomQuestion] = useState<boolean>(false);
   const [customQuestionType, setCustomQuestionType] = useState<CustomQuestionType[]>([]);
   const [questions, setQuestions] = useState<CustomQuestion[]>([]);
+  const [questionEdit, setQuestionEdit] = useState<CustomQuestion>();
+  const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
 
   const handleScroll = () => {
     setScrolling(window.scrollY !== 0)
@@ -220,6 +222,14 @@ const SetupSurvey = memo(({ id }: Props) => {
         setQuestions(res.data);
       })
       .catch(e => dispatch(setErrorMess(e)));
+  }
+
+  const getQuestionDetail = (questionId: number) => {
+    CustomQuestionService.findOne(questionId)
+      .then((res) => {
+        setQuestionEdit(res.data);
+      })
+      .catch(e => dispatch(setErrorMess(e)))
   }
 
   useEffect(() => {
@@ -558,7 +568,7 @@ const SetupSurvey = memo(({ id }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const handleClickAddCustomQuestion = (type: ECustomQuestionType) => {
+  const onOpenPopupCustomQuestion = (type: ECustomQuestionType) => {
     switch (type) {
       case ECustomQuestionType.Open_Question:
         {
@@ -582,20 +592,59 @@ const SetupSurvey = memo(({ id }: Props) => {
     }
   }
 
-  const onAddCustomQuestion = (data: CustomQuestion) => {
-    dispatch(setLoading(true));
-    const params: CreateQuestionParams = {
-      projectId: id,
-      title: data.title,
-      typeId: data.typeId,
-      answers: data.answers,
+  const onClosePopupCustomQuestion = (type: ECustomQuestionType) => {
+    switch (type) {
+      case ECustomQuestionType.Open_Question:
+        {
+          setOpenPopupAddQuestion(false);
+          break;
+        }
+      case ECustomQuestionType.Single_Choice:
+        {
+          setOpenPopupSingleChoice(false);
+          break;
+        }
+      case ECustomQuestionType.Multiple_Choices:
+        {
+          setOpenPopupMultiChoice(false);
+          break;
+        }
+      default:
+        {
+          break;
+        }
     }
-    CustomQuestionService.create(params)
-      .then(() => {
-        getCustomQuestion();
-      })
-      .catch(e => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
+    setQuestionEdit(null);
+  }
+
+  const onAddOrEditCustomQuestion = (data: CustomQuestion) => {
+    if (questionEdit) {
+      dispatch(setLoading(true));
+      const params: UpdateQuestionParams = {
+        title: data.title,
+        answers: data.answers,
+      }
+      CustomQuestionService.update(questionEdit.id, params)
+        .then(() => {
+          getCustomQuestion();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true));
+      const params: CreateQuestionParams = {
+        projectId: id,
+        title: data.title,
+        typeId: data.typeId,
+        answers: data.answers,
+      }
+      CustomQuestionService.create(params)
+        .then(() => {
+          getCustomQuestion();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
   }
 
   const onUpdateOrderQuestion = (newList: CustomQuestion[]) => {
@@ -615,12 +664,28 @@ const SetupSurvey = memo(({ id }: Props) => {
       .catch(e => dispatch(setErrorMess(e)))
   }
 
-  const handleEditQuestion = (event: SyntheticEvent<EventTarget>) => {
-    event.stopPropagation();
+  const onEditQuestion = (question: CustomQuestion) => {
+    getQuestionDetail(question.id);
+    onOpenPopupCustomQuestion(question.typeId);
   };
 
-  const handleDeleteQuestion = (event: SyntheticEvent<EventTarget>) => {
-    event.stopPropagation();
+  const onShowConfirmDeleteQuestion = (question: CustomQuestion) => {
+    setQuestionDelete(question);
+  }
+
+  const onCloseConfirmDeleteQuestion = () => {
+    setQuestionDelete(null);
+  }
+
+  const onDeleteQuestion = () => {
+    dispatch(setLoading(true));
+    CustomQuestionService.delete(questionDelete.id)
+      .then(() => {
+        getCustomQuestion();
+        onCloseConfirmDeleteQuestion();
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   };
 
   const scrollToElement = (id: string) => {
@@ -1123,9 +1188,9 @@ const SetupSurvey = memo(({ id }: Props) => {
           <Grid className={classes.flex}>
             <p className={clsx({[classes.customQuestionSubTitleDisabled]: !activeCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
             <Grid className={clsx({[classes.displayNone]: !activeCustomQuestion})}>
-              <CustomQuestionDragList questions={questions} setQuestions={setQuestions} onUpdateOrderQuestion={onUpdateOrderQuestion} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
+              <CustomQuestionDragList questions={questions} setQuestions={setQuestions} onUpdateOrderQuestion={onUpdateOrderQuestion} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} />
               {/* ===================Custom questions mobile====================== */}
-              <CustomQuestionListMobile questions={questions} setQuestions={setQuestions} handleEditQuestion={handleEditQuestion} handleDeleteQuestion={handleDeleteQuestion} />
+              <CustomQuestionListMobile questions={questions} setQuestions={setQuestions} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} />
             </Grid>
             <Grid className={clsx(classes.select, {[classes.displayNone]: !activeCustomQuestion})}>
               <FormControl classes={{ root: classes.rootSelect }} disabled={!enableAdditionalAttributes() || !editableProject(project)}>
@@ -1153,7 +1218,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                     const value = (index + 2) * 10;
                     const image = item.id === ECustomQuestionType.Open_Question ? Images.icOpenQuestion : item.id === ECustomQuestionType.Single_Choice ? Images.icSingleChoice : item.id === ECustomQuestionType.Multiple_Choices ? Images.icMultipleChoices : null;
                     return (
-                      <MenuItem value={value} onClick={() => handleClickAddCustomQuestion(item.id)} key={item.id}>
+                      <MenuItem value={value} onClick={() => onOpenPopupCustomQuestion(item.id)} key={item.id}>
                         <div className={classes.questionType}>
                           <div>
                             <img src={image} alt="" />
@@ -1355,18 +1420,28 @@ const SetupSurvey = memo(({ id }: Props) => {
         />
         <PopupAddQuestion 
           isOpen={openPopupAddQuestion} 
-          onClose={() => setOpenPopupAddQuestion(false)}
-          onSubmit={onAddCustomQuestion}
+          onClose={onClosePopupCustomQuestion}
+          onSubmit={onAddOrEditCustomQuestion}
+          questionEdit={questionEdit}
         />
         <PopupSingleChoice
           isOpen={openPopupSingChoice}
-          onClose={() => setOpenPopupSingleChoice(false)}
-          onSubmit={onAddCustomQuestion}
+          onClose={onClosePopupCustomQuestion}
+          onSubmit={onAddOrEditCustomQuestion}
+          questionEdit={questionEdit}
         />
         <PopupMultiChoice
           isOpen={openPopupMultiChoice}
-          onClose={() => setOpenPopupMultiChoice(false)}
-          onSubmit={onAddCustomQuestion}
+          onClose={onClosePopupCustomQuestion}
+          onSubmit={onAddOrEditCustomQuestion}
+          questionEdit={questionEdit}
+        />
+        <PopupConfirmDelete
+          isOpen={!!questionDelete}
+          title={"Delete question?"}
+          description={"Are you sure you want to delete this question?"}
+          onCancel={() => onCloseConfirmDeleteQuestion()}
+          onDelete={onDeleteQuestion}
         />
       </Grid>
     </>
