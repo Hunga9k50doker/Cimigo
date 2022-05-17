@@ -131,6 +131,19 @@ export class UserService {
   }
 
   
+  static async updatePaymentInfo(data: FormData): Promise<any> {
+    return await api.put(`${API.USER.UPDATE_PAYMENT_INFO}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
   
 }
 
