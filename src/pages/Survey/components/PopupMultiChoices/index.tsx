@@ -8,7 +8,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import * as yup from "yup";
 import Inputs from "components/Inputs";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CustomQuestion, CustomQuestionFormData } from "models/custom_question";
+import {
+  CustomQuestion,
+  CustomQuestionFormData,
+  CustomQuestionType,
+} from "models/custom_question";
 import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 
 interface Props {
@@ -16,6 +20,7 @@ interface Props {
   onClose: (type: ECustomQuestionType) => void;
   onSubmit: (data: CustomQuestion) => void;
   questionEdit: CustomQuestion;
+  questionType: CustomQuestionType;
 }
 
 const schema = yup.object().shape({
@@ -31,7 +36,7 @@ const schema = yup.object().shape({
 });
 
 const PopupMultiChoice = (props: Props) => {
-  const { onClose, isOpen, onSubmit, questionEdit } = props;
+  const { onClose, isOpen, onSubmit, questionEdit, questionType } = props;
   const [dragId, setDragId] = useState();
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const [answers, setAnswers] = useState([
@@ -69,7 +74,7 @@ const PopupMultiChoice = (props: Props) => {
       const answerList = questionEdit?.answers.map((item, index) => {
         return {
           id: index + 1,
-          title: item.title,
+          title: `Enter answer ${index + 1}`,
           position: index + 1,
           switchMode: item.exclusive,
           value: item.title,
@@ -178,13 +183,16 @@ const PopupMultiChoice = (props: Props) => {
       switchMode: false,
       value: "",
     };
-    if (answers.length > 19) {
+    if (answers.length >= questionType.maxAnswer) {
       return;
     }
     setAnswers((answers) => [...answers, new_inputAns]);
   };
 
   const deleteInputAns = (id) => () => {
+    if (answers.length <= questionType.minAnswer) {
+      return;
+    }
     const updated_answers = [...answers].filter((ans) => ans.id !== id);
     setAnswers(updated_answers);
   };

@@ -14,7 +14,11 @@ import IconDotsDrag from "assets/img/icon/ic-dots-drag.svg";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Inputs from "components/Inputs";
-import { CustomQuestion, CustomQuestionFormData } from "models/custom_question";
+import {
+  CustomQuestion,
+  CustomQuestionFormData,
+  CustomQuestionType,
+} from "models/custom_question";
 import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 
 interface Props {
@@ -22,6 +26,7 @@ interface Props {
   onClose: (type: ECustomQuestionType) => void;
   onSubmit: (data: CustomQuestion) => void;
   questionEdit: CustomQuestion;
+  questionType: CustomQuestionType;
 }
 
 const schema = yup.object().shape({
@@ -37,7 +42,7 @@ const schema = yup.object().shape({
 });
 
 const PopupSingleChoice = (props: Props) => {
-  const { onClose, isOpen, onSubmit, questionEdit } = props;
+  const { onClose, isOpen, onSubmit, questionEdit, questionType } = props;
   const [dragId, setDragId] = useState();
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const [answers, setAnswers] = useState([
@@ -73,11 +78,12 @@ const PopupSingleChoice = (props: Props) => {
       const answerList = questionEdit?.answers.map((item, index) => {
         return {
           id: index + 1,
-          title: item.title,
+          title: `Enter answer ${index + 1}`,
           position: index + 1,
           value: item.title,
         };
       });
+      console.log(answerList)
       setAnswers(answerList);
     } else {
       clearForm();
@@ -170,13 +176,16 @@ const PopupSingleChoice = (props: Props) => {
       position: maxAnswers + 1,
       value: "",
     };
-    if (answers.length > 19) {
+    if (answers.length >= questionType.maxAnswer) {
       return;
     }
     setAnswers((answers) => [...answers, new_inputAns]);
   };
 
   const deleteInputAns = (id) => () => {
+    if (answers.length <= questionType.minAnswer) {
+      return;
+    }
     const updated_answers = [...answers].filter((ans) => ans.id !== id);
     setAnswers(updated_answers);
   };

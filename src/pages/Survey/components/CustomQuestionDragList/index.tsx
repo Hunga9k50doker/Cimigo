@@ -103,7 +103,7 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                         <div className={classes.question}>
                           <img src={handleIcon(item.typeId)} alt="" />
                           <p>{item.title}</p>
-                          <span className={classes.hide}>$353</span>
+                          <span className={classes.hide}>${item?.type.price}</span>
                         </div>
                       </div>
                       <div>

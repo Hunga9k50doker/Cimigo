@@ -83,15 +83,18 @@ const CustomQuestionListMobile = memo(
                   <div className={classes.content}>
                     <img
                       src={
-                        item.id === 1
+                        item.typeId === 1
                           ? Images.icOpenQuestion
-                          : item.id === 2
+                          : item.typeId === 2
                           ? Images.icSingleChoice
                           : Images.icMultipleChoices
                       }
                       alt=""
                     />
                     <p>{item.title}</p>
+                  </div>
+                  <div className={classes.price}>
+                    <span>${item?.type.price}</span>
                   </div>
                   <div className={classes.buttons}>
                     <Button
