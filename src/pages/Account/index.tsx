@@ -2,7 +2,7 @@ import classes from './styles.module.scss';
 import Header from "components/Header";
 import Footer from "components/Footer";
 import { PersonOutline, Loop, Logout, Payment, KeyboardDoubleArrowLeft } from '@mui/icons-material';
-import { Button, Grid, Icon, ListItem, MenuList, Popper, ClickAwayListener, Paper, IconButton, List, ListItemText } from "@mui/material"
+import { Button, Grid, Icon, ListItem, MenuList, Popper, ClickAwayListener, Paper, IconButton, List, ListItemText, Divider } from "@mui/material"
 import UseAuth from "hooks/useAuth";
 import { matchPath, Redirect, Route, Switch, NavLink } from "react-router-dom";
 import UserProfile from './UserProfile';
@@ -72,7 +72,7 @@ const AccountPage = memo(({}: Props) => {
           </NavLink>
         );
       })}
-      <Grid className={classes.lineList}></Grid>
+      <Divider/>
       <Button className={classes.btnLogout} onClick={logout}>
         <Logout/>
         <p>Logout</p>
