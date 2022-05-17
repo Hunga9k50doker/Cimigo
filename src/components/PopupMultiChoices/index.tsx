@@ -142,7 +142,7 @@ const PopupMultiChoice = (props: Props) => {
       switchMode: false,
       value: "",
     };
-    if (answers.length > 9) {
+    if (answers.length > 19) {
       return;
     }
     setAnswers((answers) => [...answers, new_inputAns]);

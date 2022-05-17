@@ -19,7 +19,7 @@ export interface CustomQuestion {
   title: string;
   answers?: CustomAnswer[];
   id?: number;
-  order?: number,
+  order?: number;
   projectId?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -30,7 +30,7 @@ export interface CustomAnswer {
   title: string;
   exclusive?: boolean;
   id?: number;
-  order?: number,
+  order?: number;
   questionId?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -41,15 +41,31 @@ export interface CustomQuestionFormData {
   inputAns?: CustomAnswer[];
 }
 
-export interface Create {
+export interface GetTypeParams {
+  take?: number;
+  page?: number;
+  keyword?: string;
+}
+
+export interface GetAllQuestionParams {
+  take?: number;
+  page?: number;
+  projectId: number;
+}
+
+export interface CreateQuestionParams {
   projectId: number;
   title: string;
   typeId: number;
   answers?: CustomAnswer[];
 }
 
-export interface GetTypes {
-  take?: number;
-  page?: number;
-  keyword?: string;
+export interface QuestionOrder {
+  id: number;
+  order: number;
+}
+
+export interface UpdateOrderQuestionParams {
+  projectId: number;
+  questions: QuestionOrder[];
 }

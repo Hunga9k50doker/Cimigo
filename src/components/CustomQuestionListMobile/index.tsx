@@ -10,6 +10,7 @@ import Images from "config/images";
 import classes from "./styles.module.scss";
 import { Button, Collapse, Grid } from "@mui/material";
 import clsx from "clsx";
+import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 
 interface CustomQuestionListMobileProps {
   questions: CustomQuestion[];
@@ -32,13 +33,30 @@ const CustomQuestionListMobile = memo(
       setExpandId(id === expandId ? null : id);
     };
 
+    const handleIcon = (typeId: number) => {
+      switch (typeId) {
+        case ECustomQuestionType.Open_Question: {
+          return Images.icOpenQuestion;
+        }
+        case ECustomQuestionType.Single_Choice: {
+          return Images.icSingleChoice;
+        }
+        case ECustomQuestionType.Multiple_Choices: {
+          return Images.icMultipleChoices;
+        }
+        default: {
+          return null;
+        }
+      }
+    };
+
     return (
       <div className={classes.container}>
         {questions.map((item, index) => {
           const isExpanded = item.id === expandId;
           return (
             <Grid
-              className={clsx(classes.item, {[classes.expand]: isExpanded})}
+              className={clsx(classes.item, { [classes.expand]: isExpanded })}
               key={index}
               onClick={() => {
                 handleClickQuestion(item.id);
@@ -47,16 +65,7 @@ const CustomQuestionListMobile = memo(
               <Grid style={{ width: "100%" }}>
                 {!isExpanded && (
                   <div className={classes.content}>
-                    <img
-                      src={
-                        item.id === 1
-                          ? Images.icOpenQuestion
-                          : item.id === 2
-                          ? Images.icSingleChoice
-                          : Images.icMultipleChoices
-                      }
-                      alt=""
-                    />
+                    <img src={handleIcon(item.typeId)} alt="" />
                     <p>{item.title}</p>
                   </div>
                 )}

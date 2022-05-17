@@ -62,7 +62,7 @@ import { Check, Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
 import Toggle from "components/Toggle";
-import { Create, CustomQuestion, CustomQuestionType } from "models/custom_question";
+import { CreateQuestionParams, CustomQuestion, CustomQuestionType, UpdateOrderQuestionParams } from "models/custom_question";
 import { CustomQuestionService } from "services/custom_question";
 import CustomQuestionDragList from "components/CustomQuestionDragList";
 import CustomQuestionListMobile from "components/CustomQuestionListMobile";
@@ -153,23 +153,8 @@ const SetupSurvey = memo(({ id }: Props) => {
 
   const [activeCustomQuestion, setActiveCustomQuestion] = useState<boolean>(false);
   const [customQuestionType, setCustomQuestionType] = useState<CustomQuestionType[]>([]);
-  const [questions, setQuestions] = useState<CustomQuestion[]>([
-    {
-      id: 1,
-      title: "How many country in Asean?",
-      typeId: ECustomQuestionType.Open_Question,
-    },
-    {
-      id: 2,
-      title: "Which country largest in the world?",
-      typeId: ECustomQuestionType.Single_Choice,
-    },
-    {
-      id: 3,
-      title: "Who is the president of Viet Nam?",
-      typeId: ECustomQuestionType.Multiple_Choices,
-    }
-  ]);
+  const [questions, setQuestions] = useState<CustomQuestion[]>([]);
+  const [updateOrder, setUpdateOrder] = useState<boolean>(false);
 
   const handleScroll = () => {
     setScrolling(window.scrollY !== 0)
@@ -184,7 +169,7 @@ const SetupSurvey = memo(({ id }: Props) => {
     return () => {
       window.removeEventListener('scroll', _handleScroll);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (project) {
@@ -196,7 +181,14 @@ const SetupSurvey = memo(({ id }: Props) => {
       })
       setActiveCustomQuestion(project.enableCustomQuestion);
     }
-  }, [project])
+  }, [project]);
+
+  useEffect(() => {
+    if (updateOrder && questions.length !== 0) {
+      updateOrderQuestion();
+      setUpdateOrder(false);
+    }
+  }, [questions])
 
   const getPacks = () => {
     PackService.getPacks({ take: 9999, projectId: id })
@@ -230,12 +222,22 @@ const SetupSurvey = memo(({ id }: Props) => {
       .catch(e => dispatch(setErrorMess(e)));
   }
 
+  const getCustomQuestion = () => {
+    CustomQuestionService.findAll({ take: 9999, projectId: id })
+      .then((res) => {
+        setQuestions(res.data);
+        setUpdateOrder(true);
+      })
+      .catch(e => dispatch(setErrorMess(e)));
+  }
+
   useEffect(() => {
-    getPacks()
-    getAdditionalBrand()
-    getProjectAttributes()
-    getUserAttributes()
-    getCustomQuestionType()
+    getPacks();
+    getAdditionalBrand();
+    getProjectAttributes();
+    getUserAttributes();
+    getCustomQuestionType();
+    getCustomQuestion();
   }, [id])
 
   const onSubmitBI = (data: BasicInformationFormData) => {
@@ -591,7 +593,7 @@ const SetupSurvey = memo(({ id }: Props) => {
 
   const onAddCustomQuestion = (data: CustomQuestion) => {
     dispatch(setLoading(true));
-    const params: Create = {
+    const params: CreateQuestionParams = {
       projectId: id,
       title: data.title,
       typeId: data.typeId,
@@ -599,11 +601,27 @@ const SetupSurvey = memo(({ id }: Props) => {
     }
     CustomQuestionService.create(params)
       .then(() => {
-        getAdditionalBrand()
-        onClosePopupAddOrEditBrand()
+        getCustomQuestion();
       })
       .catch(e => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+  }
+
+  const updateOrderQuestion = () => {
+    const params: UpdateOrderQuestionParams = {
+      projectId: id,
+      questions: questions.map((item, index) => {
+        return {
+          id: item.id,
+          order: index + 1,
+        }
+      }),
+    }
+    CustomQuestionService.updateOrder(params)
+      .then(() => {
+        getCustomQuestion();
+      })
+      .catch(e => dispatch(setErrorMess(e)))
   }
 
   const handleEditQuestion = (event: SyntheticEvent<EventTarget>) => {

@@ -9,6 +9,7 @@ import Images from "config/images";
 import { IconButton } from "@mui/material";
 import { CustomQuestion } from "models/custom_question";
 import classes from "./styles.module.scss";
+import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 
 interface CustomQuestionDragListProps {
   questions: CustomQuestion[];
@@ -18,8 +19,7 @@ interface CustomQuestionDragListProps {
 }
 
 const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
-  const { questions, setQuestions, handleEditQuestion, handleDeleteQuestion } =
-    props;
+  const { questions, setQuestions, handleEditQuestion, handleDeleteQuestion } = props;
 
   const reorder = (items, startIndex, endIndex) => {
     const result: CustomQuestion[] = Array.from(items);
@@ -38,6 +38,23 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
       destination.index
     );
     setQuestions(result);
+  };
+
+  const handleIcon = (typeId: number) => {
+    switch (typeId) {
+      case ECustomQuestionType.Open_Question: {
+        return Images.icOpenQuestion;
+      }
+      case ECustomQuestionType.Single_Choice: {
+        return Images.icSingleChoice;
+      }
+      case ECustomQuestionType.Multiple_Choices: {
+        return Images.icMultipleChoices;
+      }
+      default: {
+        return null;
+      }
+    }
   };
 
   return (
@@ -66,16 +83,7 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                           alt=""
                         />
                         <div className={classes.question}>
-                          <img
-                            src={
-                              item.id === 1
-                                ? Images.icOpenQuestion
-                                : item.id === 2
-                                ? Images.icSingleChoice
-                                : Images.icMultipleChoices
-                            }
-                            alt=""
-                          />
+                          <img src={handleIcon(item.typeId)} alt="" />
                           <p>{item.title}</p>
                           <span className={classes.hide}>$353</span>
                         </div>
