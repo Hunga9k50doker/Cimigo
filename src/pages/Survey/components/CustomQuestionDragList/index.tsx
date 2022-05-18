@@ -17,6 +17,7 @@ interface CustomQuestionDragListProps {
   onUpdateOrderQuestion: (newList: CustomQuestion[]) => void;
   onEditQuestion: (question: CustomQuestion) => void;
   onShowConfirmDeleteQuestion: (question: CustomQuestion) => void;
+  editableProject: boolean;
 }
 
 const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
@@ -26,6 +27,7 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
     onUpdateOrderQuestion,
     onEditQuestion,
     onShowConfirmDeleteQuestion,
+    editableProject,
   } = props;
 
   const reorder = (items, startIndex, endIndex) => {
@@ -65,15 +67,21 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
     }
   };
 
-  const handleEditQuestion = (e: SyntheticEvent<EventTarget>, question: CustomQuestion) => {
+  const handleEditQuestion = (
+    e: SyntheticEvent<EventTarget>,
+    question: CustomQuestion
+  ) => {
     e.stopPropagation();
     onEditQuestion(question);
-  }
+  };
 
-  const handleDeleteQuestion = (e: SyntheticEvent<EventTarget>, question: CustomQuestion) => {
+  const handleDeleteQuestion = (
+    e: SyntheticEvent<EventTarget>,
+    question: CustomQuestion
+  ) => {
     e.stopPropagation();
     onShowConfirmDeleteQuestion(question);
-  }
+  };
 
   return (
     <div className={classes.container}>
@@ -86,6 +94,7 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                   draggableId={item.id.toString()}
                   index={index}
                   key={item.id}
+                  isDragDisabled={!editableProject}
                 >
                   {(provided) => (
                     <div
@@ -95,38 +104,44 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                       {...provided.dragHandleProps}
                     >
                       <div className={classes.listItemContent}>
-                        <img
-                          className={classes.hide}
-                          src={Images.icDrag}
-                          alt=""
-                        />
+                        {editableProject && (
+                          <img
+                            className={classes.hide}
+                            src={Images.icDrag}
+                            alt=""
+                          />
+                        )}
                         <div className={classes.question}>
                           <img src={handleIcon(item.typeId)} alt="" />
                           <p>{item.title}</p>
-                          <span className={classes.hide}>${item?.type.price}</span>
+                          <span className={classes.hide}>
+                            ${item?.type.price}
+                          </span>
                         </div>
                       </div>
-                      <div>
-                        <div className={classes.btnAction}>
-                          <IconButton
-                            onClick={(e) => handleEditQuestion(e, item)}
-                            className={classes.iconAction}
-                            edge="end"
-                            aria-label="Edit"
-                          >
-                            <img src={Images.icRename} alt="" />
-                          </IconButton>
+                      {editableProject && (
+                        <div>
+                          <div className={classes.btnAction}>
+                            <IconButton
+                              onClick={(e) => handleEditQuestion(e, item)}
+                              className={classes.iconAction}
+                              edge="end"
+                              aria-label="Edit"
+                            >
+                              <img src={Images.icRename} alt="" />
+                            </IconButton>
 
-                          <IconButton
-                            onClick={(e) => handleDeleteQuestion(e, item)}
-                            className={classes.iconAction}
-                            edge="end"
-                            aria-label="Delete"
-                          >
-                            <img src={Images.icDelete} alt="" />
-                          </IconButton>
+                            <IconButton
+                              onClick={(e) => handleDeleteQuestion(e, item)}
+                              className={classes.iconAction}
+                              edge="end"
+                              aria-label="Delete"
+                            >
+                              <img src={Images.icDelete} alt="" />
+                            </IconButton>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   )}
                 </Draggable>

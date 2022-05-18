@@ -1,31 +1,25 @@
-import {
-  Dispatch,
-  memo,
-  SetStateAction,
-  SyntheticEvent,
-  useState,
-} from "react";
+import { memo, SyntheticEvent, useState } from "react";
+import clsx from "clsx";
 import { CustomQuestion } from "models/custom_question";
 import Images from "config/images";
 import classes from "./styles.module.scss";
 import { Button, Collapse, Grid } from "@mui/material";
-import clsx from "clsx";
 import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 
 interface CustomQuestionListMobileProps {
   questions: CustomQuestion[];
-  setQuestions: Dispatch<SetStateAction<CustomQuestion[]>>;
   onEditQuestion: (question: CustomQuestion) => void;
   onShowConfirmDeleteQuestion: (question: CustomQuestion) => void;
+  editableProject: boolean;
 }
 
 const CustomQuestionListMobile = memo(
   (props: CustomQuestionListMobileProps) => {
     const {
       questions,
-      setQuestions,
       onEditQuestion,
       onShowConfirmDeleteQuestion,
+      editableProject,
     } = props;
     const [expandId, setExpandId] = useState<number>();
 
@@ -50,15 +44,21 @@ const CustomQuestionListMobile = memo(
       }
     };
 
-    const handleEditQuestion = (e: SyntheticEvent<EventTarget>, question: CustomQuestion) => {
+    const handleEditQuestion = (
+      e: SyntheticEvent<EventTarget>,
+      question: CustomQuestion
+    ) => {
       e.stopPropagation();
       onEditQuestion(question);
-    }
-  
-    const handleDeleteQuestion = (e: SyntheticEvent<EventTarget>, question: CustomQuestion) => {
+    };
+
+    const handleDeleteQuestion = (
+      e: SyntheticEvent<EventTarget>,
+      question: CustomQuestion
+    ) => {
       e.stopPropagation();
       onShowConfirmDeleteQuestion(question);
-    }
+    };
 
     return (
       <div className={classes.container}>
@@ -66,7 +66,7 @@ const CustomQuestionListMobile = memo(
           const isExpanded = item.id === expandId;
           return (
             <Grid
-              className={clsx(classes.item, { [classes.expand]: isExpanded })}
+              className={clsx(classes.item, { [classes.expand]: isExpanded, [classes.uneditable]: !editableProject })}
               key={index}
               onClick={() => {
                 handleClickQuestion(item.id);
@@ -96,22 +96,24 @@ const CustomQuestionListMobile = memo(
                   <div className={classes.price}>
                     <span>${item?.type.price}</span>
                   </div>
-                  <div className={classes.buttons}>
-                    <Button
-                      className={classes.editButton}
-                      onClick={(e) => handleEditQuestion(e, item)}
-                      translation-key="common_edit"
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      className={classes.deleteButton}
-                      onClick={(e) => handleDeleteQuestion(e, item)}
-                      translation-key="common_delete"
-                    >
-                      Delete
-                    </Button>
-                  </div>
+                  {editableProject && (
+                    <div className={classes.buttons}>
+                      <Button
+                        className={classes.editButton}
+                        onClick={(e) => handleEditQuestion(e, item)}
+                        translation-key="common_edit"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        className={classes.deleteButton}
+                        onClick={(e) => handleDeleteQuestion(e, item)}
+                        translation-key="common_delete"
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
                 </Collapse>
               </Grid>
             </Grid>

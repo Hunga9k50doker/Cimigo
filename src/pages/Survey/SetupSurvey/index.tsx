@@ -1236,17 +1236,17 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
           </Grid>
           <div className={classes.line}></div>
-          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !activeCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. Custom questions <span translation-key="common_max">({t('common_max')} 4)</span> <Toggle checked={activeCustomQuestion} onChange={onToggleCustomQuestion} /> <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${totalCustomQuestionPrice()}` : `Extra cost`}</span></div>
+          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !activeCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. Custom questions <span translation-key="common_max">({t('common_max')} 4)</span> {editableProject(project) && <Toggle checked={activeCustomQuestion} onChange={onToggleCustomQuestion} />} <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${totalCustomQuestionPrice()}` : `Extra cost`}</span></div>
           <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${totalCustomQuestionPrice()}` : `Extra cost`}</span></div>
           <Grid className={classes.flex}>
             <p className={clsx({[classes.customQuestionSubTitleDisabled]: !activeCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
             <Grid className={clsx({[classes.displayNone]: !activeCustomQuestion})}>
-              <CustomQuestionDragList questions={questions} setQuestions={setQuestions} onUpdateOrderQuestion={onUpdateOrderQuestion} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} />
+              <CustomQuestionDragList questions={questions} setQuestions={setQuestions} onUpdateOrderQuestion={onUpdateOrderQuestion} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
               {/* ===================Custom questions mobile====================== */}
-              <CustomQuestionListMobile questions={questions} setQuestions={setQuestions} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} />
+              <CustomQuestionListMobile questions={questions} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
             </Grid>
             <Grid className={clsx(classes.select, {[classes.displayNone]: !activeCustomQuestion})}>
-              <FormControl classes={{ root: classes.rootSelect }} disabled={questions.length >= maxCustomQuestion}>
+              <FormControl classes={{ root: classes.rootSelect }} disabled={!editableProject(project) && questions.length >= maxCustomQuestion}>
                 <Select
                   variant="outlined"
                   displayEmpty
@@ -1284,7 +1284,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   })}
                 </Select>
               </FormControl>
-              {questions.length >= maxCustomQuestion && <p translation-key="setup_survey_custom_question_error_max">You can only add maximum of {maxCustomQuestion} custom questions.</p>}
+              {editableProject(project) && questions.length >= maxCustomQuestion && <p translation-key="setup_survey_custom_question_error_max">You can only add maximum of {maxCustomQuestion} custom questions.</p>}
             </Grid>
           </Grid>
         </Grid>
