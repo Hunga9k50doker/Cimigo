@@ -33,10 +33,8 @@ interface Props {
 
 interface Answer {
   id: number;
-  title: string;
-  position: number;
-  switchMode: boolean;
   value: string;
+  exclusive: boolean;
 }
 
 const schema = yup.object().shape({
@@ -52,26 +50,12 @@ const schema = yup.object().shape({
 });
 
 const PopupMultipleChoices = (props: Props) => {
-  const { onClose, isOpen, onSubmit, questionEdit, questionType, language } = props;
+  const { onClose, isOpen, onSubmit, questionEdit, questionType, language } =
+    props;
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const [activeMinError, setActiveMinError] = useState<boolean>(false);
   const [activeMaxError, setActiveMaxError] = useState<boolean>(false);
-  const [answers, setAnswers] = useState([
-    {
-      id: 1,
-      title: "Enter answer",
-      position: 1,
-      switchMode: false,
-      value: "",
-    },
-    {
-      id: 2,
-      title: "Enter answer",
-      position: 2,
-      switchMode: false,
-      value: "",
-    },
-  ]);
+  const [answers, setAnswers] = useState<Answer[]>([]);
   const {
     register,
     handleSubmit,
@@ -83,6 +67,10 @@ const PopupMultipleChoices = (props: Props) => {
   });
 
   useEffect(() => {
+    initAnswer();
+  }, []);
+
+  useEffect(() => {
     if (questionEdit) {
       reset({
         inputQues: questionEdit?.title,
@@ -91,10 +79,8 @@ const PopupMultipleChoices = (props: Props) => {
       const answerList = questionEdit?.answers.map((item, index) => {
         return {
           id: index + 1,
-          title: `Enter answer`,
-          position: index + 1,
-          switchMode: item.exclusive,
           value: item.title,
+          exclusive: item.exclusive,
         };
       });
       setAnswers(answerList);
@@ -105,14 +91,17 @@ const PopupMultipleChoices = (props: Props) => {
 
   useEffect(() => {
     reset({
-      inputAns: answers.map((item) => {
-        return {
-          title: item.value,
-          exclusive: item.switchMode,
-        };
-      }),
+      inputAns: answers.map((item) => ({ title: item.value, exclusive: item.exclusive })),
     });
   }, [answers]);
+
+  const initAnswer = () => {
+    const list = [];
+    for (let i: number = 0; i < questionType?.minAnswer; ++i) {
+      list.push({ id: i + 1, value: "", exclusive: false });
+    }
+    setAnswers(list);
+  };
 
   const _onSubmit = (data: CustomQuestionFormData) => {
     if (answers.length !== 0) {
@@ -131,22 +120,7 @@ const PopupMultipleChoices = (props: Props) => {
       inputQues: "",
       inputAns: [],
     });
-    setAnswers([
-      {
-        id: 1,
-        title: "Enter answer",
-        position: 1,
-        switchMode: false,
-        value: "",
-      },
-      {
-        id: 2,
-        title: "Enter answer",
-        position: 2,
-        switchMode: false,
-        value: "",
-      },
-    ]);
+    initAnswer();    
     setIsFirstRender(true);
   };
 
@@ -174,10 +148,8 @@ const PopupMultipleChoices = (props: Props) => {
     const maxAnswers = Math.max(...answers.map((ans) => ans.id), 0);
     const new_inputAns = {
       id: maxAnswers + 1,
-      title: `Enter answer`,
-      position: maxAnswers + 1,
-      switchMode: false,
       value: "",
+      exclusive: false,
     };
     if (answers.length >= questionType?.maxAnswer) {
       setActiveMaxError(true);
@@ -186,7 +158,7 @@ const PopupMultipleChoices = (props: Props) => {
     setAnswers((answers) => [...answers, new_inputAns]);
   };
 
-  const deleteInputAns = (id) => () => {
+  const deleteInputAns = (id: number) => () => {
     setActiveMaxError(false);
     if (answers.length <= questionType?.minAnswer) {
       setActiveMinError(true);
@@ -285,7 +257,7 @@ const PopupMultipleChoices = (props: Props) => {
                                 />
                                 <input
                                   type="text"
-                                  placeholder={ans.title}
+                                  placeholder="Enter answer"
                                   onChange={handleChangeInputAns(
                                     "value",
                                     ans.id,
@@ -312,9 +284,9 @@ const PopupMultipleChoices = (props: Props) => {
                                   }}
                                 >
                                   <input
-                                    checked={ans.switchMode}
+                                    checked={ans.exclusive}
                                     onChange={handleChangeSwitch(
-                                      "switchMode",
+                                      "exclusive",
                                       ans.id
                                     )}
                                     type="checkbox"
@@ -356,16 +328,20 @@ const PopupMultipleChoices = (props: Props) => {
                 <p className={classes.clickAddOption}>Click to add option</p>
               </button>
             </Grid>
-            {questionType && answers.length <= questionType.minAnswer && activeMinError && (
-              <div className={classes.errAns}>
-                {`Must have at least ${questionType.minAnswer} answers`}
-              </div>
-            )}
-            {questionType && answers.length >= questionType.maxAnswer && activeMaxError && (
-              <div className={classes.errAns}>
-                {`Maximum ${questionType.maxAnswer} answers`}
-              </div>
-            )}
+            {questionType &&
+              answers.length <= questionType.minAnswer &&
+              activeMinError && (
+                <div className={classes.errAns}>
+                  {`Must have at least ${questionType.minAnswer} answers`}
+                </div>
+              )}
+            {questionType &&
+              answers.length >= questionType.maxAnswer &&
+              activeMaxError && (
+                <div className={classes.errAns}>
+                  {`Maximum ${questionType.maxAnswer} answers`}
+                </div>
+              )}
           </Grid>
           <Grid>
             <Button

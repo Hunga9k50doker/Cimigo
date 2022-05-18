@@ -39,8 +39,6 @@ interface Props {
 
 interface Answer {
   id: number;
-  title: string;
-  position: number;
   value: string;
 }
 
@@ -57,24 +55,12 @@ const schema = yup.object().shape({
 });
 
 const PopupSingleChoice = (props: Props) => {
-  const { onClose, isOpen, onSubmit, questionEdit, questionType, language } = props;
+  const { onClose, isOpen, onSubmit, questionEdit, questionType, language } =
+    props;
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const [activeMinError, setActiveMinError] = useState<boolean>(false);
   const [activeMaxError, setActiveMaxError] = useState<boolean>(false);
-  const [answers, setAnswers] = useState<Answer[]>([
-    {
-      id: 1,
-      title: "Enter answer",
-      position: 1,
-      value: "",
-    },
-    {
-      id: 2,
-      title: "Enter answer",
-      position: 2,
-      value: "",
-    },
-  ]);
+  const [answers, setAnswers] = useState<Answer[]>([]);
   const {
     register,
     handleSubmit,
@@ -86,6 +72,10 @@ const PopupSingleChoice = (props: Props) => {
   });
 
   useEffect(() => {
+    initAnswer();
+  }, []);
+
+  useEffect(() => {
     if (questionEdit) {
       reset({
         inputQues: questionEdit?.title,
@@ -94,8 +84,6 @@ const PopupSingleChoice = (props: Props) => {
       const answerList = questionEdit?.answers.map((item, index) => {
         return {
           id: index + 1,
-          title: `Enter answer`,
-          position: index + 1,
           value: item.title,
         };
       });
@@ -107,16 +95,20 @@ const PopupSingleChoice = (props: Props) => {
 
   useEffect(() => {
     reset({
-      inputAns: answers.map((item) => {
-        return {
-          title: item.value,
-        };
-      }),
+      inputAns: answers.map((item) => ({ title: item.value })),
     });
   }, [answers]);
 
+  const initAnswer = () => {
+    const list = [];
+    for (let i: number = 0; i < questionType?.minAnswer; ++i) {
+      list.push({ id: i + 1, value: "" });
+    }
+    setAnswers(list);
+  };
+
   const _onSubmit = (data: CustomQuestionFormData) => {
-    if (answers.length !== 0) {
+    if (answers.length) {
       const question: CustomQuestion = {
         typeId: ECustomQuestionType.Single_Choice,
         title: data.inputQues,
@@ -132,20 +124,7 @@ const PopupSingleChoice = (props: Props) => {
       inputQues: "",
       inputAns: [],
     });
-    setAnswers([
-      {
-        id: 1,
-        title: "Enter answer",
-        position: 1,
-        value: "",
-      },
-      {
-        id: 2,
-        title: "Enter answer",
-        position: 2,
-        value: "",
-      },
-    ]);
+    initAnswer();
     setIsFirstRender(true);
   };
 
@@ -166,8 +145,6 @@ const PopupSingleChoice = (props: Props) => {
     const maxAnswers = Math.max(...answers.map((ans) => ans.id), 0);
     const new_inputAns = {
       id: maxAnswers + 1,
-      title: `Enter answer`,
-      position: maxAnswers + 1,
       value: "",
     };
     if (answers.length >= questionType?.maxAnswer) {
@@ -177,7 +154,7 @@ const PopupSingleChoice = (props: Props) => {
     setAnswers((answers) => [...answers, new_inputAns]);
   };
 
-  const deleteInputAns = (id) => () => {
+  const deleteInputAns = (id: number) => () => {
     setActiveMaxError(false);
     if (answers.length <= questionType?.minAnswer) {
       setActiveMinError(true);
@@ -198,11 +175,7 @@ const PopupSingleChoice = (props: Props) => {
     if (!destination) {
       return;
     }
-    const result = reorder(
-      answers,
-      source.index,
-      destination.index
-    );
+    const result = reorder(answers, source.index, destination.index);
     setAnswers(result);
   };
 
@@ -262,51 +235,50 @@ const PopupSingleChoice = (props: Props) => {
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                             >
-                                <img
-                                  className={classes.iconDotsDrag}
-                                  src={Images.icDrag}
-                                  alt=""
-                                />
-                                <Grid sx={{ display: "block", width: "100%" }}>
-                                  <div className={classes.dnd}>
-                                    <img
-                                      src={IconDotsDrag}
-                                      className={classes.iconDotsDragMUI}
-                                      alt=""
-                                    />
-                                    <input
-                                      type="radio"
-                                      name="radio_answer"
-                                      className={classes.choiceAnswer}
-                                    />
-                                    <input
-                                      type="text"
-                                      placeholder={ans.title}
-                                      name={`name[${index}]`}
-                                      className={classes.inputanswer}
-                                      value={ans.value}
-                                      onChange={handleChangeInputAns(
-                                        "value",
-                                        ans.id,
-                                        checkAllAnsNotValue()
-                                      )}
-                                      autoComplete="off"
-                                    />
-                                    <button
-                                      type="button"
-                                      className={classes.closeInputAnswer}
-                                      onClick={deleteInputAns(ans.id)}
-                                    >
-                                      <img src={Images.icDeleteAnswer} alt="" />
-                                    </button>
-                                  </div>
-                                  <div className={classes.errAns}>
-                                    {!ans.value &&
-                                      !isFirstRender &&
-                                      "Answer is required"}
-                                  </div>
-                                </Grid>
-                              
+                              <img
+                                className={classes.iconDotsDrag}
+                                src={Images.icDrag}
+                                alt=""
+                              />
+                              <Grid sx={{ display: "block", width: "100%" }}>
+                                <div className={classes.dnd}>
+                                  <img
+                                    src={IconDotsDrag}
+                                    className={classes.iconDotsDragMUI}
+                                    alt=""
+                                  />
+                                  <input
+                                    type="radio"
+                                    name="radio_answer"
+                                    className={classes.choiceAnswer}
+                                  />
+                                  <input
+                                    type="text"
+                                    placeholder="Enter answer"
+                                    name={`name[${index}]`}
+                                    className={classes.inputanswer}
+                                    value={ans.value}
+                                    onChange={handleChangeInputAns(
+                                      "value",
+                                      ans.id,
+                                      checkAllAnsNotValue()
+                                    )}
+                                    autoComplete="off"
+                                  />
+                                  <button
+                                    type="button"
+                                    className={classes.closeInputAnswer}
+                                    onClick={deleteInputAns(ans.id)}
+                                  >
+                                    <img src={Images.icDeleteAnswer} alt="" />
+                                  </button>
+                                </div>
+                                <div className={classes.errAns}>
+                                  {!ans.value &&
+                                    !isFirstRender &&
+                                    "Answer is required"}
+                                </div>
+                              </Grid>
                             </div>
                           )}
                         </Draggable>
@@ -329,16 +301,20 @@ const PopupSingleChoice = (props: Props) => {
                 </p>
               </button>
             </Grid>
-            {questionType && answers.length <= questionType.minAnswer && activeMinError && (
-              <div className={classes.errAns}>
-                {`Must have at least ${questionType.minAnswer} answers`}
-              </div>
-            )}
-            {questionType && answers.length >= questionType.maxAnswer && activeMaxError && (
-              <div className={classes.errAns}>
-                {`Maximum ${questionType.maxAnswer} answers`}
-              </div>
-            )}
+            {questionType &&
+              answers.length <= questionType.minAnswer &&
+              activeMinError && (
+                <div className={classes.errAns}>
+                  {`Must have at least ${questionType.minAnswer} answers`}
+                </div>
+              )}
+            {questionType &&
+              answers.length >= questionType.maxAnswer &&
+              activeMaxError && (
+                <div className={classes.errAns}>
+                  {`Maximum ${questionType.maxAnswer} answers`}
+                </div>
+              )}
           </Grid>
           <Grid>
             <Button
