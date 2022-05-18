@@ -21,6 +21,8 @@ import InvalidResetPassword from 'pages/Authentication/InvalidResetPassword';
 import CallbackForgotPassword from 'pages/Callback/User/ForgotPassword';
 import HomePage from 'pages/Home';
 import AccountPage from 'pages/Account';
+import OnePayCallback from 'pages/Callback/Project/OnePay';
+import OnePayAgainLinkCallback from 'pages/Callback/Project/OnePayAgainLink';
 
 const Routers = () => {
 
@@ -29,6 +31,7 @@ const Routers = () => {
       <ScrollToTop/>
       <Switch>
         <Route exact path={routes.callback.project.create} component={CallbackCreateProject}/>
+        
         <PublicRoute exact path={routes.login} component={Login}/>
         <PublicRoute exact path={routes.register} component={Register}/>
         <PublicRoute exact path={routes.forgotPassword} component={ForgotPassword}/>
@@ -36,12 +39,15 @@ const Routers = () => {
         <PublicRoute exact path={routes.invalidResetPassword} component={InvalidResetPassword}/>
         <PublicRoute exact path={routes.callback.user.forgotPassword} component={CallbackForgotPassword}/>
         <PublicRoute exact path={routes.callback.user.active} component={CallbackActiveUser}/>
-
+        
+        <PrivateRoute exact path={routes.callback.project.onePay} component={OnePayCallback}/>
+        <PrivateRoute exact path={routes.callback.project.onePayAgainLink} component={OnePayAgainLinkCallback}/>
+        <PrivateRoute exact path={routes.callback.project.invoice} component={CallbackInvoice}/>
         <PrivateRoute path={routes.account.root} component={AccountPage}/>
         <PrivateRoute exact path={routes.project.management} component={ProjectManagement}/>
         <PrivateRoute exact path={routes.project.create} component={CreateProject}/>
         <PrivateRoute path={routes.project.detail.root} component={Survey}/>
-        <PrivateRoute exact path={routes.callback.project.invoice} component={CallbackInvoice}/>
+        
         <AdminRoute path={routes.admin.root} component={Admin}/>
         <PublicRoute exact path={routes.homePage} component={HomePage}/>
         <Redirect to={routes.login} />

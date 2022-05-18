@@ -57,6 +57,12 @@ export interface Payment {
   project: Project;
 }
 
+export interface TryAgain {
+  projectId: number;
+  returnUrl: string,
+  againLink: string,
+}
+
 export interface UpdateConfirmPayment {
   projectId: number;
   userConfirm: boolean;

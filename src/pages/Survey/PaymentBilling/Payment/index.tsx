@@ -7,7 +7,7 @@ import Buttons from "components/Buttons";
 import InputSelect from "components/InputsSelect";
 import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
-import { fCurrency2, fCurrency2VND, round } from "utils/formatNumber";
+import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import { ReducerType } from "redux/reducers";
 import { PriceService } from "helpers/price";
 import { EPaymentMethod, OptionItem } from "models/general";
@@ -29,6 +29,7 @@ import { VALIDATION } from "config/constans";
 import { InfoOutlined } from "@mui/icons-material";
 import TooltipCustom from "components/Tooltip";
 import PopupConfirmInvoiceInfo from "pages/Survey/components/PopupConfirmInvoiceInfo";
+// import PopupConfirmCancelOrder from "pages/Survey/components/PopupConfirmCancelOrder";
 
 interface DataForm {
   paymentMethodId: number,
@@ -131,6 +132,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
   const [countries, setCountries] = useState<OptionItem[]>([])
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>()
   const [showSkipInfor, setShowSkipInfor] = useState<DataForm>()
+  // const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false)
   
   useEffect(() => {
     const fetchData = async () => {
@@ -219,8 +221,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       countryId: data.countryId?.id,
       companyAddress: data.companyAddress,
       taxCode: data.taxCode,
-      returnUrl: `${process.env.REACT_APP_BASE_URL}`,
-      againLink: `${process.env.REACT_APP_BASE_URL}`
+      returnUrl: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePay}?projectId=${project.id}`,
+      againLink: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePayAgainLink.replace(':id', `${project.id}`)}`
     })
       .then((res: { payment: Payment, checkoutUrl: string }) => {
         if (res.checkoutUrl) {
@@ -261,14 +263,12 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     authPreviewOrPayment(project, onRedirect)
   }, [project])
 
-  const onCancelPayment = () => {
-    dispatch(setCancelPayment(true))
-    onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview)
-  }
+  
 
   const onSkipUpdateInfo = () => {
     if (!showSkipInfor) return
     onCheckout(showSkipInfor)
+    setShowSkipInfor(null)
   }
 
   const onUpdateInfo = () => {
@@ -282,6 +282,19 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     const headerHeight = document.getElementById('header')?.offsetHeight || 0
     window.scrollTo({ behavior: 'smooth', top: el.offsetTop - headerHeight - 10 })
   }
+
+  const onCancelPayment = () => {
+    dispatch(setCancelPayment(true))
+    onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview)
+  }
+
+  // const onShowConfirmCancel = () => {
+  //   setIsConfirmCancel(true)
+  // }
+
+  // const onCloseConfirmCancel = () => {
+  //   setIsConfirmCancel(false)
+  // }
 
   return (
     <Grid component={'form'} classes={{ root: classes.root }} onSubmit={handleSubmit(onConfirm)} noValidate autoComplete="off">
@@ -545,6 +558,11 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         onClose={onUpdateInfo}
         onYes={onSkipUpdateInfo}
       />
+      {/* <PopupConfirmCancelOrder 
+        isOpen={isConfirmCancel}
+        onClose={onCloseConfirmCancel}
+        onYes={onCancelPayment}
+      /> */}
     </Grid>
   )
 })

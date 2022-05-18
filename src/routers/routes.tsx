@@ -10,6 +10,8 @@ export const routes = {
     project: {
       invoice: '/callback/project/:id/invoice',
       create: '/callback/project/create',
+      onePay: '/callback/project/onepay',
+      onePayAgainLink: '/cb/:id/onepay',
     }
   },
   homePage: '/',
@@ -27,15 +29,17 @@ export const routes = {
       target: '/project/:id/target',
       quotas: '/project/:id/quotas',
       paymentBilling: {
-        root: '/project/:id/payment-billing',
+        root: '/project/:id/payment',
         previewAndPayment: {
-          root: '/project/:id/payment-billing/preview-and-payment',
-          preview: '/project/:id/payment-billing/preview-and-payment/preview',
-          payment: '/project/:id/payment-billing/preview-and-payment/payment',
+          root: '/project/:id/payment/steps',
+          preview: '/project/:id/payment/steps/preview',
+          payment: '/project/:id/payment/steps/payment',
         },
-        order: '/project/:id/payment-billing/order',
-        waiting: '/project/:id/payment-billing/waiting',
-        completed: '/project/:id/payment-billing/completed',
+        order: '/project/:id/payment/order',
+        waiting: '/project/:id/payment/waiting',
+        completed: '/project/:id/payment/completed',
+        onPayFail: '/project/:id/payment/online-fail',
+        onPayPending: '/project/:id/payment/online-pending',
       },
       report: '/project/:id/report',
     }

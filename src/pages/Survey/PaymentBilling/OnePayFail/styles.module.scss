@@ -2,11 +2,11 @@
   display: block;
   text-align: center;
   @media only screen and (max-width: 767px) {
-   padding: 0px 15px;
+    padding: 0px 15px;
   }
 }
 
-.root>img {
+.root > img {
   margin: 15px auto 22px auto;
   display: block;
   @media only screen and (max-width: 767px) {
@@ -55,7 +55,7 @@
     font-weight: 500;
   }
 }
-.textBlue{
+.textBlue {
   font-weight: 600;
   font-size: 24px;
   line-height: 29px;
@@ -68,20 +68,21 @@
     margin-bottom: 16px;
   }
 }
-button{
-  line-height: 16px  !important;
+button {
+  line-height: 16px !important;
 }
-.aLink{
+.aLink {
   display: block;
   margin-top: 16px;
   font-size: 16px;
   font-weight: 500;
-  text-decoration: none;
   color: rgba(31, 97, 169, 1);
+  text-underline-position: under;
+  text-decoration: underline !important;
   @media only screen and (max-width: 767px) {
     font-size: 14px;
     font-weight: 400;
-    &:last-child{
+    &:last-child {
       margin-bottom: 16px;
     }
   }

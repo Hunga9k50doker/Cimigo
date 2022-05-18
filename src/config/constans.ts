@@ -71,6 +71,9 @@ export const API = {
     INVOICE: '/v1.0/payment/invoice',
     INVOICE_DEMO: '/v1.0/payment/invoice-demo',
     VALID_CONFIRM: '/v1.0/payment/valid-confirm',
+    ONEPAY_CALLBACK: '/v1.0/payment/onepay/callback',
+    CANCEL: '/v1.0/payment/:id/cancel',
+    TRY_AGAIN: '/v1.0/payment/:id/try-again'
   },
   ATTACHMENT: {
     DOWNLOAD: '/v1.0/attachment/:id/download',
