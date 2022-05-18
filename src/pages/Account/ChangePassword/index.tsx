@@ -48,7 +48,7 @@ const ChangePassword = memo((props: Props) => {
         UserService.changePassword(data)
             .then((res) => {
                 dispatch(setSuccessMess(res.message))
-                reset({ currentPassword:'', newPassword:'', confirmPassword:'', })
+                reset()
             })
             .catch((e) => dispatch(setErrorMess(e)))
             .finally(() => dispatch(setLoading(false)))
