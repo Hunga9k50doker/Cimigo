@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo, useMemo } from "react";
 import classes from './styles.module.scss';
 import clsx from "clsx";
 import {
@@ -45,7 +45,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { ProjectService } from "services/project";
-import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import { getProjectRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { PackService } from "services/pack";
 import { Pack } from "models/pack";
 import { AdditionalBrandService } from "services/additional_brand";
@@ -134,7 +134,6 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [openPopupAddQuestion, setOpenPopupAddQuestion] = useState(false)
   const [openPopupSingChoice, setOpenPopupSingleChoice] = useState(false)
   const [openPopupMultiChoice, setOpenPopupMultiChoice] = useState(false)
-  const [isScrolling, setScrolling] = useState(false);
 
   const [packs, setPacks] = useState<Pack[]>([]);
   const [addNewPack, setAddNewPack] = useState<boolean>(false);
@@ -163,27 +162,10 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [userAttributeDelete, setUserAttributeDelete] = useState<UserAttribute>()
   const [projectAttributeDelete, setProjectAttributeDelete] = useState<ProjectAttribute>()
 
-  const [activeCustomQuestion, setActiveCustomQuestion] = useState<boolean>(false);
-  const [maxCustomQuestion, setMaxCustomQuestion] = useState<number>();
   const [customQuestionType, setCustomQuestionType] = useState<CustomQuestionType[]>([]);
   const [questions, setQuestions] = useState<CustomQuestion[]>([]);
   const [questionEdit, setQuestionEdit] = useState<CustomQuestion>();
   const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
-
-  const handleScroll = () => {
-    setScrolling(window.scrollY !== 0)
-  }
-
-  function _handleScroll(e: any) {
-    handleScroll();
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', _handleScroll);
-    return () => {
-      window.removeEventListener('scroll', _handleScroll);
-    }
-  }, []);
 
   useEffect(() => {
     if (project) {
@@ -193,8 +175,6 @@ const SetupSurvey = memo(({ id }: Props) => {
         variant: project.variant,
         manufacturer: project.manufacturer
       })
-      setActiveCustomQuestion(project.enableCustomQuestion);
-      setMaxCustomQuestion(project?.solution.maxCustomQuestion);
     }
   }, [project]);
 
@@ -453,6 +433,10 @@ const SetupSurvey = memo(({ id }: Props) => {
     return project?.solution?.maxAdditionalBrand || 0
   }
 
+  const maxCustomQuestion = () => {
+    return project?.solution?.maxCustomQuestion || 0
+  }
+
   const enableAdditionalAttributes = () => {
     return maxAdditionalAttribute() > ((projectAttributes?.length || 0) + (userAttributes?.length || 0))
   }
@@ -574,9 +558,9 @@ const SetupSurvey = memo(({ id }: Props) => {
 
   const onToggleCustomQuestion = () => {
     dispatch(setLoading(true))
-    ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: !activeCustomQuestion })
+    ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: !project?.enableCustomQuestion })
       .then(() => {
-        setActiveCustomQuestion(!activeCustomQuestion);
+        dispatch(setProjectReducer({...project, enableCustomQuestion: !project?.enableCustomQuestion}));
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -586,41 +570,19 @@ const SetupSurvey = memo(({ id }: Props) => {
     return questions.reduce((total, item) => total + item?.type.price, 0);
   }
 
-  const totalOpenQuestion = () => {
-    return questions.reduce((total, item) => {
-      if (item?.typeId === ECustomQuestionType.Open_Question) {
-        return ++total;
-      }
-      return total;
-    }, 0)
-  }
-
-  const totalSingleChoice = () => {
-    return questions.reduce((total, item) => {
-      if (item?.typeId === ECustomQuestionType.Single_Choice) {
-        return ++total;
-      }
-      return total;
-    }, 0)
-  }
-
-  const totalMultipleChoices = () => {
-    return questions.reduce((total, item) => {
-      if (item?.typeId === ECustomQuestionType.Multiple_Choices) {
-        return ++total;
-      }
-      return total;
-    }, 0)
+  const countQuestionType = (type: ECustomQuestionType) => {
+    return questions.filter((item) => item.typeId === type).length;
   }
 
   const findQuestionType = (type: ECustomQuestionType) => {
-    for (let i: number = 0; i < customQuestionType.length; ++i) {
-      if (customQuestionType[i].id === type) {
-        return customQuestionType[i];
-      }
-    }
-    return null;
+    return customQuestionType?.find(item => item.id === type);
   }
+
+  const questionTypeOpenQuestion = useMemo(() => findQuestionType(ECustomQuestionType.Open_Question), [customQuestionType]);
+
+  const questionTypeSingleChoice = useMemo(() => findQuestionType(ECustomQuestionType.Single_Choice), [customQuestionType]);
+
+  const questionTypeMultipleChoices = useMemo(() => findQuestionType(ECustomQuestionType.Multiple_Choices), [customQuestionType]);
 
   const onOpenPopupCustomQuestion = (type: ECustomQuestionType) => {
     switch (type) {
@@ -1237,17 +1199,17 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
           </Grid>
           <div className={classes.line}></div>
-          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !activeCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. Custom questions <span translation-key="common_max">({t('common_max')} {maxCustomQuestion})</span> {editableProject(project) && <Toggle checked={activeCustomQuestion} onChange={onToggleCustomQuestion} />} <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span></div>
-          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span></div>
+          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. Custom questions <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span> {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={onToggleCustomQuestion} />} <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span></div>
+          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span></div>
           <Grid className={classes.flex}>
-            <p className={clsx({[classes.customQuestionSubTitleDisabled]: !activeCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
-            <Grid className={clsx({[classes.displayNone]: !activeCustomQuestion})}>
+            <p className={clsx({[classes.customQuestionSubTitleDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
+            <Grid className={clsx({[classes.displayNone]: !project?.enableCustomQuestion})}>
               <CustomQuestionDragList questions={questions} setQuestions={setQuestions} onUpdateOrderQuestion={onUpdateOrderQuestion} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
               {/* ===================Custom questions mobile====================== */}
               <CustomQuestionListMobile questions={questions} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
             </Grid>
-            <Grid className={clsx(classes.select, {[classes.displayNone]: !activeCustomQuestion})}>
-              <FormControl classes={{ root: classes.rootSelect }} disabled={!editableProject(project) && questions.length >= maxCustomQuestion}>
+            <Grid className={clsx(classes.select, {[classes.displayNone]: !project?.enableCustomQuestion})}>
+              <FormControl classes={{ root: classes.rootSelect }} disabled={!editableProject(project) || questions.length >= maxCustomQuestion()}>
                 <Select
                   variant="outlined"
                   displayEmpty
@@ -1285,7 +1247,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   })}
                 </Select>
               </FormControl>
-              {editableProject(project) && questions.length >= maxCustomQuestion && <p translation-key="setup_survey_custom_question_error_max">You can only add maximum of {maxCustomQuestion} custom questions.</p>}
+              {editableProject(project) && questions.length >= maxCustomQuestion() && <p translation-key="setup_survey_custom_question_error_max">You can only add maximum of {maxCustomQuestion()} custom questions.</p>}
             </Grid>
           </Grid>
         </Grid>
@@ -1392,7 +1354,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   </ul>
                 </StepContent>
               </Step>
-              <Step active={questions?.length >= 1 && activeCustomQuestion} expanded>
+              <Step active={questions?.length >= 1 && project?.enableCustomQuestion} expanded>
                 <StepLabel
                   onClick={() => scrollToElement('custom-questions')}
                   StepIconComponent={ColorlibStepIcon}
@@ -1405,15 +1367,15 @@ const SetupSurvey = memo(({ id }: Props) => {
                   translation-key="setup_survey_summary_custom_question"
                 >
                   <div className={classes.summaryCustomQuestion}>
-                    <span>Custom question ({activeCustomQuestion ? questions.length : 0})</span>
-                    <span className={clsx(classes.summaryCustomQuestionPrice, {[classes.summaryCustomQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span>
+                    <span>Custom question ({project?.enableCustomQuestion ? questions.length : 0})</span>
+                    <span className={clsx(classes.summaryCustomQuestionPrice, {[classes.summaryCustomQuestionPriceDisabled]: !project?.enableCustomQuestion})}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span>
                   </div>
                 </StepLabel>
-                <StepContent className={clsx(classes.rootConnector, {[classes.displayNone]: !activeCustomQuestion})}>
+                <StepContent className={clsx(classes.rootConnector, {[classes.displayNone]: !project?.enableCustomQuestion})}>
                   <ul>
-                    {totalOpenQuestion() > 0 && <li translation-key="setup_survey_summary_open_question">Open question ({totalOpenQuestion()})</li>}
-                    {totalSingleChoice() > 0 && <li translation-key="setup_survey_summary_single_choice">Single choice ({totalSingleChoice()})</li>}
-                    {totalMultipleChoices() > 0 && <li translation-key="setup_survey_summary_multiple_choices">Multiple choices ({totalMultipleChoices()})</li>}
+                    {countQuestionType(ECustomQuestionType.Open_Question) > 0 && <li translation-key="setup_survey_summary_open_question">Open question ({countQuestionType(ECustomQuestionType.Open_Question)})</li>}
+                    {countQuestionType(ECustomQuestionType.Single_Choice) > 0 && <li translation-key="setup_survey_summary_single_choice">Single choice ({countQuestionType(ECustomQuestionType.Single_Choice)})</li>}
+                    {countQuestionType(ECustomQuestionType.Multiple_Choices) > 0 && <li translation-key="setup_survey_summary_multiple_choices">Multiple choices ({countQuestionType(ECustomQuestionType.Multiple_Choices)})</li>}
                   </ul>
                 </StepContent>
               </Step>
@@ -1472,26 +1434,32 @@ const SetupSurvey = memo(({ id }: Props) => {
           onCancel={() => onCloseConfirmDeleteAttribute()}
           onDelete={onDeleteAttribute}
         />
-        <PopupAddQuestion 
-          isOpen={openPopupAddQuestion} 
-          onClose={onClosePopupCustomQuestion}
-          onSubmit={onAddOrEditCustomQuestion}
-          questionEdit={questionEdit}
-        />
-        <PopupSingleChoice
-          isOpen={openPopupSingChoice}
-          onClose={onClosePopupCustomQuestion}
-          onSubmit={onAddOrEditCustomQuestion}
-          questionEdit={questionEdit}
-          questionType={findQuestionType(ECustomQuestionType.Single_Choice)}
-        />
-        <PopupMultiChoice
-          isOpen={openPopupMultiChoice}
-          onClose={onClosePopupCustomQuestion}
-          onSubmit={onAddOrEditCustomQuestion}
-          questionEdit={questionEdit}
-          questionType={findQuestionType(ECustomQuestionType.Multiple_Choices)}
-        />
+        {questionTypeOpenQuestion && (
+          <PopupAddQuestion 
+            isOpen={openPopupAddQuestion} 
+            onClose={onClosePopupCustomQuestion}
+            onSubmit={onAddOrEditCustomQuestion}
+            questionEdit={questionEdit}
+          />
+        )}
+        {questionTypeSingleChoice && (
+          <PopupSingleChoice
+            isOpen={openPopupSingChoice}
+            onClose={onClosePopupCustomQuestion}
+            onSubmit={onAddOrEditCustomQuestion}
+            questionEdit={questionEdit}
+            questionType={questionTypeSingleChoice}
+          />
+        )}
+        {questionTypeMultipleChoices && (
+          <PopupMultiChoice
+            isOpen={openPopupMultiChoice}
+            onClose={onClosePopupCustomQuestion}
+            onSubmit={onAddOrEditCustomQuestion}
+            questionEdit={questionEdit}
+            questionType={questionTypeMultipleChoices}
+          />
+        )}
         <PopupConfirmDelete
           isOpen={!!questionDelete}
           title={"Delete question?"}
