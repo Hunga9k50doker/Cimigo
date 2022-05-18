@@ -81,12 +81,10 @@ const PopupSingleChoice = (props: Props) => {
         inputQues: questionEdit?.title,
         inputAns: questionEdit?.answers,
       });
-      const list = questionEdit?.answers.map((item, index) => {
-        return {
-          id: index + 1,
-          value: item.title,
-        };
-      });
+      const list = questionEdit?.answers.map((item, index) => ({
+        id: index + 1,
+        value: item.title,
+      }));
       setAnswers(list);
     } else {
       clearForm();
