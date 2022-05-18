@@ -12,9 +12,9 @@ import { OptionItem } from "models/general";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
 import { useDispatch } from "react-redux";
 import UserService from "services/user";
-import { PaymentInfo } from "models/payment_info";
-import UseAuth from "hooks/useAuth";
+import { UpdatePaymentInfo } from "models/user";
 import CountryService from "services/country";
+import { PaymentInfo } from "models/payment_info";
 
 interface Props {
 
@@ -33,7 +33,6 @@ export interface PaymentFormData {
 const PaymentInfoPage = memo((props: Props) => {
 
     const { t, i18n } = useTranslation()
-    const { user } = UseAuth();
     const [countries, setCountries] = useState<OptionItem[]>([])
     const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>()
     const dispatch = useDispatch()
@@ -42,13 +41,11 @@ const PaymentInfoPage = memo((props: Props) => {
 
     const schema = useMemo(() => {
         return yup.object().shape({
-            fullName: yup.string().required('Full name is required.'),
+            fullName: yup.string().required(t('field_full_name_vali_required')),
             companyName: yup.string().required(t('field_company_vali_required')),
-            email: yup.string()
-                .email(t('field_email_vali_email')),
-            phone: yup.string().matches(VALIDATION.phone, {
-                message: t('field_phone_number_vali_phone'), excludeEmptyString: true
-            })
+            email: yup.string().email(t('field_email_vali_email'))
+                .required(t('field_email_vali_required')),
+            phone: yup.string().matches(VALIDATION.phone, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true })
                 .required(t('field_phone_number_vali_required')),
             countryId: yup.object().shape({
                 id: yup.number().required(t('field_country_vali_required')),
@@ -81,34 +78,32 @@ const PaymentInfoPage = memo((props: Props) => {
     }, [dispatch])
 
     useEffect(() => {
-        if (!paymentInfo && !user) return
+        if (!paymentInfo) return
         let countryId: OptionItem = undefined
-        if (user?.country) {
-            countryId = { id: user.country.id, name: user.country.name }
-        }
         if (paymentInfo?.country) {
             countryId = { id: paymentInfo.country.id, name: paymentInfo.country.name }
         }
         reset({
-            fullName: paymentInfo?.fullName || user?.fullName || '',
-            companyName: paymentInfo?.companyName || user?.company || '',
-            email: paymentInfo?.email || user?.email || '',
-            phone: paymentInfo?.phone || user?.phone || '',
+            fullName: paymentInfo?.fullName || '',
+            companyName: paymentInfo?.companyName || '',
+            email: paymentInfo?.email || '',
+            phone: paymentInfo?.phone || '',
             countryId: countryId,
             companyAddress: paymentInfo?.companyAddress || '',
             taxCode: paymentInfo?.taxCode || ''
         })
-    }, [paymentInfo, user, reset])
+    }, [paymentInfo, reset])
 
     const onSubmit = (data: PaymentFormData) => {
-        const form = new FormData()
-        form.append('fullName', data.fullName)
-        form.append('companyName', data.companyName)
-        form.append('phone', data.phone)
-        form.append('countryId', `${data.countryId.id}`)
-        form.append('companyAddress', data.companyAddress)
-        form.append('email', data.email)
-        form.append('taxCode', data.taxCode)
+        const form: UpdatePaymentInfo = {
+            fullName: data.fullName,
+            companyName: data.companyName,
+            companyAddress: data.companyAddress,
+            email: data.email,
+            phone: data.phone,
+            countryId: data.countryId.id,
+            taxCode: data.taxCode || '',
+        }
         dispatch(setLoading(true))
         UserService.updatePaymentInfo(form)
             .then((res) => {
@@ -157,7 +152,6 @@ const PaymentInfoPage = memo((props: Props) => {
                             translation-key-placeholder="field_email_placeholder"
                             inputRef={register('email')}
                             errorMessage={errors.email?.message}
-                            disabled
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>

@@ -110,3 +110,12 @@ export interface ChangePassword {
     newPassword: string,
     confirmPassword: string,
 }
+export interface UpdatePaymentInfo {
+    fullName: string,
+    companyName: string,
+    email: string,
+    phone: string,
+    countryId: number,
+    companyAddress: string,
+    taxCode: string,
+}
