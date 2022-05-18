@@ -78,7 +78,7 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
   return (
     <div className={classes.container}>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable-list">
+        <Droppable droppableId="droppable-list-question">
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {questions.map((item, index) => (

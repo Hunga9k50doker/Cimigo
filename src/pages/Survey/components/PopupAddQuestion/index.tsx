@@ -92,6 +92,7 @@ const PopupAddQuestion = (props: Props) => {
               type="text"
               inputRef={register("inputQues")}
               errorMessage={errors.inputQues?.message}
+              autoComplete="off"
             />
             <Grid>
               <Button

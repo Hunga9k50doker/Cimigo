@@ -80,10 +80,14 @@
 }
 
 .rowInputAnswerCheckBox {
-  display: flex;
   position: relative;
   margin-top: 27px;
   padding-left: 35px;
+  &:hover {
+    .iconDotsDrag {
+      visibility: visible;
+    }
+  }
 }
 
 .closeInputAnswer {
@@ -95,11 +99,12 @@
 }
 
 .iconDotsDrag {
-  width: 10px;
-  height: 16px;
+  width: 25px;
+  height: 40px;
   position: absolute;
-  top: 3px;
-  left: 10px;
+  top: -9px;
+  left: 0;
+  visibility: hidden;
 }
 
 .iconDotsDragMUI {
@@ -365,6 +370,7 @@ input:checked {
   font-size: 16px;
   font-weight: 400;
   margin-left: 5px;
+  margin-right: 10px;
 }
 
 .inputanswer:focus-visible {
@@ -410,10 +416,11 @@ input:checked {
 .rowToggleSwitch {
   margin-left: 38px;
 }
+
 .errAns {
   color: #af1c10;
   font-size: 12px;
-  padding-left: 40px;
+  text-align: center;
   white-space: initial;
-  padding-top: 4px;
+  padding-top: 5px;
 }

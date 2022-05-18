@@ -64,7 +64,7 @@
   font-size: 16px;
   font-weight: 500;
   padding-left: 44px;
-  margin-top: 25px;
+  margin-top: 20px;
   margin-bottom: 25px;
 }
 
@@ -78,6 +78,11 @@
   margin-top: 20px;
   padding-left: 35px;
   position: relative;
+  &:hover {
+    .iconDotsDrag {
+      visibility: visible;
+    }
+  }
 }
 
 .closeInputAnswer {
@@ -87,6 +92,7 @@
   border: none;
   cursor: pointer;
 }
+
 .inputanswer {
   width: 100%;
   border: none;
@@ -95,6 +101,7 @@
   font-size: 16px;
   font-weight: 400;
   margin-left: 5px;
+  margin-right: 10px;
 }
 
 .choiceAnswer {
@@ -104,11 +111,12 @@
 }
 
 .iconDotsDrag {
-  width: 10px;
-  height: 16px;
+  width: 25px;
+  height: 40px;
   position: absolute;
-  top: 3px;
-  left: 10px;
+  top: -9px;
+  left: 0;
+  visibility: hidden;
 }
 
 .iconDotsDragMUI {
@@ -203,13 +211,15 @@ input:checked {
   display: flex;
   align-items: center;
 }
+
 .errAns {
   color: #af1c10;
   font-size: 12px;
-  padding-left: 40px;
+  text-align: center;
   white-space: initial;
-  padding-top: 4px;
+  padding-top: 5px;
 }
+
 .inputQuestion {
   border: 1px solid rgba(0, 0, 0, 0.4);
   border-bottom: none;
@@ -229,7 +239,6 @@ input:checked {
     background-color: rgba(221, 221, 221, 1);
     font-weight: 500;
     font-size: 12px;
-    //    padding: 3px 6px 3px 6px;
     border-radius: 5px;
     width: 29px;
     height: 22px;

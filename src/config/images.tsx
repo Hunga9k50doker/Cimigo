@@ -59,6 +59,7 @@ import icDrag from 'assets/img/icon/ic-drag.svg';
 import icOpenQuestion from 'assets/img/icon/ic-open-question.svg';
 import icSingleChoice from 'assets/img/icon/ic-single-choice.svg';
 import icMultipleChoices from 'assets/img/icon/ic-multiple-choices.svg';
+import icDeleteAnswer from 'assets/img/icon/ic-delete-answer.svg';
 
 const images = {
   // ===================== Images =========================
@@ -123,6 +124,7 @@ const images = {
   icOpenQuestion,
   icSingleChoice,
   icMultipleChoices,
+  icDeleteAnswer,
 }
 
 export default images

@@ -20,6 +20,13 @@ import {
   CustomQuestionType,
 } from "models/custom_question";
 import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
+import Images from "config/images";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
 
 interface Props {
   isOpen: boolean;
@@ -27,6 +34,13 @@ interface Props {
   onSubmit: (data: CustomQuestion) => void;
   questionEdit: CustomQuestion;
   questionType: CustomQuestionType;
+}
+
+interface Answer {
+  id: number;
+  title: string;
+  position: number;
+  value: string;
 }
 
 const schema = yup.object().shape({
@@ -43,18 +57,19 @@ const schema = yup.object().shape({
 
 const PopupSingleChoice = (props: Props) => {
   const { onClose, isOpen, onSubmit, questionEdit, questionType } = props;
-  const [dragId, setDragId] = useState();
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
-  const [answers, setAnswers] = useState([
+  const [activeMinError, setActiveMinError] = useState<boolean>(false);
+  const [activeMaxError, setActiveMaxError] = useState<boolean>(false);
+  const [answers, setAnswers] = useState<Answer[]>([
     {
       id: 1,
-      title: "Enter answer 1",
+      title: "Enter answer",
       position: 1,
       value: "",
     },
     {
       id: 2,
-      title: "Enter answer 2",
+      title: "Enter answer",
       position: 2,
       value: "",
     },
@@ -78,12 +93,12 @@ const PopupSingleChoice = (props: Props) => {
       const answerList = questionEdit?.answers.map((item, index) => {
         return {
           id: index + 1,
-          title: `Enter answer ${index + 1}`,
+          title: `Enter answer`,
           position: index + 1,
           value: item.title,
         };
       });
-      console.log(answerList)
+      console.log(answerList);
       setAnswers(answerList);
     } else {
       clearForm();
@@ -99,27 +114,6 @@ const PopupSingleChoice = (props: Props) => {
       }),
     });
   }, [answers]);
-
-  const handleDrag = (ev) => {
-    setDragId(ev.currentTarget.id);
-  };
-
-  const handleDrop = (ev) => {
-    const dragBox = answers.find((ans) => ans.title === dragId);
-    const dropBox = answers.find((ans) => ans.title === ev.currentTarget.id);
-    const dragBoxOrder = dragBox.position;
-    const dropBoxOrder = dropBox.position;
-    const newBoxState = answers.map((ans) => {
-      if (ans.title === dragId) {
-        ans.position = dropBoxOrder;
-      }
-      if (ans.title === ev.currentTarget.id) {
-        ans.position = dragBoxOrder;
-      }
-      return ans;
-    });
-    setAnswers(newBoxState);
-  };
 
   const _onSubmit = (data: CustomQuestionFormData) => {
     if (answers.length !== 0) {
@@ -142,13 +136,13 @@ const PopupSingleChoice = (props: Props) => {
     setAnswers([
       {
         id: 1,
-        title: "Enter answer 1",
+        title: "Enter answer",
         position: 1,
         value: "",
       },
       {
         id: 2,
-        title: "Enter answer 2",
+        title: "Enter answer",
         position: 2,
         value: "",
       },
@@ -169,25 +163,48 @@ const PopupSingleChoice = (props: Props) => {
     };
 
   const addInputAns = () => {
+    setActiveMinError(false);
     const maxAnswers = Math.max(...answers.map((ans) => ans.id), 0);
     const new_inputAns = {
       id: maxAnswers + 1,
-      title: `Enter answer ${maxAnswers + 1}`,
+      title: `Enter answer`,
       position: maxAnswers + 1,
       value: "",
     };
-    if (answers.length >= questionType.maxAnswer) {
+    if (answers.length >= questionType?.maxAnswer) {
+      setActiveMaxError(true);
       return;
     }
     setAnswers((answers) => [...answers, new_inputAns]);
   };
 
   const deleteInputAns = (id) => () => {
-    if (answers.length <= questionType.minAnswer) {
+    setActiveMaxError(false);
+    if (answers.length <= questionType?.minAnswer) {
+      setActiveMinError(true);
       return;
     }
     const updated_answers = [...answers].filter((ans) => ans.id !== id);
     setAnswers(updated_answers);
+  };
+
+  const reorder = (items, startIndex, endIndex) => {
+    const result: Answer[] = Array.from(items);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  };
+
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    if (!destination) {
+      return;
+    }
+    const result = reorder(
+      answers,
+      source.index,
+      destination.index
+    );
+    setAnswers(result);
   };
 
   return (
@@ -224,67 +241,83 @@ const PopupSingleChoice = (props: Props) => {
               errorMessage={
                 errors.inputQues &&
                 !isFirstRender &&
-                "Question title is required."
+                "Question title is required"
               }
+              autoComplete="off"
             />
-            {/* {question.length < 0 ? errors.inputQues?.message : ""} */}
             <Grid sx={{ position: "relative", marginTop: "30px" }}>
-              <img src={IconDotsDrag} className={classes.iconDotsDrag} alt="" />
-              {answers
-                .sort((a, b) => a.position - b.position)
-                .map((ans, index) => (
-                  <div className={classes.rowInputAnswer} key={ans.id}>
-                    <Grid sx={{ display: "block", width: "100%" }}>
-                      <div
-                        className={classes.dnd}
-                        draggable={true}
-                        id={ans.title}
-                        onDragOver={(ev) => ev.preventDefault()}
-                        onDragStart={handleDrag}
-                        onDrop={handleDrop}
-                      >
-                        <img
-                          src={IconDotsDrag}
-                          className={classes.iconDotsDragMUI}
-                          alt=""
-                        />
-                        <input
-                          type="radio"
-                          name="radio_answer"
-                          className={classes.choiceAnswer}
-                        />
-                        <input
-                          type="text"
-                          placeholder={ans.title}
-                          name={`name[${index}]`}
-                          className={classes.inputanswer}
-                          value={ans.value}
-                          onChange={handleChangeInputAns(
-                            "value",
-                            ans.id,
-                            checkAllAnsNotValue()
-                          )}
-                        />
-                        <button
-                          type="button"
-                          className={classes.closeInputAnswer}
-                          onClick={deleteInputAns(ans.id)}
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable-list-answer">
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                      {answers.map((ans, index) => (
+                        <Draggable
+                          draggableId={ans.id.toString()}
+                          index={index}
+                          key={ans.id}
                         >
-                          X
-                        </button>
-                      </div>
-                      <div className={classes.errAns}>
-                        {!ans.value && !isFirstRender && "Answer is required."}
-                      </div>
-                    </Grid>
-                  </div>
-                ))}
+                          {(provided) => (
+                            <div
+                              className={classes.rowInputAnswer}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                                <img
+                                  className={classes.iconDotsDrag}
+                                  src={Images.icDrag}
+                                  alt=""
+                                />
+                                <Grid sx={{ display: "block", width: "100%" }}>
+                                  <div className={classes.dnd}>
+                                    <img
+                                      src={IconDotsDrag}
+                                      className={classes.iconDotsDragMUI}
+                                      alt=""
+                                    />
+                                    <input
+                                      type="radio"
+                                      name="radio_answer"
+                                      className={classes.choiceAnswer}
+                                    />
+                                    <input
+                                      type="text"
+                                      placeholder={ans.title}
+                                      name={`name[${index}]`}
+                                      className={classes.inputanswer}
+                                      value={ans.value}
+                                      onChange={handleChangeInputAns(
+                                        "value",
+                                        ans.id,
+                                        checkAllAnsNotValue()
+                                      )}
+                                      autoComplete="off"
+                                    />
+                                    <button
+                                      type="button"
+                                      className={classes.closeInputAnswer}
+                                      onClick={deleteInputAns(ans.id)}
+                                    >
+                                      <img src={Images.icDeleteAnswer} alt="" />
+                                    </button>
+                                  </div>
+                                  <div className={classes.errAns}>
+                                    {!ans.value &&
+                                      !isFirstRender &&
+                                      "Answer is required"}
+                                  </div>
+                                </Grid>
+                              
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </Grid>
-            {answers.length === 0 && (
-              <div className={classes.errAns}>
-                {"Must have at least 1 answer."}
-              </div>
-            )}
             <Grid className={classes.addList}>
               <button
                 type="button"
@@ -297,6 +330,16 @@ const PopupSingleChoice = (props: Props) => {
                 </p>
               </button>
             </Grid>
+            {questionType && answers.length <= questionType.minAnswer && activeMinError && (
+              <div className={classes.errAns}>
+                {`Must have at least ${questionType.minAnswer} answers`}
+              </div>
+            )}
+            {questionType && answers.length >= questionType.maxAnswer && activeMaxError && (
+              <div className={classes.errAns}>
+                {`Maximum ${questionType.maxAnswer} answers`}
+              </div>
+            )}
           </Grid>
           <Grid>
             <Button
