@@ -17,7 +17,7 @@ import { useEffect } from "react";
 
 interface Props {
   isOpen: boolean;
-  onClose: (type: ECustomQuestionType) => void;
+  onClose: () => void;
   onSubmit: (data: CustomQuestion) => void;
   questionEdit: CustomQuestion;
 }
@@ -26,7 +26,7 @@ const schema = yup.object().shape({
   inputQues: yup.string().required("Question title is required."),
 });
 
-const PopupAddQuestion = (props: Props) => {
+const PopupOpenQuestion = (props: Props) => {
   const { onClose, isOpen, onSubmit, questionEdit } = props;
   const {
     register,
@@ -54,7 +54,6 @@ const PopupAddQuestion = (props: Props) => {
       title: data.inputQues,
     };
     onSubmit(question);
-    onClose(ECustomQuestionType.Open_Question);
     clearForm();
   };
 
@@ -65,13 +64,13 @@ const PopupAddQuestion = (props: Props) => {
   }
 
   return (
-    <Dialog open={isOpen} onClose={() => onClose(ECustomQuestionType.Open_Question)} classes={{ paper: classes.paper }}>
+    <Dialog open={isOpen} onClose={() => onClose()} classes={{ paper: classes.paper }}>
       <DialogContent sx={{ padding: "0px" }}>
         <Grid className={classes.content}>
           <div className={classes.titlePopup}>Add open question</div>
           <IconButton
             className={classes.iconClose}
-            onClick={() => onClose(ECustomQuestionType.Open_Question)}
+            onClick={() => onClose()}
           ></IconButton>
         </Grid>
         <Grid className={classes.classform}>
@@ -108,4 +107,4 @@ const PopupAddQuestion = (props: Props) => {
   );
 };
 
-export default PopupAddQuestion;
+export default PopupOpenQuestion;

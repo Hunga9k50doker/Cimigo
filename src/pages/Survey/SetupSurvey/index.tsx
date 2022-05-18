@@ -65,9 +65,9 @@ import { CreateQuestionParams, CustomQuestion, CustomQuestionType, UpdateOrderQu
 import { CustomQuestionService } from "services/custom_question";
 import CustomQuestionDragList from "../components/CustomQuestionDragList";
 import CustomQuestionListMobile from "../components/CustomQuestionListMobile";
-import PopupAddQuestion from "../components/PopupAddQuestion";
+import PopupOpenQuestion from "../components/PopupOpenQuestion";
 import PopupSingleChoice from "../components/PopupSingleChoice";
-import PopupMultiChoice from "../components/PopupMultiChoices";
+import PopupMultipleChoices from "../components/PopupMultipleChoices";
 import { fCurrency2 } from "utils/formatNumber";
 
 const schema = yup.object().shape({
@@ -131,9 +131,9 @@ const SetupSurvey = memo(({ id }: Props) => {
 
   const [openPopupMandatory, setOpenPopupMandatory] = useState(false)
   const [openPopupPreDefined, setOpenPopupPreDefined] = useState(false)
-  const [openPopupAddQuestion, setOpenPopupAddQuestion] = useState(false)
-  const [openPopupSingChoice, setOpenPopupSingleChoice] = useState(false)
-  const [openPopupMultiChoice, setOpenPopupMultiChoice] = useState(false)
+  const [openPopupOpenQuestion, setOpenPopupOpenQuestion] = useState(false)
+  const [openPopupSingleChoice, setOpenPopupSingleChoice] = useState(false)
+  const [openPopupMultipleChoices, setOpenPopupMultipleChoices] = useState(false)
 
   const [packs, setPacks] = useState<Pack[]>([]);
   const [addNewPack, setAddNewPack] = useState<boolean>(false);
@@ -164,7 +164,9 @@ const SetupSurvey = memo(({ id }: Props) => {
 
   const [customQuestionType, setCustomQuestionType] = useState<CustomQuestionType[]>([]);
   const [questions, setQuestions] = useState<CustomQuestion[]>([]);
-  const [questionEdit, setQuestionEdit] = useState<CustomQuestion>();
+  const [openQuestionEdit, setOpenQuestionEdit] = useState<CustomQuestion>();
+  const [singleChoiceEdit, setSingleChoiceEdit] = useState<CustomQuestion>();
+  const [multipleChoicesEdit, setMultipleChoicesEdit] = useState<CustomQuestion>();
   const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
 
   useEffect(() => {
@@ -218,10 +220,22 @@ const SetupSurvey = memo(({ id }: Props) => {
       .catch(e => dispatch(setErrorMess(e)));
   }
 
-  const getQuestionDetail = (questionId: number) => {
-    CustomQuestionService.findOne(questionId)
+  const getQuestionDetail = (question: CustomQuestion) => {
+    CustomQuestionService.findOne(question.id)
       .then((res) => {
-        setQuestionEdit(res.data);
+        switch (question.typeId) {
+          case ECustomQuestionType.Open_Question:
+            setOpenQuestionEdit(res.data);
+            break;
+          case ECustomQuestionType.Single_Choice:
+            setSingleChoiceEdit(res.data);
+            break;
+          case ECustomQuestionType.Multiple_Choices:
+            setMultipleChoicesEdit(res.data);
+            break;
+          default:
+            break;
+        }
       })
       .catch(e => dispatch(setErrorMess(e)))
   }
@@ -587,62 +601,45 @@ const SetupSurvey = memo(({ id }: Props) => {
   const onOpenPopupCustomQuestion = (type: ECustomQuestionType) => {
     switch (type) {
       case ECustomQuestionType.Open_Question:
-        {
-          setOpenPopupAddQuestion(true);
-          break;
-        }
+        setOpenPopupOpenQuestion(true);
+        break;
       case ECustomQuestionType.Single_Choice:
-        {
-          setOpenPopupSingleChoice(true);
-          break;
-        }
+        setOpenPopupSingleChoice(true);
+        break;
       case ECustomQuestionType.Multiple_Choices:
-        {
-          setOpenPopupMultiChoice(true);
-          break;
-        }
+        setOpenPopupMultipleChoices(true);
+        break;
       default:
-        {
-          break;
-        }
+        break;
     }
   }
 
-  const onClosePopupCustomQuestion = (type: ECustomQuestionType) => {
-    switch (type) {
-      case ECustomQuestionType.Open_Question:
-        {
-          setOpenPopupAddQuestion(false);
-          break;
-        }
-      case ECustomQuestionType.Single_Choice:
-        {
-          setOpenPopupSingleChoice(false);
-          break;
-        }
-      case ECustomQuestionType.Multiple_Choices:
-        {
-          setOpenPopupMultiChoice(false);
-          break;
-        }
-      default:
-        {
-          break;
-        }
-    }
-    setQuestionEdit(null);
+  const onClosePopupOpenQuestion = () => {
+    setOpenPopupOpenQuestion(false);
+    setOpenQuestionEdit(null);
   }
 
-  const onAddOrEditCustomQuestion = (data: CustomQuestion) => {
-    if (questionEdit) {
+  const onClosePopupSingleChoice = () => {
+    setOpenPopupSingleChoice(false);
+    setSingleChoiceEdit(null);
+  }
+
+  const onClosePopupMultipleChoices = () => {
+    setOpenPopupMultipleChoices(false);
+    setMultipleChoicesEdit(null);
+  }
+
+  const onAddOrEditOpenQuestion = (data: CustomQuestion) => {
+    if (openQuestionEdit) {
       dispatch(setLoading(true));
       const params: UpdateQuestionParams = {
         title: data.title,
         answers: data.answers,
       }
-      CustomQuestionService.update(questionEdit.id, params)
+      CustomQuestionService.update(openQuestionEdit.id, params)
         .then(() => {
           getCustomQuestion();
+          onClosePopupOpenQuestion();
         })
         .catch(e => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)))
@@ -657,6 +654,71 @@ const SetupSurvey = memo(({ id }: Props) => {
       CustomQuestionService.create(params)
         .then(() => {
           getCustomQuestion();
+          onClosePopupOpenQuestion();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
+  const onAddOrEditSingleChoice = (data: CustomQuestion) => {
+    if (singleChoiceEdit) {
+      dispatch(setLoading(true));
+      const params: UpdateQuestionParams = {
+        title: data.title,
+        answers: data.answers,
+      }
+      CustomQuestionService.update(singleChoiceEdit.id, params)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupSingleChoice();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true));
+      const params: CreateQuestionParams = {
+        projectId: id,
+        title: data.title,
+        typeId: data.typeId,
+        answers: data.answers,
+      }
+      CustomQuestionService.create(params)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupSingleChoice();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
+  const onAddOrEditMultipleChoices = (data: CustomQuestion) => {
+    if (multipleChoicesEdit) {
+      dispatch(setLoading(true));
+      const params: UpdateQuestionParams = {
+        title: data.title,
+        answers: data.answers,
+      }
+      CustomQuestionService.update(multipleChoicesEdit.id, params)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupMultipleChoices();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true));
+      const params: CreateQuestionParams = {
+        projectId: id,
+        title: data.title,
+        typeId: data.typeId,
+        answers: data.answers,
+      }
+      CustomQuestionService.create(params)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupMultipleChoices();
         })
         .catch(e => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)))
@@ -681,7 +743,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   }
 
   const onEditQuestion = (question: CustomQuestion) => {
-    getQuestionDetail(question.id);
+    getQuestionDetail(question);
     onOpenPopupCustomQuestion(question.typeId);
   };
 
@@ -1435,28 +1497,28 @@ const SetupSurvey = memo(({ id }: Props) => {
           onDelete={onDeleteAttribute}
         />
         {questionTypeOpenQuestion && (
-          <PopupAddQuestion 
-            isOpen={openPopupAddQuestion} 
-            onClose={onClosePopupCustomQuestion}
-            onSubmit={onAddOrEditCustomQuestion}
-            questionEdit={questionEdit}
+          <PopupOpenQuestion 
+            isOpen={openPopupOpenQuestion} 
+            onClose={onClosePopupOpenQuestion}
+            onSubmit={onAddOrEditOpenQuestion}
+            questionEdit={openQuestionEdit}
           />
         )}
         {questionTypeSingleChoice && (
           <PopupSingleChoice
-            isOpen={openPopupSingChoice}
-            onClose={onClosePopupCustomQuestion}
-            onSubmit={onAddOrEditCustomQuestion}
-            questionEdit={questionEdit}
+            isOpen={openPopupSingleChoice}
+            onClose={onClosePopupSingleChoice}
+            onSubmit={onAddOrEditSingleChoice}
+            questionEdit={singleChoiceEdit}
             questionType={questionTypeSingleChoice}
           />
         )}
         {questionTypeMultipleChoices && (
-          <PopupMultiChoice
-            isOpen={openPopupMultiChoice}
-            onClose={onClosePopupCustomQuestion}
-            onSubmit={onAddOrEditCustomQuestion}
-            questionEdit={questionEdit}
+          <PopupMultipleChoices
+            isOpen={openPopupMultipleChoices}
+            onClose={onClosePopupMultipleChoices}
+            onSubmit={onAddOrEditMultipleChoices}
+            questionEdit={multipleChoicesEdit}
             questionType={questionTypeMultipleChoices}
           />
         )}

@@ -30,7 +30,7 @@ import {
 
 interface Props {
   isOpen: boolean;
-  onClose: (type: ECustomQuestionType) => void;
+  onClose: () => void;
   onSubmit: (data: CustomQuestion) => void;
   questionEdit: CustomQuestion;
   questionType: CustomQuestionType;
@@ -98,7 +98,6 @@ const PopupSingleChoice = (props: Props) => {
           value: item.title,
         };
       });
-      console.log(answerList);
       setAnswers(answerList);
     } else {
       clearForm();
@@ -123,7 +122,6 @@ const PopupSingleChoice = (props: Props) => {
         answers: data.inputAns,
       };
       onSubmit(question);
-      onClose(ECustomQuestionType.Single_Choice);
       clearForm();
     }
   };
@@ -210,7 +208,7 @@ const PopupSingleChoice = (props: Props) => {
   return (
     <Dialog
       open={isOpen}
-      onClose={() => onClose(ECustomQuestionType.Single_Choice)}
+      onClose={() => onClose()}
       classes={{ paper: classes.paper }}
     >
       <DialogContent sx={{ padding: "0px", paddingBottom: "10px" }}>
@@ -222,7 +220,7 @@ const PopupSingleChoice = (props: Props) => {
             <div className={classes.titlePopup}>Add single choice</div>
             <IconButton
               className={classes.iconClose}
-              onClick={() => onClose(ECustomQuestionType.Single_Choice)}
+              onClick={() => onClose()}
             ></IconButton>
           </Grid>
           <Grid className={classes.classform}>

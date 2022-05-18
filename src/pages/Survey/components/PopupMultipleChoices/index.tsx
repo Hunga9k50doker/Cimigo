@@ -24,7 +24,7 @@ import {
 
 interface Props {
   isOpen: boolean;
-  onClose: (type: ECustomQuestionType) => void;
+  onClose: () => void;
   onSubmit: (data: CustomQuestion) => void;
   questionEdit: CustomQuestion;
   questionType: CustomQuestionType;
@@ -50,7 +50,7 @@ const schema = yup.object().shape({
     .required(),
 });
 
-const PopupMultiChoice = (props: Props) => {
+const PopupMultipleChoices = (props: Props) => {
   const { onClose, isOpen, onSubmit, questionEdit, questionType } = props;
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const [activeMinError, setActiveMinError] = useState<boolean>(false);
@@ -121,7 +121,6 @@ const PopupMultiChoice = (props: Props) => {
         answers: data.inputAns,
       };
       onSubmit(question);
-      onClose(ECustomQuestionType.Multiple_Choices);
       clearForm();
     }
   };
@@ -214,7 +213,7 @@ const PopupMultiChoice = (props: Props) => {
   return (
     <Dialog
       open={isOpen}
-      onClose={() => onClose(ECustomQuestionType.Multiple_Choices)}
+      onClose={() => onClose()}
       classes={{ paper: classes.paper }}
     >
       <DialogContent sx={{ padding: "0px", paddingBottom: "10px" }}>
@@ -226,7 +225,7 @@ const PopupMultiChoice = (props: Props) => {
             <div className={classes.titlePopup}>Add multiple choices</div>
             <IconButton
               className={classes.iconClose}
-              onClick={() => onClose(ECustomQuestionType.Multiple_Choices)}
+              onClick={() => onClose()}
             ></IconButton>
           </Grid>
           <Grid className={classes.classform}>
@@ -381,4 +380,4 @@ const PopupMultiChoice = (props: Props) => {
   );
 };
 
-export default PopupMultiChoice;
+export default PopupMultipleChoices;
