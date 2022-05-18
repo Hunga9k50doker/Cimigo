@@ -725,10 +725,10 @@ const SetupSurvey = memo(({ id }: Props) => {
     }
   }
 
-  const onUpdateOrderQuestion = (newList: CustomQuestion[]) => {
+  const onUpdateOrderQuestion = (list: CustomQuestion[]) => {
     const params: UpdateOrderQuestionParams = {
       projectId: id,
-      questions: newList.map((item, index) => {
+      questions: list.map((item, index) => {
         return {
           id: item.id,
           order: index + 1,

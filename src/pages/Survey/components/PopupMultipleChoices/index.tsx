@@ -76,14 +76,14 @@ const PopupMultipleChoices = (props: Props) => {
         inputQues: questionEdit?.title,
         inputAns: questionEdit?.answers,
       });
-      const answerList = questionEdit?.answers.map((item, index) => {
+      const list = questionEdit?.answers.map((item, index) => {
         return {
           id: index + 1,
           value: item.title,
           exclusive: item.exclusive,
         };
       });
-      setAnswers(answerList);
+      setAnswers(list);
     } else {
       clearForm();
     }
@@ -91,7 +91,10 @@ const PopupMultipleChoices = (props: Props) => {
 
   useEffect(() => {
     reset({
-      inputAns: answers.map((item) => ({ title: item.value, exclusive: item.exclusive })),
+      inputAns: answers.map((item) => ({
+        title: item.value,
+        exclusive: item.exclusive,
+      })),
     });
   }, [answers]);
 
@@ -120,7 +123,7 @@ const PopupMultipleChoices = (props: Props) => {
       inputQues: "",
       inputAns: [],
     });
-    initAnswer();    
+    initAnswer();
     setIsFirstRender(true);
   };
 
