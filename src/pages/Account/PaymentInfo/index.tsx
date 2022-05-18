@@ -78,7 +78,7 @@ const PaymentInfoPage = memo((props: Props) => {
     }, [dispatch])
 
     useEffect(() => {
-        if (!paymentInfo) return
+        if (!paymentInfo) reset()
         let countryId: OptionItem = undefined
         if (paymentInfo?.country) {
             countryId = { id: paymentInfo.country.id, name: paymentInfo.country.name }
