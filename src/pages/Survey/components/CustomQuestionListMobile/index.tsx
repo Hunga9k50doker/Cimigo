@@ -5,6 +5,7 @@ import Images from "config/images";
 import classes from "./styles.module.scss";
 import { Button, Collapse, Grid } from "@mui/material";
 import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
+import { fCurrency2 } from "utils/formatNumber";
 
 interface CustomQuestionListMobileProps {
   questions: CustomQuestion[];
@@ -94,7 +95,7 @@ const CustomQuestionListMobile = memo(
                     <p>{item.title}</p>
                   </div>
                   <div className={classes.price}>
-                    <span>${item?.type.price}</span>
+                    <span>${fCurrency2(item?.type.price)}</span>
                   </div>
                   {editableProject && (
                     <div className={classes.buttons}>

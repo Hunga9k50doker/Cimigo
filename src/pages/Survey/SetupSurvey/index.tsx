@@ -68,6 +68,7 @@ import CustomQuestionListMobile from "../components/CustomQuestionListMobile";
 import PopupAddQuestion from "../components/PopupAddQuestion";
 import PopupSingleChoice from "../components/PopupSingleChoice";
 import PopupMultiChoice from "../components/PopupMultiChoices";
+import { fCurrency2 } from "utils/formatNumber";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -1236,8 +1237,8 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
           </Grid>
           <div className={classes.line}></div>
-          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !activeCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. Custom questions <span translation-key="common_max">({t('common_max')} 4)</span> {editableProject(project) && <Toggle checked={activeCustomQuestion} onChange={onToggleCustomQuestion} />} <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${totalCustomQuestionPrice()}` : `Extra cost`}</span></div>
-          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${totalCustomQuestionPrice()}` : `Extra cost`}</span></div>
+          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !activeCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. Custom questions <span translation-key="common_max">({t('common_max')} 4)</span> {editableProject(project) && <Toggle checked={activeCustomQuestion} onChange={onToggleCustomQuestion} />} <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span></div>
+          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span></div>
           <Grid className={classes.flex}>
             <p className={clsx({[classes.customQuestionSubTitleDisabled]: !activeCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
             <Grid className={clsx({[classes.displayNone]: !activeCustomQuestion})}>
@@ -1277,7 +1278,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                             <img src={image} alt="" />
                             <p>{item.title}</p>
                           </div>
-                          <span>${item.price}</span>
+                          <span>${fCurrency2(item.price)}</span>
                         </div>
                       </MenuItem>
                     )
@@ -1405,7 +1406,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                 >
                   <div className={classes.summaryCustomQuestion}>
                     <span>Custom question ({activeCustomQuestion ? questions.length : 0})</span>
-                    <span className={clsx(classes.summaryCustomQuestionPrice, {[classes.summaryCustomQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${totalCustomQuestionPrice()}` : `Extra cost`}</span>
+                    <span className={clsx(classes.summaryCustomQuestionPrice, {[classes.summaryCustomQuestionPriceDisabled]: !activeCustomQuestion})}>{activeCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span>
                   </div>
                 </StepLabel>
                 <StepContent className={clsx(classes.rootConnector, {[classes.displayNone]: !activeCustomQuestion})}>

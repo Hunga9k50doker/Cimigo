@@ -10,6 +10,7 @@ import { IconButton } from "@mui/material";
 import { CustomQuestion } from "models/custom_question";
 import classes from "./styles.module.scss";
 import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
+import { fCurrency2 } from "utils/formatNumber";
 
 interface CustomQuestionDragListProps {
   questions: CustomQuestion[];
@@ -115,7 +116,7 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                           <img src={handleIcon(item.typeId)} alt="" />
                           <p>{item.title}</p>
                           <span className={classes.hide}>
-                            ${item?.type.price}
+                            ${fCurrency2(item?.type.price)}
                           </span>
                         </div>
                       </div>
