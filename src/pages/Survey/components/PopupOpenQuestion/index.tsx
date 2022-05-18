@@ -20,6 +20,7 @@ interface Props {
   onClose: () => void;
   onSubmit: (data: CustomQuestion) => void;
   questionEdit: CustomQuestion;
+  language: string;
 }
 
 const schema = yup.object().shape({
@@ -27,7 +28,7 @@ const schema = yup.object().shape({
 });
 
 const PopupOpenQuestion = (props: Props) => {
-  const { onClose, isOpen, onSubmit, questionEdit } = props;
+  const { onClose, isOpen, onSubmit, questionEdit, language } = props;
   const {
     register,
     handleSubmit,
@@ -84,7 +85,7 @@ const PopupOpenQuestion = (props: Props) => {
               placeholder="Enter question title"
               startAdornment={
                 <InputAdornment position="start">
-                  <div className={classes.iconVI}>VI</div>
+                  <div className={classes.iconLanguage}>{language}</div>
                 </InputAdornment>
               }
               name="inputQuestion"

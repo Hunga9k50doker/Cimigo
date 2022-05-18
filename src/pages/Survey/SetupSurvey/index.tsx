@@ -1502,6 +1502,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             onClose={onClosePopupOpenQuestion}
             onSubmit={onAddOrEditOpenQuestion}
             questionEdit={openQuestionEdit}
+            language={project?.surveyLanguage || ""}
           />
         )}
         {questionTypeSingleChoice && (
@@ -1511,6 +1512,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             onSubmit={onAddOrEditSingleChoice}
             questionEdit={singleChoiceEdit}
             questionType={questionTypeSingleChoice}
+            language={project?.surveyLanguage || ""}
           />
         )}
         {questionTypeMultipleChoices && (
@@ -1520,6 +1522,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             onSubmit={onAddOrEditMultipleChoices}
             questionEdit={multipleChoicesEdit}
             questionType={questionTypeMultipleChoices}
+            language={project?.surveyLanguage || ""}
           />
         )}
         <PopupConfirmDelete

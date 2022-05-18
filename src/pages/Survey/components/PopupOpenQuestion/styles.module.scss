@@ -56,8 +56,7 @@
     display: flex;
     align-items: center;
 
-
-    .iconVI {
+    .iconLanguage {
         color: rgba(28, 28, 28, 0.65);
         background-color: rgba(221, 221, 221, 1);
         font-weight: 500;
@@ -69,6 +68,11 @@
         justify-content: center;
         align-items: center;
         line-height: 14.6px;
+        text-transform: uppercase;
+    }
+
+    > input {
+        padding: 13px 5px 13px 3px;
     }
 }
 

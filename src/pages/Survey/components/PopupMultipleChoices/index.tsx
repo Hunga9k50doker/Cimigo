@@ -28,6 +28,7 @@ interface Props {
   onSubmit: (data: CustomQuestion) => void;
   questionEdit: CustomQuestion;
   questionType: CustomQuestionType;
+  language: string;
 }
 
 interface Answer {
@@ -51,7 +52,7 @@ const schema = yup.object().shape({
 });
 
 const PopupMultipleChoices = (props: Props) => {
-  const { onClose, isOpen, onSubmit, questionEdit, questionType } = props;
+  const { onClose, isOpen, onSubmit, questionEdit, questionType, language } = props;
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const [activeMinError, setActiveMinError] = useState<boolean>(false);
   const [activeMaxError, setActiveMaxError] = useState<boolean>(false);
@@ -235,7 +236,7 @@ const PopupMultipleChoices = (props: Props) => {
               placeholder="Enter question title"
               startAdornment={
                 <InputAdornment position="start">
-                  <div className={classes.iconVI}>VI</div>
+                  <div className={classes.iconLanguage}>{language}</div>
                 </InputAdornment>
               }
               name="inputQuestion"
