@@ -16,6 +16,7 @@ import { editableProject } from 'helpers/project';
 import clsx from 'clsx';
 import InputCheckbox from 'components/InputCheckbox';
 import { useTranslation } from 'react-i18next';
+import PopupConfirmChange from 'pages/Survey/components/PopupConfirmChange';
 
 interface Props {
   isOpen: boolean,
@@ -27,10 +28,11 @@ interface Props {
 
 const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCancel }: Props) => {
   const { t } = useTranslation()
-  
+
   const dispatch = useDispatch()
   const [dataSelected, setDataSelected] = useState<DataSelected>({})
   const [groupsExpanded, setGroupsExpanded] = useState<{ [key: number]: boolean }>({})
+  const [confirmChangeTarget, setConfirmChangeTarget] = useState<boolean>(false)
 
   const onChangeGroupsExpanded = (groupId: number) => {
     setGroupsExpanded((pre) => ({ ...pre, [groupId]: !pre[groupId] }))
@@ -65,8 +67,7 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
     return isDisableSubmit(questions, dataSelected) || !editableProject(project)
   }
 
-  const onUpdateTarget = () => {
-    if (isDisable()) return
+  const onUpdateTargetRequest = () => {
     dispatch(setLoading(true))
     ProjectService.updateTarget(projectId, {
       questionTypeId: TargetQuestionType.Location,
@@ -79,6 +80,30 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onUpdateTarget = () => {
+    if (isDisable()) return
+    ProjectService.getQuota(projectId)
+      .then((res) => {
+        if (res?.length) setConfirmChangeTarget(true)
+        else onUpdateTargetRequest()
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+  }
+
+  const onCloseComfirmTarget = () => {
+    setConfirmChangeTarget(false)
+  }
+
+  const onConfimedChangeTarget = () => {
+    if (isDisable()) return
+    ProjectService.resetQuota(projectId)
+      .then(() => {
+        onUpdateTargetRequest()
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => onCloseComfirmTarget())
   }
 
   return (
@@ -213,6 +238,14 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
                 )
             }
           })}
+          <PopupConfirmChange
+            isOpen={confirmChangeTarget}
+            title={t('target_confirm_change_target_title')}
+            content={t('target_confirm_change_target_sub_1')}
+            contentSub={t('target_confirm_change_target_sub_2')}
+            onCancel={onCloseComfirmTarget}
+            onSubmit={onConfimedChangeTarget}
+          />
         </Grid>
         <Grid className={classes.btn}>
           <Buttons disabled={isDisable()} children={t('common_save')} translation-key="common_save" btnType='Blue' padding='10px 16px' onClick={onUpdateTarget} />

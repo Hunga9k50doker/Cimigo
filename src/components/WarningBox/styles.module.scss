@@ -1,0 +1,19 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  background: #f8e8bf;
+  border: 1px solid #f5bf32;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #9e5400;
+  margin: auto;
+  a {
+    color: #1F61A9;
+    text-decoration: underline!important;
+    text-underline-position: under;
+  }
+}

@@ -13,11 +13,12 @@ interface InputsProps extends OutlinedInputProps {
   title?: string,
   titleRequired?: boolean,
   placeholder?: string,
-  name: string,
+  name?: string,
   type?: string,
   defaultValue?: string,
   value?: string | number,
   showEyes?: boolean,
+  root?: string,
   className?: any,
   inputRef?: any,
   autoComplete?: string,
@@ -35,6 +36,7 @@ const Inputs = memo((props: InputsProps) => {
     defaultValue,
     value,
     type,
+    root,
     className,
     showEyes,
     inputRef,
@@ -53,7 +55,7 @@ const Inputs = memo((props: InputsProps) => {
   const { ref: refInput, ...inputProps } = inputRef || { ref: null }
 
   return (
-    <FormControl className={classes.root}>
+    <FormControl className={clsx(classes.root, root)}>
       {title && (
         <TextTitle invalid={errorMessage}>{title}
           {optional ? <span className={classes.optional}> ({t('common_optional')})</span> : ""}

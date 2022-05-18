@@ -1,16 +1,21 @@
 import classes from './styles.module.scss';
 import Header from "components/Header";
 import Footer from "components/Footer";
-import { PersonOutline, Loop, Logout, Payment, CameraAlt, KeyboardDoubleArrowLeft } from '@mui/icons-material';
-import { Button, Grid, Icon, MenuItem, ListItem, MenuList, Popper, ClickAwayListener, Paper, IconButton, List, ListItemText } from "@mui/material"
+import { PersonOutline, Loop, Logout, Payment, KeyboardDoubleArrowLeft } from '@mui/icons-material';
+import { Button, Grid, Icon, ListItem, MenuList, Popper, ClickAwayListener, Paper, IconButton, List, ListItemText, Divider } from "@mui/material"
 import UseAuth from "hooks/useAuth";
 import { matchPath, Redirect, Route, Switch, NavLink } from "react-router-dom";
 import UserProfile from './UserProfile';
 import { routes } from "routers/routes";
 import clsx from 'clsx';
-import { useState, useRef } from 'react';
+import { useState, useRef, memo } from 'react';
+import ChangePassword from './ChangePassword';
 
-const Account = () => {
+interface Props {
+
+}
+
+const AccountPage = memo(({}: Props) => {
   const { logout } = UseAuth();
   const [isOpen, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
@@ -67,7 +72,7 @@ const Account = () => {
           </NavLink>
         );
       })}
-      <Grid className={classes.lineList}></Grid>
+      <Divider/>
       <Button className={classes.btnLogout} onClick={logout}>
         <Logout/>
         <p>Logout</p>
@@ -84,6 +89,7 @@ const Account = () => {
         <div className={classes.content}>
           <Switch>
             <Route exact path={routes.account.userProfile} render={(routeProps) => <UserProfile {...routeProps} />} />
+            <Route exact path={routes.account.changePassword} render={(routeProps) => <ChangePassword {...routeProps} />} />
             <Redirect from={routes.account.root} to={routes.account.userProfile} />
           </Switch>
           <div className={classes.toggleMenu}>
@@ -114,6 +120,6 @@ const Account = () => {
       <Footer />
     </Grid>
   );
-};
-export default Account;
+})
+export default AccountPage;
 

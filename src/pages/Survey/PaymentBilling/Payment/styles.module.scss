@@ -57,14 +57,22 @@
   color: #7c9911;
 }
 .right {
-  border: 0.5px solid #c4c4c4;
-  border-radius: 4px;
   width: 50%;
   height: fit-content;
+  .sumaryBox {
+    border: 0.5px solid #c4c4c4;
+    border-radius: 4px;
+    height: fit-content;
+    @media only screen and (max-width: 767px) {
+      border: unset;
+      border-radius: 0px;
+      margin-right: 0px;
+      margin-bottom: 32px;
+      padding: 0px;
+    }
+  }
   @media only screen and (max-width: 767px) {
     width: 100%;
-    border: unset;
-    border-radius: 0px;
     margin-right: 0px;
     padding: 0px;
   }
@@ -84,7 +92,7 @@
 }
 .title {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   font-weight: 500;
   font-size: 16px;
   line-height: 140%;
@@ -173,7 +181,6 @@
       color: rgba(28, 28, 28, 0.65);
     }
   }
- 
 }
 .rootCheckbox {
   padding: 12px;
@@ -296,7 +303,7 @@
     box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
     border-radius: 0px;
     padding: 16px 19px;
-    margin-top: 50px;
+    margin-top: 32px;
     align-items: center;
     position: sticky;
     div {
@@ -330,4 +337,57 @@
 }
 .btnMobile {
   white-space: nowrap;
+}
+.methodImg {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  img {
+    height: 22px;
+    width: auto;
+    &:not(:first-child) {
+      margin-left: 5px;
+    }
+  }
+}
+.chargedBy {
+  margin-top: 15px;
+  text-align: right;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 120%;
+  letter-spacing: 0.05em;
+  color: rgba(28, 28, 28, 0.4);
+  svg {
+    top: 2px;
+    position: relative;
+    cursor: pointer;
+    margin-left: 2px;
+    font-size: 14px;
+  }
+}
+.popperClass {
+  [class^="MuiTooltip-tooltip"] {
+    padding: 8px 16px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 120%;
+    letter-spacing: 0.05em;
+    color: rgba(28, 28, 28, 0.9);
+  }
+}
+.cancelPayment {
+  cursor: pointer;
+  padding: 24px 19px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: rgba(28, 28, 28, 0.65);
+  @media only screen and (max-width: 767px) {
+    border-top: 2px solid rgba(28, 28, 28, 0.05);
+  }
 }

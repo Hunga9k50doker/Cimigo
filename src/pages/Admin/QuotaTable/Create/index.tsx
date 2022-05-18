@@ -18,6 +18,7 @@ const CreateQuotaTable = memo((props: Props) => {
     dispatch(setLoading(true))
     AdminQuotaService.createQuotaTable({
       title: data.title,
+      titleCell: data.titleCell,
       order: data.order,
       questionIds: data.questionIds.map(it => it.id),
       calculations: data.calculations

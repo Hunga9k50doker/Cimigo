@@ -43,6 +43,7 @@ import { useTranslation } from "react-i18next";
 import imgTabLocation from 'assets/img/target-tab-location.jpg';
 import imgTabAC from 'assets/img/target-tab-ac.jpg';
 import imgTabEC from 'assets/img/target-tab-ec.jpg';
+import PopupConfirmChange from "../components/PopupConfirmChange";
 
 
 export enum ETab {
@@ -142,6 +143,8 @@ const Target = memo(({ projectId }: Props) => {
   const [questionsAgeGender, setQuestionsAgeGender] = useState<TargetQuestion[]>([])
   const [questionsMum, setQuestionsMum] = useState<TargetQuestion[]>([])
 
+  const [confirmChangeSamleSize, setConfirmChangeSamleSize] = useState<number>();
+
   const isValidSampSize = (data: number) => {
     return data >= getMinSampeSize() && data <= getMaxSampeSize()
   }
@@ -234,13 +237,9 @@ const Target = memo(({ projectId }: Props) => {
     }
   }, [project])
 
-  const updateSampleSize = (data: number) => {
-    if (!isValidSampSize(data) || data === project?.sampleSize || !editableProject(project)) {
-      onClearCustomSampleSize()
-      return
-    }
+  const serviceUpdateSampleSize = (sampleSize: number) => {
     dispatch(setLoading(true))
-    ProjectService.updateSampleSize(projectId, data)
+    ProjectService.updateSampleSize(projectId, sampleSize)
       .then((res) => {
         dispatch(getProjectRequest(projectId))
         dispatch(setSuccessMess(res.message))
@@ -248,6 +247,19 @@ const Target = memo(({ projectId }: Props) => {
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+  }
+
+  const updateSampleSize = (data: number) => {
+    if (!isValidSampSize(data) || data === project?.sampleSize || !editableProject(project)) {
+      onClearCustomSampleSize()
+      return
+    }
+    ProjectService.getQuota(projectId)
+      .then((res) => {
+        if (res?.length) setConfirmChangeSamleSize(data)
+        else serviceUpdateSampleSize(data)
+      })
+      .catch(e => dispatch(setErrorMess(e)))
   }
 
   const getPrice = () => {
@@ -266,6 +278,20 @@ const Target = memo(({ projectId }: Props) => {
         reset({ sampleSize: project?.sampleSize || 0 })
       }
     }
+  }
+
+  const onCloseConfirmChangeSamleSize = () => {
+    setConfirmChangeSamleSize(null)
+  }
+
+  const onConfirmChangeSamleSize = () => {
+    if ((confirmChangeSamleSize ?? null) === null || !editableProject(project)) return
+    ProjectService.resetQuota(projectId)
+      .then(() => {
+        serviceUpdateSampleSize(confirmChangeSamleSize)
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => onCloseConfirmChangeSamleSize())
   }
 
   return (
@@ -440,6 +466,14 @@ const Target = memo(({ projectId }: Props) => {
         questionsAgeGender={questionsAgeGender}
         questionsMum={questionsMum}
         onCancel={() => setOnPopupAgeCoverage(false)}
+      />
+      <PopupConfirmChange
+        isOpen={(confirmChangeSamleSize ?? null) !== null}
+        title={t('target_confirm_change_sample_size_title')}
+        content={t('target_confirm_change_sample_size_sub_1')}
+        contentSub={t('target_confirm_change_sample_size_sub_2')}
+        onCancel={onCloseConfirmChangeSamleSize}
+        onSubmit={onConfirmChangeSamleSize}
       />
     </Grid>
   )

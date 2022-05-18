@@ -30,6 +30,8 @@ import icSad from 'assets/img/icon/ic-sad.svg';
 import icNext from 'assets/img/icon/ic-next.svg';
 import icOrder from 'assets/img/icon/ic-order.svg';
 import icBank from 'assets/img/icon/ic-bank.svg';
+import icInternetBanking from 'assets/img/icon/ic-internet-banking.svg';
+import icCreditDebit from 'assets/img/icon/ic-credit-debit.svg';
 import icTip from 'assets/img/icon/ic-tip.svg';
 import imgOrder from 'assets/img/img-order.svg';
 import imgPayment from 'assets/img/img-payment-completed.svg';
@@ -54,15 +56,36 @@ import icArrowLogin from 'assets/img/icon/ic-arrow-login.svg';
 import icArrowRegister from 'assets/img/icon/ic-arrow-register.svg';
 import icView from 'assets/img/icon/ic-view.svg';
 import icInvoice from 'assets/img/icon/ic-invoice.svg';
+import icRestore from 'assets/img/icon/ic-restore.svg';
+import icEditCell from 'assets/img/icon/ic-edit-cell.svg';
 import imgPaymentFailed from 'assets/img/img-payment-failed.svg';
 import icDrag from 'assets/img/icon/ic-drag.svg';
 import icOpenQuestion from 'assets/img/icon/ic-open-question.svg';
 import icSingleChoice from 'assets/img/icon/ic-single-choice.svg';
 import icMultipleChoices from 'assets/img/icon/ic-multiple-choices.svg';
 import icDeleteAnswer from 'assets/img/icon/ic-delete-answer.svg';
+import imgPaymentPending from 'assets/img/img-payment-pending.svg';
+import imgLangVi from 'assets/img/lang-vi.png';
+import imgLangEn from 'assets/img/lang-en.png';
+import imgVisa from 'assets/img/visa.png';
+import imgJCB from 'assets/img/jcb.png';
+import imgMastercard from 'assets/img/mastercard.png';
+import imgAmericanExpress from 'assets/img/american-express.png';
+import imgUnionpay from 'assets/img/unionpay.png';
 
 const images = {
   // ===================== Images =========================
+  imgVisa,
+  imgJCB,
+  imgMastercard,
+  imgAmericanExpress,
+  imgUnionpay,
+  icInternetBanking,
+  icCreditDebit,
+  imgLangVi,
+  imgLangEn,
+  icEditCell,
+  icRestore,
   icInvoice,
   icPdf,
   icView,
@@ -125,6 +148,7 @@ const images = {
   icSingleChoice,
   icMultipleChoices,
   icDeleteAnswer,
+  imgPaymentPending,
 }
 
 export default images

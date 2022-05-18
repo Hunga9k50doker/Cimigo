@@ -23,6 +23,7 @@ import moment from "moment";
 import { PaymentService } from "services/payment";
 import { authPreviewOrPayment } from "../models";
 import { useTranslation } from "react-i18next";
+import { setCancelPayment } from "redux/reducers/Project/actionTypes";
 
 interface ProjectReviewProps {
 }
@@ -31,7 +32,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const { t, i18n } = useTranslation()
 
   const dispatch = useDispatch()
-  const { project } = useSelector((state: ReducerType) => state.project)
+  const { project, cancelPayment } = useSelector((state: ReducerType) => state.project)
 
   const [isValid, setIsValid] = useState<boolean>(false)
   const [packs, setPacks] = useState<Pack[]>([])
@@ -162,6 +163,12 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     authPreviewOrPayment(project, onRedirect)
   }, [project])
 
+
+  useEffect(() => {
+    return () => {
+      if(cancelPayment) dispatch(setCancelPayment(false))
+    }
+  }, [])
 
 
   return (

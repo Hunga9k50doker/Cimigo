@@ -1,18 +1,16 @@
-import { Dialog, DialogContent, Grid, IconButton } from "@mui/material"
+import { Dialog, Grid, IconButton } from "@mui/material"
 import Buttons from "components/Buttons";
 import classes from './styles.module.scss';
 import Images from "config/images";
 interface Props {
   isOpen: boolean,
-  title: string,
-  description: string,
   onClose: () => void,
   onYes: () => void,
 }
 
 const PopupConfirmCancelOrder = (props: Props) => {
 
-  const { isOpen, title, description, onYes, onClose } = props;
+  const { isOpen, onYes, onClose } = props;
   return <Dialog
     open={isOpen}
     classes={{ paper: classes.paper }}
@@ -25,8 +23,8 @@ const PopupConfirmCancelOrder = (props: Props) => {
         </IconButton>
       </Grid>
       <Grid className={classes.title}>
-        <span>{title}</span>
-        <p>{description}</p>
+        <span>Cancel this payment?</span>
+        <p>If you cancel, you have to set up a new payment and fill the payment information again to pay for this project.</p>
       </Grid>
       <Grid className={classes.btn}>
         <Buttons children="No, I don't cancel" btnType='TransparentBlue' padding='12px 16px 12px 16px' onClick={onClose} />

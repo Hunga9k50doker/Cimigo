@@ -4,7 +4,7 @@ import clsx from "clsx";
 import classes from './styles.module.scss';
 
 interface ButtonsProps {
-  btnType?: "Blue" | "Red" | "TransparentBlue";
+  btnType?: "Blue" | "Red" | "TransparentBlue" | "Green";
   children?: any;
   onClick?: (e?: any) => void;
   type?: any;
@@ -22,9 +22,10 @@ const Buttons = memo((props: ButtonsProps) => {
     <Button
       className={clsx(
         classes.root,
-        btnType === "Blue" ? classes.btnBlue : "",
-        btnType === "Red" ? classes.btnRed : "",
-        btnType === "TransparentBlue" ? classes.btnTransparentBlue : "",
+        btnType === "Blue" && classes.btnBlue,
+        btnType === "Red" && classes.btnRed,
+        btnType === "TransparentBlue" && classes.btnTransparentBlue,
+        btnType === "Green" && classes.btnGreen,
         className
       )}
       classes={{ disabled: classes.btndisabled }}

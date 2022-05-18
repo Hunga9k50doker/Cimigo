@@ -13,6 +13,7 @@ import { editableProject } from "helpers/project";
 import ControlCheckbox from "components/ControlCheckbox";
 import InputCheckbox from "components/InputCheckbox";
 import { useTranslation } from "react-i18next";
+import PopupConfirmChange from "pages/Survey/components/PopupConfirmChange";
 
 enum ETab {
   Main,
@@ -35,7 +36,7 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
   const [activeTab, setActiveTab] = useState(ETab.Main);
   const [dataSelectedGenderAge, setDataSelectedGenderAge] = useState<DataSelected>({})
   const [dataSelectedMum, setDataSelectedMum] = useState<DataSelected>({})
-
+  const [confirmChangeTarget, setConfirmChangeTarget] = useState<boolean>(false)
 
   useEffect(() => {
     const _dataSelectedGenderAge: DataSelected = {}
@@ -72,8 +73,7 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
     setActiveTab(tab)
   }
 
-  const onUpdateTargetGenderAge = async () => {
-    if (isDisableGenderAge()) return
+  const onUpdateTargetGenderAgeRequest = async () => {
     dispatch(setLoading(true))
     ProjectService.updateTarget(projectId, {
       questionTypeId: TargetQuestionType.Gender_And_Age_Quotas,
@@ -94,8 +94,7 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const onUpdateTargetMum = () => {
-    if (isDisableMum()) return
+  const onUpdateTargetMumRequest = () => {
     dispatch(setLoading(true))
     ProjectService.updateTarget(projectId, {
       questionTypeId: TargetQuestionType.Mums_Only,
@@ -114,6 +113,53 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onUpdateTargetGenderAge = () => {
+    if (isDisableGenderAge()) return
+    ProjectService.getQuota(projectId)
+      .then((res) => {
+        if (res?.length) setConfirmChangeTarget(true)
+        else onUpdateTargetGenderAgeRequest()
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+  }
+
+  const onUpdateTargetMum = () => {
+    if (isDisableMum()) return
+    ProjectService.getQuota(projectId)
+      .then((res) => {
+        if (res?.length) setConfirmChangeTarget(true)
+        else onUpdateTargetMumRequest()
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+  }
+
+  const onCloseComfirmTarget = () => {
+    setConfirmChangeTarget(false)
+  }
+
+  const onConfimedChangeTarget = () => {
+    switch (activeTab) {
+      case ETab.Gender_And_Age_Quotas:
+        if (isDisableGenderAge()) return
+        ProjectService.resetQuota(projectId)
+          .then(() => {
+            onUpdateTargetGenderAgeRequest()
+          })
+          .catch(e => dispatch(setErrorMess(e)))
+          .finally(() => onCloseComfirmTarget())
+        break;
+      case ETab.Mums_Only:
+        if (isDisableMum()) return
+        ProjectService.resetQuota(projectId)
+          .then(() => {
+            onUpdateTargetMumRequest()
+          })
+          .catch(e => dispatch(setErrorMess(e)))
+          .finally(() => onCloseComfirmTarget())
+        break;
+    }
   }
 
   const renderTab = () => {
@@ -216,6 +262,14 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
   return (
     <>
       {renderTab()}
+      <PopupConfirmChange
+        isOpen={confirmChangeTarget}
+        title={t('target_confirm_change_target_title')}
+        content={t('target_confirm_change_target_sub_1')}
+        contentSub={t('target_confirm_change_target_sub_2')}
+        onCancel={onCloseComfirmTarget}
+        onSubmit={onConfimedChangeTarget}
+      />
     </>
   )
 })

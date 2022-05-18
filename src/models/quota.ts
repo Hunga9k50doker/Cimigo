@@ -5,11 +5,14 @@ export interface QuotaTableRow {
   targetAnswers: TargetAnswer[],
   original: number,
   rebase?: number,
-  sampleSize?: number
+  sampleSize?: number,
+  sampleSizeSuggestion?: number,
+  sampleSizeAdjusted?: number,
 }
 
 export interface Quota {
   quotaTable: QuotaTable,
   questions: TargetQuestion[],
-  rows: QuotaTableRow[]
+  rows: QuotaTableRow[],
+  edited: boolean,
 }

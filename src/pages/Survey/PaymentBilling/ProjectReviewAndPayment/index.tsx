@@ -1,17 +1,15 @@
 import { Step, StepConnector, StepLabel, Stepper } from "@mui/material";
+import WarningBox from "components/WarningBox";
 import QontoStepIcon from "pages/ProjectManagement/components/QontoStepIcon";
 import { memo, useMemo } from "react"
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 import { matchPath, Redirect, Route, Switch } from "react-router-dom";
+import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
 import Payment from "../Payment";
 import ProjectReview from "../ProjectReview";
 import classes from './styles.module.scss';
-
-interface StepItem {
-  name: string,
-  path: string
-}
 
 interface Props {
 
@@ -19,6 +17,7 @@ interface Props {
 
 const ProjectReviewAndPayment = memo(({ }: Props) => {
   const { t, i18n } = useTranslation()
+  const { cancelPayment } = useSelector((state: ReducerType) => state.project)
 
   const steps = useMemo(() => {
     return [
@@ -27,7 +26,7 @@ const ProjectReviewAndPayment = memo(({ }: Props) => {
     ]
   }, [i18n.language])
 
-  
+
   const activeRoute = (routeName: string, exact: boolean = false) => {
     const match = matchPath(window.location.pathname, {
       path: routeName,
@@ -43,6 +42,11 @@ const ProjectReviewAndPayment = memo(({ }: Props) => {
 
   return (
     <>
+      {cancelPayment && (
+        <WarningBox sx={{ maxWidth: '1000px' }}>
+          Your payment has been cancelled. You can now edit your project or process payment.
+        </WarningBox>
+      )}
       <Stepper
         alternativeLabel
         activeStep={getActiveStep()}

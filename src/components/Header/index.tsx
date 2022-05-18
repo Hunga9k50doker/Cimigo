@@ -19,7 +19,6 @@ import Inputs from "components/Inputs";
 import { ProjectService } from "services/project";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
-import React from "react";
 
 interface HeaderProps {
   project?: boolean;
@@ -252,10 +251,10 @@ const Header = memo((props: HeaderProps) => {
                   }}
                   classes={{ paper: classes.menuProfile }}
                 >
-                  {/* <MenuItem className={classes.itemAciton}>
+                  <MenuItem className={classes.itemAciton} onClick={() => history.push(routes.account.root)}>
                     <img src={images.icProfile} alt="" />
                     <p translation-key="auth_my_account">{t('auth_my_account')}</p>
-                  </MenuItem> */}
+                  </MenuItem> 
                   <MenuItem className={classes.itemAciton} onClick={logout}>
                     <img src={images.icLogout} alt="" />
                     <p translation-key="auth_log_out">{t('auth_log_out')}</p>

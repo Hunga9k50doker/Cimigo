@@ -1,19 +1,17 @@
-import { Dialog, DialogContent, Grid, IconButton } from "@mui/material"
+import { Dialog, Grid, IconButton } from "@mui/material"
 import Buttons from "components/Buttons";
 import classes from './styles.module.scss';
 import Images from "config/images";
 
 interface Props {
   isOpen: boolean,
-  title: string,
-  description: string,
   onYes: () => void,
   onClose: () => void,
 }
 
 const PopupConfirmInvoiceInfo = (props: Props) => {
 
-  const { isOpen, title, description, onYes, onClose } = props;
+  const { isOpen, onYes, onClose } = props;
   return <Dialog
     open={isOpen}
     classes={{ paper: classes.paper }}
@@ -26,8 +24,8 @@ const PopupConfirmInvoiceInfo = (props: Props) => {
         </IconButton>
       </Grid>
       <Grid className={classes.title}>
-        <span>{title}</span>
-        <p>{description}</p>
+        <span>Skip invoice information?</span>
+        <p>Do you really want to skip over details of the invoice? You can update these later if you skip them, but the invoice export will take longer.</p>
       </Grid>
       <Grid className={classes.btn}>
         <Buttons children="Yes, skip it!" btnType='TransparentBlue' padding='12px 16px 12px 16px' onClick={onYes} />

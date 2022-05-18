@@ -14,6 +14,7 @@ export const API = {
     DEFAULT: '/v1.0/user',
     PAYMENT_INFO: '/v1.0/user/payment-info',
     UPDATE_PROFILE: '/v1.0/user/update-profile',
+    CHANGE_PASSWORD: '/v1.0/user/change-password',
   },
   COUNTRY: {
     LIST: '/v1.0/country',
@@ -34,6 +35,9 @@ export const API = {
     TARGET: '/v1.0/project/:id/target',
     SAMPLE_SIZE: '/v1.0/project/:id/sample-size',
     UPDATE_ENABLE_CUSTOM_QUESTION: '/v1.0/project/:id/update-enable-custom-question',
+    QUOTA: {
+      DEFAULT: '/v1.0/project/:id/quota',
+    }
   },
   FOLDER: {
     DEFAULT: '/v1.0/folder',
@@ -74,6 +78,9 @@ export const API = {
     INVOICE: '/v1.0/payment/invoice',
     INVOICE_DEMO: '/v1.0/payment/invoice-demo',
     VALID_CONFIRM: '/v1.0/payment/valid-confirm',
+    ONEPAY_CALLBACK: '/v1.0/payment/onepay/callback',
+    CANCEL: '/v1.0/payment/:id/cancel',
+    TRY_AGAIN: '/v1.0/payment/:id/try-again'
   },
   ATTACHMENT: {
     DOWNLOAD: '/v1.0/attachment/:id/download',
@@ -147,4 +154,11 @@ export const API = {
 export const VALIDATION = {
   password: new RegExp("^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%^&+=])[a-zA-Z0-9@#$%^&+=]*$"),
   phone: /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/
+}
+
+export const PROJECT = {
+  QUOTA: {
+    MIN_POPULATION_WEIGHT: 0.5,
+    MAX_POPULATION_WEIGHT: 1.5,
+  }
 }

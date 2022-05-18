@@ -13,6 +13,7 @@ import { editableProject } from "helpers/project";
 import ControlCheckbox from "components/ControlCheckbox";
 import InputCheckbox from "components/InputCheckbox";
 import { useTranslation } from "react-i18next";
+import PopupConfirmChange from "pages/Survey/components/PopupConfirmChange";
 
 interface Props {
   projectId: number,
@@ -25,6 +26,7 @@ const EconomicClass = memo(({ projectId, project, questions }: Props) => {
   
   const dispatch = useDispatch()
   const [dataSelected, setDataSelected] = useState<DataSelected>({})
+  const [confirmChangeTarget, setConfirmChangeTarget] = useState<boolean>(false)
 
   useEffect(() => {
     const _dataSelected: DataSelected = {}
@@ -43,8 +45,7 @@ const EconomicClass = memo(({ projectId, project, questions }: Props) => {
     onToggleAnswer(questionId, answer, checked, dataSelected, setDataSelected)
   }
 
-  const onUpdateTarget = () => {
-    if (isDisable()) return
+  const onUpdateTargetRequest = () => {
     dispatch(setLoading(true))
     ProjectService.updateTarget(projectId, {
       questionTypeId: TargetQuestionType.Economic_Class,
@@ -56,6 +57,30 @@ const EconomicClass = memo(({ projectId, project, questions }: Props) => {
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onUpdateTarget = () => {
+    if (isDisable()) return
+    ProjectService.getQuota(projectId)
+      .then((res) => {
+        if (res?.length) setConfirmChangeTarget(true)
+        else onUpdateTargetRequest()
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+  }
+
+  const onCloseComfirmTarget = () => {
+    setConfirmChangeTarget(false)
+  }
+
+  const onConfimedChangeTarget = () => {
+    if (isDisable()) return
+    ProjectService.resetQuota(projectId)
+      .then(() => {
+        onUpdateTargetRequest()
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => onCloseComfirmTarget())
   }
 
   return (
@@ -91,6 +116,14 @@ const EconomicClass = memo(({ projectId, project, questions }: Props) => {
       <Grid classes={{ root: classes.rootBtn }}>
         <Buttons disabled={isDisable()} onClick={onUpdateTarget} btnType="Blue" children={t('common_save')} translation-key="common_save" padding="11px 58px" />
       </Grid>
+      <PopupConfirmChange
+        isOpen={confirmChangeTarget}
+        title={t('target_confirm_change_target_title')}
+        content={t('target_confirm_change_target_sub_1')}
+        contentSub={t('target_confirm_change_target_sub_2')}
+        onCancel={onCloseComfirmTarget}
+        onSubmit={onConfimedChangeTarget}
+      />
     </>
 
   )
