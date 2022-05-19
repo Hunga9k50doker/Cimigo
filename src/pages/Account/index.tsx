@@ -10,6 +10,7 @@ import { routes } from "routers/routes";
 import clsx from 'clsx';
 import { useState, useRef, memo } from 'react';
 import ChangePassword from './ChangePassword';
+import PaymentInfo from './PaymentInfo';
 
 interface Props {
 
@@ -90,6 +91,7 @@ const AccountPage = memo(({}: Props) => {
           <Switch>
             <Route exact path={routes.account.userProfile} render={(routeProps) => <UserProfile {...routeProps} />} />
             <Route exact path={routes.account.changePassword} render={(routeProps) => <ChangePassword {...routeProps} />} />
+            <Route exact path={routes.account.paymentInfo} render={(routeProps) => <PaymentInfo {...routeProps} />} />
             <Redirect from={routes.account.root} to={routes.account.userProfile} />
           </Switch>
           <div className={classes.toggleMenu}>
