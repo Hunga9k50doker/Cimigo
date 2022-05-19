@@ -160,7 +160,7 @@ const Quotas = memo(({ projectId }: Props) => {
   return (
     <>
       {
-        !!quotas?.length ? (
+        (!!quotas?.length && !!project?.sampleSize)  ? (
           <Grid classes={{ root: classes.root }}>
             <p className={classes.title} translation-key="quotas_title">{t('quotas_title')}</p>
             <p className={classes.subTitle} translation-key="quotas_sub_title_1">{t('quotas_sub_title_1')}</p>
