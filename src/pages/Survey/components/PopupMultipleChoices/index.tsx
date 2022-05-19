@@ -56,7 +56,6 @@ const PopupMultipleChoices = (props: Props) => {
     handleSubmit,
     formState: { errors },
     reset,
-    getValues,
     setValue,
     watch,
   } = useForm<CustomQuestionFormData>({
@@ -85,7 +84,10 @@ const PopupMultipleChoices = (props: Props) => {
       const question: CustomQuestion = {
         typeId: ECustomQuestionType.Multiple_Choices,
         title: data.inputQues,
-        answers: data.inputAns.map((item) => ({ title: item.title, exclusive: item.exclusive })),
+        answers: data.inputAns.map((item) => ({
+          title: item.title,
+          exclusive: item.exclusive,
+        })),
       };
       onSubmit(question);
       clearForm();
@@ -123,9 +125,7 @@ const PopupMultipleChoices = (props: Props) => {
   const handleChangeInputAns =
     (value: string, index: number, callback: boolean) =>
     (event: SyntheticEvent<EventTarget>) => {
-      const find_pos = answers.findIndex(
-        (ans) => ans.id === index
-      );
+      const find_pos = answers.findIndex((ans) => ans.id === index);
       const new_arr = [...answers];
       const element = event.currentTarget as HTMLInputElement;
       new_arr[find_pos][value] = element.value;
@@ -134,10 +134,7 @@ const PopupMultipleChoices = (props: Props) => {
 
   const addInputAns = () => {
     setActiveMinError(false);
-    const maxAnswers = Math.max(
-      ...answers.map((ans) => ans.id),
-      0
-    );
+    const maxAnswers = Math.max(...answers.map((ans) => ans.id), 0);
     const new_inputAns = {
       id: maxAnswers + 1,
       title: "",
@@ -156,9 +153,7 @@ const PopupMultipleChoices = (props: Props) => {
       setActiveMinError(true);
       return;
     }
-    const updated_answers = [...answers].filter(
-      (ans) => ans.id !== id
-    );
+    const updated_answers = [...answers].filter((ans) => ans.id !== id);
     setValue("inputAns", updated_answers);
   };
 
@@ -173,11 +168,7 @@ const PopupMultipleChoices = (props: Props) => {
     if (!destination) {
       return;
     }
-    const result = reorder(
-      answers,
-      source.index,
-      destination.index
-    );
+    const result = reorder(answers, source.index, destination.index);
     setValue("inputAns", result);
   };
 

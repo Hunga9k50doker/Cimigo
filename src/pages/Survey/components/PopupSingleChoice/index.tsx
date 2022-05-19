@@ -62,7 +62,6 @@ const PopupSingleChoice = (props: Props) => {
     handleSubmit,
     formState: { errors },
     reset,
-    getValues,
     setValue,
     watch,
   } = useForm<CustomQuestionFormData>({
@@ -122,9 +121,7 @@ const PopupSingleChoice = (props: Props) => {
   const handleChangeInputAns =
     (value: string, index: number, callback: boolean) =>
     (event: SyntheticEvent<EventTarget>) => {
-      const find_pos = answers.findIndex(
-        (ans) => ans.id === index
-      );
+      const find_pos = answers.findIndex((ans) => ans.id === index);
       const new_arr = [...answers];
       const element = event.currentTarget as HTMLInputElement;
       new_arr[find_pos][value] = element.value;
@@ -133,10 +130,7 @@ const PopupSingleChoice = (props: Props) => {
 
   const addInputAns = () => {
     setActiveMinError(false);
-    const maxAnswers = Math.max(
-      ...answers.map((ans) => ans.id),
-      0
-    );
+    const maxAnswers = Math.max(...answers.map((ans) => ans.id), 0);
     const new_inputAns = {
       id: maxAnswers + 1,
       title: "",
@@ -154,9 +148,7 @@ const PopupSingleChoice = (props: Props) => {
       setActiveMinError(true);
       return;
     }
-    const updated_answers = [...answers].filter(
-      (ans) => ans.id !== id
-    );
+    const updated_answers = [...answers].filter((ans) => ans.id !== id);
     setValue("inputAns", updated_answers);
   };
 
@@ -171,11 +163,7 @@ const PopupSingleChoice = (props: Props) => {
     if (!destination) {
       return;
     }
-    const result = reorder(
-      answers,
-      source.index,
-      destination.index
-    );
+    const result = reorder(answers, source.index, destination.index);
     setValue("inputAns", result);
   };
 
