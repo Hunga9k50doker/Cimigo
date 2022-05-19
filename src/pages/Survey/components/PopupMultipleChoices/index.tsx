@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, IconButton, Grid, Dialog, DialogContent } from "@mui/material";
 import classes from "./styles.module.scss";
@@ -9,6 +9,7 @@ import * as yup from "yup";
 import Inputs from "components/Inputs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
+  CustomAnswer,
   CustomQuestion,
   CustomQuestionFormData,
   CustomQuestionType,
@@ -31,17 +32,12 @@ interface Props {
   language: string;
 }
 
-interface Answer {
-  id: number;
-  value: string;
-  exclusive: boolean;
-}
-
 const schema = yup.object().shape({
   inputQues: yup.string().required(),
   inputAns: yup
     .array(
       yup.object({
+        id: yup.number().notRequired(),
         title: yup.string().required(),
         exclusive: yup.boolean().notRequired().default(false),
       })
@@ -55,16 +51,19 @@ const PopupMultipleChoices = (props: Props) => {
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const [activeMinError, setActiveMinError] = useState<boolean>(false);
   const [activeMaxError, setActiveMaxError] = useState<boolean>(false);
-  const [answers, setAnswers] = useState<Answer[]>([]);
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    getValues,
+    setValue,
+    watch,
   } = useForm<CustomQuestionFormData>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
+  const answers = watch("inputAns");
 
   useEffect(() => {
     initAnswer();
@@ -76,33 +75,10 @@ const PopupMultipleChoices = (props: Props) => {
         inputQues: questionEdit?.title,
         inputAns: questionEdit?.answers,
       });
-      const list = questionEdit?.answers.map((item, index) => ({
-        id: index + 1,
-        value: item.title,
-        exclusive: item.exclusive,
-      }));
-      setAnswers(list);
     } else {
       clearForm();
     }
   }, [questionEdit]);
-
-  useEffect(() => {
-    reset({
-      inputAns: answers.map((item) => ({
-        title: item.value,
-        exclusive: item.exclusive,
-      })),
-    });
-  }, [answers]);
-
-  const initAnswer = () => {
-    const list = [];
-    for (let i: number = 0; i < questionType?.minAnswer; ++i) {
-      list.push({ id: i + 1, value: "", exclusive: false });
-    }
-    setAnswers(list);
-  };
 
   const _onSubmit = (data: CustomQuestionFormData) => {
     if (answers.length !== 0) {
@@ -116,6 +92,14 @@ const PopupMultipleChoices = (props: Props) => {
     }
   };
 
+  const initAnswer = () => {
+    const list = [];
+    for (let i: number = 0; i < questionType?.minAnswer; ++i) {
+      list.push({ id: i + 1, title: "", exclusive: false });
+    }
+    setValue("inputAns", list);
+  };
+
   const clearForm = () => {
     reset({
       inputQues: "",
@@ -126,51 +110,60 @@ const PopupMultipleChoices = (props: Props) => {
   };
 
   const handleChangeSwitch = (status: any, index: number) => () => {
-    const find_pos = answers.findIndex((ans) => ans.id === index);
-    const new_arr = [...answers];
+    const find_pos = getValues("inputAns").findIndex((ans) => ans.id === index);
+    const new_arr = [...getValues("inputAns")];
     new_arr[find_pos][status] = !new_arr[find_pos][status];
-    setAnswers(new_arr);
+    setValue("inputAns", new_arr);
   };
 
   const checkAllAnsNotValue = () => {
-    return !!answers.find(({ value }) => !value);
+    return !!getValues("inputAns").find(({ title }) => !title);
   };
 
   const handleChangeInputAns =
-    (value: string, index: number, callback: boolean) => (event) => {
-      const find_pos = answers.findIndex((ans) => ans.id === index);
-      const new_arr = [...answers];
-      new_arr[find_pos][value] = event.target.value;
-      setAnswers(new_arr);
+    (value: string, index: number, callback: boolean) =>
+    (event: SyntheticEvent<EventTarget>) => {
+      const find_pos = getValues("inputAns").findIndex(
+        (ans) => ans.id === index
+      );
+      const new_arr = [...getValues("inputAns")];
+      const element = event.currentTarget as HTMLInputElement;
+      new_arr[find_pos][value] = element.value;
+      setValue("inputAns", new_arr);
     };
 
   const addInputAns = () => {
     setActiveMinError(false);
-    const maxAnswers = Math.max(...answers.map((ans) => ans.id), 0);
+    const maxAnswers = Math.max(
+      ...getValues("inputAns").map((ans) => ans.id),
+      0
+    );
     const new_inputAns = {
       id: maxAnswers + 1,
-      value: "",
+      title: "",
       exclusive: false,
     };
-    if (answers.length >= questionType?.maxAnswer) {
+    if (getValues("inputAns")?.length >= questionType?.maxAnswer) {
       setActiveMaxError(true);
       return;
     }
-    setAnswers((answers) => [...answers, new_inputAns]);
+    setValue("inputAns", [...getValues("inputAns"), new_inputAns]);
   };
 
   const deleteInputAns = (id: number) => () => {
     setActiveMaxError(false);
-    if (answers.length <= questionType?.minAnswer) {
+    if (getValues("inputAns")?.length <= questionType?.minAnswer) {
       setActiveMinError(true);
       return;
     }
-    const updated_answers = [...answers].filter((ans) => ans.id !== id);
-    setAnswers(updated_answers);
+    const updated_answers = [...getValues("inputAns")].filter(
+      (ans) => ans.id !== id
+    );
+    setValue("inputAns", updated_answers);
   };
 
   const reorder = (items, startIndex, endIndex) => {
-    const result: Answer[] = Array.from(items);
+    const result: CustomAnswer[] = Array.from(items);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
     return result;
@@ -180,8 +173,12 @@ const PopupMultipleChoices = (props: Props) => {
     if (!destination) {
       return;
     }
-    const result = reorder(answers, source.index, destination.index);
-    setAnswers(result);
+    const result = reorder(
+      getValues("inputAns"),
+      source.index,
+      destination.index
+    );
+    setValue("inputAns", result);
   };
 
   return (
@@ -259,13 +256,13 @@ const PopupMultipleChoices = (props: Props) => {
                                 <input
                                   type="text"
                                   placeholder="Enter answer"
+                                  className={classes.inputanswer}
+                                  defaultValue={ans.title}
                                   onChange={handleChangeInputAns(
-                                    "value",
+                                    "title",
                                     ans.id,
                                     checkAllAnsNotValue()
                                   )}
-                                  className={classes.inputanswer}
-                                  value={ans.value}
                                   autoComplete="off"
                                 />
                                 <button
@@ -304,7 +301,7 @@ const PopupMultipleChoices = (props: Props) => {
                                   </span>
                                 </Grid>
                                 <div className={classes.errAns}>
-                                  {!ans.value &&
+                                  {!ans.title &&
                                     !isFirstRender &&
                                     "Answer is required"}
                                 </div>
@@ -330,14 +327,14 @@ const PopupMultipleChoices = (props: Props) => {
               </button>
             </Grid>
             {questionType &&
-              answers.length <= questionType.minAnswer &&
+              getValues("inputAns")?.length <= questionType.minAnswer &&
               activeMinError && (
                 <div className={classes.errAns}>
                   {`Must have at least ${questionType.minAnswer} answers`}
                 </div>
               )}
             {questionType &&
-              answers.length >= questionType.maxAnswer &&
+              getValues("inputAns")?.length >= questionType.maxAnswer &&
               activeMaxError && (
                 <div className={classes.errAns}>
                   {`Maximum ${questionType.maxAnswer} answers`}
