@@ -132,6 +132,7 @@ const PopupSingleChoice = (props: Props) => {
     };
 
   const addInputAns = () => {
+    setIsFirstRender(false);
     setActiveMinError(false);
     const maxAnswers = Math.max(
       ...getValues("inputAns").map((ans) => ans.id),
@@ -149,6 +150,7 @@ const PopupSingleChoice = (props: Props) => {
   };
 
   const deleteInputAns = (id: number) => () => {
+    setIsFirstRender(false);
     setActiveMaxError(false);
     if (getValues("inputAns")?.length <= questionType?.minAnswer) {
       setActiveMinError(true);
@@ -300,14 +302,14 @@ const PopupSingleChoice = (props: Props) => {
                 </p>
               </button>
             </Grid>
-            {questionType &&
+            {!isFirstRender && questionType &&
               getValues("inputAns")?.length <= questionType.minAnswer &&
               activeMinError && (
                 <div className={classes.errAns}>
                   {`Must have at least ${questionType.minAnswer} answers`}
                 </div>
               )}
-            {questionType &&
+            {!isFirstRender && questionType &&
               getValues("inputAns")?.length >= questionType.maxAnswer &&
               activeMaxError && (
                 <div className={classes.errAns}>

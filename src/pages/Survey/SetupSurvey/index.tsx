@@ -1416,7 +1416,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   </ul>
                 </StepContent>
               </Step>
-              <Step active={questions?.length >= 1 && project?.enableCustomQuestion} expanded>
+              <Step active={project?.enableCustomQuestion} expanded>
                 <StepLabel
                   onClick={() => scrollToElement('custom-questions')}
                   StepIconComponent={ColorlibStepIcon}
