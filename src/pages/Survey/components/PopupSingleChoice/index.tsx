@@ -87,7 +87,7 @@ const PopupSingleChoice = (props: Props) => {
   }, [questionEdit]);
 
   const _onSubmit = (data: CustomQuestionFormData) => {
-    if (getValues("inputAns")?.length) {
+    if (answers?.length) {
       const question: CustomQuestion = {
         typeId: ECustomQuestionType.Single_Choice,
         title: data.inputQues,
@@ -116,16 +116,16 @@ const PopupSingleChoice = (props: Props) => {
   };
 
   const checkAllAnsNotValue = () => {
-    return !!getValues("inputAns").find(({ title }) => !title);
+    return !!answers.find(({ title }) => !title);
   };
 
   const handleChangeInputAns =
     (value: string, index: number, callback: boolean) =>
     (event: SyntheticEvent<EventTarget>) => {
-      const find_pos = getValues("inputAns").findIndex(
+      const find_pos = answers.findIndex(
         (ans) => ans.id === index
       );
-      const new_arr = [...getValues("inputAns")];
+      const new_arr = [...answers];
       const element = event.currentTarget as HTMLInputElement;
       new_arr[find_pos][value] = element.value;
       setValue("inputAns", new_arr);
@@ -134,27 +134,27 @@ const PopupSingleChoice = (props: Props) => {
   const addInputAns = () => {
     setActiveMinError(false);
     const maxAnswers = Math.max(
-      ...getValues("inputAns").map((ans) => ans.id),
+      ...answers.map((ans) => ans.id),
       0
     );
     const new_inputAns = {
       id: maxAnswers + 1,
       title: "",
     };
-    if (getValues("inputAns")?.length >= questionType?.maxAnswer) {
+    if (answers?.length >= questionType?.maxAnswer) {
       setActiveMaxError(true);
       return;
     }
-    setValue("inputAns", [...getValues("inputAns"), new_inputAns]);
+    setValue("inputAns", [...answers, new_inputAns]);
   };
 
   const deleteInputAns = (id: number) => () => {
     setActiveMaxError(false);
-    if (getValues("inputAns")?.length <= questionType?.minAnswer) {
+    if (answers?.length <= questionType?.minAnswer) {
       setActiveMinError(true);
       return;
     }
-    const updated_answers = [...getValues("inputAns")].filter(
+    const updated_answers = [...answers].filter(
       (ans) => ans.id !== id
     );
     setValue("inputAns", updated_answers);
@@ -172,7 +172,7 @@ const PopupSingleChoice = (props: Props) => {
       return;
     }
     const result = reorder(
-      getValues("inputAns"),
+      answers,
       source.index,
       destination.index
     );
@@ -301,14 +301,14 @@ const PopupSingleChoice = (props: Props) => {
               </button>
             </Grid>
             {questionType &&
-              getValues("inputAns")?.length <= questionType.minAnswer &&
+              answers?.length <= questionType.minAnswer &&
               activeMinError && (
                 <div className={classes.errAns}>
                   {`Must have at least ${questionType.minAnswer} answers`}
                 </div>
               )}
             {questionType &&
-              getValues("inputAns")?.length >= questionType.maxAnswer &&
+              answers?.length >= questionType.maxAnswer &&
               activeMaxError && (
                 <div className={classes.errAns}>
                   {`Maximum ${questionType.maxAnswer} answers`}
