@@ -1,0 +1,425 @@
+.paper {
+  width: 790px;
+  max-width: 790px;
+  min-height: 512px;
+}
+
+.content {
+  background-color: var(--cimigo-blue);
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 12px 12px 24px;
+  color: rgba(250, 250, 255, 1);
+  font-size: 22px;
+  line-height: 31px;
+
+  .iconClose::after {
+    width: 32px;
+    height: 32px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    content: "\00d7";
+    font-size: 30px;
+    border-radius: 100%;
+    color: rgba(23, 73, 127, 1);
+  }
+
+  button {
+    padding: 0px;
+  }
+}
+
+.formControl {
+  width: 100%;
+
+  .error {
+    color: red;
+    margin-top: 10px;
+    font-weight: 500;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .titlePopup {
+    font-size: 14px;
+  }
+
+  .inputQuestion {
+    font-size: 14px;
+  }
+
+  .inputanswer {
+    font-size: 14px;
+  }
+
+  .clickAddOption {
+    font-size: 14px;
+  }
+
+  .addOptions {
+    font-size: 14px;
+    margin-left: -27px;
+  }
+
+  .IconListAdd {
+    margin-right: 12px;
+    margin-left: -10px;
+  }
+}
+
+.addList {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  padding-left: 44px;
+  margin-top: 20px;
+  margin-bottom: 25px;
+}
+
+.rowInputAnswerCheckBox {
+  position: relative;
+  margin-top: 27px;
+  padding-left: 35px;
+  &:hover {
+    .iconDotsDrag {
+      visibility: visible;
+    }
+  }
+}
+
+.closeInputAnswer {
+  width: 13px;
+  height: 13px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.iconDotsDrag {
+  width: 25px;
+  height: 38px;
+  position: absolute;
+  top: -9px;
+  left: 0;
+  visibility: hidden;
+}
+
+.iconDotsDragMUI {
+  display: none;
+  width: 10px;
+  height: 16px;
+  position: absolute;
+  top: 3px;
+  left: 10px;
+}
+
+.addOptions {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  font-weight: 500;
+  font-size: 16px;
+  color: rgba(28, 28, 28, 0.65);
+  cursor: pointer;
+}
+
+.IconListAdd {
+  width: 20px;
+  height: 15px;
+  margin-right: 22px;
+  margin-left: -12px;
+}
+
+.inputSwitch {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+.toggleSwitch {
+  display: block;
+  width: 36px;
+  height: 14px;
+  background-color: rgba(28, 28, 28, 0.4);
+  border-radius: 100px;
+  position: relative;
+  cursor: pointer;
+  transition: 0.5s;
+  box-shadow: 0 0 50px #477a85;
+}
+
+.toggleSwitch::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  position: absolute;
+  border-radius: 70px;
+  top: 50%;
+  left: 28%;
+  transform: translate(-50%, -50%);
+  transition: 0.5s;
+}
+
+input:checked + .toggleSwitch:after {
+  left: calc(100% - 20px);
+  transform: translateY(-50%);
+  background-color: rgba(124, 153, 17, 1);
+}
+
+input:checked + .toggleSwitch {
+  background-color: rgba(166, 204, 23, 1);
+}
+
+input:checked {
+  .excluOptions {
+    color: rgb(17, 255, 0);
+    font-weight: 500;
+  }
+}
+
+.excluOptions {
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 8px;
+}
+
+.inputTextfield {
+  ::placeholder {
+    color: rgba(28, 28, 28, 0.2);
+    opacity: 1;
+  }
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+
+  input {
+    padding: 0px 0px;
+  }
+
+  fieldset {
+    border-width: 1px !important;
+  }
+}
+
+.inputQuestion {
+  border-bottom: none;
+  position: relative;
+  width: 100%;
+  min-height: 42px;
+  border-radius: 5px;
+  padding-left: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+
+  .iconLanguage {
+    color: rgba(28, 28, 28, 0.65);
+    background-color: rgba(221, 221, 221, 1);
+    font-weight: 500;
+    font-size: 12px;
+    border-radius: 5px;
+    width: 29px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 14.6px;
+    text-transform: uppercase;
+  }
+
+  input {
+    padding: 0px;
+  }
+}
+
+.btnSave {
+  background-color: var(--cimigo-blue);
+  float: right;
+  padding: 16px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+  text-transform: none;
+  margin-top: 0px;
+  right: 4%;
+}
+
+.classform {
+  background-color: white;
+  min-height: 100px;
+  padding: 32px 28px 26px 28px;
+  position: relative;
+
+  p:nth-child(1) {
+    padding-left: 20px;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  @media only screen and (max-width: 600px) {
+    .iconDotsDragMUI {
+      display: block;
+    }
+
+    .choiceAnswer {
+      display: none;
+    }
+
+    .IconListAdd {
+      margin-right: 14px;
+      margin-left: -11px;
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .btnSave {
+    width: 92%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .titlePopup {
+    font-size: 14px;
+  }
+
+  .btnSave {
+    width: 92%;
+  }
+}
+
+.btnSave:hover {
+  background-color: var(--cimigo-blue);
+}
+
+.formControl {
+  width: 100%;
+
+  .error {
+    // color: red;
+    margin-top: 10px;
+    font-weight: 500;
+  }
+}
+
+.classform {
+  background-color: white;
+  min-height: 100px;
+  padding: 32px 28px 26px 28px;
+  position: relative;
+
+  p:nth-child(1) {
+    padding-left: 20px;
+  }
+  .title {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .btnSave {
+      width: 92%;
+    }
+
+    .iconDotsDragMUI {
+      display: block;
+    }
+
+    .choiceAnswer {
+      display: none;
+    }
+
+    .rowToggleSwitch {
+      margin-left: 0px;
+    }
+  }
+}
+
+.rowRadio:first {
+  margin-top: 30px;
+}
+
+.rowInputAnswer {
+  display: flex;
+  align-items: center;
+  margin-top: 27px;
+  padding-left: 35px;
+  position: relative;
+}
+
+.inputanswer {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  height: 22px;
+  font-size: 16px;
+  font-weight: 400;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.inputanswer:focus-visible {
+  outline: none;
+}
+
+.choiceAnswer {
+  height: 20px;
+  width: 20px;
+  margin-right: 16px;
+}
+
+.dialogSigle {
+  padding-bottom: 90px;
+}
+
+.dnd {
+  width: 100%;
+  border-radius: 5px;
+  color: black;
+  display: flex;
+  align-items: center;
+}
+
+@media only screen and (max-width: 500px) {
+  .titlePopup {
+    font-size: 14px;
+  }
+
+  .inputQuestion {
+    font-size: 14px;
+  }
+
+  .inputanswer {
+    font-size: 14px;
+  }
+
+  .clickAddOption {
+    font-size: 14px;
+  }
+}
+
+.rowToggleSwitch {
+  margin-left: 38px;
+}
+
+.errAns {
+  color: #af1c10;
+  font-size: 12px;
+  text-align: center;
+  white-space: initial;
+  padding-top: 5px;
+}

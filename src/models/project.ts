@@ -110,6 +110,10 @@ export interface UpdateTarget {
   }[]
 }
 
+export interface UpdateEnableCustomQuestion {
+  enableCustomQuestion: boolean;
+}
+
 export interface UpdateQuota {
   quotaTableId: number
   quotas: {
