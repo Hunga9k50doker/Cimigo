@@ -24,6 +24,8 @@ import { PaymentService } from "services/payment";
 import { authPreviewOrPayment } from "../models";
 import { useTranslation } from "react-i18next";
 import { setCancelPayment } from "redux/reducers/Project/actionTypes";
+import { CustomQuestion } from "models/custom_question";
+import { CustomQuestionService } from "services/custom_question";
 
 interface ProjectReviewProps {
 }
@@ -39,6 +41,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const [additionalBrand, setAdditionalBrand] = useState<AdditionalBrand[]>([])
   const [projectAttributes, setProjectAttributes] = useState<ProjectAttribute[]>([]);
   const [userAttributes, setUserAttributes] = useState<UserAttribute[]>([]);
+  const [questions, setQuestions] = useState<CustomQuestion[]>([]);
 
   const onConfirmProject = () => {
     if (!isValid) return
@@ -84,6 +87,13 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
           })
       }
 
+      const getCustomQuestion = () => {
+        CustomQuestionService.findAll({ take: 9999, projectId: project.id })
+          .then((res) => {
+            if (isSubscribed) setQuestions(res.data)
+          })
+      }
+
       const checkValidConfirm = () => {
         if (!project) return
         setIsValid(false)
@@ -100,6 +110,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       getAdditionalBrand()
       getProjectAttributes()
       getUserAttributes()
+      getCustomQuestion()
       checkValidConfirm()
       return () => { isSubscribed = false }
     }
@@ -250,6 +261,10 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
               <div>
                 <p className={classes.text} translation-key="payment_billing_sub_tab_preview_additional_attribute">{t('payment_billing_sub_tab_preview_additional_attribute')}</p>
                 <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_attributes">{(projectAttributes?.length || 0) + (userAttributes?.length || 0)} {t('payment_billing_sub_tab_preview_attributes')}</span>
+              </div>
+              <div>
+                <p className={classes.text} translation-key="payment_billing_sub_tab_preview_custom_question">Custom question</p>
+                <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_custom_question">{questions?.length || 0} {questions?.length > 1 ? `questions` : `question`}</span>
               </div>
             </div>
           </Grid>
