@@ -1,4 +1,4 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, IconButton, Grid, Dialog, DialogContent } from "@mui/material";
 import classes from "./styles.module.scss";
@@ -32,25 +32,27 @@ interface Props {
   language: string;
 }
 
-const schema = yup.object().shape({
-  inputQues: yup.string().required(),
-  inputAns: yup
-    .array(
-      yup.object({
-        id: yup.number().notRequired(),
-        title: yup.string().required(),
-        exclusive: yup.boolean().notRequired().default(false),
-      })
-    )
-    .required(),
-});
-
 const PopupMultipleChoices = (props: Props) => {
   const { onClose, isOpen, onSubmit, questionEdit, questionType, language } =
     props;
-  const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
-  const [activeMinError, setActiveMinError] = useState<boolean>(false);
-  const [activeMaxError, setActiveMaxError] = useState<boolean>(false);
+
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      title: yup.string().required("Question title is required"),
+      answers: yup
+        .array(
+          yup.object({
+            id: yup.number().notRequired(),
+            title: yup.string().required("Answer is required"),
+            exclusive: yup.boolean().notRequired().default(false),
+          })
+        )
+        .required()
+        .min(questionType?.minAnswer)
+        .max(questionType?.maxAnswer),
+    });
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -62,7 +64,9 @@ const PopupMultipleChoices = (props: Props) => {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-  const answers = watch("inputAns");
+
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
+  const answers = watch("answers");
 
   useEffect(() => {
     initAnswer();
@@ -71,8 +75,8 @@ const PopupMultipleChoices = (props: Props) => {
   useEffect(() => {
     if (questionEdit) {
       reset({
-        inputQues: questionEdit?.title,
-        inputAns: questionEdit?.answers,
+        title: questionEdit?.title,
+        answers: questionEdit?.answers,
       });
     } else {
       clearForm();
@@ -83,8 +87,8 @@ const PopupMultipleChoices = (props: Props) => {
     if (answers.length !== 0) {
       const question: CustomQuestion = {
         typeId: ECustomQuestionType.Multiple_Choices,
-        title: data.inputQues,
-        answers: data.inputAns.map((item) => ({
+        title: data.title,
+        answers: data.answers.map((item) => ({
           title: item.title,
           exclusive: item.exclusive,
         })),
@@ -99,13 +103,13 @@ const PopupMultipleChoices = (props: Props) => {
     for (let i: number = 0; i < questionType?.minAnswer; ++i) {
       list.push({ id: i + 1, title: "", exclusive: false });
     }
-    setValue("inputAns", list);
+    setValue("answers", list);
   };
 
   const clearForm = () => {
     reset({
-      inputQues: "",
-      inputAns: [],
+      title: "",
+      answers: [],
     });
     initAnswer();
     setIsFirstRender(true);
@@ -115,7 +119,7 @@ const PopupMultipleChoices = (props: Props) => {
     const find_pos = answers.findIndex((ans) => ans.id === index);
     const new_arr = [...answers];
     new_arr[find_pos][status] = !new_arr[find_pos][status];
-    setValue("inputAns", new_arr);
+    setValue("answers", new_arr);
   };
 
   const checkAllAnsNotValue = () => {
@@ -129,32 +133,28 @@ const PopupMultipleChoices = (props: Props) => {
       const new_arr = [...answers];
       const element = event.currentTarget as HTMLInputElement;
       new_arr[find_pos][value] = element.value;
-      setValue("inputAns", new_arr);
+      setValue("answers", new_arr);
     };
 
   const addInputAns = () => {
-    setActiveMinError(false);
     const maxAnswers = Math.max(...answers.map((ans) => ans.id), 0);
-    const new_inputAns = {
+    const new_answers = {
       id: maxAnswers + 1,
       title: "",
       exclusive: false,
     };
     if (answers?.length >= questionType?.maxAnswer) {
-      setActiveMaxError(true);
       return;
     }
-    setValue("inputAns", [...answers, new_inputAns]);
+    setValue("answers", [...answers, new_answers]);
   };
 
   const deleteInputAns = (id: number) => () => {
-    setActiveMaxError(false);
     if (answers?.length <= questionType?.minAnswer) {
-      setActiveMinError(true);
       return;
     }
     const updated_answers = [...answers].filter((ans) => ans.id !== id);
-    setValue("inputAns", updated_answers);
+    setValue("answers", updated_answers);
   };
 
   const reorder = (items, startIndex, endIndex) => {
@@ -169,7 +169,7 @@ const PopupMultipleChoices = (props: Props) => {
       return;
     }
     const result = reorder(answers, source.index, destination.index);
-    setValue("inputAns", result);
+    setValue("answers", result);
   };
 
   return (
@@ -200,14 +200,9 @@ const PopupMultipleChoices = (props: Props) => {
                   <div className={classes.iconLanguage}>{language}</div>
                 </InputAdornment>
               }
-              name="inputQuestion"
               type="text"
-              inputRef={register("inputQues")}
-              errorMessage={
-                errors.inputQues &&
-                !isFirstRender &&
-                "Question title is required"
-              }
+              inputRef={register("title")}
+              errorMessage={errors.title?.message}
               autoComplete="off"
             />
             <Grid sx={{ position: "relative", marginTop: "30px" }}>
@@ -256,13 +251,15 @@ const PopupMultipleChoices = (props: Props) => {
                                   )}
                                   autoComplete="off"
                                 />
-                                <button
-                                  type="button"
-                                  className={classes.closeInputAnswer}
-                                  onClick={deleteInputAns(ans.id)}
-                                >
-                                  <img src={Images.icDeleteAnswer} alt="" />
-                                </button>
+                                {answers?.length > questionType?.minAnswer && (
+                                  <button
+                                    type="button"
+                                    className={classes.closeInputAnswer}
+                                    onClick={deleteInputAns(ans.id)}
+                                  >
+                                    <img src={Images.icDeleteAnswer} alt="" />
+                                  </button>
+                                )}
                               </Grid>
                               <Grid className={classes.rowToggleSwitch}>
                                 <Grid
@@ -294,7 +291,8 @@ const PopupMultipleChoices = (props: Props) => {
                                 <div className={classes.errAns}>
                                   {!ans.title &&
                                     !isFirstRender &&
-                                    "Answer is required"}
+                                    !!errors.answers?.length &&
+                                    errors.answers[index]?.title?.message}
                                 </div>
                               </Grid>
                             </div>
@@ -307,30 +305,22 @@ const PopupMultipleChoices = (props: Props) => {
                 </Droppable>
               </DragDropContext>
             </Grid>
-            <Grid className={classes.addList}>
-              <button
-                type="button"
-                className={classes.addOptions}
-                onClick={addInputAns}
-              >
-                <img src={IconListAdd} className={classes.IconListAdd} alt="" />
-                <p className={classes.clickAddOption}>Click to add option</p>
-              </button>
-            </Grid>
-            {questionType &&
-              answers?.length <= questionType.minAnswer &&
-              activeMinError && (
-                <div className={classes.errAns}>
-                  {`Must have at least ${questionType.minAnswer} answers`}
-                </div>
-              )}
-            {questionType &&
-              answers?.length >= questionType.maxAnswer &&
-              activeMaxError && (
-                <div className={classes.errAns}>
-                  {`Maximum ${questionType.maxAnswer} answers`}
-                </div>
-              )}
+            {answers?.length < questionType?.maxAnswer && (
+              <Grid className={classes.addList}>
+                <button
+                  type="button"
+                  className={classes.addOptions}
+                  onClick={addInputAns}
+                >
+                  <img
+                    src={IconListAdd}
+                    className={classes.IconListAdd}
+                    alt=""
+                  />
+                  <p className={classes.clickAddOption}>Click to add option</p>
+                </button>
+              </Grid>
+            )}
           </Grid>
           <Grid>
             <Button
@@ -339,8 +329,6 @@ const PopupMultipleChoices = (props: Props) => {
               className={classes.btnSave}
               onClick={() => {
                 setIsFirstRender(false);
-                setActiveMinError(false);
-                setActiveMaxError(false);
               }}
             />
           </Grid>

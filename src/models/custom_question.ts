@@ -37,8 +37,8 @@ export interface CustomAnswer {
 }
 
 export interface CustomQuestionFormData {
-  inputQues: string;
-  inputAns?: CustomAnswer[];
+  title: string;
+  answers?: CustomAnswer[];
 }
 
 export interface GetTypeParams {

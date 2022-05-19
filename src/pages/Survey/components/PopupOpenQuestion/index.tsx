@@ -13,7 +13,7 @@ import * as yup from "yup";
 import Inputs from "components/Inputs";
 import { CustomQuestion, CustomQuestionFormData } from "models/custom_question";
 import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 interface Props {
   isOpen: boolean;
@@ -23,12 +23,15 @@ interface Props {
   language: string;
 }
 
-const schema = yup.object().shape({
-  inputQues: yup.string().required("Question title is required."),
-});
-
 const PopupOpenQuestion = (props: Props) => {
   const { onClose, isOpen, onSubmit, questionEdit, language } = props;
+
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      title: yup.string().required("Question title is required"),
+    });
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -42,7 +45,7 @@ const PopupOpenQuestion = (props: Props) => {
   useEffect(() => {
     if (questionEdit) {
       reset({
-        inputQues: questionEdit?.title,
+        title: questionEdit?.title,
       });
     } else {
       clearForm();
@@ -52,7 +55,7 @@ const PopupOpenQuestion = (props: Props) => {
   const _onSubmit = (data: CustomQuestionFormData) => {
     const question: CustomQuestion = {
       typeId: ECustomQuestionType.Open_Question,
-      title: data.inputQues,
+      title: data.title,
     };
     onSubmit(question);
     clearForm();
@@ -60,12 +63,16 @@ const PopupOpenQuestion = (props: Props) => {
 
   const clearForm = () => {
     reset({
-      inputQues: "",
+      title: "",
     });
-  }
+  };
 
   return (
-    <Dialog open={isOpen} onClose={() => onClose()} classes={{ paper: classes.paper }}>
+    <Dialog
+      open={isOpen}
+      onClose={() => onClose()}
+      classes={{ paper: classes.paper }}
+    >
       <DialogContent sx={{ padding: "0px" }}>
         <Grid className={classes.content}>
           <div className={classes.titlePopup}>Add open question</div>
@@ -88,10 +95,9 @@ const PopupOpenQuestion = (props: Props) => {
                   <div className={classes.iconLanguage}>{language}</div>
                 </InputAdornment>
               }
-              name="inputQuestion"
               type="text"
-              inputRef={register("inputQues")}
-              errorMessage={errors.inputQues?.message}
+              inputRef={register("title")}
+              errorMessage={errors.title?.message}
               autoComplete="off"
             />
             <Grid>
