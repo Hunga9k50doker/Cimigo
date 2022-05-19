@@ -61,7 +61,7 @@ import { Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
 import Toggle from "components/Toggle";
-import { CreateQuestionParams, CustomQuestion, CustomQuestionType, UpdateOrderQuestionParams, UpdateQuestionParams } from "models/custom_question";
+import { CreateQuestionParams, CustomQuestion, CustomQuestionType, ECustomQuestionType, UpdateOrderQuestionParams, UpdateQuestionParams } from "models/custom_question";
 import { CustomQuestionService } from "services/custom_question";
 import CustomQuestionDragList from "../components/CustomQuestionDragList";
 import CustomQuestionListMobile from "../components/CustomQuestionListMobile";
@@ -95,12 +95,6 @@ interface AttributeShow {
   end: string,
   data: ProjectAttribute | UserAttribute,
   type: AttributeShowType
-}
-
-export enum ECustomQuestionType {
-  Open_Question = 1,
-  Single_Choice = 2,
-  Multiple_Choices = 3,
 }
 
 enum SECTION {

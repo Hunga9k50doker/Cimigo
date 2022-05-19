@@ -11,8 +11,7 @@ import classes from "./styles.module.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Inputs from "components/Inputs";
-import { CustomQuestion, CustomQuestionFormData } from "models/custom_question";
-import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
+import { CustomQuestion, CustomQuestionFormData, ECustomQuestionType } from "models/custom_question";
 import { useEffect, useMemo } from "react";
 
 interface Props {

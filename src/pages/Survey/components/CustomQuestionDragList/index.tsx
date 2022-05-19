@@ -7,9 +7,8 @@ import {
 } from "react-beautiful-dnd";
 import Images from "config/images";
 import { IconButton } from "@mui/material";
-import { CustomQuestion } from "models/custom_question";
+import { CustomQuestion, ECustomQuestionType } from "models/custom_question";
 import classes from "./styles.module.scss";
-import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 import { fCurrency2 } from "utils/formatNumber";
 
 interface CustomQuestionDragListProps {

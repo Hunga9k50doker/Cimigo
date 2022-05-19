@@ -1,10 +1,9 @@
 import { memo, SyntheticEvent, useState } from "react";
 import clsx from "clsx";
-import { CustomQuestion } from "models/custom_question";
+import { CustomQuestion, ECustomQuestionType } from "models/custom_question";
 import Images from "config/images";
 import classes from "./styles.module.scss";
 import { Button, Collapse, Grid } from "@mui/material";
-import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 import { fCurrency2 } from "utils/formatNumber";
 
 interface CustomQuestionListMobileProps {

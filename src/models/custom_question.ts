@@ -14,6 +14,12 @@ export interface CustomQuestionType {
   languages?: CustomQuestionType[];
 }
 
+export enum ECustomQuestionType {
+  Open_Question = 1,
+  Single_Choice = 2,
+  Multiple_Choices = 3,
+}
+
 export interface CustomQuestion {
   typeId: number;
   title: string;

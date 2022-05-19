@@ -1,4 +1,4 @@
-import { SyntheticEvent, useEffect, useMemo, useState } from "react";
+import { SyntheticEvent, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import {
   Button,
@@ -19,8 +19,8 @@ import {
   CustomQuestion,
   CustomQuestionFormData,
   CustomQuestionType,
+  ECustomQuestionType,
 } from "models/custom_question";
-import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 import Images from "config/images";
 import {
   DragDropContext,
@@ -57,7 +57,7 @@ const PopupSingleChoice = (props: Props) => {
         .min(questionType?.minAnswer)
         .max(questionType?.maxAnswer),
     });
-  }, []);
+  }, [questionType]);
 
   const {
     register,
@@ -70,8 +70,6 @@ const PopupSingleChoice = (props: Props) => {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-
-  const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const answers = watch("answers");
 
   useEffect(() => {
@@ -115,7 +113,6 @@ const PopupSingleChoice = (props: Props) => {
       answers: [],
     });
     initAnswer();
-    setIsFirstRender(true);
   };
 
   const checkAllAnsNotValue = () => {
@@ -260,7 +257,6 @@ const PopupSingleChoice = (props: Props) => {
                                 </div>
                                 <div className={classes.errAns}>
                                   {!ans.title &&
-                                    !isFirstRender &&
                                     !!errors.answers?.length &&
                                     errors.answers[index]?.title?.message}
                                 </div>
@@ -299,9 +295,6 @@ const PopupSingleChoice = (props: Props) => {
               type="submit"
               children="Save question"
               className={classes.btnSave}
-              onClick={() => {
-                setIsFirstRender(false);
-              }}
             />
           </Grid>
         </form>

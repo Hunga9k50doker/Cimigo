@@ -1,10 +1,16 @@
-import { SyntheticEvent, useEffect, useMemo, useState } from "react";
+import { SyntheticEvent, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { Button, IconButton, Grid, Dialog, DialogContent } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  Grid,
+  Dialog,
+  DialogContent,
+  InputAdornment,
+} from "@mui/material";
 import classes from "./styles.module.scss";
 import IconListAdd from "assets/img/icon/ic-list-add-svgrepo-com.svg";
 import IconDotsDrag from "assets/img/icon/ic-dots-drag.svg";
-import InputAdornment from "@mui/material/InputAdornment";
 import * as yup from "yup";
 import Inputs from "components/Inputs";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,8 +19,8 @@ import {
   CustomQuestion,
   CustomQuestionFormData,
   CustomQuestionType,
+  ECustomQuestionType,
 } from "models/custom_question";
-import { ECustomQuestionType } from "pages/Survey/SetupSurvey";
 import Images from "config/images";
 import {
   DragDropContext,
@@ -51,7 +57,7 @@ const PopupMultipleChoices = (props: Props) => {
         .min(questionType?.minAnswer)
         .max(questionType?.maxAnswer),
     });
-  }, []);
+  }, [questionType]);
 
   const {
     register,
@@ -64,8 +70,6 @@ const PopupMultipleChoices = (props: Props) => {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-
-  const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const answers = watch("answers");
 
   useEffect(() => {
@@ -112,7 +116,6 @@ const PopupMultipleChoices = (props: Props) => {
       answers: [],
     });
     initAnswer();
-    setIsFirstRender(true);
   };
 
   const handleChangeSwitch = (status: any, index: number) => () => {
@@ -290,7 +293,6 @@ const PopupMultipleChoices = (props: Props) => {
                                 </Grid>
                                 <div className={classes.errAns}>
                                   {!ans.title &&
-                                    !isFirstRender &&
                                     !!errors.answers?.length &&
                                     errors.answers[index]?.title?.message}
                                 </div>
@@ -327,9 +329,6 @@ const PopupMultipleChoices = (props: Props) => {
               type="submit"
               children="Save question"
               className={classes.btnSave}
-              onClick={() => {
-                setIsFirstRender(false);
-              }}
             />
           </Grid>
         </form>
