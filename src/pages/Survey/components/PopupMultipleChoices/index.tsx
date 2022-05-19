@@ -85,7 +85,7 @@ const PopupMultipleChoices = (props: Props) => {
       const question: CustomQuestion = {
         typeId: ECustomQuestionType.Multiple_Choices,
         title: data.inputQues,
-        answers: data.inputAns,
+        answers: data.inputAns.map((item) => ({ title: item.title, exclusive: item.exclusive })),
       };
       onSubmit(question);
       clearForm();
@@ -133,7 +133,6 @@ const PopupMultipleChoices = (props: Props) => {
     };
 
   const addInputAns = () => {
-    setIsFirstRender(false);
     setActiveMinError(false);
     const maxAnswers = Math.max(
       ...getValues("inputAns").map((ans) => ans.id),
@@ -152,7 +151,6 @@ const PopupMultipleChoices = (props: Props) => {
   };
 
   const deleteInputAns = (id: number) => () => {
-    setIsFirstRender(false);
     setActiveMaxError(false);
     if (getValues("inputAns")?.length <= questionType?.minAnswer) {
       setActiveMinError(true);
@@ -328,14 +326,14 @@ const PopupMultipleChoices = (props: Props) => {
                 <p className={classes.clickAddOption}>Click to add option</p>
               </button>
             </Grid>
-            {!isFirstRender && questionType &&
+            {questionType &&
               getValues("inputAns")?.length <= questionType.minAnswer &&
               activeMinError && (
                 <div className={classes.errAns}>
                   {`Must have at least ${questionType.minAnswer} answers`}
                 </div>
               )}
-            {!isFirstRender && questionType &&
+            {questionType &&
               getValues("inputAns")?.length >= questionType.maxAnswer &&
               activeMaxError && (
                 <div className={classes.errAns}>
@@ -348,7 +346,11 @@ const PopupMultipleChoices = (props: Props) => {
               type="submit"
               children="Save question"
               className={classes.btnSave}
-              onClick={() => setIsFirstRender(false)}
+              onClick={() => {
+                setIsFirstRender(false);
+                setActiveMinError(false);
+                setActiveMaxError(false);
+              }}
             />
           </Grid>
         </form>
