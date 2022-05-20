@@ -69,6 +69,7 @@ import PopupOpenQuestion from "../components/PopupOpenQuestion";
 import PopupSingleChoice from "../components/PopupSingleChoice";
 import PopupMultipleChoices from "../components/PopupMultipleChoices";
 import { fCurrency2 } from "utils/formatNumber";
+import { PriceService } from "helpers/price";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -173,6 +174,10 @@ const SetupSurvey = memo(({ id }: Props) => {
       })
     }
   }, [project]);
+
+  useEffect(() => {
+    dispatch(setProjectReducer({ ...project, customQuestions: questions }))
+  }, [questions]);
 
   const getPacks = () => {
     PackService.getPacks({ take: 9999, projectId: id })
@@ -279,7 +284,6 @@ const SetupSurvey = memo(({ id }: Props) => {
         .finally(() => dispatch(setLoading(false)))
     }
     onCloseAddOrEditPack()
-
   }
 
   const onDeletePack = () => {
@@ -575,7 +579,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   }
 
   const totalCustomQuestionPrice = () => {
-    return questions.reduce((total, item) => total + item?.type.price, 0);
+    return PriceService.getCustomQuestionCost(project);
   }
 
   const countQuestionType = (type: ECustomQuestionType) => {

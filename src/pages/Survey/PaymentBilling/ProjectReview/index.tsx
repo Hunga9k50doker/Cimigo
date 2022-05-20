@@ -24,6 +24,8 @@ import { PaymentService } from "services/payment";
 import { authPreviewOrPayment } from "../models";
 import { useTranslation } from "react-i18next";
 import { setCancelPayment } from "redux/reducers/Project/actionTypes";
+import { CustomQuestion } from "models/custom_question";
+import { CustomQuestionService } from "services/custom_question";
 
 interface ProjectReviewProps {
 }
@@ -250,6 +252,10 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
               <div>
                 <p className={classes.text} translation-key="payment_billing_sub_tab_preview_additional_attribute">{t('payment_billing_sub_tab_preview_additional_attribute')}</p>
                 <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_attributes">{(projectAttributes?.length || 0) + (userAttributes?.length || 0)} {t('payment_billing_sub_tab_preview_attributes')}</span>
+              </div>
+              <div>
+                <p className={classes.text} translation-key="payment_billing_sub_tab_preview_custom_question">Custom question</p>
+                <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_custom_question">{project?.customQuestions?.length || 0} {project?.customQuestions?.length > 1 ? `questions` : `question`}</span>
               </div>
             </div>
           </Grid>
