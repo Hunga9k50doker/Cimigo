@@ -41,7 +41,6 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const [additionalBrand, setAdditionalBrand] = useState<AdditionalBrand[]>([])
   const [projectAttributes, setProjectAttributes] = useState<ProjectAttribute[]>([]);
   const [userAttributes, setUserAttributes] = useState<UserAttribute[]>([]);
-  const [questions, setQuestions] = useState<CustomQuestion[]>([]);
 
   const onConfirmProject = () => {
     if (!isValid) return
@@ -87,13 +86,6 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
           })
       }
 
-      const getCustomQuestion = () => {
-        CustomQuestionService.findAll({ take: 9999, projectId: project.id })
-          .then((res) => {
-            if (isSubscribed) setQuestions(res.data)
-          })
-      }
-
       const checkValidConfirm = () => {
         if (!project) return
         setIsValid(false)
@@ -110,7 +102,6 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       getAdditionalBrand()
       getProjectAttributes()
       getUserAttributes()
-      getCustomQuestion()
       checkValidConfirm()
       return () => { isSubscribed = false }
     }
@@ -264,7 +255,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
               </div>
               <div>
                 <p className={classes.text} translation-key="payment_billing_sub_tab_preview_custom_question">Custom question</p>
-                <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_custom_question">{questions?.length || 0} {questions?.length > 1 ? `questions` : `question`}</span>
+                <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_custom_question">{project?.customQuestions?.length || 0} {project?.customQuestions?.length > 1 ? `questions` : `question`}</span>
               </div>
             </div>
           </Grid>
