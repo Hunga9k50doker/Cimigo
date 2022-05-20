@@ -23,7 +23,7 @@ interface Props {
   onClose: () => void,
 }
 
-export interface PaymentFormData {
+export interface InvoiceInfoData {
   fullName: string,
   companyName: string,
   email: string,
@@ -35,7 +35,7 @@ export interface PaymentFormData {
 }
 
 
-const PopupManatoryAttributes = memo((props: Props) => {
+const PopupInvoiceInformation = memo((props: Props) => {
   const { isOpen, project, onClose } = props;
   const { t, i18n } = useTranslation()
   const [countries, setCountries] = useState<OptionItem[]>([])
@@ -58,7 +58,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
     })
   }, [i18n.language])
 
-  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<PaymentFormData>({
+  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<InvoiceInfoData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
@@ -195,7 +195,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
     </Dialog>
   );
 });
-export default PopupManatoryAttributes;
+export default PopupInvoiceInformation;
 
 
 
