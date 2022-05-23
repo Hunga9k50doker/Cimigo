@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { Checkbox, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, IconButton, Tooltip } from '@mui/material';
+import { Checkbox, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, IconButton, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import classes from './styles.module.scss';
 import images from "config/images";
 import Buttons from 'components/Buttons';
@@ -40,7 +40,8 @@ const PopupInvoiceInformation = memo((props: Props) => {
   const { t, i18n } = useTranslation()
   const [countries, setCountries] = useState<OptionItem[]>([])
   const dispatch = useDispatch()
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down(600));
   const schema = useMemo(() => {
     return yup.object().shape({
       fullName: yup.string().required(t('field_full_name_vali_required')),
@@ -79,7 +80,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
 
   const onSubmit = (data) => {
   }
-  
+
   return (
     <Dialog
       scroll="paper"
@@ -96,76 +97,87 @@ const PopupInvoiceInformation = memo((props: Props) => {
       <DialogContent className={classes.body}>
         <p className={classes.content}>These information will be used to export the invoice. Please make sure all fields are correct.</p>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid classes={{ root: classes.flex }}>
-            <Inputs
-              title={t('field_full_name')}
-              translation-key="field_full_name"
-              placeholder={t('field_full_name_placeholder')}
-              translation-key-placeholder="field_full_name_placeholder"
-              name="fullName"
-              inputRef={register('fullName')}
-              errorMessage={errors.fullName?.message}
-            />
-            <Inputs
-              title={t('field_company')}
-              translation-key="field_company"
-              placeholder={t('field_company_placeholder')}
-              translation-key-placeholder="field_company_placeholder"
-              name="companyName"
-              inputRef={register('companyName')}
-              errorMessage={errors.companyName?.message}
-            />
+          <Grid container spacing={isMobile ? 0 : 1}>
+            <Grid item xs={12} sm={6}>
+              <Inputs
+                title={t('field_full_name')}
+                translation-key="field_full_name"
+                placeholder={t('field_full_name_placeholder')}
+                translation-key-placeholder="field_full_name_placeholder"
+                name="fullName"
+                inputRef={register('fullName')}
+                errorMessage={errors.fullName?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Inputs
+                title={t('field_company')}
+                translation-key="field_company"
+                placeholder={t('field_company_placeholder')}
+                translation-key-placeholder="field_company_placeholder"
+                name="companyName"
+                inputRef={register('companyName')}
+                errorMessage={errors.companyName?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <Inputs
+                title={t('field_email')}
+                translation-key="field_email"
+                placeholder={t('field_email_placeholder')}
+                translation-key-placeholder="field_email_placeholder"
+                name="email"
+                inputRef={register('email')}
+                errorMessage={errors.email?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Inputs
+                title={t('field_phone_number')}
+                translation-key="field_phone_number"
+                placeholder={t('field_phone_number_placeholder')}
+                translation-key-placeholder="field_phone_number_placeholder"
+                name="phone"
+                inputRef={register('phone')}
+                errorMessage={errors.phone?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <InputSelect
+                title={t('field_country')}
+                name="countryId"
+                control={control}
+                selectProps={{
+                  options: countries,
+                  placeholder: t('field_country_placeholder'),
+                }}
+                errorMessage={(errors.countryId as any)?.id?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <Inputs
+                title={t('field_company_address')}
+                translation-key="field_company_address"
+                placeholder={t('field_company_address_placeholder')}
+                translation-key-placeholder="field_company_address_placeholder"
+                name="companyAddress"
+                inputRef={register('companyAddress')}
+                errorMessage={errors.companyAddress?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <Inputs
+                optional
+                title={t('field_tax_code_for_invoice')}
+                translation-key="field_tax_code_for_invoice"
+                placeholder={t('field_tax_code_for_invoice_placeholder')}
+                translation-key-placeholder="field_tax_code_for_invoice_placeholder"
+                name="taxCode"
+                inputRef={register('taxCode')}
+                errorMessage={errors.taxCode?.message}
+              />
+            </Grid>
           </Grid>
-          <Inputs
-            title={t('field_email')}
-            translation-key="field_email"
-            placeholder={t('field_email_placeholder')}
-            translation-key-placeholder="field_email_placeholder"
-            name="email"
-            inputRef={register('email')}
-            errorMessage={errors.email?.message}
-          />
-          <Grid classes={{ root: classes.flex }}>
-            <Inputs
-              title={t('field_phone_number')}
-              translation-key="field_phone_number"
-              placeholder={t('field_phone_number_placeholder')}
-              translation-key-placeholder="field_phone_number_placeholder"
-              name="phone"
-              inputRef={register('phone')}
-              errorMessage={errors.phone?.message}
-            />
-            <InputSelect
-              title={t('field_country')}
-              name="countryId"
-              control={control}
-              selectProps={{
-                options: countries,
-                placeholder: t('field_country_placeholder'),
-                className: classes.customSelect
-              }}
-              errorMessage={(errors.countryId as any)?.id?.message}
-            />
-          </Grid>
-          <Inputs
-            title={t('field_company_address')}
-            translation-key="field_company_address"
-            placeholder={t('field_company_address_placeholder')}
-            translation-key-placeholder="field_company_address_placeholder"
-            name="companyAddress"
-            inputRef={register('companyAddress')}
-            errorMessage={errors.companyAddress?.message}
-          />
-          <Inputs
-            optional
-            title={t('field_tax_code_for_invoice')}
-            translation-key="field_tax_code_for_invoice"
-            placeholder={t('field_tax_code_for_invoice_placeholder')}
-            translation-key-placeholder="field_tax_code_for_invoice_placeholder"
-            name="taxCode"
-            inputRef={register('taxCode')}
-            errorMessage={errors.taxCode?.message}
-          />
           <Grid classes={{ root: classes.tips }}>
             <FormControlLabel
               control={
