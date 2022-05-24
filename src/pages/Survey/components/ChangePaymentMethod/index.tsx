@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import images from "config/images";
-import { memo, useEffect, useMemo } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import classes from "./styles.module.scss";
 import clsx from "clsx";
@@ -24,6 +24,7 @@ import { ChangePaymentMethodFormData, Payment } from "models/payment";
 import { User } from "models/user";
 import { ConfigData } from "models/config";
 import { useTranslation } from "react-i18next";
+import PopupConfirmCancelOrder from "../PopupConfirmCancelOrder";
 
 interface Props {
   user: User;
@@ -36,6 +37,8 @@ interface Props {
 const ChangePaymentMethod = memo(
   ({ user, configs, payment, onConfirm, onCancelPayment }: Props) => {
     const { t, i18n } = useTranslation();
+
+    const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false);
 
     const schema = useMemo(() => {
       return yup.object().shape({
@@ -97,6 +100,14 @@ const ChangePaymentMethod = memo(
         contactPhone: user?.phone || "",
       });
     }, [user]);
+
+    const onShowConfirmCancel = () => {
+      setIsConfirmCancel(true);
+    }
+
+    const onCloseConfirmCancel = () => {
+      setIsConfirmCancel(false);
+    }
 
     return (
       <Grid>
@@ -251,7 +262,7 @@ const ChangePaymentMethod = memo(
               </Grid>
               <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
             </Grid>
-            <div className={classes.cancelPayment} onClick={onCancelPayment}>Want to edit project? Cancel payment.</div>
+            <div className={classes.cancelPayment} onClick={onShowConfirmCancel}>Want to edit project? Cancel payment.</div>
           </Grid>
           <Grid className={classes.flexTotalMobile}>
             <Grid>
@@ -262,6 +273,11 @@ const ChangePaymentMethod = memo(
             <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" padding="11px" className={classes.btnMobile} />
           </Grid>
         </Grid>
+        <PopupConfirmCancelOrder
+          isOpen={isConfirmCancel}
+          onClose={onCloseConfirmCancel}
+          onYes={onCancelPayment}
+        />
       </Grid>
     );
   }

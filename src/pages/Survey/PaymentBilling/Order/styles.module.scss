@@ -176,3 +176,35 @@
     font-weight: 600;
   }
 }
+.cancelPaymentOrder {
+  display: block;
+  padding-top: 56px;
+  font-size: 24px;
+  font-weight: 500;
+  color: rgba(31, 97, 169, 1);
+  text-underline-position: under;
+  text-decoration: underline !important;
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+    font-weight: 400;
+    &:last-child {
+      margin-bottom: 16px;
+    }
+  }
+}
+.cancelPaymentBank {
+  display: inline-block;
+  padding-top: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(31, 97, 169, 1);
+  text-underline-position: under;
+  text-decoration: underline !important;
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+    font-weight: 400;
+    &:last-child {
+      margin-bottom: 16px;
+    }
+  }
+}
