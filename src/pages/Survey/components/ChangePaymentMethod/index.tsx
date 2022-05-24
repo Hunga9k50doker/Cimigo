@@ -20,17 +20,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { InfoOutlined } from "@mui/icons-material";
 import TooltipCustom from "components/Tooltip";
 import { VALIDATION } from "config/constans";
-import { Payment } from "models/payment";
+import { ChangePaymentMethodFormData, Payment } from "models/payment";
 import { User } from "models/user";
 import { ConfigData } from "models/config";
 import { useTranslation } from "react-i18next";
-import { DataForm } from "pages/Survey/PaymentBilling/OnePayFail";
 
 interface Props {
   user: User;
   configs: ConfigData;
   payment: Payment;
-  onConfirm: (data: DataForm) => void;
+  onConfirm: (data: ChangePaymentMethodFormData) => void;
   onCancelPayment: () => void;
 }
 
@@ -81,7 +80,7 @@ const ChangePaymentMethod = memo(
       formState: { errors },
       watch,
       reset,
-    } = useForm<DataForm>({
+    } = useForm<ChangePaymentMethodFormData>({
       resolver: yupResolver(schema),
       mode: "onChange",
       defaultValues: {

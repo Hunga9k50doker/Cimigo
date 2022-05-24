@@ -77,6 +77,13 @@ export interface ChangePaymentMethodParams {
   againLink?: string,
 }
 
+export interface ChangePaymentMethodFormData {
+  paymentMethodId: number,
+  contactName: string,
+  contactEmail: string,
+  contactPhone: string,
+}
+
 export interface UpdateConfirmPayment {
   projectId: number;
   userConfirm: boolean;

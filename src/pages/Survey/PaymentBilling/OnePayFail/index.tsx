@@ -15,15 +15,8 @@ import { PaymentService } from "services/payment";
 import { getProjectRequest, setCancelPayment } from "redux/reducers/Project/actionTypes";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
-import { Payment } from "models/payment";
+import { ChangePaymentMethodFormData, Payment } from "models/payment";
 import ChangePaymentMethod from "pages/Survey/components/ChangePaymentMethod";
-
-export interface DataForm {
-  paymentMethodId: number,
-  contactName: string,
-  contactEmail: string,
-  contactPhone: string,
-}
 
 interface Props {}
 
@@ -80,7 +73,7 @@ const OnePayFail = memo(({}: Props) => {
       .catch(e => dispatch(setErrorMess(e)));
   }
 
-  const onChangePaymentMethod = (data: DataForm) => {
+  const onChangePaymentMethod = (data: ChangePaymentMethodFormData) => {
     dispatch(setLoading(true));
     PaymentService.changePaymentMethod(payment.id, {
       projectId: project.id,
@@ -103,7 +96,7 @@ const OnePayFail = memo(({}: Props) => {
       .finally(() => dispatch(setLoading(false)));
   }
 
-  const onConfirm = (data: DataForm) => {
+  const onConfirm = (data: ChangePaymentMethodFormData) => {
     if (!project) return;
     onChangePaymentMethod(data);
   }
