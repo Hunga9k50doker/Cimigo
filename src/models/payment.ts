@@ -1,4 +1,5 @@
 import { Country } from "./country";
+import { CustomQuestion } from "./custom_question";
 import { OptionItem } from "./general";
 import { Project } from "./project";
 import { User } from "./user";
@@ -29,6 +30,9 @@ export interface Payment {
   sampleSize: number;
   sampleSizeCost: number;
   sampleSizeCostUSD: number;
+  customQuestions: CustomQuestion[];
+  customQuestionCost: number;
+  customQuestionCostUSD: number;
   amount: number;
   amountUSD: number;
   vat: number;
@@ -61,6 +65,23 @@ export interface TryAgain {
   projectId: number;
   returnUrl: string,
   againLink: string,
+}
+
+export interface ChangePaymentMethodParams {
+  projectId: number,
+  paymentMethodId: number,
+  contactName: string,
+  contactEmail: string,
+  contactPhone: string,
+  returnUrl?: string,
+  againLink?: string,
+}
+
+export interface ChangePaymentMethodFormData {
+  paymentMethodId: number,
+  contactName: string,
+  contactEmail: string,
+  contactPhone: string,
 }
 
 export interface UpdateConfirmPayment {

@@ -81,7 +81,8 @@ export const API = {
     VALID_CONFIRM: '/v1.0/payment/valid-confirm',
     ONEPAY_CALLBACK: '/v1.0/payment/onepay/callback',
     CANCEL: '/v1.0/payment/:id/cancel',
-    TRY_AGAIN: '/v1.0/payment/:id/try-again'
+    TRY_AGAIN: '/v1.0/payment/:id/try-again',
+    CHANGE_PAYMENT_METHOD: '/v1.0/payment/:id/change-payment-method',
   },
   ATTACHMENT: {
     DOWNLOAD: '/v1.0/attachment/:id/download',

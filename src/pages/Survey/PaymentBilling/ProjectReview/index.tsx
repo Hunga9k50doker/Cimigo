@@ -24,8 +24,6 @@ import { PaymentService } from "services/payment";
 import { authPreviewOrPayment } from "../models";
 import { useTranslation } from "react-i18next";
 import { setCancelPayment } from "redux/reducers/Project/actionTypes";
-import { CustomQuestion } from "models/custom_question";
-import { CustomQuestionService } from "services/custom_question";
 
 interface ProjectReviewProps {
 }

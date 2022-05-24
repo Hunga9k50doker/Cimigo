@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { CheckoutParams, TryAgain, UpdateConfirmPayment } from 'models/payment';
+import { ChangePaymentMethodParams, CheckoutParams, TryAgain, UpdateConfirmPayment } from 'models/payment';
 import api from 'services/configApi';
 
 export class PaymentService {
@@ -12,6 +12,7 @@ export class PaymentService {
         return Promise.reject(e?.response?.data);
       })
   }
+
   static async onePayCallback(data: any): Promise<any> {
     return await api.post(`${API.PAYMENT.ONEPAY_CALLBACK}`, data)
       .then((res) => {
@@ -21,6 +22,7 @@ export class PaymentService {
         return Promise.reject(e?.response?.data);
       })
   }
+
   static async updateConfirmPayment(data: UpdateConfirmPayment): Promise<any> {
     return await api.put(`${API.PAYMENT.CONFIRM}`, data)
       .then((res) => {
@@ -57,6 +59,16 @@ export class PaymentService {
 
   static async tryAgain(id: number, data: TryAgain): Promise<any> {
     return await api.put(API.PAYMENT.TRY_AGAIN.replace(':id', `${id}`), data)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async changePaymentMethod(id: number, data: ChangePaymentMethodParams): Promise<any> {
+    return await api.put(`${API.PAYMENT.CHANGE_PAYMENT_METHOD.replace(':id', `${id}`)}`, data)
       .then((res) => {
         return Promise.resolve(res.data.data)
       })

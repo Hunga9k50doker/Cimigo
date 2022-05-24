@@ -371,11 +371,11 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
               label={
                 <Grid classes={{ root: classes.order }}>
-                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_credit_or_debit">
-                    <img src={images.icInternetBanking} alt="" />{t('payment_billing_sub_tab_payment_method_credit_or_debit')}
+                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_internet_banking">
+                    <img src={images.icInternetBanking} alt="" />{t("payment_billing_sub_tab_payment_method_internet_banking")}
                   </Grid>
-                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_bank_transfer_sub">
-                    {t('payment_billing_sub_tab_payment_method_credit_or_debit_sub')}
+                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_internet_banking_sub">
+                    {t("payment_billing_sub_tab_payment_method_internet_banking_sub")}
                   </p>
                 </Grid>
               }
@@ -387,7 +387,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               label={
                 <Grid classes={{ root: classes.order }}>
                   <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_credit_or_debit">
-                    <img src={images.icCreditDebit} alt="" />{t('payment_billing_sub_tab_payment_method_credit_or_debit')}
+                    <img src={images.icCreditDebit} alt="" />{t("payment_billing_sub_tab_payment_method_credit_or_debit")}
                   </Grid>
                   <Grid className={classes.methodImg}>
                     <img src={images.imgVisa} alt="" />
@@ -396,8 +396,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                     <img src={images.imgJCB} alt="" />
                     <img src={images.imgUnionpay} alt="" />
                   </Grid>
-                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_internet_banking_sub">
-                    {t('payment_billing_sub_tab_payment_method_internet_banking_sub')}
+                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_credit_or_debit_sub">
+                    {t("payment_billing_sub_tab_payment_method_credit_or_debit_sub")}
                   </p>
                 </Grid>
               }
