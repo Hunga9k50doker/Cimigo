@@ -18,14 +18,14 @@ import { routes } from "routers/routes";
 import { Payment } from "models/payment";
 import ChangePaymentMethod from "pages/Survey/components/ChangePaymentMethod";
 
-interface Props {}
-
 export interface DataForm {
   paymentMethodId: number,
   contactName: string,
   contactEmail: string,
   contactPhone: string,
 }
+
+interface Props {}
 
 const OnePayFail = memo(({}: Props) => {
   const { t } = useTranslation();
@@ -44,44 +44,44 @@ const OnePayFail = memo(({}: Props) => {
   }, [project]);
 
   const onRedirect = (route: string) => {
-    dispatch(push(route.replace(":id", `${project.id}`)))
+    dispatch(push(route.replace(":id", `${project.id}`)));
   }
 
   const onCancelPayment = () => {
-    if (!payment) return
+    if (!payment) return;
     PaymentService.cancel(payment.id)
       .then(() => {
         dispatch(setCancelPayment(true))
         dispatch(getProjectRequest(project.id, () => {
-          onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview)
+          onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview);
         }))
       })
-      .catch(e => dispatch(setErrorMess(e)))
+      .catch(e => dispatch(setErrorMess(e)));
   }
 
   const onShowConfirmCancel = () => {
-    setIsConfirmCancel(true)
+    setIsConfirmCancel(true);
   }
 
   const onCloseConfirmCancel = () => {
-    setIsConfirmCancel(false)
+    setIsConfirmCancel(false);
   }
 
   const onTryAgain = () => {
-    if (!payment) return
+    if (!payment) return;
     PaymentService.tryAgain(payment.id, {
       projectId: project.id,
       returnUrl: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePay}?projectId=${project.id}`,
       againLink: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePayAgainLink.replace(':id', `${project.id}`)}`
     })
       .then((res) => {
-        window.location.href = res.checkoutUrl
+        window.location.href = res.checkoutUrl;
       })
-      .catch(e => dispatch(setErrorMess(e)))
+      .catch(e => dispatch(setErrorMess(e)));
   }
 
   const onChangePaymentMethod = (data: DataForm) => {
-    dispatch(setLoading(true))
+    dispatch(setLoading(true));
     PaymentService.changePaymentMethod(payment.id, {
       projectId: project.id,
       paymentMethodId: data.paymentMethodId,
@@ -94,13 +94,13 @@ const OnePayFail = memo(({}: Props) => {
       .then((res: { payment: Payment, checkoutUrl: string }) => {
         console.log(res)
         if (res.checkoutUrl) {
-          window.location.href = res.checkoutUrl
+          window.location.href = res.checkoutUrl;
         } else {
-          dispatch(getProjectRequest(project.id))
+          dispatch(getProjectRequest(project.id));
         }
       })
       .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
+      .finally(() => dispatch(setLoading(false)));
   }
 
   const onConfirm = (data: DataForm) => {

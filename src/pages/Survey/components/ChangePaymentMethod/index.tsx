@@ -267,4 +267,5 @@ const ChangePaymentMethod = memo(
     );
   }
 );
+
 export default ChangePaymentMethod;
