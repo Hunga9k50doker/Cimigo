@@ -41,6 +41,7 @@ const OnePayFail = memo(({}: Props) => {
   }
 
   const onCancelPayment = () => {
+    dispatch(setLoading(true));
     if (!payment) return;
     PaymentService.cancel(payment.id)
       .then(() => {
@@ -49,7 +50,8 @@ const OnePayFail = memo(({}: Props) => {
           onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview);
         }))
       })
-      .catch(e => dispatch(setErrorMess(e)));
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
   }
 
   const onShowConfirmCancel = () => {
@@ -61,6 +63,7 @@ const OnePayFail = memo(({}: Props) => {
   }
 
   const onTryAgain = () => {
+    dispatch(setLoading(true));
     if (!payment) return;
     PaymentService.tryAgain(payment.id, {
       projectId: project.id,
@@ -70,7 +73,8 @@ const OnePayFail = memo(({}: Props) => {
       .then((res) => {
         window.location.href = res.checkoutUrl;
       })
-      .catch(e => dispatch(setErrorMess(e)));
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
   }
 
   const onChangePaymentMethod = (data: ChangePaymentMethodFormData) => {
@@ -121,7 +125,7 @@ const OnePayFail = memo(({}: Props) => {
           isOpen={isConfirmCancel}
           onClose={onCloseConfirmCancel}
           onYes={onCancelPayment}
-        />
+      />
     </Grid>
   )
 });
