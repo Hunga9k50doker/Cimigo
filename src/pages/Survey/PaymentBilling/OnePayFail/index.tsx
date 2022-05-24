@@ -156,7 +156,7 @@ const OnePayFail = memo(({ }: Props) => {
     if (!project) return;
     onChangePaymentMethod(data);
   }
-  console.log(payment)
+
   return (
     <Grid>
       <Grid className={clsx(classes.root, {[classes.displayNone]: showPaymentMethod})}>
