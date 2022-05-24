@@ -85,7 +85,6 @@ const OnePayFail = memo(({}: Props) => {
       againLink: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePayAgainLink.replace(':id', `${project.id}`)}`
     })
       .then((res: { payment: Payment, checkoutUrl: string }) => {
-        console.log(res)
         if (res.checkoutUrl) {
           window.location.href = res.checkoutUrl;
         } else {
