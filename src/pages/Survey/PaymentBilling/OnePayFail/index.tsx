@@ -336,16 +336,6 @@ const OnePayFail = memo(({ }: Props) => {
             </Grid>
             <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" padding="11px" className={classes.btnMobile} />
           </Grid>
-          {/* <PopupConfirmInvoiceInfo 
-            isOpen={!!showSkipInfor}
-            onClose={onUpdateInfo}
-            onYes={onSkipUpdateInfo}
-          /> */}
-          {/* <PopupConfirmCancelOrder 
-            isOpen={isConfirmCancel}
-            onClose={onCloseConfirmCancel}
-            onYes={onCancelPayment}
-          /> */}
         </Grid>
       </Grid>
     </Grid>
