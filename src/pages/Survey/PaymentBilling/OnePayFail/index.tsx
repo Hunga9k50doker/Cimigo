@@ -102,24 +102,26 @@ const OnePayFail = memo(({}: Props) => {
 
   return (
     <Grid>
-      <Grid className={clsx(classes.root, {[classes.displayNone]: showPaymentMethod})}>
-        <img src={images.imgPaymentFailed} alt="" />
-        <p className={classes.title}>Payment failed</p>
-        <p className={classes.subTitle}>We aren’t able to process your payment. Please try again.</p>
-        <p className={classes.textGreen} translation-key="payment_billing_total_amount">{t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}</p>
-        <p className={classes.textBlue} translation-key="payment_billing_equivalent_to">({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)</p>
-        <Buttons btnType="TransparentBlue" children="Try again" padding="16px 95px" onClick={onTryAgain} />
-        <a onClick={() => setShowPaymentMethod(true)} className={classes.aLink}>Change payment method.</a>
-        <a onClick={onShowConfirmCancel} className={classes.aLink}>Want to edit project? Cancel payment.</a>
-        <PopupConfirmCancelOrder
+      {!showPaymentMethod && (
+        <Grid className={classes.root}>
+          <img src={images.imgPaymentFailed} alt="" />
+          <p className={classes.title}>Payment failed</p>
+          <p className={classes.subTitle}>We aren’t able to process your payment. Please try again.</p>
+          <p className={classes.textGreen} translation-key="payment_billing_total_amount">{t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}</p>
+          <p className={classes.textBlue} translation-key="payment_billing_equivalent_to">({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)</p>
+          <Buttons btnType="TransparentBlue" children="Try again" padding="16px 95px" onClick={onTryAgain} />
+          <a onClick={() => setShowPaymentMethod(true)} className={classes.aLink}>Change payment method.</a>
+          <a onClick={onShowConfirmCancel} className={classes.aLink}>Want to edit project? Cancel payment.</a>
+        </Grid>
+      )}
+      {showPaymentMethod && (
+        <ChangePaymentMethod user={user} configs={configs} payment={payment} onConfirm={onConfirm} onCancelPayment={onCancelPayment} />
+      )}
+      <PopupConfirmCancelOrder
           isOpen={isConfirmCancel}
           onClose={onCloseConfirmCancel}
           onYes={onCancelPayment}
         />
-      </Grid>
-      <Grid className={clsx({[classes.displayNone]: !showPaymentMethod})}>
-        <ChangePaymentMethod user={user} configs={configs} payment={payment} onConfirm={onConfirm} onCancelPayment={onCancelPayment} />
-      </Grid>
     </Grid>
   )
 });
