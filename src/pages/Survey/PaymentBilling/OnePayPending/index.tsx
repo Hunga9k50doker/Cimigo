@@ -58,8 +58,8 @@ const OnePayPending = memo(({}: Props) => {
   return (
     <Grid classes={{ root: classes.root }}>
       <img src={images.imgPaymentPending} alt="" />
-      <p className={classes.title}>Payment pending</p>
-      <p className={classes.subTitle}>The payment is processing, please complete your payment.</p>
+      <p className={classes.title} translation-key="payment_billing_pending_title">{t("payment_billing_pending_title")}</p>
+      <p className={classes.subTitle} translation-key="payment_billing_pending_sub">{t("payment_billing_pending_sub")}</p>
       <p className={classes.textGreen} translation-key="payment_billing_total_amount">{t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}</p>
       <p className={classes.textBlue} translation-key="payment_billing_equivalent_to">({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)</p>
       <a onClick={onShowConfirmCancel} className={classes.aLink} translation-key="common_cancel_payment">{t("common_cancel_payment")}</a>
