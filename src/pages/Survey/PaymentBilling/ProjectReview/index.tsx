@@ -253,8 +253,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
               </div>
               <div>
                 <p className={classes.text} translation-key="payment_billing_sub_tab_preview_custom_question">{t("payment_billing_sub_tab_preview_custom_question")}</p>
-                {project?.customQuestions?.length <= 1 && <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_question">{project?.customQuestions?.length || 0} {t("payment_billing_sub_tab_preview_question")}</span>}
-                {project?.customQuestions?.length > 1 && <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_questions">{project?.customQuestions?.length || 0} {t("payment_billing_sub_tab_preview_questions")}</span>}
+                <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_questions">{project?.customQuestions?.length || 0} {t("payment_billing_sub_tab_preview_questions")}</span>
               </div>
             </div>
           </Grid>
