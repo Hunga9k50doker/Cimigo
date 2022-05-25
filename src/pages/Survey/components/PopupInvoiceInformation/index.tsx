@@ -16,8 +16,10 @@ import { useDispatch } from 'react-redux';
 import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
 import CountryService from 'services/country';
 import InputSelect from 'components/InputsSelect';
+import { Payment } from 'models/payment';
 
 interface Props {
+  payment: Payment,
   isOpen: boolean,
   project: Project,
   onClose: () => void,
@@ -36,12 +38,13 @@ export interface InvoiceInfoData {
 
 
 const PopupInvoiceInformation = memo((props: Props) => {
-  const { isOpen, project, onClose } = props;
+  const { isOpen, project, onClose, payment } = props;
   const { t, i18n } = useTranslation()
   const [countries, setCountries] = useState<OptionItem[]>([])
   const dispatch = useDispatch()
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down(600));
+
   const schema = useMemo(() => {
     return yup.object().shape({
       fullName: yup.string().required(t('field_full_name_vali_required')),
@@ -65,6 +68,18 @@ const PopupInvoiceInformation = memo((props: Props) => {
   });
 
   useEffect(() => {
+    reset({
+      fullName: payment?.fullName || '',
+      companyName: payment?.companyName || '',
+      email: payment?.email || '',
+      phone: payment?.phone || '',
+      countryId: payment?.country ? { id: payment.country.id, name: payment.country.name } : undefined,
+      companyAddress: payment?.companyAddress || '',
+      taxCode: payment?.taxCode || ''
+    })
+  }, [payment, reset])
+
+  useEffect(() => {
     const fetchData = async () => {
       dispatch(setLoading(true))
       const data = await CountryService.getCountries({ take: 9999 })
@@ -79,6 +94,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
   }, [dispatch])
 
   const onSubmit = (data) => {
+    console.log(payment)
   }
 
   return (

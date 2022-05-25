@@ -2,7 +2,7 @@ import { Grid } from "@mui/material"
 import classes from './styles.module.scss';
 import images from "config/images";
 import Buttons from "components/Buttons";
-import { memo, useEffect, useMemo } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
@@ -15,7 +15,8 @@ import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { authOrder, getPayment } from "../models";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
-
+import WarningBox from "components/WarningBox";
+import PopupInvoiceInformation from "pages/Survey/components/PopupInvoiceInformation";
 interface Props {
 
 }
@@ -34,6 +35,7 @@ const Order = memo(({ }: Props) => {
     dispatch(push(routes.project.management))
   }
 
+  const [isOpen,setIsOpen] = useState(false);
   const confirmedPayment = () => {
     dispatch(setLoading(true))
     PaymentService.updateConfirmPayment({
@@ -159,10 +161,21 @@ const Order = memo(({ }: Props) => {
 
   return (
     <Grid classes={{ root: classes.root }}>
+         <WarningBox sx={{ maxWidth: '1000px' }}>
+          <p> <a onClick={()=>setIsOpen(true)}>Click here</a> to fill in the necessary information for the invoice and contract.</p> 
+        </WarningBox>
       <img src={images.imgOrder} alt="" />
       <p className={classes.title} translation-key="payment_billing_order_title">{t('payment_billing_order_title')}</p>
       {render()}
       <a className={classes.aLink} onClick={onBackToProjects} translation-key="payment_billing_order_btn_back_to_projects">{t('payment_billing_order_btn_back_to_projects')}</a>
+    <PopupInvoiceInformation
+    payment={payment}
+    isOpen={isOpen}
+    project={project}
+    onClose={()=>setIsOpen(false)}
+    />
+
+   
     </Grid>
   )
 })
