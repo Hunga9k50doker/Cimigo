@@ -176,7 +176,9 @@ const SetupSurvey = memo(({ id }: Props) => {
   }, [project]);
 
   useEffect(() => {
-    dispatch(setProjectReducer({ ...project, customQuestions: questions }))
+    if (project) {
+      dispatch(setProjectReducer({ ...project, customQuestions: questions }))
+    }
   }, [questions]);
 
   const getPacks = () => {
