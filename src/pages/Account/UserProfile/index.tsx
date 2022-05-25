@@ -211,7 +211,7 @@ const UserProfile = memo((props: Props) => {
                     />
                 </Grid>
             </Grid>
-            <Button type='submit' children='Save changes' className={classes.btnSave} />
+            <Button type='submit' children={t("common_save_changes")} translation-key="common_save_changes" className={classes.btnSave} />
         </form>
     )
 })
