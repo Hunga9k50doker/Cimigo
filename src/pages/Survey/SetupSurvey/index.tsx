@@ -1261,10 +1261,10 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
           </Grid>
           <div className={classes.line}></div>
-          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. Custom questions <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span> {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={onToggleCustomQuestion} />} <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span></div>
-          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span></div>
+          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. {t("setup_survey_custom_question_title")} <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span> {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={onToggleCustomQuestion} />} <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span></div>
+          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span></div>
           <Grid className={classes.flex}>
-            <p className={clsx({[classes.customQuestionSubTitleDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">You may add your own custom questions. Please only include questions that are necessary, as these will lengthen the final survey and might affect the data quality.</p>
+            <p className={clsx({[classes.customQuestionSubTitleDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">{t("setup_survey_custom_question_sub_title")}</p>
             <Grid className={clsx({[classes.displayNone]: !project?.enableCustomQuestion})}>
               <CustomQuestionDragList questions={questions} setQuestions={setQuestions} onUpdateOrderQuestion={onUpdateOrderQuestion} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
               {/* ===================Custom questions mobile====================== */}
@@ -1290,7 +1290,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   }}
                 >
                   <MenuItem disabled value="" translation-key="setup_survey_custom_question_menu_action_placeholder">
-                    Add custom question
+                    {t("setup_survey_custom_question_menu_action_placeholder")}
                   </MenuItem>
                   {customQuestionType.map((item, index) => {
                     const value = (index + 2) * 10;
@@ -1309,7 +1309,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   })}
                 </Select>
               </FormControl>
-              {editableProject(project) && questions.length >= maxCustomQuestion() && <p translation-key="setup_survey_custom_question_error_max">You can only add maximum of {maxCustomQuestion()} custom questions.</p>}
+              {editableProject(project) && questions.length >= maxCustomQuestion() && <p translation-key="setup_survey_custom_question_error_max">{t("setup_survey_custom_question_error_max", { max: maxCustomQuestion()})}</p>}
             </Grid>
           </Grid>
         </Grid>
@@ -1429,15 +1429,15 @@ const SetupSurvey = memo(({ id }: Props) => {
                   translation-key="setup_survey_summary_custom_question"
                 >
                   <div className={classes.summaryCustomQuestion}>
-                    <span>Custom question ({project?.enableCustomQuestion ? questions.length : 0})</span>
-                    <span className={clsx(classes.summaryCustomQuestionPrice, {[classes.summaryCustomQuestionPriceDisabled]: !project?.enableCustomQuestion})}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : `Extra cost`}</span>
+                    <span>{t("setup_survey_summary_custom_question")} ({project?.enableCustomQuestion ? questions.length : 0})</span>
+                    <span className={clsx(classes.summaryCustomQuestionPrice, {[classes.summaryCustomQuestionPriceDisabled]: !project?.enableCustomQuestion})}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span>
                   </div>
                 </StepLabel>
                 <StepContent className={clsx(classes.rootConnector, {[classes.displayNone]: !project?.enableCustomQuestion})}>
                   <ul>
-                    {countQuestionType(ECustomQuestionType.Open_Question) > 0 && <li translation-key="setup_survey_summary_open_question">Open question ({countQuestionType(ECustomQuestionType.Open_Question)})</li>}
-                    {countQuestionType(ECustomQuestionType.Single_Choice) > 0 && <li translation-key="setup_survey_summary_single_choice">Single choice ({countQuestionType(ECustomQuestionType.Single_Choice)})</li>}
-                    {countQuestionType(ECustomQuestionType.Multiple_Choices) > 0 && <li translation-key="setup_survey_summary_multiple_choices">Multiple choices ({countQuestionType(ECustomQuestionType.Multiple_Choices)})</li>}
+                    {countQuestionType(ECustomQuestionType.Open_Question) > 0 && <li translation-key="setup_survey_summary_open_question">{t("setup_survey_summary_open_question")} ({countQuestionType(ECustomQuestionType.Open_Question)})</li>}
+                    {countQuestionType(ECustomQuestionType.Single_Choice) > 0 && <li translation-key="setup_survey_summary_single_choice">{t("setup_survey_summary_single_choice")} ({countQuestionType(ECustomQuestionType.Single_Choice)})</li>}
+                    {countQuestionType(ECustomQuestionType.Multiple_Choices) > 0 && <li translation-key="setup_survey_summary_multiple_choices">{t("setup_survey_summary_multiple_choices")} ({countQuestionType(ECustomQuestionType.Multiple_Choices)})</li>}
                   </ul>
                 </StepContent>
               </Step>

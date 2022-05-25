@@ -62,7 +62,7 @@ const OnePayPending = memo(({}: Props) => {
       <p className={classes.subTitle}>The payment is processing, please complete your payment.</p>
       <p className={classes.textGreen} translation-key="payment_billing_total_amount">{t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}</p>
       <p className={classes.textBlue} translation-key="payment_billing_equivalent_to">({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)</p>
-      <a onClick={onShowConfirmCancel} className={classes.aLink}>Want to edit project? Cancel payment.</a>
+      <a onClick={onShowConfirmCancel} className={classes.aLink} translation-key="common_cancel_payment">{t("common_cancel_payment")}</a>
       <PopupConfirmCancelOrder
         isOpen={isConfirmCancel}
         onClose={onCloseConfirmCancel}

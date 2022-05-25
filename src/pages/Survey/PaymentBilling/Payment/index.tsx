@@ -513,7 +513,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               <span>{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</span>
             </div>
             <div className={classes.flexOrder}>
-              <span translation-key="payment_billing_sub_tab_payment_summary_custom_question">Custom questions</span>
+              <span translation-key="payment_billing_sub_tab_payment_summary_custom_question">{t("payment_billing_sub_tab_payment_summary_custom_question")}</span>
               <span>{`$`}{fCurrency2(price?.customQuestionCostUSD || 0)}</span>
             </div>
             <div className={clsx(classes.flexOrder, classes.isMobile)}>
@@ -535,15 +535,15 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               <a>{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</a>
             </div>
             <span>({fCurrency2VND(price?.totalAmount || 0)} VND)</span>
-            <div className={classes.chargedBy}>Your card will be charged in VND
-              <TooltipCustom popperClass={classes.popperClass} title="The US$ rate shown is approximate and may differ by the exhange rate used by your credit card issuer.">
+            <div className={classes.chargedBy} translation-key="payment_billing_sub_tab_payment_note">{t("payment_billing_sub_tab_payment_note")}
+              <TooltipCustom popperClass={classes.popperClass} translation-key="payment_billing_sub_tab_payment_note_tooltip" title={t("payment_billing_sub_tab_payment_note_tooltip")}>
                 <InfoOutlined />
               </TooltipCustom>
             </div>
           </Grid>
           <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
         </Grid>
-        <div className={classes.cancelPayment} onClick={onCancelPayment}>Want to edit project? Cancel payment.</div>
+        <div className={classes.cancelPayment} onClick={onCancelPayment} translation-key="common_cancel_payment">{t("common_cancel_payment")}</div>
       </Grid>
       <Grid className={classes.flexTotalMobile}>
         <Grid>

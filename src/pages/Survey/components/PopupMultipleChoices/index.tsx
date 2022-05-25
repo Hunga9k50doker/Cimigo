@@ -28,6 +28,7 @@ import {
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
+import { t } from "i18next";
 
 interface Props {
   isOpen: boolean;
@@ -187,17 +188,18 @@ const PopupMultipleChoices = (props: Props) => {
           className={classes.formControl}
         >
           <Grid className={classes.content}>
-            <div className={classes.titlePopup}>Add multiple choices</div>
+            <div className={classes.titlePopup} translation-key="setup_survey_popup_add_multiple_choices_title">{t("setup_survey_popup_add_multiple_choices_title")}</div>
             <IconButton
               className={classes.iconClose}
               onClick={() => onClose()}
             ></IconButton>
           </Grid>
           <Grid className={classes.classform}>
-            <p className={classes.title}>Question title</p>
+            <p className={classes.title} translation-key="setup_survey_popup_question_title">{t("setup_survey_popup_question_title")}</p>
             <Inputs
               className={classes.inputQuestion}
-              placeholder="Enter question title"
+              translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
+              placeholder={t("setup_survey_popup_enter_question_placeholder")}
               startAdornment={
                 <InputAdornment position="start">
                   <div className={classes.iconLanguage}>{language}</div>
@@ -210,7 +212,7 @@ const PopupMultipleChoices = (props: Props) => {
             />
             <Grid sx={{ position: "relative", marginTop: "30px" }}>
               <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="droppable-list-answer-checkbox">
+                <Droppable droppableId="droppable-list-multiple-choices-answer">
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.droppableProps}>
                       {answers.map((ans, index) => (
@@ -244,7 +246,8 @@ const PopupMultipleChoices = (props: Props) => {
                                 />
                                 <input
                                   type="text"
-                                  placeholder="Enter answer"
+                                  translation-key-placeholder="setup_survey_popup_enter_answer_placeholder"
+                                  placeholder={t("setup_survey_popup_enter_answer_placeholder")}
                                   className={classes.inputanswer}
                                   defaultValue={ans.title}
                                   onChange={handleChangeInputAns(
@@ -286,9 +289,9 @@ const PopupMultipleChoices = (props: Props) => {
                                   <label
                                     htmlFor={`${String(ans.id)}`}
                                     className={classes.toggleSwitch}
-                                  ></label>
-                                  <span className={classes.excluOptions}>
-                                    Exclusive option
+                                  />
+                                  <span className={classes.excluOptions} translation-key="setup_survey_popup_exclusive_option_title">
+                                    {t("setup_survey_popup_exclusive_option_title")}
                                   </span>
                                 </Grid>
                                 <div className={classes.errAns}>
@@ -319,7 +322,7 @@ const PopupMultipleChoices = (props: Props) => {
                     className={classes.IconListAdd}
                     alt=""
                   />
-                  <p className={classes.clickAddOption}>Click to add option</p>
+                  <p className={classes.clickAddOption} translation-key="setup_survey_popup_add_answer_title">{t("setup_survey_popup_add_answer_title")}</p>
                 </button>
               </Grid>
             )}
@@ -327,7 +330,8 @@ const PopupMultipleChoices = (props: Props) => {
           <Grid>
             <Button
               type="submit"
-              children="Save question"
+              translation-key="setup_survey_popup_save_question_title"
+              children={t("setup_survey_popup_save_question_title")}
               className={classes.btnSave}
             />
           </Grid>

@@ -8,15 +8,17 @@ import { matchPath, Redirect, Route, Switch, NavLink } from "react-router-dom";
 import UserProfile from './UserProfile';
 import { routes } from "routers/routes";
 import clsx from 'clsx';
-import { useState, useRef, memo } from 'react';
+import { useState, useRef, memo, useMemo } from 'react';
 import ChangePassword from './ChangePassword';
 import PaymentInfo from './PaymentInfo';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
 
 }
 
 const AccountPage = memo(({}: Props) => {
+  const { t, i18n } = useTranslation();
   const { logout } = UseAuth();
   const [isOpen, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
@@ -38,23 +40,25 @@ const AccountPage = memo(({}: Props) => {
     setOpen(false);
   };
 
-  const dataMenuList = [
-    {
-      icon: PersonOutline,
-      path: routes.account.userProfile,
-      name: "User profile",
-    },
-    {
-      icon: Loop,
-      path: routes.account.changePassword,
-      name: "Change password",
-    },
-    {
-      icon: Payment,
-      path: routes.account.paymentInfo,
-      name: "Payment info",
-    },
-  ]
+  const dataMenuList = useMemo(() => {
+    return [
+      {
+        icon: PersonOutline,
+        path: routes.account.userProfile,
+        name: t("auth_user_profile"),
+      },
+      {
+        icon: Loop,
+        path: routes.account.changePassword,
+        name: t("auth_change_password"),
+      },
+      {
+        icon: Payment,
+        path: routes.account.paymentInfo,
+        name: t("auth_payment_info"),
+      }
+    ]
+  }, [i18n.language]);
 
   const links = (
     <List>
@@ -76,7 +80,7 @@ const AccountPage = memo(({}: Props) => {
       <Divider/>
       <Button className={classes.btnLogout} onClick={logout}>
         <Logout/>
-        <p>Logout</p>
+        <p translation-key="auth_log_out">{t("auth_log_out")}</p>
       </Button>
     </List>
   );
