@@ -28,6 +28,7 @@ import {
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   isOpen: boolean;
@@ -39,6 +40,8 @@ interface Props {
 }
 
 const PopupSingleChoice = (props: Props) => {
+  const { t } = useTranslation();
+
   const { onClose, isOpen, onSubmit, questionEdit, questionType, language } =
     props;
 
@@ -176,17 +179,18 @@ const PopupSingleChoice = (props: Props) => {
           className={classes.formControl}
         >
           <Grid className={classes.content}>
-            <div className={classes.titlePopup}>Add single choice</div>
+            <div className={classes.titlePopup} translation-key="setup_survey_popup_add_single_choice_title">{t("setup_survey_popup_add_single_choice_title")}</div>
             <IconButton
               className={classes.iconClose}
               onClick={() => onClose()}
             ></IconButton>
           </Grid>
           <Grid className={classes.classform}>
-            <p className={classes.title}>Question title</p>
+            <p className={classes.title} translation-key="setup_survey_popup_question_title">{t("setup_survey_popup_question_title")}</p>
             <Inputs
               className={classes.inputQuestion}
-              placeholder="Enter question title"
+              translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
+              placeholder={t("setup_survey_popup_enter_question_placeholder")}
               startAdornment={
                 <InputAdornment position="start">
                   <div className={classes.iconLanguage}>{language}</div>
@@ -199,7 +203,7 @@ const PopupSingleChoice = (props: Props) => {
             />
             <Grid sx={{ position: "relative", marginTop: "30px" }}>
               <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="droppable-list-answer">
+                <Droppable droppableId="droppable-list-single-choice-answer">
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.droppableProps}>
                       {answers?.map((ans, index) => (
@@ -234,7 +238,8 @@ const PopupSingleChoice = (props: Props) => {
                                   />
                                   <input
                                     type="text"
-                                    placeholder="Enter answer"
+                                    translation-key-placeholder="setup_survey_popup_enter_answer_placeholder"
+                                    placeholder={t("setup_survey_popup_enter_answer_placeholder")}
                                     className={classes.inputanswer}
                                     defaultValue={ans.title}
                                     onChange={handleChangeInputAns(
@@ -283,8 +288,8 @@ const PopupSingleChoice = (props: Props) => {
                     className={classes.IconListAdd}
                     alt=""
                   />
-                  <p className={classes.clickAddOptionSigle}>
-                    Click to add option
+                  <p className={classes.clickAddOptionSigle} translation-key="setup_survey_popup_add_answer_title">
+                    {t("setup_survey_popup_add_answer_title")}
                   </p>
                 </button>
               </Grid>
@@ -293,7 +298,8 @@ const PopupSingleChoice = (props: Props) => {
           <Grid>
             <Button
               type="submit"
-              children="Save question"
+              translation-key="setup_survey_popup_save_question_title"
+              children={t("setup_survey_popup_save_question_title")}
               className={classes.btnSave}
             />
           </Grid>

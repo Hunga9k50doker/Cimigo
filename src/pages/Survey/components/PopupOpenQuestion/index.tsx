@@ -13,6 +13,7 @@ import * as yup from "yup";
 import Inputs from "components/Inputs";
 import { CustomQuestion, CustomQuestionFormData, ECustomQuestionType } from "models/custom_question";
 import { useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   isOpen: boolean;
@@ -23,6 +24,8 @@ interface Props {
 }
 
 const PopupOpenQuestion = (props: Props) => {
+  const { t } = useTranslation();
+
   const { onClose, isOpen, onSubmit, questionEdit, language } = props;
 
   const schema = useMemo(() => {
@@ -74,7 +77,7 @@ const PopupOpenQuestion = (props: Props) => {
     >
       <DialogContent sx={{ padding: "0px" }}>
         <Grid className={classes.content}>
-          <div className={classes.titlePopup}>Add open question</div>
+          <div className={classes.titlePopup} translation-key="setup_survey_popup_add_open_question_title">{t("setup_survey_popup_add_open_question_title")}</div>
           <IconButton
             className={classes.iconClose}
             onClick={() => onClose()}
@@ -85,10 +88,11 @@ const PopupOpenQuestion = (props: Props) => {
             onSubmit={handleSubmit(_onSubmit)}
             className={classes.formControl}
           >
-            <p className={classes.title}>Question title</p>
+            <p className={classes.title} translation-key="setup_survey_popup_question_title">{t("setup_survey_popup_question_title")}</p>
             <Inputs
               className={classes.inputQuestion}
-              placeholder="Enter question title"
+              translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
+              placeholder={t("setup_survey_popup_enter_question_placeholder")}
               startAdornment={
                 <InputAdornment position="start">
                   <div className={classes.iconLanguage}>{language}</div>
@@ -102,7 +106,8 @@ const PopupOpenQuestion = (props: Props) => {
             <Grid>
               <Button
                 type="submit"
-                children="Save question"
+                translation-key="setup_survey_popup_save_question_title"
+                children={t("setup_survey_popup_save_question_title")}
                 className={classes.btnSave}
               />
             </Grid>

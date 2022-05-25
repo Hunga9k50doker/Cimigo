@@ -5,6 +5,7 @@ import Images from "config/images";
 import classes from "./styles.module.scss";
 import { Button, Collapse, Grid } from "@mui/material";
 import { fCurrency2 } from "utils/formatNumber";
+import { useTranslation } from "react-i18next";
 
 interface CustomQuestionListMobileProps {
   questions: CustomQuestion[];
@@ -21,6 +22,7 @@ const CustomQuestionListMobile = memo(
       onShowConfirmDeleteQuestion,
       editableProject,
     } = props;
+    const { t } = useTranslation();
     const [expandId, setExpandId] = useState<number>();
 
     const handleClickQuestion = (id: number) => {
@@ -103,14 +105,14 @@ const CustomQuestionListMobile = memo(
                         onClick={(e) => handleEditQuestion(e, item)}
                         translation-key="common_edit"
                       >
-                        Edit
+                        {t("common_edit")}
                       </Button>
                       <Button
                         className={classes.deleteButton}
                         onClick={(e) => handleDeleteQuestion(e, item)}
                         translation-key="common_delete"
                       >
-                        Delete
+                        {t("common_delete")}
                       </Button>
                     </div>
                   )}
