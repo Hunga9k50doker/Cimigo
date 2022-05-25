@@ -74,6 +74,17 @@ export enum EPaymentStatus {
   CANCEL,
   FAILED
 }
+export interface UpdateInvoiceInfo {
+  projectId: number,
+  saveForLater: boolean,
+  fullName: string,
+  companyName: string,
+  email: string,
+  phone: string,
+  countryId: number,
+  companyAddress: string,
+  taxCode: string,
+}
 
 export const paymentStatuses: OptionItem[] = [
   { id: EPaymentStatus.NOT_PAID, name: 'Not paid' },

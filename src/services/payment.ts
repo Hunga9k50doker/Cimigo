@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { CheckoutParams, TryAgain, UpdateConfirmPayment } from 'models/payment';
+import { CheckoutParams, TryAgain, UpdateConfirmPayment, UpdateInvoiceInfo } from 'models/payment';
 import api from 'services/configApi';
 
 export class PaymentService {
@@ -64,6 +64,15 @@ export class PaymentService {
         return Promise.reject(e?.response?.data);
       })
   }
+  static async updateInvoiceInfo(id: number, data: UpdateInvoiceInfo): Promise<any> { 
+    return await api.put(API.PAYMENT.UPDATE_INVOICE_INFO.replace(':id', `${id}`), data)
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
 
   static async getInvoice(projectId: number) {
     return await api.get(API.PAYMENT.INVOICE, {
@@ -88,4 +97,5 @@ export class PaymentService {
         return Promise.reject(JSON.parse(await e?.response?.data?.text() || '{}'));
       })
   }
+
 }

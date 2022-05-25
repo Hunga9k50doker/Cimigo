@@ -16,8 +16,9 @@ import { useDispatch } from 'react-redux';
 import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
 import CountryService from 'services/country';
 import InputSelect from 'components/InputsSelect';
-import { Payment } from 'models/payment';
-
+import { Payment, UpdateInvoiceInfo } from 'models/payment';
+import { getProjectRequest } from 'redux/reducers/Project/actionTypes';
+import { PaymentService } from 'services/payment';
 interface Props {
   payment: Payment,
   isOpen: boolean,
@@ -93,8 +94,25 @@ const PopupInvoiceInformation = memo((props: Props) => {
     fetchData()
   }, [dispatch])
 
-  const onSubmit = (data) => {
-    console.log(payment)
+  const onSubmit = (data: InvoiceInfoData) => {
+    const form: UpdateInvoiceInfo = {
+      projectId: payment.id,
+      saveForLater: data.saveForLater,
+      fullName: data.fullName,
+      companyName: data.companyName,
+      email: data.email,
+      companyAddress: data.companyAddress,
+      phone: data.phone,
+      countryId: data.countryId.id,
+      taxCode: data.taxCode || '',
+    }
+    dispatch(setLoading(true))
+    PaymentService.updateInvoiceInfo(project.id, form)
+      .then(() => {
+        dispatch(getProjectRequest(project.id))
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
   return (
