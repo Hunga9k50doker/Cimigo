@@ -106,7 +106,7 @@ const Order = memo(({ }: Props) => {
               </Grid>
             </Grid>
             <p className={classes.textBlack} dangerouslySetInnerHTML={{__html: t('payment_billing_order_make_an_order_sub_2')}} translation-key="payment_billing_order_make_an_order_sub_2"></p>
-            <a onClick={onShowConfirmCancel} className={classes.cancelPaymentOrder}>Want to edit project? Cancel payment.</a>
+            <a onClick={onShowConfirmCancel} className={classes.cancelPaymentOrder} translation-key="common_cancel_payment">{t("common_cancel_payment")}</a>
           </>
         )
       case EPaymentMethod.BANK_TRANSFER:
@@ -178,7 +178,7 @@ const Order = memo(({ }: Props) => {
               dangerouslySetInnerHTML={{__html: t('payment_billing_order_bank_transfer_sub_6')}}
             >
             </p>
-            <a onClick={onShowConfirmCancel} className={classes.cancelPaymentBank}>Want to edit project? Cancel payment.</a>
+            <a onClick={onShowConfirmCancel} className={classes.cancelPaymentBank} translation-key="common_cancel_payment">{t("common_cancel_payment")}</a>
           </>
         )
     }

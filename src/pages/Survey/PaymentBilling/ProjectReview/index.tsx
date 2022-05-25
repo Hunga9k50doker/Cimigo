@@ -252,8 +252,9 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_attributes">{(projectAttributes?.length || 0) + (userAttributes?.length || 0)} {t('payment_billing_sub_tab_preview_attributes')}</span>
               </div>
               <div>
-                <p className={classes.text} translation-key="payment_billing_sub_tab_preview_custom_question">Custom question</p>
-                <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_custom_question">{project?.customQuestions?.length || 0} {project?.customQuestions?.length > 1 ? `questions` : `question`}</span>
+                <p className={classes.text} translation-key="payment_billing_sub_tab_preview_custom_question">{t("payment_billing_sub_tab_preview_custom_question")}</p>
+                {project?.customQuestions?.length <= 1 && <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_question">{project?.customQuestions?.length || 0} {t("payment_billing_sub_tab_preview_question")}</span>}
+                {project?.customQuestions?.length > 1 && <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_questions">{project?.customQuestions?.length || 0} {t("payment_billing_sub_tab_preview_questions")}</span>}
               </div>
             </div>
           </Grid>

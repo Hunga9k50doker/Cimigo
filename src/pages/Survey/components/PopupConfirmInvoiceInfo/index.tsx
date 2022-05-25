@@ -1,37 +1,52 @@
-import { Dialog, Grid, IconButton } from "@mui/material"
+import { Dialog, Grid, IconButton } from "@mui/material";
 import Buttons from "components/Buttons";
-import classes from './styles.module.scss';
+import classes from "./styles.module.scss";
 import Images from "config/images";
+import { useTranslation } from "react-i18next";
 
 interface Props {
-  isOpen: boolean,
-  onYes: () => void,
-  onClose: () => void,
+  isOpen: boolean;
+  onYes: () => void;
+  onClose: () => void;
 }
 
 const PopupConfirmInvoiceInfo = (props: Props) => {
-
+  const { t } = useTranslation();
   const { isOpen, onYes, onClose } = props;
-  return <Dialog
-    open={isOpen}
-    classes={{ paper: classes.paper }}
-    onClose={onClose}
-  >
-    <Grid>
-      <Grid className={classes.header}>
-        <IconButton onClick={onClose} className={classes.shadowIcClose}>
-          <img src={Images.icClose} alt='' />
-        </IconButton>
+
+  return (
+    <Dialog open={isOpen} classes={{ paper: classes.paper }} onClose={onClose}>
+      <Grid>
+        <Grid className={classes.header}>
+          <IconButton onClick={onClose} className={classes.shadowIcClose}>
+            <img src={Images.icClose} alt="" />
+          </IconButton>
+        </Grid>
+        <Grid className={classes.title}>
+          <span translation-key="payment_billing_sub_tab_payment_skip_info_title">{t("payment_billing_sub_tab_payment_skip_info_title")}</span>
+          <p translation-key="payment_billing_sub_tab_payment_skip_info_sub">
+            {t("payment_billing_sub_tab_payment_skip_info_sub")}
+          </p>
+        </Grid>
+        <Grid className={classes.btn}>
+          <Buttons
+            children={t("payment_billing_sub_tab_payment_skip_info_yes")}
+            translation-key="payment_billing_sub_tab_payment_skip_info_yes"
+            btnType="TransparentBlue"
+            padding="12px 16px 12px 16px"
+            onClick={onYes}
+          />
+          <Buttons
+            children={t("payment_billing_sub_tab_payment_skip_info_no")}
+            translation-key="payment_billing_sub_tab_payment_skip_info_no"
+            btnType="Red"
+            padding="12px 34px 12px 34px"
+            onClick={onClose}
+          />
+        </Grid>
       </Grid>
-      <Grid className={classes.title}>
-        <span>Skip invoice information?</span>
-        <p>Do you really want to skip over details of the invoice? You can update these later if you skip them, but the invoice export will take longer.</p>
-      </Grid>
-      <Grid className={classes.btn}>
-        <Buttons children="Yes, skip it!" btnType='TransparentBlue' padding='12px 16px 12px 16px' onClick={onYes} />
-        <Buttons children="No, let me update" btnType='Red' padding='12px 34px 12px 34px' onClick={onClose} />
-      </Grid>
-    </Grid>
-  </Dialog>
-}
-export default PopupConfirmInvoiceInfo
+    </Dialog>
+  );
+};
+
+export default PopupConfirmInvoiceInfo;
