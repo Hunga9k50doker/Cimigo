@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, ResetQuota, UpdateProjectBasicInformation, UpdateQuota, UpdateTarget } from 'models/project';
+import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, ResetQuota, UpdateProjectBasicInformation, UpdateQuota, UpdateTarget, UpdateEnableCustomQuestion } from 'models/project';
 import api from 'services/configApi';
 
 export class ProjectService {
@@ -127,4 +127,13 @@ export class ProjectService {
       })
   }
 
+  static async updateEnableCustomQuestion(id: number, data: UpdateEnableCustomQuestion): Promise<any> {
+    return await api.put(API.PROJECT.UPDATE_ENABLE_CUSTOM_QUESTION.replace(":id", `${id}`), data)
+    .then((res) => {
+      return Promise.resolve(res.data);
+    })
+    .catch((e) => {
+      return Promise.reject(e?.response?.data);
+    })
+  }
 }

@@ -9,6 +9,7 @@ import { AdditionalBrand } from './additional_brand';
 import { ProjectAttribute } from './project_attribute';
 import { UserAttribute } from './user_attribute';
 import { User } from './user';
+import { CustomQuestion } from './custom_question';
 export interface CreateProjectData {
   solutionId: number;
   name: string,
@@ -49,6 +50,7 @@ export interface Project {
   additionalBrands?: AdditionalBrand[];
   projectAttributes?: ProjectAttribute[];
   userAttributes?: UserAttribute[];
+  customQuestions?: CustomQuestion[];
   user?: User;
 }
 
@@ -108,6 +110,10 @@ export interface UpdateTarget {
     questionId: number,
     answerIds: number[]
   }[]
+}
+
+export interface UpdateEnableCustomQuestion {
+  enableCustomQuestion: boolean;
 }
 
 export interface UpdateQuota {

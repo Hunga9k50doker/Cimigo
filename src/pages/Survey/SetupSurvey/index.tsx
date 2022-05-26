@@ -1,5 +1,6 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo, useMemo } from "react";
 import classes from './styles.module.scss';
+import clsx from "clsx";
 import {
   FormControl,
   Grid,
@@ -22,7 +23,8 @@ import {
   StepContent,
   StepConnector,
   Collapse,
-  Button
+  Button,
+  breadcrumbsClasses,
 } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -43,7 +45,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { ProjectService } from "services/project";
-import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import { getProjectRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { PackService } from "services/pack";
 import { Pack } from "models/pack";
 import { AdditionalBrandService } from "services/additional_brand";
@@ -58,6 +60,16 @@ import { editableProject } from "helpers/project";
 import { Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
+import Toggle from "components/Toggle";
+import { CreateQuestionParams, CustomQuestion, CustomQuestionType, ECustomQuestionType, UpdateOrderQuestionParams, UpdateQuestionParams } from "models/custom_question";
+import { CustomQuestionService } from "services/custom_question";
+import CustomQuestionDragList from "../components/CustomQuestionDragList";
+import CustomQuestionListMobile from "../components/CustomQuestionListMobile";
+import PopupOpenQuestion from "../components/PopupOpenQuestion";
+import PopupSingleChoice from "../components/PopupSingleChoice";
+import PopupMultipleChoices from "../components/PopupMultipleChoices";
+import { fCurrency2 } from "utils/formatNumber";
+import { PriceService } from "helpers/price";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -114,6 +126,9 @@ const SetupSurvey = memo(({ id }: Props) => {
 
   const [openPopupMandatory, setOpenPopupMandatory] = useState(false)
   const [openPopupPreDefined, setOpenPopupPreDefined] = useState(false)
+  const [openPopupOpenQuestion, setOpenPopupOpenQuestion] = useState(false)
+  const [openPopupSingleChoice, setOpenPopupSingleChoice] = useState(false)
+  const [openPopupMultipleChoices, setOpenPopupMultipleChoices] = useState(false)
 
   const [packs, setPacks] = useState<Pack[]>([]);
   const [addNewPack, setAddNewPack] = useState<boolean>(false);
@@ -142,6 +157,13 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [userAttributeDelete, setUserAttributeDelete] = useState<UserAttribute>()
   const [projectAttributeDelete, setProjectAttributeDelete] = useState<ProjectAttribute>()
 
+  const [customQuestionType, setCustomQuestionType] = useState<CustomQuestionType[]>([]);
+  const [questions, setQuestions] = useState<CustomQuestion[]>([]);
+  const [openQuestionEdit, setOpenQuestionEdit] = useState<CustomQuestion>();
+  const [singleChoiceEdit, setSingleChoiceEdit] = useState<CustomQuestion>();
+  const [multipleChoicesEdit, setMultipleChoicesEdit] = useState<CustomQuestion>();
+  const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
+
   useEffect(() => {
     if (project) {
       reset({
@@ -151,7 +173,13 @@ const SetupSurvey = memo(({ id }: Props) => {
         manufacturer: project.manufacturer
       })
     }
-  }, [project])
+  }, [project]);
+
+  useEffect(() => {
+    if (project) {
+      dispatch(setProjectReducer({ ...project, customQuestions: questions }))
+    }
+  }, [questions]);
 
   const getPacks = () => {
     PackService.getPacks({ take: 9999, projectId: id })
@@ -177,11 +205,49 @@ const SetupSurvey = memo(({ id }: Props) => {
       .catch((e) => dispatch(setErrorMess(e)))
   }
 
+  const getCustomQuestionType = () => {
+    CustomQuestionService.getTypes({ take: 99 })
+      .then((res) => {
+        setCustomQuestionType(res.data);
+      })
+      .catch(e => dispatch(setErrorMess(e)));
+  }
+
+  const getCustomQuestion = () => {
+    CustomQuestionService.findAll({ take: 9999, projectId: id })
+      .then((res) => {
+        setQuestions(res.data);
+      })
+      .catch(e => dispatch(setErrorMess(e)));
+  }
+
+  const getQuestionDetail = (question: CustomQuestion) => {
+    CustomQuestionService.findOne(question.id)
+      .then((res) => {
+        switch (question.typeId) {
+          case ECustomQuestionType.Open_Question:
+            setOpenQuestionEdit(res.data);
+            break;
+          case ECustomQuestionType.Single_Choice:
+            setSingleChoiceEdit(res.data);
+            break;
+          case ECustomQuestionType.Multiple_Choices:
+            setMultipleChoicesEdit(res.data);
+            break;
+          default:
+            break;
+        }
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+  }
+
   useEffect(() => {
-    getPacks()
-    getAdditionalBrand()
-    getProjectAttributes()
-    getUserAttributes()
+    getPacks();
+    getAdditionalBrand();
+    getProjectAttributes();
+    getUserAttributes();
+    getCustomQuestionType();
+    getCustomQuestion();
   }, [id])
 
   const onSubmitBI = (data: BasicInformationFormData) => {
@@ -220,7 +286,6 @@ const SetupSurvey = memo(({ id }: Props) => {
         .finally(() => dispatch(setLoading(false)))
     }
     onCloseAddOrEditPack()
-
   }
 
   const onDeletePack = () => {
@@ -382,6 +447,10 @@ const SetupSurvey = memo(({ id }: Props) => {
     return project?.solution?.maxAdditionalBrand || 0
   }
 
+  const maxCustomQuestion = () => {
+    return project?.solution?.maxCustomQuestion || 0
+  }
+
   const enableAdditionalAttributes = () => {
     return maxAdditionalAttribute() > ((projectAttributes?.length || 0) + (userAttributes?.length || 0))
   }
@@ -500,6 +569,202 @@ const SetupSurvey = memo(({ id }: Props) => {
         .finally(() => dispatch(setLoading(false)))
     }
   }
+
+  const onToggleCustomQuestion = () => {
+    dispatch(setLoading(true))
+    ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: !project?.enableCustomQuestion })
+      .then(() => {
+        dispatch(setProjectReducer({...project, enableCustomQuestion: !project?.enableCustomQuestion}));
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const totalCustomQuestionPrice = () => {
+    return PriceService.getCustomQuestionCost(project);
+  }
+
+  const countQuestionType = (type: ECustomQuestionType) => {
+    return questions.filter((item) => item.typeId === type).length;
+  }
+
+  const findQuestionType = (type: ECustomQuestionType) => {
+    return customQuestionType?.find(item => item.id === type);
+  }
+
+  const questionTypeOpenQuestion = useMemo(() => findQuestionType(ECustomQuestionType.Open_Question), [customQuestionType]);
+
+  const questionTypeSingleChoice = useMemo(() => findQuestionType(ECustomQuestionType.Single_Choice), [customQuestionType]);
+
+  const questionTypeMultipleChoices = useMemo(() => findQuestionType(ECustomQuestionType.Multiple_Choices), [customQuestionType]);
+
+  const onOpenPopupCustomQuestion = (type: ECustomQuestionType) => {
+    switch (type) {
+      case ECustomQuestionType.Open_Question:
+        setOpenPopupOpenQuestion(true);
+        break;
+      case ECustomQuestionType.Single_Choice:
+        setOpenPopupSingleChoice(true);
+        break;
+      case ECustomQuestionType.Multiple_Choices:
+        setOpenPopupMultipleChoices(true);
+        break;
+      default:
+        break;
+    }
+  }
+
+  const onClosePopupOpenQuestion = () => {
+    setOpenPopupOpenQuestion(false);
+    setOpenQuestionEdit(null);
+  }
+
+  const onClosePopupSingleChoice = () => {
+    setOpenPopupSingleChoice(false);
+    setSingleChoiceEdit(null);
+  }
+
+  const onClosePopupMultipleChoices = () => {
+    setOpenPopupMultipleChoices(false);
+    setMultipleChoicesEdit(null);
+  }
+
+  const onAddOrEditOpenQuestion = (data: CustomQuestion) => {
+    if (openQuestionEdit) {
+      dispatch(setLoading(true));
+      const params: UpdateQuestionParams = {
+        title: data.title,
+        answers: data.answers,
+      }
+      CustomQuestionService.update(openQuestionEdit.id, params)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupOpenQuestion();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true));
+      const params: CreateQuestionParams = {
+        projectId: id,
+        title: data.title,
+        typeId: data.typeId,
+        answers: data.answers,
+      }
+      CustomQuestionService.create(params)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupOpenQuestion();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
+  const onAddOrEditSingleChoice = (data: CustomQuestion) => {
+    if (singleChoiceEdit) {
+      dispatch(setLoading(true));
+      const params: UpdateQuestionParams = {
+        title: data.title,
+        answers: data.answers,
+      }
+      CustomQuestionService.update(singleChoiceEdit.id, params)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupSingleChoice();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true));
+      const params: CreateQuestionParams = {
+        projectId: id,
+        title: data.title,
+        typeId: data.typeId,
+        answers: data.answers,
+      }
+      CustomQuestionService.create(params)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupSingleChoice();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
+  const onAddOrEditMultipleChoices = (data: CustomQuestion) => {
+    if (multipleChoicesEdit) {
+      dispatch(setLoading(true));
+      const params: UpdateQuestionParams = {
+        title: data.title,
+        answers: data.answers,
+      }
+      CustomQuestionService.update(multipleChoicesEdit.id, params)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupMultipleChoices();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true));
+      const params: CreateQuestionParams = {
+        projectId: id,
+        title: data.title,
+        typeId: data.typeId,
+        answers: data.answers,
+      }
+      CustomQuestionService.create(params)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupMultipleChoices();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
+  const onUpdateOrderQuestion = (list: CustomQuestion[]) => {
+    const params: UpdateOrderQuestionParams = {
+      projectId: id,
+      questions: list.map((item, index) => {
+        return {
+          id: item.id,
+          order: index + 1,
+        }
+      }),
+    }
+    CustomQuestionService.updateOrder(params)
+      .then(() => {
+        getCustomQuestion();
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+  }
+
+  const onEditQuestion = (question: CustomQuestion) => {
+    getQuestionDetail(question);
+    onOpenPopupCustomQuestion(question.typeId);
+  };
+
+  const onShowConfirmDeleteQuestion = (question: CustomQuestion) => {
+    setQuestionDelete(question);
+  }
+
+  const onCloseConfirmDeleteQuestion = () => {
+    setQuestionDelete(null);
+  }
+
+  const onDeleteQuestion = () => {
+    dispatch(setLoading(true));
+    CustomQuestionService.delete(questionDelete.id)
+      .then(() => {
+        getCustomQuestion();
+        onCloseConfirmDeleteQuestion();
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  };
 
   const scrollToElement = (id: string) => {
     const el = document.getElementById(id)
@@ -995,6 +1260,58 @@ const SetupSurvey = memo(({ id }: Props) => {
               <p translation-key="setup_survey_add_att_tip" dangerouslySetInnerHTML={{__html: t('setup_survey_add_att_tip')}}></p>
             </Grid>
           </Grid>
+          <div className={classes.line}></div>
+          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. {t("setup_survey_custom_question_title")} <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span> {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={onToggleCustomQuestion} />} <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span></div>
+          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span></div>
+          <Grid className={classes.flex}>
+            <p className={clsx({[classes.customQuestionSubTitleDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">{t("setup_survey_custom_question_sub_title")}</p>
+            <Grid className={clsx({[classes.displayNone]: !project?.enableCustomQuestion})}>
+              <CustomQuestionDragList questions={questions} setQuestions={setQuestions} onUpdateOrderQuestion={onUpdateOrderQuestion} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
+              {/* ===================Custom questions mobile====================== */}
+              <CustomQuestionListMobile questions={questions} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
+            </Grid>
+            <Grid className={clsx(classes.select, {[classes.displayNone]: !project?.enableCustomQuestion})}>
+              <FormControl classes={{ root: classes.rootSelect }} disabled={!editableProject(project) || questions.length >= maxCustomQuestion()}>
+                <Select
+                  variant="outlined"
+                  displayEmpty
+                  defaultValue={""}
+                  classes={{ select: classes.selectType, icon: classes.icSelect }}
+                  MenuProps={{
+                    className: classes.selectTypeMenu, 
+                    anchorOrigin: {
+                      vertical: "bottom",
+                      horizontal: "left"
+                    },
+                    transformOrigin: {
+                      vertical: "top",
+                      horizontal: "left"
+                    }
+                  }}
+                >
+                  <MenuItem disabled value="" translation-key="setup_survey_custom_question_menu_action_placeholder">
+                    {t("setup_survey_custom_question_menu_action_placeholder")}
+                  </MenuItem>
+                  {customQuestionType.map((item, index) => {
+                    const value = (index + 2) * 10;
+                    const image = item.id === ECustomQuestionType.Open_Question ? Images.icOpenQuestion : item.id === ECustomQuestionType.Single_Choice ? Images.icSingleChoice : item.id === ECustomQuestionType.Multiple_Choices ? Images.icMultipleChoices : null;
+                    return (
+                      <MenuItem value={value} onClick={() => onOpenPopupCustomQuestion(item.id)} key={item.id}>
+                        <div className={classes.questionType}>
+                          <div>
+                            <img src={image} alt="" />
+                            <p>{item.title}</p>
+                          </div>
+                          <span>${fCurrency2(item.price)}</span>
+                        </div>
+                      </MenuItem>
+                    )
+                  })}
+                </Select>
+              </FormControl>
+              {editableProject(project) && questions.length >= maxCustomQuestion() && <p translation-key="setup_survey_custom_question_error_max">{t("setup_survey_custom_question_error_max", { max: maxCustomQuestion()})}</p>}
+            </Grid>
+          </Grid>
         </Grid>
         <Grid classes={{ root: classes.right }}>
           <Grid className={classes.summary}>
@@ -1099,6 +1416,31 @@ const SetupSurvey = memo(({ id }: Props) => {
                   </ul>
                 </StepContent>
               </Step>
+              <Step active={project?.enableCustomQuestion} expanded>
+                <StepLabel
+                  onClick={() => scrollToElement('custom-questions')}
+                  StepIconComponent={ColorlibStepIcon}
+                  classes={{
+                    root: classes.rootStepLabel,
+                    completed: classes.rootStepLabelCompleted,
+                    active: classes.rootStepLabelActive,
+                    label: classes.rootStepLabel
+                  }}
+                  translation-key="setup_survey_summary_custom_question"
+                >
+                  <div className={classes.summaryCustomQuestion}>
+                    <span>{t("setup_survey_summary_custom_question")} ({project?.enableCustomQuestion ? questions.length : 0})</span>
+                    <span className={clsx(classes.summaryCustomQuestionPrice, {[classes.summaryCustomQuestionPriceDisabled]: !project?.enableCustomQuestion})}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span>
+                  </div>
+                </StepLabel>
+                <StepContent className={clsx(classes.rootConnector, {[classes.displayNone]: !project?.enableCustomQuestion})}>
+                  <ul>
+                    {countQuestionType(ECustomQuestionType.Open_Question) > 0 && <li translation-key="setup_survey_summary_open_question">{t("setup_survey_summary_open_question")} ({countQuestionType(ECustomQuestionType.Open_Question)})</li>}
+                    {countQuestionType(ECustomQuestionType.Single_Choice) > 0 && <li translation-key="setup_survey_summary_single_choice">{t("setup_survey_summary_single_choice")} ({countQuestionType(ECustomQuestionType.Single_Choice)})</li>}
+                    {countQuestionType(ECustomQuestionType.Multiple_Choices) > 0 && <li translation-key="setup_survey_summary_multiple_choices">{t("setup_survey_summary_multiple_choices")} ({countQuestionType(ECustomQuestionType.Multiple_Choices)})</li>}
+                  </ul>
+                </StepContent>
+              </Step>
             </Stepper>
           </Grid>
         </Grid>
@@ -1153,6 +1495,42 @@ const SetupSurvey = memo(({ id }: Props) => {
           description={t('setup_survey_add_att_confirm_delete_sub')}
           onCancel={() => onCloseConfirmDeleteAttribute()}
           onDelete={onDeleteAttribute}
+        />
+        {questionTypeOpenQuestion && (
+          <PopupOpenQuestion 
+            isOpen={openPopupOpenQuestion} 
+            onClose={onClosePopupOpenQuestion}
+            onSubmit={onAddOrEditOpenQuestion}
+            questionEdit={openQuestionEdit}
+            language={project?.surveyLanguage || ""}
+          />
+        )}
+        {questionTypeSingleChoice && (
+          <PopupSingleChoice
+            isOpen={openPopupSingleChoice}
+            onClose={onClosePopupSingleChoice}
+            onSubmit={onAddOrEditSingleChoice}
+            questionEdit={singleChoiceEdit}
+            questionType={questionTypeSingleChoice}
+            language={project?.surveyLanguage || ""}
+          />
+        )}
+        {questionTypeMultipleChoices && (
+          <PopupMultipleChoices
+            isOpen={openPopupMultipleChoices}
+            onClose={onClosePopupMultipleChoices}
+            onSubmit={onAddOrEditMultipleChoices}
+            questionEdit={multipleChoicesEdit}
+            questionType={questionTypeMultipleChoices}
+            language={project?.surveyLanguage || ""}
+          />
+        )}
+        <PopupConfirmDelete
+          isOpen={!!questionDelete}
+          title={"Delete question?"}
+          description={"Are you sure you want to delete this question?"}
+          onCancel={() => onCloseConfirmDeleteQuestion()}
+          onDelete={onDeleteQuestion}
         />
       </Grid>
     </>

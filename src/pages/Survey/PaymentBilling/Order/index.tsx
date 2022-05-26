@@ -11,12 +11,14 @@ import { EPaymentMethod } from "models/general";
 import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import { PaymentService } from "services/payment";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
-import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import { getProjectRequest, setCancelPayment } from "redux/reducers/Project/actionTypes";
 import { authOrder, getPayment } from "../models";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import WarningBox from "components/WarningBox";
 import PopupInvoiceInformation from "pages/Survey/components/PopupInvoiceInformation";
+import PopupConfirmCancelOrder from "pages/Survey/components/PopupConfirmCancelOrder";
+
 interface Props {
 
 }
@@ -26,8 +28,10 @@ const Order = memo(({ }: Props) => {
   const { t } = useTranslation()
 
   const dispatch = useDispatch()
-
+  
   const { project } = useSelector((state: ReducerType) => state.project)
+  
+  const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false);
 
   const payment = useMemo(() => getPayment(project?.payments), [project])
 
@@ -59,7 +63,30 @@ const Order = memo(({ }: Props) => {
 
   useEffect(() => {
     authOrder(project, onRedirect)
-  }, [project])
+  }, [project]);
+
+
+  const onShowConfirmCancel = () => {
+    setIsConfirmCancel(true);
+  }
+
+  const onCloseConfirmCancel = () => {
+    setIsConfirmCancel(false);
+  }
+
+  const onCancelPayment = () => {
+    dispatch(setLoading(true));
+    if (!payment) return;
+    PaymentService.cancel(payment.id)
+      .then(() => {
+        dispatch(setCancelPayment(true))
+        dispatch(getProjectRequest(project.id, () => {
+          onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview);
+        }))
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
+  }
 
   const render = () => {
     switch (payment?.paymentMethodId) {
@@ -82,7 +109,8 @@ const Order = memo(({ }: Props) => {
                 </div>
               </Grid>
             </Grid>
-            <p className={classes.textBlack} dangerouslySetInnerHTML={{ __html: t('payment_billing_order_make_an_order_sub_2') }} translation-key="payment_billing_order_make_an_order_sub_2"></p>
+            <p className={classes.textBlack} dangerouslySetInnerHTML={{__html: t('payment_billing_order_make_an_order_sub_2')}} translation-key="payment_billing_order_make_an_order_sub_2"></p>
+            <a onClick={onShowConfirmCancel} className={classes.cancelPaymentOrder} translation-key="common_cancel_payment">{t("common_cancel_payment")}</a>
           </>
         )
       case EPaymentMethod.BANK_TRANSFER:
@@ -154,6 +182,7 @@ const Order = memo(({ }: Props) => {
               dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_6') }}
             >
             </p>
+            <a onClick={onShowConfirmCancel} className={classes.cancelPaymentBank} translation-key="common_cancel_payment">{t("common_cancel_payment")}</a>
           </>
         )
     }
@@ -173,6 +202,11 @@ const Order = memo(({ }: Props) => {
         isOpen={isOpen}
         project={project}
         onClose={() => setIsOpen(false)}
+      />
+      <PopupConfirmCancelOrder
+        isOpen={isConfirmCancel}
+        onClose={onCloseConfirmCancel}
+        onYes={onCancelPayment}
       />
     </Grid>
   )

@@ -43,7 +43,6 @@
 }
 
 .inputQuestion {
-    border: 1px solid rgba(0, 0, 0, 0.4);
     border-bottom: none;
     position: relative;
     width: 100%;
@@ -56,8 +55,7 @@
     display: flex;
     align-items: center;
 
-
-    .iconVI {
+    .iconLanguage {
         color: rgba(28, 28, 28, 0.65);
         background-color: rgba(221, 221, 221, 1);
         font-weight: 500;
@@ -69,13 +67,18 @@
         justify-content: center;
         align-items: center;
         line-height: 14.6px;
+        text-transform: uppercase;
+    }
+
+    > input {
+        padding: 13px 5px 13px 3px;
     }
 }
 
 .classform {
     background-color: white;
     min-height: 100px;
-    padding: 32px 22px 26px 22px;
+    padding: 32px 28px 26px 28px;
     position: relative;
 
     p:nth-child(1) {
@@ -83,9 +86,9 @@
     }
 
     .title {
-      
         font-size: 16px;
         font-weight: 500;
+        margin-bottom: 5px;
     }
 
     .btnSave {
@@ -98,8 +101,6 @@
         line-height: 16px;
         text-transform: none;
         margin-top: 32px;
-        position: absolute;
-        right: 4%;
     }
 
     .btnSave:disabled {
@@ -125,6 +126,6 @@
     }
 
     .btnSave {
-        width: 92%;
+        width: 100%;
     }
 }

@@ -35,6 +35,7 @@ export const API = {
     BASIC_INFORMATION: '/v1.0/project/:id/basic-information',
     TARGET: '/v1.0/project/:id/target',
     SAMPLE_SIZE: '/v1.0/project/:id/sample-size',
+    UPDATE_ENABLE_CUSTOM_QUESTION: '/v1.0/project/:id/update-enable-custom-question',
     QUOTA: {
       DEFAULT: '/v1.0/project/:id/quota',
     }
@@ -57,8 +58,14 @@ export const API = {
   USER_ATTRIBUTE: {
     DEFAULT: '/v1.0/user-attribute',
   },
+  CUSTOM_QUESTION: {
+    DEFAULT: '/v1.0/custom-question',
+    UPDATE_ORDER: '/v1.0/custom-question/update-order',
+    GET_TYPES: '/v1.0/custom-question/type', 
+    QUESTION: '/v1.0/custom-question/:id',
+  },
   TRANSLATION: {
-    DEFAULT: '/v1.0/translation/{{lng}}/{{ns}}'
+    DEFAULT: '/v1.0/translation/{{lng}}/{{ns}}',
   },
   TARGET: {
     DEFAULT: '/v1.0/target/question',
@@ -75,7 +82,8 @@ export const API = {
     ONEPAY_CALLBACK: '/v1.0/payment/onepay/callback',
     CANCEL: '/v1.0/payment/:id/cancel',
     TRY_AGAIN: '/v1.0/payment/:id/try-again',
-    UPDATE_INVOICE_INFO: '/v1.0/payment/:id/update-invoice-info'
+    UPDATE_INVOICE_INFO: '/v1.0/payment/:id/update-invoice-info',
+    CHANGE_PAYMENT_METHOD: '/v1.0/payment/:id/change-payment-method',
   },
   ATTACHMENT: {
     DOWNLOAD: '/v1.0/attachment/:id/download',

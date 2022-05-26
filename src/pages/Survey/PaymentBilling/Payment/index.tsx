@@ -371,11 +371,11 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
               label={
                 <Grid classes={{ root: classes.order }}>
-                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_bank_transfer">
-                    <img src={images.icInternetBanking} alt="" />ATM card / Bank account (Vietnam only)
+                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_internet_banking">
+                    <img src={images.icInternetBanking} alt="" />{t("payment_billing_sub_tab_payment_method_internet_banking")}
                   </Grid>
-                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_bank_transfer_sub">
-                    Use your ATM card or bank account with internet banking supported to pay. You will be redirected to Onepay to complete your purchase securely.
+                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_internet_banking_sub">
+                    {t("payment_billing_sub_tab_payment_method_internet_banking_sub")}
                   </p>
                 </Grid>
               }
@@ -386,8 +386,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
               label={
                 <Grid classes={{ root: classes.order }}>
-                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_bank_transfer">
-                    <img src={images.icCreditDebit} alt="" />Credit / Debit Card
+                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_credit_or_debit">
+                    <img src={images.icCreditDebit} alt="" />{t("payment_billing_sub_tab_payment_method_credit_or_debit")}
                   </Grid>
                   <Grid className={classes.methodImg}>
                     <img src={images.imgVisa} alt="" />
@@ -396,8 +396,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                     <img src={images.imgJCB} alt="" />
                     <img src={images.imgUnionpay} alt="" />
                   </Grid>
-                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_bank_transfer_sub">
-                    You will be redirected to Onepay to complete your purchase securely.
+                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_credit_or_debit_sub">
+                    {t("payment_billing_sub_tab_payment_method_credit_or_debit_sub")}
                   </p>
                 </Grid>
               }
@@ -512,10 +512,10 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               <span translation-key="payment_billing_sub_tab_payment_summary_sample_size">{t('payment_billing_sub_tab_payment_summary_sample_size')}</span>
               <span>{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</span>
             </div>
-            {/* <div className={classes.flexOrder}>
-            <span>Eye tracking</span>
-            <span>$99</span>
-          </div> */}
+            <div className={classes.flexOrder}>
+              <span translation-key="payment_billing_sub_tab_payment_summary_custom_question">{t("payment_billing_sub_tab_payment_summary_custom_question")}</span>
+              <span>{`$`}{fCurrency2(price?.customQuestionCostUSD || 0)}</span>
+            </div>
             <div className={clsx(classes.flexOrder, classes.isMobile)}>
               <span translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</span>
               <span>{`$`}{fCurrency2(price?.vatUSD || 0)}</span>
@@ -535,15 +535,15 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               <a>{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</a>
             </div>
             <span>({fCurrency2VND(price?.totalAmount || 0)} VND)</span>
-            <div className={classes.chargedBy}>Your card will be charged in VND
-              <TooltipCustom popperClass={classes.popperClass} title="The US$ rate shown is approximate and may differ by the exhange rate used by your credit card issuer.">
+            <div className={classes.chargedBy} translation-key="payment_billing_sub_tab_payment_note">{t("payment_billing_sub_tab_payment_note")}
+              <TooltipCustom popperClass={classes.popperClass} translation-key="payment_billing_sub_tab_payment_note_tooltip" title={t("payment_billing_sub_tab_payment_note_tooltip")}>
                 <InfoOutlined />
               </TooltipCustom>
             </div>
           </Grid>
           <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
         </Grid>
-        <div className={classes.cancelPayment} onClick={onCancelPayment}>Want to edit project? Cancel payment.</div>
+        <div className={classes.cancelPayment} onClick={onCancelPayment} translation-key="common_cancel_payment">{t("common_cancel_payment")}</div>
       </Grid>
       <Grid className={classes.flexTotalMobile}>
         <Grid>

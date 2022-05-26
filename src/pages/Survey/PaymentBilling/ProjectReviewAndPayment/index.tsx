@@ -43,8 +43,8 @@ const ProjectReviewAndPayment = memo(({ }: Props) => {
   return (
     <>
       {cancelPayment && (
-        <WarningBox sx={{ maxWidth: '1000px' }}>
-          Your payment has been cancelled. You can now edit your project or process payment.
+        <WarningBox sx={{ maxWidth: '1000px' }} translation-key="payment_billing_sub_tab_preview_warning">
+          {t("payment_billing_sub_tab_preview_warning")}
         </WarningBox>
       )}
       <Stepper

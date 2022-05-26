@@ -251,6 +251,10 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 <p className={classes.text} translation-key="payment_billing_sub_tab_preview_additional_attribute">{t('payment_billing_sub_tab_preview_additional_attribute')}</p>
                 <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_attributes">{(projectAttributes?.length || 0) + (userAttributes?.length || 0)} {t('payment_billing_sub_tab_preview_attributes')}</span>
               </div>
+              <div>
+                <p className={classes.text} translation-key="payment_billing_sub_tab_preview_custom_question">{t("payment_billing_sub_tab_preview_custom_question")}</p>
+                <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_questions">{project?.customQuestions?.length || 0} {t("payment_billing_sub_tab_preview_questions")}</span>
+              </div>
             </div>
           </Grid>
         </Grid>

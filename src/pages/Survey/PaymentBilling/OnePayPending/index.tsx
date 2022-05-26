@@ -7,16 +7,16 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReducerType } from 'redux/reducers';
 import { getProjectRequest, setCancelPayment } from 'redux/reducers/Project/actionTypes';
-import { setErrorMess } from 'redux/reducers/Status/actionTypes';
+import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
 import { routes } from 'routers/routes';
 import { PaymentService } from 'services/payment';
 import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
 import { authPaymentFail, getPayment } from '../models';
 import classes from './styles.module.scss';
 
-interface Props { }
+interface Props {}
 
-const OnePayPending = memo(({ }: Props) => {
+const OnePayPending = memo(({}: Props) => {
   const { t } = useTranslation()
 
   const dispatch = useDispatch();
@@ -34,6 +34,7 @@ const OnePayPending = memo(({ }: Props) => {
   }, [project])
 
   const onCancelPayment = () => {
+    dispatch(setLoading(true));
     if (!payment) return
     PaymentService.cancel(payment.id)
       .then(() => {
@@ -43,6 +44,7 @@ const OnePayPending = memo(({ }: Props) => {
         }))
       })
       .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
   }
 
   const onShowConfirmCancel = () => {
@@ -56,11 +58,11 @@ const OnePayPending = memo(({ }: Props) => {
   return (
     <Grid classes={{ root: classes.root }}>
       <img src={images.imgPaymentPending} alt="" />
-      <p className={classes.title}>Payment pending</p>
-      <p className={classes.subTitle}>The payment is processing, please complete your payment.</p>
+      <p className={classes.title} translation-key="payment_billing_pending_title">{t("payment_billing_pending_title")}</p>
+      <p className={classes.subTitle} translation-key="payment_billing_pending_sub">{t("payment_billing_pending_sub")}</p>
       <p className={classes.textGreen} translation-key="payment_billing_total_amount">{t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}</p>
       <p className={classes.textBlue} translation-key="payment_billing_equivalent_to">({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)</p>
-      <a onClick={onShowConfirmCancel} className={classes.aLink}>Want to edit project? Cancel payment.</a>
+      <a onClick={onShowConfirmCancel} className={classes.aLink} translation-key="common_cancel_payment">{t("common_cancel_payment")}</a>
       <PopupConfirmCancelOrder
         isOpen={isConfirmCancel}
         onClose={onCloseConfirmCancel}

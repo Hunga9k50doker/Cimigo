@@ -59,6 +59,11 @@ import icInvoice from 'assets/img/icon/ic-invoice.svg';
 import icRestore from 'assets/img/icon/ic-restore.svg';
 import icEditCell from 'assets/img/icon/ic-edit-cell.svg';
 import imgPaymentFailed from 'assets/img/img-payment-failed.svg';
+import icDrag from 'assets/img/icon/ic-drag.svg';
+import icOpenQuestion from 'assets/img/icon/ic-open-question.svg';
+import icSingleChoice from 'assets/img/icon/ic-single-choice.svg';
+import icMultipleChoices from 'assets/img/icon/ic-multiple-choices.svg';
+import icDeleteAnswer from 'assets/img/icon/ic-delete-answer.svg';
 import imgPaymentPending from 'assets/img/img-payment-pending.svg';
 import imgLangVi from 'assets/img/lang-vi.png';
 import imgLangEn from 'assets/img/lang-en.png';
@@ -138,6 +143,11 @@ const images = {
   icArrowLogin, 
   icArrowRegister,
   imgPaymentFailed,
+  icDrag,
+  icOpenQuestion,
+  icSingleChoice,
+  icMultipleChoices,
+  icDeleteAnswer,
   imgPaymentPending,
 }
 
