@@ -58,7 +58,7 @@ const Waiting = memo(({ }: Props) => {
   return (
     <Grid classes={{ root: classes.root }}>
       <WarningBox sx={{ maxWidth: '1000px' }}>
-        <p> <a onClick={() => setIsOpen(true)}>Click here</a> to fill in the necessary information for the invoice and contract.</p>
+        <p> <a className={classes.clickOpenInvoice} onClick={() => setIsOpen(true)}>Click here</a> to fill in the necessary information for the invoice and contract.</p>
       </WarningBox>
       <img src={images.imgPayment} alt="" />
       <p className={classes.title} translation-key="payment_billing_waiting_title">{t('payment_billing_waiting_title')}</p>
