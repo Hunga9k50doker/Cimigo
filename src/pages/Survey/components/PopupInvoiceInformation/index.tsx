@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, IconButton, Tooltip, useMediaQuery, useTheme } from '@mui/material';
+import { Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, IconButton, Tooltip } from '@mui/material';
 import classes from './styles.module.scss';
 import images from "config/images";
 import Buttons from 'components/Buttons';
@@ -42,8 +42,6 @@ const PopupInvoiceInformation = memo((props: Props) => {
   const { t, i18n } = useTranslation()
   const [countries, setCountries] = useState<OptionItem[]>([])
   const dispatch = useDispatch()
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down(600));
   const { project } = useSelector((state: ReducerType) => state.project)
   
   const schema = useMemo(() => {
@@ -132,7 +130,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
       <DialogContent className={classes.body}>
         <p className={classes.content}>These information will be used to export the invoice. Please make sure all fields are correct.</p>
         <form onSubmit={handleSubmit(onSubmit)} id="my-form">
-          <Grid container spacing={isMobile ? 0 : 1}>
+          <Grid container spacing={1}>
             <Grid item xs={12} sm={6}>
               <Inputs
                 title={t('field_full_name')}
