@@ -231,10 +231,12 @@ const ChangePaymentMethod = memo(
                   <span translation-key="payment_billing_sub_tab_payment_summary_sample_size">{t('payment_billing_sub_tab_payment_summary_sample_size')} {`(${payment?.sampleSize || 0})`}</span>
                   <span>{`$`}{fCurrency2(payment?.sampleSizeCostUSD || 0)}</span>
                 </div>
-                <div className={classes.flexOrder}>
-                  <span translation-key="payment_billing_sub_tab_payment_summary_custom_question">{t("payment_billing_sub_tab_payment_summary_custom_question")} {`(${payment?.customQuestions?.length || 0})`}</span>
-                  <span>{`$`}{fCurrency2(payment?.customQuestionCostUSD || 0)}</span>
+                {!!payment?.customQuestionCostUSD && (
+                  <div className={classes.flexOrder}>
+                    <span translation-key="payment_billing_sub_tab_payment_summary_custom_question">{t("payment_billing_sub_tab_payment_summary_custom_question")} {`(${payment?.customQuestions?.length})`}</span>
+                    <span>{`$`}{fCurrency2(payment?.customQuestionCostUSD)}</span>
                 </div>
+                )}
                 <div className={clsx(classes.flexOrder, classes.isMobile)}>
                   <span translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</span>
                   <span>{`$`}{fCurrency2(payment?.vatUSD || 0)}</span>
