@@ -45,7 +45,7 @@ const Waiting = memo(({ }: Props) => {
 
   const payment = useMemo(() => getPayment(project?.payments), [project])
 
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpenPopupInvoice, setIsOpenPopupInvoice] = useState(false)
 
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)))
@@ -58,7 +58,7 @@ const Waiting = memo(({ }: Props) => {
   return (
     <Grid classes={{ root: classes.root }}>
       <WarningBox sx={{ maxWidth: '1000px' }}>
-        <p> <a className={classes.clickOpenInvoice} onClick={() => setIsOpen(true)}>Click here</a> to fill in the necessary information for the invoice and contract.</p>
+        <p> <a className={classes.clickOpenInvoice} onClick={() => setIsOpenPopupInvoice(true)}>Click here</a> to fill in the necessary information for the invoice and contract.</p>
       </WarningBox>
       <img src={images.imgPayment} alt="" />
       <p className={classes.title} translation-key="payment_billing_waiting_title">{t('payment_billing_waiting_title')}</p>
@@ -72,9 +72,8 @@ const Waiting = memo(({ }: Props) => {
       ></p>
       <PopupInvoiceInformation
         payment={payment}
-        isOpen={isOpen}
-        project={project}
-        onClose={() => setIsOpen(false)}
+        isOpen={isOpenPopupInvoice}
+        onClose={() => setIsOpenPopupInvoice(false)}
       />
     </Grid>
   )

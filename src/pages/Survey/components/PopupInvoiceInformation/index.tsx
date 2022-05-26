@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { Checkbox, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, IconButton, Tooltip, useMediaQuery, useTheme } from '@mui/material';
+import { Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, IconButton, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import classes from './styles.module.scss';
 import images from "config/images";
 import Buttons from 'components/Buttons';
@@ -12,17 +12,17 @@ import { VALIDATION } from 'config/constans';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from 'react-redux';
-import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
+import { useDispatch, useSelector } from 'react-redux';
+import { setErrorMess, setLoading, setSuccessMess } from 'redux/reducers/Status/actionTypes';
 import CountryService from 'services/country';
 import InputSelect from 'components/InputsSelect';
 import { Payment, UpdateInvoiceInfo } from 'models/payment';
 import { getProjectRequest } from 'redux/reducers/Project/actionTypes';
 import { PaymentService } from 'services/payment';
+import { ReducerType } from 'redux/reducers';
 interface Props {
   payment: Payment,
   isOpen: boolean,
-  project: Project,
   onClose: () => void,
 }
 
@@ -39,13 +39,14 @@ export interface InvoiceInfoData {
 
 
 const PopupInvoiceInformation = memo((props: Props) => {
-  const { isOpen, project, onClose, payment } = props;
+  const { isOpen, onClose, payment } = props;
   const { t, i18n } = useTranslation()
   const [countries, setCountries] = useState<OptionItem[]>([])
   const dispatch = useDispatch()
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down(600));
-
+  const { project } = useSelector((state: ReducerType) => state.project)
+  
   const schema = useMemo(() => {
     return yup.object().shape({
       fullName: yup.string().required(t('field_full_name_vali_required')),
@@ -107,9 +108,11 @@ const PopupInvoiceInformation = memo((props: Props) => {
       taxCode: data.taxCode || '',
     }
     dispatch(setLoading(true))
-    PaymentService.updateInvoiceInfo(project.id, form)
-      .then(() => {
+    PaymentService.updateInvoiceInfo(payment.id, form)
+      .then((res) => {
         dispatch(getProjectRequest(project.id))
+        onClose()
+        dispatch(setSuccessMess(res.message));
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -130,7 +133,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
       </DialogTitle>
       <DialogContent className={classes.body}>
         <p className={classes.content}>These information will be used to export the invoice. Please make sure all fields are correct.</p>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} id="my-form">
           <Grid container spacing={isMobile ? 0 : 1}>
             <Grid item xs={12} sm={6}>
               <Inputs
@@ -235,9 +238,11 @@ const PopupInvoiceInformation = memo((props: Props) => {
               <img src={images.icTip} alt="" />
             </Tooltip>
           </Grid>
-          <Buttons type='submit' children="Save information" className={classes.btnSave} btnType="Blue" />
         </form>
       </DialogContent>
+      <DialogActions className={classes.dialogBtn}>
+        <Buttons type='submit' children="Save information" className={classes.btnSave} btnType="Blue" form="my-form" />
+      </DialogActions>
     </Dialog>
   );
 });

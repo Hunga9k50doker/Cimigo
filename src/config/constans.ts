@@ -82,7 +82,7 @@ export const API = {
     ONEPAY_CALLBACK: '/v1.0/payment/onepay/callback',
     CANCEL: '/v1.0/payment/:id/cancel',
     TRY_AGAIN: '/v1.0/payment/:id/try-again',
-    UPDATE_INVOICE_INFO: '/v1.0/payment/:id/update-invoice-info',
+    UPDATE_INVOICE_INFO: '/v1.0/payment/:id/invoice-info',
     CHANGE_PAYMENT_METHOD: '/v1.0/payment/:id/change-payment-method',
   },
   ATTACHMENT: {
