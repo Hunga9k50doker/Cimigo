@@ -14,8 +14,6 @@ import moment from "moment";
 import { push } from "connected-react-router";
 import { authCompleted, getPayment } from "../models";
 import { useTranslation } from "react-i18next";
-import WarningBox from "components/WarningBox";
-import PopupInvoiceInformation from "pages/Survey/components/PopupInvoiceInformation";
 
 interface Props {
 
@@ -29,7 +27,6 @@ const Completed = memo(({ }: Props) => {
 
   const payment = useMemo(() => getPayment(project?.payments), [project])
 
-  const [isOpen,setIsOpen] = useState(false);
   const getInvoice = () => {
     if (!project) return
     dispatch(setLoading(true))
@@ -55,9 +52,6 @@ const Completed = memo(({ }: Props) => {
 
   return (
     <Grid classes={{ root: classes.root }}>
-      <WarningBox sx={{ maxWidth: '1000px' }}>
-        <p> <a className={classes.clickOpenInvoice} onClick={() => setIsOpen(true)}>Click here</a> to fill in the necessary information for the invoice and contract.</p>
-      </WarningBox>
       <img src={images.imgPayment} alt="" />
       <p className={classes.title} translation-key="payment_billing_completed_title">{t('payment_billing_completed_title')}</p>
       <p className={classes.textGreen} translation-key="payment_billing_total_amount">{t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}</p>
@@ -70,12 +64,6 @@ const Completed = memo(({ }: Props) => {
         dangerouslySetInnerHTML={{ __html: t('payment_billing_completed_sub_2') }}
       >
       </p>
-      <PopupInvoiceInformation
-        payment={payment}
-        isOpen={isOpen}
-        project={project}
-        onClose={() => setIsOpen(false)}
-      />
     </Grid>
   )
 })
