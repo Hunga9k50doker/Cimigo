@@ -96,7 +96,6 @@ export enum EPaymentStatus {
   FAILED
 }
 export interface UpdateInvoiceInfo {
-  projectId: number,
   saveForLater: boolean,
   fullName: string,
   companyName: string,

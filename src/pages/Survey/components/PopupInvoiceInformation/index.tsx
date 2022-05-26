@@ -4,7 +4,6 @@ import classes from './styles.module.scss';
 import images from "config/images";
 import Buttons from 'components/Buttons';
 import Images from "config/images";
-import { Project } from 'models/project';
 import Inputs from 'components/Inputs';
 import { OptionItem } from 'models/general';
 import * as yup from 'yup';
@@ -97,7 +96,6 @@ const PopupInvoiceInformation = memo((props: Props) => {
 
   const onSubmit = (data: InvoiceInfoData) => {
     const form: UpdateInvoiceInfo = {
-      projectId: payment.id,
       saveForLater: data.saveForLater,
       fullName: data.fullName,
       companyName: data.companyName,

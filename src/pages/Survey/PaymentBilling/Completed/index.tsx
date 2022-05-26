@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import classes from './styles.module.scss';
 import images from "config/images";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { EPaymentStatus } from "models/payment";
