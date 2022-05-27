@@ -23,6 +23,16 @@ export class AdminProjectService {
       })
   }
 
+  static async getQuotas(id: number): Promise<any> {
+    return await api.get(`${API.ADMIN.PROJECT.QUOTA.replace(':id', `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
   static async update(id: number, data: FormData) {
     return await api.put(`${API.ADMIN.PROJECT.DEFAULT}/${id}`, data, {
       headers: {

@@ -10,7 +10,6 @@ interface TabPanelProps {
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
-  const media = window.matchMedia("(max-width: 1024px)");
   return (
     <div
       role="tabpanel"

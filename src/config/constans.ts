@@ -140,6 +140,7 @@ export const API = {
     },
     PROJECT: {
       DEFAULT: '/v1.0/admin/project',
+      QUOTA: '/v1.0/admin/project/:id/quota',
     },
     USER: {
       DEFAULT: '/v1.0/admin/user',
