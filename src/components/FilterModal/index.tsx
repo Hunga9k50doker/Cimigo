@@ -5,14 +5,11 @@ import clsx from "clsx";
 import InputCreatableSelect from "components/InputCreatableSelect";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Dialog, Grid, IconButton, Popover } from "@mui/material";
+import { Dialog, Grid, IconButton } from "@mui/material";
 import Images from "config/images";
 import Buttons from "components/Buttons";
-import { DateRange, Range, RangeFocus, RangeKeyDict } from "react-date-range";
-import Inputs from "components/Inputs";
-import moment from "moment";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
+import DateRange from "./DateRange";
+import { Range } from "react-date-range";
 
 export enum EFilterType {
   SELECT = "SELECT",
@@ -31,7 +28,7 @@ export interface FilterValue {
   [key: string]: OptionItemT<any>[] | Range[];
 }
 
-interface CurrentValue extends FilterOption {
+export interface CurrentValue extends FilterOption {
   value: OptionItemT<any>[] | Range[];
 }
 
@@ -54,8 +51,6 @@ const FilderModal = memo(
     onChange,
   }: FilderModalProps) => {
     const [currentValue, setCurrentValue] = useState<CurrentValue[]>([]);
-    const [anchorDateRange, setAnchorDateRange] =
-      useState<HTMLButtonElement | null>(null);
     const [openPopupDateRange, setOpenPopupDateRange] =
       useState<boolean>(false);
     const [dateRange, setDateRange] = useState<Range[]>([
@@ -125,17 +120,6 @@ const FilderModal = memo(
       handleClose();
     };
 
-    const preventKeyPress = (event: React.SyntheticEvent) => {
-      event.preventDefault();
-    };
-
-    const handleSelectDateRange = (
-      event: React.MouseEvent<HTMLInputElement>
-    ) => {
-      setAnchorDateRange(event.currentTarget);
-      setOpenPopupDateRange(true);
-    };
-
     const renderFilter = () => {
       return (
         <>
@@ -166,65 +150,16 @@ const FilderModal = memo(
                 );
               case EFilterType.DATE_RANGE:
                 return (
-                  <div className={classes.dateRange} key={i}>
-                    <div className={classes.dateInput}>
-                      <p className={classes.dateInputTitle}>Start date</p>
-                      <Inputs
-                        value={
-                          dateRange[0]?.startDate
-                            ? moment(dateRange[0]?.startDate)
-                                .locale("en")
-                                .format("MMMM DD, YYYY")
-                            : ""
-                        }
-                        placeholder="From..."
-                        onKeyPress={preventKeyPress}
-                        onClick={handleSelectDateRange}
-                      />
-                    </div>
-                    <div className={classes.dateInput}>
-                      <p className={classes.dateInputTitle}>End date</p>
-                      <Inputs
-                        value={
-                          dateRange[0]?.endDate
-                            ? moment(dateRange[0]?.endDate)
-                                .locale("en")
-                                .format("MMMM DD, YYYY")
-                            : ""
-                        }
-                        placeholder="To..."
-                        onKeyPress={preventKeyPress}
-                        onClick={handleSelectDateRange}
-                      />
-                    </div>
-                    <Popover
-                      open={openPopupDateRange}
-                      anchorEl={anchorDateRange}
-                      onClose={() => setOpenPopupDateRange(false)}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "left",
-                      }}
-                    >
-                      <DateRange
-                        editableDateInputs={true}
-                        startDatePlaceholder="From..."
-                        endDatePlaceholder="To..."
-                        ranges={dateRange}
-                        onChange={(item: RangeKeyDict) => {
-                          const currentValueNew = [...currentValue];
-                          currentValueNew[i].value = [item.selection];
-                          setCurrentValue(currentValueNew);
-                          setDateRange([item.selection]);
-                        }}
-                        onRangeFocusChange={(item: RangeFocus) => {
-                          if (item[0] === 0 && item[1] === 0) {
-                            setOpenPopupDateRange(false);
-                          }
-                        }}
-                      />
-                    </Popover>
-                  </div>
+                  <DateRange
+                    open={openPopupDateRange}
+                    setOpen={setOpenPopupDateRange}
+                    dateRange={dateRange}
+                    setDateRange={setDateRange}
+                    currentValue={currentValue}
+                    setCurrentValue={setCurrentValue}
+                    index={i}
+                    key={i}
+                  />
                 );
               default:
                 return <></>;
