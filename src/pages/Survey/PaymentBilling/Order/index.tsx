@@ -15,6 +15,8 @@ import { getProjectRequest, setCancelPayment } from "redux/reducers/Project/acti
 import { authOrder, getPayment } from "../models";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
+import WarningBox from "components/WarningBox";
+import PopupInvoiceInformation from "pages/Survey/components/PopupInvoiceInformation";
 import PopupConfirmCancelOrder from "pages/Survey/components/PopupConfirmCancelOrder";
 
 interface Props {
@@ -23,7 +25,8 @@ interface Props {
 
 const Order = memo(({ }: Props) => {
 
-  const  { t } = useTranslation()
+  const { t } = useTranslation()
+
   const dispatch = useDispatch()
   
   const { project } = useSelector((state: ReducerType) => state.project)
@@ -36,21 +39,22 @@ const Order = memo(({ }: Props) => {
     dispatch(push(routes.project.management))
   }
 
+  const [isOpenPopupInvoice, setIsOpenPopupInvoice] = useState(false);
   const confirmedPayment = () => {
     dispatch(setLoading(true))
     PaymentService.updateConfirmPayment({
       projectId: project.id,
       userConfirm: true
     })
-    .then(() => {
-      dispatch(setLoading(false))
-      dispatch(getProjectRequest(project.id))
-    })
-    .catch((e) => {
-      dispatch(setErrorMess(e))
-      dispatch(setLoading(false))
-      return null
-    })
+      .then(() => {
+        dispatch(setLoading(false))
+        dispatch(getProjectRequest(project.id))
+      })
+      .catch((e) => {
+        dispatch(setErrorMess(e))
+        dispatch(setLoading(false))
+        return null
+      })
   }
 
   const onRedirect = (route: string) => {
@@ -117,8 +121,8 @@ const Order = memo(({ }: Props) => {
             <p className={classes.subTitleMain} translation-key="payment_billing_order_bank_transfer_sub_1">{t('payment_billing_order_bank_transfer_sub_1')}</p>
             <Buttons onClick={confirmedPayment} btnType="TransparentBlue" children={t('payment_billing_order_bank_transfer_btn_confirm')} translation-key="payment_billing_order_bank_transfer_btn_confirm" padding="11px 16px" className={classes.btn} />
             <p className={classes.subTitle} style={{ textAlign: "start", marginBottom: 16 }} translation-key="payment_billing_order_bank_transfer_sub_2">{t('payment_billing_order_bank_transfer_sub_2')}</p>
-            <p className={clsx(classes.subTitle, classes.subTitleSpan)} style={{ textAlign: "start" }} translation-key="payment_billing_order_bank_transfer_sub_3" 
-              dangerouslySetInnerHTML={{__html: t('payment_billing_order_bank_transfer_sub_3', { total: fCurrency2(payment?.totalAmountUSD || 0) })}}
+            <p className={clsx(classes.subTitle, classes.subTitleSpan)} style={{ textAlign: "start" }} translation-key="payment_billing_order_bank_transfer_sub_3"
+              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_3', { total: fCurrency2(payment?.totalAmountUSD || 0) }) }}
             >
             </p>
             <Grid classes={{ root: classes.box }}>
@@ -150,7 +154,7 @@ const Order = memo(({ }: Props) => {
               </Grid>
             </Grid>
             <p className={clsx(classes.subTitle, classes.subTitleSpan)} style={{ textAlign: "start" }} translation-key="payment_billing_order_bank_transfer_sub_4"
-              dangerouslySetInnerHTML={{__html: t('payment_billing_order_bank_transfer_sub_4', { total: fCurrency2VND(payment?.totalAmount || 0) })}}
+              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_4', { total: fCurrency2VND(payment?.totalAmount || 0) }) }}
             >
             </p>
             <Grid classes={{ root: classes.box }}>
@@ -175,7 +179,7 @@ const Order = memo(({ }: Props) => {
             </Grid>
             <p className={classes.subTitle} style={{ textAlign: "start", marginBottom: 16 }} translation-key="payment_billing_order_bank_transfer_sub_5">{t('payment_billing_order_bank_transfer_sub_5')}</p>
             <p className={classes.textBlack} style={{ textAlign: "start" }} translation-key="payment_billing_order_bank_transfer_sub_6"
-              dangerouslySetInnerHTML={{__html: t('payment_billing_order_bank_transfer_sub_6')}}
+              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_6') }}
             >
             </p>
             <a onClick={onShowConfirmCancel} className={classes.cancelPaymentBank} translation-key="common_cancel_payment">{t("common_cancel_payment")}</a>
@@ -186,14 +190,22 @@ const Order = memo(({ }: Props) => {
 
   return (
     <Grid classes={{ root: classes.root }}>
+      <WarningBox sx={{ maxWidth: '1000px' }}>
+        <p> <a className={classes.clickOpenInvoice} onClick={() => setIsOpenPopupInvoice(true)}>Click here</a> to fill in the necessary information for the invoice and contract.</p>
+      </WarningBox>
       <img src={images.imgOrder} alt="" />
       <p className={classes.title} translation-key="payment_billing_order_title">{t('payment_billing_order_title')}</p>
       {render()}
       <a className={classes.aLink} onClick={onBackToProjects} translation-key="payment_billing_order_btn_back_to_projects">{t('payment_billing_order_btn_back_to_projects')}</a>
+      <PopupInvoiceInformation
+        payment={payment}
+        isOpen={isOpenPopupInvoice}
+        onClose={() => setIsOpenPopupInvoice(false)}
+      />
       <PopupConfirmCancelOrder
-          isOpen={isConfirmCancel}
-          onClose={onCloseConfirmCancel}
-          onYes={onCancelPayment}
+        isOpen={isConfirmCancel}
+        onClose={onCloseConfirmCancel}
+        onYes={onCancelPayment}
       />
     </Grid>
   )
