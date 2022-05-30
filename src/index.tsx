@@ -8,6 +8,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import LoadingScreen from 'components/LoadingScreen';
 import 'assets/scss/_variables.scss';
 import 'react-quill/dist/quill.snow.css';
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 import 'moment/locale/vi'
 import TagManager from 'react-gtm-module'
 

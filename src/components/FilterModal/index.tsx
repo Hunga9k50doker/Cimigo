@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Dialog, Grid, IconButton } from "@mui/material";
 import Images from "config/images";
 import Buttons from "components/Buttons";
-import DateRange from "./DateRange";
+import DateRange, { IDateRange } from "../DateRange";
 import { Range } from "react-date-range";
 
 export enum EFilterType {
@@ -24,7 +24,7 @@ export interface FilterOption {
   placeholder?: string;
 }
 
-export type ValueType = OptionItemT<any>[] | Range
+export type ValueType = OptionItemT<any>[] | Range;
 
 export interface FilterValue {
   [key: string]: ValueType;
@@ -61,24 +61,24 @@ const FilderModal = memo(
     const initOption = (type: EFilterType) => {
       switch (type) {
         case EFilterType.SELECT:
-          return  []
+          return [];
         case EFilterType.DATE_RANGE:
           const range: Range = {
             startDate: null,
-            endDate: null
-          }
-          return  range
+            endDate: null,
+          };
+          return range;
       }
-    }
+    };
 
     const isValidData = (type: EFilterType, value: ValueType) => {
       switch (type) {
         case EFilterType.SELECT:
-          return !!(value as OptionItemT<any>[])?.length
+          return !!(value as OptionItemT<any>[])?.length;
         case EFilterType.DATE_RANGE:
-          return  !!(value as Range)?.startDate || !!(value as Range)?.endDate
+          return !!(value as Range)?.startDate || !!(value as Range)?.endDate;
       }
-    }
+    };
 
     useEffect(() => {
       if (!isOpen) return;
@@ -90,13 +90,14 @@ const FilderModal = memo(
             ...item,
             value: filterValue[key],
           });
-        } else {
-          value.push({
-            ...filterOptions[0],
-            value: initOption(item.type),
-          });
         }
       });
+      if (!value.length) {
+        value.push({
+          ...filterOptions[0],
+          value: initOption(EFilterType.SELECT),
+        });
+      }
       setCurrentValue(value);
     }, [filterValue, filterOptions, isOpen]);
 
@@ -165,12 +166,12 @@ const FilderModal = memo(
               case EFilterType.DATE_RANGE:
                 return (
                   <DateRange
-                    dateRange={[item.value as Range]}
-                    onChange={(value: Range[]) => { 
+                    dateRange={item.value as IDateRange}
+                    onChange={(value: Range) => {
                       const currentValueNew = [...currentValue];
                       currentValueNew[i].value = {
-                        startDate: value[0].startDate,
-                        endDate: value[0].endDate
+                        startDate: value?.startDate,
+                        endDate: value?.endDate,
                       };
                       setCurrentValue(currentValueNew);
                     }}

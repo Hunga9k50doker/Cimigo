@@ -1,6 +1,5 @@
 import classes from "./styles.module.scss";
 import { memo, useState } from "react";
-import { CurrentValue } from "..";
 import Inputs from "components/Inputs";
 import moment from "moment";
 import { Popover } from "@mui/material";
@@ -8,33 +7,29 @@ import {
   DateRange as ReactDateRange,
   Range,
   RangeFocus,
-  RangeKeyDict,
 } from "react-date-range";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
+
+export interface IDateRange {
+  startDate: Date;
+  endDate: Date;
+}
 
 interface DateRangeProps {
-  dateRange: Range[];
-  onChange: (value: Range[]) => void;
+  dateRange: IDateRange;
+  onChange: (value: Range) => void;
 }
 
 const DateRange = memo((props: DateRangeProps) => {
-  const {
-    dateRange,
-    onChange
-  } = props;
+  const { dateRange, onChange } = props;
+  const [openPopupCalendar, setOpenPopupCalendar] = useState<boolean>(false);
   const [anchorDateRange, setAnchorDateRange] =
     useState<HTMLButtonElement | null>(null);
-
-  const preventKeyPress = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-  };
 
   const handleOpenPopupDateRange = (
     event: React.MouseEvent<HTMLInputElement>
   ) => {
     setAnchorDateRange(event.currentTarget);
-    setOpen(true);
+    setOpenPopupCalendar(true);
   };
 
   return (
@@ -42,37 +37,33 @@ const DateRange = memo((props: DateRangeProps) => {
       <div className={classes.dateInput}>
         <p className={classes.dateInputTitle}>Start date</p>
         <Inputs
+          readOnly
           value={
-            dateRange[0]?.startDate
-              ? moment(dateRange[0]?.startDate)
-                  .locale("en")
-                  .format("MMMM DD, YYYY")
+            dateRange?.startDate
+              ? moment(dateRange?.startDate).format("DD/MM/YYYY")
               : ""
           }
           placeholder="From..."
-          onKeyPress={preventKeyPress}
           onClick={handleOpenPopupDateRange}
         />
       </div>
       <div className={classes.dateInput}>
         <p className={classes.dateInputTitle}>End date</p>
         <Inputs
+          readOnly
           value={
-            dateRange[0]?.endDate
-              ? moment(dateRange[0]?.endDate)
-                  .locale("en")
-                  .format("MMMM DD, YYYY")
+            dateRange?.endDate
+              ? moment(dateRange?.endDate).format("DD/MM/YYYY")
               : ""
           }
           placeholder="To..."
-          onKeyPress={preventKeyPress}
           onClick={handleOpenPopupDateRange}
         />
       </div>
       <Popover
-        open={open}
+        open={openPopupCalendar}
         anchorEl={anchorDateRange}
-        onClose={() => setOpen(false)}
+        onClose={() => setOpenPopupCalendar(false)}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left",
@@ -83,16 +74,19 @@ const DateRange = memo((props: DateRangeProps) => {
           startDatePlaceholder="From..."
           endDatePlaceholder="To..."
           rangeColors={["#1f61a9"]}
-          ranges={dateRange}
-          onChange={(item: RangeKeyDict) => {
-            const currentValueNew = [...currentValue];
-            currentValueNew[index].value = [item.selection];
-            setCurrentValue(currentValueNew);
-            setDateRange([item.selection]);
+          ranges={[
+            {
+              startDate: dateRange?.startDate,
+              endDate: dateRange?.endDate,
+              key: "selection",
+            },
+          ]}
+          onChange={(item) => {
+            onChange(item.selection as Range);
           }}
           onRangeFocusChange={(item: RangeFocus) => {
             if (item[0] === 0 && item[1] === 0) {
-              setOpen(false);
+              setOpenPopupCalendar(false);
             }
           }}
         />
