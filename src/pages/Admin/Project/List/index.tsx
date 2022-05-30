@@ -96,14 +96,14 @@ const List = memo(({ sort, setSort, keyword, setKeyword, data, setData, filterDa
       sortedField: sort?.sortedField,
       isDescending: sort?.isDescending,
       keyword: keyword,
-      solutionIds: filterData?.solutionIds?.map(it => it.id),
-      statusIds: filterData?.statusIds?.map(it => it.id),
-      orderIds: filterData?.orderIds?.map(it => it.id),
+      solutionIds: (filterData?.solutionIds as OptionItemT<number>[])?.map(it => it.id),
+      statusIds: (filterData?.statusIds as OptionItemT<number>[])?.map(it => it.id),
+      orderIds: (filterData?.orderIds as OptionItemT<number>[])?.map(it => it.id),
     }
     if (value?.filter !== undefined) {
-      params.solutionIds = value.filter?.solutionIds?.map(it => it.id)
-      params.statusIds = value.filter?.statusIds?.map(it => it.id)
-      params.orderIds = value.filter?.orderIds?.map(it => it.id)
+      params.solutionIds = (value.filter?.solutionIds as OptionItemT<number>[])?.map(it => it.id)
+      params.statusIds = (value.filter?.statusIds as OptionItemT<number>[])?.map(it => it.id)
+      params.orderIds = (value.filter?.orderIds as OptionItemT<number>[])?.map(it => it.id)
     }
     if (value?.sort !== undefined) {
       params.sortedField = value?.sort?.sortedField

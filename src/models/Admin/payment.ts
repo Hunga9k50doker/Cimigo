@@ -21,4 +21,6 @@ export interface GetPaymentsParams {
   page: number;
   keyword?: string;
   paymentMethodIds?: number[];
+  fromCreatedAt?: string;
+  toCreatedAt?: string;
 }

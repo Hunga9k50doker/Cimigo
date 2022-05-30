@@ -10,7 +10,7 @@ import { push } from "connected-react-router";
 import useDebounce from "hooks/useDebounce";
 import _ from "lodash";
 import { GetUsersParams } from "models/Admin/user";
-import { DataPagination, OptionItem, SortItem, TableHeaderLabel } from "models/general";
+import { DataPagination, OptionItem, OptionItemT, SortItem, TableHeaderLabel } from "models/general";
 import { User } from "models/user";
 import { memo, useEffect, useMemo, useState } from "react"
 import { useDispatch } from "react-redux";
@@ -88,10 +88,10 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
       sortedField: sort?.sortedField,
       isDescending: sort?.isDescending,
       keyword: keyword,
-      countryIds: filterData?.countryIds?.map(it => it.id),
+      countryIds: (filterData?.countryIds as OptionItemT<number>[])?.map(it => it.id),
     }
     if (value?.filter !== undefined) {
-      params.countryIds = value.filter?.countryIds?.map(it => it.id)
+      params.countryIds = (value.filter?.countryIds as OptionItemT<number>[])?.map(it => it.id)
     }
     if (value?.sort !== undefined) {
       params.sortedField = value?.sort?.sortedField

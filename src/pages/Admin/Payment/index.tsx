@@ -16,9 +16,11 @@ const PaymentPage = memo(({ }: Props) => {
   const [keyword, setKeyword] = useState<string>('');
   const [data, setData] = useState<DataPagination<Payment>>();
   const [filterData, setFilterData] = useState<FilterValue>({
-    solutionIds: [],
-    statusIds: [],
-    orderIds: [],
+    paymentMethodIds: [],
+    dateRange: {
+      startDate: null,
+      endDate: null
+    }
   });
   
   return (
