@@ -10,7 +10,7 @@ import { push } from "connected-react-router";
 import useDebounce from "hooks/useDebounce";
 import _ from "lodash";
 import { GetPaymentsParams } from "models/Admin/payment";
-import { DataPagination, paymentMethods, TableHeaderLabel } from "models/general";
+import { DataPagination, OptionItemT, paymentMethods, TableHeaderLabel } from "models/general";
 import { Payment } from "models/payment";
 import moment from "moment";
 import { memo, useEffect, useMemo, useState } from "react"
@@ -81,14 +81,14 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
       take: value?.take || data?.meta?.take || 10,
       page: value?.page || data?.meta?.page || 1,
       keyword: keyword,
-      paymentMethodIds: filterData?.paymentMethodIds?.map(it => it.id),
-      fromCreatedAt: null,
-      toCreatedAt: null,
+      paymentMethodIds: (filterData?.paymentMethodIds as OptionItemT<number>[])?.map(it => it.id),
+      fromCreatedAt: (filterData?.dateRange as Range)?.startDate ? moment((filterData?.dateRange as Range)?.startDate).startOf("day").utc().format() : undefined,
+      toCreatedAt: (filterData?.dateRange as Range)?.endDate ? moment((filterData?.dateRange as Range)?.endDate).endOf("day").utc().format() : undefined,
     }
     if (value?.filter !== undefined) {
-      params.paymentMethodIds = value.filter?.paymentMethodIds?.map(it => it.id);
-      params.fromCreatedAt = value.filter?.dateRange?.length ? moment((value.filter?.dateRange[0] as Range)?.startDate).startOf("day").utc().format() : null;
-      params.toCreatedAt = value.filter?.dateRange?.length ? moment((value.filter?.dateRange[0] as Range)?.endDate).endOf("day").utc().format() : null;
+      params.paymentMethodIds = (value.filter?.paymentMethodIds as OptionItemT<number>[])?.map(it => it.id);
+      params.fromCreatedAt = (value.filter?.dateRange as Range)?.startDate ? moment((value.filter?.dateRange as Range)?.startDate).startOf("day").utc().format() : undefined;
+      params.toCreatedAt =  (value.filter?.dateRange as Range)?.endDate ? moment((value.filter?.dateRange as Range)?.endDate).endOf("day").utc().format() : undefined;
     }
     if (value?.keyword !== undefined) {
       params.keyword = value.keyword || undefined

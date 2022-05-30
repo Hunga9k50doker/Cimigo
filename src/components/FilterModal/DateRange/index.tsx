@@ -14,24 +14,14 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
 interface DateRangeProps {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   dateRange: Range[];
-  setDateRange: React.Dispatch<React.SetStateAction<Range[]>>;
-  currentValue: CurrentValue[];
-  setCurrentValue: React.Dispatch<React.SetStateAction<CurrentValue[]>>;
-  index: number;
+  onChange: (value: Range[]) => void;
 }
 
 const DateRange = memo((props: DateRangeProps) => {
   const {
-    open,
-    setOpen,
     dateRange,
-    setDateRange,
-    currentValue,
-    setCurrentValue,
-    index,
+    onChange
   } = props;
   const [anchorDateRange, setAnchorDateRange] =
     useState<HTMLButtonElement | null>(null);

@@ -24,12 +24,14 @@ export interface FilterOption {
   placeholder?: string;
 }
 
+export type ValueType = OptionItemT<any>[] | Range
+
 export interface FilterValue {
-  [key: string]: OptionItemT<any>[] | Range[];
+  [key: string]: ValueType;
 }
 
 export interface CurrentValue extends FilterOption {
-  value: OptionItemT<any>[] | Range[];
+  value: ValueType;
 }
 
 interface FilderModalProps {
@@ -37,7 +39,7 @@ interface FilderModalProps {
   filterOptions: FilterOption[];
   filterValue: FilterValue;
   onClose: () => void;
-  getFilterOption: (name: string) => OptionItemT<any>[] | Range[];
+  getFilterOption: (name: string) => OptionItemT<any>[];
   onChange: (filterValue: FilterValue) => void;
 }
 
@@ -51,38 +53,50 @@ const FilderModal = memo(
     onChange,
   }: FilderModalProps) => {
     const [currentValue, setCurrentValue] = useState<CurrentValue[]>([]);
-    const [openPopupDateRange, setOpenPopupDateRange] =
-      useState<boolean>(false);
-    const [dateRange, setDateRange] = useState<Range[]>([
-      {
-        startDate: null,
-        endDate: null,
-        key: "selection",
-      },
-    ]);
 
     const handleClose = () => {
       onClose();
     };
+
+    const initOption = (type: EFilterType) => {
+      switch (type) {
+        case EFilterType.SELECT:
+          return  []
+        case EFilterType.DATE_RANGE:
+          const range: Range = {
+            startDate: null,
+            endDate: null
+          }
+          return  range
+      }
+    }
+
+    const isValidData = (type: EFilterType, value: ValueType) => {
+      switch (type) {
+        case EFilterType.SELECT:
+          return !!(value as OptionItemT<any>[])?.length
+        case EFilterType.DATE_RANGE:
+          return  !!(value as Range)?.startDate || !!(value as Range)?.endDate
+      }
+    }
 
     useEffect(() => {
       if (!isOpen) return;
       const value: CurrentValue[] = [];
       Object.keys(filterValue).forEach((key) => {
         const item = filterOptions?.find((it) => it.key === key);
-        if (item && filterValue[key].length) {
+        if (item && isValidData(item.type, filterValue[key])) {
           value.push({
             ...item,
             value: filterValue[key],
           });
+        } else {
+          value.push({
+            ...filterOptions[0],
+            value: initOption(item.type),
+          });
         }
       });
-      if (!value.length) {
-        value.push({
-          ...filterOptions[0],
-          value: [],
-        });
-      }
       setCurrentValue(value);
     }, [filterValue, filterOptions, isOpen]);
 
@@ -97,13 +111,13 @@ const FilderModal = memo(
         currentValueNew = [...currentValueNew, { ...item, value: [] }];
       }
       currentValueNew = currentValueNew.filter(
-        (temp) => temp.key === item.key || !!temp.value.length
+        (temp) => temp.key === item.key || isValidData(temp.type, temp.value)
       );
       if (!currentValueNew.length) {
         currentValueNew = [
           {
             ...filterOptions[0],
-            value: [],
+            value: initOption(filterOptions[0].type),
           },
         ];
       }
@@ -151,13 +165,15 @@ const FilderModal = memo(
               case EFilterType.DATE_RANGE:
                 return (
                   <DateRange
-                    open={openPopupDateRange}
-                    setOpen={setOpenPopupDateRange}
-                    dateRange={dateRange}
-                    setDateRange={setDateRange}
-                    currentValue={currentValue}
-                    setCurrentValue={setCurrentValue}
-                    index={i}
+                    dateRange={[item.value as Range]}
+                    onChange={(value: Range[]) => { 
+                      const currentValueNew = [...currentValue];
+                      currentValueNew[i].value = {
+                        startDate: value[0].startDate,
+                        endDate: value[0].endDate
+                      };
+                      setCurrentValue(currentValueNew);
+                    }}
                     key={i}
                   />
                 );
