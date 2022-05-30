@@ -21,7 +21,6 @@ interface DateRangeProps {
 
 const DateRange = memo((props: DateRangeProps) => {
   const { dateRange, onChange } = props;
-  const [openPopupCalendar, setOpenPopupCalendar] = useState<boolean>(false);
   const [anchorDateRange, setAnchorDateRange] =
     useState<HTMLButtonElement | null>(null);
 
@@ -29,7 +28,6 @@ const DateRange = memo((props: DateRangeProps) => {
     event: React.MouseEvent<HTMLInputElement>
   ) => {
     setAnchorDateRange(event.currentTarget);
-    setOpenPopupCalendar(true);
   };
 
   return (
@@ -61,9 +59,9 @@ const DateRange = memo((props: DateRangeProps) => {
         />
       </div>
       <Popover
-        open={openPopupCalendar}
+        open={Boolean(anchorDateRange)}
         anchorEl={anchorDateRange}
-        onClose={() => setOpenPopupCalendar(false)}
+        onClose={() => setAnchorDateRange(null)}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left",
@@ -86,7 +84,7 @@ const DateRange = memo((props: DateRangeProps) => {
           }}
           onRangeFocusChange={(item: RangeFocus) => {
             if (item[0] === 0 && item[1] === 0) {
-              setOpenPopupCalendar(false);
+              setAnchorDateRange(null);
             }
           }}
         />
