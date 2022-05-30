@@ -512,7 +512,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               <span translation-key="payment_billing_sub_tab_payment_summary_sample_size">{t('payment_billing_sub_tab_payment_summary_sample_size')}</span>
               <span>{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</span>
             </div>
-            {!!price?.customQuestionCostUSD && (
+            {project?.customQuestions?.length > 0 && (
               <div className={classes.flexOrder}>
                 <span translation-key="payment_billing_sub_tab_payment_summary_custom_question">{t("payment_billing_sub_tab_payment_summary_custom_question")}</span>
                 <span>{`$`}{fCurrency2(price?.customQuestionCostUSD)}</span>
