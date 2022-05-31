@@ -1,4 +1,4 @@
-import { EditOutlined, ExpandMoreOutlined, FilterAlt } from "@mui/icons-material";
+import { EditOutlined, ExpandMoreOutlined, FilterAlt, VisibilityOutlined } from "@mui/icons-material";
 import { Box, Button, Grid, IconButton, Link, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
 import clsx from "clsx";
 import FilderModal, { EFilterType, FilterOption, FilterValue } from "components/FilterModal";
@@ -27,6 +27,9 @@ const tableHeaders: TableHeaderLabel[] = [
   { name: 'project', label: 'Project', sortable: false },
   { name: 'paymentMethodId', label: 'Payment method', sortable: false },
   { name: 'status', label: 'Status', sortable: false },
+  { name: 'orderCreatedTime', label: 'Created Time', sortable: false },
+  { name: 'orderCompletedTime', label: 'Completed Time', sortable: false },
+  { name: 'orderCancelTime', label: 'Cancel Time', sortable: false },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
 
@@ -121,9 +124,18 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
     setActionAnchor(null);
   };
 
+  const onDetail = () => {
+    onRedirectPaymentDetail(itemAction)
+    onCloseActionMenu()
+  }
+
   const onEdit = () => {
     onRedirectEdit(itemAction)
     onCloseActionMenu()
+  }
+
+  const onRedirectPaymentDetail = (item: Payment) => {
+    dispatch(push(routes.admin.payment.detail.replace(':id', `${item.id}`)));
   }
 
   const onRedirectEdit = (item: Payment) => {
@@ -214,7 +226,7 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                           key={index}
                         >
                           <TableCell>
-                            <Link onClick={() => onRedirectEdit(item)}>{item.orderId}</Link>
+                            <Link onClick={() => onRedirectPaymentDetail(item)}>{item.orderId}</Link>
                           </TableCell>
                           <TableCell>
                             {item.user && <Link onClick={() => onRedirectUserDetail(item)}>{item.user.fullName}</Link>}
@@ -227,6 +239,15 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                           </TableCell>
                           <TableCell>
                             <PaymentStatus status={item.status} />
+                          </TableCell>
+                          <TableCell>
+                            {item.createdAt && moment(item.createdAt).format("DD-MM-YYYY HH:ss")}
+                          </TableCell>
+                          <TableCell>
+                            {item.completedDate && moment(item.completedDate).format("DD-MM-YYYY HH:ss")}
+                          </TableCell>
+                          <TableCell>
+                            {item.cancelledDate && moment(item.cancelledDate).format("DD-MM-YYYY HH:ss")}
                           </TableCell>
                           <TableCell>
                             <IconButton
@@ -275,6 +296,15 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
             open={Boolean(actionAnchor)}
             onClose={onCloseActionMenu}
           >
+            <MenuItem
+              sx={{ fontSize: '0.875rem' }}
+              onClick={onDetail}
+            >
+              <Box display="flex" alignItems={"center"}>
+                <VisibilityOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                <span>View</span>
+              </Box>
+            </MenuItem>
             <MenuItem
               sx={{ fontSize: '0.875rem' }}
               onClick={onEdit}

@@ -1,6 +1,7 @@
 import { Country } from "./country";
 import { CustomQuestion } from "./custom_question";
 import { OptionItem } from "./general";
+import { OnePay } from "./onepays";
 import { Project } from "./project";
 import { User } from "./user";
 
@@ -37,6 +38,8 @@ export interface Payment {
   amountUSD: number;
   vat: number;
   vatUSD: number;
+  vatRate: number;
+  usdToVNDRate: number;
   totalAmount: number;
   totalAmountUSD: number;
   paymentMethodId: number;
@@ -54,11 +57,14 @@ export interface Payment {
   invoiceDate: Date;
   userConfirm: boolean;
   createdAt: Date;
+  completedDate: Date;
+  cancelledDate: Date;
   updatedAt: Date;
   deletedAt: Date;
   country: Country;
   user: User;
   project: Project;
+  onepays: OnePay[];
 }
 
 export interface TryAgain {
