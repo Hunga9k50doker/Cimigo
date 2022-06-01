@@ -1,5 +1,6 @@
 import { ArrowBackOutlined } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Grid, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
+import PaymentStatus from "components/PaymentStatus";
 import SearchNotFound from "components/SearchNotFound";
 import TableHeader from "components/Table/TableHead";
 import { push } from "connected-react-router";
@@ -53,21 +54,6 @@ const Detail = memo(({}: Props) => {
     dispatch(push(routes.admin.payment.root));
   };
 
-  const renderPaymentStatus = (status: EPaymentStatus) => {
-    switch (status) {
-      case EPaymentStatus.FAILED:
-        return <span className={classes.red}>Failed</span>
-      case EPaymentStatus.NOT_PAID:
-        return <span className={classes.gray}>Not paid</span>
-      case EPaymentStatus.PAID:
-        return <span className={classes.green}>Paid</span>
-      case EPaymentStatus.CANCEL:
-        return <span className={classes.yellow}>Cancel</span>
-      default:
-          return <></>;
-    }
-  };
-
   const getPaymentMethod = (item: Payment) => {
     return paymentMethods.find(it => it.id === item.paymentMethodId)?.name
   };
@@ -96,7 +82,7 @@ const Detail = memo(({}: Props) => {
       </Box>
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
-          {payment ? (
+          {payment && (
             <>
               <Card elevation={3}>
                 <CardContent sx={{ minHeight: "800px" }}>
@@ -105,7 +91,7 @@ const Detail = memo(({}: Props) => {
                       <Typography my={2} variant="h6">Order</Typography>
                       <Grid container spacing={2} ml={0} width="100%">
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.id || ""}</Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Status:</span> {renderPaymentStatus(payment.status)}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Status:</span> <PaymentStatus status={payment.status}/></Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Payment Method:</span> {getPaymentMethod(payment) || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>USD To VND Rate:</span> <span className={classes.valueBox}>{fCurrency2(payment.usdToVNDRate || 0)} VND</span></Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Sample Size Cost - VND:</span> <span className={classes.valueBox}>{fCurrency2(payment.sampleSizeCost || 0)} VND</span></Typography></Grid>
@@ -179,7 +165,7 @@ const Detail = memo(({}: Props) => {
                           <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{item.vpc_OrderInfo || ""}</TableCell>
                           <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{fCurrency2(parseInt(item.amount || "0"))} VND</TableCell>
                           <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{item.vpc_TicketNo || ""}</TableCell>
-                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{renderPaymentStatus(item.status)}</TableCell>
+                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}><PaymentStatus status={item.status}/></TableCell>
                           <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{JSON.stringify(item.rawCallback || "")}</TableCell>
                           <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{item.createdAt && moment(item.createdAt).format("DD-MM-YYYY HH:ss")}</TableCell>
                           <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{item.completedDate && moment(item.completedDate).format("DD-MM-YYYY HH:ss")}</TableCell>
@@ -191,12 +177,6 @@ const Detail = memo(({}: Props) => {
                 </Card>
               )}
             </>
-          ) : (
-            <Card elevation={3}>
-              <CardContent sx={{ height: "100px", display: "flex", justifyContent: "center", alignItems: "center", p: "0 !important" }}>
-                <SearchNotFound />
-              </CardContent>
-            </Card>
           )}
         </Grid>
       </Grid>
