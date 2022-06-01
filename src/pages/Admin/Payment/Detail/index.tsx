@@ -4,7 +4,7 @@ import PaymentStatus from "components/PaymentStatus";
 import TableHeader from "components/Table/TableHead";
 import { push } from "connected-react-router";
 import { paymentMethods, TableHeaderLabel } from "models/general";
-import { Payment } from "models/payment";
+import { Payment, paymentStatuses } from "models/payment";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -71,13 +71,13 @@ const Detail = memo(({}: Props) => {
 
     payment.onepays.forEach((item) => {
       const row: (string | number)[] = [
-        item.userPaymentId,
-        item.vpc_MerchTxnRef,
-        item.vpc_OrderInfo,
-        item.amount,
-        item.vpc_TicketNo,
-        item.status,
-        item.rawCallback,
+        item.userPaymentId || "",
+        item.vpc_MerchTxnRef || "",
+        item.vpc_OrderInfo || "",
+        fCurrency2(parseInt(item.amount || "0")), 
+        item.vpc_TicketNo || "",
+        paymentStatuses.find((status) => status.id === item.status)?.name || "",
+        JSON.stringify(item.rawCallback || ""),
         formatDate(item.createdAt),
         formatDate(item.completedDate),
       ];
