@@ -134,6 +134,7 @@ export const routes = {
     },
     payment: {
       root: '/admin/payment',
+      detail: '/admin/payment/:id/detail',
       edit: '/admin/payment/:id/edit',
     }
   }
