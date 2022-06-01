@@ -1,11 +1,10 @@
 import { ArrowBackOutlined } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Grid, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import PaymentStatus from "components/PaymentStatus";
-import SearchNotFound from "components/SearchNotFound";
 import TableHeader from "components/Table/TableHead";
 import { push } from "connected-react-router";
 import { paymentMethods, TableHeaderLabel } from "models/general";
-import { EPaymentStatus, Payment } from "models/payment";
+import { Payment } from "models/payment";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
