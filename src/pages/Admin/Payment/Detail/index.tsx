@@ -70,17 +70,20 @@ const Detail = memo(({}: Props) => {
     worksheet.addRow(tableHeaders.map((header) => header.label));
 
     payment.onepays.forEach((item) => {
-      const row: (string | number)[] = [
-        item.userPaymentId || "",
-        item.vpc_MerchTxnRef || "",
-        item.vpc_OrderInfo || "",
-        fCurrency2(parseInt(item.amount || "0")), 
-        item.vpc_TicketNo || "",
-        paymentStatuses.find((status) => status.id === item.status)?.name || "",
-        JSON.stringify(item.rawCallback || ""),
-        formatDate(item.createdAt),
-        formatDate(item.completedDate),
-      ];
+      const row: (string | number)[] = [];
+      tableHeaders.forEach(({name}) => {
+        switch (name) {
+          case "orderId": row.push(item.userPaymentId || ""); break;
+          case "merchTxnRef": row.push(item.vpc_MerchTxnRef || ""); break;
+          case "orderInfo": row.push(item.vpc_OrderInfo || ""); break;
+          case "amount": row.push(fCurrency2(parseInt(item.amount || "0"))); break;
+          case "ticketNo": row.push(item.vpc_TicketNo || ""); break;
+          case "status": row.push(paymentStatuses.find((status) => status.id === item.status)?.name || ""); break;
+          case "response": row.push(JSON.stringify(item.rawCallback || "")); break;
+          case "createdTime": row.push(formatDate(item.createdAt)); break;
+          case "completedTime": row.push(formatDate(item.completedDate)); break;
+        }
+      });
       worksheet.addRow(row);
     });
 
@@ -165,23 +168,25 @@ const Detail = memo(({}: Props) => {
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Company Address:</span> {payment.companyAddress || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Email:</span> {payment.email || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Phone:</span> {payment.phone || ""}</Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Country:</span> {payment.country.name || ""}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Country:</span> {payment.country?.name || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Tax Code:</span> {payment.taxCode || ""}</Typography></Grid>
                       </Grid>
                     </Box>
                   </Box>
                 </CardContent>
               </Card>
-              <Box marginTop={5} textAlign="right">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleExportExcel}
-                  startIcon={<FileDownload />}
-                >
-                  Export
-                </Button>
-              </Box>
+              {!!payment.onepays?.length && (
+                <Box marginTop={5} textAlign="right">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleExportExcel}
+                    startIcon={<FileDownload />}
+                  >
+                    Export
+                  </Button>
+                </Box>
+              )}
               {!!payment.onepays?.length && (
                 <Card elevation={3} sx={{ marginTop: "30px"}}>
                   <CardContent sx={{ overflowX: "auto" }}>
