@@ -267,7 +267,7 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={5}>
+                      <TableCell align="center" colSpan={9}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>
