@@ -1,4 +1,4 @@
-import { ArrowBackOutlined } from "@mui/icons-material";
+import { ArrowBackOutlined, FileDownload } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Grid, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import PaymentStatus from "components/PaymentStatus";
 import TableHeader from "components/Table/TableHead";
@@ -13,6 +13,8 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
 import { AdminPaymentService } from "services/admin/payment";
 import { fCurrency2 } from "utils/formatNumber";
+import FileSaver from "file-saver";
+import ExcelJS from "exceljs";
 import classes from "./styles.module.scss";
 
 const tableHeaders: TableHeaderLabel[] = [
@@ -55,6 +57,36 @@ const Detail = memo(({}: Props) => {
 
   const getPaymentMethod = (item: Payment) => {
     return paymentMethods.find(it => it.id === item.paymentMethodId)?.name
+  };
+
+  const formatDate = (date: Date): string => {
+    return date ? moment(date).format("DD-MM-YYYY HH:mm"): "";
+  }
+
+  const handleExportExcel = async () => {
+    const workbook = new ExcelJS.Workbook();
+    workbook.created = new Date();
+    const worksheet = workbook.addWorksheet("Payment details");
+    worksheet.addRow(tableHeaders.map((header) => header.label));
+
+    payment.onepays.forEach((item) => {
+      const row: (string | number)[] = [
+        item.userPaymentId,
+        item.vpc_MerchTxnRef,
+        item.vpc_OrderInfo,
+        item.amount,
+        item.vpc_TicketNo,
+        item.status,
+        item.rawCallback,
+        formatDate(item.createdAt),
+        formatDate(item.completedDate),
+      ];
+      worksheet.addRow(row);
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const filedata: Blob = new Blob([buffer], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"});
+    FileSaver.saveAs(filedata, `Order ${id} payment details ${moment().format("DD-MM-YYYY")}.xlsx`);
   };
 
   return (
@@ -103,7 +135,7 @@ const Detail = memo(({}: Props) => {
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>VAT - USD:</span> <span className={classes.valueBox}>${fCurrency2(payment.vatUSD || 0)}</span></Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Total Amount - VND:</span> <span className={classes.valueBox}>{fCurrency2(payment.totalAmount || 0)} VND</span></Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Total Amount - USD:</span> <span className={classes.valueBox}>${fCurrency2(payment.totalAmountUSD || 0)}</span></Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>VAT Rate:</span> {payment.vatRate || 0}%</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>VAT Rate:</span> {payment.vatRate * 100 || 0}%</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Created Time:</span> {payment.createdAt && moment(payment.createdAt).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Completed Time:</span> {payment.completedDate && moment(payment.completedDate).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Cancel Time:</span> {payment.cancelledDate && moment(payment.cancelledDate).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
@@ -140,6 +172,16 @@ const Detail = memo(({}: Props) => {
                   </Box>
                 </CardContent>
               </Card>
+              <Box marginTop={5} textAlign="right">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleExportExcel}
+                  startIcon={<FileDownload />}
+                >
+                  Export
+                </Button>
+              </Box>
               {!!payment.onepays?.length && (
                 <Card elevation={3} sx={{ marginTop: "30px"}}>
                   <CardContent sx={{ overflowX: "auto" }}>
