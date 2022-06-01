@@ -125,7 +125,7 @@ const Detail = memo(({}: Props) => {
                         <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Name:</span> {payment.project?.name || ""}</Typography></Grid>
                       </Grid>
                       </Box>
-                    <Box px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Box px={3}>
                       <Typography my={2} variant="h6">Invoice</Typography>
                       <Grid container spacing={2} ml={0} width="100%">
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Fullname:</span> {payment.fullName || ""}</Typography></Grid>
@@ -136,17 +136,6 @@ const Detail = memo(({}: Props) => {
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Country:</span> {payment.country.name || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Tax Code:</span> {payment.taxCode || ""}</Typography></Grid>
                       </Grid>
-                    </Box>
-                    <Box px={3}>
-                      <Typography my={2} variant="h6">Onepay</Typography>
-                      {!!payment.onepays?.length && payment.onepays.map((item) => (
-                        <Grid container spacing={2} ml={0} mb={2} width="100%">
-                          <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500, wordWrap: "break-word" }}><span className={classes.subtitle}>MerchTxnRef:</span> {item.vpc_MerchTxnRef || ""}</Typography></Grid>
-                          <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Order Info:</span> {item.vpc_OrderInfo || ""}</Typography></Grid>
-                          <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Amount:</span> {item.amount || ""}</Typography></Grid>
-                          <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Ticked No:</span> {item.vpc_TicketNo || ""}</Typography></Grid>
-                        </Grid>
-                      ))}
                     </Box>
                   </Box>
                 </CardContent>
@@ -159,15 +148,15 @@ const Detail = memo(({}: Props) => {
                       <TableBody>
                       {payment.onepays.map((item) => (
                         <TableRow>
-                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{item.userPaymentId || ""}</TableCell>
-                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{item.vpc_MerchTxnRef || ""}</TableCell>
-                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{item.vpc_OrderInfo || ""}</TableCell>
-                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{fCurrency2(parseInt(item.amount || "0"))} VND</TableCell>
-                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{item.vpc_TicketNo || ""}</TableCell>
-                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}><PaymentStatus status={item.status}/></TableCell>
+                          <TableCell>{item.userPaymentId || ""}</TableCell>
+                          <TableCell>{item.vpc_MerchTxnRef || ""}</TableCell>
+                          <TableCell>{item.vpc_OrderInfo || ""}</TableCell>
+                          <TableCell>{fCurrency2(parseInt(item.amount || "0"))} VND</TableCell>
+                          <TableCell>{item.vpc_TicketNo || ""}</TableCell>
+                          <TableCell><PaymentStatus status={item.status}/></TableCell>
                           <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{JSON.stringify(item.rawCallback || "")}</TableCell>
-                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{item.createdAt && moment(item.createdAt).format("DD-MM-YYYY HH:ss")}</TableCell>
-                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{item.completedDate && moment(item.completedDate).format("DD-MM-YYYY HH:ss")}</TableCell>
+                          <TableCell>{item.createdAt && moment(item.createdAt).format("DD-MM-YYYY HH:ss")}</TableCell>
+                          <TableCell>{item.completedDate && moment(item.completedDate).format("DD-MM-YYYY HH:ss")}</TableCell>
                         </TableRow>
                       ))}
                       </TableBody>
