@@ -176,40 +176,40 @@ const Detail = memo(({}: Props) => {
                 </CardContent>
               </Card>
               {!!payment.onepays?.length && (
-                <Box marginTop={5} textAlign="right">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleExportExcel}
-                    startIcon={<FileDownload />}
-                  >
-                    Export
-                  </Button>
-                </Box>
-              )}
-              {!!payment.onepays?.length && (
-                <Card elevation={3} sx={{ marginTop: "30px"}}>
-                  <CardContent sx={{ overflowX: "auto" }}>
-                    <Table>
-                      <TableHeader headers={tableHeaders}/>
-                      <TableBody>
-                      {payment.onepays.map((item) => (
-                        <TableRow key={item.id}>
-                          <TableCell>{item.userPaymentId ?? ""}</TableCell>
-                          <TableCell>{item.vpc_MerchTxnRef || ""}</TableCell>
-                          <TableCell>{item.vpc_OrderInfo || ""}</TableCell>
-                          <TableCell>{fCurrency2(parseInt(item.amount || "0"))} VND</TableCell>
-                          <TableCell>{item.vpc_TicketNo || ""}</TableCell>
-                          <TableCell><PaymentStatus status={item.status}/></TableCell>
-                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{JSON.stringify(item.rawCallback || "")}</TableCell>
-                          <TableCell>{item.createdAt && moment(item.createdAt).format("DD-MM-YYYY HH:ss")}</TableCell>
-                          <TableCell>{item.completedDate && moment(item.completedDate).format("DD-MM-YYYY HH:ss")}</TableCell>
-                        </TableRow>
-                      ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
+                <>
+                  <Box marginTop={5} textAlign="right">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleExportExcel}
+                      startIcon={<FileDownload />}
+                    >
+                      Export
+                    </Button>
+                  </Box>
+                  <Card elevation={3} sx={{ marginTop: "30px"}}>
+                    <CardContent sx={{ overflowX: "auto" }}>
+                      <Table>
+                        <TableHeader headers={tableHeaders}/>
+                        <TableBody>
+                        {payment.onepays.map((item) => (
+                          <TableRow key={item.id}>
+                            <TableCell>{item.userPaymentId ?? ""}</TableCell>
+                            <TableCell>{item.vpc_MerchTxnRef || ""}</TableCell>
+                            <TableCell>{item.vpc_OrderInfo || ""}</TableCell>
+                            <TableCell>{fCurrency2(parseInt(item.amount || "0"))} VND</TableCell>
+                            <TableCell>{item.vpc_TicketNo || ""}</TableCell>
+                            <TableCell><PaymentStatus status={item.status}/></TableCell>
+                            <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{JSON.stringify(item.rawCallback || "")}</TableCell>
+                            <TableCell>{item.createdAt && moment(item.createdAt).format("DD-MM-YYYY HH:ss")}</TableCell>
+                            <TableCell>{item.completedDate && moment(item.completedDate).format("DD-MM-YYYY HH:ss")}</TableCell>
+                          </TableRow>
+                        ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                </>
               )}
             </>
           )}
