@@ -1,10 +1,10 @@
-import { ArrowBackOutlined } from "@mui/icons-material";
+import { ArrowBackOutlined, FileDownload } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Grid, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import PaymentStatus from "components/PaymentStatus";
 import TableHeader from "components/Table/TableHead";
 import { push } from "connected-react-router";
 import { paymentMethods, TableHeaderLabel } from "models/general";
-import { Payment } from "models/payment";
+import { Payment, paymentStatuses } from "models/payment";
 import moment from "moment";
 import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -13,6 +13,8 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
 import { AdminPaymentService } from "services/admin/payment";
 import { fCurrency2 } from "utils/formatNumber";
+import FileSaver from "file-saver";
+import ExcelJS from "exceljs";
 import classes from "./styles.module.scss";
 
 const tableHeaders: TableHeaderLabel[] = [
@@ -57,6 +59,39 @@ const Detail = memo(({}: Props) => {
     return paymentMethods.find(it => it.id === item.paymentMethodId)?.name
   };
 
+  const formatDate = (date: Date): string => {
+    return date ? moment(date).format("DD-MM-YYYY HH:mm"): "";
+  }
+
+  const handleExportExcel = async () => {
+    const workbook = new ExcelJS.Workbook();
+    workbook.created = new Date();
+    const worksheet = workbook.addWorksheet("Payment details");
+    worksheet.addRow(tableHeaders.map((header) => header.label));
+
+    payment.onepays.forEach((item) => {
+      const row: (string | number)[] = [];
+      tableHeaders.forEach(({name}) => {
+        switch (name) {
+          case "orderId": row.push(item.userPaymentId ?? ""); break;
+          case "merchTxnRef": row.push(item.vpc_MerchTxnRef || ""); break;
+          case "orderInfo": row.push(item.vpc_OrderInfo || ""); break;
+          case "amount": row.push(`${fCurrency2(parseInt(item.amount || "0"))} VND`); break;
+          case "ticketNo": row.push(item.vpc_TicketNo || ""); break;
+          case "status": row.push(paymentStatuses.find((status) => status.id === item.status)?.name || ""); break;
+          case "response": row.push(JSON.stringify(item.rawCallback || "")); break;
+          case "createdTime": row.push(formatDate(item.createdAt)); break;
+          case "completedTime": row.push(formatDate(item.completedDate)); break;
+        }
+      });
+      worksheet.addRow(row);
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const filedata: Blob = new Blob([buffer], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"});
+    FileSaver.saveAs(filedata, `Order ${id} payment details ${moment().format("DD-MM-YYYY")}.xlsx`);
+  };
+
   return (
     <div>
       <Box
@@ -89,7 +124,7 @@ const Detail = memo(({}: Props) => {
                     <Box px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
                       <Typography my={2} variant="h6">Order</Typography>
                       <Grid container spacing={2} ml={0} width="100%">
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.id || ""}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.id ?? ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Status:</span> <PaymentStatus status={payment.status}/></Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Payment Method:</span> {getPaymentMethod(payment) || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>USD To VND Rate:</span> <span className={classes.valueBox}>{fCurrency2(payment.usdToVNDRate || 0)} VND</span></Typography></Grid>
@@ -103,7 +138,7 @@ const Detail = memo(({}: Props) => {
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>VAT - USD:</span> <span className={classes.valueBox}>${fCurrency2(payment.vatUSD || 0)}</span></Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Total Amount - VND:</span> <span className={classes.valueBox}>{fCurrency2(payment.totalAmount || 0)} VND</span></Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Total Amount - USD:</span> <span className={classes.valueBox}>${fCurrency2(payment.totalAmountUSD || 0)}</span></Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>VAT Rate:</span> {payment.vatRate || 0}%</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>VAT Rate:</span> {payment.vatRate * 100 || 0}%</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Created Time:</span> {payment.createdAt && moment(payment.createdAt).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Completed Time:</span> {payment.completedDate && moment(payment.completedDate).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Cancel Time:</span> {payment.cancelledDate && moment(payment.cancelledDate).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
@@ -112,7 +147,7 @@ const Detail = memo(({}: Props) => {
                     <Box px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
                       <Typography my={2} variant="h6">User</Typography>
                       <Grid container spacing={2} ml={0} width="100%">
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.user?.id || ""}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.user?.id ?? ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Fullname:</span> {payment.user?.fullName || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Email:</span> {payment.user?.email || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Phone:</span> {payment.user?.phone || ""}</Typography></Grid>
@@ -121,7 +156,7 @@ const Detail = memo(({}: Props) => {
                     <Box px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
                       <Typography my={2} variant="h6">Project</Typography>
                       <Grid container spacing={2} ml={0} width="100%">
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.project?.id || ""}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.project?.id ?? ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Name:</span> {payment.project?.name || ""}</Typography></Grid>
                       </Grid>
                       </Box>
@@ -133,7 +168,7 @@ const Detail = memo(({}: Props) => {
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Company Address:</span> {payment.companyAddress || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Email:</span> {payment.email || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Phone:</span> {payment.phone || ""}</Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Country:</span> {payment.country.name || ""}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Country:</span> {payment.country?.name || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Tax Code:</span> {payment.taxCode || ""}</Typography></Grid>
                       </Grid>
                     </Box>
@@ -141,28 +176,40 @@ const Detail = memo(({}: Props) => {
                 </CardContent>
               </Card>
               {!!payment.onepays?.length && (
-                <Card elevation={3} sx={{ marginTop: "30px"}}>
-                  <CardContent sx={{ overflowX: "auto" }}>
-                    <Table>
-                      <TableHeader headers={tableHeaders}/>
-                      <TableBody>
-                      {payment.onepays.map((item) => (
-                        <TableRow>
-                          <TableCell>{item.userPaymentId || ""}</TableCell>
-                          <TableCell>{item.vpc_MerchTxnRef || ""}</TableCell>
-                          <TableCell>{item.vpc_OrderInfo || ""}</TableCell>
-                          <TableCell>{fCurrency2(parseInt(item.amount || "0"))} VND</TableCell>
-                          <TableCell>{item.vpc_TicketNo || ""}</TableCell>
-                          <TableCell><PaymentStatus status={item.status}/></TableCell>
-                          <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{JSON.stringify(item.rawCallback || "")}</TableCell>
-                          <TableCell>{item.createdAt && moment(item.createdAt).format("DD-MM-YYYY HH:ss")}</TableCell>
-                          <TableCell>{item.completedDate && moment(item.completedDate).format("DD-MM-YYYY HH:ss")}</TableCell>
-                        </TableRow>
-                      ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
+                <>
+                  <Box marginTop={5} textAlign="right">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleExportExcel}
+                      startIcon={<FileDownload />}
+                    >
+                      Export
+                    </Button>
+                  </Box>
+                  <Card elevation={3} sx={{ marginTop: "30px"}}>
+                    <CardContent sx={{ overflowX: "auto" }}>
+                      <Table>
+                        <TableHeader headers={tableHeaders}/>
+                        <TableBody>
+                        {payment.onepays.map((item) => (
+                          <TableRow key={item.id}>
+                            <TableCell>{item.userPaymentId ?? ""}</TableCell>
+                            <TableCell>{item.vpc_MerchTxnRef || ""}</TableCell>
+                            <TableCell>{item.vpc_OrderInfo || ""}</TableCell>
+                            <TableCell>{fCurrency2(parseInt(item.amount || "0"))} VND</TableCell>
+                            <TableCell>{item.vpc_TicketNo || ""}</TableCell>
+                            <TableCell><PaymentStatus status={item.status}/></TableCell>
+                            <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{JSON.stringify(item.rawCallback || "")}</TableCell>
+                            <TableCell>{item.createdAt && moment(item.createdAt).format("DD-MM-YYYY HH:ss")}</TableCell>
+                            <TableCell>{item.completedDate && moment(item.completedDate).format("DD-MM-YYYY HH:ss")}</TableCell>
+                          </TableRow>
+                        ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                </>
               )}
             </>
           )}

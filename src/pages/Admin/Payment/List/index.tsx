@@ -1,4 +1,4 @@
-import { EditOutlined, ExpandMoreOutlined, FilterAlt, VisibilityOutlined } from "@mui/icons-material";
+import { EditOutlined, ExpandMoreOutlined, FilterAlt, FileDownload, VisibilityOutlined } from "@mui/icons-material";
 import { Box, Button, Grid, IconButton, Link, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
 import clsx from "clsx";
 import FilderModal, { EFilterType, FilterOption, FilterValue } from "components/FilterModal";
@@ -19,6 +19,10 @@ import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
 import { AdminPaymentService } from "services/admin/payment";
+import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
+import ExcelJS from "exceljs";
+import FileSaver from "file-saver";
+import { worksheetCols } from "./model";
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
@@ -103,6 +107,104 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
   }
+
+  const _getCellData = (payment, key): string | number => {
+    switch (key) {
+      case "paymentMethodId":
+        return paymentMethods.find(
+          (method) => method.id === payment[key]
+        )?.name;
+      case "sampleSizeCost":
+      case "customQuestionCost":
+      case "vat":
+      case "totalAmount":
+      case "usdToVNDRate":
+        return `${fCurrency2VND(payment[key] ?? 0)} VND`;
+      case "sampleSizeCostUSD":
+      case "customQuestionCostUSD":
+      case "vatUSD":
+      case "totalAmountUSD":
+        return `${fCurrency2(payment[key] ?? 0)} USD`;
+      case "vatRate":
+        return `${((payment[key] ?? 0) * 100)}%`;
+      case "createdAt":
+      case "completedDate":
+      case "cancelledDate":
+        return payment[key] ? moment(payment[key]).format("DD-MM-YYYY HH:mm") : "";
+      case "user.id":
+      case "user.fullName":
+      case "user.email":
+      case "user.phone":
+        key = key.split(".")[1];
+        return payment.user?.[key];
+      case "project.id":
+      case "project.name":
+        key = key.split(".")[1];
+        return payment.project?.[key];
+      case "country.name":
+        return payment.country?.name;
+      case "onepays.vpc_MerchTxnRef":
+      case "onepays.vpc_OrderInfo":
+      case "onepays.amount":
+      case "onepays.vpc_TicketNo":
+        if (payment.onepays?.length) {
+          key = key.split(".")[1];
+          if (key === "amount") return `${fCurrency2VND(payment.onepays[0].amount)} VND`;
+          return payment.onepays[0][key];
+        }
+        return;
+      default:
+        return payment[key];
+    }
+  }
+
+  const handleExportExcel = async () => {
+    const params: GetPaymentsParams = {
+      take: 9999,
+      page: 1,
+      keyword: keyword,
+      paymentMethodIds: (
+        filterData?.paymentMethodIds as OptionItemT<number>[]
+      )?.map((it) => it.id),
+      fromCreatedAt: (filterData?.dateRange as Range)?.startDate
+        ? moment((filterData?.dateRange as Range)?.startDate)
+            .startOf("day")
+            .utc()
+            .format()
+        : undefined,
+      toCreatedAt: (filterData?.dateRange as Range)?.endDate
+        ? moment((filterData?.dateRange as Range)?.endDate)
+            .endOf("day")
+            .utc()
+            .format()
+        : undefined,
+    };
+
+    const workbook = new ExcelJS.Workbook();
+    workbook.created = new Date();
+    const worksheet = workbook.addWorksheet(
+      `Order ${moment().format("DD-MM-YYYY")}`,
+      {}
+    );
+    worksheet.addRow(worksheetCols.map((col) => col.header));
+
+    try {
+      const { data } = await AdminPaymentService.getPayments(params);
+      data.forEach(async (payment) => {
+        const row: (string | number)[] = [];
+        worksheetCols.forEach(({ key }) => {
+          row.push(_getCellData(payment, key) ?? "");
+        });
+        worksheet.addRow(row);
+      });
+      
+      const buffer = await workbook.xlsx.writeBuffer();
+      const filedata: Blob = new Blob([buffer], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"});
+      FileSaver.saveAs(filedata, `Order ${moment().format("DD-MM-YYYY")}.xlsx`);
+    } catch (err) {
+      dispatch(setErrorMess(err));
+    }
+  };
 
   const _onSearch = useDebounce((keyword: string) => fetchData({ keyword, page: 1 }), 500)
 
@@ -204,14 +306,29 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                 value={keyword || ''}
                 onChange={onSearch}
               />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setIsOpenFilter(true)}
-                startIcon={<FilterAlt />}
-              >
-                Filter
-              </Button>
+              <Box>
+                {
+                  !!data?.data?.length && (
+                    <Button
+                      sx={{ marginRight: 2 }}
+                      variant="contained"
+                      color="primary"
+                      onClick={handleExportExcel}
+                      startIcon={<FileDownload />}
+                    >
+                      Export
+                    </Button>
+                  )
+                }
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setIsOpenFilter(true)}
+                  startIcon={<FilterAlt />}
+                >
+                  Filter
+                </Button>
+              </Box>
             </Box>
             <Table>
               <TableHeader headers={tableHeaders} />
