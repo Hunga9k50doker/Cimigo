@@ -149,6 +149,7 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
       case "onepays.vpc_TicketNo":
         if (payment.onepays?.length) {
           key = key.split(".")[1];
+          if (key === "amount") return `${fCurrency2VND(payment.onepays[0].amount)} VND`;
           return payment.onepays[0][key];
         }
         return;
@@ -306,15 +307,19 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                 onChange={onSearch}
               />
               <Box>
-                <Button
-                  sx={{ marginRight: 2 }}
-                  variant="contained"
-                  color="primary"
-                  onClick={handleExportExcel}
-                  startIcon={<FileDownload />}
-                >
-                  Export
-                </Button>
+                {
+                  !!data?.data?.length && (
+                    <Button
+                      sx={{ marginRight: 2 }}
+                      variant="contained"
+                      color="primary"
+                      onClick={handleExportExcel}
+                      startIcon={<FileDownload />}
+                    >
+                      Export
+                    </Button>
+                  )
+                }
                 <Button
                   variant="contained"
                   color="primary"

@@ -73,10 +73,10 @@ const Detail = memo(({}: Props) => {
       const row: (string | number)[] = [];
       tableHeaders.forEach(({name}) => {
         switch (name) {
-          case "orderId": row.push(item.userPaymentId || ""); break;
+          case "orderId": row.push(item.userPaymentId ?? ""); break;
           case "merchTxnRef": row.push(item.vpc_MerchTxnRef || ""); break;
           case "orderInfo": row.push(item.vpc_OrderInfo || ""); break;
-          case "amount": row.push(fCurrency2(parseInt(`${item.amount || "0"} VND`))); break;
+          case "amount": row.push(`${fCurrency2(parseInt(item.amount || "0"))} VND`); break;
           case "ticketNo": row.push(item.vpc_TicketNo || ""); break;
           case "status": row.push(paymentStatuses.find((status) => status.id === item.status)?.name || ""); break;
           case "response": row.push(JSON.stringify(item.rawCallback || "")); break;
@@ -124,7 +124,7 @@ const Detail = memo(({}: Props) => {
                     <Box px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
                       <Typography my={2} variant="h6">Order</Typography>
                       <Grid container spacing={2} ml={0} width="100%">
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.id || ""}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.id ?? ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Status:</span> <PaymentStatus status={payment.status}/></Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Payment Method:</span> {getPaymentMethod(payment) || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>USD To VND Rate:</span> <span className={classes.valueBox}>{fCurrency2(payment.usdToVNDRate || 0)} VND</span></Typography></Grid>
@@ -147,7 +147,7 @@ const Detail = memo(({}: Props) => {
                     <Box px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
                       <Typography my={2} variant="h6">User</Typography>
                       <Grid container spacing={2} ml={0} width="100%">
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.user?.id || ""}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.user?.id ?? ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Fullname:</span> {payment.user?.fullName || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Email:</span> {payment.user?.email || ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Phone:</span> {payment.user?.phone || ""}</Typography></Grid>
@@ -156,7 +156,7 @@ const Detail = memo(({}: Props) => {
                     <Box px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
                       <Typography my={2} variant="h6">Project</Typography>
                       <Grid container spacing={2} ml={0} width="100%">
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.project?.id || ""}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>ID:</span> {payment.project?.id ?? ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{fontWeight: 500}}><span className={classes.subtitle}>Name:</span> {payment.project?.name || ""}</Typography></Grid>
                       </Grid>
                       </Box>
@@ -194,8 +194,8 @@ const Detail = memo(({}: Props) => {
                       <TableHeader headers={tableHeaders}/>
                       <TableBody>
                       {payment.onepays.map((item) => (
-                        <TableRow>
-                          <TableCell>{item.userPaymentId || ""}</TableCell>
+                        <TableRow key={item.id}>
+                          <TableCell>{item.userPaymentId ?? ""}</TableCell>
                           <TableCell>{item.vpc_MerchTxnRef || ""}</TableCell>
                           <TableCell>{item.vpc_OrderInfo || ""}</TableCell>
                           <TableCell>{fCurrency2(parseInt(item.amount || "0"))} VND</TableCell>
