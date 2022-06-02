@@ -263,6 +263,52 @@ const Detail = memo(({ }: Props) => {
                       </Box>
                     </>
                   )}
+                  {!!project?.customQuestions?.length && (
+                    <>
+                      <Typography variant="h6" component="div" sx={{ marginBottom: 2, marginTop: 4 }}>
+                        Custom questions
+                      </Typography>
+                      <Box ml={2}>
+                        {
+                          project.customQuestions.map((question) => (
+                            <Box marginTop={2} key={question.id}>
+                              <Typography variant="subtitle1" component="div">
+                                <span style={{ fontWeight: 500 }}>Title:</span> {question.title}
+                              </Typography>
+                            
+                              <Box marginLeft={4}>
+                                <Typography variant="subtitle1" component="div">
+                                  Type: {question.type.title}
+                                </Typography>
+
+                                <Typography variant="subtitle1" component="div">
+                                  Price: <span className={classes.valueBox}>{fCurrency2(question.type.price)} USD</span>
+                                </Typography>
+
+                                {!!question.answers?.length && (
+                                  <>
+                                    <Typography variant="subtitle1" component="div">
+                                      Answers:
+                                    </Typography>
+
+                                    {
+                                      question.answers.map((answer) => (
+                                        <Typography display="flex" alignItems="center" marginLeft={4} variant="subtitle1" component="div">
+                                          Title: {" "}
+                                          {answer.title}
+                                          {answer.exclusive && <span className={classes.exclusiveBox}>exclusive</span>}
+                                        </Typography>
+                                      ))
+                                    }
+                                  </>
+                                )}
+                              </Box>
+                            </Box>
+                          ))
+                        }
+                      </Box>
+                    </>
+                  )}
                 </Box>
               </TabPanel>
               <TabPanel value={activeTab} index={ETab.TARGET}>
