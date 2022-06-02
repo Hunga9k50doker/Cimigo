@@ -27,8 +27,6 @@ import { Quota, QuotaTableRow } from "models/quota"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import PaymentStatus from "components/PaymentStatus"
-import { ECustomQuestionType } from "models/custom_question"
-import images from "config/images"
 
 
 enum ETab {
@@ -275,7 +273,7 @@ const Detail = memo(({ }: Props) => {
                           project.customQuestions.map((question) => (
                             <Box marginTop={2} key={question.id}>
                               <Typography variant="subtitle1" component="div">
-                              <span style={{ fontWeight: 500 }}>Title:</span> {question.title}
+                                <span style={{ fontWeight: 500 }}>Title:</span> {question.title}
                               </Typography>
                             
                               <Box marginLeft={4}>
@@ -284,7 +282,7 @@ const Detail = memo(({ }: Props) => {
                                 </Typography>
 
                                 <Typography variant="subtitle1" component="div">
-                                Price: <span className={classes.valueBox}>{fCurrency2(question.type.price)} USD</span>
+                                  Price: <span className={classes.valueBox}>{fCurrency2(question.type.price)} USD</span>
                                 </Typography>
 
                                 {!!question.answers?.length && (
