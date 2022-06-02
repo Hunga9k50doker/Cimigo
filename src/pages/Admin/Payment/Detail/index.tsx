@@ -76,7 +76,7 @@ const Detail = memo(({}: Props) => {
           case "orderId": row.push(item.userPaymentId || ""); break;
           case "merchTxnRef": row.push(item.vpc_MerchTxnRef || ""); break;
           case "orderInfo": row.push(item.vpc_OrderInfo || ""); break;
-          case "amount": row.push(fCurrency2(parseInt(item.amount || "0"))); break;
+          case "amount": row.push(fCurrency2(parseInt(`${item.amount || "0"} VND`))); break;
           case "ticketNo": row.push(item.vpc_TicketNo || ""); break;
           case "status": row.push(paymentStatuses.find((status) => status.id === item.status)?.name || ""); break;
           case "response": row.push(JSON.stringify(item.rawCallback || "")); break;
