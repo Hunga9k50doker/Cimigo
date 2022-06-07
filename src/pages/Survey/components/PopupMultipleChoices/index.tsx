@@ -1,4 +1,4 @@
-import { SyntheticEvent, useEffect, useMemo } from "react";
+import { SyntheticEvent, useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import {
   Button,
@@ -42,6 +42,7 @@ interface Props {
 const PopupMultipleChoices = (props: Props) => {
   const { onClose, isOpen, onSubmit, questionEdit, questionType, language } =
     props;
+  const [focusEleIdx, setFocusEleIdx] = useState(-1);
 
   const schema = useMemo(() => {
     return yup.object().shape({
@@ -150,6 +151,7 @@ const PopupMultipleChoices = (props: Props) => {
     if (answers?.length >= questionType?.maxAnswer) {
       return;
     }
+    setFocusEleIdx(answers.length);
     setValue("answers", [...answers, new_answers]);
   };
 
@@ -256,6 +258,8 @@ const PopupMultipleChoices = (props: Props) => {
                                     checkAllAnsNotValue()
                                   )}
                                   autoComplete="off"
+                                  autoFocus={index === focusEleIdx}
+                                  onFocus={() => setFocusEleIdx(-1)}
                                 />
                                 {answers?.length > questionType?.minAnswer && (
                                   <button
@@ -327,7 +331,7 @@ const PopupMultipleChoices = (props: Props) => {
               </Grid>
             )}
           </Grid>
-          <Grid>
+          <Grid textAlign="right">
             <Button
               type="submit"
               translation-key="setup_survey_popup_save_question_title"

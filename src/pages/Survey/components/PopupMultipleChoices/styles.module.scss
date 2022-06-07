@@ -1,7 +1,6 @@
 .paper {
   width: 790px;
   max-width: 790px;
-  min-height: 512px;
 }
 
 .content {
@@ -121,6 +120,7 @@
   align-items: center;
   background-color: transparent;
   border: none;
+  font-family: inherit;
   font-weight: 500;
   font-size: 16px;
   color: rgba(28, 28, 28, 0.65);
@@ -244,7 +244,6 @@ input:checked {
 
 .btnSave {
   background-color: var(--cimigo-blue);
-  float: right;
   padding: 16px;
   color: white;
   font-size: 14px;
@@ -252,7 +251,7 @@ input:checked {
   line-height: 16px;
   text-transform: none;
   margin-top: 0px;
-  right: 4%;
+  margin-right: 4%;
 }
 
 .classform {
@@ -308,6 +307,7 @@ input:checked {
 
 .formControl {
   width: 100%;
+  padding-bottom: 1rem;
 
   .error {
     // color: red;
@@ -367,6 +367,7 @@ input:checked {
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   height: 22px;
+  font-family: inherit;
   font-size: 16px;
   font-weight: 400;
   margin-left: 5px;

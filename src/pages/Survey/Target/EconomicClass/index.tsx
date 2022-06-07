@@ -89,7 +89,7 @@ const EconomicClass = memo(({ projectId, project, questions }: Props) => {
         <Grid key={question.id} classes={{ root: classes.rootLocation }}>
           <p>{question.title}</p>
           <div>
-            <Grid className={classes.rootCheck} container spacing={2}>
+            <Grid className={classes.rootCheck} container>
               {question.targetAnswers.map((answer) => {
                 return (
                   <Grid item xs={6} key={answer.id}>
