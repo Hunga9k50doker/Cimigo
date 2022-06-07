@@ -300,7 +300,7 @@ const PopupSingleChoice = (props: Props) => {
               </Grid>
             )}
           </Grid>
-          <Grid>
+          <Grid textAlign="right">
             <Button
               type="submit"
               translation-key="setup_survey_popup_save_question_title"

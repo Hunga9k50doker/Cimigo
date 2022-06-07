@@ -256,6 +256,11 @@ const PopupMultipleChoices = (props: Props) => {
                                     checkAllAnsNotValue()
                                   )}
                                   autoComplete="off"
+                                  autoFocus={
+                                    answers?.length >
+                                      questionType?.minAnswer &&
+                                    index === answers.length - 1
+                                  }
                                 />
                                 {answers?.length > questionType?.minAnswer && (
                                   <button
@@ -327,7 +332,7 @@ const PopupMultipleChoices = (props: Props) => {
               </Grid>
             )}
           </Grid>
-          <Grid>
+          <Grid textAlign="right">
             <Button
               type="submit"
               translation-key="setup_survey_popup_save_question_title"
