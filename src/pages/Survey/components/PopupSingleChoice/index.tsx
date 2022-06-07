@@ -1,4 +1,4 @@
-import { SyntheticEvent, useEffect, useMemo } from "react";
+import { SyntheticEvent, useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import {
   Button,
@@ -41,6 +41,7 @@ interface Props {
 
 const PopupSingleChoice = (props: Props) => {
   const { t } = useTranslation();
+  const [focusEleIdx, setFocusEleIdx] = useState(-1);
 
   const { onClose, isOpen, onSubmit, questionEdit, questionType, language } =
     props;
@@ -141,6 +142,7 @@ const PopupSingleChoice = (props: Props) => {
     if (answers?.length >= questionType?.maxAnswer) {
       return;
     }
+    setFocusEleIdx(answers.length);
     setValue("answers", [...answers, new_answers]);
   };
 
@@ -248,11 +250,8 @@ const PopupSingleChoice = (props: Props) => {
                                       checkAllAnsNotValue()
                                     )}
                                     autoComplete="off"
-                                    autoFocus={
-                                      answers?.length >
-                                        questionType?.minAnswer &&
-                                      index === answers.length - 1
-                                    }
+                                    autoFocus={focusEleIdx === index}
+                                    onFocus={() => setFocusEleIdx(-1)}
                                   />
                                   {answers?.length >
                                     questionType?.minAnswer && (
