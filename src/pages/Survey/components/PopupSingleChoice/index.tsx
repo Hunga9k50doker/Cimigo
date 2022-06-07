@@ -248,6 +248,11 @@ const PopupSingleChoice = (props: Props) => {
                                       checkAllAnsNotValue()
                                     )}
                                     autoComplete="off"
+                                    autoFocus={
+                                      answers?.length >
+                                        questionType?.minAnswer &&
+                                      index === answers.length - 1
+                                    }
                                   />
                                   {answers?.length >
                                     questionType?.minAnswer && (
