@@ -236,6 +236,7 @@ const PopupSingleChoice = (props: Props) => {
                                   <input
                                     type="radio"
                                     name="radio_answer"
+                                    disabled={true}
                                     className={classes.choiceAnswer}
                                   />
                                   <input

@@ -243,6 +243,7 @@ const PopupMultipleChoices = (props: Props) => {
                                 />
                                 <input
                                   type="checkbox"
+                                  disabled={true}
                                   name="checkbox_answer"
                                   className={classes.choiceAnswer}
                                 />
