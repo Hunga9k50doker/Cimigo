@@ -110,6 +110,10 @@ const Quotas = memo(({ projectId }: Props) => {
     setPopupInvalidQuota(true)
   }
 
+  const onClosePopupInvalidQuota = () => {
+    setPopupInvalidQuota(false)
+  }
+
   const onEdit = () => {
     if (!quotaEdit || !isValidEdit()) {
       onOpenPopupInvalidQuota()
@@ -196,11 +200,7 @@ const Quotas = memo(({ projectId }: Props) => {
                           </Buttons>
                           <PopupInvalidQuota
                             isOpen={popupInvalidQuota}
-                            onCancel={() => setPopupInvalidQuota(false)}
-                            title="Invalid quota adjustment"
-                            subTitle="Your adjustment must meet the following requirements:"
-                            content_1={<span>The population weights must be <strong>in the range of 0.5 to 1.5</strong>. Beyond this range, may result in unreliable data at the weighted total result.</span>}
-                            content_2="Your adjusted total sample size must be the same as your unadjusted total sample size."
+                            onCancel={onClosePopupInvalidQuota}
                           />
                         </>
                       ) : (
@@ -218,7 +218,6 @@ const Quotas = memo(({ projectId }: Props) => {
                                 <img src={Images.icEditCell} alt='' />
                               </IconButton>
                             </TooltipCustom>
-                            
                           </>
                         )
                       )}
@@ -304,7 +303,7 @@ const Quotas = memo(({ projectId }: Props) => {
                                 />
                               </TableCell>
                               <TableCell align="center">
-                                <span className={clsx(classes.valid, { [classes.invalid]: !validPopulationWeight(row) })}>{getPopulationWeight(row)}<WarningAmber /></span>
+                                <span className={clsx(classes.valid, { [classes.invalid]: !validPopulationWeight(row) })}>{getPopulationWeight(row)}{!validPopulationWeight(row) && <WarningAmber sx={{ fontSize: 16 }} />}</span>
                               </TableCell>
                             </>
                           ) : (

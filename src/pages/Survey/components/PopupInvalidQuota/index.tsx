@@ -8,15 +8,11 @@ import Images from "config/images";
 
 interface Props {
     isOpen: boolean,
-    title: string,
-    subTitle: string,
-    content_1: any,
-    content_2: string,
     onCancel: () => void,
 }
 
 const PopupInvalidQuota = memo((props: Props) => {
-    const { isOpen, title, subTitle, content_1, content_2, onCancel } = props;
+    const { isOpen, onCancel } = props;
     const { t } = useTranslation()
 
     return (
@@ -26,23 +22,23 @@ const PopupInvalidQuota = memo((props: Props) => {
             classes={{ paper: classes.paper }}
         >
             <DialogTitle className={classes.header}>
-                <p className={classes.title}><Error />{title}</p>
+                <p className={classes.title}><Error />Invalid quota adjustment</p>
                 <IconButton onClick={onCancel}>
                     <img src={Images.icClose} alt='' />
                 </IconButton>
             </DialogTitle>
             <DialogContent className={classes.body} dividers>
-                {subTitle}<br /><br />
+                Your adjustment must meet the following requirements:
                 <ul>
-                    <li>{content_1}<br /><br /></li>
-                    <li>{content_2}</li>
+                    <li>The population weights must be <strong>in the range of 0.5 to 1.5</strong>. Beyond this range, may result in unreliable data at the weighted total result.</li>
+                    <li>Your adjusted total sample size must be the same as your unadjusted total sample size.</li>
                 </ul>
             </DialogContent>
             <DialogActions className={classes.btnBox}>
-                <Buttons children={'OK'} translation-key="" btnType="Blue" padding='11px 16px' onClick={onCancel}/>
+                <Buttons children={'OK'} translation-key="" btnType="Blue" padding='11px 16px' onClick={onCancel} />
             </DialogActions>
         </Dialog>
     )
-}) 
+})
 
 export default PopupInvalidQuota
