@@ -299,7 +299,17 @@ const Quotas = memo(({ projectId }: Props) => {
                                 />
                               </TableCell>
                               <TableCell align="center">
-                                <span className={clsx(classes.valid, { [classes.invalid]: !validPopulationWeight(row) })}><div>{getPopulationWeight(row)}{!validPopulationWeight(row) && <WarningAmber sx={{ fontSize: 16, marginLeft: 0.5 }} />}</div></span>
+                                <span className={clsx(classes.valid, { [classes.invalid]: !validPopulationWeight(row) })}>
+                                  <Box
+                                    sx={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                    }}
+                                  >
+                                    {getPopulationWeight(row)}{!validPopulationWeight(row) && <WarningAmber sx={{ fontSize: 16, marginLeft: 0.5 }} />}
+                                  </Box>
+                                </span>
                               </TableCell>
                             </>
                           ) : (
