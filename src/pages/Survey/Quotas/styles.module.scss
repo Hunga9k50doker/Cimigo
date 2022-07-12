@@ -234,6 +234,11 @@
                 letter-spacing: 0.025em;
               }
             }
+            span{
+              svg{
+                font-size: 14px !important;
+              }
+            }
           }
           &.total {
             td {
@@ -273,10 +278,21 @@
     }
   }
   .valid {
+    position: relative;
     color: #7c9911;
+    svg{
+      display: none;
+      font-size: 16px;
+      transform: translateY(12%);
+      position: absolute;
+      right: -20px;
+    }
   }
   .invalid {
     color: var(--cimigo-danger);
+    svg{
+      display: inline-block;
+    }
   }
 }
 .btnCancel {

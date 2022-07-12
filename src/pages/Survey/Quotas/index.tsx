@@ -15,10 +15,11 @@ import { editableProject } from 'helpers/project';
 import clsx from 'clsx';
 import Inputs from 'components/Inputs';
 import Buttons from 'components/Buttons';
-import { Check, InfoOutlined } from '@mui/icons-material';
+import { Check, InfoOutlined, WarningAmber } from '@mui/icons-material';
 import TooltipCustom from 'components/Tooltip';
 import { ProjectService } from 'services/project';
 import { PROJECT } from 'config/constans';
+import PopupInvalidQuota from '../components/PopupInvalidQuota';
 
 interface Props {
   projectId: number,
@@ -34,6 +35,8 @@ const Quotas = memo(({ projectId }: Props) => {
 
   const [quotas, setQuotas] = useState<Quota[]>([])
   const [quotaEdit, setQuotaEdit] = useState<number>()
+
+  const [popupInvalidQuota, setPopupInvalidQuota] = useState(false)
 
   const isMobile = useMediaQuery(theme.breakpoints.down(767));
 
@@ -103,8 +106,15 @@ const Quotas = memo(({ projectId }: Props) => {
       })
   }
 
+  const onOpenPopupInvalidQuota = () => {
+    setPopupInvalidQuota(true)
+  }
+
   const onEdit = () => {
-    if (!quotaEdit || !isValidEdit()) return
+    if (!quotaEdit || !isValidEdit()) {
+      onOpenPopupInvalidQuota()
+      return
+    }
     const iTable = quotas.findIndex(it => it.quotaTable.id === quotaEdit)
     if (iTable === -1) return
     ProjectService.updateQuota(project.id, {
@@ -160,7 +170,7 @@ const Quotas = memo(({ projectId }: Props) => {
   return (
     <>
       {
-        (!!quotas?.length && !!project?.sampleSize)  ? (
+        (!!quotas?.length && !!project?.sampleSize) ? (
           <Grid classes={{ root: classes.root }}>
             <p className={classes.title} translation-key="quotas_title">{t('quotas_title')}</p>
             <p className={classes.subTitle} translation-key="quotas_sub_title_1">{t('quotas_sub_title_1')}</p>
@@ -184,18 +194,31 @@ const Quotas = memo(({ projectId }: Props) => {
                           <Buttons btnType="Green" className={classes.btnSave} onClick={onEdit} translate-key="common_save_changes">
                             <Check sx={{ marginRight: 2 }} />{t('common_save_changes')}
                           </Buttons>
+                          <PopupInvalidQuota
+                            isOpen={popupInvalidQuota}
+                            onCancel={() => setPopupInvalidQuota(false)}
+                            title="Invalid quota adjustment"
+                            subTitle="Your adjustment must meet the following requirements:"
+                            content_1={<span>The population weights must be <strong>in the range of 0.5 to 1.5</strong>. Beyond this range, may result in unreliable data at the weighted total result.</span>}
+                            content_2="Your adjusted total sample size must be the same as your unadjusted total sample size."
+                          />
                         </>
                       ) : (
                         editableProject(project) && (
                           <>
                             {quota.edited && (
-                              <IconButton onClick={() => onRestore(quota.quotaTable.id)}>
-                                <img src={Images.icRestore} alt='' />
-                              </IconButton>
+                              <TooltipCustom title={"Reset quota"} translation-key="">
+                                <IconButton onClick={() => onRestore(quota.quotaTable.id)}>
+                                  <img src={Images.icRestore} alt='' />
+                                </IconButton>
+                              </TooltipCustom>
                             )}
-                            <IconButton onClick={() => onStartEdit(quota.quotaTable.id)}>
-                              <img src={Images.icEditCell} alt='' />
-                            </IconButton>
+                            <TooltipCustom title={"Edit quota"} translation-key="">
+                              <IconButton onClick={() => onStartEdit(quota.quotaTable.id)}>
+                                <img src={Images.icEditCell} alt='' />
+                              </IconButton>
+                            </TooltipCustom>
+                            
                           </>
                         )
                       )}
@@ -281,7 +304,7 @@ const Quotas = memo(({ projectId }: Props) => {
                                 />
                               </TableCell>
                               <TableCell align="center">
-                                <span className={clsx(classes.valid, { [classes.invalid]: !validPopulationWeight(row) })}>{getPopulationWeight(row)}</span>
+                                <span className={clsx(classes.valid, { [classes.invalid]: !validPopulationWeight(row) })}>{getPopulationWeight(row)}<WarningAmber /></span>
                               </TableCell>
                             </>
                           ) : (
