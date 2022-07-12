@@ -198,10 +198,6 @@ const Quotas = memo(({ projectId }: Props) => {
                           <Buttons btnType="Green" className={classes.btnSave} onClick={onEdit} translate-key="common_save_changes">
                             <Check sx={{ marginRight: 2 }} />{t('common_save_changes')}
                           </Buttons>
-                          <PopupInvalidQuota
-                            isOpen={popupInvalidQuota}
-                            onCancel={onClosePopupInvalidQuota}
-                          />
                         </>
                       ) : (
                         editableProject(project) && (
@@ -303,7 +299,7 @@ const Quotas = memo(({ projectId }: Props) => {
                                 />
                               </TableCell>
                               <TableCell align="center">
-                                <span className={clsx(classes.valid, { [classes.invalid]: !validPopulationWeight(row) })}>{getPopulationWeight(row)}{!validPopulationWeight(row) && <WarningAmber sx={{ fontSize: 16 }} />}</span>
+                                <span className={clsx(classes.valid, { [classes.invalid]: !validPopulationWeight(row) })}><div>{getPopulationWeight(row)}{!validPopulationWeight(row) && <WarningAmber sx={{ fontSize: 16, marginLeft: 0.5 }} />}</div></span>
                               </TableCell>
                             </>
                           ) : (
@@ -348,6 +344,10 @@ const Quotas = memo(({ projectId }: Props) => {
                 </Box>
               )
             })}
+            <PopupInvalidQuota
+              isOpen={popupInvalidQuota}
+              onCancel={onClosePopupInvalidQuota}
+            />
           </Grid>
         ) : (
           <Grid className={classes.noSetup}>

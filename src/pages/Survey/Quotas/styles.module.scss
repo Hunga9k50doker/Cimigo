@@ -282,9 +282,10 @@
   }
   .invalid {
     color: var(--cimigo-danger);
-    svg {
-      transform: translateY(12%);
-      margin-left: 4px;
+    div {
+      align-items: center;
+      display: flex;
+      justify-content: center;
     }
   }
 }
