@@ -68,6 +68,8 @@ import CustomQuestionListMobile from "../components/CustomQuestionListMobile";
 import PopupOpenQuestion from "../components/PopupOpenQuestion";
 import PopupSingleChoice from "../components/PopupSingleChoice";
 import PopupMultipleChoices from "../components/PopupMultipleChoices";
+import PopupConfirmDisable from "../components/PopupConfirmDisable";
+
 import { fCurrency2 } from "utils/formatNumber";
 import { PriceService } from "helpers/price";
 
@@ -164,6 +166,10 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [multipleChoicesEdit, setMultipleChoicesEdit] = useState<CustomQuestion>();
   const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
   
+  
+  const [popupConfirmCancel, setPopupConfirmCancel] = useState(false);
+  const [valueQuestions, setValueQuestions] = useState('')
+  const [valueAttributes, setValueAttributes] = useState('')
   useEffect(() => {
     if (project) {
       reset({
@@ -398,6 +404,14 @@ const SetupSurvey = memo(({ id }: Props) => {
     setBrandEditMobile(null)
   }
 
+  const onOpenPopupConfirmCancel = () => {
+    setPopupConfirmCancel(true);
+  }
+
+  const onClosePopupConfirmCancel = () => {
+    setPopupConfirmCancel(false);
+  }
+
   const onAddOrEditBrandMobile = (data: BrandFormData) => {
     if (brandEditMobile) {
       dispatch(setLoading(true))
@@ -571,13 +585,18 @@ const SetupSurvey = memo(({ id }: Props) => {
   }
 
   const onToggleCustomQuestion = () => {
-    dispatch(setLoading(true))
-    ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: !project?.enableCustomQuestion })
-      .then(() => {
-        dispatch(setProjectReducer({...project, enableCustomQuestion: !project?.enableCustomQuestion}));
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
+    if(questions.length > 0){
+      onOpenPopupConfirmCancel();
+    }
+    else {
+      dispatch(setLoading(true))
+      ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: !project?.enableCustomQuestion })
+        .then(() => {
+          dispatch(setProjectReducer({...project, enableCustomQuestion: !project?.enableCustomQuestion}));
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
   }
 
   const totalCustomQuestionPrice = () => {
@@ -766,6 +785,7 @@ const SetupSurvey = memo(({ id }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   };
 
+
   const scrollToElement = (id: string) => {
     const el = document.getElementById(id)
     if (!el) return
@@ -773,6 +793,12 @@ const SetupSurvey = memo(({ id }: Props) => {
     window.scrollTo({ behavior: 'smooth', top: el.offsetTop - headerHeight - 10 })
   }
 
+  const handleChangeSelectQuestions = () => {
+    setValueQuestions(t("setup_survey_custom_question_menu_action_placeholder"))
+  }
+  const handleChangeSelectAttributes = () => {
+    setValueAttributes(t('setup_survey_add_att_menu_action_placeholder'))
+  }
   return (
     <>
       {(project && !editableProject(project)) && (
@@ -1236,13 +1262,15 @@ const SetupSurvey = memo(({ id }: Props) => {
                 <Select
                   variant="outlined"
                   displayEmpty
-                  defaultValue={""}
+                  // defaultValue={""}
+                  value={valueAttributes}
+                  onChange={handleChangeSelectAttributes}
                   classes={{ select: classes.selectType, icon: classes.icSelect }}
                   MenuProps={{
                     className: classes.selectTypeMenu
                   }}
                 >
-                  <MenuItem disabled value="" translation-key="setup_survey_add_att_menu_action_placeholder">
+                  <MenuItem disabled value={valueAttributes} translation-key="setup_survey_add_att_menu_action_placeholder">
                     {t('setup_survey_add_att_menu_action_placeholder')}
                   </MenuItem>
                   <MenuItem value={20} onClick={() => setOpenPopupPreDefined(true)} translation-key="setup_survey_add_att_menu_action_from_pre_defined_list">
@@ -1261,7 +1289,16 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
           </Grid>
           <div className={classes.line}></div>
-          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. {t("setup_survey_custom_question_title")} <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span> {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={onToggleCustomQuestion} />} <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `&${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} questions)` : t("setup_survey_custom_question_cost_description")}</span></div>
+          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">
+            5. {t("setup_survey_custom_question_title")} 
+            <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span> 
+            {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={onToggleCustomQuestion}/> 
+            } 
+           
+            <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">
+              {project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} questions)` : t("setup_survey_custom_question_cost_description")}
+            </span>
+            </div>
           <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span></div>
           <Grid className={classes.flex}>
             <p className={clsx({[classes.customQuestionSubTitleDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">{t("setup_survey_custom_question_sub_title")}</p>
@@ -1275,8 +1312,10 @@ const SetupSurvey = memo(({ id }: Props) => {
                 <Select
                   variant="outlined"
                   displayEmpty
-                  defaultValue={""}
+                  // defaultValue={""}
+                  value={valueQuestions}
                   classes={{ select: classes.selectType, icon: classes.icSelect }}
+                  onChange={handleChangeSelectQuestions}
                   MenuProps={{
                     className: classes.selectTypeMenu, 
                     anchorOrigin: {
@@ -1289,7 +1328,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                     }
                   }}
                 >
-                  <MenuItem disabled value="" translation-key="setup_survey_custom_question_menu_action_placeholder">
+                  <MenuItem disabled value={valueQuestions} translation-key="setup_survey_custom_question_menu_action_placeholder">
                     {t("setup_survey_custom_question_menu_action_placeholder")}
                   </MenuItem>
                   {customQuestionType.map((item, index) => {
@@ -1532,6 +1571,11 @@ const SetupSurvey = memo(({ id }: Props) => {
           onCancel={() => onCloseConfirmDeleteQuestion()}
           onDelete={onDeleteQuestion}
         />
+         <PopupConfirmDisable 
+         isOpen={popupConfirmCancel} 
+         onCancel={onClosePopupConfirmCancel} 
+         onYes={onClosePopupConfirmCancel}
+         />
       </Grid>
     </>
   );

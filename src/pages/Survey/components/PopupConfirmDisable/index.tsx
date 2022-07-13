@@ -1,18 +1,17 @@
-import { Dialog, Grid, IconButton } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import Buttons from "components/Buttons";
 import classes from "./styles.module.scss";
 import Images from "config/images";
+import { Help } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 interface Props {
     isOpen: boolean,
-    title: string,
-    description: string,
     onCancel: () => void,
-    onDelete: () => void,
+    onYes: ()=> void,
   }
   
 const PopupConfirmDisable = (props: Props) => {
-    const { onCancel, isOpen, title, description, onDelete } = props;
+    const { onCancel, isOpen, onYes } = props;
     const { t } = useTranslation()
   
     return (
@@ -21,22 +20,23 @@ const PopupConfirmDisable = (props: Props) => {
       onClose={onCancel}
       classes={{ paper: classes.paper }}
     >
-      <Grid>
-        <Grid className={classes.header}>
-          <IconButton onClick={onCancel}>
-            <img src={Images.icClose} alt='' />
-          </IconButton>
-        </Grid>
-          <Grid className={classes.title}>
-            <span>{title}</span>
-            <p>{description}</p>
-          </Grid>
-          <Grid className={classes.btn}>
-            <Buttons children={t('common_cancel')} translation-key="common_cancel" btnType='TransparentBlue' padding='11px 18px' onClick={onCancel} />
-            <Buttons children={t('common_delete')} translation-key="common_delete" btnType='Red' padding='11px 20px' onClick={onDelete}/>
-          </Grid>
-      </Grid>
-    </Dialog>
+            <DialogTitle className={classes.header}>
+                <p className={classes.title}><Help />Turn off custom questions</p>
+                <IconButton onClick={onCancel}>
+                    <img src={Images.icClose} alt='' />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent className={classes.body} dividers>
+               <p> Some custom questions have been added. Turn off this option will clear all off your
+                added questions.</p>
+                <p>Do you want to turn off this option?</p>
+            </DialogContent>
+            <DialogActions className={classes.btnBox}>
+                <Buttons children={'Cancel'} translation-key="" btnType="Blue" padding='11px 16px' onClick={onCancel} />
+                <Buttons children={'Yes, turn it off'} translation-key="" btnType="Blue" padding='11px 16px' onClick={onYes}/>
+            </DialogActions>
+        </Dialog>
+
     )
 }
 export default PopupConfirmDisable;

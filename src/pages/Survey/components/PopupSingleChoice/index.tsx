@@ -253,6 +253,7 @@ const PopupSingleChoice = (props: Props) => {
                                     autoComplete="off"
                                     autoFocus={focusEleIdx === index}
                                     onFocus={() => setFocusEleIdx(-1)}
+                                    tabIndex={index+1}
                                   />
                                   {answers?.length >
                                     questionType?.minAnswer && (
