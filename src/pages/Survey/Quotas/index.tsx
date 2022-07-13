@@ -203,13 +203,13 @@ const Quotas = memo(({ projectId }: Props) => {
                         editableProject(project) && (
                           <>
                             {quota.edited && (
-                              <TooltipCustom title={"Reset quota"} translation-key="">
+                              <TooltipCustom title={t('quotas_reset_tooltip')} translation-key="quotas_reset_tooltip">
                                 <IconButton onClick={() => onRestore(quota.quotaTable.id)}>
                                   <img src={Images.icRestore} alt='' />
                                 </IconButton>
                               </TooltipCustom>
                             )}
-                            <TooltipCustom title={"Edit quota"} translation-key="">
+                            <TooltipCustom title={t('quotas_edit_tooltip')} translation-key="quotas_edit_tooltip">
                               <IconButton onClick={() => onStartEdit(quota.quotaTable.id)}>
                                 <img src={Images.icEditCell} alt='' />
                               </IconButton>

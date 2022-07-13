@@ -22,16 +22,20 @@ const PopupInvalidQuota = memo((props: Props) => {
             classes={{ paper: classes.paper }}
         >
             <DialogTitle className={classes.header}>
-                <p className={classes.title}><Error />Invalid quota adjustment</p>
+                <p className={classes.title} translation-key="quotas_invalid_popup_title"><Error />{t('quotas_invalid_popup_title')}</p>
                 <IconButton onClick={onCancel}>
                     <img src={Images.icClose} alt='' />
                 </IconButton>
             </DialogTitle>
             <DialogContent className={classes.body} dividers>
-                Your adjustment must meet the following requirements:
+                <p translation-key="quotas_invalid_popup_subtitle">{t('quotas_invalid_popup_subtitle')}</p>
                 <ul>
-                    <li>The population weights must be <strong>in the range of 0.5 to 1.5</strong>. Beyond this range, may result in unreliable data at the weighted total result.</li>
-                    <li>Your adjusted total sample size must be the same as your unadjusted total sample size.</li>
+                    <li
+                        translation-key="quotas_invalid_popup_requirement_1"
+                        dangerouslySetInnerHTML={{ __html: t('quotas_invalid_popup_requirement_1') }}
+                    >
+                    </li>
+                    <li translation-key="quotas_invalid_popup_requirement_2">{t('quotas_invalid_popup_requirement_2')}</li>
                 </ul>
             </DialogContent>
             <DialogActions className={classes.btnBox}>
