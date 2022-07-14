@@ -30,6 +30,10 @@
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  p {
+    overflow: hidden;
+    word-wrap: break-word;
+  }
 }
 
 .price {

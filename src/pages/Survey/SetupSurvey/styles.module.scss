@@ -482,15 +482,22 @@
   justify-content: center;
   align-items: center;
 }
+
+.listTextLeft {
+  width:235.7px;
+}
+
 .listTextLeft > p {
   margin: 0;
   font-weight: 400;
   font-size: 12px;
   color: #1c1c1c;
   text-align: end;
-  max-width: 235.7px;
   @media only screen and (max-width: 768px) {
     max-width: 130.6px;
+  }
+  @media only screen and (min-width: 1024px) {
+    width:100%;
   }
 }
 
@@ -501,6 +508,7 @@
   color: #1c1c1c;
   text-align: start;
 }
+
 .listNumber {
   margin: auto 35px;
   max-width: 240px;
@@ -526,6 +534,7 @@
     }
   }
 }
+
 .rootListItem {
   > [class~="MuiListItemButton-root"] {
     display: block;
@@ -548,9 +557,11 @@
   }
 
 }
+
 .containerList {
   background:red;
 }
+
 .btnAction {
   width: 70px;
   visibility: hidden;
@@ -770,7 +781,7 @@
   font-size: 12px;
   padding: 4px 16px;
   margin-left: auto;
-  margin-right: 10px;
+  margin-right: 48px;
   color: #fafaff;
   background-color: #7c9911;
   border-radius: 30px;
