@@ -576,6 +576,7 @@
   font-weight: 500;
   font-size: 12px;
   color: var(--cimigo-blue);
+  text-transform: none;
 }
 .select {
   display: flex;
@@ -829,6 +830,8 @@
     }
   }
 }
+
+
 .displayNone {
   display: none;
 }
@@ -851,3 +854,4 @@
   color: #1c1c1c66 !important;
   background-color: #1c1c1c33 !important;
 }
+

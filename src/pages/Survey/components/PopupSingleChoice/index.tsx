@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   InputAdornment,
+  Tooltip,
 } from "@mui/material";
 import classes from "./styles.module.scss";
 import IconListAdd from "assets/img/icon/ic-list-add-svgrepo-com.svg";
@@ -195,7 +196,9 @@ const PopupSingleChoice = (props: Props) => {
               placeholder={t("setup_survey_popup_enter_question_placeholder")}
               startAdornment={
                 <InputAdornment position="start">
+                  <Tooltip translation-key="" title="Please use your survey language, which will be displayed in the survey when asking respondents">
                   <div className={classes.iconLanguage}>{language}</div>
+                  </Tooltip>
                 </InputAdornment>
               }
               type="text"

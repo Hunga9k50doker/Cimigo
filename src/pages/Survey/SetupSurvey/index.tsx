@@ -26,6 +26,7 @@ import {
   Button,
   breadcrumbsClasses,
 } from "@mui/material";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
@@ -166,10 +167,12 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [multipleChoicesEdit, setMultipleChoicesEdit] = useState<CustomQuestion>();
   const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
   
-  
   const [popupConfirmCancel, setPopupConfirmCancel] = useState(false);
-  const [valueQuestions, setValueQuestions] = useState('')
-  const [valueAttributes, setValueAttributes] = useState('')
+  const [anchorElMenuQuestions, setAnchorElMenuQuestions] = useState<null | HTMLElement>(null);
+  const openMenuQuestions = Boolean(anchorElMenuQuestions)
+  const [anchorElMenuAttributes, setAnchorElMenuAttributes] = useState<null | HTMLElement>(null);
+  const openMenuAttributes = Boolean(anchorElMenuAttributes)
+
   useEffect(() => {
     if (project) {
       reset({
@@ -621,12 +624,15 @@ const SetupSurvey = memo(({ id }: Props) => {
     switch (type) {
       case ECustomQuestionType.Open_Question:
         setOpenPopupOpenQuestion(true);
+        handleCloseMenuQuestions();
         break;
       case ECustomQuestionType.Single_Choice:
         setOpenPopupSingleChoice(true);
+        handleCloseMenuQuestions();
         break;
       case ECustomQuestionType.Multiple_Choices:
         setOpenPopupMultipleChoices(true);
+        handleCloseMenuQuestions();
         break;
       default:
         break;
@@ -793,12 +799,31 @@ const SetupSurvey = memo(({ id }: Props) => {
     window.scrollTo({ behavior: 'smooth', top: el.offsetTop - headerHeight - 10 })
   }
 
-  const handleChangeSelectQuestions = () => {
-    setValueQuestions(t("setup_survey_custom_question_menu_action_placeholder"))
+  const handleClickMenuQuestions = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElMenuQuestions(event.currentTarget)
   }
-  const handleChangeSelectAttributes = () => {
-    setValueAttributes(t('setup_survey_add_att_menu_action_placeholder'))
+  const handleCloseMenuQuestions = () => {
+    setAnchorElMenuQuestions(null);
   }
+
+  const handleClickMenuAttributes = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElMenuAttributes(event.currentTarget)
+  }
+
+  const handleCloseMenuAttributes = () => {
+    setAnchorElMenuAttributes(null);
+  }
+
+  const onOpenPopupPreDefined = () => {
+    setOpenPopupPreDefined(true)
+    handleCloseMenuAttributes()
+  }
+
+  const onOpenPopupAddAttributes = () => {
+    setOpenPopupAddAttributes(true)
+    handleCloseMenuAttributes()
+  }
+
   return (
     <>
       {(project && !editableProject(project)) && (
@@ -1258,28 +1283,37 @@ const SetupSurvey = memo(({ id }: Props) => {
               })}
             </Grid>
             <Grid classes={{ root: classes.select }}>
-              <FormControl classes={{ root: classes.rootSelect }} disabled={!enableAdditionalAttributes() || !editableProject(project)}>
-                <Select
-                  variant="outlined"
-                  displayEmpty
-                  // defaultValue={""}
-                  value={valueAttributes}
-                  onChange={handleChangeSelectAttributes}
-                  classes={{ select: classes.selectType, icon: classes.icSelect }}
-                  MenuProps={{
-                    className: classes.selectTypeMenu
-                  }}
-                >
-                  <MenuItem disabled value={valueAttributes} translation-key="setup_survey_add_att_menu_action_placeholder">
-                    {t('setup_survey_add_att_menu_action_placeholder')}
-                  </MenuItem>
-                  <MenuItem value={20} onClick={() => setOpenPopupPreDefined(true)} translation-key="setup_survey_add_att_menu_action_from_pre_defined_list">
+              <FormControl classes={{ root: classes.rootSelect }} >
+                <Button translation-key="setup_survey_add_att_menu_action_placeholder"
+                id="attribute-type-button"
+                onClick={handleClickMenuAttributes}
+                endIcon={<KeyboardArrowDownIcon/>}
+                aria-controls={openMenuAttributes ? 'attribute-type-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={openMenuAttributes ? 'true' : undefined}
+                className={classes.selectType}
+                variant="outlined"
+                disabled={!enableAdditionalAttributes() || !editableProject(project)}>
+                {t('setup_survey_add_att_menu_action_placeholder')}
+                </Button>
+                <Menu id="attribute-type-menu"
+                anchorEl={anchorElMenuAttributes}
+                open={openMenuAttributes}
+                MenuListProps={{'aria-labelledby':'attribute-type-button'}}
+                onClose={handleCloseMenuAttributes}
+                PaperProps={{
+                  className: classes.selectTypeMenu
+                }}>
+                <MenuItem disabled value="" translation-key="setup_survey_add_att_menu_action_placeholder">
+                  {t('setup_survey_add_att_menu_action_placeholder')}
+                </MenuItem>
+                <MenuItem value={20} onClick={onOpenPopupPreDefined} translation-key="setup_survey_add_att_menu_action_from_pre_defined_list">
                   {t('setup_survey_add_att_menu_action_from_pre_defined_list')}
-                  </MenuItem>
-                  <MenuItem value={30} onClick={() => setOpenPopupAddAttributes(true)} translation-key="setup_survey_add_att_menu_action_your_own_attribute">
+                </MenuItem>
+                <MenuItem value={30} onClick={onOpenPopupAddAttributes} translation-key="setup_survey_add_att_menu_action_your_own_attribute">
                   {t('setup_survey_add_att_menu_action_your_own_attribute')}
-                  </MenuItem>
-                </Select>
+                </MenuItem>
+                </Menu>
               </FormControl>
               {!enableAdditionalAttributes() && <p translation-key="setup_survey_add_att_error_max">{t('setup_survey_add_att_error_max', { max: maxAdditionalAttribute() })}</p>}
             </Grid>
@@ -1308,45 +1342,47 @@ const SetupSurvey = memo(({ id }: Props) => {
               <CustomQuestionListMobile questions={questions} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
             </Grid>
             <Grid className={clsx(classes.select, {[classes.displayNone]: !project?.enableCustomQuestion})}>
-              <FormControl classes={{ root: classes.rootSelect }} disabled={!editableProject(project) || questions.length >= maxCustomQuestion()}>
-                <Select
-                  variant="outlined"
-                  displayEmpty
-                  // defaultValue={""}
-                  value={valueQuestions}
-                  classes={{ select: classes.selectType, icon: classes.icSelect }}
-                  onChange={handleChangeSelectQuestions}
-                  MenuProps={{
-                    className: classes.selectTypeMenu, 
-                    anchorOrigin: {
-                      vertical: "bottom",
-                      horizontal: "left"
-                    },
-                    transformOrigin: {
-                      vertical: "top",
-                      horizontal: "left"
-                    }
-                  }}
+              <FormControl classes={{ root: classes.rootSelect }} >
+                <Button id="question-type-button" 
+                translation-key="setup_survey_custom_question_menu_action_placeholder" 
+                onClick={handleClickMenuQuestions} 
+                aria-controls={openMenuQuestions ? 'question-type-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={openMenuQuestions ? 'true' : undefined}
+                endIcon={<KeyboardArrowDownIcon/>}
+                variant="outlined"
+                className={classes.selectType}
+                disabled={!editableProject(project) || questions.length >= maxCustomQuestion()}>
+                  {t("setup_survey_custom_question_menu_action_placeholder")}
+                </Button>
+                <Menu id="question-type-menu" 
+                anchorEl={anchorElMenuQuestions} 
+                open={openMenuQuestions}
+                MenuListProps={{'aria-labelledby':'question-type-button'}}
+                onClose={handleCloseMenuQuestions}
+                PaperProps={{
+                  className: classes.selectTypeMenu
+                }}
                 >
-                  <MenuItem disabled value={valueQuestions} translation-key="setup_survey_custom_question_menu_action_placeholder">
-                    {t("setup_survey_custom_question_menu_action_placeholder")}
-                  </MenuItem>
-                  {customQuestionType.map((item, index) => {
-                    const value = (index + 2) * 10;
-                    const image = item.id === ECustomQuestionType.Open_Question ? Images.icOpenQuestion : item.id === ECustomQuestionType.Single_Choice ? Images.icSingleChoice : item.id === ECustomQuestionType.Multiple_Choices ? Images.icMultipleChoices : null;
-                    return (
-                      <MenuItem value={value} onClick={() => onOpenPopupCustomQuestion(item.id)} key={item.id}>
-                        <div className={classes.questionType}>
-                          <div>
-                            <img src={image} alt="" />
-                            <p>{item.title}</p>
-                          </div>
-                          <span>${fCurrency2(item.price)}</span>
+                <MenuItem disabled value="" translation-key="setup_survey_custom_question_menu_action_placeholder">
+                  {t("setup_survey_custom_question_menu_action_placeholder")}
+                </MenuItem>
+                {customQuestionType.map((item, index) => {
+                  const value = (index + 2) * 10;
+                  const image = item.id === ECustomQuestionType.Open_Question ? Images.icOpenQuestion : item.id === ECustomQuestionType.Single_Choice ? Images.icSingleChoice : item.id === ECustomQuestionType.Multiple_Choices ? Images.icMultipleChoices : null;
+                  return (
+                    <MenuItem value={value} onClick={() => onOpenPopupCustomQuestion(item.id)} key={item.id}>
+                      <div className={classes.questionType}>
+                        <div>
+                          <img src={image} alt="" />
+                          <p>{item.title}</p>
                         </div>
-                      </MenuItem>
+                        <span>${fCurrency2(item.price)}</span>
+                      </div>
+                    </MenuItem>
                     )
                   })}
-                </Select>
+                </Menu>    
               </FormControl>
               {editableProject(project) && questions.length >= maxCustomQuestion() && <p translation-key="setup_survey_custom_question_error_max">{t("setup_survey_custom_question_error_max", { max: maxCustomQuestion()})}</p>}
             </Grid>
