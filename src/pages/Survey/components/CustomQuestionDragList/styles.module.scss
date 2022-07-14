@@ -39,15 +39,14 @@
     p{
       overflow: hidden;
       word-wrap: break-word;
-      width:668px;
+      width: 100%;
     }
   }
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 767px) {
     div {
       p{
         overflow: hidden;
         word-wrap: break-word;
-        width:460px;
       }
     }
   }
@@ -58,6 +57,7 @@
   align-items: center;
   gap: 10px;
   margin-left: 10px;
+  width: 88%;
   > p {
     font-weight: 500;
     font-size: 14px;
@@ -70,6 +70,9 @@
     border-radius: 24px;
     padding: 4px 8px;
     margin-left: 10px;
+  }
+  @media only screen and (max-width: 767px) {
+    width:84%;
   }
 }
 .btnAction {

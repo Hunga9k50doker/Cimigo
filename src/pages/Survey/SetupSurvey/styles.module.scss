@@ -483,22 +483,14 @@
   align-items: center;
 }
 
-.listTextLeft {
-  width:235.7px;
-}
-
 .listTextLeft > p {
   margin: 0;
   font-weight: 400;
   font-size: 12px;
   color: #1c1c1c;
   text-align: end;
-  @media only screen and (max-width: 768px) {
-    max-width: 130.6px;
-  }
-  @media only screen and (min-width: 1024px) {
-    width:100%;
-  }
+  word-break: normal;
+  overflow-wrap: anywhere;
 }
 
 .listTextRight > p {
@@ -544,10 +536,6 @@
     &:hover {
       background: transparent;
     }
-    > [class~="MuiGrid-root"] {
-      word-wrap: break-word;
-    }
-   
   }
   &:hover {
     background: rgba(28, 28, 28, 0.05);
@@ -555,17 +543,11 @@
       visibility: visible !important;
     }
   }
-
-}
-
-.containerList {
-  background:red;
 }
 
 .btnAction {
   width: 70px;
   visibility: hidden;
-  
 }
 
 .iconAction {
@@ -579,9 +561,6 @@
 .icSelect {
   right: 7px;
   color: var(--cimigo-blue);
-  @media only screen and (max-width: 767px) {
-    // position: unset;
-  }
 }
 .selectType {
   font-weight: 500;
@@ -780,8 +759,7 @@
   font-weight: 400;
   font-size: 12px;
   padding: 4px 16px;
-  margin-left: auto;
-  margin-right: 48px;
+  margin-left: auto;  
   color: #fafaff;
   background-color: #7c9911;
   border-radius: 30px;
@@ -810,7 +788,6 @@
   color: #1c1c1c66 !important;
 }
 .questionType {
-  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -819,9 +796,6 @@
   > div {
     display: flex;
     gap: 15px;
-  }
-  > div > img {
-    height:20px;
   }
   > div > p {
     color: #1c1c1ce5;
@@ -841,7 +815,6 @@
     }
   }
 }
-
 
 .displayNone {
   display: none;
