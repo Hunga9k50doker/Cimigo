@@ -74,7 +74,7 @@ const ChangePassword = memo((props: Props) => {
     UserService.changePassword(data)
       .then((res) => {
         dispatch(setSuccessMess(res.message));
-        if (isEmptyPassword){
+        if (isEmptyPassword) {
           setIsEmptyPassword(false)
         }
         reset();
@@ -94,15 +94,15 @@ const ChangePassword = memo((props: Props) => {
       >
         {t("auth_change_password_sub")}
       </p>
-      <Divider className={classes.divider} />
       {isEmptyPassword &&
         <p
-          className={classes.emptyPasswordTitle}
+          className={classes.subTitle}
           translation-key="auth_change_empty_password"
         >
           {t("auth_change_empty_password")}
         </p>
       }
+      <Divider className={classes.divider} />
       <form
         onSubmit={handleSubmit(onSubmit)}
         name="change-password"
@@ -112,17 +112,19 @@ const ChangePassword = memo((props: Props) => {
       >
         {
           !isEmptyPassword &&
-          <Inputs
-            title={t("field_current_password")}
-            translation-key="field_current_password"
-            name="currentPassword"
-            placeholder={t("field_current_password_placeholder")}
-            translation-key-placeholder="field_current_password_placeholder"
-            type="password"
-            showEyes
-            inputRef={register("currentPassword")}
-            errorMessage={errors.currentPassword?.message}
-          />
+          (
+            <Inputs
+              title={t("field_current_password")}
+              translation-key="field_current_password"
+              name="currentPassword"
+              placeholder={t("field_current_password_placeholder")}
+              translation-key-placeholder="field_current_password_placeholder"
+              type="password"
+              showEyes
+              inputRef={register("currentPassword")}
+              errorMessage={errors.currentPassword?.message}
+            />
+          )
         }
         <Inputs
           title={t("field_new_password")}
