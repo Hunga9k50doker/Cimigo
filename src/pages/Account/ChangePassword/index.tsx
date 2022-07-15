@@ -1,5 +1,5 @@
 import { Divider, Grid } from "@mui/material";
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState, useEffect } from "react";
 import classes from "./styles.module.scss";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,7 +16,7 @@ import {
 import UserService from "services/user";
 import { useDispatch } from "react-redux";
 
-interface Props {}
+interface Props { }
 
 interface DataForm {
   currentPassword: string;
@@ -27,10 +27,21 @@ interface DataForm {
 const ChangePassword = memo((props: Props) => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
+  const [isEmptyPassword, setIsEmptyPassword] = useState(false)
+
+  useEffect(() => {
+    dispatch(setLoading(true));
+    UserService.checkEmptyPassword()
+      .then((res) => {
+        setIsEmptyPassword(res)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
+  }, [])
 
   const schema = useMemo(() => {
     return yup.object().shape({
-      currentPassword: yup.string().required(t("field_current_password_vali_required")),
+      currentPassword: isEmptyPassword ? yup.string() : yup.string().required(t("field_current_password_vali_required")),
       newPassword: yup
         .string()
         .matches(VALIDATION.password, {
@@ -46,7 +57,7 @@ const ChangePassword = memo((props: Props) => {
         )
         .required(t("field_confirm_new_password_vali_required")),
     });
-  }, [i18n.language]);
+  }, [i18n.language, isEmptyPassword]);
 
   const {
     register,
@@ -81,6 +92,14 @@ const ChangePassword = memo((props: Props) => {
         {t("auth_change_password_sub")}
       </p>
       <Divider className={classes.divider} />
+      {isEmptyPassword &&
+        <p
+          className={classes.emptyPasswordTitle}
+          translation-key="auth_change_empty_password"
+        >
+          {t("auth_change_empty_password")}
+        </p>
+      }
       <form
         onSubmit={handleSubmit(onSubmit)}
         name="change-password"
@@ -88,17 +107,20 @@ const ChangePassword = memo((props: Props) => {
         autoComplete="off"
         className={classes.form}
       >
-        <Inputs
-          title={t("field_current_password")}
-          translation-key="field_current_password"
-          name="currentPassword"
-          placeholder={t("field_current_password_placeholder")}
-          translation-key-placeholder="field_current_password_placeholder"
-          type="password"
-          showEyes
-          inputRef={register("currentPassword")}
-          errorMessage={errors.currentPassword?.message}
-        />
+        {
+          !isEmptyPassword &&
+          <Inputs
+            title={t("field_current_password")}
+            translation-key="field_current_password"
+            name="currentPassword"
+            placeholder={t("field_current_password_placeholder")}
+            translation-key-placeholder="field_current_password_placeholder"
+            type="password"
+            showEyes
+            inputRef={register("currentPassword")}
+            errorMessage={errors.currentPassword?.message}
+          />
+        }
         <Inputs
           title={t("field_new_password")}
           translation-key="field_new_password"

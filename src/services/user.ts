@@ -138,6 +138,16 @@ export class UserService {
         return Promise.reject(e?.response?.data);
       })
   }
+
+  static async checkEmptyPassword() {
+    return await api.get(API.AUTH.CHECK_EMPTY_PASSWORD)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
   
 }
 
