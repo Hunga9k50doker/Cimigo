@@ -117,8 +117,9 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                           <span className={classes.hide}>
                             ${fCurrency2(item?.type.price)}
                           </span>
-                        </div>
-                        {editableProject && (
+                        </div>                       
+                      </div>
+                      {editableProject && (
                         <div>
                           <div className={classes.btnAction}>
                             <IconButton
@@ -140,8 +141,6 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                           </div>
                         </div>
                       )}
-                      </div>
-
                     </div>
                   )}
                 </Draggable>
