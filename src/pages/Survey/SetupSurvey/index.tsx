@@ -1318,10 +1318,10 @@ const SetupSurvey = memo(({ id }: Props) => {
             } 
            
             <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">
-              {project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} questions)` : t("setup_survey_custom_question_cost_description")}
+              {project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}
             </span>
             </div>
-          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} questions)` : t("setup_survey_custom_question_cost_description")}</span></div>
+          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}</span></div>
           <Grid className={classes.flex}>
             <p className={clsx({[classes.customQuestionSubTitleDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">{t("setup_survey_custom_question_sub_title")}</p>
             <Grid className={clsx({[classes.displayNone]: !project?.enableCustomQuestion})}>
@@ -1357,7 +1357,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                         <div className={classes.questionType}>
                           <div>
                             <img src={image} alt="" />
-                            <p>{item.title}</p>
+                            <p>{t(`setup_survey_menu_item_questions_${index+1}`)}</p>
                           </div>
                           <span>${fCurrency2(item.price)}</span>
                         </div>

@@ -20,19 +20,18 @@ const PopupConfirmDisable = (props: Props) => {
         classes={{ paper: classes.paper }}
       >
         <DialogTitle className={classes.header}>
-            <p className={classes.title}><Help />Turn off custom questions</p>
+            <p className={classes.title}><Help />{t("setup_survey_popup_confirm_disable_question_title")}</p>
             <IconButton onClick={onCancel}>
                 <img src={Images.icClose} alt='' />
             </IconButton>
         </DialogTitle>
         <DialogContent className={classes.body} dividers>
-            <p> Some custom questions have been added. Turn off this option will clear all off your
-            added questions.</p>
-            <p>Do you want to turn off this option?</p>
+            <p>{t("setup_survey_popup_confirm_disable_question_summary")}</p>
+            <p>{t("setup_survey_popup_confirm_disable_question_summary_question")}</p>
         </DialogContent>
         <DialogActions className={classes.btnBox}>
-            <Buttons children={'Cancel'} translation-key="" btnType="Blue" padding='11px 16px' onClick={onCancel} />
-            <Buttons children={'Yes, turn it off'} translation-key="" btnType="Blue" padding='11px 16px' onClick={onYes}/>
+            <Buttons children={t("setup_survey_popup_confirm_disable_question_cancel")} btnType="Blue" padding='11px 16px' onClick={onCancel} />
+            <Buttons children={t("setup_survey_popup_confirm_disable_question_yes")} btnType="Blue" padding='11px 16px' onClick={onYes}/>
         </DialogActions>
       </Dialog>
     )

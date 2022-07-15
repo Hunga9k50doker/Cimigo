@@ -96,7 +96,7 @@ const PopupOpenQuestion = (props: Props) => {
               placeholder={t("setup_survey_popup_enter_question_placeholder")}
               startAdornment={
                 <InputAdornment position="start">
-                  <Tooltip title="Please use your survey language, which will be displayed in the survey when asking respondents">
+                  <Tooltip title={t("setup_survey_popup_question_tooltip-icon")}>
                   <div className={classes.iconLanguage}>{language}</div>
                   </Tooltip>
                 </InputAdornment>
