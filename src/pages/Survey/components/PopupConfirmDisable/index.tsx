@@ -20,18 +20,18 @@ const PopupConfirmDisable = (props: Props) => {
         classes={{ paper: classes.paper }}
       >
         <DialogTitle className={classes.header}>
-            <p className={classes.title}><Help />{t("setup_survey_popup_confirm_disable_question_title")}</p>
+            <p translation-key="setup_survey_popup_confirm_disable_question_title" className={classes.title}><Help />{t("setup_survey_popup_confirm_disable_question_title")}</p>
             <IconButton onClick={onCancel}>
-                <img src={Images.icClose} alt='' />
+                <img src={Images.icClose} alt=''/>
             </IconButton>
         </DialogTitle>
         <DialogContent className={classes.body} dividers>
-            <p>{t("setup_survey_popup_confirm_disable_question_summary")}</p>
-            <p>{t("setup_survey_popup_confirm_disable_question_summary_question")}</p>
+            <p translation-key="setup_survey_popup_confirm_disable_question_summary">{t("setup_survey_popup_confirm_disable_question_summary")}</p>
+            <p translation-key="setup_survey_popup_confirm_disable_question_summary_question">{t("setup_survey_popup_confirm_disable_question_summary_question")}</p>
         </DialogContent>
         <DialogActions className={classes.btnBox}>
-            <Buttons children={t("setup_survey_popup_confirm_disable_question_cancel")} btnType="Blue" padding='11px 16px' onClick={onCancel} />
-            <Buttons children={t("setup_survey_popup_confirm_disable_question_yes")} btnType="Blue" padding='11px 16px' onClick={onYes}/>
+            <Buttons translation-key="common_cancel" children={t("common_cancel")} btnType="Blue" padding='11px 16px' onClick={onCancel} />
+            <Buttons translation-key="setup_survey_popup_confirm_disable_question_yes" children={t("setup_survey_popup_confirm_disable_question_yes")} btnType="Blue" padding='11px 16px' onClick={onYes}/>
         </DialogActions>
       </Dialog>
     )

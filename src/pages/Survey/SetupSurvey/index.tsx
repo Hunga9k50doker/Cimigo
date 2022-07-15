@@ -1357,7 +1357,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                         <div className={classes.questionType}>
                           <div>
                             <img src={image} alt="" />
-                            <p>{t(`setup_survey_menu_item_questions_${index+1}`)}</p>
+                            <p>{item.title}</p>
                           </div>
                           <span>${fCurrency2(item.price)}</span>
                         </div>
