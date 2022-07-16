@@ -92,13 +92,6 @@
     }
 }
 
-.iconReport {
-    width: 14px;
-    height: 14px;
-    color: rgba(50, 50, 50, 1);
-    position: absolute;
-    right: 10px;
-}
 @media only screen and (max-width: 1024px) {
     .menuList {
         display: none;
@@ -158,9 +151,6 @@
     }
     .form {
         padding: 30px 24px 25px 24px;
-    }
-    .iconReport {
-        display: none;
     }
 }
 

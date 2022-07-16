@@ -12,7 +12,6 @@ const TextTitle = styled(Typography)<TextTitleProps>`
   line-height: 140%;
   letter-spacing: 0.015em;
   padding-bottom: 5px;
-  padding-left: 16px;
   margin: 0;
 `
 export default TextTitle

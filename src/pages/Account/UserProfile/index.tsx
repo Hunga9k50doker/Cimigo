@@ -1,7 +1,7 @@
-import { Button, Grid, InputAdornment, useMediaQuery, useTheme } from "@mui/material"
+import { Button, Grid, useMediaQuery, useTheme } from "@mui/material"
 import { memo, useEffect, useMemo, useState } from "react";
 import classes from './styles.module.scss';
-import { CameraAlt, Report } from '@mui/icons-material';
+import { CameraAlt } from '@mui/icons-material';
 import Inputs from "components/Inputs";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -18,7 +18,6 @@ import UploadImage from "components/UploadImage";
 import UserService from "services/user";
 import { getMe } from "redux/reducers/User/actionTypes";
 import UseAuth from "hooks/useAuth";
-
 export interface UserFormData {
     avatar: File | string;
     firstName: string;
@@ -201,11 +200,6 @@ const UserProfile = memo((props: Props) => {
                         type="text"
                         placeholder={t('field_company_placeholder')}
                         translation-key-placeholder="field_company_placeholder"
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <Report className={classes.iconReport} />
-                            </InputAdornment>
-                        }
                         inputRef={register('company')}
                         errorMessage={errors.company?.message}
                     />

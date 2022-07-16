@@ -234,6 +234,11 @@
                 letter-spacing: 0.025em;
               }
             }
+            span {
+              svg {
+                font-size: 14px !important;
+              }
+            }
           }
           &.total {
             td {

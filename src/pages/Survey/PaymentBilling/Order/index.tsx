@@ -28,9 +28,9 @@ const Order = memo(({ }: Props) => {
   const { t } = useTranslation()
 
   const dispatch = useDispatch()
-  
+
   const { project } = useSelector((state: ReducerType) => state.project)
-  
+
   const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false);
 
   const payment = useMemo(() => getPayment(project?.payments), [project])
@@ -109,7 +109,7 @@ const Order = memo(({ }: Props) => {
                 </div>
               </Grid>
             </Grid>
-            <p className={classes.textBlack} dangerouslySetInnerHTML={{__html: t('payment_billing_order_make_an_order_sub_2')}} translation-key="payment_billing_order_make_an_order_sub_2"></p>
+            <p className={classes.textBlack} dangerouslySetInnerHTML={{ __html: t('payment_billing_order_make_an_order_sub_2') }} translation-key="payment_billing_order_make_an_order_sub_2"></p>
             <a onClick={onShowConfirmCancel} className={classes.cancelPaymentOrder} translation-key="common_cancel_payment">{t("common_cancel_payment")}</a>
           </>
         )
@@ -191,7 +191,7 @@ const Order = memo(({ }: Props) => {
   return (
     <Grid classes={{ root: classes.root }}>
       <WarningBox sx={{ maxWidth: '1000px' }}>
-        <p> <a className={classes.clickOpenInvoice} onClick={() => setIsOpenPopupInvoice(true)}>Click here</a> to fill in the necessary information for the invoice and contract.</p>
+        <p translation-key="payment_billing_order_fill_purpose"> <a className={classes.clickOpenInvoice} onClick={() => setIsOpenPopupInvoice(true)} translation-key="payment_billing_order_fill_click">{t('payment_billing_order_fill_click')}</a> {t('payment_billing_order_fill_purpose')}</p>
       </WarningBox>
       <img src={images.imgOrder} alt="" />
       <p className={classes.title} translation-key="payment_billing_order_title">{t('payment_billing_order_title')}</p>
