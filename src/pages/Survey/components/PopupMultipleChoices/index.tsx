@@ -8,10 +8,10 @@ import {
   DialogContent,
   InputAdornment,
   Tooltip,
+  Switch,
 } from "@mui/material";
 import classes from "./styles.module.scss";
 import IconListAdd from "assets/img/icon/ic-list-add-svgrepo-com.svg";
-import IconDotsDrag from "assets/img/icon/ic-dots-drag.svg";
 import * as yup from "yup";
 import Inputs from "components/Inputs";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -121,7 +121,7 @@ const PopupMultipleChoices = (props: Props) => {
     initAnswer();
   };
 
-  const handleChangeSwitch = (status: any, index: number) => () => {
+  const handleChangeSwitch = (status: any, index: number) => {
     const find_pos = answers.findIndex((ans) => ans.id === index);
     const new_arr = [...answers];
     new_arr[find_pos][status] = !new_arr[find_pos][status];
@@ -239,11 +239,6 @@ const PopupMultipleChoices = (props: Props) => {
                                 alt=""
                               />
                               <Grid sx={{ display: "flex", width: "100%" }}>
-                                <img
-                                  src={IconDotsDrag}
-                                  className={classes.iconDotsDragMUI}
-                                  alt=""
-                                />
                                 <input
                                   type="checkbox"
                                   disabled={true}
@@ -284,20 +279,14 @@ const PopupMultipleChoices = (props: Props) => {
                                     alignItems: "center",
                                   }}
                                 >
-                                  <input
+                                  <Switch
                                     checked={ans.exclusive}
-                                    onChange={handleChangeSwitch(
-                                      "exclusive",
-                                      ans.id
-                                    )}
-                                    type="checkbox"
-                                    name="toggle_switch"
-                                    id={`${String(ans.id)}`}
-                                    className={classes.inputSwitch}
-                                  />
-                                  <label
-                                    htmlFor={`${String(ans.id)}`}
-                                    className={classes.toggleSwitch}
+                                    onChange={() => handleChangeSwitch("exclusive", ans.id)}
+                                    classes={{
+                                      root: classes.rootSwitch,
+                                      checked: classes.checkedSwitch,
+                                      track: ans.exclusive ? classes.trackSwitchOn : classes.trackSwitchOff
+                                    }}
                                   />
                                   <span className={classes.excluOptions} translation-key="setup_survey_popup_exclusive_option_title">
                                     {t("setup_survey_popup_exclusive_option_title")}
