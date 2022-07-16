@@ -205,7 +205,7 @@ const PopupMultipleChoices = (props: Props) => {
               placeholder={t("setup_survey_popup_enter_question_placeholder")}
               startAdornment={
                 <InputAdornment position="start">
-                  <Tooltip translation-key="setup_survey_popup_question_tooltip_icon" title={t("setup_survey_popup_question_tooltip-icon")}>
+                  <Tooltip translation-key="setup_survey_popup_question_tooltip_icon" title={t("setup_survey_popup_question_tooltip_icon")}>
                   <div className={classes.iconLanguage}>{language}</div>
                   </Tooltip>
                 </InputAdornment>
