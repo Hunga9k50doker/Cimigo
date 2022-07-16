@@ -457,6 +457,7 @@
     span {
       font-weight: 400;
       font-size: 14px;
+      word-wrap: break-word;
     }
   }
 }
@@ -481,13 +482,17 @@
   justify-content: center;
   align-items: center;
 }
+
 .listTextLeft > p {
   margin: 0;
   font-weight: 400;
   font-size: 12px;
   color: #1c1c1c;
   text-align: end;
+  word-break: normal;
+  overflow-wrap: anywhere;
 }
+
 .listTextRight > p {
   margin: 0;
   font-weight: 400;
@@ -495,6 +500,7 @@
   color: #1c1c1c;
   text-align: start;
 }
+
 .listNumber {
   margin: auto 35px;
   max-width: 240px;
@@ -520,6 +526,7 @@
     }
   }
 }
+
 .rootListItem {
   > [class~="MuiListItemButton-root"] {
     display: block;
@@ -554,14 +561,12 @@
 .icSelect {
   right: 7px;
   color: var(--cimigo-blue);
-  @media only screen and (max-width: 767px) {
-    // position: unset;
-  }
 }
 .selectType {
   font-weight: 500;
   font-size: 12px;
   color: var(--cimigo-blue);
+  text-transform: none;
 }
 .select {
   display: flex;
@@ -754,8 +759,7 @@
   font-weight: 400;
   font-size: 12px;
   padding: 4px 16px;
-  margin-left: auto;
-  margin-right: 10px;
+  margin-left: auto;  
   color: #fafaff;
   background-color: #7c9911;
   border-radius: 30px;
@@ -784,12 +788,12 @@
   color: #1c1c1c66 !important;
 }
 .questionType {
-  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: 50px;
+  flex: 1;
   > div {
     display: flex;
     gap: 15px;
@@ -812,6 +816,7 @@
     }
   }
 }
+
 .displayNone {
   display: none;
 }
@@ -834,3 +839,4 @@
   color: #1c1c1c66 !important;
   background-color: #1c1c1c33 !important;
 }
+

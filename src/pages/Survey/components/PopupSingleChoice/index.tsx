@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   InputAdornment,
+  Tooltip,
 } from "@mui/material";
 import classes from "./styles.module.scss";
 import IconListAdd from "assets/img/icon/ic-list-add-svgrepo-com.svg";
@@ -195,7 +196,9 @@ const PopupSingleChoice = (props: Props) => {
               placeholder={t("setup_survey_popup_enter_question_placeholder")}
               startAdornment={
                 <InputAdornment position="start">
+                  <Tooltip translation-key="setup_survey_popup_question_tooltip_icon" title={t("setup_survey_popup_question_tooltip_icon")}>
                   <div className={classes.iconLanguage}>{language}</div>
+                  </Tooltip>
                 </InputAdornment>
               }
               type="text"
@@ -236,6 +239,7 @@ const PopupSingleChoice = (props: Props) => {
                                   <input
                                     type="radio"
                                     name="radio_answer"
+                                    disabled={true}
                                     className={classes.choiceAnswer}
                                   />
                                   <input
@@ -252,6 +256,7 @@ const PopupSingleChoice = (props: Props) => {
                                     autoComplete="off"
                                     autoFocus={focusEleIdx === index}
                                     onFocus={() => setFocusEleIdx(-1)}
+                                    tabIndex={index+1}
                                   />
                                   {answers?.length >
                                     questionType?.minAnswer && (

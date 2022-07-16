@@ -117,7 +117,7 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                           <span className={classes.hide}>
                             ${fCurrency2(item?.type.price)}
                           </span>
-                        </div>
+                        </div>                       
                       </div>
                       {editableProject && (
                         <div>
@@ -130,7 +130,6 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                             >
                               <img src={Images.icRename} alt="" />
                             </IconButton>
-
                             <IconButton
                               onClick={(e) => handleDeleteQuestion(e, item)}
                               className={classes.iconAction}

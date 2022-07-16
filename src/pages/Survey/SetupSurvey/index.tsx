@@ -9,7 +9,6 @@ import {
   ListItemButton,
   Menu,
   MenuItem,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -24,8 +23,8 @@ import {
   StepConnector,
   Collapse,
   Button,
-  breadcrumbsClasses,
 } from "@mui/material";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
@@ -68,6 +67,8 @@ import CustomQuestionListMobile from "../components/CustomQuestionListMobile";
 import PopupOpenQuestion from "../components/PopupOpenQuestion";
 import PopupSingleChoice from "../components/PopupSingleChoice";
 import PopupMultipleChoices from "../components/PopupMultipleChoices";
+import PopupConfirmDisableCustomQuestion from "../components/PopupConfirmDisableCustomQuestion";
+
 import { fCurrency2 } from "utils/formatNumber";
 import { PriceService } from "helpers/price";
 
@@ -163,6 +164,11 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [singleChoiceEdit, setSingleChoiceEdit] = useState<CustomQuestion>();
   const [multipleChoicesEdit, setMultipleChoicesEdit] = useState<CustomQuestion>();
   const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
+  
+  const [openConfirmDisableCustomQuestion, setOpenConfirmDisableCustomQuestion] = useState(false);
+  const [anchorElMenuQuestions, setAnchorElMenuQuestions] = useState<null | HTMLElement>(null);
+  const [anchorElMenuAttributes, setAnchorElMenuAttributes] = useState<null | HTMLElement>(null);
+
 
   useEffect(() => {
     if (project) {
@@ -398,6 +404,19 @@ const SetupSurvey = memo(({ id }: Props) => {
     setBrandEditMobile(null)
   }
 
+  const onOpenPopupConfirmDisableCustomQuestion = () => {
+    setOpenConfirmDisableCustomQuestion(true);
+  }
+
+  const onClosePopupConfirmDisableCustomQuestion = () => {
+    setOpenConfirmDisableCustomQuestion(false);
+  }
+
+  const onConfirmedDisableCustomQuestion = () => {
+    onToggleCustomQuestion(true)
+    onClosePopupConfirmDisableCustomQuestion()
+  }
+
   const onAddOrEditBrandMobile = (data: BrandFormData) => {
     if (brandEditMobile) {
       dispatch(setLoading(true))
@@ -570,14 +589,24 @@ const SetupSurvey = memo(({ id }: Props) => {
     }
   }
 
-  const onToggleCustomQuestion = () => {
+  const onToggleCustomQuestion = (confirmed: boolean = false) => {
+    const enableCustomQuestion = !project?.enableCustomQuestion;
+    if (!enableCustomQuestion && !confirmed && !!questions.length) {
+      onOpenPopupConfirmDisableCustomQuestion()
+      return
+    }
     dispatch(setLoading(true))
-    ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: !project?.enableCustomQuestion })
-      .then(() => {
-        dispatch(setProjectReducer({...project, enableCustomQuestion: !project?.enableCustomQuestion}));
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
+      ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: enableCustomQuestion })
+        .then(() => {
+          if (!enableCustomQuestion) {
+            dispatch(setProjectReducer({...project, enableCustomQuestion: enableCustomQuestion, customQuestions: []}));
+            setQuestions([])
+          } else {
+            dispatch(setProjectReducer({...project, enableCustomQuestion: enableCustomQuestion}));
+          }
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
   }
 
   const totalCustomQuestionPrice = () => {
@@ -612,6 +641,7 @@ const SetupSurvey = memo(({ id }: Props) => {
       default:
         break;
     }
+    handleCloseMenuQuestions();
   }
 
   const onClosePopupOpenQuestion = () => {
@@ -771,6 +801,31 @@ const SetupSurvey = memo(({ id }: Props) => {
     if (!el) return
     const headerHeight = document.getElementById('header')?.offsetHeight || 0
     window.scrollTo({ behavior: 'smooth', top: el.offsetTop - headerHeight - 10 })
+  }
+
+  const handleClickMenuQuestions = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElMenuQuestions(event.currentTarget)
+  }
+  const handleCloseMenuQuestions = () => {
+    setAnchorElMenuQuestions(null);
+  }
+
+  const handleClickMenuAttributes = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElMenuAttributes(event.currentTarget)
+  }
+
+  const handleCloseMenuAttributes = () => {
+    setAnchorElMenuAttributes(null);
+  }
+
+  const onOpenPopupPreDefined = () => {
+    setOpenPopupPreDefined(true)
+    handleCloseMenuAttributes()
+  }
+
+  const onOpenPopupAddAttributes = () => {
+    setOpenPopupAddAttributes(true)
+    handleCloseMenuAttributes()
   }
 
   return (
@@ -1156,7 +1211,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   alignItems="center"
                   component="div"
                   key={index}
-                  classes={{ root: classes.rootListItem }}
+                  classes={{ root: classes.rootListItem}}
                   secondaryAction={
                     <div className={classes.btnAction}>
                       {editableProject(project) && (
@@ -1232,26 +1287,31 @@ const SetupSurvey = memo(({ id }: Props) => {
               })}
             </Grid>
             <Grid classes={{ root: classes.select }}>
-              <FormControl classes={{ root: classes.rootSelect }} disabled={!enableAdditionalAttributes() || !editableProject(project)}>
-                <Select
+              <FormControl classes={{ root: classes.rootSelect }} >
+                <Button translation-key="setup_survey_add_att_menu_action_placeholder"
+                  onClick={handleClickMenuAttributes}
+                  endIcon={<KeyboardArrowDownIcon/>}
+                  className={classes.selectType}
                   variant="outlined"
-                  displayEmpty
-                  defaultValue={""}
-                  classes={{ select: classes.selectType, icon: classes.icSelect }}
-                  MenuProps={{
+                  disabled={!enableAdditionalAttributes() || !editableProject(project)}>
+                  {t('setup_survey_add_att_menu_action_placeholder')}
+                </Button>
+                <Menu 
+                  anchorEl={anchorElMenuAttributes}
+                  open={Boolean(anchorElMenuAttributes)}
+                  MenuListProps={{'aria-labelledby':'attribute-type-button'}}
+                  onClose={handleCloseMenuAttributes}
+                  PaperProps={{
                     className: classes.selectTypeMenu
                   }}
                 >
-                  <MenuItem disabled value="" translation-key="setup_survey_add_att_menu_action_placeholder">
-                    {t('setup_survey_add_att_menu_action_placeholder')}
+                  <MenuItem value={20} onClick={onOpenPopupPreDefined} translation-key="setup_survey_add_att_menu_action_from_pre_defined_list">
+                    {t('setup_survey_add_att_menu_action_from_pre_defined_list')}
                   </MenuItem>
-                  <MenuItem value={20} onClick={() => setOpenPopupPreDefined(true)} translation-key="setup_survey_add_att_menu_action_from_pre_defined_list">
-                  {t('setup_survey_add_att_menu_action_from_pre_defined_list')}
+                  <MenuItem value={30} onClick={onOpenPopupAddAttributes} translation-key="setup_survey_add_att_menu_action_your_own_attribute">
+                    {t('setup_survey_add_att_menu_action_your_own_attribute')}
                   </MenuItem>
-                  <MenuItem value={30} onClick={() => setOpenPopupAddAttributes(true)} translation-key="setup_survey_add_att_menu_action_your_own_attribute">
-                  {t('setup_survey_add_att_menu_action_your_own_attribute')}
-                  </MenuItem>
-                </Select>
+                </Menu>
               </FormControl>
               {!enableAdditionalAttributes() && <p translation-key="setup_survey_add_att_error_max">{t('setup_survey_add_att_error_max', { max: maxAdditionalAttribute() })}</p>}
             </Grid>
@@ -1261,8 +1321,17 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
           </Grid>
           <div className={classes.line}></div>
-          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">5. {t("setup_survey_custom_question_title")} <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span> {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={onToggleCustomQuestion} />} <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span></div>
-          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span></div>
+          <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">
+            5. {t("setup_survey_custom_question_title")} 
+            <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span> 
+            {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={() => onToggleCustomQuestion()}/> 
+            } 
+           
+            <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">
+              {project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}
+            </span>
+            </div>
+          <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}</span></div>
           <Grid className={classes.flex}>
             <p className={clsx({[classes.customQuestionSubTitleDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">{t("setup_survey_custom_question_sub_title")}</p>
             <Grid className={clsx({[classes.displayNone]: !project?.enableCustomQuestion})}>
@@ -1271,27 +1340,25 @@ const SetupSurvey = memo(({ id }: Props) => {
               <CustomQuestionListMobile questions={questions} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
             </Grid>
             <Grid className={clsx(classes.select, {[classes.displayNone]: !project?.enableCustomQuestion})}>
-              <FormControl classes={{ root: classes.rootSelect }} disabled={!editableProject(project) || questions.length >= maxCustomQuestion()}>
-                <Select
+              <FormControl classes={{ root: classes.rootSelect }} >
+                <Button 
+                  translation-key="setup_survey_custom_question_menu_action_placeholder" 
+                  onClick={handleClickMenuQuestions} 
+                  endIcon={<KeyboardArrowDownIcon/>}
                   variant="outlined"
-                  displayEmpty
-                  defaultValue={""}
-                  classes={{ select: classes.selectType, icon: classes.icSelect }}
-                  MenuProps={{
-                    className: classes.selectTypeMenu, 
-                    anchorOrigin: {
-                      vertical: "bottom",
-                      horizontal: "left"
-                    },
-                    transformOrigin: {
-                      vertical: "top",
-                      horizontal: "left"
-                    }
+                  className={classes.selectType}
+                  disabled={!editableProject(project) || questions.length >= maxCustomQuestion()}>
+                    {t("setup_survey_custom_question_menu_action_placeholder")}
+                </Button>
+                <Menu  
+                  anchorEl={anchorElMenuQuestions} 
+                  open={Boolean(anchorElMenuQuestions)}
+                  MenuListProps={{'aria-labelledby':'question-type-button'}}
+                  onClose={handleCloseMenuQuestions}
+                  PaperProps={{
+                    className: classes.selectTypeMenu
                   }}
                 >
-                  <MenuItem disabled value="" translation-key="setup_survey_custom_question_menu_action_placeholder">
-                    {t("setup_survey_custom_question_menu_action_placeholder")}
-                  </MenuItem>
                   {customQuestionType.map((item, index) => {
                     const value = (index + 2) * 10;
                     const image = item.id === ECustomQuestionType.Open_Question ? Images.icOpenQuestion : item.id === ECustomQuestionType.Single_Choice ? Images.icSingleChoice : item.id === ECustomQuestionType.Multiple_Choices ? Images.icMultipleChoices : null;
@@ -1307,7 +1374,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                       </MenuItem>
                     )
                   })}
-                </Select>
+                </Menu>    
               </FormControl>
               {editableProject(project) && questions.length >= maxCustomQuestion() && <p translation-key="setup_survey_custom_question_error_max">{t("setup_survey_custom_question_error_max", { max: maxCustomQuestion()})}</p>}
             </Grid>
@@ -1532,6 +1599,11 @@ const SetupSurvey = memo(({ id }: Props) => {
           onCancel={() => onCloseConfirmDeleteQuestion()}
           onDelete={onDeleteQuestion}
         />
+         <PopupConfirmDisableCustomQuestion 
+          isOpen={openConfirmDisableCustomQuestion} 
+          onCancel={onClosePopupConfirmDisableCustomQuestion} 
+          onYes={onConfirmedDisableCustomQuestion}
+         />
       </Grid>
     </>
   );

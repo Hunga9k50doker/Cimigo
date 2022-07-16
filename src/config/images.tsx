@@ -61,7 +61,7 @@ import icEditCell from 'assets/img/icon/ic-edit-cell.svg';
 import imgPaymentFailed from 'assets/img/img-payment-failed.svg';
 import icDrag from 'assets/img/icon/ic-drag.svg';
 import icOpenQuestion from 'assets/img/icon/ic-open-question.svg';
-import icSingleChoice from 'assets/img/icon/ic-single-choice.svg';
+import icSingleChoice from 'assets/img/icon/ic-single-choice.png';
 import icMultipleChoices from 'assets/img/icon/ic-multiple-choices.svg';
 import icDeleteAnswer from 'assets/img/icon/ic-delete-answer.svg';
 import imgPaymentPending from 'assets/img/img-payment-pending.svg';

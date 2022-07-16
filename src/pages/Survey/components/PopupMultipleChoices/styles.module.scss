@@ -104,15 +104,9 @@
   top: -9px;
   left: 0;
   visibility: hidden;
-}
-
-.iconDotsDragMUI {
-  display: none;
-  width: 10px;
-  height: 16px;
-  position: absolute;
-  top: 3px;
-  left: 10px;
+  @media only screen and (max-width: 600px) {
+    visibility: visible;
+  }
 }
 
 .addOptions {
@@ -134,52 +128,17 @@
   margin-left: -12px;
 }
 
-.inputSwitch {
-  width: 0;
-  height: 0;
-  visibility: hidden;
+.rootSwitch {
+  
 }
-
-.toggleSwitch {
-  display: block;
-  width: 36px;
-  height: 14px;
-  background-color: rgba(28, 28, 28, 0.4);
-  border-radius: 100px;
-  position: relative;
-  cursor: pointer;
-  transition: 0.5s;
-  box-shadow: 0 0 50px #477a85;
+.checkedSwitch {
+  color: #7c9911 !important;
 }
-
-.toggleSwitch::after {
-  content: "";
-  width: 20px;
-  height: 20px;
-  background-color: white;
-  position: absolute;
-  border-radius: 70px;
-  top: 50%;
-  left: 28%;
-  transform: translate(-50%, -50%);
-  transition: 0.5s;
+.trackSwitchOn {
+  background: #a6cc17 !important;
 }
-
-input:checked + .toggleSwitch:after {
-  left: calc(100% - 20px);
-  transform: translateY(-50%);
-  background-color: rgba(124, 153, 17, 1);
-}
-
-input:checked + .toggleSwitch {
-  background-color: rgba(166, 204, 23, 1);
-}
-
-input:checked {
-  .excluOptions {
-    color: rgb(17, 255, 0);
-    font-weight: 500;
-  }
+.trackSwitchOff {
+  background: rgba(28, 28, 28, 0.4) !important;
 }
 
 .excluOptions {
@@ -270,10 +229,6 @@ input:checked {
     margin-bottom: 5px;
   }
   @media only screen and (max-width: 600px) {
-    .iconDotsDragMUI {
-      display: block;
-    }
-
     .choiceAnswer {
       display: none;
     }
@@ -334,10 +289,6 @@ input:checked {
   @media only screen and (max-width: 600px) {
     .btnSave {
       width: 92%;
-    }
-
-    .iconDotsDragMUI {
-      display: block;
     }
 
     .choiceAnswer {
@@ -415,7 +366,7 @@ input:checked {
 }
 
 .rowToggleSwitch {
-  margin-left: 38px;
+  margin-left: 30px;
 }
 
 .errAns {

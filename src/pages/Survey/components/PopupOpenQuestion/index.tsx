@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogContent,
   InputAdornment,
+  Tooltip
 } from "@mui/material";
 import classes from "./styles.module.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -95,7 +96,9 @@ const PopupOpenQuestion = (props: Props) => {
               placeholder={t("setup_survey_popup_enter_question_placeholder")}
               startAdornment={
                 <InputAdornment position="start">
+                  <Tooltip translation-key="setup_survey_popup_question_tooltip_icon" title={t("setup_survey_popup_question_tooltip_icon")}>
                   <div className={classes.iconLanguage}>{language}</div>
+                  </Tooltip>
                 </InputAdornment>
               }
               type="text"
