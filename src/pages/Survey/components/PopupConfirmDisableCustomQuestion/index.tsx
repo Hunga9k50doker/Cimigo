@@ -10,7 +10,7 @@ interface Props {
     onYes: ()=> void,
   }
   
-const PopupConfirmDisable = (props: Props) => {
+const PopupConfirmDisableCustomQuestion = (props: Props) => {
     const { onCancel, isOpen, onYes } = props;
     const { t } = useTranslation()
     return (
@@ -36,4 +36,4 @@ const PopupConfirmDisable = (props: Props) => {
       </Dialog>
     )
 }
-export default PopupConfirmDisable;
+export default PopupConfirmDisableCustomQuestion;

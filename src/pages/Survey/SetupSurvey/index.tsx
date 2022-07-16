@@ -67,7 +67,7 @@ import CustomQuestionListMobile from "../components/CustomQuestionListMobile";
 import PopupOpenQuestion from "../components/PopupOpenQuestion";
 import PopupSingleChoice from "../components/PopupSingleChoice";
 import PopupMultipleChoices from "../components/PopupMultipleChoices";
-import PopupConfirmDisable from "../components/PopupConfirmDisable";
+import PopupConfirmDisableCustomQuestion from "../components/PopupConfirmDisableCustomQuestion";
 
 import { fCurrency2 } from "utils/formatNumber";
 import { PriceService } from "helpers/price";
@@ -165,7 +165,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [multipleChoicesEdit, setMultipleChoicesEdit] = useState<CustomQuestion>();
   const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
   
-  const [popupConfirmCancel, setPopupConfirmCancel] = useState(false);
+  const [openConfirmDisableCustomQuestion, setOpenConfirmDisableCustomQuestion] = useState(false);
   const [anchorElMenuQuestions, setAnchorElMenuQuestions] = useState<null | HTMLElement>(null);
   const [anchorElMenuAttributes, setAnchorElMenuAttributes] = useState<null | HTMLElement>(null);
 
@@ -404,12 +404,17 @@ const SetupSurvey = memo(({ id }: Props) => {
     setBrandEditMobile(null)
   }
 
-  const onOpenPopupConfirmCancel = () => {
-    setPopupConfirmCancel(true);
+  const onOpenPopupConfirmDisableCustomQuestion = () => {
+    setOpenConfirmDisableCustomQuestion(true);
   }
 
-  const onClosePopupConfirmCancel = () => {
-    setPopupConfirmCancel(false);
+  const onClosePopupConfirmDisableCustomQuestion = () => {
+    setOpenConfirmDisableCustomQuestion(false);
+  }
+
+  const onConfirmedDisableCustomQuestion = () => {
+    onToggleCustomQuestion(true)
+    onClosePopupConfirmDisableCustomQuestion()
   }
 
   const onAddOrEditBrandMobile = (data: BrandFormData) => {
@@ -584,19 +589,24 @@ const SetupSurvey = memo(({ id }: Props) => {
     }
   }
 
-  const onToggleCustomQuestion = () => {
-    if(questions.length > 0){
-      onOpenPopupConfirmCancel();
+  const onToggleCustomQuestion = (confirmed: boolean = false) => {
+    const enableCustomQuestion = !project?.enableCustomQuestion;
+    if (!enableCustomQuestion && !confirmed && !!questions.length) {
+      onOpenPopupConfirmDisableCustomQuestion()
+      return
     }
-    else {
-      dispatch(setLoading(true))
-      ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: !project?.enableCustomQuestion })
+    dispatch(setLoading(true))
+      ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: enableCustomQuestion })
         .then(() => {
-          dispatch(setProjectReducer({...project, enableCustomQuestion: !project?.enableCustomQuestion}));
+          if (!enableCustomQuestion) {
+            dispatch(setProjectReducer({...project, enableCustomQuestion: enableCustomQuestion, customQuestions: []}));
+            setQuestions([])
+          } else {
+            dispatch(setProjectReducer({...project, enableCustomQuestion: enableCustomQuestion}));
+          }
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)))
-    }
   }
 
   const totalCustomQuestionPrice = () => {
@@ -1314,7 +1324,7 @@ const SetupSurvey = memo(({ id }: Props) => {
           <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">
             5. {t("setup_survey_custom_question_title")} 
             <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span> 
-            {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={onToggleCustomQuestion}/> 
+            {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={() => onToggleCustomQuestion()}/> 
             } 
            
             <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">
@@ -1589,10 +1599,10 @@ const SetupSurvey = memo(({ id }: Props) => {
           onCancel={() => onCloseConfirmDeleteQuestion()}
           onDelete={onDeleteQuestion}
         />
-         <PopupConfirmDisable 
-         isOpen={popupConfirmCancel} 
-         onCancel={onClosePopupConfirmCancel} 
-         onYes={onClosePopupConfirmCancel}
+         <PopupConfirmDisableCustomQuestion 
+          isOpen={openConfirmDisableCustomQuestion} 
+          onCancel={onClosePopupConfirmDisableCustomQuestion} 
+          onYes={onConfirmedDisableCustomQuestion}
          />
       </Grid>
     </>
