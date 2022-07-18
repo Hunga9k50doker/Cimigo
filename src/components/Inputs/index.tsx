@@ -78,7 +78,9 @@ const Inputs = memo((props: InputsProps) => {
             <IconButton
               aria-label="toggle password visibility"
               onClick={handleClick}
-              className={classes.iconEye}>
+              className={classes.iconEye}
+              tabIndex={-1}
+              >
               {toggleEyes ? <img src={iconEyeOpen} alt="eye-close" /> : <VisibilityOffIcon />}
             </IconButton>
           </InputAdornment> : <img src={images.icError} alt="error" />

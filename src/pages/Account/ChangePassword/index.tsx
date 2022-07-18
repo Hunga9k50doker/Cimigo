@@ -15,6 +15,7 @@ import {
 } from "redux/reducers/Status/actionTypes";
 import UserService from "services/user";
 import { useDispatch } from "react-redux";
+import clsx from "clsx"
 
 interface Props { }
 
@@ -94,15 +95,15 @@ const ChangePassword = memo((props: Props) => {
       >
         {t("auth_change_password_sub")}
       </p>
+      <Divider className={classes.divider} />
       {isEmptyPassword &&
         <p
-          className={classes.subTitle}
+          className={clsx(classes.subTitle, classes.emptyPasswordTitle)}
           translation-key="auth_change_empty_password"
         >
           {t("auth_change_empty_password")}
         </p>
       }
-      <Divider className={classes.divider} />
       <form
         onSubmit={handleSubmit(onSubmit)}
         name="change-password"
