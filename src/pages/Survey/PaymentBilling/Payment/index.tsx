@@ -121,7 +121,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     mode: 'onChange',
     defaultValues: {
       saveForLater: false,
-      paymentMethodId: EPaymentMethod.MAKE_AN_ORDER
+      paymentMethodId: null
     }
   });
 
@@ -160,7 +160,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       countryId = { id: paymentInfo.country.id, name: paymentInfo.country.name }
     }
     reset({
-      paymentMethodId: EPaymentMethod.MAKE_AN_ORDER,
+      paymentMethodId: null,
       contactName: user?.fullName || '',
       contactEmail: user?.email || '',
       contactPhone: user?.phone || '',
@@ -543,9 +543,9 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               </TooltipCustom>
             </div>
           </Grid>
-          <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
+          <Buttons type="submit" disabled={!Number(watch("paymentMethodId"))} children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
         </Grid>
-        <div className={classes.cancelPayment} onClick={onCancelPayment} translation-key="common_cancel_payment">{t("common_cancel_payment")}</div>
+        <div className={classes.cancelPayment}  translation-key="common_cancel_payment"><span onClick={onCancelPayment}>{t("common_cancel_payment")}</span></div>
       </Grid>
       <Grid className={classes.flexTotalMobile}>
         <Grid>
@@ -553,7 +553,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
           <a style={{ marginBottom: 4 }}>{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</a>
           <span>({fCurrency2VND(price?.totalAmount || 0)} VND)</span>
         </Grid>
-        <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" padding="11px" className={classes.btnMobile} />
+        <Buttons type="submit" disabled={!Number(watch("paymentMethodId"))} children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" padding="11px" className={classes.btnMobile} />
       </Grid>
       <PopupConfirmInvoiceInfo 
         isOpen={!!showSkipInfor}

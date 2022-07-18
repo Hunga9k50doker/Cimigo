@@ -33,7 +33,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
 
   const dispatch = useDispatch()
   const { project, cancelPayment } = useSelector((state: ReducerType) => state.project)
-
+  
   const [isValid, setIsValid] = useState<boolean>(false)
   const [packs, setPacks] = useState<Pack[]>([])
   const [additionalBrand, setAdditionalBrand] = useState<AdditionalBrand[]>([])
@@ -48,7 +48,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const gotoSetupSurvey = () => {
     dispatch(push(routes.project.detail.setupSurvey.replace(':id', `${project.id}`)))
   }
-
+  
   const gotoTarget = () => {
     dispatch(push(routes.project.detail.target.replace(':id', `${project.id}`)))
   }
@@ -251,10 +251,15 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 <p className={classes.text} translation-key="payment_billing_sub_tab_preview_additional_attribute">{t('payment_billing_sub_tab_preview_additional_attribute')}</p>
                 <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_attributes">{(projectAttributes?.length || 0) + (userAttributes?.length || 0)} {t('payment_billing_sub_tab_preview_attributes')}</span>
               </div>
-              <div>
-                <p className={classes.text} translation-key="payment_billing_sub_tab_preview_custom_question">{t("payment_billing_sub_tab_preview_custom_question")}</p>
-                <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_questions">{project?.customQuestions?.length || 0} {t("payment_billing_sub_tab_preview_questions")}</span>
-              </div>
+              {
+                project?.enableCustomQuestion && 
+                (
+                  <div>
+                    <p className={classes.text} translation-key="payment_billing_sub_tab_preview_custom_question">{t("payment_billing_sub_tab_preview_custom_question")}</p>
+                    <span className={classes.textBlack} translation-key="payment_billing_sub_tab_preview_questions">{project?.customQuestions?.length} {t("payment_billing_sub_tab_preview_questions")}</span>
+                  </div>
+                )
+              }
             </div>
           </Grid>
         </Grid>
