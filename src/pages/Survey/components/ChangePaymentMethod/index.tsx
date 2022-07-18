@@ -87,14 +87,14 @@ const ChangePaymentMethod = memo(
       resolver: yupResolver(schema),
       mode: "onChange",
       defaultValues: {
-        paymentMethodId: 0,
+        paymentMethodId: null,
       },
     });
 
     useEffect(() => {
       if (!user) return;
       reset({
-        paymentMethodId: 0,
+        paymentMethodId: null,
         contactName: user?.fullName || "",
         contactEmail: user?.email || "",
         contactPhone: user?.phone || "",
@@ -111,8 +111,8 @@ const ChangePaymentMethod = memo(
 
     return (
       <Grid>
-        <p className={classes.changePaymentMethodTitle}>Change payment method</p>
-        <p className={classes.changePaymentMethodSubTitle}>Please choose another payment method and then place the order again</p>
+        <p className={classes.changePaymentMethodTitle} translation-key="payment_billing_change_method_title">{t('payment_billing_change_method_title')}</p>
+        <p className={classes.changePaymentMethodSubTitle} translation-key="payment_billing_change_method_subTitle">{t('payment_billing_change_method_subTitle')}</p>
         <Grid component={'form'} className={classes.root1} onSubmit={handleSubmit(onConfirm)} noValidate autoComplete="off">
           <Divider className={classes.divider1} />
           <Grid classes={{ root: classes.left }}>
