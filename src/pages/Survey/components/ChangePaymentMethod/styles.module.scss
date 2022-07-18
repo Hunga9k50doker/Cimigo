@@ -395,7 +395,6 @@
   }
 }
 .cancelPayment {
-  cursor: pointer;
   padding: 24px 19px 0px;
   display: flex;
   justify-content: center;
@@ -407,5 +406,8 @@
   color: rgba(28, 28, 28, 0.65);
   @media only screen and (max-width: 767px) {
     border-top: 2px solid rgba(28, 28, 28, 0.05);
+  }
+  span{
+    cursor: pointer;
   }
 }

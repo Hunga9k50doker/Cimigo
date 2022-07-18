@@ -87,14 +87,14 @@ const ChangePaymentMethod = memo(
       resolver: yupResolver(schema),
       mode: "onChange",
       defaultValues: {
-        paymentMethodId: EPaymentMethod.MAKE_AN_ORDER,
+        paymentMethodId: 0,
       },
     });
 
     useEffect(() => {
       if (!user) return;
       reset({
-        paymentMethodId: EPaymentMethod.MAKE_AN_ORDER,
+        paymentMethodId: 0,
         contactName: user?.fullName || "",
         contactEmail: user?.email || "",
         contactPhone: user?.phone || "",
@@ -262,9 +262,9 @@ const ChangePaymentMethod = memo(
                   </TooltipCustom>
                 </div>
               </Grid>
-              <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
+              <Buttons type="submit" disabled={!Number(watch("paymentMethodId"))} children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
             </Grid>
-            <div className={classes.cancelPayment} onClick={onShowConfirmCancel} translation-key="common_cancel_payment">{t("common_cancel_payment")}</div>
+            <div className={classes.cancelPayment} translation-key="common_cancel_payment"><span onClick={onShowConfirmCancel}>{t("common_cancel_payment")}</span></div>
           </Grid>
           <Grid className={classes.flexTotalMobile}>
             <Grid>
@@ -272,7 +272,7 @@ const ChangePaymentMethod = memo(
               <a style={{ marginBottom: 4 }}>{`$`}{fCurrency2(payment?.totalAmountUSD || 0)}</a>
               <span>({fCurrency2VND(payment?.totalAmount || 0)} VND)</span>
             </Grid>
-            <Buttons type="submit" children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" padding="11px" className={classes.btnMobile} />
+            <Buttons type="submit" disabled={!Number(watch("paymentMethodId"))} children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" padding="11px" className={classes.btnMobile} />
           </Grid>
         </Grid>
         <PopupConfirmCancelOrder
