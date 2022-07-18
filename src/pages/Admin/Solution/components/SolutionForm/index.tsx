@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowBackOutlined, Save } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
 import { Solution, SolutionCategory, SolutionCategoryHome } from "models/Admin/solution";
@@ -56,10 +56,16 @@ const schema = yup.object().shape({
     .typeError('Max Additional Attribute is required.')
     .positive('Max Additional Attribute must be a positive number')
     .required('Max Additional Attribute is required.'),
-  maxCustomQuestion: yup.number()
-    .typeError('Max Custom Question is required.')
-    .positive('Max Custom Question must be a positive number')
-    .required('Max Custom Question is required.')
+  enableCustomQuestion: yup.boolean().required('Enable Custom Question is required.'),
+  maxCustomQuestion: yup.mixed()
+    .when("enableCustomQuestion", {
+      is: (val: boolean) => !!val,
+      then: yup.number()
+        .typeError('Max Custom Question is required.')
+        .positive('Max Custom Question must be a positive number')
+        .required('Max Custom Question is required.'),
+      otherwise: yup.mixed().notRequired()
+    })
 })
 
 export interface SolutionFormData {
@@ -72,6 +78,7 @@ export interface SolutionFormData {
   maxPack: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;
+  enableCustomQuestion: boolean;
   maxCustomQuestion: number;
 }
 
@@ -87,9 +94,12 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
   const dispatch = useDispatch();
   const [categories, setCategories] = useState<OptionItem[]>([]);
   const [categoriesHome, setCategoriesHome] = useState<OptionItem[]>([]);
-  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<SolutionFormData>({
+  const { register, handleSubmit, formState: { errors }, reset, control, watch } = useForm<SolutionFormData>({
     resolver: yupResolver(schema),
-    mode: 'onChange'
+    mode: 'onChange',
+    defaultValues: {
+      enableCustomQuestion: true
+    }
   });
 
   const handleBack = () => {
@@ -105,7 +115,10 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     formData.append('maxPack', `${data.maxPack}`)
     formData.append('maxAdditionalBrand', `${data.maxAdditionalBrand}`)
     formData.append('maxAdditionalAttribute', `${data.maxAdditionalAttribute}`)
-    formData.append('maxCustomQuestion', `${data.maxCustomQuestion}`)
+    formData.append('enableCustomQuestion', `${data.enableCustomQuestion}`)
+    if (data.enableCustomQuestion) {
+      formData.append('maxCustomQuestion', `${data.maxCustomQuestion}`)
+    }
     if (data.image && typeof data.image === 'object') formData.append('image', data.image)
     if (data?.categoryHomeId?.id) formData.append('categoryHomeId', `${data.categoryHomeId.id}`)
     if (langEdit) formData.append('language', langEdit)
@@ -125,6 +138,7 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         maxPack: itemEdit.maxPack,
         maxAdditionalBrand: itemEdit.maxAdditionalBrand,
         maxAdditionalAttribute: itemEdit.maxAdditionalAttribute,
+        enableCustomQuestion: itemEdit.enableCustomQuestion,
         maxCustomQuestion: itemEdit.maxCustomQuestion,
       })
     }
@@ -293,16 +307,36 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                       errorMessage={errors.maxAdditionalAttribute?.message}
                     />
                   </Grid>
+                  <Grid item xs={12} sm={6}></Grid>
                   <Grid item xs={12} sm={6}>
-                    <Inputs
-                      title="Max Custom Question"
-                      name="maxCustomQuestion"
-                      type="number"
-                      disabled={!!langEdit}
-                      inputRef={register('maxCustomQuestion')}
-                      errorMessage={errors.maxCustomQuestion?.message}
+                    <TextTitle>Custom Question</TextTitle>
+                    <FormControlLabel
+                      control={
+                        <Controller
+                          name="enableCustomQuestion"
+                          control={control}
+                          render={({ field }) => <Checkbox
+                            checked={field.value}
+                            {...field}
+                            disabled={!!langEdit}
+                          />}
+                        />
+                      }
+                      label="Enable Custom Question"
                     />
                   </Grid>
+                  {watch("enableCustomQuestion") && (
+                    <Grid item xs={12} sm={6}>
+                      <Inputs
+                        title="Max Custom Question"
+                        name="maxCustomQuestion"
+                        type="number"
+                        disabled={!!langEdit}
+                        inputRef={register('maxCustomQuestion')}
+                        errorMessage={errors.maxCustomQuestion?.message}
+                      />
+                    </Grid>
+                  )}
                 </Grid>
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <Button

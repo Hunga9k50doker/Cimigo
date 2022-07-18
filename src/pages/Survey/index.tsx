@@ -16,7 +16,7 @@ import PaymentBilling from "./PaymentBilling";
 import Report from "./Report";
 import images from "config/images";
 import { useDispatch, useSelector } from "react-redux";
-import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import { getProjectRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { matchPath, Redirect, Route, Switch, useParams } from "react-router-dom";
 import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
@@ -65,6 +65,9 @@ const Survey = () => {
   useEffect(() => {
     if (id && !isNaN(Number(id))) {
       dispatch(getProjectRequest(Number(id)))
+      return () => {
+        dispatch(setProjectReducer(null))
+      }
     }
   }, [dispatch, id])
 
