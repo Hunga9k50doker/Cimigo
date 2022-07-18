@@ -39,7 +39,7 @@ const PopupInvalidQuota = memo((props: Props) => {
                 </ul>
             </DialogContent>
             <DialogActions className={classes.btnBox}>
-                <Buttons children={'OK'} translation-key="" btnType="Blue" padding='11px 16px' onClick={onCancel} />
+                <Buttons children={t('common_ok')} translation-key="common_ok" btnType="Blue" padding='11px 16px' onClick={onCancel} />
             </DialogActions>
         </Dialog>
     )
