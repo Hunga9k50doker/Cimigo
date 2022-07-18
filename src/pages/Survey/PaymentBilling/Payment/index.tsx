@@ -160,6 +160,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       countryId = { id: paymentInfo.country.id, name: paymentInfo.country.name }
     }
     reset({
+      paymentMethodId: 0,
       contactName: user?.fullName || '',
       contactEmail: user?.email || '',
       contactPhone: user?.phone || '',
