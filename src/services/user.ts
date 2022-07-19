@@ -148,6 +148,20 @@ export class UserService {
         return Promise.reject(e?.response?.data);
       })
   }
+
+  static async updateAvatar(data: FormData): Promise<any> {
+    return await api.put(`${API.USER.UPDATE_AVATAR}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
   
 }
 

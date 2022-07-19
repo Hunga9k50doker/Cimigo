@@ -11,6 +11,7 @@ import {
 import { AddAPhoto as AddAPhotoIcon } from '@mui/icons-material';
 import classes from './styles.module.scss';
 import ErrorMessage from 'components/Inputs/components/ErrorMessage';
+import { useTranslation } from "react-i18next";
 
 const PHOTO_SIZE = 3145728; // bytes
 const FILE_FORMATS = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
@@ -46,7 +47,8 @@ const UploadImage = memo(
     const [isError, setIsError] = useState<string>('');
     const isMountedRef = useIsMountedRef();
     const [fileReview, setFileReview] = useState<string>('');
-   
+    const { t } = useTranslation()
+
     const handleDrop = useCallback(
       async (acceptedFiles) => {
         let file = acceptedFiles[0];
@@ -60,6 +62,7 @@ const UploadImage = memo(
           setIsError('type-invalid');
           return
         }
+        setIsError('false');
         setIsLoading(true);
         onChange && onChange(file)
         setIsLoading(false);
@@ -69,7 +72,7 @@ const UploadImage = memo(
     );
 
     useEffect(() => {
-      if(!!file && typeof file === "object") {
+      if (!!file && typeof file === "object") {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => setFileReview(reader.result as string);
@@ -103,18 +106,18 @@ const UploadImage = memo(
               [classes.isDragActive]: isDragActive,
               [classes.isDragAccept]: isDragAccept,
               [classes.dropZoneSquare]: square,
-              
+
             })}
             {...getRootProps()}
           >
-            <input {...getInputProps()}  id="upload"/>
+            <input {...getInputProps()} id="upload" />
             {isLoading && (
               <Box className={classes.loading}>
                 <CircularProgress size={32} thickness={2.4} />
               </Box>
             )}
             {fileReview && (
-              <img alt="upload" src={fileReview} className={classes.imgFile} referrerPolicy='no-referrer'/>
+              <img alt="upload" src={fileReview} className={classes.imgFile} referrerPolicy='no-referrer' />
             )}
             <div
               className={clsx(classes.placeholder, { [classes.hover]: fileReview })}
@@ -136,11 +139,23 @@ const UploadImage = memo(
             </>
           )}
         </Typography>
-        {isError === 'size-invalid' && <ErrorMessage align={align}>{`File is larger than ${fData(photoSize)}`}</ErrorMessage>}
-        {isError === 'type-invalid' && <ErrorMessage align={align}>File type must be *.jpeg, *.jpg, *.png</ErrorMessage>}
+        {isError === 'size-invalid' && <ErrorMessage align={align} translation-key="common_file_size">{t('common_file_size', { size: fData(photoSize) })}</ErrorMessage>}
+        {isError === 'type-invalid' &&
+          (
+            <ErrorMessage align={align} translation-key="common_file_type">
+              {
+                t('common_file_type', {
+                  fileFormats: fileFormats.map(format => (
+                    format.replace("image/", "*.")
+                  )).join(", ")
+                })
+              }
+            </ErrorMessage>
+          )
+        }
         {errorMessage && <ErrorMessage align={align}>{errorMessage}</ErrorMessage>}
         <Box sx={{ display: 'flex', justifyContent: align === "left" ? "flex-start" : 'center' }}>
-         
+
         </Box>
       </>
     );

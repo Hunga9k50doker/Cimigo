@@ -120,7 +120,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
-      saveForLater: false,
+      saveForLater: true,
       paymentMethodId: null
     }
   });
@@ -133,7 +133,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>()
   const [showSkipInfor, setShowSkipInfor] = useState<DataForm>()
   // const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false)
-  
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch(setLoading(true))
@@ -164,7 +164,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       contactName: user?.fullName || '',
       contactEmail: user?.email || '',
       contactPhone: user?.phone || '',
-      saveForLater: false,
+      saveForLater: true,
       fullName: paymentInfo?.fullName || user?.fullName || '',
       companyName: paymentInfo?.companyName || user?.company || '',
       email: paymentInfo?.email || user?.email || '',
@@ -263,7 +263,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     authPreviewOrPayment(project, onRedirect)
   }, [project])
 
-  
+
 
   const onSkipUpdateInfo = () => {
     if (!showSkipInfor) return
@@ -509,12 +509,12 @@ const PaymentPage = memo(({ }: PaymentProps) => {
           <Grid classes={{ root: classes.bodyOrder }}>
             <p translation-key="payment_billing_sub_tab_payment_summary">{t('payment_billing_sub_tab_payment_summary')}</p>
             <div className={classes.flexOrder}>
-              <span translation-key="payment_billing_sub_tab_payment_summary_sample_size">{t('payment_billing_sub_tab_payment_summary_sample_size')}</span>
+              <span translation-key="payment_billing_sub_tab_payment_summary_sample_size">{t('payment_billing_sub_tab_payment_summary_sample_size')} {`(${project?.sampleSize || 0})`}</span>
               <span>{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</span>
             </div>
             {project?.customQuestions?.length > 0 && (
               <div className={classes.flexOrder}>
-                <span translation-key="payment_billing_sub_tab_payment_summary_custom_question">{t("payment_billing_sub_tab_payment_summary_custom_question")}</span>
+                <span translation-key="payment_billing_sub_tab_payment_summary_custom_question">{t("payment_billing_sub_tab_payment_summary_custom_question")} {`(${(project?.customQuestions?.length) || 0})`}</span>
                 <span>{`$`}{fCurrency2(price?.customQuestionCostUSD)}</span>
               </div>
             )}
@@ -545,7 +545,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
           </Grid>
           <Buttons type="submit" disabled={!Number(watch("paymentMethodId"))} children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" width="100%" padding="11px" className={classes.btn} />
         </Grid>
-        <div className={classes.cancelPayment}  translation-key="common_cancel_payment"><span onClick={onCancelPayment}>{t("common_cancel_payment")}</span></div>
+        <div className={classes.cancelPayment} translation-key="common_cancel_payment"><span onClick={onCancelPayment}>{t("common_cancel_payment")}</span></div>
       </Grid>
       <Grid className={classes.flexTotalMobile}>
         <Grid>
@@ -555,7 +555,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         </Grid>
         <Buttons type="submit" disabled={!Number(watch("paymentMethodId"))} children={t('payment_billing_sub_tab_payment_summary_place_order')} translation-key="payment_billing_sub_tab_payment_summary_place_order" btnType="Blue" padding="11px" className={classes.btnMobile} />
       </Grid>
-      <PopupConfirmInvoiceInfo 
+      <PopupConfirmInvoiceInfo
         isOpen={!!showSkipInfor}
         onClose={onUpdateInfo}
         onYes={onSkipUpdateInfo}

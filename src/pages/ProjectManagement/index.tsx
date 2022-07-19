@@ -80,8 +80,10 @@ const ProjectManagement = memo((props: Props) => {
   const { verifiedSuccess } = useSelector((state: ReducerType) => state.user)
 
   const [keyword, setKeyword] = useState<string>('');
-  const [sort, setSort] = useState<SortItem>();
-
+  const [sort, setSort] = useState<SortItem>({
+    sortedField: SortedField.updatedAt,
+    isDescending: true
+  });
   const [folderId, setFolderId] = useState<Folder>();
   const [statusId, setStatusId] = useState<OptionItem>();
   const [data, setData] = useState<DataPagination<Project>>();
