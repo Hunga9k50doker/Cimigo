@@ -309,6 +309,10 @@
     font-weight: 400;
     font-size: 16px;
     color: #333333;
+    overflow-wrap: anywhere;
+    > [class~="MuiButton-root"]{
+      word-wrap: break-word;
+    }
   }
 }
 .rootTextfield {
@@ -499,6 +503,8 @@
   font-size: 12px;
   color: #1c1c1c;
   text-align: start;
+  word-break: normal;
+  overflow-wrap: anywhere;
 }
 
 .listNumber {
