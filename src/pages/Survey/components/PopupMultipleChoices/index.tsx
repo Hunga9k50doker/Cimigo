@@ -259,7 +259,7 @@ const PopupMultipleChoices = (props: Props) => {
                                   autoComplete="off"
                                   autoFocus={index === focusEleIdx}
                                   onFocus={() => setFocusEleIdx(-1)}
-                                  tabIndex={index+1}
+                                  tabIndex={index+2}
                                 />
                                 {answers?.length > questionType?.minAnswer && (
                                   <button
