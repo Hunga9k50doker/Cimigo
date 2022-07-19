@@ -214,6 +214,7 @@ const PopupMultipleChoices = (props: Props) => {
               inputRef={register("title")}
               errorMessage={errors.title?.message}
               autoComplete="off"
+              inputProps={{tabIndex:1}}
             />
             <Grid sx={{ position: "relative", marginTop: "30px" }}>
               <DragDropContext onDragEnd={onDragEnd}>

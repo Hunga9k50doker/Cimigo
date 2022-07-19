@@ -66,7 +66,6 @@ const Inputs = memo((props: InputsProps) => {
         type={!toggleEyes ? type : 'text'}
         placeholder={placeholder}
         fullWidth
-        inputProps={{tabIndex:1}}
         name={name}
         defaultValue={defaultValue}
         value={value}
