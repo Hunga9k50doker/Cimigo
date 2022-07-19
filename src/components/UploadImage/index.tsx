@@ -62,7 +62,7 @@ const UploadImage = memo(
           setIsError('type-invalid');
           return
         }
-        setIsError('false');
+        setIsError('');
         setIsLoading(true);
         onChange && onChange(file)
         setIsLoading(false);
