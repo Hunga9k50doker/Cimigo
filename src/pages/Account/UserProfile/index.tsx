@@ -92,17 +92,22 @@ const UserProfile = memo((props: Props) => {
     }, [user, reset])
 
     useEffect(() => {
-        if (typeof watch("avatar") === 'object') {
-            const form = new FormData()
-            form.append('avatar', watch("avatar"))
-            UserService.updateAvatar(form)
-                .then(() => {
-                    dispatch(getMe())
-                })
-                .catch((e) => dispatch(setErrorMess(e)))
-                .finally(() => dispatch(setLoading(false)))
-        }
-    }, [watch("avatar")])
+        const subscription = watch((value, { name, type }) => {
+            if (name === "avatar") {
+                if (typeof value.avatar === 'object') {
+                    const form = new FormData()
+                    form.append('avatar', value.avatar)
+                    UserService.updateAvatar(form)
+                        .then(() => {
+                            dispatch(getMe())
+                        })
+                        .catch((e) => dispatch(setErrorMess(e)))
+                        .finally(() => dispatch(setLoading(false)))
+                }
+            }
+        })
+        return () => subscription.unsubscribe()
+    }, [watch])
 
     const onSubmit = (data: UserFormData) => {
         const form = new FormData()
