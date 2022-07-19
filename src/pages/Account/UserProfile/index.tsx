@@ -58,7 +58,7 @@ const UserProfile = memo((props: Props) => {
         })
     }, [i18n.language])
     const [countries, setCountries] = useState<OptionItem[]>([])
-    const { register, handleSubmit, control, formState: { errors }, reset } = useForm<UserFormData>({
+    const { register, handleSubmit, control, formState: { errors }, reset, watch } = useForm<UserFormData>({
         resolver: yupResolver(schema),
         mode: 'onChange'
     });
@@ -80,7 +80,7 @@ const UserProfile = memo((props: Props) => {
     useEffect(() => {
         if (user) {
             reset({
-                avatar: user.avatar || images.icProfile ||  '',
+                avatar: user.avatar || images.icProfile || '',
                 firstName: user.firstName || '',
                 lastName: user.lastName || '',
                 email: user.email || '',
@@ -90,6 +90,20 @@ const UserProfile = memo((props: Props) => {
             })
         }
     }, [user, reset])
+
+    useEffect(() => {
+        if (typeof watch("avatar") === 'object') {
+            const form = new FormData()
+            form.append('avatar', watch("avatar"))
+            UserService.updateAvatar(form)
+                .then(() => {
+                    dispatch(getMe())
+                })
+                .catch((e) => dispatch(setErrorMess(e)))
+                .finally(() => dispatch(setLoading(false)))
+        }
+    }, [watch("avatar")])
+
     const onSubmit = (data: UserFormData) => {
         const form = new FormData()
         form.append('firstName', data.firstName)
@@ -97,7 +111,6 @@ const UserProfile = memo((props: Props) => {
         form.append('countryId', `${data.countryId.id}`)
         form.append('company', data.company)
         form.append('phone', data.phone)
-        if (typeof data.avatar === 'object') form.append('avatar', data.avatar)
         dispatch(setLoading(true))
         UserService.update(form)
             .then(() => {

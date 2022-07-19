@@ -389,6 +389,11 @@
   color: rgba(28, 28, 28, 0.65);
   span {
     cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+      color: var(--cimigo-blue);
+      text-underline-position: under;
+    }
   }
   @media only screen and (max-width: 767px) {
     border-top: 2px solid rgba(28, 28, 28, 0.05);
