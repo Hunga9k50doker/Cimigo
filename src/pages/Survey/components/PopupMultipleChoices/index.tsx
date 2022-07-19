@@ -214,6 +214,7 @@ const PopupMultipleChoices = (props: Props) => {
               inputRef={register("title")}
               errorMessage={errors.title?.message}
               autoComplete="off"
+              inputProps={{tabIndex:1}}
             />
             <Grid sx={{ position: "relative", marginTop: "30px" }}>
               <DragDropContext onDragEnd={onDragEnd}>
@@ -259,7 +260,7 @@ const PopupMultipleChoices = (props: Props) => {
                                   autoComplete="off"
                                   autoFocus={index === focusEleIdx}
                                   onFocus={() => setFocusEleIdx(-1)}
-                                  tabIndex={index+1}
+                                  tabIndex={index+2}
                                 />
                                 {answers?.length > questionType?.minAnswer && (
                                   <button

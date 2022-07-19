@@ -205,6 +205,7 @@ const PopupSingleChoice = (props: Props) => {
               inputRef={register("title")}
               errorMessage={errors.title?.message}
               autoComplete="off"
+              inputProps={{tabIndex:1}}
             />
             <Grid sx={{ position: "relative", marginTop: "30px" }}>
               <DragDropContext onDragEnd={onDragEnd}>
@@ -256,7 +257,7 @@ const PopupSingleChoice = (props: Props) => {
                                     autoComplete="off"
                                     autoFocus={focusEleIdx === index}
                                     onFocus={() => setFocusEleIdx(-1)}
-                                    tabIndex={index+1}
+                                    tabIndex={index+2}
                                   />
                                   {answers?.length >
                                     questionType?.minAnswer && (
