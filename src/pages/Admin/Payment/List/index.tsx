@@ -149,7 +149,7 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
       case "onepays.vpc_TicketNo":
         if (payment.onepays?.length) {
           key = key.split(".")[1];
-          if (key === "amount") return payment.onepays[0].amount;
+          if (key === "amount") return Number(payment.onepays[0].amount ?? 0);
           return payment.onepays[0][key];
         }
         return;
@@ -200,7 +200,7 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
       
       const buffer = await workbook.xlsx.writeBuffer();
       const filedata: Blob = new Blob([buffer], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"});
-      FileSaver.saveAs(filedata, `Order ${moment().format("DD-MM-YYYY")}.xlsx`);
+      FileSaver.saveAs(filedata, `Order ${moment().format("DD-MM-YYYY HH:mm")}.xlsx`);
     } catch (err) {
       dispatch(setErrorMess(err));
     }

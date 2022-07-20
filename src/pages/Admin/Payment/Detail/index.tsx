@@ -89,7 +89,7 @@ const Detail = memo(({}: Props) => {
 
     const buffer = await workbook.xlsx.writeBuffer();
     const filedata: Blob = new Blob([buffer], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"});
-    FileSaver.saveAs(filedata, `Order ${id} payment details ${moment().format("DD-MM-YYYY")}.xlsx`);
+    FileSaver.saveAs(filedata, `Order ${id} payment details ${moment().format("DD-MM-YYYY HH:mm")}.xlsx`);
   };
 
   const onRedirectEdit = () => {
