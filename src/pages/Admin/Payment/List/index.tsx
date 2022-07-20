@@ -119,12 +119,12 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
       case "vat":
       case "totalAmount":
       case "usdToVNDRate":
-        return `${fCurrency2VND(payment[key] ?? 0)} VND`;
+        return payment[key] ?? 0;
       case "sampleSizeCostUSD":
       case "customQuestionCostUSD":
       case "vatUSD":
       case "totalAmountUSD":
-        return `${fCurrency2(payment[key] ?? 0)} USD`;
+        return payment[key] ?? 0;
       case "vatRate":
         return `${((payment[key] ?? 0) * 100)}%`;
       case "createdAt":
@@ -149,7 +149,7 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
       case "onepays.vpc_TicketNo":
         if (payment.onepays?.length) {
           key = key.split(".")[1];
-          if (key === "amount") return `${fCurrency2VND(payment.onepays[0].amount)} VND`;
+          if (key === "amount") return payment.onepays[0].amount;
           return payment.onepays[0][key];
         }
         return;

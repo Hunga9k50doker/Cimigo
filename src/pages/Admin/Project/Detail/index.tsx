@@ -7,7 +7,7 @@ import { routes } from "routers/routes"
 import { Project } from "models/project"
 import { AdminProjectService } from "services/admin/project"
 import { Box, Button, Card, CardContent, Grid, Paper, Tab, Table, TableBody, TableCell, TableHead, TableRow, Tabs, Tooltip, Typography } from "@mui/material"
-import { ArrowBackOutlined } from "@mui/icons-material"
+import { ArrowBackOutlined, EditOutlined } from "@mui/icons-material"
 import classes from './styles.module.scss'
 import clsx from "clsx"
 import { fCurrency2, fCurrency2VND } from "utils/formatNumber"
@@ -111,6 +111,11 @@ const Detail = memo(({ }: Props) => {
     return Math.round(rows.reduce((res, item) => res + (item.sampleSize || 0), 0))
   }
 
+  const onRedirectEdit = () => {
+    if (!project) return
+    dispatch(push(routes.admin.project.edit.replace(':id', `${project.id}`)));
+  }
+
   return (
     <div>
       <Box display="flex" justifyContent="space-between" alignContent="center" mb={4}>
@@ -126,6 +131,17 @@ const Detail = memo(({ }: Props) => {
           >
             Back
           </Button>
+          {project && (
+            <Button
+              sx={{ marginLeft: 2 }}
+              variant="contained"
+              color="primary"
+              onClick={onRedirectEdit}
+              startIcon={<EditOutlined />}
+            >
+              Edit
+            </Button>
+          )}
         </Box>
       </Box>
       <Grid container spacing={3}>

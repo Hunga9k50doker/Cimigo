@@ -1,4 +1,4 @@
-import { ArrowBackOutlined, FileDownload } from "@mui/icons-material";
+import { ArrowBackOutlined, EditOutlined, FileDownload } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Grid, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import PaymentStatus from "components/PaymentStatus";
 import TableHeader from "components/Table/TableHead";
@@ -76,7 +76,7 @@ const Detail = memo(({}: Props) => {
           case "orderId": row.push(item.userPaymentId ?? ""); break;
           case "merchTxnRef": row.push(item.vpc_MerchTxnRef || ""); break;
           case "orderInfo": row.push(item.vpc_OrderInfo || ""); break;
-          case "amount": row.push(`${fCurrency2(parseInt(item.amount || "0"))} VND`); break;
+          case "amount": row.push(parseInt(item.amount || "0")); break;
           case "ticketNo": row.push(item.vpc_TicketNo || ""); break;
           case "status": row.push(paymentStatuses.find((status) => status.id === item.status)?.name || ""); break;
           case "response": row.push(JSON.stringify(item.rawCallback || "")); break;
@@ -91,6 +91,11 @@ const Detail = memo(({}: Props) => {
     const filedata: Blob = new Blob([buffer], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"});
     FileSaver.saveAs(filedata, `Order ${id} payment details ${moment().format("DD-MM-YYYY")}.xlsx`);
   };
+
+  const onRedirectEdit = () => {
+    if (!payment) return
+    dispatch(push(routes.admin.payment.edit.replace(':id', `${payment.id}`)));
+  }
 
   return (
     <div>
@@ -112,6 +117,17 @@ const Detail = memo(({}: Props) => {
           >
             Back
           </Button>
+          {payment && (
+            <Button
+              sx={{ marginLeft: 2 }}
+              variant="contained"
+              color="primary"
+              onClick={onRedirectEdit}
+              startIcon={<EditOutlined />}
+            >
+              Edit
+            </Button>
+          )}
         </Box>
       </Box>
       <Grid container spacing={3}>
