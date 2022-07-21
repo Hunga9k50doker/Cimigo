@@ -175,7 +175,6 @@ const PaymentInfoPage = memo((props: Props) => {
             <Inputs
               title={t("field_phone_number")}
               name="phone"
-              optional
               type="text"
               placeholder={t("field_phone_number_placeholder")}
               translation-key-placeholder="field_phone_number_placeholder"
