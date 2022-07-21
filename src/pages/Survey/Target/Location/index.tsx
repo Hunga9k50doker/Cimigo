@@ -167,7 +167,7 @@ const Location = memo(({ projectId, project, questions }: Props) => {
                         <ListItem
                           key={group.id}
                           className={classes.listSecondaryAction}
-                          secondaryAction={groupsSelected[question.id]?.id === group.id ? <img src={Images.icSelect} /> : ""}
+                          secondaryAction={groupsSelected[question.id]?.id === group.id ? <img src={Images.icSelect} alt="" /> : ""}
                           disablePadding
                         >
                           <ListItemButton
@@ -229,7 +229,7 @@ const Location = memo(({ projectId, project, questions }: Props) => {
               </Grid>
             )
         }
-        return
+        return null
       })}
       <Grid classes={{ root: classes.rootBtn }}>
         <Buttons onClick={onUpdateTarget} disabled={isDisable()} btnType="Blue" children={t('common_save')} translation-key="common_save" padding="11px 58px" />

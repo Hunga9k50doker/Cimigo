@@ -7,7 +7,6 @@ import { ReducerType } from 'redux/reducers';
 import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
 import { authPaymentFail, getPayment } from '../models';
 import classes from './styles.module.scss';
-import clsx from "clsx";
 import { Grid } from "@mui/material"
 import Buttons from "components/Buttons";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
