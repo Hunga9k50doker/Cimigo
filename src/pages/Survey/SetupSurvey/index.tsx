@@ -914,7 +914,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                           <MoreVertIcon sx={{ color: "white" }} />
                         </IconButton>
                       )}
-                      <img src={item.image} alt="image pack" />
+                      <img src={item.image} alt="pack" />
                       <div className={classes.itemInfor}>
                         <div><p translation-key="project_brand">{t('project_brand')}: </p><span>{item.brand}</span></div>
                         <div><p translation-key="project_variant">{t('project_variant')}: </p><span>{item.variant}</span></div>
@@ -1125,7 +1125,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   }
                   {(enableAdditionalBrand() && !addRow && !additionalBrandEdit) && <TableRow hover className={classes.btnAddBrand} onClick={() => setAddRow(true)}>
                     <TableCell colSpan={4} variant="footer" align="center" scope="row">
-                      <div translation-key="setup_survey_add_brand_btn_add"><img src={Images.icAddBlue} /> {t('setup_survey_add_brand_btn_add')}</div>
+                      <div translation-key="setup_survey_add_brand_btn_add"><img src={Images.icAddBlue} alt="" /> {t('setup_survey_add_brand_btn_add')}</div>
                     </TableCell>
                   </TableRow>}
                 </TableBody>

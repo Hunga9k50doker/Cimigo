@@ -186,9 +186,11 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
       case ETab.Gender_And_Age_Quotas:
         return (
           <Grid classes={{ root: classes.age }}>
-            <a className={classes.switchTab} onClick={() => onChangeTab(ETab.Mums_Only)} translation-key="target_sub_tab_age_coverage_switch_mum_only">
-              {t('target_sub_tab_age_coverage_switch_mum_only')}
-            </a>
+            <span>
+              <a className={classes.switchTab} onClick={() => onChangeTab(ETab.Mums_Only)} translation-key="target_sub_tab_age_coverage_switch_mum_only">
+                {t('target_sub_tab_age_coverage_switch_mum_only')}
+              </a>
+            </span>
             {questionsAgeGender.map(question => (
               <Grid key={question.id} classes={{ root: classes.rootLocation }}>
                 <p>{question.title}</p>
@@ -223,9 +225,11 @@ const AgeCoverage = memo(({ projectId, project, questionsAgeGender, questionsMum
       case ETab.Mums_Only:
         return (
           <Grid classes={{ root: classes.momOnly }}>
-            <a className={classes.switchTab} onClick={() => onChangeTab(ETab.Gender_And_Age_Quotas)} translation-key="target_sub_tab_age_coverage_switch_gender_and_age">
-              {t('target_sub_tab_age_coverage_switch_gender_and_age')}
-            </a>
+            <span>
+              <a className={classes.switchTab} onClick={() => onChangeTab(ETab.Gender_And_Age_Quotas)} translation-key="target_sub_tab_age_coverage_switch_gender_and_age">
+                {t('target_sub_tab_age_coverage_switch_gender_and_age')}
+              </a>
+            </span>
             {questionsMum.map(question => (
               <Grid key={question.id} classes={{ root: classes.rootLocation }}>
                 <p>{question.title}</p>

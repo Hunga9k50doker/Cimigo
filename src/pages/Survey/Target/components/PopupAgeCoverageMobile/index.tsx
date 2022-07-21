@@ -212,7 +212,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeG
                   iconWrapper: classes.iconWrapper,
                 }}
                 id={`target-tab-gender-and-age`}
-                icon={<img src={activeTab === ETab.Gender_And_Age_Quotas ? Images.icTabGreen : Images.icTabGray} />}
+                icon={<img src={activeTab === ETab.Gender_And_Age_Quotas ? Images.icTabGreen : Images.icTabGray} alt="" />}
                 iconPosition="start"
               />
               <Tab
@@ -224,7 +224,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, projectId, project, questionsAgeG
                   root: classes.rootTab,
                   iconWrapper: classes.iconWrapper,
                 }}
-                icon={<img src={activeTab === ETab.Mums_Only ? Images.icTabGreen : Images.icTabGray} />}
+                icon={<img src={activeTab === ETab.Mums_Only ? Images.icTabGreen : Images.icTabGray} alt="" />}
                 iconPosition="start"
               />
             </Tabs>
