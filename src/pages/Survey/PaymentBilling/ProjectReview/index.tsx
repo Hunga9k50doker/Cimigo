@@ -18,8 +18,8 @@ import { AdditionalBrandService } from "services/additional_brand";
 import clsx from "clsx";
 import { TargetQuestionType } from "models/Admin/target";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
-import FileSaver from 'file-saver';
-import moment from "moment";
+//import FileSaver from 'file-saver';
+//import moment from "moment";
 import { PaymentService } from "services/payment";
 import { authPreviewOrPayment } from "../models";
 import { useTranslation } from "react-i18next";
@@ -140,16 +140,16 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     return isValidSampleSize() && isValidTarget() && isValidPacks() && isValidAdditionalBrand() && isValidBasic()
   }
 
-  const getInvoice = () => {
-    if (!project) return
-    dispatch(setLoading(true))
-    PaymentService.getInvoiceDemo(project.id)
-      .then(res => {
-        FileSaver.saveAs(res.data, `invoice-demo-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
-  }
+  // const getInvoice = () => {
+  //   if (!project) return
+  //   dispatch(setLoading(true))
+  //   PaymentService.getInvoiceDemo(project.id)
+  //     .then(res => {
+  //       FileSaver.saveAs(res.data, `invoice-demo-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+  //     })
+  //     .catch((e) => dispatch(setErrorMess(e)))
+  //     .finally(() => dispatch(setLoading(false)))
+  // }
 
   // const openNewTabContact = () => {
   //   window.open(`${process.env.REACT_APP_BASE_API_URL}/static/contract/contract.pdf`, '_blank').focus()
@@ -185,7 +185,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
           <Grid className={classes.left}>
             <div className={classes.solution}>
               <p className={classes.textGreen} translation-key="payment_billing_sub_tab_preview_solution">{t('payment_billing_sub_tab_preview_solution')}</p>
-              <span className={classes.textBlue}><img src={project?.solution.image || Images.icPack} />{project?.solution?.title}</span>
+              <span className={classes.textBlue}><img src={project?.solution.image || Images.icPack} alt="" />{project?.solution?.title}</span>
             </div>
             <div className={classes.expected}>
               <p className={classes.textGreen} translation-key="payment_billing_sub_tab_preview_expected_delivery">{t('payment_billing_sub_tab_preview_expected_delivery')}</p>

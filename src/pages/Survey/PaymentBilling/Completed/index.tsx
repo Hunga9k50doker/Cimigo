@@ -4,7 +4,6 @@ import images from "config/images";
 import { memo, useEffect, useMemo} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
-import { EPaymentStatus } from "models/payment";
 import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import Images from "config/images";
 import { PaymentService } from "services/payment";

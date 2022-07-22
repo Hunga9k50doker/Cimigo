@@ -1,13 +1,10 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import { Dialog, Grid, IconButton } from '@mui/material';
 import classes from './styles.module.scss';
 
 import Buttons from 'components/Buttons';
 import Images from "config/images";
 import { Folder } from 'models/folder';
-import { ProjectService } from 'services/project';
-import { useDispatch } from 'react-redux';
-import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
 
 interface PopupDeleteFolderProps {
   itemDelete: Folder,
@@ -18,7 +15,6 @@ interface PopupDeleteFolderProps {
 
 const PopupDeleteFolder = memo((props: PopupDeleteFolderProps) => {
   const { onCancel, onDelete, itemDelete } = props;
-  const dispatch = useDispatch()
 
   const _onCancel = () => {
     onCancel()
