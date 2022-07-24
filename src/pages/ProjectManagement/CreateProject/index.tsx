@@ -264,7 +264,7 @@ const CreateProject = () => {
                     return (
                       <Grid key={index} className={clsx({[classes.cardSelect]: selected}, classes.card)} onClick={() => hendleSolutionShow(item)}>
                         <div>
-                          <img src={item.image} alt="solution image" />
+                          <img src={item.image} alt="solution" />
                           <p>{item.title}</p>
                           <span>{item.description}</span>
                         </div>
@@ -292,7 +292,7 @@ const CreateProject = () => {
                     return (
                       <Grid key={index} className={classes.cardComing}>
                         <div translation-key="select_solution_coming_soon">{t('select_solution_coming_soon')}</div>
-                        <img src={item.image} alt="solution image" />
+                        <img src={item.image} alt="solution" />
                         <p>{item.title}</p>
                         <span>{item.description}</span>
                       </Grid>
