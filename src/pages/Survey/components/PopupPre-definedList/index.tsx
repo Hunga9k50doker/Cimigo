@@ -73,6 +73,7 @@ const PopupPreDefinedList = memo((props: Props) => {
           setAttributes(data)
         })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, project])
 
   const isDisabled = (item: Attribute) => {

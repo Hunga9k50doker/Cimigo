@@ -35,6 +35,7 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
       start: yup.string().required(t('setup_survey_popup_your_own_att_start_point_label_required')),
       end: yup.string().required(t('setup_survey_popup_your_own_att_end_point_label_required')),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const [expanded, setExpanded] = useState(false);
@@ -60,6 +61,7 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
       })
       setExpanded(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdd, itemEdit])
 
   useEffect(() => {
@@ -69,6 +71,7 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
         end: itemEdit.end
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemEdit])
 
   return (

@@ -74,6 +74,7 @@ const ChangePaymentMethod = memo(
           }),
         }),
       });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const {
@@ -99,6 +100,7 @@ const ChangePaymentMethod = memo(
         contactEmail: user?.email || "",
         contactPhone: user?.phone || "",
       });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     const onShowConfirmCancel = () => {

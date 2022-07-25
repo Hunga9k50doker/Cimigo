@@ -79,6 +79,7 @@ const PopupSingleChoice = (props: Props) => {
 
   useEffect(() => {
     initAnswer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -90,6 +91,7 @@ const PopupSingleChoice = (props: Props) => {
     } else {
       clearForm();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionEdit]);
 
   const _onSubmit = (data: CustomQuestionFormData) => {
