@@ -53,6 +53,7 @@ const Survey = () => {
       { name: t('payment_billing_tab'), path: routes.project.detail.paymentBilling.root, translation: 'payment_billing_tab' },
       { name: t('report_tab'), path: routes.project.detail.report, translation: 'report_tab' }
     ]
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const { id } = useParams<{ id?: string }>()

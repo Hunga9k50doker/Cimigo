@@ -27,6 +27,7 @@ const PopupMoveProject = memo((props: PopupMoveProjectProps) => {
   
   const allOption: OptionItem = useMemo(() => {
     return { id: -1, name: t('project_mgmt_all_projects') }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const [itemSelected, setItemSelected] = useState<OptionItem>(null);
@@ -38,12 +39,14 @@ const PopupMoveProject = memo((props: PopupMoveProjectProps) => {
 
   useEffect(() => {
     setItemSelected(project?.folder ? { id: project.folder.id, name: project.folder.name } : allOption)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project])
 
   useEffect(() => {
     const _options: OptionItem[] = folders?.map(it => ({ id: it.id, name: it.name })) || []
     _options.unshift(allOption)
     setOptions(_options)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [folders])
 
   const _onCancel = () => {

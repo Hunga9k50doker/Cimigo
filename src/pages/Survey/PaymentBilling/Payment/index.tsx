@@ -113,6 +113,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         }),
       taxCode: yup.string(),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
 
@@ -148,6 +149,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       dispatch(setLoading(false))
     }
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
 
   useEffect(() => {
@@ -173,6 +175,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       companyAddress: paymentInfo?.companyAddress || '',
       taxCode: paymentInfo?.taxCode || ''
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentInfo, user])
 
   const price = useMemo(() => {
@@ -196,6 +199,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       }
     });
     return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watch]);
 
   const checkHaveShowSkipInfor = (data: DataForm) => {
@@ -261,6 +265,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     }
     checkValidConfirm()
     authPreviewOrPayment(project, onRedirect)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project])
 
 

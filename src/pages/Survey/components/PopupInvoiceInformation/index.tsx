@@ -59,6 +59,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
       companyAddress: yup.string().required(t('field_company_address_vali_required')),
       taxCode: yup.string(),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const { register, handleSubmit, formState: { errors }, reset, control } = useForm<InvoiceInfoData>({

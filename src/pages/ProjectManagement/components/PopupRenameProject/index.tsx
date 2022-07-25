@@ -31,6 +31,7 @@ const PopupRenameProject = memo((props: PopupRenameProjectProps) => {
     return yup.object().shape({
       name: yup.string().required(t('field_project_name_vali_required'))
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
   
   const { onCancel, onSubmit, project } = props;
@@ -46,6 +47,7 @@ const PopupRenameProject = memo((props: PopupRenameProjectProps) => {
         name: project.name,
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project])
 
   const _onCancel = () => {

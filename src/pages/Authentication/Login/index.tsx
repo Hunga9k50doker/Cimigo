@@ -35,6 +35,7 @@ const Login = () => {
       password: yup.string()
         .required(t('field_password_vali_required')),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const { solutionId } = useSelector((state: ReducerType) => state.project)
@@ -53,6 +54,7 @@ const Login = () => {
       errorSubmit && setErrorSubmit(false)
     });
     return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watch]);
 
   const onSubmit = (data: LoginForm) => {

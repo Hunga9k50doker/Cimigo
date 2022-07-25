@@ -85,6 +85,7 @@ const AnswerSuggestionForm = memo(({ title, questionId, itemEdit, langEdit, onSu
         .catch((e) => dispatch(setErrorMess(e)))
     }
     fetchOption()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

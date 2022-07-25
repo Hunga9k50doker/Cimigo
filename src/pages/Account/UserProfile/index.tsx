@@ -56,6 +56,7 @@ const UserProfile = memo((props: Props) => {
                 name: yup.string().required()
             }).required(),
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language])
     const [countries, setCountries] = useState<OptionItem[]>([])
     const { register, handleSubmit, control, formState: { errors }, reset, watch } = useForm<UserFormData>({
@@ -75,6 +76,7 @@ const UserProfile = memo((props: Props) => {
             dispatch(setLoading(false))
         }
         fetchData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch])
 
     useEffect(() => {
@@ -89,6 +91,7 @@ const UserProfile = memo((props: Props) => {
                 phone: user.phone || '',
             })
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, reset])
 
     useEffect(() => {
@@ -107,6 +110,7 @@ const UserProfile = memo((props: Props) => {
             }
         })
         return () => subscription.unsubscribe()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watch])
 
     const onSubmit = (data: UserFormData) => {

@@ -55,6 +55,7 @@ const Report = memo(({ projectId }: Props) => {
                 allowFullScreen
                 frameBorder={0}
                 className={classes.iframe}
+                title="data-studio"
               >
               </iframe>
             )}

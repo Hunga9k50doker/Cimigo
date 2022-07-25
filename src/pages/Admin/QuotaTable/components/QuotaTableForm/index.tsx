@@ -131,6 +131,7 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
       }
       fetchData()
     } else setCalculationsData([])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionsSelected])
 
   const onChangeOriginal = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {

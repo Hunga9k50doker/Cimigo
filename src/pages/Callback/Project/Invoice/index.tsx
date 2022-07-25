@@ -33,6 +33,7 @@ const CallbackInvoice = () => {
         })
     }
     getInvoice()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
   return null
 }

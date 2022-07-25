@@ -66,6 +66,7 @@ const CreateProject = () => {
       { id: EStep.SELECT_SOLUTION, name: t('select_solution_title') },
       { id: EStep.CREATE_PROJECT, name: t('create_project_title') },
     ]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const schema = useMemo(() => {
@@ -79,6 +80,7 @@ const CreateProject = () => {
       variant: yup.string(),
       manufacturer: yup.string()
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const { solutionId } = useSelector((state: ReducerType) => state.project)
@@ -170,6 +172,7 @@ const CreateProject = () => {
         .finally(() => dispatch(setLoading(false)))
     }
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
 
   const onSubmit = (data: CreateProjectFormData) => {
@@ -206,6 +209,7 @@ const CreateProject = () => {
         })
       dispatch(setSolutionCreateProject(null))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [solutionId])
 
   return (
@@ -297,6 +301,8 @@ const CreateProject = () => {
                         <span>{item.description}</span>
                       </Grid>
                     )
+                  default:
+                    return null
                 }
               })}
             </Grid>

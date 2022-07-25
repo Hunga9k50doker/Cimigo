@@ -53,6 +53,7 @@ const Waiting = memo(({ }: Props) => {
 
   useEffect(() => {
     authWaiting(project, onRedirect)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project])
 
   return (

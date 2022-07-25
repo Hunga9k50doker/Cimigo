@@ -28,6 +28,7 @@ export const OnePayCallback = () => {
           }
         })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params])
   return null
 }

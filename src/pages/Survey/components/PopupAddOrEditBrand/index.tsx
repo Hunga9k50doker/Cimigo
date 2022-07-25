@@ -34,6 +34,7 @@ const PopupAddOrEditBrand = memo((props: Props) => {
       manufacturer: yup.string().required(t('setup_survey_add_brand_popup_manufacturer_required')),
       variant: yup.string().required(t('setup_survey_add_brand_popup_variant_required')),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<BrandFormData>({
@@ -53,6 +54,7 @@ const PopupAddOrEditBrand = memo((props: Props) => {
         variant: ''
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemEdit, isAdd])
 
   useEffect(() => {
@@ -63,6 +65,7 @@ const PopupAddOrEditBrand = memo((props: Props) => {
         variant: itemEdit.variant,
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemEdit])
 
   return (

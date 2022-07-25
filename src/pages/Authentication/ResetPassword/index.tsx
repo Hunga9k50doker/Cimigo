@@ -47,6 +47,7 @@ const ResetPassword = () => {
         .oneOf([yup.ref('password')], t('field_confirm_new_password_vali_password_do_not_match'))
         .required(t('field_confirm_new_password_vali_required')),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
 

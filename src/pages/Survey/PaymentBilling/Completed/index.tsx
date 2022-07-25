@@ -47,6 +47,7 @@ const Completed = memo(({ }: Props) => {
 
   useEffect(() => {
     authCompleted(project, onRedirect)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project])
 
   return (

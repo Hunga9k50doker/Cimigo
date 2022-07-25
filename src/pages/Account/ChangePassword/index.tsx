@@ -38,6 +38,7 @@ const ChangePassword = memo((props: Props) => {
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const schema = useMemo(() => {
@@ -58,6 +59,7 @@ const ChangePassword = memo((props: Props) => {
         )
         .required(t("field_confirm_new_password_vali_required")),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language, isEmptyPassword]);
 
   const {

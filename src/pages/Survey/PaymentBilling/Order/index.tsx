@@ -63,6 +63,7 @@ const Order = memo(({ }: Props) => {
 
   useEffect(() => {
     authOrder(project, onRedirect)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
 
 
