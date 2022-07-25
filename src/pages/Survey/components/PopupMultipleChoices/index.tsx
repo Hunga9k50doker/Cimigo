@@ -273,6 +273,11 @@ const PopupMultipleChoices = (props: Props) => {
                                 )}
                               </Grid>
                               <Grid className={classes.rowToggleSwitch}>
+                                <div className={classes.errAns}>
+                                  {!ans.title &&
+                                    !!errors.answers?.length &&
+                                    errors.answers[index]?.title?.message}
+                                </div>
                                 <Grid
                                   sx={{
                                     marginTop: "12px",
@@ -293,11 +298,6 @@ const PopupMultipleChoices = (props: Props) => {
                                     {t("setup_survey_popup_exclusive_option_title")}
                                   </span>
                                 </Grid>
-                                <div className={classes.errAns}>
-                                  {!ans.title &&
-                                    !!errors.answers?.length &&
-                                    errors.answers[index]?.title?.message}
-                                </div>
                               </Grid>
                             </div>
                           )}
