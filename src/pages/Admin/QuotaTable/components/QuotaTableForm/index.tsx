@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowBackOutlined, Save } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Chip, Grid, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
 import { memo, useEffect, useState } from "react"
@@ -16,6 +16,7 @@ import { TargetQuestionService } from "services/admin/target_question";
 import { TargetAnswer, TargetQuestion } from "models/Admin/target";
 import { TargetAnswerService } from "services/admin/target_answer";
 import _ from "lodash";
+import React from "react";
 
 const schema = yup.object().shape({
   title: yup.string().required('Title is required.'),
@@ -29,6 +30,7 @@ const schema = yup.object().shape({
 
 export interface CalculationItem {
   answers: TargetAnswer[],
+  isDefault?: boolean,
   original: number
 }
 
@@ -39,7 +41,8 @@ export interface QuotaTableFormData {
   questionIds: OptionItem[];
   calculations: {
     answerIds: number[]
-    original: number
+    original: number,
+    isDefault?: boolean
   }[];
 }
 
@@ -79,7 +82,7 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
     const fetchOption = async () => {
       TargetQuestionService.getQuestions({ take: 9999 })
         .then((res) => {
-          setTargetQuestions((res.data as TargetQuestion[]).map((it) => ({ id: it.id, name: it.name })))
+          setTargetQuestions((res.data as TargetQuestion[]).map((it) => ({ id: it.id, name: it.name})))
         })
         .catch((e) => dispatch(setErrorMess(e)))
     }
@@ -113,9 +116,9 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
                     const answersTemp = [...answers, item]
                     const answerIds = answersTemp.map(it => it.id).sort()
                     const config = itemEdit.quotaCalculations.find(temp => _.isEqual(temp.answerIds.sort(), answerIds))
-                    _calculationsData.push({ answers: [...answers, item], original: config?.original || 0 })
+                    _calculationsData.push({ answers: [...answers, item], original: config?.original || 0, isDefault: config.isDefault })
                   } else {
-                    _calculationsData.push({ answers: [...answers, item], original: 0 })
+                    _calculationsData.push({ answers: [...answers, item], original: 0, isDefault: false })
                   }
                 }
               })
@@ -138,8 +141,14 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
     setCalculationsData(_calculationsData)
   }
 
+  const onChangeIsDefault = (index: number) => {
+    const _calculationsData = [...calculationsData]
+    _calculationsData[index].isDefault = !_calculationsData[index].isDefault
+    setCalculationsData(_calculationsData)
+  }
+
   const checkIsValid = () => {
-    return isValid && !calculationsData.find(it => (it.original ?? null) === null)
+    return isValid && !calculationsData.find(it => !isValidCalculation(it))
   }
 
   const _onSubmit = (data: QuotaTableFormData) => {
@@ -148,9 +157,32 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
       ...data,
       calculations: calculationsData.map(it => ({
         answerIds: it.answers?.map(temp => temp.id),
-        original: it.original || 0
+        original: it.original || 0,
+        isDefault: it.isDefault
       }))
     })
+  }
+
+  const isShowCheckBox = (answers: TargetAnswer[]) => {
+    return !!answers.find(it => it.exclusive && it.targetAnswerGroup)
+  }
+
+  const isValidCalculation = (item: CalculationItem) => {
+    if (item.original) return true
+    const iTargetAnswerHaveGroup = item.answers.findIndex(it => it.targetAnswerGroup)
+    if (iTargetAnswerHaveGroup !== -1 && !isShowCheckBox(item.answers)) {
+      const targetAnswerGroup = item.answers[iTargetAnswerHaveGroup].targetAnswerGroup
+      return !!(calculationsData.find(row => {
+        const exclusive = row.answers.find(answer => answer.exclusive && answer.targetAnswerGroup?.id === targetAnswerGroup.id)
+        if (exclusive) {
+          const answers = _.cloneDeep(item.answers)
+          answers.splice(iTargetAnswerHaveGroup, 1, exclusive)
+          return row.isDefault && _.isEqual(row.answers.map(it => it.id).sort(), answers.map(it => it.id).sort())
+        }
+        return false
+      }))
+    }
+    return false
   }
 
   return (
@@ -229,22 +261,34 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
                               {questionsSelected.map(item => (
                                 <TableCell key={item.id}>{item.name}</TableCell>
                               ))}
+                              <TableCell>Default</TableCell>
                               <TableCell>Original</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
                             {calculationsData.map((item, index) => (
                               <TableRow key={index}>
-                                {item.answers.map(answer => {
-                                  return (
-                                    <TableCell key={answer.id}>{answer.name}</TableCell>
-                                  )
-                                })}
+                                {item.answers.map(answer => (
+                                  <TableCell key={answer.id}>
+                                    {answer.targetAnswerGroup && <Chip sx={{ marginRight: 1 }} label={answer.targetAnswerGroup.name} color="primary" variant="outlined" />}
+                                    {answer.name}
+                                  </TableCell>
+                                ))}
+                                <TableCell>
+                                  {isShowCheckBox(item.answers) && (
+                                    <Switch
+                                      checked={!!item?.isDefault}
+                                      onChange={() => onChangeIsDefault(index)}
+                                      inputProps={{ 'aria-label': 'controlled' }}
+                                    />
+                                  )}
+                                </TableCell>
                                 <TableCell>
                                   <Inputs
                                     name=""
                                     type="number"
                                     disabled={!!langEdit}
+                                    isShowError={!isValidCalculation(item)}
                                     value={item.original ?? ''}
                                     onChange={(e) => onChangeOriginal(e, index)}
                                   />

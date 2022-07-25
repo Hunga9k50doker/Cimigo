@@ -308,7 +308,7 @@ const Detail = memo(({ }: Props) => {
 
                                     {
                                       question.answers.map((answer) => (
-                                        <Typography display="flex" alignItems="center" marginLeft={4} variant="subtitle1" component="div">
+                                        <Typography key={answer.id} display="flex" alignItems="center" marginLeft={4} variant="subtitle1" component="div">
                                           Title: {" "}
                                           {answer.title}
                                           {answer.exclusive && <span className={classes.exclusiveBox}>exclusive</span>}

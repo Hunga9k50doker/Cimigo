@@ -24,7 +24,8 @@ interface InputsProps extends OutlinedInputProps {
   autoComplete?: string,
   errorMessage?: string | null,
   optional?: boolean,
-  infor?: string
+  infor?: string,
+  isShowError?: boolean,
 }
 const Inputs = memo((props: InputsProps) => {
   const { t } = useTranslation()
@@ -45,6 +46,7 @@ const Inputs = memo((props: InputsProps) => {
     optional,
     infor,
     titleRequired,
+    isShowError,
     ...rest
   } = props;
 
@@ -70,7 +72,7 @@ const Inputs = memo((props: InputsProps) => {
         defaultValue={defaultValue}
         value={value}
         variant="standard"
-        classes={{ root: clsx(!errorMessage ? classes.inputTextfield : classes.inputInvalid) }}
+        classes={{ root: clsx(!errorMessage && !isShowError ? classes.inputTextfield : classes.inputInvalid) }}
         className={className}
         autoComplete={autoComplete}
         endAdornment={!errorMessage ?

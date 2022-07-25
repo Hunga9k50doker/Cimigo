@@ -19,6 +19,7 @@ export interface QuotaCalculation {
   id: number;
   original: number;
   quotaTableId: number;
+  isDefault: boolean;
   answerIds: number[];
   createdAt: Date;
   updatedAt: Date;
