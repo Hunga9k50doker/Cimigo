@@ -337,6 +337,7 @@ const Target = memo(({ projectId }: Props) => {
                       value={field.value || ''}
                       onBlur={field.onBlur}
                       onChange={field.onChange}
+                      onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
                       autoFocus
                     />}
                   />
