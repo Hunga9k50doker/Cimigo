@@ -3,7 +3,7 @@ import { ArrowBackOutlined, Save } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Chip, Grid, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
-import { memo, useEffect, useState } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { routes } from "routers/routes";
@@ -82,7 +82,7 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
     const fetchOption = async () => {
       TargetQuestionService.getQuestions({ take: 9999 })
         .then((res) => {
-          setTargetQuestions((res.data as TargetQuestion[]).map((it) => ({ id: it.id, name: it.name})))
+          setTargetQuestions((res.data as TargetQuestion[]).map((it) => ({ id: it.id, name: it.name })))
         })
         .catch((e) => dispatch(setErrorMess(e)))
     }
@@ -166,6 +166,10 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
   const isShowCheckBox = (answers: TargetAnswer[]) => {
     return !!answers.find(it => it.exclusive && it.targetAnswerGroup)
   }
+
+  const isShowDefaultCol = useMemo(() => {
+    return !!calculationsData.find(it => isShowCheckBox(it.answers))
+  }, [calculationsData])
 
   const isValidCalculation = (item: CalculationItem) => {
     if (item.original) return true
@@ -261,7 +265,9 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
                               {questionsSelected.map(item => (
                                 <TableCell key={item.id}>{item.name}</TableCell>
                               ))}
-                              <TableCell>Default</TableCell>
+                              {isShowDefaultCol && (
+                                <TableCell>Default</TableCell>
+                              )}
                               <TableCell>Original</TableCell>
                             </TableRow>
                           </TableHead>
@@ -274,15 +280,17 @@ const QuotaTableForm = memo(({ itemEdit, langEdit, onSubmit }: Props) => {
                                     {answer.name}
                                   </TableCell>
                                 ))}
-                                <TableCell>
-                                  {isShowCheckBox(item.answers) && (
-                                    <Switch
-                                      checked={!!item?.isDefault}
-                                      onChange={() => onChangeIsDefault(index)}
-                                      inputProps={{ 'aria-label': 'controlled' }}
-                                    />
-                                  )}
-                                </TableCell>
+                                {isShowDefaultCol && (
+                                  <TableCell>
+                                    {isShowCheckBox(item.answers) && (
+                                      <Switch
+                                        checked={!!item?.isDefault}
+                                        onChange={() => onChangeIsDefault(index)}
+                                        inputProps={{ 'aria-label': 'controlled' }}
+                                      />
+                                    )}
+                                  </TableCell>
+                                )}
                                 <TableCell>
                                   <Inputs
                                     name=""
