@@ -624,20 +624,17 @@ const SetupSurvey = memo(({ id }: Props) => {
     return customQuestionType?.find(item => item.id === type);
   }
 
-  const questionTypeOpenQuestion = useMemo(() => (
-    findQuestionType(ECustomQuestionType.Open_Question)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), [customQuestionType]);
+  const questionTypeOpenQuestion = useMemo(() => findQuestionType(ECustomQuestionType.Open_Question)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  , [customQuestionType]);
 
-  const questionTypeSingleChoice = useMemo(() => (
-    findQuestionType(ECustomQuestionType.Single_Choice)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), [customQuestionType]);
+  const questionTypeSingleChoice = useMemo(() => findQuestionType(ECustomQuestionType.Single_Choice)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  , [customQuestionType]);
 
-  const questionTypeMultipleChoices = useMemo(() => (
-    findQuestionType(ECustomQuestionType.Multiple_Choices)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), [customQuestionType]);
+  const questionTypeMultipleChoices = useMemo(() => findQuestionType(ECustomQuestionType.Multiple_Choices)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  , [customQuestionType]);
 
   const onOpenPopupCustomQuestion = (type: ECustomQuestionType) => {
     switch (type) {
