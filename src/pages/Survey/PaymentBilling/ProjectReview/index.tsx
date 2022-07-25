@@ -103,6 +103,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       checkValidConfirm()
       return () => { isSubscribed = false }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project])
 
   const inValidTargetMess = () => {
@@ -161,6 +162,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
 
   useEffect(() => {
     authPreviewOrPayment(project, onRedirect)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project])
 
 
@@ -168,6 +170,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     return () => {
       if(cancelPayment) dispatch(setCancelPayment(false))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 

@@ -100,6 +100,7 @@ const Target = memo(({ projectId }: Props) => {
         img: imgTabAC
       },
     ]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const getSampleSizeConstConfig = () => {
@@ -122,6 +123,7 @@ const Target = memo(({ projectId }: Props) => {
         .min(getMinSampeSize(), t('target_sample_size_min', { number: getMinSampeSize() }))
         .max(getMaxSampeSize(), t('target_sample_size_max', { number: getMaxSampeSize() }))
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language, project])
 
   const { handleSubmit, formState: { errors, isValid }, reset, control } = useForm<CustomSampleSizeForm>({

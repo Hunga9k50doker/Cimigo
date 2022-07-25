@@ -106,16 +106,16 @@ enum SECTION {
   additional_attributes = 'additional-attributes'
 }
 
-interface IQueryString {
-  section?: string
-}
+// interface IQueryString {
+//   section?: string
+// }
 
 interface Props {
   id: number
 }
 
 const SetupSurvey = memo(({ id }: Props) => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   const dispatch = useDispatch()
   const { project } = useSelector((state: ReducerType) => state.project)
@@ -164,7 +164,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [singleChoiceEdit, setSingleChoiceEdit] = useState<CustomQuestion>();
   const [multipleChoicesEdit, setMultipleChoicesEdit] = useState<CustomQuestion>();
   const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
-  
+
   const [openConfirmDisableCustomQuestion, setOpenConfirmDisableCustomQuestion] = useState(false);
   const [anchorElMenuQuestions, setAnchorElMenuQuestions] = useState<null | HTMLElement>(null);
   const [anchorElMenuAttributes, setAnchorElMenuAttributes] = useState<null | HTMLElement>(null);
@@ -179,12 +179,14 @@ const SetupSurvey = memo(({ id }: Props) => {
         manufacturer: project.manufacturer
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
 
   useEffect(() => {
     if (project) {
       dispatch(setProjectReducer({ ...project, customQuestions: questions }))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questions]);
 
   const getPacks = () => {
@@ -254,6 +256,7 @@ const SetupSurvey = memo(({ id }: Props) => {
     getUserAttributes();
     getCustomQuestionType();
     getCustomQuestion();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   const onSubmitBI = (data: BasicInformationFormData) => {
@@ -596,17 +599,17 @@ const SetupSurvey = memo(({ id }: Props) => {
       return
     }
     dispatch(setLoading(true))
-      ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: enableCustomQuestion })
-        .then(() => {
-          if (!enableCustomQuestion) {
-            dispatch(setProjectReducer({...project, enableCustomQuestion: enableCustomQuestion, customQuestions: []}));
-            setQuestions([])
-          } else {
-            dispatch(setProjectReducer({...project, enableCustomQuestion: enableCustomQuestion}));
-          }
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
+    ProjectService.updateEnableCustomQuestion(id, { enableCustomQuestion: enableCustomQuestion })
+      .then(() => {
+        if (!enableCustomQuestion) {
+          dispatch(setProjectReducer({ ...project, enableCustomQuestion: enableCustomQuestion, customQuestions: [] }));
+          setQuestions([])
+        } else {
+          dispatch(setProjectReducer({ ...project, enableCustomQuestion: enableCustomQuestion }));
+        }
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
   const totalCustomQuestionPrice = () => {
@@ -621,11 +624,20 @@ const SetupSurvey = memo(({ id }: Props) => {
     return customQuestionType?.find(item => item.id === type);
   }
 
-  const questionTypeOpenQuestion = useMemo(() => findQuestionType(ECustomQuestionType.Open_Question), [customQuestionType]);
+  const questionTypeOpenQuestion = useMemo(() => (
+    findQuestionType(ECustomQuestionType.Open_Question)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), [customQuestionType]);
 
-  const questionTypeSingleChoice = useMemo(() => findQuestionType(ECustomQuestionType.Single_Choice), [customQuestionType]);
+  const questionTypeSingleChoice = useMemo(() => (
+    findQuestionType(ECustomQuestionType.Single_Choice)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), [customQuestionType]);
 
-  const questionTypeMultipleChoices = useMemo(() => findQuestionType(ECustomQuestionType.Multiple_Choices), [customQuestionType]);
+  const questionTypeMultipleChoices = useMemo(() => (
+    findQuestionType(ECustomQuestionType.Multiple_Choices)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), [customQuestionType]);
 
   const onOpenPopupCustomQuestion = (type: ECustomQuestionType) => {
     switch (type) {
@@ -889,7 +901,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               {editableProject(project) && (
                 <Grid className={classes.btnSave}>
                   <Buttons type={"submit"} padding="3px 13px" btnType="TransparentBlue" translation-key="common_save">
-                    <Save fontSize="small" sx={{marginRight: "8px"}}/>{t('common_save')}
+                    <Save fontSize="small" sx={{ marginRight: "8px" }} />{t('common_save')}
                   </Buttons>
                 </Grid>
               )}
@@ -1057,7 +1069,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                                 onClick={onAddOrEditBrand}
                                 translation-key="common_save"
                               >
-                                <Save fontSize="small" sx={{marginRight: "8px"}}/>{t('common_save')}
+                                <Save fontSize="small" sx={{ marginRight: "8px" }} />{t('common_save')}
                               </Buttons>
                             </TableCell>
                           </>
@@ -1118,7 +1130,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                           onClick={onAddOrEditBrand}
                           translation-key="common_save"
                         >
-                          <Save fontSize="small" sx={{marginRight: "8px"}}/>{t('common_save')}
+                          <Save fontSize="small" sx={{ marginRight: "8px" }} />{t('common_save')}
                         </Buttons>
                       </TableCell>
                     </TableRow>
@@ -1211,7 +1223,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   alignItems="center"
                   component="div"
                   key={index}
-                  classes={{ root: classes.rootListItem}}
+                  classes={{ root: classes.rootListItem }}
                   secondaryAction={
                     <div className={classes.btnAction}>
                       {editableProject(project) && (
@@ -1290,16 +1302,16 @@ const SetupSurvey = memo(({ id }: Props) => {
               <FormControl classes={{ root: classes.rootSelect }} >
                 <Button translation-key="setup_survey_add_att_menu_action_placeholder"
                   onClick={handleClickMenuAttributes}
-                  endIcon={<KeyboardArrowDownIcon/>}
+                  endIcon={<KeyboardArrowDownIcon />}
                   className={classes.selectType}
                   variant="outlined"
                   disabled={!enableAdditionalAttributes() || !editableProject(project)}>
                   {t('setup_survey_add_att_menu_action_placeholder')}
                 </Button>
-                <Menu 
+                <Menu
                   anchorEl={anchorElMenuAttributes}
                   open={Boolean(anchorElMenuAttributes)}
-                  MenuListProps={{'aria-labelledby':'attribute-type-button'}}
+                  MenuListProps={{ 'aria-labelledby': 'attribute-type-button' }}
                   onClose={handleCloseMenuAttributes}
                   PaperProps={{
                     className: classes.selectTypeMenu
@@ -1317,70 +1329,70 @@ const SetupSurvey = memo(({ id }: Props) => {
             </Grid>
             <Grid classes={{ root: classes.tip }}>
               <img src={Images.icTipGray} alt="" />
-              <p translation-key="setup_survey_add_att_tip" dangerouslySetInnerHTML={{__html: t('setup_survey_add_att_tip')}}></p>
+              <p translation-key="setup_survey_add_att_tip" dangerouslySetInnerHTML={{ __html: t('setup_survey_add_att_tip') }}></p>
             </Grid>
           </Grid>
           {project?.solution?.enableCustomQuestion && (
             <>
-            <div className={classes.line}></div>
-            <div className={clsx(classes.customQuestionTitle, {[classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion})} id="custom-questions" translation-key="setup_survey_custom_question_title">
-              5. {t("setup_survey_custom_question_title")} 
-              <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span> 
-              {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={() => onToggleCustomQuestion()}/> 
-              } 
-            
-              <span className={clsx(classes.customQuestionPrice, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">
-                {project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}
-              </span>
-            </div>
-            <div><span className={clsx(classes.customQuestionPriceMobile, {[classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}</span></div>
-            <Grid className={classes.flex}>
-              <p className={clsx({[classes.customQuestionSubTitleDisabled]: !project?.enableCustomQuestion})} translation-key="setup_survey_custom_question_sub_title">{t("setup_survey_custom_question_sub_title")}</p>
-              <Grid className={clsx({[classes.displayNone]: !project?.enableCustomQuestion})}>
-                <CustomQuestionDragList questions={questions} setQuestions={setQuestions} onUpdateOrderQuestion={onUpdateOrderQuestion} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
-                {/* ===================Custom questions mobile====================== */}
-                <CustomQuestionListMobile questions={questions} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
-              </Grid>
-              <Grid className={clsx(classes.select, {[classes.displayNone]: !project?.enableCustomQuestion})}>
-                <FormControl classes={{ root: classes.rootSelect }} >
-                  <Button 
-                    translation-key="setup_survey_custom_question_menu_action_placeholder" 
-                    onClick={handleClickMenuQuestions} 
-                    endIcon={<KeyboardArrowDownIcon/>}
-                    variant="outlined"
-                    className={classes.selectType}
-                    disabled={!editableProject(project) || questions.length >= maxCustomQuestion()}>
+              <div className={classes.line}></div>
+              <div className={clsx(classes.customQuestionTitle, { [classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion })} id="custom-questions" translation-key="setup_survey_custom_question_title">
+                5. {t("setup_survey_custom_question_title")}
+                <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span>
+                {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={() => onToggleCustomQuestion()} />
+                }
+
+                <span className={clsx(classes.customQuestionPrice, { [classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion })} translation-key="setup_survey_custom_question_cost_description">
+                  {project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}
+                </span>
+              </div>
+              <div><span className={clsx(classes.customQuestionPriceMobile, { [classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion })} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}</span></div>
+              <Grid className={classes.flex}>
+                <p className={clsx({ [classes.customQuestionSubTitleDisabled]: !project?.enableCustomQuestion })} translation-key="setup_survey_custom_question_sub_title">{t("setup_survey_custom_question_sub_title")}</p>
+                <Grid className={clsx({ [classes.displayNone]: !project?.enableCustomQuestion })}>
+                  <CustomQuestionDragList questions={questions} setQuestions={setQuestions} onUpdateOrderQuestion={onUpdateOrderQuestion} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
+                  {/* ===================Custom questions mobile====================== */}
+                  <CustomQuestionListMobile questions={questions} onEditQuestion={onEditQuestion} onShowConfirmDeleteQuestion={onShowConfirmDeleteQuestion} editableProject={editableProject(project)} />
+                </Grid>
+                <Grid className={clsx(classes.select, { [classes.displayNone]: !project?.enableCustomQuestion })}>
+                  <FormControl classes={{ root: classes.rootSelect }} >
+                    <Button
+                      translation-key="setup_survey_custom_question_menu_action_placeholder"
+                      onClick={handleClickMenuQuestions}
+                      endIcon={<KeyboardArrowDownIcon />}
+                      variant="outlined"
+                      className={classes.selectType}
+                      disabled={!editableProject(project) || questions.length >= maxCustomQuestion()}>
                       {t("setup_survey_custom_question_menu_action_placeholder")}
-                  </Button>
-                  <Menu  
-                    anchorEl={anchorElMenuQuestions} 
-                    open={Boolean(anchorElMenuQuestions)}
-                    MenuListProps={{'aria-labelledby':'question-type-button'}}
-                    onClose={handleCloseMenuQuestions}
-                    PaperProps={{
-                      className: classes.selectTypeMenu
-                    }}
-                  >
-                    {customQuestionType.map((item, index) => {
-                      const value = (index + 2) * 10;
-                      const image = item.id === ECustomQuestionType.Open_Question ? Images.icOpenQuestion : item.id === ECustomQuestionType.Single_Choice ? Images.icSingleChoice : item.id === ECustomQuestionType.Multiple_Choices ? Images.icMultipleChoices : null;
-                      return (
-                        <MenuItem value={value} onClick={() => onOpenPopupCustomQuestion(item.id)} key={item.id}>
-                          <div className={classes.questionType}>
-                            <div>
-                              <img src={image} alt="" />
-                              <p>{item.title}</p>
+                    </Button>
+                    <Menu
+                      anchorEl={anchorElMenuQuestions}
+                      open={Boolean(anchorElMenuQuestions)}
+                      MenuListProps={{ 'aria-labelledby': 'question-type-button' }}
+                      onClose={handleCloseMenuQuestions}
+                      PaperProps={{
+                        className: classes.selectTypeMenu
+                      }}
+                    >
+                      {customQuestionType.map((item, index) => {
+                        const value = (index + 2) * 10;
+                        const image = item.id === ECustomQuestionType.Open_Question ? Images.icOpenQuestion : item.id === ECustomQuestionType.Single_Choice ? Images.icSingleChoice : item.id === ECustomQuestionType.Multiple_Choices ? Images.icMultipleChoices : null;
+                        return (
+                          <MenuItem value={value} onClick={() => onOpenPopupCustomQuestion(item.id)} key={item.id}>
+                            <div className={classes.questionType}>
+                              <div>
+                                <img src={image} alt="" />
+                                <p>{item.title}</p>
+                              </div>
+                              <span>${fCurrency2(item.price)}</span>
                             </div>
-                            <span>${fCurrency2(item.price)}</span>
-                          </div>
-                        </MenuItem>
-                      )
-                    })}
-                  </Menu>    
-                </FormControl>
-                {editableProject(project) && questions.length >= maxCustomQuestion() && <p translation-key="setup_survey_custom_question_error_max">{t("setup_survey_custom_question_error_max", { max: maxCustomQuestion()})}</p>}
+                          </MenuItem>
+                        )
+                      })}
+                    </Menu>
+                  </FormControl>
+                  {editableProject(project) && questions.length >= maxCustomQuestion() && <p translation-key="setup_survey_custom_question_error_max">{t("setup_survey_custom_question_error_max", { max: maxCustomQuestion() })}</p>}
+                </Grid>
               </Grid>
-            </Grid>
             </>
           )}
         </Grid>
@@ -1502,10 +1514,10 @@ const SetupSurvey = memo(({ id }: Props) => {
                   >
                     <div className={classes.summaryCustomQuestion}>
                       <span>{t("setup_survey_summary_custom_question")} ({project?.enableCustomQuestion ? questions.length : 0})</span>
-                      <span className={clsx(classes.summaryCustomQuestionPrice, {[classes.summaryCustomQuestionPriceDisabled]: !project?.enableCustomQuestion})}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span>
+                      <span className={clsx(classes.summaryCustomQuestionPrice, { [classes.summaryCustomQuestionPriceDisabled]: !project?.enableCustomQuestion })}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span>
                     </div>
                   </StepLabel>
-                  <StepContent className={clsx(classes.rootConnector, {[classes.displayNone]: !project?.enableCustomQuestion})}>
+                  <StepContent className={clsx(classes.rootConnector, { [classes.displayNone]: !project?.enableCustomQuestion })}>
                     <ul>
                       {countQuestionType(ECustomQuestionType.Open_Question) > 0 && <li translation-key="setup_survey_summary_open_question">{t("setup_survey_summary_open_question")} ({countQuestionType(ECustomQuestionType.Open_Question)})</li>}
                       {countQuestionType(ECustomQuestionType.Single_Choice) > 0 && <li translation-key="setup_survey_summary_single_choice">{t("setup_survey_summary_single_choice")} ({countQuestionType(ECustomQuestionType.Single_Choice)})</li>}
@@ -1570,8 +1582,8 @@ const SetupSurvey = memo(({ id }: Props) => {
           onDelete={onDeleteAttribute}
         />
         {questionTypeOpenQuestion && (
-          <PopupOpenQuestion 
-            isOpen={openPopupOpenQuestion} 
+          <PopupOpenQuestion
+            isOpen={openPopupOpenQuestion}
             onClose={onClosePopupOpenQuestion}
             onSubmit={onAddOrEditOpenQuestion}
             questionEdit={openQuestionEdit}
@@ -1605,11 +1617,11 @@ const SetupSurvey = memo(({ id }: Props) => {
           onCancel={() => onCloseConfirmDeleteQuestion()}
           onDelete={onDeleteQuestion}
         />
-         <PopupConfirmDisableCustomQuestion 
-          isOpen={openConfirmDisableCustomQuestion} 
-          onCancel={onClosePopupConfirmDisableCustomQuestion} 
+        <PopupConfirmDisableCustomQuestion
+          isOpen={openConfirmDisableCustomQuestion}
+          onCancel={onClosePopupConfirmDisableCustomQuestion}
           onYes={onConfirmedDisableCustomQuestion}
-         />
+        />
       </Grid>
     </>
   );
