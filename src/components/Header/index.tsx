@@ -1,5 +1,5 @@
 import { Grid, IconButton, Menu, MenuItem } from "@mui/material";
-import { memo, useEffect, useState, useRef, useMemo } from "react";
+import { memo, useState, useRef, useMemo } from "react";
 import classes from './styles.module.scss';
 import cimigoLogo from 'assets/img/cimigo_logo.svg';
 import iconMenuOpen from 'assets/img/icon/menu-open.svg';
@@ -67,6 +67,7 @@ const Header = memo((props: HeaderProps) => {
         name: t('header_menu_FAQ'),
       }
     ]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
 
