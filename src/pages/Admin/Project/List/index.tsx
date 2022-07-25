@@ -1,4 +1,4 @@
-import { Add, DeleteOutlineOutlined, Done, EditOutlined, ExpandMoreOutlined, FilterAlt, HideSource } from "@mui/icons-material";
+import { DeleteOutlineOutlined, EditOutlined, ExpandMoreOutlined, FilterAlt } from "@mui/icons-material";
 import { Box, Button, Grid, IconButton, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography, Link } from "@mui/material";
 import clsx from "clsx";
 import FilderModal, { EFilterType, FilterOption, FilterValue } from "components/FilterModal";
@@ -236,12 +236,14 @@ const List = memo(({ sort, setSort, keyword, setKeyword, data, setData, filterDa
     if (!data) return 0
     if (inValidPage()) return data.meta.page - 2
     return data.meta.page - 1
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   useEffect(() => {
     if (inValidPage()) {
       handleChangePage(null, data.meta.page - 2)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   return (

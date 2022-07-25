@@ -36,7 +36,7 @@ const SampleSizeForm = memo(({ solutionId, itemEdit, onSubmit }: Props) => {
 
   const dispatch = useDispatch();
 
-  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<SampleSizeFormData>({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<SampleSizeFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });

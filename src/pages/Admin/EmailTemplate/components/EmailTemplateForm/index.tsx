@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowBackOutlined, Save } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, Grid, TextareaAutosize, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
 import { memo, useEffect } from "react"
