@@ -15,6 +15,7 @@ export const OnePayAgainLinkCallback = () => {
     if (id) {
       dispatch(push(routes.project.detail.paymentBilling.onPayPending.replace(":id", id)))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   return null

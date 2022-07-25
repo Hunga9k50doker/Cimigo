@@ -24,6 +24,7 @@ const CallbackCreateProject = () => {
     } else {
       dispatch(push(routes.project.create))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [solutionId, isLoggedIn])
   return null
 }

@@ -55,6 +55,7 @@ const Register = () => {
       phone: yup.string().matches(VALIDATION.phone, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }),
       company: yup.string(),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const [countries, setCountries] = useState<OptionItem[]>([])
