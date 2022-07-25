@@ -309,52 +309,6 @@ const PaymentPage = memo(({ }: PaymentProps) => {
             classes={{ root: classes.radioGroup }}
           >
             <FormControlLabel
-              value={EPaymentMethod.MAKE_AN_ORDER}
-              classes={{ root: classes.lable }}
-              control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
-              label={
-                <Grid classes={{ root: classes.order }}>
-                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_make_an_order"><img src={images.icOrder} alt="" />
-                    {t('payment_billing_sub_tab_payment_method_make_an_order')}
-                  </Grid>
-                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_make_an_order_sub">
-                    {t('payment_billing_sub_tab_payment_method_make_an_order_sub')}
-                  </p>
-                  {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
-                    <Box>
-                      <Inputs
-                        title={t('field_contact_name')}
-                        translation-key="field_contact_name"
-                        name="contactName"
-                        placeholder={t('field_contact_name_placeholder')}
-                        translation-key-placeholder="field_contact_name_placeholder"
-                        inputRef={register('contactName')}
-                        errorMessage={errors.contactName?.message}
-                      />
-                      <Inputs
-                        title={t('field_contact_email')}
-                        translation-key="field_contact_email"
-                        name="contactEmail"
-                        placeholder={t('field_contact_email_placeholder')}
-                        translation-key-placeholder="field_contact_email_placeholder"
-                        inputRef={register('contactEmail')}
-                        errorMessage={errors.contactEmail?.message}
-                      />
-                      <Inputs
-                        title={t('field_contact_phone')}
-                        translation-key="field_contact_phone"
-                        name="contactPhone"
-                        placeholder={t('field_contact_phone_placeholder')}
-                        translation-key-placeholder="field_contact_phone_placeholder"
-                        inputRef={register('contactPhone')}
-                        errorMessage={errors.contactPhone?.message}
-                      />
-                    </Box>
-                  )}
-                </Grid>
-              }
-            />
-            <FormControlLabel
               value={EPaymentMethod.BANK_TRANSFER}
               classes={{ root: classes.lable }}
               control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
@@ -399,6 +353,52 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                   <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_credit_or_debit_sub">
                     {t("payment_billing_sub_tab_payment_method_credit_or_debit_sub")}
                   </p>
+                </Grid>
+              }
+            />
+            <FormControlLabel
+              value={EPaymentMethod.MAKE_AN_ORDER}
+              classes={{ root: classes.lable }}
+              control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
+              label={
+                <Grid classes={{ root: classes.order }}>
+                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_make_an_order"><img src={images.icOrder} alt="" />
+                    {t('payment_billing_sub_tab_payment_method_make_an_order')}
+                  </Grid>
+                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_make_an_order_sub">
+                    {t('payment_billing_sub_tab_payment_method_make_an_order_sub')}
+                  </p>
+                  {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
+                    <Box>
+                      <Inputs
+                        title={t('field_contact_name')}
+                        translation-key="field_contact_name"
+                        name="contactName"
+                        placeholder={t('field_contact_name_placeholder')}
+                        translation-key-placeholder="field_contact_name_placeholder"
+                        inputRef={register('contactName')}
+                        errorMessage={errors.contactName?.message}
+                      />
+                      <Inputs
+                        title={t('field_contact_email')}
+                        translation-key="field_contact_email"
+                        name="contactEmail"
+                        placeholder={t('field_contact_email_placeholder')}
+                        translation-key-placeholder="field_contact_email_placeholder"
+                        inputRef={register('contactEmail')}
+                        errorMessage={errors.contactEmail?.message}
+                      />
+                      <Inputs
+                        title={t('field_contact_phone')}
+                        translation-key="field_contact_phone"
+                        name="contactPhone"
+                        placeholder={t('field_contact_phone_placeholder')}
+                        translation-key-placeholder="field_contact_phone_placeholder"
+                        inputRef={register('contactPhone')}
+                        errorMessage={errors.contactPhone?.message}
+                      />
+                    </Box>
+                  )}
                 </Grid>
               }
             />
