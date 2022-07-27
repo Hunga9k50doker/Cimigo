@@ -19,7 +19,6 @@ import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
 import { AdminPaymentService } from "services/admin/payment";
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import ExcelJS from "exceljs";
 import FileSaver from "file-saver";
 import { worksheetCols } from "./model";
@@ -276,12 +275,14 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
     if (!data) return 0
     if (inValidPage()) return data.meta.page - 2
     return data.meta.page - 1
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   useEffect(() => {
     if (inValidPage()) {
       handleChangePage(null, data.meta.page - 2)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   const getPaymentMethod = (item: Payment) => {

@@ -31,6 +31,7 @@ const OnePayPending = memo(({}: Props) => {
 
   useEffect(() => {
     authPaymentFail(project, onRedirect)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project])
 
   const onCancelPayment = () => {

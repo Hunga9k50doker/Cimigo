@@ -85,7 +85,7 @@ const AnswerForm = memo(({ title, questionId, itemEdit, langEdit, onSubmit }: Pr
         .catch((e) => dispatch(setErrorMess(e)))
     }
     fetchOption()
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
 
   return (

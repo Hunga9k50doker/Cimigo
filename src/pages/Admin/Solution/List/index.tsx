@@ -170,12 +170,14 @@ const List = memo(({ keyword, setKeyword, data, setData }: Props) => {
     if (!data) return 0
     if (inValidPage()) return data.meta.page - 2
     return data.meta.page - 1
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   useEffect(() => {
     if (inValidPage()) {
       handleChangePage(null, data.meta.page - 2)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   return (

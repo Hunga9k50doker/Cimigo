@@ -58,6 +58,7 @@ const Quotas = memo(({ projectId }: Props) => {
     if (project?.targets?.length) {
       getQuotas()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project])
 
   const checkHasGroupCell = (quota: Quota, questionId: number) => {

@@ -29,6 +29,7 @@ const ForgotPassword = () => {
         .email(t('field_email_vali_email'))
         .required(t('field_email_vali_required')),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const dispatch = useDispatch()

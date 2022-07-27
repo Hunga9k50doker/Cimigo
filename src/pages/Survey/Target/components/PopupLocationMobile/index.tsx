@@ -236,6 +236,8 @@ const PopupLocationMobile = memo(({ isOpen, projectId, project, questions, onCan
                     </Grid>
                   </React.Fragment>
                 )
+              default:
+                return null
             }
           })}
           <PopupConfirmChange

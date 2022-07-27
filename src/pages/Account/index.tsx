@@ -58,6 +58,7 @@ const AccountPage = memo(({}: Props) => {
         name: t("auth_payment_info"),
       }
     ]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   const links = (

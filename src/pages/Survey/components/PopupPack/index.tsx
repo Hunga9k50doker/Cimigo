@@ -55,6 +55,7 @@ const PopupPack = memo((props: Props) => {
       manufacturer: yup.string().required(t('setup_survey_packs_popup_pack_manufacturer_required')),
       variant: yup.string().required(t('setup_survey_packs_popup_pack_variant_required')),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   const isMountedRef = useIsMountedRef();
@@ -85,6 +86,7 @@ const PopupPack = memo((props: Props) => {
       manufacturer: '',
       variant: ''
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, itemEdit])
 
   const image = watch('image')
@@ -100,6 +102,7 @@ const PopupPack = memo((props: Props) => {
       }
       clearErrors("image")
     } else setFileReview('')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image]);
 
   useEffect(() => {
@@ -113,6 +116,7 @@ const PopupPack = memo((props: Props) => {
         variant: itemEdit.variant,
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemEdit])
 
   const isValidSize = async (file: File) => {
@@ -205,14 +209,14 @@ const PopupPack = memo((props: Props) => {
                 <input {...getInputProps()} />
                 {fileReview ? (
                   <>
-                    <img src={fileReview} className={classes.imgPreview} />
+                    <img src={fileReview} className={classes.imgPreview} alt="preview" />
                     <IconButton aria-label="upload" className={classes.btnUpload}>
                       <CameraAlt />
                     </IconButton>
                   </>
                 ) : (
                   <>
-                    <img className={classes.imgAddPhoto} src={Images.icAddPhoto} />
+                    <img className={classes.imgAddPhoto} src={Images.icAddPhoto} alt="ic-add" />
                     <span translation-key="setup_survey_packs_popup_select_image">{t('setup_survey_packs_popup_select_image')}</span>
                   </>
                 )}
