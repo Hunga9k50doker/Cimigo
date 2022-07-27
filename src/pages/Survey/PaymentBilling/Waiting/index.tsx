@@ -17,7 +17,7 @@ import PopupInvoiceInformation from "pages/Survey/components/PopupInvoiceInforma
 interface Props {
 
 }
-
+// eslint-disable-next-line no-empty-pattern
 const Waiting = memo(({ }: Props) => {
 
   const { t } = useTranslation()
@@ -59,6 +59,7 @@ const Waiting = memo(({ }: Props) => {
   return (
     <Grid classes={{ root: classes.root }}>
       <WarningBox sx={{ maxWidth: '1000px' }}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <p translation-key="payment_billing_waiting_fill_purpose"> <a className={classes.clickOpenInvoice} onClick={() => setIsOpenPopupInvoice(true)} translation-key="payment_billing_waiting_fill_click">{t('payment_billing_waiting_fill_click')}</a> {t('payment_billing_waiting_fill_purpose')}</p>
       </WarningBox>
       <img src={images.imgPayment} alt="" />
@@ -67,6 +68,7 @@ const Waiting = memo(({ }: Props) => {
       <p className={classes.textBlue} translation-key="payment_billing_equivalent_to">({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)</p>
       <p className={classes.subTitle} style={{ marginBottom: 24 }} translation-key="payment_billing_waiting_sub_1">{t('payment_billing_waiting_sub_1')}</p>
       <p className={classes.subTitle} style={{ marginBottom: 24 }} translation-key="payment_billing_waiting_sub_2">
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         {t('payment_billing_waiting_sub_2')} <a onClick={unConfirmedPayment} translation-key="payment_billing_waiting_btn_back_transfer">{t('payment_billing_waiting_btn_back_transfer')}</a></p>
       <p className={classes.subTitle} style={{ marginBottom: 24 }} translation-key="payment_billing_waiting_sub_3"
         dangerouslySetInnerHTML={{ __html: t('payment_billing_waiting_sub_3') }}
