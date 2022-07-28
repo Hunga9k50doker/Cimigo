@@ -152,7 +152,7 @@ const ChangePaymentMethod = memo(
                     </Grid>
                   }
                 />
-                <FormControlLabel
+                {/* <FormControlLabel
                   value={EPaymentMethod.CREDIT_OR_DEBIT}
                   classes={{ root: classes.lable }}
                   control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
@@ -173,7 +173,7 @@ const ChangePaymentMethod = memo(
                       </p>
                     </Grid>
                   }
-                />
+                /> */}
                 <FormControlLabel
                   value={EPaymentMethod.MAKE_AN_ORDER}
                   classes={{ root: classes.lable }}
