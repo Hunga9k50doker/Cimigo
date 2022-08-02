@@ -17,7 +17,7 @@ export const authPreviewOrPayment = (project: Project, onRedirect: (route: strin
       if ([EPaymentMethod.MAKE_AN_ORDER, EPaymentMethod.BANK_TRANSFER].includes(payment.paymentMethodId)) {
         if (payment?.userConfirm) onRedirect(routes.project.detail.paymentBilling.waiting)
         else onRedirect(routes.project.detail.paymentBilling.order)
-      } else if ([EPaymentMethod.INTERNET_BANKING, EPaymentMethod.CREDIT_OR_DEBIT].includes(payment.paymentMethodId)) {
+      } else if ([EPaymentMethod.ONEPAY_GENERAL].includes(payment.paymentMethodId)) {
         if (payment.status === EPaymentStatus.FAILED) onRedirect(routes.project.detail.paymentBilling.onPayFail)
         else onRedirect(routes.project.detail.paymentBilling.onPayPending)
       }
@@ -40,7 +40,7 @@ export const authOrder = (project: Project, onRedirect: (route: string) => void)
       if (!payment) return
       if ([EPaymentMethod.MAKE_AN_ORDER, EPaymentMethod.BANK_TRANSFER].includes(payment.paymentMethodId)) {
         if (payment?.userConfirm) onRedirect(routes.project.detail.paymentBilling.waiting)
-      } else if ([EPaymentMethod.INTERNET_BANKING, EPaymentMethod.CREDIT_OR_DEBIT].includes(payment.paymentMethodId)) {
+      } else if ([EPaymentMethod.ONEPAY_GENERAL].includes(payment.paymentMethodId)) {
         if (payment.status === EPaymentStatus.FAILED) onRedirect(routes.project.detail.paymentBilling.onPayFail)
         else onRedirect(routes.project.detail.paymentBilling.onPayPending)
       }
@@ -63,7 +63,7 @@ export const authWaiting = (project: Project, onRedirect: (route: string) => voi
       if (!payment) return
       if ([EPaymentMethod.MAKE_AN_ORDER, EPaymentMethod.BANK_TRANSFER].includes(payment.paymentMethodId)) {
         if (!payment?.userConfirm) onRedirect(routes.project.detail.paymentBilling.order)
-      } else if ([EPaymentMethod.INTERNET_BANKING, EPaymentMethod.CREDIT_OR_DEBIT].includes(payment.paymentMethodId)) {
+      } else if ([EPaymentMethod.ONEPAY_GENERAL].includes(payment.paymentMethodId)) {
         if (payment.status === EPaymentStatus.FAILED) onRedirect(routes.project.detail.paymentBilling.onPayFail)
         else onRedirect(routes.project.detail.paymentBilling.onPayPending)
       }
@@ -87,7 +87,7 @@ export const authCompleted = (project: Project, onRedirect: (route: string) => v
       if ([EPaymentMethod.MAKE_AN_ORDER, EPaymentMethod.BANK_TRANSFER].includes(payment.paymentMethodId)) {
         if (payment?.userConfirm) onRedirect(routes.project.detail.paymentBilling.waiting)
         else onRedirect(routes.project.detail.paymentBilling.order)
-      } else if ([EPaymentMethod.INTERNET_BANKING, EPaymentMethod.CREDIT_OR_DEBIT].includes(payment.paymentMethodId)) {
+      } else if ([EPaymentMethod.ONEPAY_GENERAL].includes(payment.paymentMethodId)) {
         if (payment.status === EPaymentStatus.FAILED) onRedirect(routes.project.detail.paymentBilling.onPayFail)
         else onRedirect(routes.project.detail.paymentBilling.onPayPending)
       }
@@ -106,7 +106,7 @@ export const authPaymentFail = (project: Project, onRedirect: (route: string) =>
       if (!payment) return
       if ([EPaymentMethod.MAKE_AN_ORDER, EPaymentMethod.BANK_TRANSFER].includes(payment.paymentMethodId)) {
         if (!payment?.userConfirm) onRedirect(routes.project.detail.paymentBilling.order)
-      } else if ([EPaymentMethod.INTERNET_BANKING, EPaymentMethod.CREDIT_OR_DEBIT].includes(payment.paymentMethodId)) {
+      } else if ([EPaymentMethod.ONEPAY_GENERAL].includes(payment.paymentMethodId)) {
         if (payment.status === EPaymentStatus.FAILED) {
         } else onRedirect(routes.project.detail.paymentBilling.onPayPending)
       }

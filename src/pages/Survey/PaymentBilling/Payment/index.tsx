@@ -203,7 +203,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
   }, [watch]);
 
   const checkHaveShowSkipInfor = (data: DataForm) => {
-    if ([EPaymentMethod.INTERNET_BANKING, EPaymentMethod.CREDIT_OR_DEBIT].includes(data.paymentMethodId)) {
+    if ([EPaymentMethod.ONEPAY_GENERAL].includes(data.paymentMethodId)) {
       return !data.fullName || !data.companyName || !data.email || !data.phone || !data.countryId || !data.companyAddress
     }
     return false
@@ -325,28 +325,13 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               }
             />
             <FormControlLabel
-              value={EPaymentMethod.INTERNET_BANKING}
+              value={EPaymentMethod.ONEPAY_GENERAL}
               classes={{ root: classes.lable }}
               control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
               label={
                 <Grid classes={{ root: classes.order }}>
-                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_internet_banking">
-                    <img src={images.icInternetBanking} alt="" />{t("payment_billing_sub_tab_payment_method_internet_banking")}
-                  </Grid>
-                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_internet_banking_sub">
-                    {t("payment_billing_sub_tab_payment_method_internet_banking_sub")}
-                  </p>
-                </Grid>
-              }
-            />
-            {/* <FormControlLabel
-              value={EPaymentMethod.CREDIT_OR_DEBIT}
-              classes={{ root: classes.lable }}
-              control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
-              label={
-                <Grid classes={{ root: classes.order }}>
-                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_credit_or_debit">
-                    <img src={images.icCreditDebit} alt="" />{t("payment_billing_sub_tab_payment_method_credit_or_debit")}
+                  <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_onepay">
+                    <img src={images.icInternetBanking} alt="" />{t("payment_billing_sub_tab_payment_method_onepay")}
                   </Grid>
                   <Grid className={classes.methodImg}>
                     <img src={images.imgVisa} alt="" />
@@ -355,12 +340,12 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                     <img src={images.imgJCB} alt="" />
                     <img src={images.imgUnionpay} alt="" />
                   </Grid>
-                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_credit_or_debit_sub">
-                    {t("payment_billing_sub_tab_payment_method_credit_or_debit_sub")}
+                  <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_onepay_sub">
+                    {t("payment_billing_sub_tab_payment_method_onepay_sub")}
                   </p>
                 </Grid>
               }
-            /> */}
+            />
             <FormControlLabel
               value={EPaymentMethod.MAKE_AN_ORDER}
               classes={{ root: classes.lable }}

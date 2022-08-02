@@ -125,16 +125,18 @@ export const statuses: OptionItem[] = [
 
 export enum EPaymentMethod {
   CREDIT_OR_DEBIT = 1,
-  INTERNET_BANKING,
-  BANK_TRANSFER,
-  MAKE_AN_ORDER
+  INTERNET_BANKING = 2,
+  BANK_TRANSFER = 3,
+  MAKE_AN_ORDER = 4,
+  ONEPAY_GENERAL = 5
 }
 
 export const paymentMethods: OptionItem[] = [
   { id: EPaymentMethod.CREDIT_OR_DEBIT, name: "Credit / Debit Card" },
   { id: EPaymentMethod.INTERNET_BANKING, name: "ATM card / Bank account" },
   { id: EPaymentMethod.BANK_TRANSFER, name: "Bank transfer" },
-  { id: EPaymentMethod.MAKE_AN_ORDER, name: "Make an order" }
+  { id: EPaymentMethod.MAKE_AN_ORDER, name: "Make an order" },
+  { id: EPaymentMethod.ONEPAY_GENERAL, name: "ATM card (Internet Banking) / Credit / Debit Card" },
 ]
 
 export enum ETypeVerifyCode {
