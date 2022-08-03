@@ -7,7 +7,6 @@ import clsx from "clsx";
 import {
   Box,
   Divider,
-  FormControlLabel,
   Grid,
   Radio,
   RadioGroup,
@@ -84,6 +83,7 @@ const ChangePaymentMethod = memo(
       formState: { errors },
       watch,
       reset,
+      setValue
     } = useForm<ChangePaymentMethodFormData>({
       resolver: yupResolver(schema),
       mode: "onChange",
@@ -123,88 +123,93 @@ const ChangePaymentMethod = memo(
               name="paymentMethodId"
               control={control}
               render={({ field }) => <RadioGroup
-                {...field}
+                name={field.name}
+                value={field.value}
+                ref={field.ref}
+                onBlur={field.onBlur}
                 classes={{ root: classes.radioGroup }}
               >
-                <FormControlLabel
-                  value={EPaymentMethod.BANK_TRANSFER}
-                  classes={{ root: classes.lable }}
-                  control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
-                  label={
-                    <Grid classes={{ root: classes.order }}>
-                      <Grid classes={{ root: classes.title1 }} translation-key="payment_billing_sub_tab_payment_method_bank_transfer"><img src={images.icBank} alt="" />{t('payment_billing_sub_tab_payment_method_bank_transfer')}</Grid>
-                      <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_bank_transfer_sub">{t('payment_billing_sub_tab_payment_method_bank_transfer_sub')}</p>
+                <Box className={classes.lable}>
+                  <Radio 
+                    checked={field.value === EPaymentMethod.BANK_TRANSFER}
+                    onChange={() => setValue("paymentMethodId", EPaymentMethod.BANK_TRANSFER)} 
+                    classes={{ root: classes.rootRadio, checked: classes.checkRadio }} 
+                  />
+                  <Grid classes={{ root: classes.order }}>
+                    <Grid onClick={() => setValue("paymentMethodId", EPaymentMethod.BANK_TRANSFER)} classes={{ root: classes.title1 }} translation-key="payment_billing_sub_tab_payment_method_bank_transfer">
+                      <img src={images.icBank} alt="" />{t('payment_billing_sub_tab_payment_method_bank_transfer')}
                     </Grid>
-                  }
-                />
-                <FormControlLabel
-                  value={EPaymentMethod.ONEPAY_GENERAL}
-                  classes={{ root: classes.lable }}
-                  control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
-                  label={
-                    <Grid classes={{ root: classes.order }}>
-                      <Grid classes={{ root: classes.title }} translation-key="payment_billing_sub_tab_payment_method_onepay">
-                        <img src={images.icInternetBanking} alt="" />{t("payment_billing_sub_tab_payment_method_onepay")}
-                      </Grid>
-                      <Grid className={classes.methodImg}>
-                        <img src={images.imgVisa} alt="" />
-                        <img src={images.imgMastercard} alt="" />
-                        <img src={images.imgAmericanExpress} alt="" />
-                        <img src={images.imgJCB} alt="" />
-                        <img src={images.imgUnionpay} alt="" />
-                      </Grid>
-                      <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_onepay_sub">
-                        {t("payment_billing_sub_tab_payment_method_onepay_sub")}
-                      </p>
+                    <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_bank_transfer_sub">{t('payment_billing_sub_tab_payment_method_bank_transfer_sub')}</p>
+                  </Grid>
+                </Box>
+                <Box className={classes.lable}>
+                  <Radio 
+                    checked={field.value === EPaymentMethod.ONEPAY_GENERAL}
+                    onChange={() => setValue("paymentMethodId", EPaymentMethod.ONEPAY_GENERAL)} 
+                    classes={{ root: classes.rootRadio, checked: classes.checkRadio }} 
+                  />
+                  <Grid classes={{ root: classes.order }}>
+                    <Grid onClick={() => setValue("paymentMethodId", EPaymentMethod.ONEPAY_GENERAL)} classes={{ root: classes.title1 }} translation-key="payment_billing_sub_tab_payment_method_onepay">
+                      <img src={images.icInternetBanking} alt="" />{t("payment_billing_sub_tab_payment_method_onepay")}
                     </Grid>
-                  }
-                />
-                <FormControlLabel
-                  value={EPaymentMethod.MAKE_AN_ORDER}
-                  classes={{ root: classes.lable }}
-                  control={<Radio classes={{ root: classes.rootRadio, checked: classes.checkRadio }} />}
-                  label={
-                    <Grid classes={{ root: classes.order }}>
-                      <Grid classes={{ root: classes.title1 }} translation-key="payment_billing_sub_tab_payment_method_make_an_order"><img src={images.icOrder} alt="" />
-                        {t('payment_billing_sub_tab_payment_method_make_an_order')}
-                      </Grid>
-                      <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_make_an_order_sub">
-                        {t('payment_billing_sub_tab_payment_method_make_an_order_sub')}
-                      </p>
-                      {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
-                        <Box>
-                          <Inputs
-                            title={t('field_contact_name')}
-                            translation-key="field_contact_name"
-                            name="contactName"
-                            placeholder={t('field_contact_name_placeholder')}
-                            translation-key-placeholder="field_contact_name_placeholder"
-                            inputRef={register('contactName')}
-                            errorMessage={errors.contactName?.message}
-                          />
-                          <Inputs
-                            title={t('field_contact_email')}
-                            translation-key="field_contact_email"
-                            name="contactEmail"
-                            placeholder={t('field_contact_email_placeholder')}
-                            translation-key-placeholder="field_contact_email_placeholder"
-                            inputRef={register('contactEmail')}
-                            errorMessage={errors.contactEmail?.message}
-                          />
-                          <Inputs
-                            title={t('field_contact_phone')}
-                            translation-key="field_contact_phone"
-                            name="contactPhone"
-                            placeholder={t('field_contact_phone_placeholder')}
-                            translation-key-placeholder="field_contact_phone_placeholder"
-                            inputRef={register('contactPhone')}
-                            errorMessage={errors.contactPhone?.message}
-                          />
-                        </Box>
-                      )}
+                    <Grid className={classes.methodImg}>
+                      <img src={images.imgVisa} alt="" />
+                      <img src={images.imgMastercard} alt="" />
+                      <img src={images.imgAmericanExpress} alt="" />
+                      <img src={images.imgJCB} alt="" />
+                      <img src={images.imgUnionpay} alt="" />
                     </Grid>
-                  }
-                />
+                    <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_onepay_sub">
+                      {t("payment_billing_sub_tab_payment_method_onepay_sub")}
+                    </p>
+                  </Grid>
+                </Box>
+                <Box className={classes.lable}>
+                  <Radio 
+                    checked={field.value === EPaymentMethod.MAKE_AN_ORDER}
+                    onChange={() => setValue("paymentMethodId", EPaymentMethod.MAKE_AN_ORDER)} 
+                    classes={{ root: classes.rootRadio, checked: classes.checkRadio }} 
+                  />
+                  <Grid classes={{ root: classes.order }}>
+                    <Grid onClick={() => setValue("paymentMethodId", EPaymentMethod.MAKE_AN_ORDER)} classes={{ root: classes.title1 }} translation-key="payment_billing_sub_tab_payment_method_make_an_order"><img src={images.icOrder} alt="" />
+                      {t('payment_billing_sub_tab_payment_method_make_an_order')}
+                    </Grid>
+                    <p className={classes.titleSub} translation-key="payment_billing_sub_tab_payment_method_make_an_order_sub">
+                      {t('payment_billing_sub_tab_payment_method_make_an_order_sub')}
+                    </p>
+                    {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
+                      <Box>
+                        <Inputs
+                          title={t('field_contact_name')}
+                          translation-key="field_contact_name"
+                          name="contactName"
+                          placeholder={t('field_contact_name_placeholder')}
+                          translation-key-placeholder="field_contact_name_placeholder"
+                          inputRef={register('contactName')}
+                          errorMessage={errors.contactName?.message}
+                        />
+                        <Inputs
+                          title={t('field_contact_email')}
+                          translation-key="field_contact_email"
+                          name="contactEmail"
+                          placeholder={t('field_contact_email_placeholder')}
+                          translation-key-placeholder="field_contact_email_placeholder"
+                          inputRef={register('contactEmail')}
+                          errorMessage={errors.contactEmail?.message}
+                        />
+                        <Inputs
+                          title={t('field_contact_phone')}
+                          translation-key="field_contact_phone"
+                          name="contactPhone"
+                          placeholder={t('field_contact_phone_placeholder')}
+                          translation-key-placeholder="field_contact_phone_placeholder"
+                          inputRef={register('contactPhone')}
+                          errorMessage={errors.contactPhone?.message}
+                        />
+                      </Box>
+                    )}
+                  </Grid>
+                </Box>
               </RadioGroup>
               }
             />

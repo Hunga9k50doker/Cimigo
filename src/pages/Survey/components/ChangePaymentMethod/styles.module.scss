@@ -105,8 +105,8 @@
 }
 .rootRadio {
   color: #a5a5a5;
-  padding: 0 10px 10px 10px;
-  margin-right: 10px;
+  padding: 0px;
+  margin-right: 16px;
 }
 .title1 {
   display: flex;
@@ -116,6 +116,7 @@
   line-height: 140%;
   letter-spacing: 0.015em;
   color: #1f61a9;
+  cursor: pointer;
   img {
     margin-right: 10px;
   }
@@ -146,12 +147,15 @@
 .lable {
   display: flex;
   align-items: flex-start;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
 }
 .radioGroup {
   padding: 0px 20px;
   margin-bottom: 25px;
   @media only screen and (max-width: 767px) {
     padding: 0px;
+    .lable,
     label {
       padding: 0px 19px;
     }
