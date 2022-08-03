@@ -1,0 +1,355 @@
+.paper {
+    width: 790px;
+    max-width: 790px;
+  }
+  .header {
+    padding:0;
+  }
+  .content {
+    background-color: var(--cimigo-blue);
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 12px 12px 24px;
+    color: rgba(250, 250, 255, 1);
+    font-size: 22px;
+    line-height: 31px;
+  
+    .iconClose::after {
+      width: 32px;
+      height: 32px;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      content: "\00d7";
+      font-size: 30px;
+      border-radius: 100%;
+      color: rgba(23, 73, 127, 1);
+    }
+  
+    button {
+      padding: 0px;
+    }
+  }
+  .titleAdvice {
+    padding-left: 0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    text-align: justify;
+  }
+  .title {
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size:16px;
+  }
+  
+  .formControl {
+    padding-bottom: 26px;
+  }
+  
+  .classForm {
+    background-color: white;
+    min-height: 100px;
+    padding: 32px 28px 26px 28px;
+    position: relative;
+  }
+  
+  .addList {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    padding-left: 44px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+  }
+  
+  .rowInputAttributeControl {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    padding-left: 35px;
+    position: relative;
+    cursor: grab;
+    &:hover {
+      .iconDotsDrag {
+        visibility: visible;
+      }
+    }
+  }
+  .rowInputAttribute {
+    width: 90%;
+    margin-right: auto;
+    p {
+      display: none;
+    }
+    @media only screen and (max-width: 500px) {
+      p {
+        display: block;
+        font-size:14px;
+        font-weight:400;
+        margin-bottom:10px;
+      }
+    }
+  }
+  
+  .closeInputAttribute {
+    width: 13px;
+    height: 13px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    @media only screen and (max-width: 500px) {
+      margin-bottom:68px;
+    }
+  }
+  .inputContainer {
+    @media only screen and (max-width: 500px) {
+      display: contents;
+    }
+  }
+  
+  .inputAttribute {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    height: 22px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: 5px;
+    margin-right: 10px;
+    @media only screen and (max-width: 500px) {
+        margin-top:12px; 
+        margin-left: 8px;
+      }
+  }
+  
+  .iconDotsDrag {
+    width: 25px;
+    height: 40px;
+    position: absolute;
+    top: -9px;
+    left: 0;
+    visibility: hidden;
+  }
+  
+  .addOptions {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 16px;
+    color: rgba(28, 28, 28, 0.65);
+    cursor: pointer;
+  }
+  
+  .IconListAdd {
+    width: 20px;
+    height: 15px;
+    margin-right: 19px;
+    margin-left: -9px;
+  }
+  
+  .errAtt {
+    color: #af1c10;
+    font-size: 12px;
+    white-space: initial;
+    padding-top: 5px;
+    margin-left: 6px;
+    @media only screen and (max-width: 600px) {
+    margin-left: 7px;
+    }
+  }
+  
+  .inputQuestion {
+    border-bottom: none;
+    position: relative;
+    width: 100%;
+    min-height: 42px;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    .iconLanguage {
+      color: rgba(28, 28, 28, 0.65);
+      background-color: rgba(221, 221, 221, 1);
+      font-weight: 500;
+      font-size: 12px;
+      border-radius: 5px;
+      width: 29px;
+      height: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 14.6px;
+      text-transform: uppercase;
+    }
+  
+    input {
+      padding: 0px;
+    }
+  }
+  @media only screen and (max-width: 500px) {
+    .titlePopup {
+      font-size: 14px;
+    }
+  
+    .inputQuestion {
+      font-size: 14px;
+    }
+  
+    .inputAttribute {
+      font-size: 14px;
+    }
+  
+    .addOptions {
+      font-size: 14px;
+      margin-left: -27px;
+    }
+  
+    .IconListAdd {
+      margin-left: -11px;
+      margin-right: 13px;
+    }
+  
+  }
+  @media only screen and (max-width: 600px) {
+    .btnSave {
+      width: 92%;
+    }
+  
+    .errAns {
+      padding-left: 5px;
+      padding-top: 4px;
+    }
+  }
+  
+  @media only screen and (max-width: 767px) {
+      .title, .multiAttribute, .scaleRangeTitle{
+        color: var(--cimigo-blue);
+      }
+  }
+  .scaleRangeContainer {
+    margin-top:17px;
+    p {
+      font-weight:600;
+      font-size:16px;
+    }
+  }
+  
+  .contentScaleRange {
+    display: flex;
+    margin-top: 10px;
+    p {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        color: rgba(28, 28, 28, 0.65);
+    }
+    input:nth-child(2) {
+      max-width:20px;
+    }
+    input {
+        font-family: 'Montserrat';
+        font-weight: 400;
+        max-width: 36px;
+        height: 24px;
+        font-size: 16px;      
+        border: none;
+        border-bottom: 1px solid #8D8D8D;
+        outline: none;
+        margin: 0 10px;
+        text-decoration: none;
+    }
+    input::placeholder {
+      text-align: center;
+    }
+  }
+  
+  .multiAttributeControl {
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+  
+  }
+  .multiAttribute {
+    font-weight:600;
+    font-size:16px;
+  }
+  
+  .toggleMultipleAttributes {
+    @media only screen and (max-width: 600px) {
+      margin-left: auto;
+    }
+  }
+  
+  .multiAttributeTitle{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    font-style: normal;
+    text-align: justify;
+  }
+  .btnSave {
+    background-color: var(--cimigo-blue);
+    padding: 16px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16px;
+    text-transform: none;
+    margin-top: 0px;
+    margin-right: 4%;
+  }
+  .btnSave:hover {
+    background-color: var(--cimigo-blue);
+  }
+  .inputAttribute:focus-visible {
+    outline: none;
+  }
+  
+  
+  .footer {
+  padding: 0;
+  @media only screen and (max-width: 600px) {
+    display:flex;
+    flex-direction: column;
+    align-items: end;
+    margin-right: 4%;
+    .btnSave {
+      margin-right:0;
+      margin-top:16px;
+    }
+   }
+  }
+  
+  
+  .costContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin-right: 16px;
+    margin-top: 8px;
+    p {
+    color: #7C9911;
+    }
+    span {
+        font-size:12px;
+        font-weight:400;
+    }
+    @media only screen and (max-width: 767px) {
+      margin-right: 8px;
+    }
+  }
