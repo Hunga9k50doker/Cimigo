@@ -1,15 +1,16 @@
 .paper {
     width: 790px;
     max-width: 790px;
+    border-radius: 8px;
   }
   .header {
     padding:0;
   }
   .content {
-    background-color: var(--cimigo-blue);
+    background-color:  #17497F;
     display: flex;
     justify-content: space-between;
-    padding: 12px 12px 12px 24px;
+    padding:24px;
     color: rgba(250, 250, 255, 1);
     font-size: 22px;
     line-height: 31px;
