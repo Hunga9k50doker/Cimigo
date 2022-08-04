@@ -273,7 +273,7 @@
         height: 24px;
         font-size: 16px;      
         border: none;
-        border-bottom: 1px solid #8D8D8D;
+        border-bottom: 1px solid #D2D2D2;
         outline: none;
         margin: 0 10px;
         text-decoration: none;
@@ -325,7 +325,7 @@
     padding: 16px;
     color: white;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 16px;
     text-transform: none;
     margin-top: 0px;
@@ -362,6 +362,7 @@
     margin-top: 8px;
     p {
     color: #7C9911;
+    font-weight: 600;
     }
     span {
         font-size:12px;
