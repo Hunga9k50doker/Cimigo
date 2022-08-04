@@ -44,7 +44,12 @@ const PopupNumericScale = (props: Props) => {
   const { onClose, isOpen } = props;
 
   const [multipleAttributes, setMultipleAttributes] = useState(false);
+
   const [focusEleIdx, setFocusEleIdx] = useState(-1);
+  
+  const onToggleMultipleAttributes = () => {
+    setMultipleAttributes(!multipleAttributes);
+  };
 
   const initListAttributes = [
     {
@@ -57,8 +62,8 @@ const PopupNumericScale = (props: Props) => {
 
   const schema = yup.object().shape({
     title: yup.string().required("Question is required"),
-    from: yup.string().required("Required"),
-    to: yup.string().required("Required"),
+    from: yup.number().typeError('Only number').integer().required("Required"),
+    to: yup.number().typeError('Only number').required("Required"),
     attributes: yup
       .array(
         yup.object({
@@ -90,15 +95,6 @@ const PopupNumericScale = (props: Props) => {
       list.push({ id: i + 1 });
     }
     setValue("attributes", list);
-  };
-
-  useEffect(() => {
-    initAttribute();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const onToggleMultipleAttributes = () => {
-    setMultipleAttributes(!multipleAttributes);
   };
 
   const reorder = (items, startIndex, endIndex) => {
@@ -137,6 +133,8 @@ const PopupNumericScale = (props: Props) => {
   const clearForm = () => {
     reset({
       title: "",
+      from: null,
+      to: null,
       attributes: [],
     });
     initAttribute();
@@ -160,8 +158,11 @@ const PopupNumericScale = (props: Props) => {
     const maxAttributes = Math.max(...attributes.map((att) => att.id), 0);
     const new_attributes = {
       id: maxAttributes + 1,
+      userId: null,
       start: "",
       end: "",
+      createdAt: null,
+      updatedAt: null
     };
     setFocusEleIdx(attributes.length);
     setValue("attributes", [...attributes,new_attributes]);
@@ -174,6 +175,11 @@ const PopupNumericScale = (props: Props) => {
     const updated_attributes = [...attributes].filter((ans) => ans.id !== id);
     setValue("attributes", updated_attributes);
   };
+
+  useEffect(() => {
+    initAttribute();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Dialog
@@ -231,12 +237,19 @@ const PopupNumericScale = (props: Props) => {
               <div className={classes.contentScaleRange}>
                 <p>From</p>
                 <Grid>
-                  <input placeholder="0" tabIndex={2} {...register("from")}/>
+                  <input placeholder="0" 
+                  autoComplete="off" 
+                  tabIndex={2} 
+                  {...register("from")}
+                  />
                   <div className={classes.errAtt}>{errors.from?.message}</div>
                 </Grid>
                 <p>to</p>
                 <Grid>
-                  <input placeholder="max" tabIndex={3} {...register("to")}/>
+                  <input placeholder="max" 
+                  autoComplete="off" 
+                  tabIndex={3} 
+                  {...register("to")}/>
                   <div className={classes.errAtt}>{errors.to?.message}</div>
                 </Grid>
               </div> 
