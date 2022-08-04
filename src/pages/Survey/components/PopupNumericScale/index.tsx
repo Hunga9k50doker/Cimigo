@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState, useEffect, useMemo } from "react";
+import { SyntheticEvent, useState, useEffect } from "react";
 import {
   Button,
   IconButton,
@@ -40,6 +40,8 @@ interface Props {
 
 const PopupNumericScale = (props: Props) => {
   const { t } = useTranslation();
+
+  const { onClose, isOpen } = props;
 
   const [multipleAttributes, setMultipleAttributes] = useState(false);
   const [focusEleIdx, setFocusEleIdx] = useState(-1);
@@ -94,8 +96,6 @@ const PopupNumericScale = (props: Props) => {
     initAttribute();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const { onClose, isOpen } = props;
 
   const onToggleMultipleAttributes = () => {
     setMultipleAttributes(!multipleAttributes);
@@ -160,15 +160,11 @@ const PopupNumericScale = (props: Props) => {
     const maxAttributes = Math.max(...attributes.map((att) => att.id), 0);
     const new_attributes = {
       id: maxAttributes + 1,
-      title: "",
-      userID: "",
       start: "",
       end: "",
-      createAt: "",
-      updateAt: ""
     };
     setFocusEleIdx(attributes.length);
-    setValue("attributes", [...attributes, new_attributes]);
+    setValue("attributes", [...attributes,new_attributes]);
   };
 
   const deleteInputAtt = (id: number) => () => {
