@@ -59,11 +59,11 @@ const PopupNumericScale = (props: Props) => {
       id: "2",
     },
   ];
-
+  
   const schema = yup.object().shape({
     title: yup.string().required("Question is required"),
-    from: yup.number().typeError('Only number').integer().required("Required"),
-    to: yup.number().typeError('Only number').required("Required"),
+    from: yup.number().typeError('Required').integer().required("Required"),
+    to: yup.number().typeError('Required').required("Required"),
     attributes: yup
       .array(
         yup.object({
@@ -74,6 +74,7 @@ const PopupNumericScale = (props: Props) => {
       )
       .required(),
   });
+
 
   const {
     register,
@@ -86,6 +87,7 @@ const PopupNumericScale = (props: Props) => {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
+
 
   const attributes = watch("attributes");
 
@@ -241,6 +243,7 @@ const PopupNumericScale = (props: Props) => {
                   autoComplete="off" 
                   tabIndex={2} 
                   {...register("from")}
+                  type="number"
                   />
                   <div className={classes.errAtt}>{errors.from?.message}</div>
                 </Grid>
@@ -249,14 +252,16 @@ const PopupNumericScale = (props: Props) => {
                   <input placeholder="max" 
                   autoComplete="off" 
                   tabIndex={3} 
-                  {...register("to")}/>
+                  type="number"
+                  {...register("to")}
+                  min={Number(watch("from")) + 1}/>
                   <div className={classes.errAtt}>{errors.to?.message}</div>
                 </Grid>
               </div> 
             </Grid>
             <Grid>
               <div className={classes.multiAttributeControl}>
-                <span className={classes.multiAttribute} translation-key="">
+                <span className={multipleAttributes ? classes.multiAttribute : classes.disabledMultiAttribute } translation-key="">
                   Multiple attributes
                 </span>
                 <Toggle
@@ -264,7 +269,7 @@ const PopupNumericScale = (props: Props) => {
                   onChange={onToggleMultipleAttributes}
                 />
               </div>
-              <p className={classes.multiAttributeTitle}>
+              <p className={multipleAttributes ? classes.multiAttributeTitle : classes.disabledMultiAttributeTitle}>
                 Your question will be evaluated based on the following list of
                 attributes.
               </p>

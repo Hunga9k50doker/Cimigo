@@ -99,15 +99,15 @@
   }
   
   .closeInputAttribute {
+    position:absolute;
     width: 13px;
     height: 13px;
     margin-bottom: 10px;
+    top:0;
+    right:0;
     background-color: transparent;
     border: none;
     cursor: pointer;
-    @media only screen and (max-width: 500px) {
-      margin-bottom:68px;
-    }
   }
   .inputContainer {
     @media only screen and (max-width: 500px) {
@@ -235,12 +235,7 @@
       padding-top: 4px;
     }
   }
-  
-  @media only screen and (max-width: 767px) {
-      .title, .multiAttribute, .scaleRangeTitle{
-        color: var(--cimigo-blue);
-      }
-  }
+
   .scaleRangeContainer {
     margin-top:17px;
     p {
@@ -251,15 +246,25 @@
   
   .contentScaleRange {
     display: flex;
-    margin-top: 10px;
+    margin-top: 8px;
     p {
         font-weight: 400;
         font-size: 16px;
         line-height: 24px;
         color: rgba(28, 28, 28, 0.65);
     }
-    input:nth-child(2) {
-      max-width:20px;
+    > [class~="MuiGrid-root"]:nth-child(2){
+      input {
+        max-width:20px;
+      }
+      div {
+        margin-left:-8px;
+      }
+    }
+    > [class~="MuiGrid-root"]:nth-child(4){
+      div {
+        margin-left:0px;
+      }
     }
     input {
         font-family: 'Montserrat';
@@ -277,16 +282,29 @@
       text-align: center;
     }
   }
-  
+
+
   .multiAttributeControl {
     margin-top: 32px;
     display: flex;
     align-items: center;
-  
   }
+  .disrowInputAttribute{
+    display: none;
+  }
+
   .multiAttribute {
     font-weight:600;
     font-size:16px;
+  }
+
+  .disabledMultiAttribute {
+    color: #767676;
+  }
+
+  .disabledMultiAttributeTitle {
+    color: #767676;
+    font-weight: 400;
   }
   
   .toggleMultipleAttributes {
