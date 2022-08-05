@@ -1,7 +1,7 @@
 import { SyntheticEvent, useState, useEffect } from "react";
 import {
   Button,
-  IconButton,
+  OutlinedInput,
   Grid,
   Dialog,
   DialogTitle,
@@ -10,7 +10,8 @@ import {
   InputAdornment,
   Tooltip,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import CloseIcon from '@mui/icons-material/Close';
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   DragDropContext,
@@ -63,7 +64,7 @@ const PopupNumericScale = (props: Props) => {
   const schema = yup.object().shape({
     title: yup.string().required("Question is required"),
     from: yup.number().typeError('Required').integer().required("Required"),
-    to: yup.number().typeError('Required').required("Required"),
+    to: yup.number().typeError('Required').required("Required").min(yup.ref("from"),"Greater from"),
     attributes: yup
       .array(
         yup.object({
@@ -82,12 +83,12 @@ const PopupNumericScale = (props: Props) => {
     setValue,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<AttributeFormData>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-
 
   const attributes = watch("attributes");
 
@@ -194,10 +195,10 @@ const PopupNumericScale = (props: Props) => {
           <div className={classes.titlePopup} translation-key="">
             Add numeric scale
           </div>
-          <IconButton
-            className={classes.iconClose}
-            onClick={() => onClose()}
-          ></IconButton>
+          <CloseIcon 
+          className={classes.iconClose}
+          onClick={() => onClose()}>
+          </CloseIcon>
         </Grid>
       </DialogTitle>
       <form className={classes.formControl} onSubmit={handleSubmit(_onSubmit)}>
@@ -230,6 +231,7 @@ const PopupNumericScale = (props: Props) => {
               }
               type="text"
               autoComplete="off"
+              autoFocus
               inputProps={{ tabIndex: 1 }}
               inputRef={register("title")}
               errorMessage={errors.title?.message}
@@ -239,23 +241,41 @@ const PopupNumericScale = (props: Props) => {
               <div className={classes.contentScaleRange}>
                 <p>From</p>
                 <Grid>
-                  <input placeholder="0" 
-                  autoComplete="off" 
-                  tabIndex={2} 
-                  {...register("from")}
-                  type="number"
+                  <Controller
+                    name="from"
+                    control={control}
+                    render={({ field }) => <OutlinedInput
+                      className={classes.fromScale}
+                      fullWidth
+                      type="number"
+                      placeholder="0"
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
+                      autoComplete="off"
+                      inputProps={{tabIndex:2}}
+                    />}
                   />
                   <div className={classes.errAtt}>{errors.from?.message}</div>
                 </Grid>
                 <p>to</p>
                 <Grid>
-                  <input placeholder="max" 
-                  autoComplete="off" 
-                  tabIndex={3} 
-                  type="number"
-                  {...register("to")}
-                  min={Number(watch("from")) + 1}/>
-                  <div className={classes.errAtt}>{errors.to?.message}</div>
+                  <Controller
+                      name="to"
+                      control={control}
+                      render={({ field }) => <OutlinedInput
+                        className={classes.toScale}
+                        fullWidth
+                        type="number"
+                        placeholder="max"
+                        onBlur={field.onBlur}
+                        onChange={field.onChange}
+                        onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
+                        autoComplete="off"
+                        inputProps={{tabIndex:3}}
+                      />}
+                    />
+                    <div className={classes.errAtt}>{errors.to?.message}</div>
                 </Grid>
               </div> 
             </Grid>
@@ -349,7 +369,6 @@ const PopupNumericScale = (props: Props) => {
                                             att.id,
                                             checkAllAttNotValueEnd()
                                           )}
-                                          autoFocus={index === focusEleIdx}
                                         />
                                         <div className={classes.errAtt}>
                                           {!att.end && !!errors.attributes?.length &&

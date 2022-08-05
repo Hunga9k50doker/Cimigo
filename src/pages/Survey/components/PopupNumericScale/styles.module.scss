@@ -15,17 +15,13 @@
     font-size: 22px;
     line-height: 31px;
   
-    .iconClose::after {
+    .iconClose {
       width: 32px;
       height: 32px;
       background-color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      content: "\00d7";
-      font-size: 30px;
       border-radius: 100%;
       color: rgba(23, 73, 127, 1);
+      cursor: pointer;
     }
   
     button {
@@ -255,33 +251,44 @@
         color: rgba(28, 28, 28, 0.65);
     }
     > [class~="MuiGrid-root"]:nth-child(2){
-      input {
-        max-width:20px;
-      }
-      div {
-        margin-left:-8px;
-      }
+        div:nth-child(2) {
+          margin-left:-8px;   
+        }
     }
     > [class~="MuiGrid-root"]:nth-child(4){
-      div {
-        margin-left:0px;
-      }
+        div:nth-child(2) {
+          margin-left:0px;
+        }
     }
+  }
+
+  .fromScale, .toScale {
+    font-family: 'Montserrat';
+    font-weight: 400;
+    max-width: 36px;
+    height: 24px;
+    font-size: 16px;      
+    outline: none;
+    margin: 0 10px;
     input {
-        font-family: 'Montserrat';
-        font-weight: 400;
-        max-width: 36px;
-        height: 24px;
-        font-size: 16px;      
-        border: none;
-        border-bottom: 1px solid #D2D2D2;
-        outline: none;
-        margin: 0 10px;
-        text-decoration: none;
+      padding:0;
+      border: none;
+      border-bottom: 1px solid #D2D2D2;
     }
     input::placeholder {
       text-align: center;
     }
+    > [class~="MuiOutlinedInput-notchedOutline"] {
+      border:none;
+    }
+  }
+
+  .fromScale {
+    max-width:20px;
+  }
+
+  .fromScale::placeholder, .toScale::placeholder{
+    text-align: center;
   }
 
 
@@ -301,11 +308,14 @@
 
   .disabledMultiAttribute {
     color: #767676;
+    font-weight:600;
   }
 
   .disabledMultiAttributeTitle {
     color: #767676;
     font-weight: 400;
+    text-align: justify;
+    line-height: 24px;
   }
   
   .toggleMultipleAttributes {
