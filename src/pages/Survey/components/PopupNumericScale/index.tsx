@@ -1,7 +1,6 @@
 import { SyntheticEvent, useState, useEffect } from "react";
 import {
   Button,
-  OutlinedInput,
   Grid,
   Dialog,
   DialogTitle,
@@ -27,6 +26,10 @@ import Inputs from "components/Inputs";
 import Images from "config/images";
 import { UserAttribute } from "models/user_attribute";
 import { useTranslation } from "react-i18next";
+import ParagraphBody from "components/common/text/ParagraphBody"
+import HeadingTitle from "components/common/text/Heading5"
+import HeadingTitlePopup from "components/common/text/Heading3"
+import InputAttributes from "components/common/inputs/InputAttributes"
 export interface AttributeFormData {
   title?: string;
   from?:number;
@@ -192,9 +195,9 @@ const PopupNumericScale = (props: Props) => {
     >
       <DialogTitle className={classes.header}>
         <Grid className={classes.content}>
-          <div className={classes.titlePopup} translation-key="">
+          <HeadingTitlePopup translation-key="">
             Add numeric scale
-          </div>
+          </HeadingTitlePopup>
           <CloseIcon 
           className={classes.iconClose}
           onClick={() => onClose()}>
@@ -204,17 +207,16 @@ const PopupNumericScale = (props: Props) => {
       <form className={classes.formControl} onSubmit={handleSubmit(_onSubmit)}>
         <DialogContent sx={{ padding: "0px", paddingBottom: "10px" }}>
           <Grid className={classes.classForm}>
-            <p className={classes.titleAdvice}>
+            <ParagraphBody colorName="#1C1C1C" className={classes.titleAdvice}>
               The price of this demand will change based on the number of
               attributes you add, $149 for the first attribute, $32 for each
               subsequent attribute.
-            </p>
-            <p
-              className={classes.title}
+            </ParagraphBody>
+            <HeadingTitle
               translation-key="setup_survey_popup_question_title"
             >
               {t("setup_survey_popup_question_title")}
-            </p>
+            </HeadingTitle>
             <Inputs
               className={classes.inputQuestion}
               translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
@@ -237,14 +239,14 @@ const PopupNumericScale = (props: Props) => {
               errorMessage={errors.title?.message}
             />
             <Grid className={classes.scaleRangeContainer}>
-              <p className={classes.scaleRangeTitle}>Scale Range</p>
+              <HeadingTitle>Scale Range</HeadingTitle>
               <div className={classes.contentScaleRange}>
-                <p>From</p>
+                <ParagraphBody colorName="rgba(28, 28, 28, 0.65)">From</ParagraphBody>
                 <Grid>
                   <Controller
                     name="from"
                     control={control}
-                    render={({ field }) => <OutlinedInput
+                    render={({ field }) => <InputAttributes
                       className={classes.fromScale}
                       fullWidth
                       type="number"
@@ -258,13 +260,14 @@ const PopupNumericScale = (props: Props) => {
                   />
                   <div className={classes.errAtt}>{errors.from?.message}</div>
                 </Grid>
-                <p>to</p>
+                <ParagraphBody colorName="rgba(28, 28, 28, 0.65)">to</ParagraphBody>
                 <Grid>
                   <Controller
                       name="to"
                       control={control}
-                      render={({ field }) => <OutlinedInput
+                      render={({ field }) => <InputAttributes
                         className={classes.toScale}
+                        width="36px"
                         fullWidth
                         type="number"
                         placeholder="max"
@@ -281,20 +284,20 @@ const PopupNumericScale = (props: Props) => {
             </Grid>
             <Grid>
               <div className={classes.multiAttributeControl}>
-                <span className={multipleAttributes ? classes.multiAttribute : classes.disabledMultiAttribute } translation-key="">
+                <HeadingTitle colorName={!multipleAttributes && "#767676" } translation-key="">
                   Multiple attributes
-                </span>
+                </HeadingTitle>
                 <Toggle
                   className={classes.toggleMultipleAttributes}
                   onChange={onToggleMultipleAttributes}
                 />
               </div>
-              <p className={multipleAttributes ? classes.multiAttributeTitle : classes.disabledMultiAttributeTitle}>
+              <ParagraphBody colorName={multipleAttributes ? "#494949" : "#767676"}>
                 Your question will be evaluated based on the following list of
                 attributes.
-              </p>
+              </ParagraphBody>
               {multipleAttributes && (
-                <Grid sx={{ position: "relative", marginTop: "30px" }}>
+                <Grid sx={{ position: "relative", marginTop: "24px" }}>
                   <DragDropContext onDragEnd={onDragEnd}>
                     <Droppable droppableId="droppable-list-multiple-attributes">
                       {(provided) => (
@@ -321,7 +324,7 @@ const PopupNumericScale = (props: Props) => {
                                       src={Images.icDrag}
                                       alt=""
                                     />
-                                    <p>Attribute {att.id}</p>
+                                    <ParagraphBody colorName="#494949">Attribute {att.id}</ParagraphBody>
                                     <Grid
                                       container
                                       rowSpacing={1}
@@ -332,19 +335,25 @@ const PopupNumericScale = (props: Props) => {
                                         xs={6}
                                         className={classes.inputContainer}
                                       >
-                                        <input
-                                          type="text"
-                                          translation-key-placeholder=""
-                                          placeholder="Enter left label"
-                                          className={classes.inputAttribute}
-                                          autoComplete="off"
-                                          tabIndex={index + 4}
-                                          onChange={handleChangeInputAtt(
-                                            "start",
-                                            att.id,
-                                            checkAllAttNotValueStart()
-                                          )}
-                                          autoFocus={index === focusEleIdx}
+                                        <Controller
+                                          name="attributes"
+                                          control={control}
+                                          render={({ field }) => <InputAttributes
+                                            width="100%"
+                                            className={classes.inputAttribute}
+                                            type="text"
+                                            placeholder="Left label"
+                                            onBlur={field.onBlur}
+                                            onChange={handleChangeInputAtt(
+                                              "start",
+                                              att.id,
+                                              checkAllAttNotValueStart()
+                                            )}
+                                            onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
+                                            autoComplete="off"
+                                            inputProps={{tabIndex:index + 4}}
+                                            autoFocus={index === focusEleIdx}
+                                          />}
                                         />
                                         <div className={classes.errAtt}>
                                           {!att.start && !!errors.attributes?.length &&
@@ -357,18 +366,24 @@ const PopupNumericScale = (props: Props) => {
                                         xs={6}
                                         className={classes.inputContainer}
                                       >
-                                        <input
-                                          type="text"
-                                          translation-key-placeholder=""
-                                          placeholder="Enter right label"
-                                          className={classes.inputAttribute}
-                                          autoComplete="off"
-                                          tabIndex={index + 5}
-                                          onChange={handleChangeInputAtt(
-                                            "end",
-                                            att.id,
-                                            checkAllAttNotValueEnd()
-                                          )}
+                                        <Controller
+                                          name="attributes"
+                                          control={control}
+                                          render={({ field }) => <InputAttributes
+                                            className={classes.inputAttribute}
+                                            width="100%"
+                                            type="text"
+                                            placeholder="Right label"
+                                            onBlur={field.onBlur}
+                                            onChange={handleChangeInputAtt(
+                                              "end",
+                                              att.id,
+                                              checkAllAttNotValueEnd()
+                                            )}
+                                            onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
+                                            autoComplete="off"
+                                            inputProps={{tabIndex:index + 5}}
+                                          />}
                                         />
                                         <div className={classes.errAtt}>
                                           {!att.end && !!errors.attributes?.length &&
@@ -403,9 +418,9 @@ const PopupNumericScale = (props: Props) => {
                         className={classes.IconListAdd}
                         alt=""
                       />
-                      <p translation-key="setup_survey_popup_add_answer_title">
+                      <ParagraphBody colorName="rgba(28, 28, 28, 0.65)" translation-key="setup_survey_popup_add_answer_title">
                         {t("setup_survey_popup_add_answer_title")}
-                      </p>
+                      </ParagraphBody>
                     </button>
                   </Grid>
                 </Grid>
@@ -415,7 +430,7 @@ const PopupNumericScale = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <p> US$ 149 (3,240,258 VND)</p>
+            <HeadingTitle colorName="#7C9911" fontSize="18px"> US$ 149 (3,240,258 VND)</HeadingTitle>
             <span>Tax exclusive</span>
           </Grid>
           <Button
