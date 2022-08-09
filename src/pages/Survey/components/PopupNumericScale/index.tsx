@@ -27,9 +27,10 @@ import Images from "config/images";
 import { UserAttribute } from "models/user_attribute";
 import { useTranslation } from "react-i18next";
 import ParagraphBody from "components/common/text/ParagraphBody"
-import HeadingTitle from "components/common/text/Heading5"
-import HeadingTitlePopup from "components/common/text/Heading3"
-import InputAttributes from "components/common/inputs/InputAttributes"
+import Heading5 from "components/common/text/Heading5"
+import Heading3 from "components/common/text/Heading3"
+import InputLineTextfield from "components/common/inputs/InputLineTextfield"
+import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 export interface AttributeFormData {
   title?: string;
   from?:number;
@@ -148,7 +149,7 @@ const PopupNumericScale = (props: Props) => {
 
   const _onSubmit = (data: AttributeFormData) => {
     if (attributes.length !== 0) {
-      const atribute = {
+      const attribute = {
         title: data.title,
         attributes: data.attributes.map((item) => ({
           start: item.start,
@@ -195,9 +196,9 @@ const PopupNumericScale = (props: Props) => {
     >
       <DialogTitle className={classes.header}>
         <Grid className={classes.content}>
-          <HeadingTitlePopup translation-key="">
+          <Heading3 translation-key="">
             Add numeric scale
-          </HeadingTitlePopup>
+          </Heading3 >
           <CloseIcon 
           className={classes.iconClose}
           onClick={() => onClose()}>
@@ -207,16 +208,16 @@ const PopupNumericScale = (props: Props) => {
       <form className={classes.formControl} onSubmit={handleSubmit(_onSubmit)}>
         <DialogContent sx={{ padding: "0px", paddingBottom: "10px" }}>
           <Grid className={classes.classForm}>
-            <ParagraphBody colorName="#1C1C1C" className={classes.titleAdvice}>
+            <ParagraphBody colorName="var(--eerie-black)" translation-key="" className={classes.titleAdvice} >
               The price of this demand will change based on the number of
               attributes you add, $149 for the first attribute, $32 for each
               subsequent attribute.
             </ParagraphBody>
-            <HeadingTitle
+            <Heading5
               translation-key="setup_survey_popup_question_title"
             >
               {t("setup_survey_popup_question_title")}
-            </HeadingTitle>
+            </Heading5>
             <Inputs
               className={classes.inputQuestion}
               translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
@@ -239,14 +240,14 @@ const PopupNumericScale = (props: Props) => {
               errorMessage={errors.title?.message}
             />
             <Grid className={classes.scaleRangeContainer}>
-              <HeadingTitle>Scale Range</HeadingTitle>
+              <Heading5>Scale Range</Heading5>
               <div className={classes.contentScaleRange}>
-                <ParagraphBody colorName="rgba(28, 28, 28, 0.65)">From</ParagraphBody>
+                <ParagraphBody colorName="var(--eerie-black-65)">From</ParagraphBody>
                 <Grid>
                   <Controller
                     name="from"
                     control={control}
-                    render={({ field }) => <InputAttributes
+                    render={({ field }) => <InputLineTextfield
                       className={classes.fromScale}
                       fullWidth
                       type="number"
@@ -260,12 +261,12 @@ const PopupNumericScale = (props: Props) => {
                   />
                   <div className={classes.errAtt}>{errors.from?.message}</div>
                 </Grid>
-                <ParagraphBody colorName="rgba(28, 28, 28, 0.65)">to</ParagraphBody>
+                <ParagraphBody colorName="var(--eerie-black-65)">to</ParagraphBody>
                 <Grid>
                   <Controller
                       name="to"
                       control={control}
-                      render={({ field }) => <InputAttributes
+                      render={({ field }) => <InputLineTextfield
                         className={classes.toScale}
                         width="36px"
                         fullWidth
@@ -284,15 +285,15 @@ const PopupNumericScale = (props: Props) => {
             </Grid>
             <Grid>
               <div className={classes.multiAttributeControl}>
-                <HeadingTitle colorName={!multipleAttributes && "#767676" } translation-key="">
+                <Heading5 colorName={!multipleAttributes && "var(--gray-60)"} translation-key="">
                   Multiple attributes
-                </HeadingTitle>
+                </Heading5>
                 <Toggle
                   className={classes.toggleMultipleAttributes}
                   onChange={onToggleMultipleAttributes}
                 />
               </div>
-              <ParagraphBody colorName={multipleAttributes ? "#494949" : "#767676"}>
+              <ParagraphBody colorName={multipleAttributes ? "var(--gray-80)" : "var(--gray-60)"}>
                 Your question will be evaluated based on the following list of
                 attributes.
               </ParagraphBody>
@@ -324,7 +325,7 @@ const PopupNumericScale = (props: Props) => {
                                       src={Images.icDrag}
                                       alt=""
                                     />
-                                    <ParagraphBody colorName="#494949">Attribute {att.id}</ParagraphBody>
+                                    <ParagraphBody colorName="var(--gray-80)" className={classes.attributeTitle}>Attribute {att.id}</ParagraphBody>
                                     <Grid
                                       container
                                       rowSpacing={1}
@@ -338,7 +339,7 @@ const PopupNumericScale = (props: Props) => {
                                         <Controller
                                           name="attributes"
                                           control={control}
-                                          render={({ field }) => <InputAttributes
+                                          render={({ field }) => <InputLineTextfield
                                             width="100%"
                                             className={classes.inputAttribute}
                                             type="text"
@@ -369,7 +370,7 @@ const PopupNumericScale = (props: Props) => {
                                         <Controller
                                           name="attributes"
                                           control={control}
-                                          render={({ field }) => <InputAttributes
+                                          render={({ field }) => <InputLineTextfield
                                             className={classes.inputAttribute}
                                             width="100%"
                                             type="text"
@@ -418,7 +419,7 @@ const PopupNumericScale = (props: Props) => {
                         className={classes.IconListAdd}
                         alt=""
                       />
-                      <ParagraphBody colorName="rgba(28, 28, 28, 0.65)" translation-key="setup_survey_popup_add_answer_title">
+                      <ParagraphBody colorName="var(--eerie-black-65)" translation-key="setup_survey_popup_add_answer_title">
                         {t("setup_survey_popup_add_answer_title")}
                       </ParagraphBody>
                     </button>
@@ -430,8 +431,8 @@ const PopupNumericScale = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <HeadingTitle colorName="#7C9911" fontSize="18px"> US$ 149 (3,240,258 VND)</HeadingTitle>
-            <span>Tax exclusive</span>
+            <Heading5 colorName="var(--cimigo-green-dark)"> US$ 149 (3,240,258 VND)</Heading5>
+            <ParagraphExtraSmall colorName="var(--gray-90)">Tax exclusive</ParagraphExtraSmall>
           </Grid>
           <Button
             type="submit"

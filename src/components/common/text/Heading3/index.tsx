@@ -5,13 +5,13 @@ interface Props {
     colorName?: string;
 }
 
-const HeadingTitlePopup = styled(Typography)<Props>`
+const Heading3 = styled(Typography)<Props>`
     font-family: 'Montserrat';
     font-style: normal;
     font-weight: 600;
     font-size: 22px;
     line-height: 32px;
-    color: ${props => props.colorName || "#FAFAFF"};
+    color: ${props => props.colorName || "var(--ghost-white)"};
 `
 
-export default HeadingTitlePopup;
+export default Heading3;

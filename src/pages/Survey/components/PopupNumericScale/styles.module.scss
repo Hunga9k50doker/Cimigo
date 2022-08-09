@@ -90,10 +90,13 @@
     background-color: transparent;
     border: none;
     cursor: pointer;
+  }
+  .attributeTitle {
     @media only screen and (max-width: 500px) {
-      top: 0;
+      margin-left: 9px;
     }
   }
+
   .inputContainer {
     @media only screen and (max-width: 500px) {
       display: contents;
@@ -103,13 +106,12 @@
   .inputAttribute {
     margin-left: 5px;
     margin-right: 10px;
-
     @media only screen and (max-width: 500px) {
         margin-top:12px; 
         margin-left: 8px;
       }
   }
-  
+
   .iconDotsDrag {
     width: 25px;
     height: 40px;
@@ -143,10 +145,12 @@
     font-size: 12px;
     white-space: initial;
     padding-top: 5px;
-    margin-left: 6px;
-    @media only screen and (max-width: 600px) {
-    margin-left: 7px;
+    @media only screen and (max-width: 500px) {
+    margin-left: 17px;
     }
+    @media only screen and (min-width: 568px) {
+      margin-left: 15px;
+      }
   }
   
   .inputQuestion {
@@ -161,7 +165,6 @@
     line-height: 22px;
     display: flex;
     align-items: center;
-    margin-top: 12px;
     .iconLanguage {
       color: rgba(28, 28, 28, 0.65);
       background-color: rgba(221, 221, 221, 1);
@@ -219,7 +222,6 @@
   
   .contentScaleRange {
     display: flex;
-    margin-top: 8px;
     > [class~="MuiGrid-root"]:nth-child(2){
         div:nth-child(2) {
           margin-left:-8px;   
@@ -234,6 +236,9 @@
 
   .fromScale, .toScale {
     margin: 0 10px;
+    input {
+      padding: 0!important;
+    }
     > input::placeholder {
       text-align: center;
     }
