@@ -208,7 +208,7 @@ const PopupNumericScale = (props: Props) => {
       <form className={classes.formControl} onSubmit={handleSubmit(_onSubmit)}>
         <DialogContent sx={{ padding: "0px", paddingBottom: "10px" }}>
           <Grid className={classes.classForm}>
-            <ParagraphBody colorName="var(--eerie-black)" translation-key="" className={classes.titleAdvice} >
+            <ParagraphBody colorName="--eerie-black" translation-key="" className={classes.titleAdvice} >
               The price of this demand will change based on the number of
               attributes you add, $149 for the first attribute, $32 for each
               subsequent attribute.
@@ -242,7 +242,7 @@ const PopupNumericScale = (props: Props) => {
             <Grid className={classes.scaleRangeContainer}>
               <Heading5>Scale Range</Heading5>
               <div className={classes.contentScaleRange}>
-                <ParagraphBody colorName="var(--eerie-black-65)">From</ParagraphBody>
+                <ParagraphBody colorName="--eerie-black-65">From</ParagraphBody>
                 <Grid>
                   <Controller
                     name="from"
@@ -257,18 +257,17 @@ const PopupNumericScale = (props: Props) => {
                       onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
                       autoComplete="off"
                       inputProps={{tabIndex:2}}
+                      errorMessage={errors.from?.message}
                     />}
-                  />
-                  <div className={classes.errAtt}>{errors.from?.message}</div>
+                  />                
                 </Grid>
-                <ParagraphBody colorName="var(--eerie-black-65)">to</ParagraphBody>
+                <ParagraphBody colorName="--eerie-black-65">to</ParagraphBody>
                 <Grid>
                   <Controller
                       name="to"
                       control={control}
                       render={({ field }) => <InputLineTextfield
                         className={classes.toScale}
-                        width="36px"
                         fullWidth
                         type="number"
                         placeholder="max"
@@ -277,15 +276,15 @@ const PopupNumericScale = (props: Props) => {
                         onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
                         autoComplete="off"
                         inputProps={{tabIndex:3}}
+                        errorMessage={errors.to?.message}
                       />}
                     />
-                    <div className={classes.errAtt}>{errors.to?.message}</div>
                 </Grid>
               </div> 
             </Grid>
             <Grid>
               <div className={classes.multiAttributeControl}>
-                <Heading5 colorName={!multipleAttributes && "var(--gray-60)"} translation-key="">
+                <Heading5 colorName={!multipleAttributes && "--gray-60"} translation-key="">
                   Multiple attributes
                 </Heading5>
                 <Toggle
@@ -293,7 +292,7 @@ const PopupNumericScale = (props: Props) => {
                   onChange={onToggleMultipleAttributes}
                 />
               </div>
-              <ParagraphBody colorName={multipleAttributes ? "var(--gray-80)" : "var(--gray-60)"}>
+              <ParagraphBody colorName={multipleAttributes ? "--gray-80" : "--gray-60"}>
                 Your question will be evaluated based on the following list of
                 attributes.
               </ParagraphBody>
@@ -325,7 +324,7 @@ const PopupNumericScale = (props: Props) => {
                                       src={Images.icDrag}
                                       alt=""
                                     />
-                                    <ParagraphBody colorName="var(--gray-80)" className={classes.attributeTitle}>Attribute {att.id}</ParagraphBody>
+                                    <ParagraphBody colorName="--gray-80" className={classes.attributeTitle}>Attribute {att.id}</ParagraphBody>
                                     <Grid
                                       container
                                       rowSpacing={1}
@@ -340,7 +339,6 @@ const PopupNumericScale = (props: Props) => {
                                           name="attributes"
                                           control={control}
                                           render={({ field }) => <InputLineTextfield
-                                            width="100%"
                                             className={classes.inputAttribute}
                                             type="text"
                                             placeholder="Left label"
@@ -354,13 +352,11 @@ const PopupNumericScale = (props: Props) => {
                                             autoComplete="off"
                                             inputProps={{tabIndex:index + 4}}
                                             autoFocus={index === focusEleIdx}
+                                            errorMessage={!att.start && !!errors.attributes?.length &&
+                                              errors.attributes[index]?.start
+                                                ?.message}
                                           />}
                                         />
-                                        <div className={classes.errAtt}>
-                                          {!att.start && !!errors.attributes?.length &&
-                                            errors.attributes[index]?.start
-                                              ?.message}
-                                        </div>
                                       </Grid>
                                       <Grid
                                         item
@@ -372,7 +368,6 @@ const PopupNumericScale = (props: Props) => {
                                           control={control}
                                           render={({ field }) => <InputLineTextfield
                                             className={classes.inputAttribute}
-                                            width="100%"
                                             type="text"
                                             placeholder="Right label"
                                             onBlur={field.onBlur}
@@ -384,13 +379,11 @@ const PopupNumericScale = (props: Props) => {
                                             onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
                                             autoComplete="off"
                                             inputProps={{tabIndex:index + 5}}
+                                            errorMessage={!att.end && !!errors.attributes?.length &&
+                                              errors.attributes[index]?.end
+                                                ?.message}
                                           />}
                                         />
-                                        <div className={classes.errAtt}>
-                                          {!att.end && !!errors.attributes?.length &&
-                                            errors.attributes[index]?.end
-                                              ?.message}
-                                        </div>
                                       </Grid>
                                     </Grid>
                                   </div>
@@ -419,7 +412,7 @@ const PopupNumericScale = (props: Props) => {
                         className={classes.IconListAdd}
                         alt=""
                       />
-                      <ParagraphBody colorName="var(--eerie-black-65)" translation-key="setup_survey_popup_add_answer_title">
+                      <ParagraphBody colorName="--eerie-black-65" translation-key="setup_survey_popup_add_answer_title">
                         {t("setup_survey_popup_add_answer_title")}
                       </ParagraphBody>
                     </button>
@@ -431,8 +424,8 @@ const PopupNumericScale = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <Heading5 colorName="var(--cimigo-green-dark)"> US$ 149 (3,240,258 VND)</Heading5>
-            <ParagraphExtraSmall colorName="var(--gray-90)">Tax exclusive</ParagraphExtraSmall>
+            <Heading5 colorName="--cimigo-green-dark"> US$ 149 (3,240,258 VND)</Heading5>
+            <ParagraphExtraSmall colorName="--gray-90">Tax exclusive</ParagraphExtraSmall>
           </Grid>
           <Button
             type="submit"

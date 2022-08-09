@@ -12,7 +12,7 @@ const Heading5 = styled(Typography)<Props>`
     font-weight: 600;
     font-size: 16px;
     line-height: 24px;
-    color: ${props => props.colorName || "var(--eerie-black)"};
+    color: ${props => `var(${props.colorName || '--eerie-black'})`};
 `
 
 export default Heading5;

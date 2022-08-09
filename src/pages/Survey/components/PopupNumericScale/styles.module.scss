@@ -69,14 +69,12 @@
   .rowInputAttribute {
     width: 90%;
     margin-right: auto;
-    p {
+    .attributeTitle {
       display: none;
     }
     @media only screen and (max-width: 500px) {
-      p {
+      .attributeTitle {
         display: block;
-        font-size:14px;
-        font-weight:400;
       }
     }
   }
@@ -98,6 +96,12 @@
   }
 
   .inputContainer {
+    >div > [class~="MuiTypography-root"]{
+      margin-left: 15px;
+      @media only screen and (max-width: 500px) {
+        margin-left: 18px;
+      }
+    }
     @media only screen and (max-width: 500px) {
       display: contents;
     }
@@ -106,6 +110,12 @@
   .inputAttribute {
     margin-left: 5px;
     margin-right: 10px;
+    input {
+      padding: 0 0 0 9px;
+    }
+    img {
+      display: none;
+    }
     @media only screen and (max-width: 500px) {
         margin-top:12px; 
         margin-left: 8px;
@@ -234,10 +244,22 @@
     }
   }
 
+  .fromScale {
+      max-width:20px;
+  }
+
+  .toScale {
+      max-width:36px;
+  }
+
   .fromScale, .toScale {
     margin: 0 10px;
+    padding: 0!important;
+    img {
+      display: none;
+    }
     input {
-      padding: 0!important;
+      padding: 0;
     }
     > input::placeholder {
       text-align: center;

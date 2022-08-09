@@ -12,7 +12,7 @@ const ParagraphBody = styled(Typography)<Props>`
     font-size: 16px;
     line-height: 24px;
     text-align: justify;
-    color: ${props => props.colorName || "var(--gray-50)"};
+    color: ${props => `var(${props.colorName || '--gray-50'})`};
 `
 
 export default ParagraphBody;

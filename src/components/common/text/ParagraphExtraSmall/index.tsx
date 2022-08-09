@@ -12,7 +12,7 @@ const ParagraphExtraSmall = styled(Typography)<Props>`
     font-size: 12px;
     line-height: 16px;
     letter-spacing: 0.015em;
-    color: ${props => props.colorName || "var(--gray-90)"};
+    color: ${props => `var(${props.colorName || '--gray-90'})`};
 `
 
 export default ParagraphExtraSmall;
