@@ -2,7 +2,7 @@
   width: 100%;
 }
 .textTitle {
-  color: rgba(28, 28, 28, 0.65);
+  color: var(--eerie-black-65);
   font-size: 14px;
   font-weight: 400;
   line-height: 140%;
@@ -12,7 +12,7 @@
   margin: 0;
 }
 .textTitleInvalid {
-  color: #af1c10;
+  color: var(--cimigo-danger);
   font-size: 14px;
   font-weight: 400;
   line-height: 140%;
@@ -82,12 +82,12 @@
 }
 
 .optional {
-  color: #7c9911;
+  color: var(--cimigo-green-dark);
 }
 .textInfor {
   font-weight: 400;
   font-size: 12px;
-  color: rgba(28, 28, 28, 0.65);
+  color: var(--eerie-black-65);
   margin: 0;
   margin-top: 5px;
   padding-left: 16px;
@@ -98,7 +98,7 @@
   font-size: 12px;
   line-height: 140%;
   letter-spacing: 0.015em;
-  color: #af1c10;
+  color: var(--cimigo-danger);
   padding-top: 5px;
   padding-left: 16px;
   white-space: initial;
@@ -118,7 +118,7 @@
     margin: 0;
     font-weight: 500;
     font-size: 12px;
-    color: rgba(28, 28, 28, 0.65);
+    color: var(--eerie-black-65);
   }
 }
 .titleRequired {

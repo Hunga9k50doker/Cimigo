@@ -9,7 +9,6 @@ import {
   InputAdornment,
   Tooltip,
 } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -31,6 +30,11 @@ import Heading5 from "components/common/text/Heading5"
 import Heading3 from "components/common/text/Heading3"
 import InputLineTextfield from "components/common/inputs/InputLineTextfield"
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
+import ButtonCLose from "components/common/buttons/ButtonClose"
+import ButtonCloseAttribute from "components/common/buttons/ButtonCloseAttribute"
+import ButtonAddOption from "components/common/buttons/ButtonAddOption"
+import ButtonSmall from "components/common/buttons/ButtonSmall"
+
 export interface AttributeFormData {
   title?: string;
   from?:number;
@@ -199,10 +203,9 @@ const PopupNumericScale = (props: Props) => {
           <Heading3 translation-key="">
             Add numeric scale
           </Heading3 >
-          <CloseIcon 
-          className={classes.iconClose}
+          <ButtonCLose
           onClick={() => onClose()}>
-          </CloseIcon>
+          </ButtonCLose>
         </Grid>
       </DialogTitle>
       <form className={classes.formControl} onSubmit={handleSubmit(_onSubmit)}>
@@ -243,7 +246,7 @@ const PopupNumericScale = (props: Props) => {
               <Heading5>Scale Range</Heading5>
               <div className={classes.contentScaleRange}>
                 <ParagraphBody colorName="--eerie-black-65">From</ParagraphBody>
-                <Grid>
+                <Grid className={classes.gridFromScale}>
                   <Controller
                     name="from"
                     control={control}
@@ -254,7 +257,6 @@ const PopupNumericScale = (props: Props) => {
                       placeholder="0"
                       onBlur={field.onBlur}
                       onChange={field.onChange}
-                      onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
                       autoComplete="off"
                       inputProps={{tabIndex:2}}
                       errorMessage={errors.from?.message}
@@ -273,7 +275,6 @@ const PopupNumericScale = (props: Props) => {
                         placeholder="max"
                         onBlur={field.onBlur}
                         onChange={field.onChange}
-                        onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
                         autoComplete="off"
                         inputProps={{tabIndex:3}}
                         errorMessage={errors.to?.message}
@@ -348,7 +349,6 @@ const PopupNumericScale = (props: Props) => {
                                               att.id,
                                               checkAllAttNotValueStart()
                                             )}
-                                            onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
                                             autoComplete="off"
                                             inputProps={{tabIndex:index + 4}}
                                             autoFocus={index === focusEleIdx}
@@ -376,7 +376,6 @@ const PopupNumericScale = (props: Props) => {
                                               att.id,
                                               checkAllAttNotValueEnd()
                                             )}
-                                            onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
                                             autoComplete="off"
                                             inputProps={{tabIndex:index + 5}}
                                             errorMessage={!att.end && !!errors.attributes?.length &&
@@ -388,13 +387,12 @@ const PopupNumericScale = (props: Props) => {
                                     </Grid>
                                   </div>
                                   {attributes?.length > initListAttributes.length && (
-                                    <button
+                                    <ButtonCloseAttribute
                                     type="button"
                                     className={classes.closeInputAttribute}
                                     onClick={deleteInputAtt(att.id)}
                                     >
-                                    <img src={Images.icDeleteAnswer} alt="" />
-                                  </button>
+                                  </ButtonCloseAttribute>
                                   ) }
                                 </div>
                               )}
@@ -406,7 +404,7 @@ const PopupNumericScale = (props: Props) => {
                     </Droppable>
                   </DragDropContext>
                   <Grid className={classes.addList}>
-                    <button type="button" className={classes.addOptions} onClick={addInputAtt}>
+                    <ButtonAddOption type="button" onClick={addInputAtt}>
                       <img
                         src={IconListAdd}
                         className={classes.IconListAdd}
@@ -415,7 +413,7 @@ const PopupNumericScale = (props: Props) => {
                       <ParagraphBody colorName="--eerie-black-65" translation-key="setup_survey_popup_add_answer_title">
                         {t("setup_survey_popup_add_answer_title")}
                       </ParagraphBody>
-                    </button>
+                    </ButtonAddOption>
                   </Grid>
                 </Grid>
               )}
@@ -427,7 +425,7 @@ const PopupNumericScale = (props: Props) => {
             <Heading5 colorName="--cimigo-green-dark"> US$ 149 (3,240,258 VND)</Heading5>
             <ParagraphExtraSmall colorName="--gray-90">Tax exclusive</ParagraphExtraSmall>
           </Grid>
-          <Button
+          <ButtonSmall
             type="submit"
             translation-key="setup_survey_popup_save_question_title"
             children={t("setup_survey_popup_save_question_title")}

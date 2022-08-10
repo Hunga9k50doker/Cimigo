@@ -5,8 +5,8 @@ import iconEyeOpen from 'assets/img/icon/eye-open.svg';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import clsx from 'clsx';
 import images from 'config/images';
-import TextTitle from './components/TextTitle';
-import ErrorMessage from './components/ErrorMessage';
+import TextTitle from '../../text/TextTitle';
+import ErrorMessage from '../../text/ErrorMessage';
 import { useTranslation } from 'react-i18next';
 
 interface InputsProps extends OutlinedInputProps {
@@ -27,7 +27,7 @@ interface InputsProps extends OutlinedInputProps {
   infor?: string,
   isShowError?: boolean,
 }
-const Inputs = memo((props: InputsProps) => {
+const InputLineTextField = memo((props: InputsProps) => {
   const { t } = useTranslation()
 
   const [toggleEyes, setToggleEyes] = useState(false);
@@ -97,7 +97,7 @@ const Inputs = memo((props: InputsProps) => {
     </FormControl>
   );
 });
-export default Inputs;
+export default InputLineTextField;
 
 
 

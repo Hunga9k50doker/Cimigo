@@ -6,7 +6,7 @@ interface TextTitleProps {
 }
 
 const TextTitle = styled(Typography)<TextTitleProps>`
-  color: ${(props) => props.invalid ? '#af1c10' : 'rgba(28, 28, 28, 0.9)'};
+  color: ${(props) => props.invalid ? 'var(--cimigo-danger)' : 'var(--gray-80)'};
   font-size: 14px;
   font-weight: 500;
   line-height: 140%;

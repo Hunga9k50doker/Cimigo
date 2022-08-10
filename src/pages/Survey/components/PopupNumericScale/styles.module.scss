@@ -14,16 +14,7 @@
     color: rgba(250, 250, 255, 1);
     font-size: 22px;
     line-height: 31px;
-  
-    .iconClose {
-      width: 32px;
-      height: 32px;
-      background-color: white;
-      border-radius: 100%;
-      color: rgba(23, 73, 127, 1);
-      cursor: pointer;
-    }
-  
+    
     button {
       padding: 0px;
     }
@@ -81,13 +72,8 @@
   
   .closeInputAttribute {
     position:absolute;
-    width: 13px;
-    height: 13px;
-    top:4px;
+    top:0;
     right:0;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
   }
   .attributeTitle {
     @media only screen and (max-width: 500px) {
@@ -131,18 +117,6 @@
     visibility: hidden;
   }
   
-  .addOptions {
-    display: flex;
-    align-items: center;
-    background-color: transparent;
-    border: none;
-    font-family: inherit;
-    font-weight: 500;
-    font-size: 16px;
-    color: rgba(28, 28, 28, 0.65);
-    cursor: pointer;
-  }
-  
   .IconListAdd {
     width: 20px;
     height: 15px;
@@ -175,6 +149,7 @@
     line-height: 22px;
     display: flex;
     align-items: center;
+    margin-top: 8px;
     .iconLanguage {
       color: rgba(28, 28, 28, 0.65);
       background-color: rgba(221, 221, 221, 1);
@@ -232,14 +207,10 @@
   
   .contentScaleRange {
     display: flex;
+    margin-top: 8px;
     > [class~="MuiGrid-root"]:nth-child(2){
-        div:nth-child(2) {
-          margin-left:-8px;   
-        }
-    }
-    > [class~="MuiGrid-root"]:nth-child(4){
-        div:nth-child(2) {
-          margin-left:0px;
+      > [class~="MuiFormControl-root"] {
+          align-items: center;   
         }
     }
   }
@@ -279,23 +250,9 @@
     }
   }
   
-
   .btnSave {
-    background-color: var(--cimigo-blue);
-    padding: 16px;
-    color: white;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 16px;
-    text-transform: none;
-    margin-top: 0px;
     margin-right: 4%;
   }
-
-  .btnSave:hover {
-    background-color: var(--cimigo-blue);
-  }
-  
 
   .inputAttribute:focus-visible {
     outline: none;
