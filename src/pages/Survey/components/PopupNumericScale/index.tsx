@@ -9,6 +9,8 @@ import {
   InputAdornment,
   Tooltip,
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -31,9 +33,7 @@ import Heading3 from "components/common/text/Heading3"
 import InputLineTextfield from "components/common/inputs/InputLineTextfield"
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import ButtonCLose from "components/common/buttons/ButtonClose"
-import ButtonCloseAttribute from "components/common/buttons/ButtonCloseAttribute"
-import ButtonAddOption from "components/common/buttons/ButtonAddOption"
-import ButtonSmall from "components/common/buttons/ButtonSmall"
+import ButtonMUI, { BtnType } from "components/common/buttons/Button"
 
 export interface AttributeFormData {
   title?: string;
@@ -387,12 +387,12 @@ const PopupNumericScale = (props: Props) => {
                                     </Grid>
                                   </div>
                                   {attributes?.length > initListAttributes.length && (
-                                    <ButtonCloseAttribute
+                                    <CloseIcon
                                     type="button"
                                     className={classes.closeInputAttribute}
                                     onClick={deleteInputAtt(att.id)}
                                     >
-                                  </ButtonCloseAttribute>
+                                  </CloseIcon>
                                   ) }
                                 </div>
                               )}
@@ -404,16 +404,12 @@ const PopupNumericScale = (props: Props) => {
                     </Droppable>
                   </DragDropContext>
                   <Grid className={classes.addList}>
-                    <ButtonAddOption type="button" onClick={addInputAtt}>
-                      <img
-                        src={IconListAdd}
-                        className={classes.IconListAdd}
-                        alt=""
-                      />
+                    <div onClick={addInputAtt} className={classes.addOptions}>
+                      <PlaylistAddIcon className={classes.IconListAdd}/>
                       <ParagraphBody colorName="--eerie-black-65" translation-key="setup_survey_popup_add_answer_title">
                         {t("setup_survey_popup_add_answer_title")}
                       </ParagraphBody>
-                    </ButtonAddOption>
+                    </div>
                   </Grid>
                 </Grid>
               )}
@@ -425,7 +421,8 @@ const PopupNumericScale = (props: Props) => {
             <Heading5 colorName="--cimigo-green-dark"> US$ 149 (3,240,258 VND)</Heading5>
             <ParagraphExtraSmall colorName="--gray-90">Tax exclusive</ParagraphExtraSmall>
           </Grid>
-          <ButtonSmall
+          <ButtonMUI
+            btnType={BtnType.Primary}
             type="submit"
             translation-key="setup_survey_popup_save_question_title"
             children={t("setup_survey_popup_save_question_title")}
