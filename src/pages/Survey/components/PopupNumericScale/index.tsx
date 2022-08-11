@@ -163,7 +163,6 @@ const PopupNumericScale = (props: Props) => {
         })),
         
       };
-      console.log(attribute);
       //onSubmit(atribute);
       clearForm();
     }
