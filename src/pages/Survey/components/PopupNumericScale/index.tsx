@@ -31,7 +31,7 @@ import Heading3 from "components/common/text/Heading3"
 import InputLineTextfield from "components/common/inputs/InputLineTextfield"
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import ButtonCLose from "components/common/buttons/ButtonClose"
-import ButtonMUI, { BtnType } from "components/common/buttons/Button"
+import Button, { BtnType } from "components/common/buttons/Button"
 import ButtonSmall from "components/common/text/ButtonSmall"
 
 export interface AttributeFormData {
@@ -420,7 +420,7 @@ const PopupNumericScale = (props: Props) => {
             <Heading5 colorName="--cimigo-green-dark"> US$ 149 (3,240,258 VND)</Heading5>
             <ParagraphExtraSmall colorName="--gray-90">Tax exclusive</ParagraphExtraSmall>
           </Grid>
-          <ButtonMUI
+          <Button
             btnType={BtnType.Raised}
             type="submit"
             translation-key="setup_survey_popup_save_question_title"
