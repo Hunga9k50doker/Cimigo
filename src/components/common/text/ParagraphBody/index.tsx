@@ -13,6 +13,9 @@ const ParagraphBody = styled(Typography)<Props>`
     line-height: 24px;
     text-align: justify;
     color: ${props => `var(${props.colorName || '--gray-50'})`};
+    @media only screen and (max-width: 767px) {
+      font-size: 14px;
+    }
 `
 
 export default ParagraphBody;

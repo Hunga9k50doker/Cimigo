@@ -13,6 +13,9 @@ const Heading5 = styled(Typography)<Props>`
     font-size: 16px;
     line-height: 24px;
     color: ${props => `var(${props.colorName || '--eerie-black'})`};
+    @media only screen and (max-width: 767px) {
+      font-size: 14px;
+    }
 `
 
 export default Heading5;

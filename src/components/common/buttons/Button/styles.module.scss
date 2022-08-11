@@ -2,21 +2,18 @@
   text-transform: none;
   border-radius: 4px;
   padding: 8px 16px;
-  &[class~=Mui-disabled] {
-    opacity: 0.5;
-  }
 }
 .btnPrimary {
   background: var(--cimigo-blue);
   border: 1px solid transparent;
   color: var(--gray-10);
-  &:hover {
+  &[class~='MuiButton-root']:hover {
     background: var(--cimigo-blue-light-1);
   }
-  &:active {
+  &[class~='MuiButton-root']:active {
     background: var(--cimigo-blue-dark-1);
   }
-  &:disabled {
+  &[class~='MuiButton-root']:disabled {
     background: var(--eerie-black-5);
     p {
       color: var(--eerie-black-40);
@@ -29,19 +26,19 @@
   p {
     color: var(--cimigo-blue);
   }
-  &:hover {
+  &[class~='MuiButton-root']:hover {
     background: var(--cimigo-blue-light-4);
     p {
       color: var(--cimigo-blue-light-1);
     }
   }
-  &:active {
+  &[class~='MuiButton-root']:active {
     background: var(--cimigo-blue-light-4);
     p {
       color: var(--cimigo-blue-dark-1);
     }
   }
-  &:disabled {
+  &[class~='MuiButton-root']:disabled {
     background: var(--eerie-black-5);
     p {
       color: var(--eerie-black-40);
@@ -54,20 +51,20 @@
   p {
     color: var(--cimigo-blue);
   }
-  &:hover {
+  &[class~='MuiButton-root']:hover {
     background: var(--cimigo-blue-light-4);
     p { 
       color: var(--cimigo-blue-light-1);
     }
   }
-  &:active {
+  &[class~='MuiButton-root']:active {
     color: var(--cimigo-blue-dark-1);
     background: var(--cimigo-blue-light-4);
     p { 
       color: var(--cimigo-blue-dark-1);
     }
   }
-  &:disabled {
+  &[class~='MuiButton-root']:disabled {
     background: var(--eerie-black-5);
     border: 1px solid var(--eerie-black-20);
     p {
@@ -82,19 +79,19 @@
   p {
     color: var(--cimigo-blue);
   }
-  &:hover {
+  &[class~='MuiButton-root']:hover {
     background: transparent;
     p {
       color: var(--cimigo-blue-light-1);
     }
   }
-  &:active {
+  &[class~='MuiButton-root']:active {
     background: transparent;
     p {
       color: var(--cimigo-blue-dark-1);
     }
   }
-  &:disabled {
+  &[class~='MuiButton-root']:disabled {
     background: transparent;
     p {
       color: var(--eerie-black-40);
@@ -107,15 +104,15 @@
   border: 1px solid transparent;
   box-shadow: 0px 8px 16px rgba(31, 97, 169, 0.12);
   color: var(--gray-10);
-  &:hover {
+  &[class~='MuiButton-root']:hover {
     background: var(--cimigo-blue-light-1);
     box-shadow: 0px 12px 20px rgba(59, 135, 219, 0.24);
   }
-  &:active {
+  &[class~='MuiButton-root']:active {
     background: var(--cimigo-blue-dark-1);
     box-shadow: 0px 4px 12px rgba(31, 97, 169, 0.2);
   }
-  &:disabled {
+  &[class~='MuiButton-root']:disabled {
     background: var(--eerie-black-5);
     p {
       color: var(--eerie-black-40);

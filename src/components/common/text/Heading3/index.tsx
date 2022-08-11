@@ -12,6 +12,9 @@ const Heading3 = styled(Typography)<Props>`
     font-size: 22px;
     line-height: 32px;
     color: ${props => `var(${props.colorName || '--ghost-white'})`};
+    @media only screen and (max-width: 767px) {
+        font-size: 18px;
+    }
 `
 
 export default Heading3;

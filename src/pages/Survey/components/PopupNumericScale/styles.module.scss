@@ -42,6 +42,9 @@
     padding-left: 44px;
     margin-top: 16px;
     margin-bottom: 25px;
+    @media only screen and (max-width: 500px) {
+      padding-left: 0;
+    }
   }
 
   .addOptions {
@@ -56,6 +59,7 @@
     padding-left: 35px;
     position: relative;
     cursor: grab;
+
     &:hover {
       .iconDotsDrag {
         visibility: visible;
@@ -68,6 +72,7 @@
     .attributeTitle {
       display: none;
     }
+
     @media only screen and (max-width: 500px) {
       .attributeTitle {
         display: block;
@@ -82,6 +87,7 @@
     color: var(--eerie-black-65);
     cursor: pointer;
   }
+
   .attributeTitle {
     @media only screen and (max-width: 500px) {
       margin-left: 9px;
@@ -89,7 +95,7 @@
   }
 
   .inputContainer {
-    >div > [class~="MuiTypography-root"]{
+    [class~="MuiTypography-root"]{
       margin-left: 15px;
       @media only screen and (max-width: 500px) {
         margin-left: 18px;
@@ -103,12 +109,15 @@
   .inputAttribute {
     margin-left: 5px;
     margin-right: 10px;
+
     input {
       padding: 0 0 0 9px;
     }
+
     img {
       display: none;
     }
+
     @media only screen and (max-width: 500px) {
         margin-top:12px; 
         margin-left: 8px;
@@ -132,7 +141,6 @@
     color: var(--eerie-black-65);
   }
   
-  
   .inputQuestion {
     border-bottom: none;
     position: relative;
@@ -146,6 +154,7 @@
     display: flex;
     align-items: center;
     margin-top: 8px;
+
     .iconLanguage {
       color: var(--eerie-black-65);
       background-color: rgba(221, 221, 221, 1);
@@ -165,6 +174,7 @@
       padding: 0px;
     }
   }
+
   @media only screen and (max-width: 500px) {
 
     .inputQuestion {
@@ -174,7 +184,6 @@
     .inputAttribute {
       font-size: 14px;
     }
-  
   
     .IconListAdd {
       margin-left: -11px;
@@ -190,10 +199,8 @@
   .contentScaleRange {
     display: flex;
     margin-top: 8px;
-    > [class~="MuiGrid-root"]:nth-child(2){
-      > [class~="MuiFormControl-root"] {
+    [class~="MuiFormControl-root"] {
           align-items: center;   
-        }
     }
   }
 
@@ -261,13 +268,16 @@
     align-items: end;
     margin-right: 16px;
     margin-top: 8px;
-    p{
+
+    p {
       margin-bottom: 0;
     }
+
     span {
         font-size:12px;
         font-weight:400;
     }
+
     @media only screen and (max-width: 767px) {
       margin-right: 8px;
       p {
