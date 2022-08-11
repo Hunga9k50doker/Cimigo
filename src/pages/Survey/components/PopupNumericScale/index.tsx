@@ -32,6 +32,8 @@ import ButtonCLose from "components/common/buttons/ButtonClose"
 import Button, { BtnType } from "components/common/buttons/Button"
 import ButtonSmall from "components/common/text/ButtonSmall"
 import InputTextfield from "components/common/inputs/InputTextfield"
+import { v4 as uuidv4 } from 'uuid';
+
 
 export interface AttributeFormData {
   title?: string;
@@ -100,7 +102,7 @@ const PopupNumericScale = (props: Props) => {
   const initAttribute = () => {
     const list = [];
     for (let i: number = 0; i < initListAttributes.length; ++i) {
-      list.push({ index: i + 1 });
+      list.push({ id: i + 1 });
     }
     setValue("attributes", list);
   };
@@ -123,7 +125,7 @@ const PopupNumericScale = (props: Props) => {
   const handleChangeInputAtt =
     (value: string, index: number, callback: boolean) =>
     (event: SyntheticEvent<EventTarget>) => {
-      const find_pos = attributes.findIndex((att) => att.index === index);
+      const find_pos = attributes.findIndex((att) => att.id === index);
       const new_arr = [...attributes];
       const element = event.currentTarget as HTMLInputElement;
       new_arr[find_pos][value] = element.value;
@@ -152,22 +154,26 @@ const PopupNumericScale = (props: Props) => {
     if (attributes.length !== 0) {
       const attribute = {
         title: data.title,
+        from: data.from,
+        to: data.to,
         attributes: data.attributes.map((item) => ({
+          id: null,
           start: item.start,
           end: item.end
         })),
+        
       };
+      console.log(attribute);
       //onSubmit(atribute);
       clearForm();
     }
   };
 
+  
+
   const addInputAtt = () => {
-    const maxAttributes = Math.max(...attributes.map((att) => att.index), 0);
     const new_attributes = {
-      index: maxAttributes + 1,
-      id: null,
-      userId: null,
+      id: uuidv4(),
       start: "",
       end: "",
     };
@@ -179,7 +185,7 @@ const PopupNumericScale = (props: Props) => {
     if (attributes?.length <= initListAttributes?.length) {
       return;
     }
-    const updated_attributes = [...attributes].filter((att) => att.index !== index);
+    const updated_attributes = [...attributes].filter((att) => att.id !== index);
     setValue("attributes", updated_attributes);
   };
 
@@ -304,9 +310,9 @@ const PopupNumericScale = (props: Props) => {
                         >
                           {attributes?.map((att, index) => (
                             <Draggable
-                              draggableId={att.index.toString()}
+                              draggableId={att.id.toString()}
                               index={index}
-                              key={att.index}
+                              key={att.id}
                             >
                               {(provided) => (
                                 <div
@@ -342,7 +348,7 @@ const PopupNumericScale = (props: Props) => {
                                             onBlur={field.onBlur}
                                             onChange={handleChangeInputAtt(
                                               "start",
-                                              att.index,
+                                              att.id,
                                               checkAllAttNotValueStart()
                                             )}
                                             autoComplete="off"
@@ -369,7 +375,7 @@ const PopupNumericScale = (props: Props) => {
                                             onBlur={field.onBlur}
                                             onChange={handleChangeInputAtt(
                                               "end",
-                                              att.index,
+                                              att.id,
                                               checkAllAttNotValueEnd()
                                             )}
                                             autoComplete="off"
@@ -386,7 +392,7 @@ const PopupNumericScale = (props: Props) => {
                                     <CloseIcon
                                     type="button"
                                     className={classes.closeInputAttribute}
-                                    onClick={deleteInputAtt(att.index)}
+                                    onClick={deleteInputAtt(att.id)}
                                     >
                                   </CloseIcon>
                                   ) }
