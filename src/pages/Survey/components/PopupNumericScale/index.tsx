@@ -38,12 +38,11 @@ export interface AttributeFormData {
   title?: string;
   from?:number;
   to?:number;
-  attributes?: UserAttribute[];
+  attributes?: any;
 }
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  //onSubmit: (data: UserAttribute) => void;
 }
 
 const PopupNumericScale = (props: Props) => {
@@ -102,13 +101,13 @@ const PopupNumericScale = (props: Props) => {
   const initAttribute = () => {
     const list = [];
     for (let i: number = 0; i < initListAttributes.length; ++i) {
-      list.push({ id: i + 1 });
+      list.push({ index: i + 1 });
     }
     setValue("attributes", list);
   };
 
   const reorder = (items, startIndex, endIndex) => {
-    const result: UserAttribute[] = Array.from(items);
+    const result = Array.from(items);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
     return result;
@@ -125,7 +124,7 @@ const PopupNumericScale = (props: Props) => {
   const handleChangeInputAtt =
     (value: string, index: number, callback: boolean) =>
     (event: SyntheticEvent<EventTarget>) => {
-      const find_pos = attributes.findIndex((att) => att.id === index);
+      const find_pos = attributes.findIndex((att) => att.index === index);
       const new_arr = [...attributes];
       const element = event.currentTarget as HTMLInputElement;
       new_arr[find_pos][value] = element.value;
@@ -165,24 +164,23 @@ const PopupNumericScale = (props: Props) => {
   };
 
   const addInputAtt = () => {
-    const maxAttributes = Math.max(...attributes.map((att) => att.id), 0);
+    const maxAttributes = Math.max(...attributes.map((att) => att.index), 0);
     const new_attributes = {
-      id: maxAttributes + 1,
+      index: maxAttributes + 1,
+      id: null,
       userId: null,
       start: "",
       end: "",
-      createdAt: null,
-      updatedAt: null
     };
     setFocusEleIdx(attributes.length);
     setValue("attributes", [...attributes,new_attributes]);
   };
 
-  const deleteInputAtt = (id: number) => () => {
+  const deleteInputAtt = (index: number) => () => {
     if (attributes?.length <= initListAttributes?.length) {
       return;
     }
-    const updated_attributes = [...attributes].filter((ans) => ans.id !== id);
+    const updated_attributes = [...attributes].filter((att) => att.index !== index);
     setValue("attributes", updated_attributes);
   };
 
@@ -307,9 +305,9 @@ const PopupNumericScale = (props: Props) => {
                         >
                           {attributes?.map((att, index) => (
                             <Draggable
-                              draggableId={att.id.toString()}
+                              draggableId={att.index.toString()}
                               index={index}
-                              key={att.id}
+                              key={att.index}
                             >
                               {(provided) => (
                                 <div
@@ -345,7 +343,7 @@ const PopupNumericScale = (props: Props) => {
                                             onBlur={field.onBlur}
                                             onChange={handleChangeInputAtt(
                                               "start",
-                                              att.id,
+                                              att.index,
                                               checkAllAttNotValueStart()
                                             )}
                                             autoComplete="off"
@@ -372,7 +370,7 @@ const PopupNumericScale = (props: Props) => {
                                             onBlur={field.onBlur}
                                             onChange={handleChangeInputAtt(
                                               "end",
-                                              att.id,
+                                              att.index,
                                               checkAllAttNotValueEnd()
                                             )}
                                             autoComplete="off"
@@ -389,7 +387,7 @@ const PopupNumericScale = (props: Props) => {
                                     <CloseIcon
                                     type="button"
                                     className={classes.closeInputAttribute}
-                                    onClick={deleteInputAtt(att.id)}
+                                    onClick={deleteInputAtt(att.index)}
                                     >
                                   </CloseIcon>
                                   ) }
