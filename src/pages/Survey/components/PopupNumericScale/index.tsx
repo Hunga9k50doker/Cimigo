@@ -21,7 +21,6 @@ import {
 import classes from "./styles.module.scss";
 import * as yup from "yup";
 import Toggle from "components/Toggle";
-import Inputs from "components/Inputs";
 import Images from "config/images";
 import { UserAttribute } from "models/user_attribute";
 import { useTranslation } from "react-i18next";
@@ -33,6 +32,7 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import ButtonCLose from "components/common/buttons/ButtonClose"
 import Button, { BtnType } from "components/common/buttons/Button"
 import ButtonSmall from "components/common/text/ButtonSmall"
+import InputTextfield from "components/common/inputs/InputTextfield"
 
 export interface AttributeFormData {
   title?: string;
@@ -220,7 +220,7 @@ const PopupNumericScale = (props: Props) => {
             >
               {t("setup_survey_popup_question_title")}
             </Heading5>
-            <Inputs
+            <InputTextfield
               className={classes.inputQuestion}
               translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
               placeholder={t("setup_survey_popup_enter_question_placeholder")}

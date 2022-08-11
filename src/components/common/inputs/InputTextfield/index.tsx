@@ -10,7 +10,6 @@ import ErrorMessage from '../../text/ErrorMessage';
 import { useTranslation } from 'react-i18next';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-
 interface InputsProps extends OutlinedInputProps {
   title?: string,
   titleRequired?: boolean,
@@ -29,7 +28,7 @@ interface InputsProps extends OutlinedInputProps {
   infor?: string,
   isShowError?: boolean,
 }
-const InputLineTextField = memo((props: InputsProps) => {
+const InputTextfield = memo((props: InputsProps) => {
   const { t } = useTranslation()
 
   const [toggleEyes, setToggleEyes] = useState(false);
@@ -88,7 +87,7 @@ const InputLineTextField = memo((props: InputsProps) => {
               >
               {toggleEyes ? <img src={iconEyeOpen} alt="eye-close" /> : <VisibilityOffIcon />}
             </IconButton>
-          </InputAdornment> : <ErrorOutlineIcon className={classes.iconErrorOutline}/>
+          </InputAdornment> : <ErrorOutlineIcon className={classes.iconErrorOutline} />
         }
         {...inputProps}
         inputRef={refInput}
@@ -99,7 +98,7 @@ const InputLineTextField = memo((props: InputsProps) => {
     </FormControl>
   );
 });
-export default InputLineTextField;
+export default InputTextfield;
 
 
 
