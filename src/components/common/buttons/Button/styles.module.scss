@@ -7,13 +7,13 @@
   background: var(--cimigo-blue);
   border: 1px solid transparent;
   color: var(--gray-10);
-  &[class~='MuiButton-root']:hover {
+  &:hover {
     background: var(--cimigo-blue-light-1);
   }
-  &[class~='MuiButton-root']:active {
+  &:active {
     background: var(--cimigo-blue-dark-1);
   }
-  &[class~='MuiButton-root']:disabled {
+  &[class~=Mui-disabled] {
     background: var(--eerie-black-5);
     p {
       color: var(--eerie-black-40);
@@ -26,19 +26,19 @@
   p {
     color: var(--cimigo-blue);
   }
-  &[class~='MuiButton-root']:hover {
+  &:hover {
     background: var(--cimigo-blue-light-4);
     p {
       color: var(--cimigo-blue-light-1);
     }
   }
-  &[class~='MuiButton-root']:active {
+  &:active {
     background: var(--cimigo-blue-light-4);
     p {
       color: var(--cimigo-blue-dark-1);
     }
   }
-  &[class~='MuiButton-root']:disabled {
+  &[class~=Mui-disabled] {
     background: var(--eerie-black-5);
     p {
       color: var(--eerie-black-40);
@@ -51,20 +51,20 @@
   p {
     color: var(--cimigo-blue);
   }
-  &[class~='MuiButton-root']:hover {
+  &:hover {
     background: var(--cimigo-blue-light-4);
     p { 
       color: var(--cimigo-blue-light-1);
     }
   }
-  &[class~='MuiButton-root']:active {
+  &:active {
     color: var(--cimigo-blue-dark-1);
     background: var(--cimigo-blue-light-4);
     p { 
       color: var(--cimigo-blue-dark-1);
     }
   }
-  &[class~='MuiButton-root']:disabled {
+  &[class~=Mui-disabled] {
     background: var(--eerie-black-5);
     border: 1px solid var(--eerie-black-20);
     p {
@@ -79,19 +79,19 @@
   p {
     color: var(--cimigo-blue);
   }
-  &[class~='MuiButton-root']:hover {
+  &:hover {
     background: transparent;
     p {
       color: var(--cimigo-blue-light-1);
     }
   }
-  &[class~='MuiButton-root']:active {
+  &:active {
     background: transparent;
     p {
       color: var(--cimigo-blue-dark-1);
     }
   }
-  &[class~='MuiButton-root']:disabled {
+  &[class~=Mui-disabled] {
     background: transparent;
     p {
       color: var(--eerie-black-40);
@@ -104,15 +104,15 @@
   border: 1px solid transparent;
   box-shadow: 0px 8px 16px rgba(31, 97, 169, 0.12);
   color: var(--gray-10);
-  &[class~='MuiButton-root']:hover {
+  &:hover {
     background: var(--cimigo-blue-light-1);
     box-shadow: 0px 12px 20px rgba(59, 135, 219, 0.24);
   }
-  &[class~='MuiButton-root']:active {
+  &:active{
     background: var(--cimigo-blue-dark-1);
     box-shadow: 0px 4px 12px rgba(31, 97, 169, 0.2);
   }
-  &[class~='MuiButton-root']:disabled {
+  &[class~=Mui-disabled] {
     background: var(--eerie-black-5);
     p {
       color: var(--eerie-black-40);
