@@ -1,6 +1,5 @@
 import { SyntheticEvent, useState, useEffect } from "react";
 import {
-  Button,
   Grid,
   Dialog,
   DialogTitle,
@@ -21,7 +20,6 @@ import {
 } from "react-beautiful-dnd";
 import classes from "./styles.module.scss";
 import * as yup from "yup";
-import IconListAdd from "assets/img/icon/ic-list-add-svgrepo-com.svg";
 import Toggle from "components/Toggle";
 import Inputs from "components/Inputs";
 import Images from "config/images";
@@ -34,6 +32,7 @@ import InputLineTextfield from "components/common/inputs/InputLineTextfield"
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import ButtonCLose from "components/common/buttons/ButtonClose"
 import ButtonMUI, { BtnType } from "components/common/buttons/Button"
+import ButtonSmall from "components/common/text/ButtonSmall"
 
 export interface AttributeFormData {
   title?: string;
@@ -422,10 +421,10 @@ const PopupNumericScale = (props: Props) => {
             <ParagraphExtraSmall colorName="--gray-90">Tax exclusive</ParagraphExtraSmall>
           </Grid>
           <ButtonMUI
-            btnType={BtnType.Primary}
+            btnType={BtnType.Raised}
             type="submit"
             translation-key="setup_survey_popup_save_question_title"
-            children={t("setup_survey_popup_save_question_title")}
+            children={<ButtonSmall>{t("setup_survey_popup_save_question_title")}</ButtonSmall>}
             className={classes.btnSave}
           />
         </DialogActions>

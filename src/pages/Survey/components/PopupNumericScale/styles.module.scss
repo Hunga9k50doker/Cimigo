@@ -182,16 +182,6 @@
     }
   
   }
-  @media only screen and (max-width: 600px) {
-    .btnSave {
-      width: 92%;
-    }
-  
-    .errAns {
-      padding-left: 5px;
-      padding-top: 4px;
-    }
-  }
 
   .scaleRangeContainer {
     margin-top:17px;
@@ -258,8 +248,9 @@
     align-items: end;
     margin-right: 4%;
     .btnSave {
+      width: 92%;
       margin-right:0;
-      margin-top:16px;
+      margin-top:16px; 
     }
    }
   }

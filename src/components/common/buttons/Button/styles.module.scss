@@ -1,7 +1,7 @@
 .root {
   text-transform: none;
-  font-size: 14px;
-  font-weight: 500;
+  border-radius: 4px;
+  padding: 8px 16px;
   &[class~=Mui-disabled] {
     opacity: 0.5;
   }
@@ -9,8 +9,7 @@
 .btnPrimary {
   background: var(--cimigo-blue);
   border: 1px solid transparent;
-  color: var(--ghost-white);
-  padding:8px 16px;
+  color: var(--gray-10);
   &:hover {
     background: var(--cimigo-blue-light-1);
   }
@@ -19,74 +18,95 @@
   }
   &:disabled {
     background: var(--eerie-black-5);
-    color: var(--eerie-black-40);
+    p {
+      color: var(--eerie-black-40);
+    }  
   }
 }
 .btnSecondary {
   background: var(--cimigo-blue-light-4);
   border: 1px solid transparent;
-  color: var(--cimigo-blue);
-  padding:8px 16px;
+  p {
+    color: var(--cimigo-blue);
+  }
   &:hover {
-    color: var(--cimigo-blue-light-1);
     background: var(--cimigo-blue-light-4);
+    p {
+      color: var(--cimigo-blue-light-1);
+    }
   }
   &:active {
-    color: var(--cimigo-blue-dark-1);
     background: var(--cimigo-blue-light-4);
+    p {
+      color: var(--cimigo-blue-dark-1);
+    }
   }
   &:disabled {
     background: var(--eerie-black-5);
-    color: var(--eerie-black-40);
+    p {
+      color: var(--eerie-black-40);
+    } 
   }
 }
 .btnOutlined {
   background: var(--cimigo-blue-light-4);
   border: 1px solid var(--cimigo-blue-light-2);
-  color: var(--cimigo-blue);
-  padding:8px 16px;
+  p {
+    color: var(--cimigo-blue);
+  }
   &:hover {
-    color: var(--cimigo-blue-light-1);
     background: var(--cimigo-blue-light-4);
-    border: 1px solid var(--cimigo-blue-light-2);
+    p { 
+      color: var(--cimigo-blue-light-1);
+    }
   }
   &:active {
     color: var(--cimigo-blue-dark-1);
-    border: 1px solid var(--cimigo-blue-dark-1);
     background: var(--cimigo-blue-light-4);
+    p { 
+      color: var(--cimigo-blue-dark-1);
+    }
   }
   &:disabled {
     background: var(--eerie-black-5);
-    color: var(--eerie-black-40);
     border: 1px solid var(--eerie-black-20);
+    p {
+      color: var(--eerie-black-40);
+    } 
   }
 }
 
 .btnText {
   background: transparent;
   border: 1px solid transparent;
-  color: var(--cimigo-blue);
-  padding:8px 16px;
+  p {
+    color: var(--cimigo-blue);
+  }
   &:hover {
-    color: var(--cimigo-blue-light-1);
     background: transparent;
+    p {
+      color: var(--cimigo-blue-light-1);
+    }
   }
   &:active {
-    color: var(--cimigo-blue-dark-1);
     background: transparent;
+    p {
+      color: var(--cimigo-blue-dark-1);
+    }
   }
   &:disabled {
-    color: var(--eerie-black-40);
     background: transparent;
+    p {
+      color: var(--eerie-black-40);
+    }
   }
 }
 
 .btnRaised {
   background: var(--cimigo-blue);
   border: 1px solid transparent;
-  color: var(--ghost-white);
-  padding:8px 16px;
   box-shadow: 0px 8px 16px rgba(31, 97, 169, 0.12);
+  color: var(--gray-10);
   &:hover {
     background: var(--cimigo-blue-light-1);
     box-shadow: 0px 12px 20px rgba(59, 135, 219, 0.24);
@@ -97,6 +117,8 @@
   }
   &:disabled {
     background: var(--eerie-black-5);
-    color: var(--eerie-black-40);
+    p {
+      color: var(--eerie-black-40);
+    }
   }
 }
