@@ -13,6 +13,8 @@ import { getMe } from 'redux/reducers/User/actionTypes';
 import { History } from 'history';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'locales';
+import UseAuth from 'hooks/useAuth';
+import { langSupports } from 'models/general';
 
 
 interface AppProps {
@@ -28,13 +30,17 @@ const AppContainer = styled.div`
 const App = ({ history, dispatch }: AppProps) => {
   const theme = defaultTheme;
   const isLoadingAuth = useSelector((state: ReducerType) => state.status.isLoadingAuth)
+  const { user } = UseAuth();
 
   useEffect(() => {
     dispatch(getMe())
   }, [dispatch])
 
   useEffect(() => {
-    if (i18n.language && i18n.languages.length && !i18n.languages.includes(i18n.language)) i18n.changeLanguage(i18n.languages[0])
+    if (!i18n.language) return
+    if (!langSupports.find(lang => lang.key === i18n.language)) {
+      i18n.changeLanguage(langSupports[0].key)
+    }
   }, [i18n.language])
 
   return (

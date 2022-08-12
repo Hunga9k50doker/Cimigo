@@ -19,6 +19,7 @@ import Inputs from "components/Inputs";
 import { ProjectService } from "services/project";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import UserService from "services/user";
 
 interface HeaderProps {
   project?: boolean;
@@ -76,9 +77,14 @@ const Header = memo((props: HeaderProps) => {
     else dispatch(push(routes.login))
   }
 
-  const changeLanguage = (lang: string) => {
+  const changeLanguage = async (lang: string) => {
     setAnchorElLang(null)
     if (lang === i18n.language) return
+    if (isLoggedIn) {
+      dispatch(setLoading(true))
+      await UserService.changeLanguage(lang)
+        .finally(() => dispatch(setLoading(false)))
+    }
     i18n.changeLanguage(lang, () => {
       window.location.reload()
     })

@@ -54,6 +54,7 @@ export interface User {
         createdAt: Date;
         updatedAt: Date;
     },
+    language: string,
     country?: Country,
     verified: boolean,
     createdAt: Date,

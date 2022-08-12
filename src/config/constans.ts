@@ -10,6 +10,7 @@ export const API = {
     FORGOT_PASSWORD: '/v1.0/user/forgot-password',
     CHECK_ISVALID_CODE: '/v1.0/user/check-isvalid-code',
     CHECK_EMPTY_PASSWORD: '/v1.0/user/check-empty-password',
+    CHANGE_LANGUAGE: '/v1.0/user/change-language',
   },
   USER: {
     DEFAULT: '/v1.0/user',

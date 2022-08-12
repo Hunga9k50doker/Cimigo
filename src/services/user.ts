@@ -1,6 +1,6 @@
 import api from './configApi';
 import { API } from 'config/constans';
-import { CheckIsValidCode, ForgotPasswordData, LoginForm, RegisterData, SocialLoginData, ChangePassword, UpdatePaymentInfo } from 'models/user';
+import { CheckIsValidCode, ForgotPasswordData, LoginForm, RegisterData, SocialLoginData, ChangePassword, UpdatePaymentInfo, User } from 'models/user';
 export class UserService {
   static async login(data: LoginForm): Promise<any> {
     return await api.post(API.AUTH.LOGIN, data)
@@ -12,7 +12,7 @@ export class UserService {
       })
   }
 
-  static async getMe() {
+  static async getMe(): Promise<User> {
     return await api.get(API.AUTH.ME)
       .then((res) => {
         return Promise.resolve(res.data.data)
@@ -163,6 +163,17 @@ export class UserService {
       })
   }
   
+  static async changeLanguage(language: string): Promise<any> {
+    return await api.put(API.AUTH.CHANGE_LANGUAGE, {
+      language
+    })
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
 }
 
 export default UserService
