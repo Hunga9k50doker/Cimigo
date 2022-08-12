@@ -254,7 +254,7 @@ const PopupNumericScale = (props: Props) => {
                                       src={Images.icDrag}
                                       alt=""
                                     />
-                                    <ParagraphBody colorName="--gray-80" className={classes.attributeTitle}>Attribute {att.id}</ParagraphBody>
+                                    <ParagraphBody colorName="--gray-80" className={classes.attributeTitle}>Attribute {index + 1}</ParagraphBody>
                                     <Grid
                                       container
                                       rowSpacing={1}
