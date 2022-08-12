@@ -30,7 +30,7 @@ import InputLineTextfield from "components/common/inputs/InputLineTextfield"
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import ButtonCLose from "components/common/buttons/ButtonClose"
 import Button, { BtnType } from "components/common/buttons/Button"
-import ButtonSmall from "components/common/text/ButtonSmall"
+import ButtonSmall from "components/common/text/TextBtnSmall"
 import InputTextfield from "components/common/inputs/InputTextfield"
 import { v4 as uuidv4 } from 'uuid';
 
@@ -55,19 +55,6 @@ const PopupNumericScale = (props: Props) => {
 
   const [focusEleIdx, setFocusEleIdx] = useState(-1);
   
-  const onToggleMultipleAttributes = () => {
-    setMultipleAttributes(!multipleAttributes);
-  };
-
-  const initListAttributes = [
-    {
-      id: "1",
-    },
-    {
-      id: "2",
-    },
-  ];
-  
   const schema = yup.object().shape({
     title: yup.string().required("Question is required"),
     from: yup.number().typeError('Required').integer().required("Required"),
@@ -90,7 +77,6 @@ const PopupNumericScale = (props: Props) => {
     setValue,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
   } = useForm<AttributeFormData>({
     resolver: yupResolver(schema),
@@ -99,37 +85,28 @@ const PopupNumericScale = (props: Props) => {
 
   const attributes = watch("attributes");
 
-  const initAttribute = () => {
-    const list = [];
-    for (let i: number = 0; i < initListAttributes.length; ++i) {
-      list.push({ id: i + 1 });
-    }
-    setValue("attributes", list);
+
+  const addInputAtt = () => {
+
   };
 
+  const onToggleMultipleAttributes = () => {
+    setMultipleAttributes(!multipleAttributes); 
+
+  }
+
+
   const reorder = (items, startIndex, endIndex) => {
-    const result = Array.from(items);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
+
   };
 
   const onDragEnd = ({ destination, source }: DropResult) => {
-    if (!destination) {
-      return;
-    }
-    const result = reorder(attributes, source.index, destination.index);
-    setValue("attributes", result);
+
   };
 
-  const handleChangeInputAtt =
-    (value: string, index: number, callback: boolean) =>
+  const handleChangeInputAtt = (value: string, index: number, callback: boolean) =>
     (event: SyntheticEvent<EventTarget>) => {
-      const find_pos = attributes.findIndex((att) => att.id === index);
-      const new_arr = [...attributes];
-      const element = event.currentTarget as HTMLInputElement;
-      new_arr[find_pos][value] = element.value;
-      setValue("attributes", new_arr);
+
     };
 
   const checkAllAttNotValueStart = () => {
@@ -141,57 +118,18 @@ const PopupNumericScale = (props: Props) => {
   };
 
   const clearForm = () => {
-    reset({
-      title: "",
-      from: null,
-      to: null,
-      attributes: [],
-    });
-    initAttribute();
+
   };
+
 
   const _onSubmit = (data: AttributeFormData) => {
-    if (attributes.length !== 0) {
-      const attribute = {
-        title: data.title,
-        from: data.from,
-        to: data.to,
-        attributes: data.attributes.map((item) => ({
-          id: null,
-          start: item.start,
-          end: item.end
-        })),
-        
-      };
-      //onSubmit(atribute);
-      clearForm();
-    }
-  };
 
+  };
   
 
-  const addInputAtt = () => {
-    const new_attributes = {
-      id: uuidv4(),
-      start: "",
-      end: "",
-    };
-    setFocusEleIdx(attributes.length);
-    setValue("attributes", [...attributes,new_attributes]);
-  };
+  const deleteInputAtt = (id: number) => () => {
 
-  const deleteInputAtt = (index: number) => () => {
-    if (attributes?.length <= initListAttributes?.length) {
-      return;
-    }
-    const updated_attributes = [...attributes].filter((att) => att.id !== index);
-    setValue("attributes", updated_attributes);
   };
-
-  useEffect(() => {
-    initAttribute();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <Dialog
@@ -203,7 +141,7 @@ const PopupNumericScale = (props: Props) => {
         <Grid className={classes.content}>
           <Heading3 translation-key="">
             Add numeric scale
-          </Heading3 >
+          </Heading3>
           <ButtonCLose
           onClick={() => onClose()}>
           </ButtonCLose>
@@ -248,39 +186,29 @@ const PopupNumericScale = (props: Props) => {
               <div className={classes.contentScaleRange}>
                 <ParagraphBody colorName="--eerie-black-65">From</ParagraphBody>
                 <Grid className={classes.gridFromScale}>
-                  <Controller
-                    name="from"
-                    control={control}
-                    render={({ field }) => <InputLineTextfield
-                      className={classes.fromScale}
-                      fullWidth
-                      type="number"
-                      placeholder="0"
-                      onBlur={field.onBlur}
-                      onChange={field.onChange}
-                      autoComplete="off"
-                      inputProps={{tabIndex:2}}
-                      errorMessage={errors.from?.message}
-                    />}
-                  />                
+                  <InputLineTextfield
+                    className={classes.fromScale}
+                    fullWidth
+                    type="number"
+                    placeholder="0"
+                    autoComplete="off"
+                    inputProps={{tabIndex:2}}
+                    inputRef={register("from")}
+                    errorMessage={errors.from?.message}
+                      />               
                 </Grid>
                 <ParagraphBody colorName="--eerie-black-65">to</ParagraphBody>
                 <Grid>
-                  <Controller
-                      name="to"
-                      control={control}
-                      render={({ field }) => <InputLineTextfield
-                        className={classes.toScale}
-                        fullWidth
-                        type="number"
-                        placeholder="max"
-                        onBlur={field.onBlur}
-                        onChange={field.onChange}
-                        autoComplete="off"
-                        inputProps={{tabIndex:3}}
-                        errorMessage={errors.to?.message}
-                      />}
-                    />
+                  <InputLineTextfield
+                    className={classes.toScale}
+                    fullWidth
+                    type="number"
+                    placeholder="max"
+                    autoComplete="off"
+                    inputProps={{tabIndex:3}}
+                    inputRef={register("to")}
+                    errorMessage={errors.to?.message}
+                  />
                 </Grid>
               </div> 
             </Grid>
@@ -337,26 +265,19 @@ const PopupNumericScale = (props: Props) => {
                                         xs={6}
                                         className={classes.inputContainer}
                                       >
-                                        <Controller
-                                          name="attributes"
-                                          control={control}
-                                          render={({ field }) => <InputLineTextfield
-                                            className={classes.inputAttribute}
-                                            type="text"
-                                            placeholder="Left label"
-                                            onBlur={field.onBlur}
-                                            onChange={handleChangeInputAtt(
-                                              "start",
-                                              att.id,
-                                              checkAllAttNotValueStart()
-                                            )}
-                                            autoComplete="off"
-                                            inputProps={{tabIndex:index + 4}}
-                                            autoFocus={index === focusEleIdx}
-                                            errorMessage={!att.start && !!errors.attributes?.length &&
-                                              errors.attributes[index]?.start
-                                                ?.message}
-                                          />}
+                                        <InputLineTextfield
+                                          className={classes.inputAttribute}
+                                          type="text"
+                                          placeholder="Left label"
+                                          onChange={handleChangeInputAtt(
+                                            "start",
+                                            att.id,
+                                            checkAllAttNotValueStart()
+                                          )}
+                                           autoComplete="off"
+                                          inputProps={{tabIndex:index + 4}}
+                                          autoFocus={index === focusEleIdx}
+                                          errorMessage={!att.start && !!errors.attributes?.length && errors.attributes[index]?.start?.message}
                                         />
                                       </Grid>
                                       <Grid
@@ -364,30 +285,24 @@ const PopupNumericScale = (props: Props) => {
                                         xs={6}
                                         className={classes.inputContainer}
                                       >
-                                        <Controller
-                                          name="attributes"
-                                          control={control}
-                                          render={({ field }) => <InputLineTextfield
-                                            className={classes.inputAttribute}
-                                            type="text"
-                                            placeholder="Right label"
-                                            onBlur={field.onBlur}
-                                            onChange={handleChangeInputAtt(
-                                              "end",
-                                              att.id,
-                                              checkAllAttNotValueEnd()
-                                            )}
-                                            autoComplete="off"
-                                            inputProps={{tabIndex:index + 5}}
-                                            errorMessage={!att.end && !!errors.attributes?.length &&
-                                              errors.attributes[index]?.end
-                                                ?.message}
-                                          />}
-                                        />
+                                        <InputLineTextfield
+                                          className={classes.inputAttribute}
+                                          type="text"
+                                          placeholder="Right label"
+                                          onChange={handleChangeInputAtt(
+                                            "end",
+                                            att.id,
+                                            checkAllAttNotValueEnd()
+                                          )}
+                                          autoComplete="off"
+                                          inputProps={{tabIndex:index + 5}}
+                                          errorMessage={!att.end && !!errors.attributes?.length &&
+                                            errors.attributes[index]?.end?.message}
+                                          />
                                       </Grid>
                                     </Grid>
                                   </div>
-                                  {attributes?.length > initListAttributes.length && (
+                                  {attributes?.length > 1 && (
                                     <CloseIcon
                                     type="button"
                                     className={classes.closeInputAttribute}
