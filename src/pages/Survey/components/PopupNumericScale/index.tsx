@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState, useEffect } from "react";
+import { SyntheticEvent, useState } from "react";
 import {
   Grid,
   Dialog,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   DragDropContext,
@@ -30,7 +30,7 @@ import InputLineTextfield from "components/common/inputs/InputLineTextfield"
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import ButtonCLose from "components/common/buttons/ButtonClose"
 import Button, { BtnType } from "components/common/buttons/Button"
-import ButtonSmall from "components/common/text/TextBtnSmall"
+import TextBtnSmall from "components/common/text/TextBtnSmall"
 import InputTextfield from "components/common/inputs/InputTextfield"
 import { v4 as uuidv4 } from 'uuid';
 
@@ -341,7 +341,7 @@ const PopupNumericScale = (props: Props) => {
             btnType={BtnType.Raised}
             type="submit"
             translation-key="setup_survey_popup_save_question_title"
-            children={<ButtonSmall>{t("setup_survey_popup_save_question_title")}</ButtonSmall>}
+            children={<TextBtnSmall>{t("setup_survey_popup_save_question_title")}</TextBtnSmall>}
             className={classes.btnSave}
           />
         </DialogActions>
