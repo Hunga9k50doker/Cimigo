@@ -1,0 +1,287 @@
+.paper {
+    width: 790px;
+    max-width: 790px;
+    border-radius: 8px;
+  }
+  .header {
+    padding:0;
+  }
+  .content {
+    background-color:  var(--cimigo-blue-dark-1);
+    display: flex;
+    justify-content: space-between;
+    padding:24px;
+    color: var(--ghost-white);
+    font-size: 22px;
+    line-height: 31px;
+    
+    button {
+      padding: 0px;
+    }
+  }
+  .titleAdvice {
+    margin-bottom: 24px;
+  }
+
+  .formControl {
+    padding-bottom: 26px;
+  }
+  
+  .classForm {
+    background-color: white;
+    min-height: 100px;
+    padding: 32px 28px 26px 28px;
+    position: relative;
+  }
+  
+  .addList {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    padding-left: 44px;
+    margin-top: 16px;
+    margin-bottom: 25px;
+    @media only screen and (max-width: 500px) {
+      padding-left: 0;
+    }
+  }
+
+  .addOptions {
+    display: flex;
+    cursor: pointer;
+  }
+  
+  .rowInputAttributeControl {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    padding-left: 35px;
+    position: relative;
+    cursor: grab;
+
+    &:hover {
+      .iconDotsDrag {
+        visibility: visible;
+      }
+    }
+  }
+  .rowInputAttribute {
+    width: 90%;
+    margin-right: auto;
+    .attributeTitle {
+      display: none;
+    }
+
+    @media only screen and (max-width: 500px) {
+      .attributeTitle {
+        display: block;
+      }
+    }
+  }
+  
+  .closeInputAttribute {
+    position:absolute;
+    top:0;
+    right:0;
+    color: var(--eerie-black-65);
+    cursor: pointer;
+  }
+
+  .attributeTitle {
+    @media only screen and (max-width: 500px) {
+      margin-left: 9px;
+    }
+  }
+
+  .inputContainer {
+    [class~="MuiTypography-root"]{
+      margin-left: 15px;
+      @media only screen and (max-width: 500px) {
+        margin-left: 18px;
+      }
+    }
+    @media only screen and (max-width: 500px) {
+      display: contents;
+    }
+  }
+  
+  .inputAttribute {
+    margin-left: 5px;
+    margin-right: 10px;
+
+    input {
+      padding: 0 0 0 9px;
+    }
+
+    svg {
+      display: none;
+    }
+
+    @media only screen and (max-width: 500px) {
+        margin-top:12px; 
+        margin-left: 8px;
+      }
+  }
+
+  .iconDotsDrag {
+    width: 25px;
+    height: 40px;
+    position: absolute;
+    top: -9px;
+    left: 0;
+    visibility: hidden;
+  }
+  
+  .IconListAdd {
+    width: 40px;
+    height: 25px;
+    margin-right: 15px;
+    margin-left: -14px;
+    color: var(--eerie-black-65);
+  }
+  
+  .inputQuestion {
+    border-bottom: none;
+    position: relative;
+    width: 100%;
+    min-height: 42px;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+
+    .iconLanguage {
+      color: var(--eerie-black-65);
+      background-color: rgba(221, 221, 221, 1);
+      font-weight: 500;
+      font-size: 12px;
+      border-radius: 5px;
+      width: 29px;
+      height: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 14.6px;
+      text-transform: uppercase;
+    }
+  
+    input {
+      padding: 0px;
+    }
+  }
+
+  @media only screen and (max-width: 500px) {
+
+    .inputQuestion {
+      font-size: 14px;
+    }
+  
+    .inputAttribute {
+      font-size: 14px;
+    }
+  
+    .IconListAdd {
+      margin-left: -11px;
+      margin-right: 13px;
+    }
+  
+  }
+
+  .scaleRangeContainer {
+    margin-top:17px;
+  }
+  
+  .contentScaleRange {
+    display: flex;
+    margin-top: 8px;
+    [class~="MuiFormControl-root"] {
+          align-items: center;   
+    }
+  }
+
+  .fromScale {
+      max-width:20px;
+  }
+
+  .toScale {
+      max-width:36px;
+  }
+
+  .fromScale, .toScale {
+    margin: 0 10px;
+    padding: 0!important;
+    svg {
+      display: none;
+    }
+    input {
+      padding: 0;
+    }
+    > input::placeholder {
+      text-align: center;
+    }
+  }
+
+  .multiAttributeControl {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .toggleMultipleAttributes {
+    margin-left:24px;
+    @media only screen and (max-width: 500px) {
+      margin-left: auto;
+    }
+  }
+  
+  .btnSave {
+    margin-right: 4%;
+  }
+
+  .inputAttribute:focus-visible {
+    outline: none;
+  }
+  
+  .footer {
+  padding: 0;
+  @media only screen and (max-width: 600px) {
+    display:flex;
+    flex-direction: column;
+    align-items: end;
+    margin-right: 4%;
+    .btnSave {
+      width: 92%;
+      margin-right:0;
+      margin-top:16px; 
+    }
+   }
+  }
+  
+  .costContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin-right: 16px;
+    margin-top: 8px;
+
+    p {
+      margin-bottom: 0;
+    }
+
+    span {
+        font-size:12px;
+        font-weight:400;
+    }
+
+    @media only screen and (max-width: 767px) {
+      margin-right: 8px;
+      p {
+        text-align: end;
+      }
+    }
+  }

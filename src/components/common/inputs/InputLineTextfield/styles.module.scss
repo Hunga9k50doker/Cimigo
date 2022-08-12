@@ -1,0 +1,115 @@
+.root {
+  width: 100%;
+}
+
+.iconEye {
+  svg {
+    width: 17px;
+    height: 16px;
+  }
+}
+
+.iconErrorOutline {
+  width: 20px;
+  height: 20px;
+  color: var(--cimigo-danger);
+}
+
+.inputTextfield {
+  &[class~=Mui-disabled] {
+    background: var(--gray-5);
+    fieldset {
+      border-width: 1px !important;
+      border: none;
+      border-bottom: 1px solid var(--gray-20);
+      border-radius: initial;
+    }
+    ::placeholder {
+      color: var(--gray-20);
+    }
+  }
+  ::placeholder {
+    color: var(--gray-50);
+    font-weight: 400;
+    font-size: 16px; 
+    opacity: 1;
+  }
+  @media only screen and (max-width: 767px) {
+    ::placeholder {
+      font-size: 14px;
+    }
+  }
+  :focus {
+    caret-color: var(--cimigo-blue-light-1);
+  }
+  input {
+    padding: 0;
+  }
+  padding-left: 9px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  height: 24px;
+  letter-spacing: 0.015em;
+  color: var(--eerie-black);
+  border-radius: initial; 
+  fieldset {
+    border-width: 1px !important;
+    border: none;
+    border-bottom: 1px solid var(--gray-20);
+    border-radius: initial;
+  }
+}
+.inputInvalid {
+  &[class~=Mui-disabled] {
+    background: var(--gray-5);
+    fieldset {
+      border-width: 1px !important;
+      border: none;
+      border-bottom: 1px solid var(--gray-20);
+      border-radius: initial;
+    }
+    ::placeholder {
+      color: var(--gray-20);
+    }
+  }
+  ::placeholder {
+    color: var(--gray-50);
+    font-weight: 400;
+    font-size: 16px; 
+    opacity: 1;
+  }
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  height: 24px;
+  letter-spacing: 0.015em;
+  color: var(--eerie-black);
+  background:#fff;
+  border-radius: initial; 
+  fieldset {
+    border: none;
+    border-bottom: 1px solid var(--cimigo-danger);
+    border-width: 1px !important;
+    border-radius: initial; 
+  }
+}
+
+.optional {
+  color: var(--cimigo-green-dark);
+}
+.textInfor {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--gray-80);
+  margin: 0;
+  margin-top: 5px;
+  padding-left: 9px;
+}
+
+.titleRequired {
+  color: var(--cimigo-danger);
+}
