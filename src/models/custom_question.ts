@@ -3,8 +3,10 @@ export interface CustomQuestionType {
   title: string;
   order: number;
   price: number;
+  priceAttribute: number;
   minAnswer: number;
   maxAnswer: number;
+  maxAttribute: number;
   status: number;
   language: string;
   parentLanguage: string;
@@ -18,6 +20,9 @@ export enum ECustomQuestionType {
   Open_Question = 1,
   Single_Choice = 2,
   Multiple_Choices = 3,
+  Numeric_Scale = 4,
+  Smiley_Rating = 5,
+  Star_Rating = 6,
 }
 
 export interface CustomQuestion {
@@ -30,6 +35,12 @@ export interface CustomQuestion {
   createdAt?: Date;
   updatedAt?: Date;
   type?: CustomQuestionType;
+  scaleRangeFrom?: number;
+  scaleRangeTo?: number;
+  numberOfStars?: number;
+  invertScale?: boolean;
+  customQuestionAttributes?: CustomQuestionAttribute[];
+  customQuestionEmojis?: CustomQuestionEmoji[];
 }
 
 export interface CustomAnswer {
@@ -59,11 +70,50 @@ export interface GetAllQuestionParams {
   projectId: number;
 }
 
-export interface CreateQuestionParams {
-  projectId: number;
+export interface CreateOrEditCustomQuestionInput {
+  projectId?: number;
   title: string;
+  scaleRangeFrom?: number;
+  scaleRangeTo?: number;
+  numberOfStars?: number;
+  invertScale?: boolean;
   typeId: number;
-  answers?: CustomAnswer[];
+  answers?: {
+    title: string;
+    exclusive: boolean;
+  }[],
+  customQuestionAttributes?: {
+    attribute?: string;
+    leftLabel?: string;
+    rightLabel?: string;
+  }[],
+  customQuestionEmojis?: {
+    label: string;
+    emojiId: number;
+  }[]
+}
+
+export interface CreateCustomQuestionInput {
+  projectId?: number;
+  title: string;
+  scaleRangeFrom?: number;
+  scaleRangeTo?: number;
+  numberOfStars?: number;
+  invertScale?: boolean;
+  typeId: number;
+  answers?: {
+    title: string;
+    exclusive: boolean;
+  }[],
+  customQuestionAttributes?: {
+    attribute?: string;
+    leftLabel?: string;
+    rightLabel?: string;
+  }[],
+  customQuestionEmojis?: {
+    label: string;
+    emojiId: number;
+  }[]
 }
 
 export interface QuestionOrder {
@@ -76,7 +126,52 @@ export interface UpdateOrderQuestionParams {
   questions: QuestionOrder[];
 }
 
-export interface UpdateQuestionParams {
-  title?: string;
-  answers?: CustomAnswer[];
+export interface UpdateCustomQuestionInput {
+  title: string;
+  typeId: number;
+  scaleRangeFrom?: number;
+  scaleRangeTo?: number;
+  numberOfStars?: number;
+  invertScale?: boolean;
+  answers?: {
+    id?: number;
+    title: string;
+    exclusive: boolean;
+  }[],
+  customQuestionAttributes?: {
+    id?: number;
+    attribute?: string;
+    leftLabel?: string;
+    rightLabel?: string;
+  }[],
+  customQuestionEmojis?: {
+    id?: number;
+    label: string;
+    emojiId: number;
+  }[]
+}
+
+export interface CustomQuestionAttribute {
+  id: number;
+  attribute: string;
+  leftLabel: string;
+  rightLabel: string;
+  order: number,
+  customQuestionId: number;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
+  customQuestion?: CustomQuestion
+}
+
+export interface CustomQuestionEmoji {
+  id: number;
+  label: string;
+  emojiId: string;
+  order: number,
+  customQuestionId: number;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
+  customQuestion?: CustomQuestion
 }

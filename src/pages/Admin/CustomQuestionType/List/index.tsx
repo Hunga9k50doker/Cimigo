@@ -22,8 +22,10 @@ const tableHeaders: TableHeaderLabel[] = [
   { name: 'id', label: 'Id', sortable: false },
   { name: 'title', label: 'Title', sortable: false },
   { name: 'price', label: 'Price', sortable: false },
+  { name: 'priceAttribute', label: 'Attribute price', sortable: false },
   { name: 'minAnswer', label: 'Min answer', sortable: false },
   { name: 'maxAnswer', label: 'Max answer', sortable: false },
+  { name: 'maxAttribute', label: 'Max attribute', sortable: false },
   { name: 'languages', label: 'Languages', sortable: false },
   { name: 'status', label: 'Status', sortable: false },
   { name: 'actions', label: 'Actions', sortable: false },
@@ -186,10 +188,18 @@ const List = memo(({ keyword, setKeyword, data, setData }: Props) => {
                             {'$'}{fCurrency2(item.price)}
                           </TableCell>
                           <TableCell>
+                            {item.priceAttribute && (
+                              <>{'$'}{fCurrency2(item.priceAttribute)}</>
+                            )}
+                          </TableCell>
+                          <TableCell>
                             {item.minAnswer}
                           </TableCell>
                           <TableCell>
                             {item.maxAnswer}
+                          </TableCell>
+                          <TableCell>
+                            {item.maxAttribute}
                           </TableCell>
                           <TableCell>
                             {item?.languages?.map(it => it.language).join(', ')}

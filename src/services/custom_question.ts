@@ -1,10 +1,10 @@
 import { API } from "config/constans";
 import {
-  CreateQuestionParams,
+  CreateCustomQuestionInput,
   GetAllQuestionParams,
   GetTypeParams,
   UpdateOrderQuestionParams,
-  UpdateQuestionParams,
+  UpdateCustomQuestionInput
 } from "models/custom_question";
 import api from "services/configApi";
 
@@ -31,7 +31,7 @@ export class CustomQuestionService {
       });
   }
 
-  static async create(data: CreateQuestionParams): Promise<any> {
+  static async create(data: CreateCustomQuestionInput): Promise<any> {
     return await api
       .post(API.CUSTOM_QUESTION.DEFAULT, data)
       .then((res) => {
@@ -53,7 +53,7 @@ export class CustomQuestionService {
       });
   }
 
-  static async update(id: number, data: UpdateQuestionParams): Promise<any> {
+  static async update(id: number, data: UpdateCustomQuestionInput): Promise<any> {
     return await api
       .put(API.CUSTOM_QUESTION.QUESTION.replace(":id", `${id}`), data)
       .then((res) => {

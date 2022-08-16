@@ -44,9 +44,11 @@ const Edit = memo(({}: Props) => {
     const form: AdminUpdateCustomQuestionType = {
       title: data.title,
       order: data.order,
-      price: data.price,
-      minAnswer: data.minAnswer,
-      maxAnswer: data.maxAnswer,
+      price: data.price ?? 0,
+      priceAttribute: data.priceAttribute ?? 0,
+      minAnswer: data.minAnswer ?? 0,
+      maxAnswer: data.maxAnswer ?? 0,
+      maxAttribute: data.maxAttribute ?? 0,
       status: data.status.id
     }
     if (lang) form.language = lang

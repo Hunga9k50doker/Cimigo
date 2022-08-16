@@ -10,6 +10,9 @@ import { IconButton } from "@mui/material";
 import { CustomQuestion, ECustomQuestionType } from "models/custom_question";
 import classes from "./styles.module.scss";
 import { fCurrency2 } from "utils/formatNumber";
+import { useSelector } from "react-redux";
+import { ReducerType } from "redux/reducers";
+import { PriceService } from "helpers/price";
 
 interface CustomQuestionDragListProps {
   questions: CustomQuestion[];
@@ -29,6 +32,12 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
     onShowConfirmDeleteQuestion,
     editableProject,
   } = props;
+
+  const { configs } = useSelector((state: ReducerType) => state.user)
+
+  const getPrice = (customQuestion: CustomQuestion) => {
+    return PriceService.getCustomQuestionItemCost(customQuestion, configs)
+  }
 
   const reorder = (items, startIndex, endIndex) => {
     const result: CustomQuestion[] = Array.from(items);
@@ -115,7 +124,7 @@ const CustomQuestionDragList = memo((props: CustomQuestionDragListProps) => {
                           <img src={handleIcon(item.typeId)} alt="" />
                           <p>{item.title}</p>
                           <span className={classes.hide}>
-                            ${fCurrency2(item?.type.price)}
+                            ${fCurrency2(getPrice(item)?.priceUSD || 0)}
                           </span>
                         </div>                       
                       </div>

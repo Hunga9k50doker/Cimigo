@@ -3,8 +3,10 @@ export interface CustomQuestionType {
   title: string;
   order: number,
   price: number;
+  priceAttribute: number;
   minAnswer: number;
   maxAnswer: number;
+  maxAttribute: number;
   status: number;
   language: string;
   parentLanguage: string;
@@ -30,8 +32,10 @@ export interface AdminUpdateCustomQuestionType {
   title: string;
   order: number,
   price: number;
+  priceAttribute?: number;
   minAnswer: number;
   maxAnswer: number;
+  maxAttribute?: number;
   status: number;
   language?: string;
 }

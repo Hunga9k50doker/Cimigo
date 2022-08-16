@@ -60,7 +60,7 @@ import { Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
 import Toggle from "components/Toggle";
-import { CreateQuestionParams, CustomQuestion, CustomQuestionType, ECustomQuestionType, UpdateOrderQuestionParams, UpdateQuestionParams } from "models/custom_question";
+import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType, UpdateOrderQuestionParams, CreateCustomQuestionInput, UpdateCustomQuestionInput } from "models/custom_question";
 import { CustomQuestionService } from "services/custom_question";
 import CustomQuestionDragList from "../components/CustomQuestionDragList";
 import CustomQuestionListMobile from "../components/CustomQuestionListMobile";
@@ -71,6 +71,7 @@ import PopupConfirmDisableCustomQuestion from "../components/PopupConfirmDisable
 
 import { fCurrency2 } from "utils/formatNumber";
 import { PriceService } from "helpers/price";
+import PopupNumericScale from "../components/PopupNumericScale";
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -118,6 +119,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   const { t } = useTranslation()
 
   const dispatch = useDispatch()
+  const { configs } = useSelector((state: ReducerType) => state.user)
   const { project } = useSelector((state: ReducerType) => state.project)
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<BasicInformationFormData>({
@@ -130,6 +132,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [openPopupOpenQuestion, setOpenPopupOpenQuestion] = useState(false)
   const [openPopupSingleChoice, setOpenPopupSingleChoice] = useState(false)
   const [openPopupMultipleChoices, setOpenPopupMultipleChoices] = useState(false)
+  const [openPopupNumericScale, setOpenPopupNumericScale] = useState(false)
 
   const [packs, setPacks] = useState<Pack[]>([]);
   const [addNewPack, setAddNewPack] = useState<boolean>(false);
@@ -163,6 +166,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [openQuestionEdit, setOpenQuestionEdit] = useState<CustomQuestion>();
   const [singleChoiceEdit, setSingleChoiceEdit] = useState<CustomQuestion>();
   const [multipleChoicesEdit, setMultipleChoicesEdit] = useState<CustomQuestion>();
+  const [numericScaleEdit, setNumericScaleEdit] = useState<CustomQuestion>();
   const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
 
   const [openConfirmDisableCustomQuestion, setOpenConfirmDisableCustomQuestion] = useState(false);
@@ -241,6 +245,13 @@ const SetupSurvey = memo(({ id }: Props) => {
             break;
           case ECustomQuestionType.Multiple_Choices:
             setMultipleChoicesEdit(res.data);
+            break;
+          case ECustomQuestionType.Numeric_Scale:
+            setNumericScaleEdit(res.data);
+            break;
+          case ECustomQuestionType.Smiley_Rating:
+            break;
+          case ECustomQuestionType.Star_Rating:
             break;
           default:
             break;
@@ -612,9 +623,9 @@ const SetupSurvey = memo(({ id }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const totalCustomQuestionPrice = () => {
-    return PriceService.getCustomQuestionCost(project);
-  }
+  const totalCustomQuestionPrice = useMemo(() => {
+    return PriceService.getCustomQuestionCost(questions, configs) || 0;
+  }, [questions, configs])
 
   const countQuestionType = (type: ECustomQuestionType) => {
     return questions.filter((item) => item.typeId === type).length;
@@ -625,16 +636,20 @@ const SetupSurvey = memo(({ id }: Props) => {
   }
 
   const questionTypeOpenQuestion = useMemo(() => findQuestionType(ECustomQuestionType.Open_Question)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  , [customQuestionType]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    , [customQuestionType]);
 
   const questionTypeSingleChoice = useMemo(() => findQuestionType(ECustomQuestionType.Single_Choice)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  , [customQuestionType]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    , [customQuestionType]);
 
   const questionTypeMultipleChoices = useMemo(() => findQuestionType(ECustomQuestionType.Multiple_Choices)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  , [customQuestionType]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    , [customQuestionType]);
+
+  const questionTypeNumericScale = useMemo(() => findQuestionType(ECustomQuestionType.Numeric_Scale)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    , [customQuestionType]);
 
   const onOpenPopupCustomQuestion = (type: ECustomQuestionType) => {
     switch (type) {
@@ -646,6 +661,15 @@ const SetupSurvey = memo(({ id }: Props) => {
         break;
       case ECustomQuestionType.Multiple_Choices:
         setOpenPopupMultipleChoices(true);
+        break;
+      case ECustomQuestionType.Numeric_Scale:
+        setOpenPopupNumericScale(true);
+        break;
+      case ECustomQuestionType.Smiley_Rating:
+
+        break;
+      case ECustomQuestionType.Star_Rating:
+
         break;
       default:
         break;
@@ -668,96 +692,123 @@ const SetupSurvey = memo(({ id }: Props) => {
     setMultipleChoicesEdit(null);
   }
 
+  const onClosePopupNumericScale = () => {
+    setOpenPopupNumericScale(false);
+    setNumericScaleEdit(null);
+  }
+
   const onAddOrEditOpenQuestion = (data: CustomQuestion) => {
-    if (openQuestionEdit) {
-      dispatch(setLoading(true));
-      const params: UpdateQuestionParams = {
-        title: data.title,
-        answers: data.answers,
-      }
-      CustomQuestionService.update(openQuestionEdit.id, params)
-        .then(() => {
-          getCustomQuestion();
-          onClosePopupOpenQuestion();
-        })
-        .catch(e => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
-    } else {
-      dispatch(setLoading(true));
-      const params: CreateQuestionParams = {
-        projectId: id,
-        title: data.title,
-        typeId: data.typeId,
-        answers: data.answers,
-      }
-      CustomQuestionService.create(params)
-        .then(() => {
-          getCustomQuestion();
-          onClosePopupOpenQuestion();
-        })
-        .catch(e => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
-    }
+    // if (openQuestionEdit) {
+    //   dispatch(setLoading(true));
+    //   const params: UpdateCustomQuestionInput = {
+    //     title: data.title,
+    //     answers: data.answers,
+    //   }
+    //   CustomQuestionService.update(openQuestionEdit.id, params)
+    //     .then(() => {
+    //       getCustomQuestion();
+    //       onClosePopupOpenQuestion();
+    //     })
+    //     .catch(e => dispatch(setErrorMess(e)))
+    //     .finally(() => dispatch(setLoading(false)))
+    // } else {
+    //   dispatch(setLoading(true));
+    //   const params: CreateCustomQuestionInput = {
+    //     projectId: id,
+    //     title: data.title,
+    //     typeId: data.typeId,
+    //     answers: data.answers,
+    //   }
+    //   CustomQuestionService.create(params)
+    //     .then(() => {
+    //       getCustomQuestion();
+    //       onClosePopupOpenQuestion();
+    //     })
+    //     .catch(e => dispatch(setErrorMess(e)))
+    //     .finally(() => dispatch(setLoading(false)))
+    // }
   }
 
   const onAddOrEditSingleChoice = (data: CustomQuestion) => {
-    if (singleChoiceEdit) {
-      dispatch(setLoading(true));
-      const params: UpdateQuestionParams = {
-        title: data.title,
-        answers: data.answers,
-      }
-      CustomQuestionService.update(singleChoiceEdit.id, params)
-        .then(() => {
-          getCustomQuestion();
-          onClosePopupSingleChoice();
-        })
-        .catch(e => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
-    } else {
-      dispatch(setLoading(true));
-      const params: CreateQuestionParams = {
-        projectId: id,
-        title: data.title,
-        typeId: data.typeId,
-        answers: data.answers,
-      }
-      CustomQuestionService.create(params)
-        .then(() => {
-          getCustomQuestion();
-          onClosePopupSingleChoice();
-        })
-        .catch(e => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
-    }
+    // if (singleChoiceEdit) {
+    //   dispatch(setLoading(true));
+    //   const params: UpdateCustomQuestionInput = {
+    //     title: data.title,
+    //     answers: data.answers,
+    //   }
+    //   CustomQuestionService.update(singleChoiceEdit.id, params)
+    //     .then(() => {
+    //       getCustomQuestion();
+    //       onClosePopupSingleChoice();
+    //     })
+    //     .catch(e => dispatch(setErrorMess(e)))
+    //     .finally(() => dispatch(setLoading(false)))
+    // } else {
+    //   dispatch(setLoading(true));
+    //   const params: CreateCustomQuestionInput = {
+    //     projectId: id,
+    //     title: data.title,
+    //     typeId: data.typeId,
+    //     answers: data.answers,
+    //   }
+    //   CustomQuestionService.create(params)
+    //     .then(() => {
+    //       getCustomQuestion();
+    //       onClosePopupSingleChoice();
+    //     })
+    //     .catch(e => dispatch(setErrorMess(e)))
+    //     .finally(() => dispatch(setLoading(false)))
+    // }
   }
 
   const onAddOrEditMultipleChoices = (data: CustomQuestion) => {
-    if (multipleChoicesEdit) {
+    // if (multipleChoicesEdit) {
+    //   dispatch(setLoading(true));
+    //   const params: UpdateCustomQuestionInput = {
+    //     title: data.title,
+    //     answers: data.answers,
+    //   }
+    //   CustomQuestionService.update(multipleChoicesEdit.id, params)
+    //     .then(() => {
+    //       getCustomQuestion();
+    //       onClosePopupMultipleChoices();
+    //     })
+    //     .catch(e => dispatch(setErrorMess(e)))
+    //     .finally(() => dispatch(setLoading(false)))
+    // } else {
+    //   dispatch(setLoading(true));
+    //   const params: CreateCustomQuestionInput = {
+    //     projectId: id,
+    //     title: data.title,
+    //     typeId: data.typeId,
+    //     answers: data.answers,
+    //   }
+    //   CustomQuestionService.create(params)
+    //     .then(() => {
+    //       getCustomQuestion();
+    //       onClosePopupMultipleChoices();
+    //     })
+    //     .catch(e => dispatch(setErrorMess(e)))
+    //     .finally(() => dispatch(setLoading(false)))
+    // }
+  }
+
+  const onAddOrEditNumericScale = (data: CreateOrEditCustomQuestionInput) => {
+    if (numericScaleEdit) {
       dispatch(setLoading(true));
-      const params: UpdateQuestionParams = {
-        title: data.title,
-        answers: data.answers,
-      }
-      CustomQuestionService.update(multipleChoicesEdit.id, params)
+      CustomQuestionService.update(numericScaleEdit.id, data)
         .then(() => {
           getCustomQuestion();
-          onClosePopupMultipleChoices();
+          onClosePopupNumericScale();
         })
         .catch(e => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)))
     } else {
       dispatch(setLoading(true));
-      const params: CreateQuestionParams = {
-        projectId: id,
-        title: data.title,
-        typeId: data.typeId,
-        answers: data.answers,
-      }
-      CustomQuestionService.create(params)
+      CustomQuestionService.create(data)
         .then(() => {
           getCustomQuestion();
-          onClosePopupMultipleChoices();
+          onClosePopupNumericScale();
         })
         .catch(e => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)))
@@ -835,6 +886,23 @@ const SetupSurvey = memo(({ id }: Props) => {
   const onOpenPopupAddAttributes = () => {
     setOpenPopupAddAttributes(true)
     handleCloseMenuAttributes()
+  }
+
+  const getCustomQuestionIcon = (id: number) => {
+    switch (id) {
+      case ECustomQuestionType.Open_Question:
+        return Images.icOpenQuestion
+      case ECustomQuestionType.Single_Choice:
+        return Images.icSingleChoice
+      case ECustomQuestionType.Multiple_Choices:
+        return Images.icMultipleChoices
+      case ECustomQuestionType.Numeric_Scale:
+        return Images.icOpenQuestion
+      case ECustomQuestionType.Smiley_Rating:
+        return Images.icOpenQuestion
+      case ECustomQuestionType.Star_Rating:
+        return Images.icOpenQuestion
+    }
   }
 
   return (
@@ -1339,10 +1407,10 @@ const SetupSurvey = memo(({ id }: Props) => {
                 }
 
                 <span className={clsx(classes.customQuestionPrice, { [classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion })} translation-key="setup_survey_custom_question_cost_description">
-                  {project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}
+                  {project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice)} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}
                 </span>
               </div>
-              <div><span className={clsx(classes.customQuestionPriceMobile, { [classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion })} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}</span></div>
+              <div><span className={clsx(classes.customQuestionPriceMobile, { [classes.customQuestionPriceDisabled]: !project?.enableCustomQuestion })} translation-key="setup_survey_custom_question_cost_description">{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice)} ( ${questions.length} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}</span></div>
               <Grid className={classes.flex}>
                 <p className={clsx({ [classes.customQuestionSubTitleDisabled]: !project?.enableCustomQuestion })} translation-key="setup_survey_custom_question_sub_title">{t("setup_survey_custom_question_sub_title")}</p>
                 <Grid className={clsx({ [classes.displayNone]: !project?.enableCustomQuestion })}>
@@ -1371,13 +1439,11 @@ const SetupSurvey = memo(({ id }: Props) => {
                       }}
                     >
                       {customQuestionType.map((item, index) => {
-                        const value = (index + 2) * 10;
-                        const image = item.id === ECustomQuestionType.Open_Question ? Images.icOpenQuestion : item.id === ECustomQuestionType.Single_Choice ? Images.icSingleChoice : item.id === ECustomQuestionType.Multiple_Choices ? Images.icMultipleChoices : null;
                         return (
-                          <MenuItem value={value} onClick={() => onOpenPopupCustomQuestion(item.id)} key={item.id}>
+                          <MenuItem onClick={() => onOpenPopupCustomQuestion(item.id)} key={item.id}>
                             <div className={classes.questionType}>
                               <div>
-                                <img src={image} alt="" />
+                                <img src={getCustomQuestionIcon(item.id)} alt="" />
                                 <p>{item.title}</p>
                               </div>
                               <span>${fCurrency2(item.price)}</span>
@@ -1511,7 +1577,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   >
                     <div className={classes.summaryCustomQuestion}>
                       <span>{t("setup_survey_summary_custom_question")} ({project?.enableCustomQuestion ? questions.length : 0})</span>
-                      <span className={clsx(classes.summaryCustomQuestionPrice, { [classes.summaryCustomQuestionPriceDisabled]: !project?.enableCustomQuestion })}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice())}` : t("setup_survey_custom_question_cost_description")}</span>
+                      <span className={clsx(classes.summaryCustomQuestionPrice, { [classes.summaryCustomQuestionPriceDisabled]: !project?.enableCustomQuestion })}>{project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice)}` : t("setup_survey_custom_question_cost_description")}</span>
                     </div>
                   </StepLabel>
                   <StepContent className={clsx(classes.rootConnector, { [classes.displayNone]: !project?.enableCustomQuestion })}>
@@ -1605,6 +1671,16 @@ const SetupSurvey = memo(({ id }: Props) => {
             questionEdit={multipleChoicesEdit}
             questionType={questionTypeMultipleChoices}
             language={project?.surveyLanguage || ""}
+          />
+        )}
+        {questionTypeNumericScale && (
+          <PopupNumericScale
+            isOpen={openPopupNumericScale}
+            onClose={onClosePopupNumericScale}
+            onSubmit={onAddOrEditNumericScale}
+            questionEdit={numericScaleEdit}
+            questionType={questionTypeNumericScale}
+            project={project}
           />
         )}
         <PopupConfirmDelete

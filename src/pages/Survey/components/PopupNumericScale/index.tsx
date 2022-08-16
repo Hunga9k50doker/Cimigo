@@ -1,16 +1,14 @@
-import { SyntheticEvent, useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Grid,
   Dialog,
   DialogTitle,
-  DialogActions,
-  DialogContent,
   InputAdornment,
   Tooltip,
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   DragDropContext,
@@ -32,127 +30,191 @@ import ButtonCLose from "components/common/buttons/ButtonClose"
 import Button, { BtnType } from "components/common/buttons/Button"
 import TextBtnSmall from "components/common/text/TextBtnSmall"
 import InputTextfield from "components/common/inputs/InputTextfield"
-import { v4 as uuidv4 } from 'uuid';
+import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
+import { Project } from "models/project";
+import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
+import { DialogContent } from "components/common/dialogs/DialogContent";
+import { DialogActions } from "components/common/dialogs/DialogActions";
+import ErrorMessage from "components/common/text/ErrorMessage";
+import { PriceService } from "helpers/price";
+import { useSelector } from "react-redux";
+import { ReducerType } from "redux/reducers";
 
 
-export interface AttributeFormData {
-  title?: string;
-  from?:number;
-  to?:number;
-  attributes?: any;
+export interface NumericScaleForm {
+  title: string;
+  scaleRangeFrom?: number;
+  scaleRangeTo?: number;
+  customQuestionAttributes?: {
+    id?: number;
+    leftLabel?: string;
+    rightLabel?: string;
+  }[],
 }
 interface Props {
   isOpen: boolean;
+  project: Project;
+  questionEdit: CustomQuestion;
+  questionType: CustomQuestionType;
   onClose: () => void;
+  onSubmit: (data: CreateOrEditCustomQuestionInput) => void;
 }
 
 const PopupNumericScale = (props: Props) => {
-  const { t } = useTranslation();
 
-  const { onClose, isOpen } = props;
+  const { t, i18n } = useTranslation();
 
-  const [multipleAttributes, setMultipleAttributes] = useState(false);
+  const { configs } = useSelector((state: ReducerType) => state.user)
+
+  const { isOpen, project, questionEdit, questionType, onClose, onSubmit } = props;
 
   const [focusEleIdx, setFocusEleIdx] = useState(-1);
-  
-  const schema = yup.object().shape({
-    title: yup.string().required("Question is required"),
-    from: yup.number().typeError('Required').integer().required("Required"),
-    to: yup.number().typeError('Required').required("Required").min(yup.ref("from"),"Greater from"),
-    attributes: yup
-      .array(
-        yup.object({
-          id: yup.number().notRequired(),
-          start: yup.string().required("Label left is required"),
-          end: yup.string().required("Label right is required"),
-        })
-      )
-      .required(),
-  });
 
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      title: yup.string().required("Question title is required"),
+      scaleRangeFrom: yup.number()
+        .typeError('From is required')
+        .integer("From must be an integer")
+        .required("From is required"),
+      scaleRangeTo: yup.number()
+        .typeError('To is required')
+        .integer("To must be an integer")
+        .required("To is required")
+        .min(yup.ref("scaleRangeFrom"), "Greater from"),
+      customQuestionAttributes: yup
+        .array(yup.object({
+          id: yup.number().notRequired(),
+          leftLabel: yup.string().required("Left label is required"),
+          rightLabel: yup.string().required("Right label is required"),
+        }))
+        .required(),
+    })
+  }, [i18n.language]);
 
   const {
+    control,
     register,
-    watch,
-    setValue,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<AttributeFormData>({
+  } = useForm<NumericScaleForm>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
 
-  const attributes = watch("attributes");
+  const { fields: fieldsAttributes, append: appendAttribute, remove: removeAttribute, move: moveAttribute } = useFieldArray({
+    control,
+    name: "customQuestionAttributes"
+  });
 
+  const isShowMultiAttributes = useMemo(() => !!fieldsAttributes?.length, [fieldsAttributes])
 
-  const addInputAtt = () => {
+  const price = useMemo(() => {
+    if (!questionType) return
+    return PriceService.getCustomQuestionNumericScaleCost(questionType, fieldsAttributes.length, configs)
+  }, [questionType, fieldsAttributes])
 
+  const onAddAttribute = () => {
+    if (fieldsAttributes?.length >= questionType.maxAttribute) return
+
+    appendAttribute({
+      leftLabel: '',
+      rightLabel: '',
+    })
+    setFocusEleIdx(fieldsAttributes?.length ?? 0)
   };
 
   const onToggleMultipleAttributes = () => {
-    setMultipleAttributes(!multipleAttributes); 
-
+    if (isShowMultiAttributes) {
+      removeAttribute()
+    } else {
+      onAddAttribute()
+    }
   }
 
-
-  const reorder = (items, startIndex, endIndex) => {
-
-  };
-
   const onDragEnd = ({ destination, source }: DropResult) => {
-
-  };
-
-  const handleChangeInputAtt = (value: string, index: number, callback: boolean) =>
-    (event: SyntheticEvent<EventTarget>) => {
-
-    };
-
-  const checkAllAttNotValueStart = () => {
-    return !!attributes.find(({ start }) => !start);
-  };
-
-  const checkAllAttNotValueEnd = () => {
-    return !!attributes.find(({ end }) => !end);
+    if (!destination) return
+    moveAttribute(source.index, destination.index)
   };
 
   const clearForm = () => {
-
+    reset({
+      title: "",
+      scaleRangeFrom: null,
+      scaleRangeTo: null,
+      customQuestionAttributes: [],
+    })
   };
 
-
-  const _onSubmit = (data: AttributeFormData) => {
-
+  const _onSubmit = (value: NumericScaleForm) => {
+    const data: CreateOrEditCustomQuestionInput = {
+      projectId: project.id,
+      title: value.title,
+      scaleRangeFrom: value.scaleRangeFrom,
+      scaleRangeTo: value.scaleRangeTo,
+      typeId: ECustomQuestionType.Numeric_Scale,
+      customQuestionAttributes: value.customQuestionAttributes?.map(it => ({
+        id: it.id,
+        leftLabel: it.leftLabel,
+        rightLabel: it.rightLabel
+      }))
+    }
+    onSubmit(data)
   };
-  
 
-  const deleteInputAtt = (id: number) => () => {
-
+  const onDeleteAttribute = (index: number) => () => {
+    removeAttribute(index)
   };
+
+  const _onClose = () => {
+    onClose()
+  }
+
+  useEffect(() => {
+    if (questionEdit) {
+      reset({
+        title: questionEdit.title,
+        scaleRangeFrom: questionEdit.scaleRangeFrom,
+        scaleRangeTo: questionEdit.scaleRangeTo,
+        customQuestionAttributes: questionEdit.customQuestionAttributes?.map(it => ({
+          id: it.id,
+          leftLabel: it.leftLabel,
+          rightLabel: it.rightLabel
+        })),
+      })
+    }
+  }, [questionEdit])
+
+  useEffect(() => {
+    if (!isOpen && !questionEdit) {
+      clearForm()
+    }
+  }, [isOpen, questionEdit])
 
   return (
     <Dialog
+      scroll="paper"
       open={isOpen}
-      onClose={() => onClose()}
+      onClose={() => _onClose()}
       classes={{ paper: classes.paper }}
     >
-      <DialogTitle className={classes.header}>
-        <Grid className={classes.content}>
-          <Heading3 translation-key="">
-            Add numeric scale
-          </Heading3>
-          <ButtonCLose
-          onClick={() => onClose()}>
-          </ButtonCLose>
-        </Grid>
-      </DialogTitle>
-      <form className={classes.formControl} onSubmit={handleSubmit(_onSubmit)}>
-        <DialogContent sx={{ padding: "0px", paddingBottom: "10px" }}>
+      <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
+        <DialogTitle className={classes.header}>
+          <Grid className={classes.content}>
+            <Heading3 translation-key="">
+              Add numeric scale
+            </Heading3>
+            <ButtonCLose
+              onClick={() => _onClose()}>
+            </ButtonCLose>
+          </Grid>
+        </DialogTitle>
+        <DialogContent dividers>
           <Grid className={classes.classForm}>
             <ParagraphBody colorName="--eerie-black" translation-key="" className={classes.titleAdvice} >
               The price of this demand will change based on the number of
-              attributes you add, $149 for the first attribute, $32 for each
+              attributes you add, ${fCurrency2(questionType?.price || 0)} for the first attribute, ${fCurrency2(questionType?.priceAttribute || 0)} for each
               subsequent attribute.
             </ParagraphBody>
             <Heading5
@@ -170,7 +232,7 @@ const PopupNumericScale = (props: Props) => {
                     translation-key="setup_survey_popup_question_tooltip_icon"
                     title={t("setup_survey_popup_question_tooltip_icon")}
                   >
-                    <div className={classes.iconLanguage}>en</div>
+                    <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
                   </Tooltip>
                 </InputAdornment>
               }
@@ -185,48 +247,46 @@ const PopupNumericScale = (props: Props) => {
               <Heading5>Scale Range</Heading5>
               <div className={classes.contentScaleRange}>
                 <ParagraphBody colorName="--eerie-black-65">From</ParagraphBody>
-                <Grid className={classes.gridFromScale}>
-                  <InputLineTextfield
-                    className={classes.fromScale}
-                    fullWidth
-                    type="number"
-                    placeholder="0"
-                    autoComplete="off"
-                    inputProps={{tabIndex:2}}
-                    inputRef={register("from")}
-                    errorMessage={errors.from?.message}
-                      />               
-                </Grid>
+                <InputLineTextfield
+                  root={classes.inputScaleRange}
+                  fullWidth
+                  type="number"
+                  placeholder="min"
+                  autoComplete="off"
+                  inputProps={{ tabIndex: 2 }}
+                  inputRef={register("scaleRangeFrom")}
+                  isShowError={!!errors.scaleRangeFrom?.message}
+                />
                 <ParagraphBody colorName="--eerie-black-65">to</ParagraphBody>
-                <Grid>
-                  <InputLineTextfield
-                    className={classes.toScale}
-                    fullWidth
-                    type="number"
-                    placeholder="max"
-                    autoComplete="off"
-                    inputProps={{tabIndex:3}}
-                    inputRef={register("to")}
-                    errorMessage={errors.to?.message}
-                  />
-                </Grid>
-              </div> 
+                <InputLineTextfield
+                  root={classes.inputScaleRange}
+                  fullWidth
+                  type="number"
+                  placeholder="max"
+                  autoComplete="off"
+                  inputProps={{ tabIndex: 3 }}
+                  inputRef={register("scaleRangeTo")}
+                  isShowError={!!errors.scaleRangeTo?.message}
+                />
+              </div>
             </Grid>
+            {!!errors.scaleRangeFrom?.message && <ErrorMessage>{errors.scaleRangeFrom?.message}</ErrorMessage>}
+            {!!errors.scaleRangeTo?.message && <ErrorMessage>{errors.scaleRangeTo?.message}</ErrorMessage>}
             <Grid>
               <div className={classes.multiAttributeControl}>
-                <Heading5 colorName={!multipleAttributes && "--gray-60"} translation-key="">
+                <Heading5 colorName={!isShowMultiAttributes && "--gray-60"} translation-key="">
                   Multiple attributes
                 </Heading5>
                 <Toggle
+                  checked={isShowMultiAttributes}
                   className={classes.toggleMultipleAttributes}
                   onChange={onToggleMultipleAttributes}
                 />
               </div>
-              <ParagraphBody colorName={multipleAttributes ? "--gray-80" : "--gray-60"}>
-                Your question will be evaluated based on the following list of
-                attributes.
+              <ParagraphBody colorName={isShowMultiAttributes ? "--gray-80" : "--gray-60"}>
+                Your question will be evaluated based on the following list of attributes.
               </ParagraphBody>
-              {multipleAttributes && (
+              {!!fieldsAttributes?.length && (
                 <Grid sx={{ position: "relative", marginTop: "24px" }}>
                   <DragDropContext onDragEnd={onDragEnd}>
                     <Droppable droppableId="droppable-list-multiple-attributes">
@@ -235,11 +295,11 @@ const PopupNumericScale = (props: Props) => {
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                         >
-                          {attributes?.map((att, index) => (
+                          {fieldsAttributes?.map((field, index) => (
                             <Draggable
-                              draggableId={att.id.toString()}
+                              draggableId={field.id}
                               index={index}
-                              key={att.id}
+                              key={field.id}
                             >
                               {(provided) => (
                                 <div
@@ -268,16 +328,13 @@ const PopupNumericScale = (props: Props) => {
                                         <InputLineTextfield
                                           className={classes.inputAttribute}
                                           type="text"
-                                          placeholder="Left label"
-                                          onChange={handleChangeInputAtt(
-                                            "start",
-                                            att.id,
-                                            checkAllAttNotValueStart()
-                                          )}
-                                           autoComplete="off"
-                                          inputProps={{tabIndex:index + 4}}
+                                          placeholder="Enter left label"
+                                          autoComplete="off"
+                                          inputProps={{ tabIndex: index + 4 }}
                                           autoFocus={index === focusEleIdx}
-                                          errorMessage={!att.start && !!errors.attributes?.length && errors.attributes[index]?.start?.message}
+                                          onFocus={() => setFocusEleIdx(-1)}
+                                          inputRef={register(`customQuestionAttributes.${index}.leftLabel`)}
+                                          errorMessage={errors.customQuestionAttributes?.[index]?.leftLabel?.message}
                                         />
                                       </Grid>
                                       <Grid
@@ -288,28 +345,23 @@ const PopupNumericScale = (props: Props) => {
                                         <InputLineTextfield
                                           className={classes.inputAttribute}
                                           type="text"
-                                          placeholder="Right label"
-                                          onChange={handleChangeInputAtt(
-                                            "end",
-                                            att.id,
-                                            checkAllAttNotValueEnd()
-                                          )}
+                                          placeholder="Enter right label"
                                           autoComplete="off"
-                                          inputProps={{tabIndex:index + 5}}
-                                          errorMessage={!att.end && !!errors.attributes?.length &&
-                                            errors.attributes[index]?.end?.message}
-                                          />
+                                          inputProps={{ tabIndex: index + 5 }}
+                                          inputRef={register(`customQuestionAttributes.${index}.rightLabel`)}
+                                          errorMessage={errors.customQuestionAttributes?.[index]?.rightLabel?.message}
+                                        />
                                       </Grid>
                                     </Grid>
                                   </div>
-                                  {attributes?.length > 1 && (
+                                  {fieldsAttributes?.length > 1 && (
                                     <CloseIcon
-                                    type="button"
-                                    className={classes.closeInputAttribute}
-                                    onClick={deleteInputAtt(att.id)}
+                                      type="button"
+                                      className={classes.closeInputAttribute}
+                                      onClick={onDeleteAttribute(index)}
                                     >
-                                  </CloseIcon>
-                                  ) }
+                                    </CloseIcon>
+                                  )}
                                 </div>
                               )}
                             </Draggable>
@@ -319,14 +371,16 @@ const PopupNumericScale = (props: Props) => {
                       )}
                     </Droppable>
                   </DragDropContext>
-                  <Grid className={classes.addList}>
-                    <div onClick={addInputAtt} className={classes.addOptions}>
-                      <PlaylistAddIcon className={classes.IconListAdd}/>
-                      <ParagraphBody colorName="--eerie-black-65" translation-key="setup_survey_popup_add_answer_title">
-                        {t("setup_survey_popup_add_answer_title")}
-                      </ParagraphBody>
-                    </div>
-                  </Grid>
+                  {fieldsAttributes?.length < questionType.maxAttribute && (
+                    <Grid className={classes.addList}>
+                      <div onClick={onAddAttribute} className={classes.addOptions}>
+                        <PlaylistAddIcon className={classes.IconListAdd} />
+                        <ParagraphBody colorName="--eerie-black-65" translation-key="setup_survey_popup_add_answer_title">
+                          {t("setup_survey_popup_add_answer_title")}
+                        </ParagraphBody>
+                      </div>
+                    </Grid>
+                  )}
                 </Grid>
               )}
             </Grid>
@@ -334,7 +388,7 @@ const PopupNumericScale = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <Heading5 colorName="--cimigo-green-dark"> US$ 149 (3,240,258 VND)</Heading5>
+            <Heading5 colorName="--cimigo-green-dark"> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)} VND)</Heading5>
             <ParagraphExtraSmall colorName="--gray-90">Tax exclusive</ParagraphExtraSmall>
           </Grid>
           <Button

@@ -75,7 +75,7 @@ const Inputs = memo((props: InputsProps) => {
         classes={{ root: clsx(!errorMessage && !isShowError ? classes.inputTextfield : classes.inputInvalid) }}
         className={className}
         autoComplete={autoComplete}
-        onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
+        onWheel={e => (e.target instanceof HTMLElement && (e.target as any).type === 'number') && e.target.blur()}
         endAdornment={!errorMessage ?
           showEyes && <InputAdornment position="end">
             <IconButton

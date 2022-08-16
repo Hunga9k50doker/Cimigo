@@ -6,6 +6,9 @@ import classes from "./styles.module.scss";
 import { Button, Collapse, Grid } from "@mui/material";
 import { fCurrency2 } from "utils/formatNumber";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import { ReducerType } from "redux/reducers";
+import { PriceService } from "helpers/price";
 
 interface CustomQuestionListMobileProps {
   questions: CustomQuestion[];
@@ -24,6 +27,12 @@ const CustomQuestionListMobile = memo(
     } = props;
     const { t } = useTranslation();
     const [expandId, setExpandId] = useState<number>();
+
+    const { configs } = useSelector((state: ReducerType) => state.user)
+
+  const getPrice = (customQuestion: CustomQuestion) => {
+    return PriceService.getCustomQuestionItemCost(customQuestion, configs)
+  }
 
     const handleClickQuestion = (id: number) => {
       setExpandId(id === expandId ? null : id);
@@ -96,7 +105,7 @@ const CustomQuestionListMobile = memo(
                     <p>{item.title}</p>
                   </div>
                   <div className={classes.price}>
-                    <span>${fCurrency2(item?.type.price)}</span>
+                    <span>${fCurrency2(getPrice(item)?.priceUSD || 0)}</span>
                   </div>
                   {editableProject && (
                     <div className={classes.buttons}>

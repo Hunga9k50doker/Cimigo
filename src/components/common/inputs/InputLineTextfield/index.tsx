@@ -4,7 +4,6 @@ import classes from './styles.module.scss';
 import iconEyeOpen from 'assets/img/icon/eye-open.svg';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import clsx from 'clsx';
-import images from 'config/images';
 import TextTitle from '../../text/TextTitle';
 import ErrorMessage from '../../text/ErrorMessage';
 import { useTranslation } from 'react-i18next';
@@ -74,10 +73,10 @@ const InputLineTextField = memo((props: InputsProps) => {
         defaultValue={defaultValue}
         value={value}
         variant="standard"
-        classes={{ root: clsx(!errorMessage && !isShowError ? classes.inputTextfield : classes.inputInvalid) }}
+        classes={{ root: clsx(classes.inputTextfield, {[classes.inputInvalid]: !!errorMessage|| isShowError}) }}
         className={className}
         autoComplete={autoComplete}
-        onWheel={e => e.target instanceof HTMLElement && e.target.blur()}
+        onWheel={e => (e.target instanceof HTMLElement && (e.target as any).type === 'number') && e.target.blur()}
         endAdornment={!errorMessage ?
           showEyes && <InputAdornment position="end">
             <IconButton
