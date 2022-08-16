@@ -64,13 +64,12 @@ import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, EC
 import { CustomQuestionService } from "services/custom_question";
 import CustomQuestionDragList from "../components/CustomQuestionDragList";
 import CustomQuestionListMobile from "../components/CustomQuestionListMobile";
+import PopupConfirmDisableCustomQuestion from "../components/PopupConfirmDisableCustomQuestion";
+import { fCurrency2 } from "utils/formatNumber";
+import { PriceService } from "helpers/price";
 import PopupOpenQuestion from "../components/PopupOpenQuestion";
 import PopupSingleChoice from "../components/PopupSingleChoice";
 import PopupMultipleChoices from "../components/PopupMultipleChoices";
-import PopupConfirmDisableCustomQuestion from "../components/PopupConfirmDisableCustomQuestion";
-
-import { fCurrency2 } from "utils/formatNumber";
-import { PriceService } from "helpers/price";
 import PopupNumericScale from "../components/PopupNumericScale";
 
 const schema = yup.object().shape({
@@ -761,36 +760,26 @@ const SetupSurvey = memo(({ id }: Props) => {
     // }
   }
 
-  const onAddOrEditMultipleChoices = (data: CustomQuestion) => {
-    // if (multipleChoicesEdit) {
-    //   dispatch(setLoading(true));
-    //   const params: UpdateCustomQuestionInput = {
-    //     title: data.title,
-    //     answers: data.answers,
-    //   }
-    //   CustomQuestionService.update(multipleChoicesEdit.id, params)
-    //     .then(() => {
-    //       getCustomQuestion();
-    //       onClosePopupMultipleChoices();
-    //     })
-    //     .catch(e => dispatch(setErrorMess(e)))
-    //     .finally(() => dispatch(setLoading(false)))
-    // } else {
-    //   dispatch(setLoading(true));
-    //   const params: CreateCustomQuestionInput = {
-    //     projectId: id,
-    //     title: data.title,
-    //     typeId: data.typeId,
-    //     answers: data.answers,
-    //   }
-    //   CustomQuestionService.create(params)
-    //     .then(() => {
-    //       getCustomQuestion();
-    //       onClosePopupMultipleChoices();
-    //     })
-    //     .catch(e => dispatch(setErrorMess(e)))
-    //     .finally(() => dispatch(setLoading(false)))
-    // }
+  const onAddOrEditMultipleChoices = (data: CreateOrEditCustomQuestionInput) => {
+    if (multipleChoicesEdit) {
+      dispatch(setLoading(true));
+      CustomQuestionService.update(multipleChoicesEdit.id, data)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupMultipleChoices();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true));
+      CustomQuestionService.create(data)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupMultipleChoices();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
   }
 
   const onAddOrEditNumericScale = (data: CreateOrEditCustomQuestionInput) => {
@@ -1670,7 +1659,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             onSubmit={onAddOrEditMultipleChoices}
             questionEdit={multipleChoicesEdit}
             questionType={questionTypeMultipleChoices}
-            language={project?.surveyLanguage || ""}
+            project={project}
           />
         )}
         {questionTypeNumericScale && (

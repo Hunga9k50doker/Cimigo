@@ -2,7 +2,7 @@ import { Typography } from  '@mui/material';
 import styled from 'styled-components';
 
 interface Props {
-    colorName?: string;
+    $colorName?: string;
 }
 
 const ButtonSmall = styled(Typography)<Props>`
@@ -11,7 +11,7 @@ const ButtonSmall = styled(Typography)<Props>`
     font-weight: 500;
     font-size: 14px;
     line-height: 24px;
-    color: ${props => `var(${props.colorName || '--gray-10'})`};
+    color: ${props => `var(${props.$colorName || '--gray-10'})`};
 `
 
 export default ButtonSmall;

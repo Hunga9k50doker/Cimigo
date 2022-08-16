@@ -102,15 +102,18 @@ export interface CreateCustomQuestionInput {
   invertScale?: boolean;
   typeId: number;
   answers?: {
+    id?: number;
     title: string;
     exclusive: boolean;
   }[],
   customQuestionAttributes?: {
+    id?: number;
     attribute?: string;
     leftLabel?: string;
     rightLabel?: string;
   }[],
   customQuestionEmojis?: {
+    id?: number;
     label: string;
     emojiId: number;
   }[]

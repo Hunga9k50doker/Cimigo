@@ -84,7 +84,7 @@ const PopupNumericScale = (props: Props) => {
         .min(yup.ref("scaleRangeFrom"), "Greater from"),
       customQuestionAttributes: yup
         .array(yup.object({
-          id: yup.number().notRequired(),
+          id: yup.number().transform(value => (isNaN(value) ? undefined : value)).notRequired(),
           leftLabel: yup.string().required("Left label is required"),
           rightLabel: yup.string().required("Right label is required"),
         }))
@@ -212,7 +212,7 @@ const PopupNumericScale = (props: Props) => {
         </DialogTitle>
         <DialogContent dividers>
           <Grid className={classes.classForm}>
-            <ParagraphBody colorName="--eerie-black" translation-key="" className={classes.titleAdvice} >
+            <ParagraphBody $colorName="--eerie-black" translation-key="" className={classes.titleAdvice} >
               The price of this demand will change based on the number of
               attributes you add, ${fCurrency2(questionType?.price || 0)} for the first attribute, ${fCurrency2(questionType?.priceAttribute || 0)} for each
               subsequent attribute.
@@ -246,7 +246,7 @@ const PopupNumericScale = (props: Props) => {
             <Grid className={classes.scaleRangeContainer}>
               <Heading5>Scale Range</Heading5>
               <div className={classes.contentScaleRange}>
-                <ParagraphBody colorName="--eerie-black-65">From</ParagraphBody>
+                <ParagraphBody $colorName="--eerie-black-65">From</ParagraphBody>
                 <InputLineTextfield
                   root={classes.inputScaleRange}
                   fullWidth
@@ -257,7 +257,7 @@ const PopupNumericScale = (props: Props) => {
                   inputRef={register("scaleRangeFrom")}
                   isShowError={!!errors.scaleRangeFrom?.message}
                 />
-                <ParagraphBody colorName="--eerie-black-65">to</ParagraphBody>
+                <ParagraphBody $colorName="--eerie-black-65">to</ParagraphBody>
                 <InputLineTextfield
                   root={classes.inputScaleRange}
                   fullWidth
@@ -274,7 +274,7 @@ const PopupNumericScale = (props: Props) => {
             {!!errors.scaleRangeTo?.message && <ErrorMessage>{errors.scaleRangeTo?.message}</ErrorMessage>}
             <Grid>
               <div className={classes.multiAttributeControl}>
-                <Heading5 colorName={!isShowMultiAttributes && "--gray-60"} translation-key="">
+                <Heading5 $colorName={!isShowMultiAttributes && "--gray-60"} translation-key="">
                   Multiple attributes
                 </Heading5>
                 <Toggle
@@ -283,7 +283,7 @@ const PopupNumericScale = (props: Props) => {
                   onChange={onToggleMultipleAttributes}
                 />
               </div>
-              <ParagraphBody colorName={isShowMultiAttributes ? "--gray-80" : "--gray-60"}>
+              <ParagraphBody $colorName={isShowMultiAttributes ? "--gray-80" : "--gray-60"}>
                 Your question will be evaluated based on the following list of attributes.
               </ParagraphBody>
               {!!fieldsAttributes?.length && (
@@ -314,7 +314,7 @@ const PopupNumericScale = (props: Props) => {
                                       src={Images.icDrag}
                                       alt=""
                                     />
-                                    <ParagraphBody colorName="--gray-80" className={classes.attributeTitle}>Attribute {index + 1}</ParagraphBody>
+                                    <ParagraphBody $colorName="--gray-80" className={classes.attributeTitle}>Attribute {index + 1}</ParagraphBody>
                                     <Grid
                                       container
                                       rowSpacing={1}
@@ -375,7 +375,7 @@ const PopupNumericScale = (props: Props) => {
                     <Grid className={classes.addList}>
                       <div onClick={onAddAttribute} className={classes.addOptions}>
                         <PlaylistAddIcon className={classes.IconListAdd} />
-                        <ParagraphBody colorName="--eerie-black-65" translation-key="setup_survey_popup_add_answer_title">
+                        <ParagraphBody $colorName="--eerie-black-65" translation-key="setup_survey_popup_add_answer_title">
                           {t("setup_survey_popup_add_answer_title")}
                         </ParagraphBody>
                       </div>
@@ -388,8 +388,8 @@ const PopupNumericScale = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <Heading5 colorName="--cimigo-green-dark"> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)} VND)</Heading5>
-            <ParagraphExtraSmall colorName="--gray-90">Tax exclusive</ParagraphExtraSmall>
+            <Heading5 $colorName="--cimigo-green-dark"> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)} VND)</Heading5>
+            <ParagraphExtraSmall $colorName="--gray-90">Tax exclusive</ParagraphExtraSmall>
           </Grid>
           <Button
             btnType={BtnType.Raised}

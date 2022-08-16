@@ -1,24 +1,18 @@
-import { SyntheticEvent, useState, useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useState, useEffect, useMemo } from "react";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import {
-  Button,
-  IconButton,
   Grid,
   Dialog,
-  DialogContent,
   InputAdornment,
   Tooltip,
   Switch,
 } from "@mui/material";
-import classes from "./styles.module.scss";
 import IconListAdd from "assets/img/icon/ic-list-add-svgrepo-com.svg";
 import * as yup from "yup";
-import Inputs from "components/Inputs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
-  CustomAnswer,
+  CreateOrEditCustomQuestionInput,
   CustomQuestion,
-  CustomQuestionFormData,
   CustomQuestionType,
   ECustomQuestionType,
 } from "models/custom_question";
@@ -29,20 +23,50 @@ import {
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
-import { t } from "i18next";
+import classes from "./styles.module.scss";
+import { Project } from "models/project";
+import { useTranslation } from "react-i18next";
+import InputLineTextfield from "components/common/inputs/InputLineTextfield";
+import { DialogTitle } from "components/common/dialogs/DialogTitle";
+import Heading3 from "components/common/text/Heading3";
+import ButtonCLose from "components/common/buttons/ButtonClose";
+import { DialogContent } from "components/common/dialogs/DialogContent";
+import { DialogActions } from "components/common/dialogs/DialogActions";
+import Heading5 from "components/common/text/Heading5";
+import { PriceService } from "helpers/price";
+import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
+import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
+import Button, { BtnType } from "components/common/buttons/Button";
+import TextBtnSmall from "components/common/text/TextBtnSmall";
+import { useSelector } from "react-redux";
+import { ReducerType } from "redux/reducers";
+import ErrorMessage from "components/common/text/ErrorMessage";
+import InputTextfield from "components/common/inputs/InputTextfield";
+interface MultipleChoicesForm {
+  title: string;
+  answers?: {
+    id?: number;
+    title: string;
+    exclusive: boolean;
+  }[],
+}
 
 interface Props {
   isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (data: CustomQuestion) => void;
+  project: Project;
   questionEdit: CustomQuestion;
   questionType: CustomQuestionType;
-  language: string;
+  onClose: () => void;
+  onSubmit: (data: CreateOrEditCustomQuestionInput) => void;
 }
 
 const PopupMultipleChoices = (props: Props) => {
-  const { onClose, isOpen, onSubmit, questionEdit, questionType, language } =
-    props;
+  const { isOpen, questionEdit, questionType, project, onClose, onSubmit } = props;
+
+  const { t, i18n } = useTranslation();
+
+  const { configs } = useSelector((state: ReducerType) => state.user)
+
   const [focusEleIdx, setFocusEleIdx] = useState(-1);
 
   const schema = useMemo(() => {
@@ -51,29 +75,37 @@ const PopupMultipleChoices = (props: Props) => {
       answers: yup
         .array(
           yup.object({
-            id: yup.number().notRequired(),
+            id: yup.number().transform(value => (isNaN(value) ? undefined : value)).notRequired(),
             title: yup.string().required("Answer is required"),
             exclusive: yup.boolean().notRequired().default(false),
           })
         )
         .required()
-        .min(questionType?.minAnswer)
-        .max(questionType?.maxAnswer),
+        .min(questionType?.minAnswer, `Answers must be greater than ${questionType?.minAnswer}`)
+        .max(questionType?.maxAnswer, `Answers should be less than ${questionType?.maxAnswer}`),
     });
-  }, [questionType]);
+  }, [questionType, i18n.language]);
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
-    watch,
-  } = useForm<CustomQuestionFormData>({
+  } = useForm<MultipleChoicesForm>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-  const answers = watch("answers");
+
+  const { fields: fieldsAnswers, append: appendAnswer, remove: removeAnswer, move: moveAnswer } = useFieldArray({
+    control,
+    name: "answers"
+  });
+
+  const price = useMemo(() => {
+    if (!questionType) return
+    return PriceService.getCustomQuestionMultipleChoicesCost(questionType, configs)
+  }, [questionType])
 
   useEffect(() => {
     initAnswer();
@@ -83,36 +115,39 @@ const PopupMultipleChoices = (props: Props) => {
   useEffect(() => {
     if (questionEdit) {
       reset({
-        title: questionEdit?.title,
-        answers: questionEdit?.answers,
+        title: questionEdit.title,
+        answers: questionEdit.answers?.map(it => ({
+          id: it.id,
+          title: it.title,
+          exclusive: it.exclusive,
+        })),
       });
-    } else {
-      clearForm();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionEdit]);
 
-  const _onSubmit = (data: CustomQuestionFormData) => {
-    if (answers.length !== 0) {
-      const question: CustomQuestion = {
-        typeId: ECustomQuestionType.Multiple_Choices,
-        title: data.title,
-        answers: data.answers.map((item) => ({
-          title: item.title,
-          exclusive: item.exclusive,
-        })),
-      };
-      onSubmit(question);
-      clearForm();
+  const _onSubmit = (value: MultipleChoicesForm) => {
+    const data: CreateOrEditCustomQuestionInput = {
+      projectId: project.id,
+      title: value.title,
+      typeId: ECustomQuestionType.Multiple_Choices,
+      answers: value.answers.map((it) => ({
+        id: it.id,
+        title: it.title,
+        exclusive: it.exclusive,
+      })),
     }
+    onSubmit(data)
   };
 
   const initAnswer = () => {
-    const list = [];
     for (let i: number = 0; i < questionType?.minAnswer; ++i) {
-      list.push({ id: i + 1, title: "", exclusive: false });
+      appendAnswer({
+        id: null,
+        title: "",
+        exclusive: false
+      })
     }
-    setValue("answers", list);
   };
 
   const clearForm = () => {
@@ -123,111 +158,87 @@ const PopupMultipleChoices = (props: Props) => {
     initAnswer();
   };
 
-  const handleChangeSwitch = (status: any, index: number) => {
-    const find_pos = answers.findIndex((ans) => ans.id === index);
-    const new_arr = [...answers];
-    new_arr[find_pos][status] = !new_arr[find_pos][status];
-    setValue("answers", new_arr);
-  };
-
-  const checkAllAnsNotValue = () => {
-    return !!answers.find(({ title }) => !title);
-  };
-
-  const handleChangeInputAns =
-    (value: string, index: number, callback: boolean) =>
-    (event: SyntheticEvent<EventTarget>) => {
-      const find_pos = answers.findIndex((ans) => ans.id === index);
-      const new_arr = [...answers];
-      const element = event.currentTarget as HTMLInputElement;
-      new_arr[find_pos][value] = element.value;
-      setValue("answers", new_arr);
-    };
-
-  const addInputAns = () => {
-    const maxAnswers = Math.max(...answers.map((ans) => ans.id), 0);
-    const new_answers = {
-      id: maxAnswers + 1,
-      title: "",
+  const onAddAnswer = () => {
+    if (fieldsAnswers?.length >= questionType.maxAnswer) return
+    appendAnswer({
+      title: '',
       exclusive: false,
-    };
-    if (answers?.length >= questionType?.maxAnswer) {
-      return;
-    }
-    setFocusEleIdx(answers.length);
-    setValue("answers", [...answers, new_answers]);
+    })
+    setFocusEleIdx(fieldsAnswers?.length ?? 0)
   };
 
-  const deleteInputAns = (id: number) => () => {
-    if (answers?.length <= questionType?.minAnswer) {
-      return;
-    }
-    const updated_answers = [...answers].filter((ans) => ans.id !== id);
-    setValue("answers", updated_answers);
-  };
-
-  const reorder = (items, startIndex, endIndex) => {
-    const result: CustomAnswer[] = Array.from(items);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
+  const onDeleteAnswer = (index: number) => () => {
+    if (fieldsAnswers?.length <= questionType?.minAnswer) return
+    removeAnswer(index)
   };
 
   const onDragEnd = ({ destination, source }: DropResult) => {
-    if (!destination) {
-      return;
-    }
-    const result = reorder(answers, source.index, destination.index);
-    setValue("answers", result);
+    if (!destination) return
+    moveAnswer(source.index, destination.index)
   };
+
+  useEffect(() => {
+    if (!isOpen && !questionEdit) {
+      clearForm()
+    }
+  }, [isOpen, questionEdit])
+
+  const _onClose = () => {
+    onClose()
+  }
 
   return (
     <Dialog
+      scroll="paper"
       open={isOpen}
-      onClose={() => onClose()}
+      onClose={() => _onClose()}
       classes={{ paper: classes.paper }}
     >
-      <DialogContent sx={{ padding: "0px", paddingBottom: "10px" }}>
-        <form
-          onSubmit={handleSubmit(_onSubmit)}
-          className={classes.formControl}
-        >
-          <Grid className={classes.content}>
-            <div className={classes.titlePopup} translation-key="setup_survey_popup_add_multiple_choices_title">{t("setup_survey_popup_add_multiple_choices_title")}</div>
-            <IconButton
-              className={classes.iconClose}
-              onClick={() => onClose()}
-            ></IconButton>
-          </Grid>
-          <Grid className={classes.classform}>
-            <p className={classes.title} translation-key="setup_survey_popup_question_title">{t("setup_survey_popup_question_title")}</p>
-            <Inputs
+      <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
+        <DialogTitle>
+          <Heading3 translation-key="setup_survey_popup_add_multiple_choices_title">
+            {t("setup_survey_popup_add_multiple_choices_title")}
+          </Heading3>
+          <ButtonCLose
+            onClick={() => _onClose()}>
+          </ButtonCLose>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Grid className={classes.classForm}>
+            <Heading5 translation-key="setup_survey_popup_question_title">
+              {t("setup_survey_popup_question_title")}
+            </Heading5>
+            <InputTextfield
               className={classes.inputQuestion}
               translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
               placeholder={t("setup_survey_popup_enter_question_placeholder")}
               startAdornment={
                 <InputAdornment position="start">
-                  <Tooltip translation-key="setup_survey_popup_question_tooltip_icon" title={t("setup_survey_popup_question_tooltip_icon")}>
-                  <div className={classes.iconLanguage}>{language}</div>
+                  <Tooltip
+                    translation-key="setup_survey_popup_question_tooltip_icon"
+                    title={t("setup_survey_popup_question_tooltip_icon")}
+                  >
+                    <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
                   </Tooltip>
                 </InputAdornment>
               }
               type="text"
+              autoComplete="off"
+              autoFocus
+              inputProps={{ tabIndex: 1 }}
               inputRef={register("title")}
               errorMessage={errors.title?.message}
-              autoComplete="off"
-              inputProps={{tabIndex:1}}
             />
             <Grid sx={{ position: "relative", marginTop: "30px" }}>
               <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="droppable-list-multiple-choices-answer">
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.droppableProps}>
-                      {answers.map((ans, index) => (
+                      {fieldsAnswers.map((field, index) => (
                         <Draggable
-                          draggableId={ans.id.toString()}
+                          draggableId={field.id}
                           index={index}
-                          key={ans.id}
+                          key={field.id}
                         >
                           {(provided) => (
                             <div
@@ -248,38 +259,30 @@ const PopupMultipleChoices = (props: Props) => {
                                   name="checkbox_answer"
                                   className={classes.choiceAnswer}
                                 />
-                                <input
+                                <InputLineTextfield
+                                  root={classes.inputAnswer}
                                   type="text"
-                                  translation-key-placeholder="setup_survey_popup_enter_answer_placeholder"
                                   placeholder={t("setup_survey_popup_enter_answer_placeholder")}
-                                  className={classes.inputanswer}
-                                  defaultValue={ans.title}
-                                  onChange={handleChangeInputAns(
-                                    "title",
-                                    ans.id,
-                                    checkAllAnsNotValue()
-                                  )}
+                                  translation-key-placeholder="setup_survey_popup_enter_answer_placeholder"
                                   autoComplete="off"
                                   autoFocus={index === focusEleIdx}
                                   onFocus={() => setFocusEleIdx(-1)}
-                                  tabIndex={index+2}
+                                  tabIndex={index + 2}
+                                  inputRef={register(`answers.${index}.title`)}
+                                  isShowError={!!errors.answers?.[index]?.title?.message}
                                 />
-                                {answers?.length > questionType?.minAnswer && (
+                                {fieldsAnswers?.length > questionType?.minAnswer && (
                                   <button
                                     type="button"
                                     className={classes.closeInputAnswer}
-                                    onClick={deleteInputAns(ans.id)}
+                                    onClick={onDeleteAnswer(index)}
                                   >
                                     <img src={Images.icDeleteAnswer} alt="" />
                                   </button>
                                 )}
                               </Grid>
                               <Grid className={classes.rowToggleSwitch}>
-                                <div className={classes.errAns}>
-                                  {!ans.title &&
-                                    !!errors.answers?.length &&
-                                    errors.answers[index]?.title?.message}
-                                </div>
+                                {!!errors.answers?.[index]?.title?.message && <ErrorMessage className={classes.errAns}>{errors.answers[index]?.title?.message}</ErrorMessage>}
                                 <Grid
                                   sx={{
                                     marginTop: "12px",
@@ -287,14 +290,18 @@ const PopupMultipleChoices = (props: Props) => {
                                     alignItems: "center",
                                   }}
                                 >
-                                  <Switch
-                                    checked={ans.exclusive}
-                                    onChange={() => handleChangeSwitch("exclusive", ans.id)}
-                                    classes={{
-                                      root: classes.rootSwitch,
-                                      checked: classes.checkedSwitch,
-                                      track: ans.exclusive ? classes.trackSwitchOn : classes.trackSwitchOff
-                                    }}
+                                  <Controller
+                                    name={`answers.${index}.exclusive`}
+                                    control={control}
+                                    render={({ field }) => <Switch
+                                      checked={field.value}
+                                      {...field}
+                                      classes={{
+                                        root: classes.rootSwitch,
+                                        checked: classes.checkedSwitch,
+                                        track: field.value ? classes.trackSwitchOn : classes.trackSwitchOff
+                                      }}
+                                    />}
                                   />
                                   <span className={classes.excluOptions} translation-key="setup_survey_popup_exclusive_option_title">
                                     {t("setup_survey_popup_exclusive_option_title")}
@@ -311,12 +318,12 @@ const PopupMultipleChoices = (props: Props) => {
                 </Droppable>
               </DragDropContext>
             </Grid>
-            {answers?.length < questionType?.maxAnswer && (
+            {fieldsAnswers?.length < questionType?.maxAnswer && (
               <Grid className={classes.addList}>
                 <button
                   type="button"
                   className={classes.addOptions}
-                  onClick={addInputAns}
+                  onClick={onAddAnswer}
                 >
                   <img
                     src={IconListAdd}
@@ -328,16 +335,21 @@ const PopupMultipleChoices = (props: Props) => {
               </Grid>
             )}
           </Grid>
-          <Grid textAlign="right">
-            <Button
-              type="submit"
-              translation-key="setup_survey_popup_save_question_title"
-              children={t("setup_survey_popup_save_question_title")}
-              className={classes.btnSave}
-            />
+        </DialogContent>
+        <DialogActions className={classes.footer}>
+          <Grid className={classes.costContainer}>
+            <Heading5 $colorName={"--cimigo-green-dark"}> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)} VND)</Heading5>
+            <ParagraphExtraSmall $colorName={"--gray-90"}>Tax exclusive</ParagraphExtraSmall>
           </Grid>
-        </form>
-      </DialogContent>
+          <Button
+            btnType={BtnType.Raised}
+            type="submit"
+            translation-key="setup_survey_popup_save_question_title"
+            children={<TextBtnSmall>{t("setup_survey_popup_save_question_title")}</TextBtnSmall>}
+            className={classes.btnSave}
+          />
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

@@ -2,7 +2,7 @@ import { Typography } from  '@mui/material';
 import styled from 'styled-components';
 
 interface Props {
-    colorName?: string;
+    $colorName?: string;
 }
 
 const ParagraphBody = styled(Typography)<Props>`
@@ -12,7 +12,7 @@ const ParagraphBody = styled(Typography)<Props>`
     font-size: 16px;
     line-height: 24px;
     text-align: justify;
-    color: ${props => `var(${props.colorName || '--gray-50'})`};
+    color: ${props => `var(${props.$colorName || '--gray-50'})`};
     @media only screen and (max-width: 767px) {
       font-size: 14px;
     }
