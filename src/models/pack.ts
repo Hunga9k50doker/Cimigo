@@ -5,12 +5,14 @@ export interface GetPacks {
   take?: number;
   page?: number;
   projectId: number;
+  positionId?: number;
 }
 
 export interface Pack {
   id: number;
   name: string;
   image: string;
+  positionId: number;
   packTypeId: number;
   projectId: number;
   userId: number;
@@ -34,3 +36,8 @@ export const packTypes: OptionItem[] = [
   { id: PackType.Test_Pack, name: 'Test pack', translation: 'setup_survey_pack_type_test_pack' },
   { id: PackType.Competitor_Pack, name: 'Competitor pack', translation: 'setup_survey_pack_type_competitor_pack' },
 ]
+
+export enum PackPosition {
+  Normal = 1,
+  Eye_Tracking = 2
+}

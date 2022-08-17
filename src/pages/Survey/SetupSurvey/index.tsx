@@ -46,7 +46,7 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { ProjectService } from "services/project";
 import { getProjectRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { PackService } from "services/pack";
-import { Pack } from "models/pack";
+import { Pack, PackPosition } from "models/pack";
 import { AdditionalBrandService } from "services/additional_brand";
 import { AdditionalBrand } from "models/additional_brand";
 import PopupAddOrEditBrand, { BrandFormData } from "../components/PopupAddOrEditBrand";
@@ -1584,6 +1584,7 @@ const SetupSurvey = memo(({ id }: Props) => {
         <PopupPack
           isOpen={addNewPack}
           itemEdit={packEdit}
+          positionId={PackPosition.Normal}
           onCancel={onCloseAddOrEditPack}
           onSubmit={onAddOrEditPack}
         />

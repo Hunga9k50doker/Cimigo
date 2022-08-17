@@ -11,7 +11,7 @@ import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from 'react-hook-form';
 import { OptionItem } from 'models/general';
-import { Pack, packTypes } from 'models/pack';
+import { Pack, PackPosition, PackType, packTypes } from 'models/pack';
 import ErrorMessage from 'components/Inputs/components/ErrorMessage';
 import useIsMountedRef from 'hooks/useIsMountedRef';
 import { fData } from 'utils/formatNumber';
@@ -34,29 +34,30 @@ export interface PackFormData {
 interface Props {
   isOpen: boolean,
   itemEdit?: Pack,
+  positionId?: PackPosition,
   onCancel: () => void,
   onSubmit: (data: FormData) => void,
 }
 
 
 const PopupPack = memo((props: Props) => {
-  const { onCancel, onSubmit, isOpen, itemEdit } = props;
+  const { onCancel, onSubmit, isOpen, itemEdit, positionId = PackPosition.Normal } = props;
   const { t, i18n } = useTranslation()
 
   const schema = useMemo(() => {
     return yup.object().shape({
       image: yup.mixed().required(t('setup_survey_packs_popup_image_required')),
       name: yup.string().required(t('setup_survey_packs_popup_pack_name_required')),
-      packTypeId: yup.object().shape({
+      packTypeId: positionId === PackPosition.Eye_Tracking ? yup.mixed().notRequired() : yup.object().shape({
         id: yup.number().required(t('setup_survey_packs_popup_pack_type_required')),
         name: yup.string().required()
       }).required(t('setup_survey_packs_popup_pack_type_required')).nullable(),
-      brand: yup.string().required(t('setup_survey_packs_popup_pack_brand_required')),
-      manufacturer: yup.string().required(t('setup_survey_packs_popup_pack_manufacturer_required')),
-      variant: yup.string().required(t('setup_survey_packs_popup_pack_variant_required')),
+      brand: positionId === PackPosition.Eye_Tracking ? yup.string().notRequired() : yup.string().required(t('setup_survey_packs_popup_pack_brand_required')),
+      manufacturer: positionId === PackPosition.Eye_Tracking ? yup.string().notRequired() : yup.string().required(t('setup_survey_packs_popup_pack_manufacturer_required')),
+      variant: positionId === PackPosition.Eye_Tracking ? yup.string().notRequired() : yup.string().required(t('setup_survey_packs_popup_pack_variant_required')),
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i18n.language])
+  }, [i18n.language, positionId])
 
   const isMountedRef = useIsMountedRef();
   const [fileReview, setFileReview] = useState<string>('');
@@ -66,13 +67,20 @@ const PopupPack = memo((props: Props) => {
     mode: 'onChange'
   });
 
+  const isEyeTracking = useMemo(() => positionId === PackPosition.Eye_Tracking, [positionId])
+
   const _onSubmit = (data: PackFormData) => {
     const form = new FormData()
+    form.append('positionId', `${positionId}`)
     form.append('name', data.name)
     form.append('brand', data.brand)
     form.append('manufacturer', data.manufacturer)
     form.append('variant', data.variant)
-    form.append('packTypeId', `${data.packTypeId.id}`)
+    if (positionId === PackPosition.Eye_Tracking) {
+      form.append('packTypeId', `${PackType.Competitor_Pack}`)
+    } else {
+      form.append('packTypeId', `${data.packTypeId.id}`)
+    }
     if (data.image && typeof data.image === 'object') form.append('image', data.image)
     onSubmit(form)
   }
@@ -172,6 +180,28 @@ const PopupPack = memo((props: Props) => {
     multiple: false,
   });
 
+  const getPopupTitle = () => {
+    switch (positionId) {
+      case PackPosition.Normal:
+        if (!itemEdit) return <p className={classes.title} translation-key="setup_survey_packs_popup_add_title">{t('setup_survey_packs_popup_add_title')}</p>
+        return <p className={classes.title} translation-key="setup_survey_packs_popup_edit_title">{t('setup_survey_packs_popup_edit_title')}</p>
+      case PackPosition.Eye_Tracking:
+        if (!itemEdit) return <p className={classes.title} translation-key="">Add other competitor packs</p>
+        return <p className={classes.title} translation-key="">Edit other competitor packs</p>
+    }
+  }
+
+  const getPopupSubTitle = () => {
+    switch (positionId) {
+      case PackPosition.Normal:
+        if (!itemEdit) return <p translation-key="setup_survey_packs_popup_add_sub_title">{t('setup_survey_packs_popup_add_sub_title')}</p>
+        return <p translation-key="setup_survey_packs_popup_edit_sub_title">{t('setup_survey_packs_popup_edit_sub_title')}</p>
+      case PackPosition.Eye_Tracking:
+        if (!itemEdit) return <p translation-key="">Upload your competitor pack image and enter corresponding information.</p>
+        return <p translation-key="">Edit your competitor pack image and enter corresponding information.</p>
+    }
+  }
+
   return (
     <Dialog
       scroll="paper"
@@ -181,21 +211,13 @@ const PopupPack = memo((props: Props) => {
     >
       <form autoComplete="off" className={classes.form} noValidate onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle className={classes.header}>
-          {!itemEdit ? (
-            <p className={classes.title} translation-key="setup_survey_packs_popup_add_title">{t('setup_survey_packs_popup_add_title')}</p>
-          ) : (
-            <p className={classes.title} translation-key="setup_survey_packs_popup_edit_title">{t('setup_survey_packs_popup_edit_title')}</p>
-          )}
+          {getPopupTitle()}
           <IconButton onClick={onCancel}>
             <img src={Images.icClose} alt='icon close' />
           </IconButton>
         </DialogTitle>
         <DialogContent className={classes.body} dividers>
-          {!itemEdit ? (
-            <p translation-key="setup_survey_packs_popup_add_sub_title">{t('setup_survey_packs_popup_add_sub_title')}</p>
-          ) : (
-            <p translation-key="setup_survey_packs_popup_edit_sub_title">{t('setup_survey_packs_popup_edit_sub_title')}</p>
-          )}
+          {getPopupSubTitle()}
           <Grid className={classes.spacing}>
             <Grid>
               <Grid
@@ -237,17 +259,17 @@ const PopupPack = memo((props: Props) => {
                 <p translation-key="setup_survey_packs_popup_image_instruction_4" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_4') }}></p>
               </div>
               <Grid container className={classes.input} spacing={1}>
-                <Grid item xs={6}>
+                <Grid item xs={isEyeTracking ? 12 : 6}>
                   <Controller
                     name="name"
                     control={control}
                     render={({ field }) => <Inputs
                       title={t('setup_survey_packs_popup_pack_name')}
                       translation-key="setup_survey_packs_popup_pack_name"
-                      placeholder={t('setup_survey_packs_popup_pack_name_placeholder')}
-                      translation-key-placeholder="setup_survey_packs_popup_pack_name_placeholder"
-                      infor={t('setup_survey_packs_popup_pack_name_info')}
-                      translation-key-infor="setup_survey_packs_popup_pack_name_info"
+                      placeholder={isEyeTracking ? "Enter competitor pack name" : t('setup_survey_packs_popup_pack_name_placeholder')}
+                      translation-key-placeholder={isEyeTracking ? "" : "setup_survey_packs_popup_pack_name_placeholder"}
+                      infor={isEyeTracking ? '' : t('setup_survey_packs_popup_pack_name_info')}
+                      translation-key-infor={isEyeTracking ? '' : "setup_survey_packs_popup_pack_name_info"}
                       errorMessage={errors.name?.message}
                       name={field.name}
                       value={field.value || ''}
@@ -256,20 +278,22 @@ const PopupPack = memo((props: Props) => {
                     />}
                   />
                 </Grid>
-                <Grid item xs={6}>
-                  <InputSelect
-                    title={t('setup_survey_packs_popup_pack_type')}
-                    name="packTypeId"
-                    control={control}
-                    bindLabel="translation"
-                    selectProps={{
-                      options: packTypes,
-                      menuPosition: "fixed",
-                      placeholder: t('setup_survey_packs_popup_pack_type_placeholder')
-                    }}
-                    errorMessage={(errors.packTypeId as any)?.message || errors.packTypeId?.id?.message}
-                  />
-                </Grid>
+                {!isEyeTracking && (
+                  <Grid item xs={6}>
+                    <InputSelect
+                      title={t('setup_survey_packs_popup_pack_type')}
+                      name="packTypeId"
+                      control={control}
+                      bindLabel="translation"
+                      selectProps={{
+                        options: packTypes,
+                        menuPosition: "fixed",
+                        placeholder: t('setup_survey_packs_popup_pack_type_placeholder')
+                      }}
+                      errorMessage={(errors.packTypeId as any)?.message || errors.packTypeId?.id?.message}
+                    />
+                  </Grid>
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -292,20 +316,22 @@ const PopupPack = memo((props: Props) => {
                 onChange={field.onChange}
               />}
             />
-            <InputSelect
-              title={t('setup_survey_packs_popup_pack_type')}
-              name="packTypeId"
-              control={control}
-              selectProps={{
-                options: packTypes,
-                menuPosition: "fixed",
-                placeholder: t('setup_survey_packs_popup_pack_type_placeholder')
-              }}
-              errorMessage={(errors.packTypeId as any)?.message || errors.packTypeId?.id?.message}
-            />
+            {!isEyeTracking && (
+              <InputSelect
+                title={t('setup_survey_packs_popup_pack_type')}
+                name="packTypeId"
+                control={control}
+                selectProps={{
+                  options: packTypes,
+                  menuPosition: "fixed",
+                  placeholder: t('setup_survey_packs_popup_pack_type_placeholder')
+                }}
+                errorMessage={(errors.packTypeId as any)?.message || errors.packTypeId?.id?.message}
+              />
+            )}
           </Grid>
           <Grid className={classes.flex}>
-            <p translation-key="setup_survey_packs_popup_brand_related_title">{t('setup_survey_packs_popup_brand_related_title')}</p>
+            <p translation-key="setup_survey_packs_popup_brand_related_title">{t('setup_survey_packs_popup_brand_related_title')} {isEyeTracking && <span>(optional)</span>}</p>
             <span translation-key="setup_survey_packs_popup_brand_related_sub_title">{t('setup_survey_packs_popup_brand_related_sub_title')}</span>
             <Grid>
               <Inputs
