@@ -71,6 +71,8 @@ import PopupOpenQuestion from "../components/PopupOpenQuestion";
 import PopupSingleChoice from "../components/PopupSingleChoice";
 import PopupMultipleChoices from "../components/PopupMultipleChoices";
 import PopupNumericScale from "../components/PopupNumericScale";
+import PopupStarRating from "../components/PopupStarRating";
+
 
 const schema = yup.object().shape({
   category: yup.string(),
@@ -132,6 +134,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [openPopupSingleChoice, setOpenPopupSingleChoice] = useState(false)
   const [openPopupMultipleChoices, setOpenPopupMultipleChoices] = useState(false)
   const [openPopupNumericScale, setOpenPopupNumericScale] = useState(false)
+  const [openPopupStarRating, setOpenPopupStarRating] = useState(false)
 
   const [packs, setPacks] = useState<Pack[]>([]);
   const [addNewPack, setAddNewPack] = useState<boolean>(false);
@@ -166,6 +169,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [singleChoiceEdit, setSingleChoiceEdit] = useState<CustomQuestion>();
   const [multipleChoicesEdit, setMultipleChoicesEdit] = useState<CustomQuestion>();
   const [numericScaleEdit, setNumericScaleEdit] = useState<CustomQuestion>();
+  const [starRatingEdit, setStarRatingEdit] = useState<CustomQuestion>();
   const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
 
   const [openConfirmDisableCustomQuestion, setOpenConfirmDisableCustomQuestion] = useState(false);
@@ -251,6 +255,7 @@ const SetupSurvey = memo(({ id }: Props) => {
           case ECustomQuestionType.Smiley_Rating:
             break;
           case ECustomQuestionType.Star_Rating:
+            setStarRatingEdit(res.data);
             break;
           default:
             break;
@@ -649,6 +654,9 @@ const SetupSurvey = memo(({ id }: Props) => {
   const questionTypeNumericScale = useMemo(() => findQuestionType(ECustomQuestionType.Numeric_Scale)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     , [customQuestionType]);
+  const questionTypeStarRating = useMemo(() => findQuestionType(ECustomQuestionType.Star_Rating)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    , [customQuestionType]);
 
   const onOpenPopupCustomQuestion = (type: ECustomQuestionType) => {
     switch (type) {
@@ -668,7 +676,7 @@ const SetupSurvey = memo(({ id }: Props) => {
 
         break;
       case ECustomQuestionType.Star_Rating:
-
+        setOpenPopupStarRating(true);
         break;
       default:
         break;
@@ -694,6 +702,11 @@ const SetupSurvey = memo(({ id }: Props) => {
   const onClosePopupNumericScale = () => {
     setOpenPopupNumericScale(false);
     setNumericScaleEdit(null);
+  }
+
+  const onClosePopupStarRating = () => {
+    setOpenPopupStarRating(false);
+    setStarRatingEdit(null);
   }
 
   const onAddOrEditOpenQuestion = (data: CustomQuestion) => {
@@ -798,6 +811,28 @@ const SetupSurvey = memo(({ id }: Props) => {
         .then(() => {
           getCustomQuestion();
           onClosePopupNumericScale();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
+  const onAddOrEditStarRating = (data: CreateOrEditCustomQuestionInput) => {
+    if (starRatingEdit) {
+      dispatch(setLoading(true));
+      CustomQuestionService.update(starRatingEdit.id, data)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupStarRating();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true));
+      CustomQuestionService.create(data)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupStarRating();
         })
         .catch(e => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)))
@@ -1669,6 +1704,16 @@ const SetupSurvey = memo(({ id }: Props) => {
             onSubmit={onAddOrEditNumericScale}
             questionEdit={numericScaleEdit}
             questionType={questionTypeNumericScale}
+            project={project}
+          />
+        )}
+        {questionTypeStarRating && (
+          <PopupStarRating
+            isOpen={openPopupStarRating}
+            onClose={onClosePopupStarRating}
+            onSubmit={onAddOrEditStarRating}
+            questionEdit={starRatingEdit}
+            questionType={questionTypeStarRating}
             project={project}
           />
         )}

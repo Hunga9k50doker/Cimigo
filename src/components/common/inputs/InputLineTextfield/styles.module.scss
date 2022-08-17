@@ -35,7 +35,7 @@
     opacity: 1;
   }
   @media only screen and (max-width: 767px) {
-    ::placeholder {
+    input::placeholder {
       font-size: 14px;
     }
   }
@@ -43,16 +43,15 @@
     caret-color: var(--cimigo-blue-light-1);
   }
   input {
-    padding: 0;
+    padding: 0 !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.015em;
+    color: var(--eerie-black);
   }
   padding-left: 9px;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  height: 24px;
-  letter-spacing: 0.015em;
-  color: var(--eerie-black);
   border-radius: initial; 
   fieldset {
     border-width: 1px !important;
@@ -74,19 +73,30 @@
       color: var(--gray-20);
     }
   }
+  @media only screen and (max-width: 767px) {
+    input::placeholder {
+      font-size: 14px;
+    }
+  }
   ::placeholder {
     color: var(--gray-50);
     font-weight: 400;
     font-size: 16px; 
     opacity: 1;
   }
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  height: 24px;
-  letter-spacing: 0.015em;
-  color: var(--eerie-black);
+  :focus {
+    caret-color: var(--cimigo-blue-light-1);
+  }
+  input {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    height: 24px;
+    letter-spacing: 0.015em;
+    color: var(--eerie-black);
+  }
+
   background:#fff;
   border-radius: initial; 
   fieldset {

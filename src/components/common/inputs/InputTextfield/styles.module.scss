@@ -28,18 +28,25 @@
     font-size: 16px; 
     opacity: 1;
   }
+  @media only screen and (max-width: 767px) {
+    input::placeholder {
+      font-size: 14px;
+    }
+  }
   :focus {
     caret-color: var(--cimigo-blue-light-1);
   }
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: 0.015em;
-  color: var(--eerie-black);
+
   input {
     padding: 8px 16px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.015em;
+    color: var(--eerie-black);
   }
+
   fieldset {
     border-width: 1px !important;
   }
@@ -61,18 +68,26 @@
     font-size: 16px; 
     opacity: 1;
   }
+  @media only screen and (max-width: 767px) {
+    input::placeholder {
+      font-size: 14px;
+    }
+  }
   :focus {
     caret-color: var(--cimigo-blue-light-1);
   }
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: 0.015em;
-  color: var(--eerie-black);
+
   input {
     padding: 8px 16px;
+    font-weight: 400;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.015em;
+    color: var(--eerie-black);
   }
+
   fieldset {
     border-color: var(--cimigo-danger) !important;
     border-width: 1px !important;
