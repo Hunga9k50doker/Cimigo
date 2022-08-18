@@ -1,3 +1,4 @@
+import { Attachment } from "models/attachment";
 import { SampleSize } from "./sample_size";
 
 export interface SolutionCategory {
@@ -38,11 +39,22 @@ export interface Solution {
   categoryHomeId: number;
   parentLanguage: number,
   language: string;
+  minPack: number;
   maxPack: number;
+  minAdditionalBrand: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;
-  enableCustomQuestion: boolean;
   maxCustomQuestion: number;
+  enableCustomQuestion: boolean;
+  enableEyeTracking: boolean;
+  minEyeTrackingPack: number;
+  maxEyeTrackingPack: number;
+  enableHowToSetUpSurvey: boolean;
+  howToSetUpSurveyPageTitle: string;
+  howToSetUpSurveyDialogTitle: string;
+  howToSetUpSurveyContent: string;
+  howToSetUpSurveyFileId: number;
+  howToSetUpSurveyFile: Attachment;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;

@@ -55,7 +55,7 @@ import { UserAttribute } from "models/user_attribute";
 import { ProjectAttributeService } from "services/project_attribute";
 import { UserAttributeService } from "services/user_attribute";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
-import { editableProject } from "helpers/project";
+import ProjectHelper, { editableProject } from "helpers/project";
 import { Save } from "@mui/icons-material";
 import Warning from "../components/Warning";
 import { useTranslation } from "react-i18next";
@@ -319,10 +319,6 @@ const SetupSurvey = memo(({ id }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const enableAdditionalBrand = () => {
-    return maxAdditionalBrand() > additionalBrand?.length && editableProject(project)
-  }
-
   const getAdditionalBrand = () => {
     AdditionalBrandService.getAdditionalBrandList({ take: 9999, projectId: id })
       .then((res) => {
@@ -467,25 +463,21 @@ const SetupSurvey = memo(({ id }: Props) => {
     onCloseActionADB()
   }
 
-  const maxPack = () => {
-    return project?.solution?.maxPack || 0
-  }
+  const maxPack = useMemo(() => project?.solution?.maxPack || 0, [project])
 
-  const maxAdditionalAttribute = () => {
-    return project?.solution?.maxAdditionalAttribute || 0
-  }
+  const maxAdditionalAttribute = useMemo(() => project?.solution?.maxAdditionalAttribute || 0, [project])
 
-  const maxAdditionalBrand = () => {
-    return project?.solution?.maxAdditionalBrand || 0
-  }
+  const maxAdditionalBrand = useMemo(() => project?.solution?.maxAdditionalBrand || 0, [project])
 
-  const maxCustomQuestion = () => {
-    return project?.solution?.maxCustomQuestion || 0
-  }
+  const maxCustomQuestion = useMemo(() => project?.solution?.maxCustomQuestion || 0, [project])
 
-  const enableAdditionalAttributes = () => {
-    return maxAdditionalAttribute() > ((projectAttributes?.length || 0) + (userAttributes?.length || 0))
-  }
+  const enableAdditionalAttributes = useMemo(() => {
+    return maxAdditionalAttribute > ((projectAttributes?.length || 0) + (userAttributes?.length || 0))
+  }, [maxAdditionalAttribute, projectAttributes, userAttributes])
+
+  const enableAdditionalBrand = useMemo(() => {
+    return maxAdditionalBrand > additionalBrand?.length && editableProject(project)
+  }, [maxAdditionalBrand, additionalBrand, project])
 
   const onAddProjectAttribute = (attributeIds: number[]) => {
     if (!attributeIds?.length) {
@@ -894,6 +886,18 @@ const SetupSurvey = memo(({ id }: Props) => {
     }
   }
 
+  const isValidBasic = useMemo(() => {
+    return ProjectHelper.isValidBasic(project)
+  }, [project])
+
+  const isValidPacks = useMemo(() => {
+    return ProjectHelper.isValidPacks(project?.solution, packs)
+  }, [project, packs])
+
+  const isValidAdditionalBrand = useMemo(() => {
+    return ProjectHelper.isValidAdditionalBrand(project?.solution, additionalBrand)
+  }, [project, additionalBrand])
+
   return (
     <>
       {(project && !editableProject(project)) && (
@@ -963,7 +967,7 @@ const SetupSurvey = memo(({ id }: Props) => {
           </Grid>
           <div className={classes.line}></div>
           <p className={classes.subTitle} id={SECTION.upload_packs} translation-key="setup_survey_packs_title">
-            2. {t('setup_survey_packs_title')} <span translation-key="common_max">({t('common_max')} {maxPack()})</span>
+            2. {t('setup_survey_packs_title')} <span translation-key="common_max">({t('common_max')} {maxPack})</span>
           </p>
           <Grid className={classes.flex}>
             <p translation-key="setup_survey_packs_sub_title"> {t('setup_survey_packs_sub_title')} </p>
@@ -994,7 +998,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   </Grid>
                 )
               })}
-              {(maxPack() > packs?.length && editableProject(project)) && (
+              {(maxPack > packs?.length && editableProject(project)) && (
                 <Grid className={classes.addPack} onClick={() => setAddNewPack(true)}>
                   <img src={Images.icAddPack} alt="" />
                   <p translation-key="setup_survey_packs_add"> {t('setup_survey_packs_add')} </p>
@@ -1028,7 +1032,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             </MenuItem>
           </Menu>
           <div className={classes.line}></div>
-          <p className={classes.subTitle} id={SECTION.additional_brand_list} translation-key="setup_survey_add_brand_title">3. {t('setup_survey_add_brand_title')} <span>({t('common_max')} {maxAdditionalBrand()})</span></p>
+          <p className={classes.subTitle} id={SECTION.additional_brand_list} translation-key="setup_survey_add_brand_title">3. {t('setup_survey_add_brand_title')} <span>({t('common_max')} {maxAdditionalBrand})</span></p>
           <Grid className={classes.flex}>
             <p translation-key="setup_survey_add_brand_sub_title" dangerouslySetInnerHTML={{ __html: t('setup_survey_add_brand_sub_title') }}></p>
             <TableContainer className={classes.table}>
@@ -1189,7 +1193,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                       </TableCell>
                     </TableRow>
                   }
-                  {(enableAdditionalBrand() && !addRow && !additionalBrandEdit) && <TableRow hover className={classes.btnAddBrand} onClick={() => setAddRow(true)}>
+                  {(enableAdditionalBrand && !addRow && !additionalBrandEdit) && <TableRow hover className={classes.btnAddBrand} onClick={() => setAddRow(true)}>
                     <TableCell colSpan={4} variant="footer" align="center" scope="row">
                       <div translation-key="setup_survey_add_brand_btn_add"><img src={Images.icAddBlue} alt="" /> {t('setup_survey_add_brand_btn_add')}</div>
                     </TableCell>
@@ -1244,7 +1248,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   </Grid>
                 )
               })}
-              {enableAdditionalBrand() && (
+              {enableAdditionalBrand && (
                 <Grid className={classes.itemBrandMobileAdd} onClick={() => setAddBrandMobile(true)}>
                   <img src={Images.icAddGray} alt="" />
                   <p translation-key="setup_survey_add_brand_btn_add">{t('setup_survey_add_brand_btn_add')}</p>
@@ -1268,7 +1272,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             </MenuItem>
           </Menu>
           <div className={classes.line}></div>
-          <p className={classes.subTitle} id={SECTION.additional_attributes} translation-key="setup_survey_add_att_title">4. {t('setup_survey_add_att_title')} <span>({t('common_max')} {maxAdditionalAttribute()})</span></p>
+          <p className={classes.subTitle} id={SECTION.additional_attributes} translation-key="setup_survey_add_att_title">4. {t('setup_survey_add_att_title')} <span>({t('common_max')} {maxAdditionalAttribute})</span></p>
           <Grid className={classes.flex}>
             <p translation-key="setup_survey_add_att_sub_title_1">{t('setup_survey_add_att_sub_title_1')} <span onClick={() => setOpenPopupMandatory(true)}>{t('setup_survey_add_att_sub_title_2')}</span>. {t('setup_survey_add_att_sub_title_3')}</p>
             <Grid container classes={{ root: classes.rootList }}>
@@ -1359,7 +1363,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   endIcon={<KeyboardArrowDownIcon />}
                   className={classes.selectType}
                   variant="outlined"
-                  disabled={!enableAdditionalAttributes() || !editableProject(project)}>
+                  disabled={!enableAdditionalAttributes || !editableProject(project)}>
                   {t('setup_survey_add_att_menu_action_placeholder')}
                 </Button>
                 <Menu
@@ -1379,7 +1383,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   </MenuItem>
                 </Menu>
               </FormControl>
-              {!enableAdditionalAttributes() && <p translation-key="setup_survey_add_att_error_max">{t('setup_survey_add_att_error_max', { max: maxAdditionalAttribute() })}</p>}
+              {!enableAdditionalAttributes && <p translation-key="setup_survey_add_att_error_max">{t('setup_survey_add_att_error_max', { max: maxAdditionalAttribute })}</p>}
             </Grid>
             <Grid classes={{ root: classes.tip }}>
               <img src={Images.icTipGray} alt="" />
@@ -1391,7 +1395,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               <div className={classes.line}></div>
               <div className={clsx(classes.customQuestionTitle, { [classes.customQuestionTitleDisabled]: !project?.enableCustomQuestion })} id="custom-questions" translation-key="setup_survey_custom_question_title">
                 5. {t("setup_survey_custom_question_title")}
-                <span translation-key="common_max">({t('common_max')} {maxCustomQuestion()})</span>
+                <span translation-key="common_max">({t('common_max')} {maxCustomQuestion})</span>
                 {editableProject(project) && <Toggle checked={project?.enableCustomQuestion} onChange={() => onToggleCustomQuestion()} />
                 }
 
@@ -1415,7 +1419,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                       endIcon={<KeyboardArrowDownIcon />}
                       variant="outlined"
                       className={classes.selectType}
-                      disabled={!editableProject(project) || questions.length >= maxCustomQuestion()}>
+                      disabled={!editableProject(project) || questions.length >= maxCustomQuestion}>
                       {t("setup_survey_custom_question_menu_action_placeholder")}
                     </Button>
                     <Menu
@@ -1442,7 +1446,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                       })}
                     </Menu>
                   </FormControl>
-                  {editableProject(project) && questions.length >= maxCustomQuestion() && <p translation-key="setup_survey_custom_question_error_max">{t("setup_survey_custom_question_error_max", { max: maxCustomQuestion() })}</p>}
+                  {editableProject(project) && questions.length >= maxCustomQuestion && <p translation-key="setup_survey_custom_question_error_max">{t("setup_survey_custom_question_error_max", { max: maxCustomQuestion })}</p>}
                 </Grid>
               </Grid>
             </>
@@ -1456,7 +1460,7 @@ const SetupSurvey = memo(({ id }: Props) => {
               classes={{ root: classes.rootSteper }}
               connector={<StepConnector classes={{ root: classes.rootConnector, active: classes.activeConnector }} />}
             >
-              <Step active={!!project?.category && !!project?.brand && !!project?.variant && !!project?.manufacturer} expanded>
+              <Step active={isValidBasic} expanded>
                 <StepLabel
                   StepIconComponent={ColorlibStepIcon}
                   onClick={() => scrollToElement('basic-information')}
@@ -1479,7 +1483,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   </ul>
                 </StepContent>
               </Step>
-              <Step active={packs?.length >= 2} expanded>
+              <Step active={isValidPacks} expanded>
                 <StepLabel
                   onClick={() => scrollToElement('upload-packs')}
                   StepIconComponent={ColorlibStepIcon}
@@ -1499,7 +1503,7 @@ const SetupSurvey = memo(({ id }: Props) => {
                   </ul>
                 </StepContent>
               </Step>
-              <Step active={additionalBrand?.length >= 2} expanded>
+              <Step active={isValidAdditionalBrand} expanded>
                 <StepLabel
                   onClick={() => scrollToElement('additional-brand-list')}
                   StepIconComponent={ColorlibStepIcon}

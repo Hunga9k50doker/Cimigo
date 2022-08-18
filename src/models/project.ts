@@ -47,6 +47,7 @@ export interface Project {
   payments: Payment[];
   reports?: Attachment[];
   packs?: Pack[];
+  eyeTrackingPacks?: Pack[];
   additionalBrands?: AdditionalBrand[];
   projectAttributes?: ProjectAttribute[];
   userAttributes?: UserAttribute[];

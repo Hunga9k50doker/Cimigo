@@ -1,5 +1,5 @@
-import { memo, useEffect, useState } from "react";
-import { Button, Divider, Grid } from "@mui/material"
+import { memo, useEffect, useState, useMemo } from "react";
+import { Button, Grid } from "@mui/material"
 import classes from './styles.module.scss';
 import Images from "config/images";
 import Buttons from "components/Buttons";
@@ -24,6 +24,7 @@ import { PaymentService } from "services/payment";
 import { authPreviewOrPayment } from "../models";
 import { useTranslation } from "react-i18next";
 import { setCancelPayment } from "redux/reducers/Project/actionTypes";
+import ProjectHelper from "helpers/project";
 
 interface ProjectReviewProps {
 }
@@ -117,29 +118,25 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     return mess
   }
 
-  const isValidTarget = () => {
-    return !inValidTargetMess()?.length
-  }
+  const isValidTarget = useMemo(() => {
+    return ProjectHelper.isValidTarget(project)
+  }, [project])
 
-  const isValidSampleSize = () => {
-    return !!project?.sampleSize
-  }
+  const isValidSampleSize = useMemo(() => {
+    return ProjectHelper.isValidSampleSize(project)
+  }, [project])
 
-  const isValidPacks = () => {
-    return packs?.length >= 2
-  }
+  // const isValidBasic = useMemo(() => {
+  //   return ProjectHelper.isValidBasic(project)
+  // }, [project])
 
-  const isValidAdditionalBrand = () => {
-    return additionalBrand?.length >= 2
-  }
+  const isValidPacks = useMemo(() => {
+    return ProjectHelper.isValidPacks(project?.solution, packs)
+  }, [project, packs])
 
-  const isValidBasic = () => {
-    return !!project?.category && !!project?.brand && !!project?.variant && !!project?.manufacturer
-  }
-
-  const isValidConfirm = () => {
-    return isValidSampleSize() && isValidTarget() && isValidPacks() && isValidAdditionalBrand() && isValidBasic()
-  }
+  const isValidAdditionalBrand = useMemo(() => {
+    return ProjectHelper.isValidAdditionalBrand(project?.solution, additionalBrand)
+  }, [project, additionalBrand])
 
   // const getInvoice = () => {
   //   if (!project) return
@@ -177,7 +174,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   return (
     <Grid classes={{ root: classes.root }}>
       {
-        isValidConfirm() ? (
+        isValid ? (
           <p className={classes.title} dangerouslySetInnerHTML={{ __html: t('payment_billing_sub_tab_preview_sub_title_success') }} translation-key="payment_billing_sub_tab_preview_sub_title_success"></p>
         ) : (
           <p className={clsx(classes.title, classes.titleDanger)} dangerouslySetInnerHTML={{ __html: t('payment_billing_sub_tab_preview_sub_title_error') }} translation-key="payment_billing_sub_tab_preview_sub_title_error"></p>
@@ -199,12 +196,12 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
               <div className={classes.flex2}>
                 <div>
                   <p className={classes.text} translation-key="payment_billing_sub_tab_preview_sample_size">{t('payment_billing_sub_tab_preview_sample_size')}</p>
-                  <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidSampleSize() })} translation-key="payment_billing_sub_tab_preview_no_sample_size">{project?.sampleSize || t('payment_billing_sub_tab_preview_no_sample_size')}</span>
+                  <span className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidSampleSize })} translation-key="payment_billing_sub_tab_preview_no_sample_size">{project?.sampleSize || t('payment_billing_sub_tab_preview_no_sample_size')}</span>
                 </div>
                 <div>
                   <p className={classes.text} translation-key="payment_billing_sub_tab_preview_target_criteria">{t('payment_billing_sub_tab_preview_target_criteria')}</p>
-                  <a className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidTarget() })} onClick={gotoTarget} translation-key="payment_billing_sub_tab_preview_view_detail">
-                    {!isValidTarget() ? (
+                  <a className={clsx(classes.textBlack, { [classes.colorDanger]: !isValidTarget })} onClick={gotoTarget} translation-key="payment_billing_sub_tab_preview_view_detail">
+                    {!isValidTarget ? (
                       <><span className={classes.missing} translation-key="payment_billing_sub_tab_preview_solution">{t('payment_billing_sub_tab_preview_missing_setup')}: </span>{inValidTargetMess().join(', ')}</>
                     ) : t('payment_billing_sub_tab_preview_view_detail')}
                   </a>
@@ -227,27 +224,27 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
               <div>
                 <p className={classes.text} translation-key="payment_billing_sub_tab_preview_pack">{t('payment_billing_sub_tab_preview_pack')}</p>
                 <span 
-                  className={clsx(classes.textBlack, { [clsx(classes.colorDanger, classes.pointer)]: !isValidPacks() })} 
+                  className={clsx(classes.textBlack, { [clsx(classes.colorDanger, classes.pointer)]: !isValidPacks })} 
                   translation-key="payment_billing_sub_tab_preview_packs"
                   onClick={() => {
-                    if (!isValidPacks())onRedirect(routes.project.detail.setupSurvey)
+                    if (!isValidPacks)onRedirect(routes.project.detail.setupSurvey)
                   }}
                 >
                   {packs?.length || 0} {t('payment_billing_sub_tab_preview_packs')}<br />
-                  {!isValidPacks() && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_packs_required">{t('payment_billing_sub_tab_preview_packs_required')}</span>}
+                  {!isValidPacks && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_packs_required">{t('payment_billing_sub_tab_preview_packs_required')}</span>}
                 </span>
               </div>
               <div>
                 <p className={classes.text} translation-key="payment_billing_sub_tab_preview_brand_list">{t('payment_billing_sub_tab_preview_brand_list')}</p>
                 <span 
-                  className={clsx(classes.textBlack, { [clsx(classes.colorDanger, classes.pointer)]: !isValidAdditionalBrand() })} 
+                  className={clsx(classes.textBlack, { [clsx(classes.colorDanger, classes.pointer)]: !isValidAdditionalBrand })} 
                   translation-key="payment_billing_sub_tab_preview_brands"
                   onClick={() => {
-                    if (!isValidAdditionalBrand())onRedirect(routes.project.detail.setupSurvey)
+                    if (!isValidAdditionalBrand)onRedirect(routes.project.detail.setupSurvey)
                   }}
                 >
                   {additionalBrand?.length || 0} {t('payment_billing_sub_tab_preview_brands')} <br />
-                  {!isValidAdditionalBrand() && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_brands_required">{t('payment_billing_sub_tab_preview_brands_required')}</span>}
+                  {!isValidAdditionalBrand && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_brands_required">{t('payment_billing_sub_tab_preview_brands_required')}</span>}
                 </span>
               </div>
               <div>
