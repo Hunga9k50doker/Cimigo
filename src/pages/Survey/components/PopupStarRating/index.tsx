@@ -6,9 +6,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import RemoveIcon from '@mui/icons-material/Remove';
 import StarIcon from '@mui/icons-material/Star';
-import AddIcon from '@mui/icons-material/Add';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -30,9 +28,9 @@ import InputLineTextfield from "components/common/inputs/InputLineTextfield"
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import ButtonCLose from "components/common/buttons/ButtonClose"
 import Button, { BtnType } from "components/common/buttons/Button"
-import ButtonCounter from "components/common/buttons/ButtonCounter"
 import TextBtnSmall from "components/common/text/TextBtnSmall"
 import InputTextfield from "components/common/inputs/InputTextfield"
+import InputCounterStar from "components/common/inputs/InputCounterStar"
 import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
 import { Project } from "models/project";
 import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
@@ -76,8 +74,8 @@ const PopupStarRating = (props: Props) => {
     return yup.object().shape({
           title: yup.string().required("Question is required"),
           numberOfStars: yup.number()
-          .min(minStars, `Greater ${minStars}`)
-          .max(maxStars, `Less than ${maxStars}`)
+          .min(minStars, `Number of stars must be between ${minStars} and ${maxStars}`)
+          .max(maxStars, `Number of stars must be between ${minStars} and ${maxStars}`)
           .required("Number of stars is required"),
           customQuestionAttributes: yup
             .array(
@@ -248,20 +246,13 @@ const PopupStarRating = (props: Props) => {
               <>
                   <Grid className={classes.numberStarControl}>
                     <Heading5>Number of stars</Heading5>                   
-                    <div className={classes.contentNumberStar}>
-                      <ButtonCounter type="button" onClick={() => {field.onChange(field.value - 1)}} disabled={field.value === minStars}>
-                          <RemoveIcon/>
-                      </ButtonCounter>
-                      <Grid className={classes.numberStarValue}>
-                          <input 
-                          value={field.value} 
-                          readOnly
-                          />
-                      </Grid>                       
-                      <ButtonCounter type="button" onClick={() => {field.onChange(field.value + 1)}} disabled={field.value === maxStars}>
-                        <AddIcon/>
-                      </ButtonCounter>
-                    </div>                                          
+                    <InputCounterStar
+                      maxStars = {maxStars}
+                      minStars = {minStars}
+                      onChangeRemoveStar = {() => {field.onChange(field.value - 1)}}
+                      onChangeAddStar = {() => {field.onChange(field.value + 1)}}
+                      value = {field.value}
+                    />                                       
                   </Grid>
                   <Grid className={classes.rowStar}>
                       {[...Array(field.value)].map((star,index) => {
