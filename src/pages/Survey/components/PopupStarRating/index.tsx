@@ -76,8 +76,8 @@ const PopupStarRating = (props: Props) => {
     return yup.object().shape({
           title: yup.string().required("Question is required"),
           numberOfStars: yup.number()
-          .min(3, "Greater 3")
-          .max(10, "Less than 10")
+          .min(minStars, `Greater ${minStars}`)
+          .max(maxStars, `Less than ${maxStars}`)
           .required("Number of stars is required"),
           customQuestionAttributes: yup
             .array(
