@@ -10,7 +10,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import StarIcon from '@mui/icons-material/Star';
 import AddIcon from '@mui/icons-material/Add';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   DragDropContext,
@@ -43,6 +43,8 @@ import { PriceService } from "helpers/price";
 import { useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 
+const minStars = 3;
+const maxStars = 10;
 export interface StarRatingForm {
     title: string;
     numberOfStars: number;
@@ -73,7 +75,10 @@ const PopupStarRating = (props: Props) => {
   const schema = useMemo(() => {
     return yup.object().shape({
           title: yup.string().required("Question is required"),
-          numberOfStars: yup.number().min(3).max(10).required(),
+          numberOfStars: yup.number()
+          .min(3, "Greater 3")
+          .max(10, "Less than 10")
+          .required("Number of stars is required"),
           customQuestionAttributes: yup
             .array(
               yup.object({
@@ -90,13 +95,14 @@ const PopupStarRating = (props: Props) => {
     register,
     handleSubmit,
     reset,
-    setValue,
-    watch,
     control,
     formState: { errors },
   } = useForm<StarRatingForm>({
     resolver: yupResolver(schema),
     mode: "onChange",
+    defaultValues: {
+      numberOfStars: 5,
+    }
   });
 
   const { fields: fieldsAttributes, append: appendAttribute, remove: removeAttribute, move: moveAttribute } = useFieldArray({
@@ -185,16 +191,6 @@ const PopupStarRating = (props: Props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [isOpen, questionEdit])
 
- const numberOfStars = watch("numberOfStars")
-
- const handleRemoveStar = () => {
-  setValue("numberOfStars", numberOfStars - 1)
- }
-
- const handleAddStar = () => {
-  setValue("numberOfStars", numberOfStars + 1)
- }
-
   return (
     <Dialog
       scroll="paper"
@@ -245,30 +241,37 @@ const PopupStarRating = (props: Props) => {
               errorMessage={errors.title?.message}
             />
             <Grid className={classes.numberStarContainer}>
-                <Grid className={classes.numberStarControl}>
+              <Controller
+              name="numberOfStars"
+              control={control}
+              render={({field}) => 
+              <>
+                  <Grid className={classes.numberStarControl}>
                     <Heading5>Number of stars</Heading5>                   
-                        <div className={classes.contentNumberStar}>
-                        <ButtonCounter type="button" onClick={handleRemoveStar} disabled={numberOfStars === 3}>
-                            <RemoveIcon/>
-                        </ButtonCounter>
-                        <Grid className={classes.numberStarValue}>
+                    <div className={classes.contentNumberStar}>
+                      <ButtonCounter type="button" onClick={() => {field.onChange(field.value - 1)}} disabled={field.value === minStars}>
+                          <RemoveIcon/>
+                      </ButtonCounter>
+                      <Grid className={classes.numberStarValue}>
                           <input 
-                          {...register("numberOfStars")}
-                          value={numberOfStars} 
+                          value={field.value} 
                           readOnly
                           />
-                        </Grid>                       
-                        <ButtonCounter type="button" onClick={handleAddStar} disabled={numberOfStars === 10}>
-                            <AddIcon/>
-                        </ButtonCounter>
-                         </div>                                          
-                </Grid>
-                <Grid className={classes.rowStar}>
-                    {[...Array(numberOfStars)].map((star,index) => {
-                        return (
-                        <StarIcon className={classes.iconStar} key={index}/>)  
-                    })}
-                </Grid>    
+                      </Grid>                       
+                      <ButtonCounter type="button" onClick={() => {field.onChange(field.value + 1)}} disabled={field.value === maxStars}>
+                        <AddIcon/>
+                      </ButtonCounter>
+                    </div>                                          
+                  </Grid>
+                  <Grid className={classes.rowStar}>
+                      {[...Array(field.value)].map((star,index) => {
+                          return (
+                          <StarIcon className={classes.iconStar} key={index}/>)  
+                      })}
+                  </Grid>
+              </>
+              }
+              />    
             </Grid>
             <Grid>
               <div className={classes.multiAttributeControl}>
