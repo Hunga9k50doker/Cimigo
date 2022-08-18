@@ -27,6 +27,9 @@
     ::placeholder {
       color: var(--gray-20);
     }
+    .iconErrorOutline {
+      display: none;
+    }
   }
   ::placeholder {
     color: var(--gray-50);
@@ -52,6 +55,8 @@
     color: var(--eerie-black);
   }
   padding-left: 9px;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
   border-radius: initial; 
   fieldset {
     border-width: 1px !important;
@@ -61,44 +66,6 @@
   }
 }
 .inputInvalid {
-  &[class~=Mui-disabled] {
-    background: var(--gray-5);
-    fieldset {
-      border-width: 1px !important;
-      border: none;
-      border-bottom: 1px solid var(--gray-20);
-      border-radius: initial;
-    }
-    ::placeholder {
-      color: var(--gray-20);
-    }
-  }
-  @media only screen and (max-width: 767px) {
-    input::placeholder {
-      font-size: 14px;
-    }
-  }
-  ::placeholder {
-    color: var(--gray-50);
-    font-weight: 400;
-    font-size: 16px; 
-    opacity: 1;
-  }
-  :focus {
-    caret-color: var(--cimigo-blue-light-1);
-  }
-  input {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    height: 24px;
-    letter-spacing: 0.015em;
-    color: var(--eerie-black);
-  }
-
-  background:#fff;
-  border-radius: initial; 
   fieldset {
     border: none;
     border-bottom: 1px solid var(--cimigo-danger);

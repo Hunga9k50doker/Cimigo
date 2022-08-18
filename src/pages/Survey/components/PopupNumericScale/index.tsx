@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from "react";
 import {
   Grid,
   Dialog,
-  DialogTitle,
   InputAdornment,
   Tooltip,
 } from "@mui/material";
@@ -33,6 +32,7 @@ import InputTextfield from "components/common/inputs/InputTextfield"
 import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
 import { Project } from "models/project";
 import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
+import {DialogTitle} from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import { DialogActions } from "components/common/dialogs/DialogActions";
 import ErrorMessage from "components/common/text/ErrorMessage";
@@ -90,6 +90,7 @@ const PopupNumericScale = (props: Props) => {
         }))
         .required(),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   const {
@@ -113,6 +114,7 @@ const PopupNumericScale = (props: Props) => {
   const price = useMemo(() => {
     if (!questionType) return
     return PriceService.getCustomQuestionNumericScaleCost(questionType, fieldsAttributes.length, configs)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionType, fieldsAttributes])
 
   const onAddAttribute = () => {
@@ -184,12 +186,14 @@ const PopupNumericScale = (props: Props) => {
         })),
       })
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [questionEdit])
 
   useEffect(() => {
     if (!isOpen && !questionEdit) {
       clearForm()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, questionEdit])
 
   return (
@@ -200,15 +204,13 @@ const PopupNumericScale = (props: Props) => {
       classes={{ paper: classes.paper }}
     >
       <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
-        <DialogTitle className={classes.header}>
-          <Grid className={classes.content}>
+        <DialogTitle>
             <Heading3 translation-key="">
               Add numeric scale
             </Heading3>
             <ButtonCLose
               onClick={() => _onClose()}>
             </ButtonCLose>
-          </Grid>
         </DialogTitle>
         <DialogContent dividers>
           <Grid className={classes.classForm}>

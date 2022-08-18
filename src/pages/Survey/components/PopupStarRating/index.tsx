@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from "react";
 import {
   Grid,
   Dialog,
-  DialogTitle,
   InputAdornment,
   Tooltip,
 } from "@mui/material";
@@ -32,12 +31,12 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import ButtonCLose from "components/common/buttons/ButtonClose"
 import Button, { BtnType } from "components/common/buttons/Button"
 import ButtonCounter from "components/common/buttons/ButtonCounter"
-import SubTitle from "components/common/text/SubTitle"
 import TextBtnSmall from "components/common/text/TextBtnSmall"
 import InputTextfield from "components/common/inputs/InputTextfield"
 import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
 import { Project } from "models/project";
 import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
+import {DialogTitle} from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import { DialogActions } from "components/common/dialogs/DialogActions";
 import { PriceService } from "helpers/price";
@@ -60,7 +59,6 @@ interface Props {
   questionType: CustomQuestionType;
   onClose: () => void;
   onSubmit: (data: CreateOrEditCustomQuestionInput) => void;
-
 }
 
 const PopupStarRating = (props: Props) => {
@@ -70,32 +68,30 @@ const PopupStarRating = (props: Props) => {
 
   const { onClose, project, questionEdit, questionType, isOpen, onSubmit } = props;
   
-  const [counterStar, setCounterStar] = useState(5);
-
-  
-
   const [focusEleIdx, setFocusEleIdx] = useState(-1);
   
-  
-const schema = useMemo(() => {
-   return yup.object().shape({
-        title: yup.string().required("Question is required"),
-        numberOfStars: yup.number().required(),
-        customQuestionAttributes: yup
-          .array(
-            yup.object({
-              id: yup.number().transform(value => (isNaN(value) ? undefined : value)).notRequired(),
-              attribute: yup.string().required("Attribute is required"),
-            })
-          )
-          .required(),
-      })
-},[i18n.language]);
+  const schema = useMemo(() => {
+    return yup.object().shape({
+          title: yup.string().required("Question is required"),
+          numberOfStars: yup.number().min(3).max(10).required(),
+          customQuestionAttributes: yup
+            .array(
+              yup.object({
+                id: yup.number().transform(value => (isNaN(value) ? undefined : value)).notRequired(),
+                attribute: yup.string().required("Attribute is required"),
+              })
+            )
+            .required(),
+        })
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      },[i18n.language]);
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     control,
     formState: { errors },
   } = useForm<StarRatingForm>({
@@ -113,8 +109,8 @@ const schema = useMemo(() => {
   const price = useMemo(() => {
     if (!questionType) return
     return PriceService.getCustomQuestionStarRatingCost(questionType, fieldsAttributes.length, configs)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionType, fieldsAttributes])
-
 
   const onAddAttribute = () => {
     if (fieldsAttributes?.length >= questionType.maxAttribute) return
@@ -141,7 +137,7 @@ const schema = useMemo(() => {
   const clearForm = () => {
     reset({
       title: "",
-      numberOfStars: counterStar,
+      numberOfStars: 5,
       customQuestionAttributes: [],
     })
   };
@@ -179,22 +175,26 @@ const schema = useMemo(() => {
         })),
       })
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionEdit])
 
   useEffect(() => {
     if (!isOpen && !questionEdit) {
       clearForm()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [isOpen, questionEdit])
 
+ const numberOfStars = watch("numberOfStars")
+
  const handleRemoveStar = () => {
-  setCounterStar(counterStar - 1);
+  setValue("numberOfStars", numberOfStars - 1)
  }
 
  const handleAddStar = () => {
-  setCounterStar(counterStar + 1);
+  setValue("numberOfStars", numberOfStars + 1)
  }
-  
+
   return (
     <Dialog
       scroll="paper"
@@ -203,15 +203,13 @@ const schema = useMemo(() => {
       classes={{ paper: classes.paper }}
     >
       <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
-        <DialogTitle className={classes.header}>
-            <Grid className={classes.content}>
-                <Heading3 translation-key="">
-                    Add star rating
-                </Heading3>
-                <ButtonCLose
-                onClick={() => _onClose()}>
-                </ButtonCLose>
-            </Grid>
+        <DialogTitle>
+          <Heading3 translation-key="">
+            Add star rating
+          </Heading3>
+          <ButtonCLose
+            onClick={() => _onClose()}>
+          </ButtonCLose>
         </DialogTitle>
         <DialogContent dividers>
           <Grid className={classes.classForm}>
@@ -248,21 +246,25 @@ const schema = useMemo(() => {
             />
             <Grid className={classes.numberStarContainer}>
                 <Grid className={classes.numberStarControl}>
-                    <Heading5>Number of stars</Heading5>
-                    <div className={classes.contentNumberStar}>
-                        <ButtonCounter type="button" onClick={handleRemoveStar} disabled ={counterStar===3}>
+                    <Heading5>Number of stars</Heading5>                   
+                        <div className={classes.contentNumberStar}>
+                        <ButtonCounter type="button" onClick={handleRemoveStar} disabled={numberOfStars === 3}>
                             <RemoveIcon/>
                         </ButtonCounter>
                         <Grid className={classes.numberStarValue}>
-                            <SubTitle {...register("numberOfStars")}>{counterStar}</SubTitle>
-                        </Grid>
-                        <ButtonCounter type="button" onClick={handleAddStar} disabled ={counterStar===10}>
+                          <input 
+                          {...register("numberOfStars")}
+                          value={numberOfStars} 
+                          readOnly
+                          />
+                        </Grid>                       
+                        <ButtonCounter type="button" onClick={handleAddStar} disabled={numberOfStars === 10}>
                             <AddIcon/>
                         </ButtonCounter>
-                    </div> 
+                         </div>                                          
                 </Grid>
                 <Grid className={classes.rowStar}>
-                    {[...Array(counterStar)].map((star,index) => {
+                    {[...Array(numberOfStars)].map((star,index) => {
                         return (
                         <StarIcon className={classes.iconStar} key={index}/>)  
                     })}
