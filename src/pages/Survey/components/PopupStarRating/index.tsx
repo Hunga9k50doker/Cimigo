@@ -30,7 +30,7 @@ import ButtonCLose from "components/common/buttons/ButtonClose"
 import Button, { BtnType } from "components/common/buttons/Button"
 import TextBtnSmall from "components/common/text/TextBtnSmall"
 import InputTextfield from "components/common/inputs/InputTextfield"
-import InputCounterStar from "components/common/inputs/InputCounterStar"
+import InputCounter from "components/common/inputs/InputCounter"
 import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
 import { Project } from "models/project";
 import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
@@ -246,11 +246,10 @@ const PopupStarRating = (props: Props) => {
               <>
                   <Grid className={classes.numberStarControl}>
                     <Heading5>Number of stars</Heading5>                   
-                    <InputCounterStar
-                      maxStars = {maxStars}
-                      minStars = {minStars}
-                      onChangeRemoveStar = {() => {field.onChange(field.value - 1)}}
-                      onChangeAddStar = {() => {field.onChange(field.value + 1)}}
+                    <InputCounter
+                      max = {maxStars}
+                      min = {minStars}
+                      onChange = {field.onChange}
                       value = {field.value}
                     />                                       
                   </Grid>
