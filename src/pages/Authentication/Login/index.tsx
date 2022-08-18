@@ -21,8 +21,10 @@ import { push } from "connected-react-router";
 import Google from "components/SocialButton/Google";
 import { useTranslation } from 'react-i18next';
 import { ReducerType } from "redux/reducers";
-
-
+import Heading2 from "components/common/text/Heading2";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
+import ButtonSecondary from "components/common/text/TextBtnSecondary";
+import InputTextfield from "components/common/inputs/InputTextfield";
 
 const Login = () => {
   const { t, i18n } = useTranslation()
@@ -75,7 +77,7 @@ const Login = () => {
   };
 
   const onSendVerify = () => {
-    
+
     setIsNotVerified(false)
     const email = getValues('email');
     if (!email || errors.email) return
@@ -93,24 +95,27 @@ const Login = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="login" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <p className={classes.textLogin} translation-key="login_title">{t('login_title')}</p>
-          <Inputs
-            title={t('field_email_address')}
+          <Heading2 className={classes.textLogin} translation-key="login_title">{t('Login')}</Heading2>
+          <ParagraphSmall className={classes.textHead} translation-key="login_head">{t('Please login to manage your projects and save your work.')}</ParagraphSmall>
+          <InputTextfield
+            title={t('Email address')}
             translation-key="field_email_address"
             name="email"
-            placeholder={t('field_email_placeholder')}
+            className={classes.textInput}
+            placeholder={t('Enter your email address')}
             translation-key-placeholder="field_email_placeholder"
             type="text"
             inputRef={register('email')}
             errorMessage={errors.email?.message}
           />
-          <Inputs
-            title={t('field_password')}
+          <InputTextfield
+            title={t('Password')}
             translation-key="field_password"
             name="password"
+            className={classes.textInput}
             type="password"
             showEyes
-            placeholder={t('field_password_placeholder')}
+            placeholder={t('Enter your password')}
             translation-key-placeholder="field_password_placeholder"
             inputRef={register('password')}
             errorMessage={errors.password?.message}
@@ -118,20 +123,20 @@ const Login = () => {
           <Grid className={classes.checkbox}>
             <div></div>
             <Link to={routes.forgotPassword} className={classes.linkText} translation-key="login_redirect_forgot_password">
-              {t('login_redirect_forgot_password')}
-            </Link>
+              {t('Forgot password?')}
+            </Link>             
           </Grid>
           {errorSubmit && (
             <Typography className={classes.errorText} translation-key="login_invalid_error">
               {t('login_invalid_error')}
             </Typography>
           )}
-          <Buttons type={'submit'} children={t('login_btn_login')} btnType="Blue" padding="11px 16px" translation-key="login_btn_login" />
+          <ButtonSecondary className={classes.btnLogin} children={('Login')} padding="8px 16px" translation-key="btn_login"/>
           <div className={classes.separator}>
-            <span translation-key="login_login_with">{t('login_login_with')}</span>
+            <span translation-key="login_login_with">{t('or login with')}</span>
           </div>
           <Google />
-          <Link className={classes.linkText} to={routes.register} translation-key="login_do_not_have_account">{t('login_do_not_have_account')}</Link>
+          <Link className={classes.linkText} to={routes.register} translation-key="login_do_not_have_account">{t("Don't have an account? Register now!")}</Link>
         </Grid>
       </form>
       <Footer />

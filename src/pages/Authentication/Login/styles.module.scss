@@ -18,11 +18,18 @@
 }
 .textLogin {
   color: #1f61a9;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 24px;
-  text-align: center;
+  text-align: left;
   margin: 0;
-  margin-bottom: 25px;
+  margin-bottom: 16px;
+}
+.textHead {
+  text-align: left;
+  margin-bottom: 24px;
+}
+.textInput {
+  margin-bottom: 16px;
 }
 .errorText {
   font-style: normal;
@@ -44,12 +51,17 @@
   padding-bottom: 20px;
 }
 .linkText {
-  font-weight: 500;
-  font-size: 12px;
+  font-weight: 400;
+  font-size: 14px;
   color: #1f61a9;
   text-align: center;
   text-underline-position: under;
   text-decoration: underline !important;
+}
+.btnLogin {
+  text-align: center;
+  background-color: #1f61a9;
+  border-radius: 7px;
 }
 .labelCheckbox {
   font-size: 12px !important;
@@ -57,7 +69,7 @@
   font-weight: 300;
 }
 .separator {
-  padding: 22px 0px;
+  padding: 24px 0px;
   display: flex;
   align-items: center;
   &:before {
