@@ -75,6 +75,7 @@ const Login = () => {
   };
 
   const onSendVerify = () => {
+    
     setIsNotVerified(false)
     const email = getValues('email');
     if (!email || errors.email) return
