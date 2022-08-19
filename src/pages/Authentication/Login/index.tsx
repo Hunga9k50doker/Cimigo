@@ -95,27 +95,27 @@ const Login = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="login" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <Heading2 className={classes.textLogin} translation-key="login_title">{t('Login')}</Heading2>
-          <ParagraphSmall className={classes.textHead} translation-key="login_head">{t('Please login to manage your projects and save your work.')}</ParagraphSmall>
+          <Heading2 className={classes.textLogin} translation-key="login_title">{'Login'}</Heading2>
+          <ParagraphSmall className={classes.textHead} translation-key="login_head">{'Please login to manage your projects and save your work.'}</ParagraphSmall>
           <InputTextfield
             title={t('Email address')}
             translation-key="field_email_address"
             name="email"
             className={classes.textInput}
-            placeholder={t('Enter your email address')}
+            placeholder={'Enter your email address'}
             translation-key-placeholder="field_email_placeholder"
             type="text"
             inputRef={register('email')}
             errorMessage={errors.email?.message}
           />
           <InputTextfield
-            title={t('Password')}
+            title={'Password'}
             translation-key="field_password"
             name="password"
             className={classes.textInput}
             type="password"
             showEyes
-            placeholder={t('Enter your password')}
+            placeholder={'Enter your password'}
             translation-key-placeholder="field_password_placeholder"
             inputRef={register('password')}
             errorMessage={errors.password?.message}
@@ -131,12 +131,12 @@ const Login = () => {
               {t('login_invalid_error')}
             </Typography>
           )}
-          <ButtonSecondary className={classes.btnLogin} children={('Login')} padding="8px 16px" translation-key="btn_login"/>
+          <Buttons type={"submit"} translation-key="btn_login" children={('Login')} btnType="Blue" padding="8px 16px" className={classes.btnLogin}/>
           <div className={classes.separator}>
-            <span translation-key="login_login_with">{t('or login with')}</span>
+            <span translation-key="login_login_with">{'or login with'}</span>
           </div>
           <Google />
-          <Link className={classes.linkText} to={routes.register} translation-key="login_do_not_have_account">{t("Don't have an account? Register now!")}</Link>
+          <Link className={classes.linkText} to={routes.register} translation-key="login_do_not_have_account">{"Don't have an account? Register now!"}</Link>
         </Grid>
       </form>
       <Footer />
