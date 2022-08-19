@@ -8,8 +8,8 @@ interface TextTitleProps {
 const TextTitle = styled(Typography)<TextTitleProps>`
   color: ${(props) => props.invalid ? 'var(--cimigo-danger)' : 'var(--gray-80)'};
   font-size: 14px;
-  font-weight: 500;
-  line-height: 140%;
+  font-weight: 400;
+  line-height: 24px;
   letter-spacing: 0.015em;
   padding-bottom: 5px;
   margin: 0;

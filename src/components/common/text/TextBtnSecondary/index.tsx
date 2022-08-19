@@ -5,7 +5,7 @@ interface Props {
     $colorName?: string;
 }
 
-const ButtonSecondary = styled(Typography)<Props>`
+const TextBtnSecondary = styled(Typography)<Props>`
     font-family: 'Montserrat';
     font-style: normal;
     font-weight: 500;
@@ -14,4 +14,4 @@ const ButtonSecondary = styled(Typography)<Props>`
     color: ${props => `var(${props.$colorName || '--gray-10'})`};
 `
 
-export default ButtonSecondary;
+export default TextBtnSecondary;
