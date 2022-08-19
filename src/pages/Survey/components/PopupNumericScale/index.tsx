@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -311,11 +312,7 @@ const PopupNumericScale = (props: Props) => {
                                   {...provided.dragHandleProps}
                                 >
                                   <div className={classes.rowInputAttribute}>
-                                    <img
-                                      className={classes.iconDotsDrag}
-                                      src={Images.icDrag}
-                                      alt=""
-                                    />
+                                  <DragIndicatorIcon className={classes.iconDotsDrag}/>
                                     <ParagraphBody $colorName="--gray-80" className={classes.attributeTitle}>Attribute {index + 1}</ParagraphBody>
                                     <Grid
                                       container

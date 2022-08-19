@@ -126,8 +126,10 @@
   top: -9px;
   left: 0;
   visibility: hidden;
+  color: var(--eerie-black-65);
   @media only screen and (max-width: 767px) {
     visibility: visible;
+    color: var(--eerie-black-40);
   }
 }
 

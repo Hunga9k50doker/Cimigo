@@ -7,7 +7,6 @@ import {
   Tooltip,
   Switch,
 } from "@mui/material";
-import IconListAdd from "assets/img/icon/ic-list-add-svgrepo-com.svg";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -16,7 +15,6 @@ import {
   CustomQuestionType,
   ECustomQuestionType,
 } from "models/custom_question";
-import Images from "config/images";
 import {
   DragDropContext,
   Droppable,
@@ -26,6 +24,7 @@ import {
 import classes from "./styles.module.scss";
 import { Project } from "models/project";
 import { useTranslation } from "react-i18next";
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import InputLineTextfield from "components/common/inputs/InputLineTextfield";
 import { DialogTitle } from "components/common/dialogs/DialogTitle";
 import Heading3 from "components/common/text/Heading3";
@@ -36,12 +35,18 @@ import Heading5 from "components/common/text/Heading5";
 import { PriceService } from "helpers/price";
 import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import { useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import ErrorMessage from "components/common/text/ErrorMessage";
 import InputTextfield from "components/common/inputs/InputTextfield";
+import ParagraphBody from "components/common/text/ParagraphBody"
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import CloseIcon from '@mui/icons-material/Close';
+
+
 interface MultipleChoicesForm {
   title: string;
   answers?: {
@@ -84,6 +89,7 @@ const PopupMultipleChoices = (props: Props) => {
         .min(questionType?.minAnswer, `Answers must be greater than ${questionType?.minAnswer}`)
         .max(questionType?.maxAnswer, `Answers should be less than ${questionType?.maxAnswer}`),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionType, i18n.language]);
 
   const {
@@ -105,6 +111,7 @@ const PopupMultipleChoices = (props: Props) => {
   const price = useMemo(() => {
     if (!questionType) return
     return PriceService.getCustomQuestionMultipleChoicesCost(questionType, configs)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionType])
 
   useEffect(() => {
@@ -181,6 +188,7 @@ const PopupMultipleChoices = (props: Props) => {
     if (!isOpen && !questionEdit) {
       clearForm()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, questionEdit])
 
   const _onClose = () => {
@@ -229,7 +237,7 @@ const PopupMultipleChoices = (props: Props) => {
               inputRef={register("title")}
               errorMessage={errors.title?.message}
             />
-            <Grid sx={{ position: "relative", marginTop: "30px" }}>
+            <Grid sx={{ position: "relative", marginTop: "32px" }}>
               <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="droppable-list-multiple-choices-answer">
                   {(provided) => (
@@ -247,11 +255,7 @@ const PopupMultipleChoices = (props: Props) => {
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                             >
-                              <img
-                                className={classes.iconDotsDrag}
-                                src={Images.icDrag}
-                                alt=""
-                              />
+                              <DragIndicatorIcon className={classes.iconDotsDrag}/>
                               <Grid sx={{ display: "flex", width: "100%" }}>
                                 <input
                                   type="checkbox"
@@ -267,25 +271,22 @@ const PopupMultipleChoices = (props: Props) => {
                                   autoComplete="off"
                                   autoFocus={index === focusEleIdx}
                                   onFocus={() => setFocusEleIdx(-1)}
-                                  tabIndex={index + 2}
+                                  inputProps={{ tabIndex: index + 2 }}
                                   inputRef={register(`answers.${index}.title`)}
                                   isShowError={!!errors.answers?.[index]?.title?.message}
                                 />
                                 {fieldsAnswers?.length > questionType?.minAnswer && (
-                                  <button
-                                    type="button"
+                                  <CloseIcon
                                     className={classes.closeInputAnswer}
                                     onClick={onDeleteAnswer(index)}
-                                  >
-                                    <img src={Images.icDeleteAnswer} alt="" />
-                                  </button>
+                                  />
                                 )}
                               </Grid>
                               <Grid className={classes.rowToggleSwitch}>
                                 {!!errors.answers?.[index]?.title?.message && <ErrorMessage className={classes.errAns}>{errors.answers[index]?.title?.message}</ErrorMessage>}
                                 <Grid
                                   sx={{
-                                    marginTop: "12px",
+                                    marginTop: "4px",
                                     display: "flex",
                                     alignItems: "center",
                                   }}
@@ -303,9 +304,9 @@ const PopupMultipleChoices = (props: Props) => {
                                       }}
                                     />}
                                   />
-                                  <span className={classes.excluOptions} translation-key="setup_survey_popup_exclusive_option_title">
+                                  <ParagraphSmall className={classes.excluOptions} translation-key="setup_survey_popup_exclusive_option_title">
                                     {t("setup_survey_popup_exclusive_option_title")}
-                                  </span>
+                                  </ParagraphSmall>
                                 </Grid>
                               </Grid>
                             </div>
@@ -320,18 +321,12 @@ const PopupMultipleChoices = (props: Props) => {
             </Grid>
             {fieldsAnswers?.length < questionType?.maxAnswer && (
               <Grid className={classes.addList}>
-                <button
-                  type="button"
-                  className={classes.addOptions}
-                  onClick={onAddAnswer}
-                >
-                  <img
-                    src={IconListAdd}
-                    className={classes.IconListAdd}
-                    alt=""
-                  />
-                  <p className={classes.clickAddOption} translation-key="setup_survey_popup_add_answer_title">{t("setup_survey_popup_add_answer_title")}</p>
-                </button>
+                <div onClick={onAddAnswer} className={classes.addOptions}>
+                  <PlaylistAddIcon className={classes.IconListAdd}/>
+                  <ParagraphBody $colorName="--eerie-black-65" translation-key="setup_survey_popup_add_answer_title">
+                    {t("setup_survey_popup_add_answer_title")}
+                  </ParagraphBody>
+                </div>
               </Grid>
             )}
           </Grid>
