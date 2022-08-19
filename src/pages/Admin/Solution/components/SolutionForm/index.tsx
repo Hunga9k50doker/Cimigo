@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowBackOutlined, Save } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Checkbox, FormControlLabel, Grid, Typography, Divider } from "@mui/material";
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
 import { Solution, SolutionCategory, SolutionCategoryHome } from "models/Admin/solution";
@@ -19,6 +19,8 @@ import clsx from "clsx";
 import UploadImage from "components/UploadImage";
 import { setErrorMess } from "redux/reducers/Status/actionTypes";
 import AdminSolutionService from "services/admin/solution";
+import UploadFile from "pages/Admin/Project/components/UploadFile";
+import { FileUpload } from "models/attachment";
 
 const modules = {
   toolbar: [
@@ -44,10 +46,20 @@ const schema = yup.object().shape({
     id: yup.number(),
     name: yup.string()
   }).nullable(),
+  minPack: yup.number()
+    .typeError('Min Pack is required.')
+    .min(0)
+    .integer('Min Pack must be a integer number')
+    .required('Min Pack is required.'),
   maxPack: yup.number()
     .typeError('Max Pack is required.')
     .positive('Max Pack must be a positive number')
     .required('Max Pack is required.'),
+  minAdditionalBrand: yup.number()
+    .typeError('Min Additional Brand is required.')
+    .min(0)
+    .integer('Min Additional Brand must be a integer number')
+    .required('Min Additional Brand is required.'),
   maxAdditionalBrand: yup.number()
     .typeError('Max Additional Brand is required.')
     .positive('Max Additional Brand must be a positive number')
@@ -58,14 +70,59 @@ const schema = yup.object().shape({
     .required('Max Additional Attribute is required.'),
   enableCustomQuestion: yup.boolean().required('Enable Custom Question is required.'),
   maxCustomQuestion: yup.mixed()
-    .when("enableCustomQuestion", {
-      is: (val: boolean) => !!val,
+    .when('enableCustomQuestion', {
+      is: (val: number) => !!val,
       then: yup.number()
         .typeError('Max Custom Question is required.')
         .positive('Max Custom Question must be a positive number')
         .required('Max Custom Question is required.'),
-      otherwise: yup.mixed().notRequired()
-    })
+      otherwise: yup.mixed().notRequired().nullable()
+    }),
+  enableEyeTracking: yup.boolean().required(),
+  minEyeTrackingPack: yup.mixed()
+    .when('enableEyeTracking', {
+      is: (val: number) => !!val,
+      then: yup.number()
+        .typeError('Min Pack Of Eye Tracking is required.')
+        .min(0)
+        .integer('Min Pack Of Eye Tracking must be a integer number')
+        .required('Min Pack Of Eye Tracking is required.'),
+      otherwise: yup.mixed().notRequired().nullable()
+    }),
+  maxEyeTrackingPack: yup.mixed()
+    .when('enableEyeTracking', {
+      is: (val: number) => !!val,
+      then: yup.number()
+        .typeError('Max Pack Of Eye Tracking is required.')
+        .positive('Max Pack Of Eye Tracking must be a positive number')
+        .required('Max Pack Of Eye Tracking is required.'),
+      otherwise: yup.mixed().notRequired().nullable()
+    }),
+  enableHowToSetUpSurvey: yup.boolean().required(),
+  howToSetUpSurveyPageTitle: yup.string()
+    .when('enableHowToSetUpSurvey', {
+      is: (val: number) => !!val,
+      then: yup.string().required('Page Title is required.'),
+      otherwise: yup.string().notRequired().nullable()
+    }),
+  howToSetUpSurveyDialogTitle: yup.string()
+    .when('enableHowToSetUpSurvey', {
+      is: (val: number) => !!val,
+      then: yup.string().required('Dialog Title is required.'),
+      otherwise: yup.string().notRequired().nullable()
+    }),
+  howToSetUpSurveyContent: yup.string()
+    .when('enableHowToSetUpSurvey', {
+      is: (val: number) => !!val,
+      then: yup.string().required('Content is required.'),
+      otherwise: yup.string().notRequired().nullable()
+    }),
+  howToSetUpSurveyFile: yup.mixed()
+    .when('enableHowToSetUpSurvey', {
+      is: (val: number) => !!val,
+      then: yup.mixed().required('PDF is required.'),
+      otherwise: yup.mixed().notRequired().nullable()
+    }),
 })
 
 export interface SolutionFormData {
@@ -75,11 +132,21 @@ export interface SolutionFormData {
   content: string,
   categoryId: OptionItem,
   categoryHomeId: OptionItem,
+  minPack: number;
   maxPack: number;
+  minAdditionalBrand: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;
-  enableCustomQuestion: boolean;
   maxCustomQuestion: number;
+  enableCustomQuestion: boolean;
+  enableEyeTracking: boolean;
+  minEyeTrackingPack: number;
+  maxEyeTrackingPack: number;
+  enableHowToSetUpSurvey: boolean;
+  howToSetUpSurveyPageTitle: string;
+  howToSetUpSurveyDialogTitle: string;
+  howToSetUpSurveyContent: string;
+  howToSetUpSurveyFile: FileUpload;
 }
 
 interface SolutionFormProps {
@@ -98,7 +165,9 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
-      enableCustomQuestion: true
+      enableCustomQuestion: true,
+      enableEyeTracking: true,
+      enableHowToSetUpSurvey: false
     }
   });
 
@@ -112,14 +181,26 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     formData.append('description', data.description)
     formData.append('content', data.content)
     formData.append('categoryId', `${data.categoryId.id}`)
+    formData.append('minPack', `${data.minPack}`)
     formData.append('maxPack', `${data.maxPack}`)
+    formData.append('minAdditionalBrand', `${data.minAdditionalBrand}`)
     formData.append('maxAdditionalBrand', `${data.maxAdditionalBrand}`)
     formData.append('maxAdditionalAttribute', `${data.maxAdditionalAttribute}`)
     formData.append('enableCustomQuestion', `${data.enableCustomQuestion}`)
     if (data.enableCustomQuestion) {
       formData.append('maxCustomQuestion', `${data.maxCustomQuestion}`)
     }
+    formData.append('enableEyeTracking', `${data.enableEyeTracking}`)
+    if (data.enableEyeTracking) {
+      formData.append('minEyeTrackingPack', `${data.minEyeTrackingPack}`)
+      formData.append('maxEyeTrackingPack', `${data.maxEyeTrackingPack}`)
+    }
+    formData.append('enableHowToSetUpSurvey', `${data.enableHowToSetUpSurvey}`)
+    formData.append('howToSetUpSurveyPageTitle', data.howToSetUpSurveyPageTitle || '')
+    formData.append('howToSetUpSurveyDialogTitle', data.howToSetUpSurveyDialogTitle || '')
+    formData.append('howToSetUpSurveyContent', data.howToSetUpSurveyContent || '')
     if (data.image && typeof data.image === 'object') formData.append('image', data.image)
+    if (data.howToSetUpSurveyFile?.file) formData.append('howToSetUpSurveyFile', data.howToSetUpSurveyFile.file)
     if (data?.categoryHomeId?.id) formData.append('categoryHomeId', `${data.categoryHomeId.id}`)
     if (langEdit) formData.append('language', langEdit)
 
@@ -135,11 +216,21 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         content: itemEdit.content,
         categoryId: itemEdit.category ? { id: itemEdit.category.id, name: itemEdit.category.name } : null,
         categoryHomeId: itemEdit.categoryHome ? { id: itemEdit.categoryHome.id, name: itemEdit.categoryHome.name } : null,
+        minPack: itemEdit.minPack,
         maxPack: itemEdit.maxPack,
+        minAdditionalBrand: itemEdit.minAdditionalBrand,
         maxAdditionalBrand: itemEdit.maxAdditionalBrand,
         maxAdditionalAttribute: itemEdit.maxAdditionalAttribute,
         enableCustomQuestion: itemEdit.enableCustomQuestion,
         maxCustomQuestion: itemEdit.maxCustomQuestion,
+        enableEyeTracking: itemEdit.enableEyeTracking,
+        minEyeTrackingPack: itemEdit.minEyeTrackingPack,
+        maxEyeTrackingPack: itemEdit.maxEyeTrackingPack,
+        enableHowToSetUpSurvey: itemEdit.enableHowToSetUpSurvey,
+        howToSetUpSurveyPageTitle: itemEdit.howToSetUpSurveyPageTitle || '',
+        howToSetUpSurveyDialogTitle: itemEdit.howToSetUpSurveyDialogTitle || '',
+        howToSetUpSurveyContent: itemEdit.howToSetUpSurveyContent || '',
+        howToSetUpSurveyFile: itemEdit.howToSetUpSurveyFile,
       })
     }
   }, [reset, itemEdit])
@@ -279,12 +370,32 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Inputs
+                      title="Min Pack"
+                      name="minPack"
+                      type="number"
+                      disabled={!!langEdit}
+                      inputRef={register('minPack')}
+                      errorMessage={errors.minPack?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Inputs
                       title="Max Pack"
                       name="maxPack"
                       type="number"
                       disabled={!!langEdit}
                       inputRef={register('maxPack')}
                       errorMessage={errors.maxPack?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Inputs
+                      title="Min Additional Brand"
+                      name="minAdditionalBrand"
+                      type="number"
+                      disabled={!!langEdit}
+                      inputRef={register('minAdditionalBrand')}
+                      errorMessage={errors.minAdditionalBrand?.message}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -307,7 +418,9 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                       errorMessage={errors.maxAdditionalAttribute?.message}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}></Grid>
+                  <Grid item xs={12}>
+                    <Divider />
+                  </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextTitle>Custom Question</TextTitle>
                     <FormControlLabel
@@ -336,6 +449,119 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                         errorMessage={errors.maxCustomQuestion?.message}
                       />
                     </Grid>
+                  )}
+                  <Grid item xs={12}>
+                    <Divider />
+                  </Grid>
+                  <Grid item xs={12} sm={12}>
+                    <TextTitle>Eye Tracking</TextTitle>
+                    <FormControlLabel
+                      control={
+                        <Controller
+                          name="enableEyeTracking"
+                          control={control}
+                          render={({ field }) => <Checkbox
+                            checked={field.value}
+                            {...field}
+                            disabled={!!langEdit}
+                          />}
+                        />
+                      }
+                      label="Enable Eye Tracking"
+                    />
+                  </Grid>
+                  {watch("enableEyeTracking") && (
+                    <>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Min Pack Of Eye Tracking"
+                          name="minEyeTrackingPack"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('minEyeTrackingPack')}
+                          errorMessage={errors.minEyeTrackingPack?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Max Pack Of Eye Tracking"
+                          name="maxEyeTrackingPack"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('maxEyeTrackingPack')}
+                          errorMessage={errors.maxEyeTrackingPack?.message}
+                        />
+                      </Grid>
+                    </>
+                  )}
+                  <Grid item xs={12}>
+                    <Divider />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextTitle>How to set up survey </TextTitle>
+                    <FormControlLabel
+                      control={
+                        <Controller
+                          name="enableHowToSetUpSurvey"
+                          control={control}
+                          render={({ field }) => <Checkbox
+                            checked={field.value}
+                            {...field}
+                          />}
+                        />
+                      }
+                      label="Enable how to set up survey"
+                    />
+                  </Grid>
+                  {watch("enableHowToSetUpSurvey") && (
+                    <>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Page title"
+                          name="howToSetUpSurveyPageTitle"
+                          inputRef={register('howToSetUpSurveyPageTitle')}
+                          errorMessage={errors.howToSetUpSurveyPageTitle?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Dialog title"
+                          name="howToSetUpSurveyDialogTitle"
+                          inputRef={register('howToSetUpSurveyDialogTitle')}
+                          errorMessage={errors.howToSetUpSurveyDialogTitle?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <TextTitle invalid={errors.content?.message}>Content</TextTitle>
+                        <Controller
+                          name="howToSetUpSurveyContent"
+                          control={control}
+                          render={({ field }) => <ReactQuill
+                            modules={modules}
+                            className={clsx(classes.editor, { [classes.editorError]: !!errors.howToSetUpSurveyContent?.message })}
+                            value={field.value || ''}
+                            onBlur={() => field.onBlur()}
+                            onChange={(value) => field.onChange(value)}
+                          />}
+                        />
+                        {errors.content?.message && <ErrorMessage>{errors.howToSetUpSurveyContent?.message}</ErrorMessage>}
+                      </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <TextTitle>PDF</TextTitle>
+                        <Controller
+                          name="howToSetUpSurveyFile"
+                          control={control}
+                          render={({ field }) => <UploadFile
+                            value={field.value}
+                            caption="Allowed pdf"
+                            typeInvalidMess="File type must be pdf"
+                            fileFormats={['application/pdf']}
+                            errorMessage={(errors.howToSetUpSurveyFile as any)?.message}
+                            onChange={(value) => field.onChange(value)}
+                          />}
+                        />
+                      </Grid>
+                    </>
                   )}
                 </Grid>
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
