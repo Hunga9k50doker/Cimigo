@@ -284,13 +284,7 @@ const PopupMultipleChoices = (props: Props) => {
                               </Grid>
                               <Grid className={classes.rowToggleSwitch}>
                                 {!!errors.answers?.[index]?.title?.message && <ErrorMessage className={classes.errAns}>{errors.answers[index]?.title?.message}</ErrorMessage>}
-                                <Grid
-                                  sx={{
-                                    marginTop: "4px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                  }}
-                                >
+                                <Grid className={classes.exclusiveContainer}>
                                   <Controller
                                     name={`answers.${index}.exclusive`}
                                     control={control}
