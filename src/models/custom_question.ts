@@ -81,7 +81,7 @@ export interface CreateOrEditCustomQuestionInput {
   answers?: {
     id?: number;
     title: string;
-    exclusive: boolean;
+    exclusive?: boolean;
   }[],
   customQuestionAttributes?: {
     id?: number;
@@ -106,7 +106,7 @@ export interface CreateCustomQuestionInput {
   typeId: number;
   answers?: {
     title: string;
-    exclusive: boolean;
+    exclusive?: boolean;
   }[],
   customQuestionAttributes?: {
     attribute?: string;
@@ -139,7 +139,7 @@ export interface UpdateCustomQuestionInput {
   answers?: {
     id?: number;
     title: string;
-    exclusive: boolean;
+    exclusive?: boolean;
   }[],
   customQuestionAttributes?: {
     id?: number;
