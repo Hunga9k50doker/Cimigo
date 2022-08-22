@@ -20,7 +20,6 @@ import {
 import classes from "./styles.module.scss";
 import * as yup from "yup";
 import Toggle from "components/Toggle";
-import Images from "config/images";
 import { useTranslation } from "react-i18next";
 import ParagraphBody from "components/common/text/ParagraphBody"
 import Heading5 from "components/common/text/Heading5"

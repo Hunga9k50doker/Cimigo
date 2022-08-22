@@ -186,21 +186,21 @@ const PopupSingleChoice = (props: Props) => {
       onClose={() => _onClose()}
       classes={{ paper: classes.paper }}
     >
-        <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
-          <DialogTitle>
-            <Heading3 translation-key="setup_survey_popup_add_multiple_choices_title">
-              {t("setup_survey_popup_add_multiple_choices_title")}
-            </Heading3>
-            <ButtonCLose
-              onClick={() => _onClose()}>
-            </ButtonCLose>
-          </DialogTitle>
-          <DialogContent dividers>
-            <Grid className={classes.classForm}>
-              <Heading5 translation-key="setup_survey_popup_question_title">
-                {t("setup_survey_popup_question_title")}
+      <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
+        <DialogTitle>
+          <Heading3 translation-key="setup_survey_popup_add_single_choice_title">
+            {t("setup_survey_popup_add_single_choice_title")}
+          </Heading3>
+          <ButtonCLose
+            onClick={() => _onClose()}>
+          </ButtonCLose>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Grid className={classes.classForm}>
+            <Heading5 translation-key="setup_survey_popup_question_title">
+              {t("setup_survey_popup_question_title")}
               </Heading5>
-              <InputTextfield
+            <InputTextfield
               className={classes.inputQuestion}
               translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
               placeholder={t("setup_survey_popup_enter_question_placeholder")}
@@ -255,7 +255,7 @@ const PopupSingleChoice = (props: Props) => {
                                     autoComplete="off"
                                     autoFocus={index === focusEleIdx}
                                     onFocus={() => setFocusEleIdx(-1)}
-                                    tabIndex={index + 2}
+                                    inputProps={{ tabIndex: index + 2 }}
                                     inputRef={register(`answers.${index}.title`)}
                                     isShowError={!!errors.answers?.[index]?.title?.message}
                                   />
@@ -288,22 +288,22 @@ const PopupSingleChoice = (props: Props) => {
                 </div>
                 </Grid>
               )}
-            </Grid>
-          </DialogContent>
-          <DialogActions className={classes.footer}>
-            <Grid className={classes.costContainer}>
-              <Heading5 $colorName={"--cimigo-green-dark"}> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)}) VND</Heading5>
-              <ParagraphExtraSmall $colorName={"--gray-90"}>Tax exclusive</ParagraphExtraSmall>
-            </Grid>
-            <Button
+          </Grid>
+        </DialogContent>
+        <DialogActions className={classes.footer}>
+          <Grid className={classes.costContainer}>
+            <Heading5 $colorName={"--cimigo-green-dark"}> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)}) VND</Heading5>
+            <ParagraphExtraSmall $colorName={"--gray-90"}>Tax exclusive</ParagraphExtraSmall>
+          </Grid>
+          <Button
               btnType={BtnType.Raised}
               type="submit"
               translation-key="setup_survey_popup_save_question_title"
               children={<TextBtnSmall>{t("setup_survey_popup_save_question_title")}</TextBtnSmall>}
               className={classes.btnSave}
-            />
+          />
         </DialogActions>
-        </form>
+      </form>
     </Dialog>
   );
 };

@@ -119,56 +119,56 @@ const PopupOpenQuestion = (props: Props) => {
       onClose={() => _onClose()}
       classes={{ paper: classes.paper }}
     >
-        <form onSubmit={handleSubmit(_onSubmit)}className={classes.form}>
+      <form onSubmit={handleSubmit(_onSubmit)} className={classes.form}>
         <DialogTitle>
-          <Heading3 translation-key="setup_survey_popup_add_multiple_choices_title">
-            {t("setup_survey_popup_add_multiple_choices_title")}
+          <Heading3 translation-key="setup_survey_popup_add_open_question_title">
+            {t("setup_survey_popup_add_open_question_title")}
           </Heading3>
           <ButtonCLose
             onClick={() => _onClose()}>
           </ButtonCLose>
         </DialogTitle>
-      <DialogContent sx={{ padding: "0px" }}>
-        <Grid className={classes.classForm}>
-            <Heading5 translation-key="setup_survey_popup_question_title">
-              {t("setup_survey_popup_question_title")}
-            </Heading5>
-            <InputTextfield
-              className={classes.inputQuestion}
-              translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
-              placeholder={t("setup_survey_popup_enter_question_placeholder")}
-              startAdornment={
-                <InputAdornment position="start">
-                  <Tooltip
-                    translation-key="setup_survey_popup_question_tooltip_icon"
-                    title={t("setup_survey_popup_question_tooltip_icon")}
-                  >
-                    <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
-                  </Tooltip>
-                </InputAdornment>
-              }
-              type="text"
-              autoComplete="off"
-              autoFocus
-              inputProps={{ tabIndex: 1 }}
-              inputRef={register("title")}
-              errorMessage={errors.title?.message}
-            />
-        </Grid>
+        <DialogContent dividers>
+          <Grid className={classes.classForm}>
+              <Heading5 translation-key="setup_survey_popup_question_title">
+                {t("setup_survey_popup_question_title")}
+              </Heading5>
+              <InputTextfield
+                className={classes.inputQuestion}
+                translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
+                placeholder={t("setup_survey_popup_enter_question_placeholder")}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <Tooltip
+                      translation-key="setup_survey_popup_question_tooltip_icon"
+                      title={t("setup_survey_popup_question_tooltip_icon")}
+                    >
+                      <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
+                    </Tooltip>
+                  </InputAdornment>
+                }
+                type="text"
+                autoComplete="off"
+                autoFocus
+                inputProps={{ tabIndex: 1 }}
+                inputRef={register("title")}
+                errorMessage={errors.title?.message}
+              />
+          </Grid>
         </DialogContent>
-          <DialogActions className={classes.footer}>
-            <Grid className={classes.costContainer}>
-              <Heading5 $colorName={"--cimigo-green-dark"}> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)} VND)</Heading5>
-                <ParagraphExtraSmall $colorName={"--gray-90"}>Tax exclusive</ParagraphExtraSmall>
-            </Grid>
-            <Button
-              btnType={BtnType.Raised}
-              type="submit"
-              translation-key="setup_survey_popup_save_question_title"
-              children={<TextBtnSmall>{t("setup_survey_popup_save_question_title")}</TextBtnSmall>}
-              className={classes.btnSave}
-            />
-          </DialogActions>
+        <DialogActions className={classes.footer}>
+          <Grid className={classes.costContainer}>
+            <Heading5 $colorName={"--cimigo-green-dark"}> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)} VND)</Heading5>
+              <ParagraphExtraSmall $colorName={"--gray-90"}>Tax exclusive</ParagraphExtraSmall>
+          </Grid>
+          <Button
+            btnType={BtnType.Raised}
+            type="submit"
+            translation-key="setup_survey_popup_save_question_title"
+            children={<TextBtnSmall>{t("setup_survey_popup_save_question_title")}</TextBtnSmall>}
+            className={classes.btnSave}
+          />
+        </DialogActions>
         </form>
     </Dialog>
   );
