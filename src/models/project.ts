@@ -25,11 +25,13 @@ export interface Project {
   name: string;
   userId: number;
   solutionId: number;
+  planId: number;
   brand: string;
   manufacturer: string;
   category: string;
   variant: string,
   sampleSize: number;
+  eyeTrackingSampleSize: number;
   status: ProjectStatus;
   editable: boolean;
   dataStudio: string;
@@ -38,6 +40,7 @@ export interface Project {
   invoiceId: number;
   invoice: Attachment;
   enableCustomQuestion: boolean;
+  enableEyeTracking: boolean;
   surveyLanguage: string,
   createdAt: Date;
   updatedAt: Date;

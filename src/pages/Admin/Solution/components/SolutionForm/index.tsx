@@ -255,6 +255,12 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     dispatch(push(routes.admin.solution.sampleSize.root.replace(":solutionId", `${itemEdit.id}`)))
   }
 
+  const onRedirectEyeTrackingSampleSize = () => {
+    if (!itemEdit) return
+    dispatch(push(routes.admin.solution.eyeTrackingSampleSize.root.replace(":solutionId", `${itemEdit.id}`)))
+  }
+
+
   return (
     <div>
       <Box display="flex" justifyContent="space-between" alignContent="center" mb={4}>
@@ -263,15 +269,26 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         </Typography>
         <Box display="flex" alignContent="center">
           {itemEdit && (
-            <Button
-              sx={{ marginRight: 2 }}
-              variant="contained"
-              color="primary"
-              onClick={onRedirectSampleSize}
-            >
-              Sample Size Cost
-            </Button>
+            <>
+              <Button
+                sx={{ marginRight: 2 }}
+                variant="contained"
+                color="primary"
+                onClick={onRedirectSampleSize}
+              >
+                Sample Size Cost
+              </Button>
+              <Button
+                sx={{ marginRight: 2 }}
+                variant="contained"
+                color="primary"
+                onClick={onRedirectEyeTrackingSampleSize}
+              >
+                Eye Tracking Sample Size Cost
+              </Button>
+            </>
           )}
+
           <Button
             variant="contained"
             color="primary"

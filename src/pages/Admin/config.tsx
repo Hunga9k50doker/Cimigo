@@ -2,7 +2,7 @@ import {
   NavItem, 
   routes 
 } from "routers/routes";
-import { Category, FormatListBulleted, GTranslate, HelpOutline, Lightbulb, LiveHelp, Mail, Paid, Person, Settings, TableView, Work } from '@mui/icons-material';
+import { Category, FactCheck, FormatListBulleted, GTranslate, HelpOutline, Lightbulb, LiveHelp, Mail, Paid, Person, Settings, TableView, Work } from '@mui/icons-material';
 import SolutionCategory from "./SolutionCategory";
 import Solution from "./Solution";
 import SolutionCategoryHome from "./SolutionCategoryHome";
@@ -16,6 +16,7 @@ import Project from "./Project";
 import User from "./User";
 import CustomQuestionType from "./CustomQuestionType";
 import PaymentPage from "./Payment";
+import PlanModule from "./Plan";
 
 export const adminRouter: NavItem[] = [
   {
@@ -58,6 +59,13 @@ export const adminRouter: NavItem[] = [
     name: 'Solution category home',
     icon: Category,
     component: SolutionCategoryHome,
+    layout: "/admin"
+  },
+  {
+    path: routes.admin.plan.root,
+    name: 'Plan',
+    icon: FactCheck,
+    component: PlanModule,
     layout: "/admin"
   },
   {

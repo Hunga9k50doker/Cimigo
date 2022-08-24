@@ -1,4 +1,5 @@
 import { Attachment } from "models/attachment";
+import { EyeTrackingSampleSize } from "./eye_tracking_sample_size";
 import { SampleSize } from "./sample_size";
 
 export interface SolutionCategory {
@@ -62,6 +63,7 @@ export interface Solution {
   category?: SolutionCategory;
   categoryHome?: SolutionCategoryHome;
   sampleSizes?: SampleSize[];
+  eyeTrackingSampleSizes?: EyeTrackingSampleSize[];
 }
 
 export interface GetSolutionsParams {
