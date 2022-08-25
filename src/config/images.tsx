@@ -72,6 +72,12 @@ import imgJCB from 'assets/img/jcb.png';
 import imgMastercard from 'assets/img/mastercard.png';
 import imgAmericanExpress from 'assets/img/american-express.png';
 import imgUnionpay from 'assets/img/unionpay.png';
+import imgLaugh from 'assets/img/icon/laugh.svg';
+import imgSmile from 'assets/img/icon/smile.svg';
+import imgMeh from 'assets/img/icon/meh.svg';
+import imgSad from 'assets/img/icon/sad.svg';
+import imgPain from 'assets/img/icon/pain.svg';
+
 
 const images = {
   // ===================== Images =========================
@@ -149,6 +155,11 @@ const images = {
   icMultipleChoices,
   icDeleteAnswer,
   imgPaymentPending,
+  imgLaugh,
+  imgSmile,
+  imgMeh,
+  imgSad,
+  imgPain
 }
 
 export default images

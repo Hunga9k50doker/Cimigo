@@ -1,4 +1,5 @@
 import images from "config/images";
+import { EmojisId } from "models/custom_question";
 
 export interface TableHeaderLabel {
   name: string;
@@ -143,3 +144,16 @@ export enum ETypeVerifyCode {
   VERIFY_EMAIL = 1,
   RESET_PASSWORD = 2
 }
+
+
+export enum faceType {
+  FIVE = 1,
+  THREE = 2,
+}
+
+
+
+export const emojiFaces: OptionItem[] = [
+  { id: faceType.FIVE, name: "5 faces" },
+  { id: faceType.THREE, name: "3 faces" },
+]

@@ -170,11 +170,19 @@ export interface CustomQuestionAttribute {
 export interface CustomQuestionEmoji {
   id: number;
   label: string;
-  emojiId: string;
+  emojiId: number;
   order: number,
   customQuestionId: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
   customQuestion?: CustomQuestion
+}
+
+export enum EmojisId {
+  LAUGH = 1,
+  SMILE = 2,
+  MEH = 3,
+  SAD = 4,
+  PAIN = 5,
 }
