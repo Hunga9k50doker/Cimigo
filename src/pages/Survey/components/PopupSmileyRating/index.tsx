@@ -94,22 +94,6 @@ const PopupSmileyRating = (props: Props) => {
 
   const [isClassThreeEmoji, setIsClassThreeEmoji] = useState(false);
 
-  const [isInvertScale, setIsInvertScale] = useState(false);
-
-  const onChangeOption = (item: OptionItem) => {
-    setItemSelected(item);
-    if(item.id === faceType.THREE){
-        removeEmojis();
-        onAddThreeEmojis();
-        setIsClassThreeEmoji(true);
-    }
-    else if(item.id === faceType.FIVE) {
-      removeEmojis();
-      onAddFiveEmojis();
-      setIsClassThreeEmoji(false);
-    }
-    }
-  
   const schema = useMemo(() => {
     return yup.object().shape({
           title: yup.string().required("Question is required"),
@@ -132,44 +116,8 @@ const PopupSmileyRating = (props: Props) => {
             .required(),
         })
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      },[i18n.language]);
+  },[i18n.language]);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<SmileyRatingForm>({
-    resolver: yupResolver(schema),
-    mode: "onChange",
-  });
-
-  const { fields: fieldsAttributes, append: appendAttribute, remove: removeAttribute, move: moveAttribute } = useFieldArray({
-    control,
-    name: "customQuestionAttributes"
-  });
-  const { fields: fieldsEmojis, append: appendEmojis, remove: removeEmojis} = useFieldArray({
-    control,
-    name: "customQuestionEmojis"
-  });
-
-  const isShowMultiAttributes = useMemo(() => !!fieldsAttributes?.length, [fieldsAttributes])
-
-  const price = useMemo(() => {
-    if (!questionType) return
-    return PriceService.getCustomQuestionSmileyRatingCost(questionType, fieldsAttributes.length, configs)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionType, fieldsAttributes])
-
-  const onAddAttribute = () => {
-    if (fieldsAttributes?.length >= questionType.maxAttribute) return
-
-    appendAttribute({
-        attribute: ''
-    })
-    setFocusEleIdx(fieldsAttributes?.length ?? 0)
-  };
   const arrayFiveEmojis = [
     {
       emojiId: EmojisId.PAIN,
@@ -193,23 +141,62 @@ const PopupSmileyRating = (props: Props) => {
     },
   ]
 
-  const array1 = arrayFiveEmojis.slice(0,1);
-  const array2 = arrayFiveEmojis.slice(2,3);
-  const array3 = arrayFiveEmojis.slice(4,5);
-
-  let arrayThreeEmojis = array1.concat(array2, array3);
-
-  const onAddFiveEmojis = () => {
-      appendEmojis(arrayFiveEmojis)
-  };
-
-  const onAddThreeEmojis = () => {
-    appendEmojis(arrayThreeEmojis);
-};
-
-  const onToggleInvertScale = () => {
-    setIsInvertScale(!isInvertScale);
+  const onChangeIsInvertScale = () => {
+    fieldsEmojis.reverse()
   }
+
+  const onChangeOption = (item: OptionItem) => {
+    setItemSelected(item);
+    if(item.id === faceType.THREE){
+      removeEmojis();
+      appendEmojis([arrayFiveEmojis[0], arrayFiveEmojis[2], arrayFiveEmojis[4]])
+      setIsClassThreeEmoji(true);
+    }
+    else if(item.id === faceType.FIVE) {
+      removeEmojis();
+      appendEmojis(arrayFiveEmojis)
+      setIsClassThreeEmoji(false);
+    }
+  }
+  
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<SmileyRatingForm>({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+  });
+
+  const { fields: fieldsAttributes, append: appendAttribute, remove: removeAttribute, move: moveAttribute } = useFieldArray({
+    control,
+    name: "customQuestionAttributes"
+  });
+  const { fields: fieldsEmojis, append: appendEmojis, remove: removeEmojis} = useFieldArray({
+    control,
+    name: "customQuestionEmojis"
+  });
+
+  // const watchFieldsEmojis = watch(fieldsEmojis)
+
+  const isShowMultiAttributes = useMemo(() => !!fieldsAttributes?.length, [fieldsAttributes])
+
+  const price = useMemo(() => {
+    if (!questionType) return
+    return PriceService.getCustomQuestionSmileyRatingCost(questionType, fieldsAttributes.length, configs)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questionType, fieldsAttributes])
+
+  const onAddAttribute = () => {
+    if (fieldsAttributes?.length >= questionType.maxAttribute) return
+
+    appendAttribute({
+        attribute: ''
+    })
+    setFocusEleIdx(fieldsAttributes?.length ?? 0)
+  };
 
   const onToggleMultipleAttributes = () => {
     if (isShowMultiAttributes) {
@@ -286,11 +273,6 @@ const PopupSmileyRating = (props: Props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [isOpen, questionEdit])
 
-  useEffect(() => {
-    onAddFiveEmojis();
-  // eslint-disable-next-line react-hooks/exhaustive-deps 
-    }, [])
-
   return (
     <Dialog
       scroll= "paper"
@@ -356,7 +338,7 @@ const PopupSmileyRating = (props: Props) => {
               <Grid className={isClassThreeEmoji ? classes.emojiContainer : ""}>
               <Grid className={classes.emojiContent}>
                 {fieldsEmojis?.map((field, index) => ( 
-                  <div className={classes.emojiItem} >
+                  <div className={classes.emojiItem} key={index} >
                     <img src={renderImage(field.emojiId)} alt=""/>
                     <InputLineTextfield
                     className={classes.inputEmojis}
@@ -376,8 +358,8 @@ const PopupSmileyRating = (props: Props) => {
                           <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
                         </Tooltip>
                       </InputAdornment>
-                    }
-                  />
+                      }
+                      />
                   </div>
                 ))}                           
             </Grid>  
@@ -392,8 +374,13 @@ const PopupSmileyRating = (props: Props) => {
                 control={control}
                 render = {({field}) => 
                 <Toggle
+                {...field}
                 className={classes.toggle}
-                onChange={onToggleInvertScale}
+                onChange={(value: any) => {
+                  console.log(value, "=======value=======")
+                  onChangeIsInvertScale()
+                  return field.onChange(value)
+                }}
                 />}
               />
             </Grid>

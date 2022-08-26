@@ -256,6 +256,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             setNumericScaleEdit(res.data);
             break;
           case ECustomQuestionType.Smiley_Rating:
+            setSmileyRatingEdit(res.data);
             break;
           case ECustomQuestionType.Star_Rating:
             setStarRatingEdit(res.data);
