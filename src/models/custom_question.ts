@@ -186,3 +186,27 @@ export enum EmojisId {
   SAD = 4,
   PAIN = 5,
 }
+
+
+export const arrayEmojis = [
+  {
+    emojiId: 1,
+    label: ''
+  },
+  {
+    emojiId: 2,
+    label: ''
+  },
+  {
+    emojiId: 3,
+    label: ''
+  },
+  {
+    emojiId: 4,
+    label: ''
+  },
+  {
+    emojiId: 5,
+    label: ''
+  },
+]

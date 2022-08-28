@@ -146,7 +146,7 @@ export enum ETypeVerifyCode {
 }
 
 
-export enum faceType {
+export enum FaceType {
   FIVE = 1,
   THREE = 2,
 }
@@ -154,6 +154,6 @@ export enum faceType {
 
 
 export const emojiFaces: OptionItem[] = [
-  { id: faceType.FIVE, name: "5 faces" },
-  { id: faceType.THREE, name: "3 faces" },
+  { id: FaceType.FIVE, name: "5 faces" },
+  { id: FaceType.THREE, name: "3 faces" },
 ]
