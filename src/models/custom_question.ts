@@ -189,24 +189,19 @@ export enum EmojisId {
 
 
 export const arrayEmojis = [
-  {
-    emojiId: 1,
-    label: ''
+  { 
+    emojiId: EmojisId.PAIN,
   },
   {
-    emojiId: 2,
-    label: ''
+    emojiId: EmojisId.SAD,
   },
   {
-    emojiId: 3,
-    label: ''
+    emojiId: EmojisId.MEH,
   },
   {
-    emojiId: 4,
-    label: ''
+    emojiId: EmojisId.SMILE,
   },
   {
-    emojiId: 5,
-    label: ''
+    emojiId: EmojisId.LAUGH,
   },
 ]

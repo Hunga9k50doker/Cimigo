@@ -161,10 +161,10 @@ const PopupSmileyRating = (props: Props) => {
       onAddAttribute()
     }
   }
-
   const onToggleInvertScale = () => {
     setIsInvertScale(!isInvertScale);
     fieldsEmojis.reverse()
+    console.log(fieldsEmojis)
   }
 
   const onDragEnd = ({ destination, source }: DropResult) => {
