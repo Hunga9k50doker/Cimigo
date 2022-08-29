@@ -74,6 +74,8 @@ const PopupSmileyRating = (props: Props) => {
   const { onClose, project, questionEdit, questionType, isOpen, onSubmit } = props;
   
   const [focusEleIdx, setFocusEleIdx] = useState(-1);
+  
+  const [isInvertScale, setIsInvertScale] = useState(false);
 
   const schema = useMemo(() => {
     return yup.object().shape({
@@ -124,7 +126,7 @@ const PopupSmileyRating = (props: Props) => {
           case FaceType.FIVE:
             removeEmojis();
             appendEmojis(arrayEmojis);
-            break;
+            break;  
           case FaceType.THREE:
             removeEmojis();
             appendEmojis([arrayEmojis[0], arrayEmojis[2], arrayEmojis[4]]);
@@ -134,15 +136,6 @@ const PopupSmileyRating = (props: Props) => {
             appendEmojis(arrayEmojis);
       }
   }
-
-  const itemSelected = useMemo(() => {
-    if(fieldsEmojis.length === FaceType.FIVE){
-      return emojiFaces[0].name;
-    }
-    else {
-      return emojiFaces[1].name;
-    }
-  },[fieldsEmojis]);
 
   const isShowMultiAttributes = useMemo(() => !!fieldsAttributes?.length, [fieldsAttributes])
 
@@ -170,6 +163,7 @@ const PopupSmileyRating = (props: Props) => {
   }
 
   const onToggleInvertScale = () => {
+    setIsInvertScale(!isInvertScale);
     fieldsEmojis.reverse()
   }
 
@@ -300,16 +294,16 @@ const PopupSmileyRating = (props: Props) => {
                 <InputSelect
                 className={classes.selectBox}
                 selectProps={
-                  {options: emojiFaces,
-                  value: itemSelected,
-                  placeholder: "5 faces",
+                  {
+                  defaultValue: emojiFaces[0],
+                  options: emojiFaces,
                   onChange:(val: any) => (onChangeOption(val))  
                 }}
                 />
               </Grid>
               <Grid className={classes.emojiContent}>
                 {fieldsEmojis?.map((field, index) => ( 
-                  <div className={classes.emojiItem} key={index} >
+                  <div className={classes.emojiItem} key={index}>
                     <Emoji emojiId={field.emojiId}/>
                     <InputLineTextfield
                     className={classes.inputEmojis}
@@ -336,7 +330,7 @@ const PopupSmileyRating = (props: Props) => {
             </Grid>        
             </Grid>
             <Grid className={classes.invertScaleContainer}>
-              <Heading5 $colorName="--gray-60" translation-key="">
+              <Heading5 $colorName={!isInvertScale && "--gray-60"} translation-key="">
                 Invert scale
               </Heading5>
               <Controller
@@ -345,6 +339,7 @@ const PopupSmileyRating = (props: Props) => {
                 render = {({field}) => 
                 <Toggle
                 {...field}
+                checked={isInvertScale}
                 className={classes.toggle}
                 onChange={(value: any) => {
                   onToggleInvertScale()
