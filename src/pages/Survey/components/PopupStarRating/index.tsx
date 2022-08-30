@@ -6,8 +6,9 @@ import {
   Tooltip,
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import StarIcon from '@mui/icons-material/Star';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   DragDropContext,
@@ -29,28 +30,28 @@ import ButtonCLose from "components/common/buttons/ButtonClose"
 import Button, { BtnType } from "components/common/buttons/Button"
 import TextBtnSmall from "components/common/text/TextBtnSmall"
 import InputTextfield from "components/common/inputs/InputTextfield"
+import InputCounter from "components/common/inputs/InputCounter"
 import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
 import { Project } from "models/project";
 import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
 import {DialogTitle} from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import { DialogActions } from "components/common/dialogs/DialogActions";
-import ErrorMessage from "components/common/text/ErrorMessage";
 import { PriceService } from "helpers/price";
 import { useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 
-
-export interface NumericScaleForm {
-  title: string;
-  scaleRangeFrom?: number;
-  scaleRangeTo?: number;
-  customQuestionAttributes?: {
-    id?: number;
-    leftLabel?: string;
-    rightLabel?: string;
-  }[],
+const minStars = 3;
+const maxStars = 10;
+export interface StarRatingForm {
+    title: string;
+    numberOfStars: number;
+    customQuestionAttributes?: {
+      id?: number;
+      attribute?: string;
+    }[],
 }
+
 interface Props {
   isOpen: boolean;
   project: Project;
@@ -60,48 +61,46 @@ interface Props {
   onSubmit: (data: CreateOrEditCustomQuestionInput) => void;
 }
 
-const PopupNumericScale = (props: Props) => {
-
+const PopupStarRating = (props: Props) => {
   const { t, i18n } = useTranslation();
 
   const { configs } = useSelector((state: ReducerType) => state.user)
 
-  const { isOpen, project, questionEdit, questionType, onClose, onSubmit } = props;
-
+  const { onClose, project, questionEdit, questionType, isOpen, onSubmit } = props;
+  
   const [focusEleIdx, setFocusEleIdx] = useState(-1);
-
+  
   const schema = useMemo(() => {
     return yup.object().shape({
-      title: yup.string().required("Question title is required"),
-      scaleRangeFrom: yup.number()
-        .typeError('From is required')
-        .integer("From must be an integer")
-        .required("From is required"),
-      scaleRangeTo: yup.number()
-        .typeError('To is required')
-        .integer("To must be an integer")
-        .required("To is required")
-        .min(yup.ref("scaleRangeFrom"), "Greater from"),
-      customQuestionAttributes: yup
-        .array(yup.object({
-          id: yup.number().transform(value => (isNaN(value) ? undefined : value)).notRequired(),
-          leftLabel: yup.string().required("Left label is required"),
-          rightLabel: yup.string().required("Right label is required"),
-        }))
-        .required(),
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i18n.language]);
+          title: yup.string().required("Question is required"),
+          numberOfStars: yup.number()
+          .min(minStars, `Number of stars must be between ${minStars} and ${maxStars}`)
+          .max(maxStars, `Number of stars must be between ${minStars} and ${maxStars}`)
+          .required("Number of stars is required"),
+          customQuestionAttributes: yup
+            .array(
+              yup.object({
+                id: yup.number().transform(value => (isNaN(value) ? undefined : value)).notRequired(),
+                attribute: yup.string().required("Attribute is required"),
+              })
+            )
+            .required(),
+        })
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      },[i18n.language]);
 
   const {
-    control,
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
-  } = useForm<NumericScaleForm>({
+  } = useForm<StarRatingForm>({
     resolver: yupResolver(schema),
     mode: "onChange",
+    defaultValues: {
+      numberOfStars: 5,
+    }
   });
 
   const { fields: fieldsAttributes, append: appendAttribute, remove: removeAttribute, move: moveAttribute } = useFieldArray({
@@ -113,7 +112,7 @@ const PopupNumericScale = (props: Props) => {
 
   const price = useMemo(() => {
     if (!questionType) return
-    return PriceService.getCustomQuestionNumericScaleCost(questionType, fieldsAttributes.length, configs)
+    return PriceService.getCustomQuestionStarRatingCost(questionType, fieldsAttributes.length, configs)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionType, fieldsAttributes])
 
@@ -121,8 +120,7 @@ const PopupNumericScale = (props: Props) => {
     if (fieldsAttributes?.length >= questionType.maxAttribute) return
 
     appendAttribute({
-      leftLabel: '',
-      rightLabel: '',
+        attribute: ''
     })
     setFocusEleIdx(fieldsAttributes?.length ?? 0)
   };
@@ -143,23 +141,20 @@ const PopupNumericScale = (props: Props) => {
   const clearForm = () => {
     reset({
       title: "",
-      scaleRangeFrom: null,
-      scaleRangeTo: null,
+      numberOfStars: 5,
       customQuestionAttributes: [],
     })
   };
 
-  const _onSubmit = (value: NumericScaleForm) => {
+  const _onSubmit = (value: StarRatingForm) => {
     const data: CreateOrEditCustomQuestionInput = {
       projectId: project.id,
       title: value.title,
-      scaleRangeFrom: value.scaleRangeFrom,
-      scaleRangeTo: value.scaleRangeTo,
-      typeId: ECustomQuestionType.Numeric_Scale,
+      numberOfStars: value.numberOfStars,
+      typeId: ECustomQuestionType.Star_Rating,
       customQuestionAttributes: value.customQuestionAttributes?.map(it => ({
         id: it.id,
-        leftLabel: it.leftLabel,
-        rightLabel: it.rightLabel
+        attribute: it.attribute
       }))
     }
     onSubmit(data)
@@ -177,23 +172,21 @@ const PopupNumericScale = (props: Props) => {
     if (questionEdit) {
       reset({
         title: questionEdit.title,
-        scaleRangeFrom: questionEdit.scaleRangeFrom,
-        scaleRangeTo: questionEdit.scaleRangeTo,
+        numberOfStars: questionEdit.numberOfStars,
         customQuestionAttributes: questionEdit.customQuestionAttributes?.map(it => ({
           id: it.id,
-          leftLabel: it.leftLabel,
-          rightLabel: it.rightLabel
+          attribute: it.attribute
         })),
       })
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionEdit])
 
   useEffect(() => {
     if (!isOpen && !questionEdit) {
       clearForm()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [isOpen, questionEdit])
 
   return (
@@ -205,12 +198,12 @@ const PopupNumericScale = (props: Props) => {
     >
       <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle>
-            <Heading3 translation-key="">
-              Add numeric scale
-            </Heading3>
-            <ButtonCLose
-              onClick={() => _onClose()}>
-            </ButtonCLose>
+          <Heading3 translation-key="">
+            Add star rating
+          </Heading3>
+          <ButtonCLose
+            onClick={() => _onClose()}>
+          </ButtonCLose>
         </DialogTitle>
         <DialogContent dividers>
           <Grid className={classes.classForm}>
@@ -245,35 +238,31 @@ const PopupNumericScale = (props: Props) => {
               inputRef={register("title")}
               errorMessage={errors.title?.message}
             />
-            <Grid className={classes.scaleRangeContainer}>
-              <Heading5>Scale Range</Heading5>
-              <div className={classes.contentScaleRange}>
-                <ParagraphBody $colorName="--eerie-black-65">From</ParagraphBody>
-                <InputLineTextfield
-                  root={classes.inputScaleRange}
-                  fullWidth
-                  type="number"
-                  placeholder="min"
-                  autoComplete="off"
-                  inputProps={{ tabIndex: 2 }}
-                  inputRef={register("scaleRangeFrom")}
-                  isShowError={!!errors.scaleRangeFrom?.message}
-                />
-                <ParagraphBody $colorName="--eerie-black-65">to</ParagraphBody>
-                <InputLineTextfield
-                  root={classes.inputScaleRange}
-                  fullWidth
-                  type="number"
-                  placeholder="max"
-                  autoComplete="off"
-                  inputProps={{ tabIndex: 3 }}
-                  inputRef={register("scaleRangeTo")}
-                  isShowError={!!errors.scaleRangeTo?.message}
-                />
-              </div>
+            <Grid className={classes.numberStarContainer}>
+              <Controller
+              name="numberOfStars"
+              control={control}
+              render={({field}) => 
+              <>
+                  <Grid className={classes.numberStarControl}>
+                    <Heading5>Number of stars</Heading5>                   
+                    <InputCounter
+                      max = {maxStars}
+                      min = {minStars}
+                      onChange = {field.onChange}
+                      value = {field.value}
+                    />                                       
+                  </Grid>
+                  <Grid className={classes.rowStar}>
+                      {[...Array(field.value)].map((star,index) => {
+                          return (
+                          <StarIcon className={classes.iconStar} key={index}/>)  
+                      })}
+                  </Grid>
+              </>
+              }
+              />    
             </Grid>
-            {!!errors.scaleRangeFrom?.message && <ErrorMessage>{errors.scaleRangeFrom?.message}</ErrorMessage>}
-            {!!errors.scaleRangeTo?.message && <ErrorMessage>{errors.scaleRangeTo?.message}</ErrorMessage>}
             <Grid>
               <div className={classes.multiAttributeControl}>
                 <Heading5 $colorName={!isShowMultiAttributes && "--gray-60"} translation-key="">
@@ -286,7 +275,8 @@ const PopupNumericScale = (props: Props) => {
                 />
               </div>
               <ParagraphBody $colorName={isShowMultiAttributes ? "--gray-80" : "--gray-60"}>
-                Your question will be evaluated based on the following list of attributes.
+                Your question will be evaluated based on the following list of
+                attributes.
               </ParagraphBody>
               {!!fieldsAttributes?.length && (
                 <Grid sx={{ position: "relative", marginTop: "24px" }}>
@@ -315,55 +305,29 @@ const PopupNumericScale = (props: Props) => {
                                       className={classes.iconDotsDrag}
                                       src={Images.icDrag}
                                       alt=""
-                                    />
-                                    <ParagraphBody $colorName="--gray-80" className={classes.attributeTitle}>Attribute {index + 1}</ParagraphBody>
-                                    <Grid
-                                      container
-                                      rowSpacing={1}
-                                      columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                                    >
-                                      <Grid
-                                        item
-                                        xs={6}
-                                        className={classes.inputContainer}
-                                      >
+                                    />                                  
+                                    <Grid className={classes.inputContainer}>
                                         <InputLineTextfield
                                           className={classes.inputAttribute}
                                           type="text"
-                                          placeholder="Enter left label"
+                                          placeholder="Enter attribute"
                                           autoComplete="off"
-                                          inputProps={{ tabIndex: index + 4 }}
+                                          inputProps={{tabIndex:index + 2}}
                                           autoFocus={index === focusEleIdx}
                                           onFocus={() => setFocusEleIdx(-1)}
-                                          inputRef={register(`customQuestionAttributes.${index}.leftLabel`)}
-                                          errorMessage={errors.customQuestionAttributes?.[index]?.leftLabel?.message}
+                                          inputRef={register(`customQuestionAttributes.${index}.attribute`)}
+                                          errorMessage={errors.customQuestionAttributes?.[index]?.attribute?.message}
                                         />
-                                      </Grid>
-                                      <Grid
-                                        item
-                                        xs={6}
-                                        className={classes.inputContainer}
-                                      >
-                                        <InputLineTextfield
-                                          className={classes.inputAttribute}
-                                          type="text"
-                                          placeholder="Enter right label"
-                                          autoComplete="off"
-                                          inputProps={{ tabIndex: index + 5 }}
-                                          inputRef={register(`customQuestionAttributes.${index}.rightLabel`)}
-                                          errorMessage={errors.customQuestionAttributes?.[index]?.rightLabel?.message}
-                                        />
-                                      </Grid>
                                     </Grid>
                                   </div>
                                   {fieldsAttributes?.length > 1 && (
                                     <CloseIcon
-                                      type="button"
-                                      className={classes.closeInputAttribute}
-                                      onClick={onDeleteAttribute(index)}
+                                    type="button"
+                                    className={classes.closeInputAttribute}
+                                    onClick={onDeleteAttribute(index)}
                                     >
-                                    </CloseIcon>
-                                  )}
+                                  </CloseIcon>
+                                  ) }
                                 </div>
                               )}
                             </Draggable>
@@ -375,12 +339,12 @@ const PopupNumericScale = (props: Props) => {
                   </DragDropContext>
                   {fieldsAttributes?.length < questionType.maxAttribute && (
                     <Grid className={classes.addList}>
-                      <div onClick={onAddAttribute} className={classes.addOptions}>
-                        <PlaylistAddIcon className={classes.IconListAdd} />
+                        <div onClick={onAddAttribute} className={classes.addOptions}>
+                        <PlaylistAddIcon className={classes.IconListAdd}/>
                         <ParagraphBody $colorName="--eerie-black-65" translation-key="setup_survey_popup_add_answer_title">
-                          {t("setup_survey_popup_add_answer_title")}
+                            {t("setup_survey_popup_add_answer_title")}
                         </ParagraphBody>
-                      </div>
+                        </div>
                     </Grid>
                   )}
                 </Grid>
@@ -406,4 +370,4 @@ const PopupNumericScale = (props: Props) => {
   );
 };
 
-export default PopupNumericScale;
+export default PopupStarRating;

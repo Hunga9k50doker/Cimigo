@@ -23,8 +23,9 @@ import { useTranslation } from 'react-i18next';
 import { ReducerType } from "redux/reducers";
 import Heading2 from "components/common/text/Heading2";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import ButtonSecondary from "components/common/text/TextBtnSecondary";
 import InputTextfield from "components/common/inputs/InputTextfield";
+import Button, { BtnType } from "components/common/buttons/Button"
+import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 
 const Login = () => {
   const { t, i18n } = useTranslation()
@@ -131,7 +132,13 @@ const Login = () => {
               {t('login_invalid_error')}
             </Typography>
           )}
-          <Buttons type={"submit"} translation-key="btn_login" children={('Login')} btnType="Blue" padding="8px 16px" className={classes.btnLogin}/>
+          <Button
+            btnType={BtnType.Secondary}
+            type="submit"
+            translation-key="button_login"
+            children={<TextBtnSecondary>{'Login'}</TextBtnSecondary>}
+          />
+
           <div className={classes.separator}>
             <span translation-key="login_login_with">{'or login with'}</span>
           </div>

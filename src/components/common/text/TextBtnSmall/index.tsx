@@ -5,7 +5,7 @@ interface Props {
     $colorName?: string;
 }
 
-const ButtonSmall = styled(Typography)<Props>`
+const TextBtnSmall = styled(Typography)<Props>`
     font-family: 'Montserrat';
     font-style: normal;
     font-weight: 500;
@@ -14,4 +14,4 @@ const ButtonSmall = styled(Typography)<Props>`
     color: ${props => `var(${props.$colorName || '--gray-10'})`};
 `
 
-export default ButtonSmall;
+export default TextBtnSmall;
