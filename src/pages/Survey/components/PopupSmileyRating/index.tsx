@@ -196,7 +196,7 @@ const PopupSmileyRating = (props: Props) => {
         attribute: it.attribute
       }))
     }
-    onSubmit(data);
+   onSubmit(data);
   };
 
   const onDeleteAttribute = (index: number) => () => {
@@ -335,14 +335,13 @@ const PopupSmileyRating = (props: Props) => {
               <Controller
                 name="invertScale"
                 control={control}
-                render = {({field}) => 
+                render = {({field: {onChange}}) => 
                 <Toggle
-                {...field}
                 checked={isInvertScale}
                 className={classes.toggle}
                 onChange={(value: any) => {
                   onToggleInvertScale()
-                  return field.onChange(value)
+                  return onChange(value)
                 }}
                 />}
               />
