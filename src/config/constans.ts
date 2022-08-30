@@ -108,6 +108,10 @@ export const API = {
       DEFAULT: '/v1.0/admin/solution-category-home',
       UPDATE_STATUS: '/v1.0/admin/solution-category-home/update-status/:id',
     },
+    PLAN: {
+      DEFAULT: '/v1.0/admin/plan',
+      UPDATE_STATUS: '/v1.0/admin/plan/update-status/:id',
+    },
     ATTRIBUTE: {
       DEFAULT: '/v1.0/admin/attribute',
     },
@@ -130,6 +134,9 @@ export const API = {
     },
     SAMPLE_SIZE: {
       DEFAULT: '/v1.0/admin/sample-size',
+    },
+    EYE_TRACKING_SAMPLE_SIZE: {
+      DEFAULT: '/v1.0/admin/eye-tracking-sample-size',
     },
     QUOTA: {
       TABLE: {

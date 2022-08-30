@@ -16,6 +16,18 @@ export class PriceService {
     return round(sampleSize * unitPrice)
   }
 
+  static getEyeTrackingSampleSizeConstConfig = (project: Project) => {
+    return [...(project?.solution?.eyeTrackingSampleSizes || [])].sort((a, b) => a.limit - b.limit)
+  }
+
+  static getEyeTrackingSampleSizeCost = (project: Project) => {
+    if (!project?.enableEyeTracking) return 0
+    const sampleSize = project?.eyeTrackingSampleSize || 0
+    const eyeTrackingSampleSizeConstConfig = PriceService.getEyeTrackingSampleSizeConstConfig(project)
+    const unitPrice = eyeTrackingSampleSizeConstConfig.find((it, index) => it.limit > sampleSize || (it.limit === sampleSize && index === (eyeTrackingSampleSizeConstConfig.length - 1)))?.price || 0
+    return round(sampleSize * unitPrice)
+  }
+
   static convertUSDToVND = (value: number, configs: ConfigData) => {
     return Math.round(value * configs.usdToVND)
   }
@@ -105,12 +117,15 @@ export class PriceService {
 
     const sampleSizeCostUSD: number = PriceService.getSampleSizeCost(project);
     const customQuestionCostUSD: number = PriceService.getCustomQuestionCost(project.customQuestions, configs);
-    const amountUSD = sampleSizeCostUSD + customQuestionCostUSD;
-    const vatUSD = Math.round(amountUSD * configs.vat * 100) / 100;
-    const totalAmountUSD = Math.round((amountUSD + vatUSD) * 100) / 100;
+    const eyeTrackingSampleSizeCostUSD: number = PriceService.getEyeTrackingSampleSizeCost(project);
+
+    const amountUSD = sampleSizeCostUSD + customQuestionCostUSD + eyeTrackingSampleSizeCostUSD;
+    const vatUSD = round(amountUSD * configs.vat);
+    const totalAmountUSD = round(amountUSD + vatUSD);
 
     const sampleSizeCost: number = Math.round(sampleSizeCostUSD * configs.usdToVND);
     const customQuestionCost: number = Math.round(customQuestionCostUSD * configs.usdToVND);
+    const eyeTrackingSampleSizeCost: number = Math.round(eyeTrackingSampleSizeCostUSD * configs.usdToVND);
     const amount = Math.round(amountUSD * configs.usdToVND);
     const vat = Math.round(vatUSD * configs.usdToVND);
     const totalAmount = Math.round(totalAmountUSD * configs.usdToVND);
@@ -119,6 +134,8 @@ export class PriceService {
       sampleSize,
       sampleSizeCost,
       sampleSizeCostUSD,
+      eyeTrackingSampleSizeCost,
+      eyeTrackingSampleSizeCostUSD,
       customQuestionCost,
       customQuestionCostUSD,
       amount,

@@ -8,6 +8,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import StarIcon from '@mui/icons-material/Star';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -19,7 +20,6 @@ import {
 import classes from "./styles.module.scss";
 import * as yup from "yup";
 import Toggle from "components/Toggle";
-import Images from "config/images";
 import { useTranslation } from "react-i18next";
 import ParagraphBody from "components/common/text/ParagraphBody"
 import Heading5 from "components/common/text/Heading5"
@@ -301,11 +301,7 @@ const PopupStarRating = (props: Props) => {
                                   {...provided.dragHandleProps}
                                 >
                                   <div className={classes.rowInputAttribute}>
-                                    <img
-                                      className={classes.iconDotsDrag}
-                                      src={Images.icDrag}
-                                      alt=""
-                                    />                                  
+                                    <DragIndicatorIcon className={classes.iconDotsDrag}/>                               
                                     <Grid className={classes.inputContainer}>
                                         <InputLineTextfield
                                           className={classes.inputAttribute}

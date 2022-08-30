@@ -701,68 +701,48 @@ const SetupSurvey = memo(({ id }: Props) => {
     setStarRatingEdit(null);
   }
 
-  const onAddOrEditOpenQuestion = (data: CustomQuestion) => {
-    // if (openQuestionEdit) {
-    //   dispatch(setLoading(true));
-    //   const params: UpdateCustomQuestionInput = {
-    //     title: data.title,
-    //     answers: data.answers,
-    //   }
-    //   CustomQuestionService.update(openQuestionEdit.id, params)
-    //     .then(() => {
-    //       getCustomQuestion();
-    //       onClosePopupOpenQuestion();
-    //     })
-    //     .catch(e => dispatch(setErrorMess(e)))
-    //     .finally(() => dispatch(setLoading(false)))
-    // } else {
-    //   dispatch(setLoading(true));
-    //   const params: CreateCustomQuestionInput = {
-    //     projectId: id,
-    //     title: data.title,
-    //     typeId: data.typeId,
-    //     answers: data.answers,
-    //   }
-    //   CustomQuestionService.create(params)
-    //     .then(() => {
-    //       getCustomQuestion();
-    //       onClosePopupOpenQuestion();
-    //     })
-    //     .catch(e => dispatch(setErrorMess(e)))
-    //     .finally(() => dispatch(setLoading(false)))
-    // }
+  const onAddOrEditOpenQuestion = (data: CreateOrEditCustomQuestionInput) => {
+    if (openQuestionEdit) {
+      dispatch(setLoading(true));
+      CustomQuestionService.update(openQuestionEdit.id, data)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupOpenQuestion();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true));
+      CustomQuestionService.create(data)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupOpenQuestion();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
   }
 
-  const onAddOrEditSingleChoice = (data: CustomQuestion) => {
-    // if (singleChoiceEdit) {
-    //   dispatch(setLoading(true));
-    //   const params: UpdateCustomQuestionInput = {
-    //     title: data.title,
-    //     answers: data.answers,
-    //   }
-    //   CustomQuestionService.update(singleChoiceEdit.id, params)
-    //     .then(() => {
-    //       getCustomQuestion();
-    //       onClosePopupSingleChoice();
-    //     })
-    //     .catch(e => dispatch(setErrorMess(e)))
-    //     .finally(() => dispatch(setLoading(false)))
-    // } else {
-    //   dispatch(setLoading(true));
-    //   const params: CreateCustomQuestionInput = {
-    //     projectId: id,
-    //     title: data.title,
-    //     typeId: data.typeId,
-    //     answers: data.answers,
-    //   }
-    //   CustomQuestionService.create(params)
-    //     .then(() => {
-    //       getCustomQuestion();
-    //       onClosePopupSingleChoice();
-    //     })
-    //     .catch(e => dispatch(setErrorMess(e)))
-    //     .finally(() => dispatch(setLoading(false)))
-    // }
+  const onAddOrEditSingleChoice = (data: CreateOrEditCustomQuestionInput) => {
+    if (singleChoiceEdit) {
+      dispatch(setLoading(true));
+      CustomQuestionService.update(singleChoiceEdit.id, data)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupSingleChoice();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true));
+      CustomQuestionService.create(data)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupSingleChoice();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
   }
 
   const onAddOrEditMultipleChoices = (data: CreateOrEditCustomQuestionInput) => {
@@ -1679,7 +1659,8 @@ const SetupSurvey = memo(({ id }: Props) => {
             onClose={onClosePopupOpenQuestion}
             onSubmit={onAddOrEditOpenQuestion}
             questionEdit={openQuestionEdit}
-            language={project?.surveyLanguage || ""}
+            questionType={questionTypeOpenQuestion}
+            project={project}
           />
         )}
         {questionTypeSingleChoice && (
@@ -1689,7 +1670,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             onSubmit={onAddOrEditSingleChoice}
             questionEdit={singleChoiceEdit}
             questionType={questionTypeSingleChoice}
-            language={project?.surveyLanguage || ""}
+            project={project}
           />
         )}
         {questionTypeMultipleChoices && (

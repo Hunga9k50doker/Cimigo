@@ -61,6 +61,11 @@ export const routes = {
         create: '/admin/solution/:solutionId/sample-size/create',
         edit: '/admin/solution/:solutionId/sample-size/:sampleSizeId/edit',
       },
+      eyeTrackingSampleSize: {
+        root: '/admin/solution/:solutionId/eye-tracking-sample-size',
+        create: '/admin/solution/:solutionId/eye-tracking-sample-size/create',
+        edit: '/admin/solution/:solutionId/eye-tracking-sample-size/:sampleSizeId/edit',
+      },
     },
     solutionCategory: {
       root: '/admin/solution-category',
@@ -71,6 +76,11 @@ export const routes = {
       root: '/admin/solution-category-home',
       create: '/admin/solution-category-home/create',
       edit: '/admin/solution-category-home/:id/edit',
+    },
+    plan: {
+      root: '/admin/plan',
+      create: '/admin/plan/create',
+      edit: '/admin/plan/:id/edit',
     },
     attribute: {
       root: '/admin/attribute',
