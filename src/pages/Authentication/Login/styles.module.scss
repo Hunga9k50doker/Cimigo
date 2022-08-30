@@ -56,6 +56,15 @@
   &:hover p {
     color: #ffffff !important;
   }
+  @media only screen and (max-width: 767px) {
+    padding: 4px 16px !important;
+  }
+}
+.BtnLoginForm p{
+  color: #ffffff !important;
+  @media only screen and (max-width: 767px) {
+    font-size: 14px !important;
+  }
 }
 .checkbox {
   display: flex;

@@ -97,10 +97,10 @@ const Login = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="login" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <Heading2 className={classes.textLogin} translation-key="login_title">{'Login'}</Heading2>
+          <Heading2 className={classes.textLogin} translation-key="login_title">{'Login'}</Heading2> 
           <ParagraphSmall className={classes.textHead} translation-key="login_head">{'Please login to manage your projects and save your work.'}</ParagraphSmall>
           <InputTextfield
-            title={t('Email address')}
+            title={'Email address'}
             translation-key="field_email_address"
             name="email"
             className={classes.textInput}
@@ -109,7 +109,7 @@ const Login = () => {
             type="text"
             inputRef={register('email')}
             errorMessage={errors.email?.message}
-          />
+          /> 
           <InputTextfield
             title={'Password'}
             translation-key="field_password"
@@ -125,7 +125,7 @@ const Login = () => {
           <Grid className={classes.checkbox}>
             <div></div>
             <Link to={routes.forgotPassword} className={classes.linkText} translation-key="login_redirect_forgot_password">
-              {t('Forgot password?')}
+              {'Forgot password?'}
             </Link>             
           </Grid>
           {errorSubmit && (
@@ -140,7 +140,6 @@ const Login = () => {
             children={<TextBtnSecondary>{"Login"}</TextBtnSecondary>}
             className={classes.BtnLoginForm}
           />
-
           <div className={classes.separator}>
             <span translation-key="login_login_with">{'or login with'}</span>
           </div>
@@ -166,3 +165,12 @@ const Login = () => {
   );
 };
 export default Login;
+
+/**
+ * List translation-key !== text
+ * Heading2 translation-key="login_title" text="Login"
+ * ParagraphSmall translation-key="login_head" text="Please login to manage your projects and save your work."
+ * Button translation-key="login_form" text="Login"
+ * div translation-key="login_login_with" text="or login with"
+ * Link translation-key="login_do_not_have_account" text="Don't have an account? Register now!"
+ */

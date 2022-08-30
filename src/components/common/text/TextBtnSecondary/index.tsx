@@ -12,9 +12,6 @@ const TextBtnSecondary = styled(Typography)<Props>`
     font-size: 18px;
     line-height: 32px;
     color: ${props => `var(${props.$colorName || '--gray-10'})`};
-    @media only screen and (max-width: 767px) {
-        font-size: 14px;
-  }
 `
 
 export default TextBtnSecondary;
