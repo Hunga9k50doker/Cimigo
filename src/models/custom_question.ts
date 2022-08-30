@@ -1,3 +1,5 @@
+import { OptionItem } from "./general";
+
 export interface CustomQuestionType {
   id: number;
   title: string;
@@ -188,20 +190,35 @@ export enum EmojisId {
 }
 
 
-export const arrayEmojis = [
+export const arrayEmojis: OptionItem[] = [
   { 
-    emojiId: EmojisId.PAIN,
+    id: EmojisId.PAIN,
+    name: 'Pain'
   },
   {
-    emojiId: EmojisId.SAD,
+    id: EmojisId.SAD,
+    name: 'Sad'
   },
   {
-    emojiId: EmojisId.MEH,
+    id: EmojisId.MEH,
+    name: 'Meh'
   },
   {
-    emojiId: EmojisId.SMILE,
+    id: EmojisId.SMILE,
+    name: 'Smile'
   },
   {
-    emojiId: EmojisId.LAUGH,
+    id: EmojisId.LAUGH,
+    name: 'Laugh'
   },
+]
+
+export enum FaceType {
+  FIVE = 5,
+  THREE = 3,
+}
+
+export const emojiFaces: OptionItem[] = [
+  { id: FaceType.FIVE, name: "5 faces" },
+  { id: FaceType.THREE, name: "3 faces" },
 ]

@@ -144,16 +144,3 @@ export enum ETypeVerifyCode {
   VERIFY_EMAIL = 1,
   RESET_PASSWORD = 2
 }
-
-
-export enum FaceType {
-  FIVE = 1,
-  THREE = 2,
-}
-
-
-
-export const emojiFaces: OptionItem[] = [
-  { id: FaceType.FIVE, name: "5 faces" },
-  { id: FaceType.THREE, name: "3 faces" },
-]
