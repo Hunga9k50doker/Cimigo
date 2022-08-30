@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { memo } from 'react';
 import {
   FormControl
 } from '@mui/material';
@@ -15,6 +15,12 @@ import { useTranslation } from 'react-i18next';
 const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unknown>> => ({
   indicatorSeparator: () => ({
     display: "none",
+  }),
+  indicatorsContainer: (provided) => ({
+    ...provided,
+   'div': {
+    padding: '6px 8px',
+   }
   }),
   option: (provided, state) => ({
     ...provided,
@@ -51,7 +57,7 @@ const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unk
   control: (provided, state) => ({
     ...provided,
     cursor: state.isDisabled ? "not-allowed" : "pointer",
-    background: state.isDisabled ? "var(--gray-5)" : "var(--ghost-white)",
+    background: state.isDisabled ? "var(--gray-5)" : "var(--gray-10)",
     border: state.isFocused ? "1px solid var(--cimigo-blue-light-1)" : "1px solid var(--gray-40)",
     // borderColor:"var(--gray-40)",
     "svg": {
@@ -103,11 +109,10 @@ interface InputSelectProps {
   selectProps?: StateManagerProps,
   fullWidth?: boolean,
   optional?: boolean
-  onClick?: () => void,
 }
 
 const InputSelect = memo((props: InputSelectProps) => {
-  const { className, title, errorMessage, name, control, bindKey, bindLabel, selectProps, fullWidth, optional, onClick } = props;
+  const { className, title, errorMessage, name, control, bindKey, bindLabel, selectProps, fullWidth, optional } = props;
   const { t } = useTranslation()
 
   const getOptionLabel = (option: any) => {
@@ -120,7 +125,7 @@ const InputSelect = memo((props: InputSelectProps) => {
   }
 
   return (
-    <FormControl className={className}>
+    <FormControl className={className} sx={{ width: fullWidth ? '100%' : 'auto' }}>
       {title && <TextTitle invalid={errorMessage}>{title} {optional && <span>({t('common_optional')})</span>}</TextTitle>}
       {
         control ? (

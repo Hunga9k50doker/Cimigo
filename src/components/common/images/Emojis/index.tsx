@@ -12,16 +12,16 @@ const Emoji = memo((props: Props) => {
   
   const renderImage = (emojiId) => {
     switch (emojiId) {
-        case EmojisId.LAUGH:
-            return Images.imgLaugh;
-        case EmojisId.SMILE:
-            return Images.imgSmile;
+        case EmojisId.PAIN:
+            return Images.imgPain;
+        case EmojisId.SAD:
+            return Images.imgSad;
         case EmojisId.MEH:
             return Images.imgMeh;
-         case EmojisId.SAD:
-            return Images.imgSad;
+         case EmojisId.SMILE:
+            return Images.imgSmile;
         default:
-            return Images.imgPain;
+            return Images.imgLaugh;
     }
   }
   return (

@@ -240,8 +240,8 @@ const PopupSmileyRating = (props: Props) => {
   }, [isOpen, questionEdit])
 
   const smileyScale = useMemo(() => {
-    const numbeFace = fieldsEmojis.length
-    switch (numbeFace) {
+    const numberFace = fieldsEmojis.length
+    switch (numberFace) {
       case FaceType.THREE:
         return emojiFaces.find(it => it.id === FaceType.THREE)
       case FaceType.FIVE:
@@ -316,7 +316,7 @@ const PopupSmileyRating = (props: Props) => {
                   }}
                 />
               </Grid>
-              <Grid className={classes.emojiContent}>
+              <Grid className={classes.emojiContainer}>
                 {fieldsEmojis?.map((field, index) => (
                   <div className={classes.emojiItem} key={index}>
                     <Emoji emojiId={field.emojiId} />
@@ -325,7 +325,7 @@ const PopupSmileyRating = (props: Props) => {
                       type="text"
                       placeholder="Enter label"
                       autoComplete="off"
-                      inputProps={{ tabIndex: 1 }}
+                      inputProps={{ tabIndex: 2 }}
                       autoFocus
                       inputRef={register(`customQuestionEmojis.${index}.label`)}
                       errorMessage={errors.customQuestionEmojis?.[index]?.label?.message}
@@ -407,7 +407,7 @@ const PopupSmileyRating = (props: Props) => {
                                         type="text"
                                         placeholder="Enter attribute"
                                         autoComplete="off"
-                                        inputProps={{ tabIndex: index + 2 }}
+                                        inputProps={{ tabIndex: 3 }}
                                         autoFocus={index === focusEleIdx}
                                         onFocus={() => setFocusEleIdx(-1)}
                                         inputRef={register(`customQuestionAttributes.${index}.attribute`)}

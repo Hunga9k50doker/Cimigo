@@ -1,6 +1,4 @@
 import images from "config/images";
-import { EmojisId } from "models/custom_question";
-
 export interface TableHeaderLabel {
   name: string;
   label: string;
