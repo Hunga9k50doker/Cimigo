@@ -26,6 +26,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import Button, { BtnType } from "components/common/buttons/Button"
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
+import ParagraphSmallUnderline from "components/common/text/ParagraphSmallUnderline";
 
 const Login = () => {
   const { t, i18n } = useTranslation()
@@ -134,9 +135,10 @@ const Login = () => {
           )}
           <Button
             btnType={BtnType.Secondary}
-            type="submit"
-            translation-key="button_login"
-            children={<TextBtnSecondary>{'Login'}</TextBtnSecondary>}
+            type='submit'
+            translation-key="login_form"
+            children={<TextBtnSecondary>{"Login"}</TextBtnSecondary>}
+            className={classes.BtnLoginForm}
           />
 
           <div className={classes.separator}>
