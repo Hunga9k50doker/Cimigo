@@ -39,7 +39,7 @@ const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unk
   }),
   valueContainer: (provided) => ({
     ...provided,
-    padding: "8px 0 8px 16px", 
+    padding: "6px 0 6px 16px", 
   }),   
   singleValue: (provided) => ({
     ...provided,

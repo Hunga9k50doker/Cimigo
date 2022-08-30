@@ -202,7 +202,7 @@ const PopupSmileyRating = (props: Props) => {
         attribute: it.attribute
       }))
     }
-    onSubmit(data);
+   onSubmit(data);
   };
 
   const onDeleteAttribute = (index: number) => () => {
@@ -355,7 +355,7 @@ const PopupSmileyRating = (props: Props) => {
                   <Toggle
                     checked={field.value}
                     className={classes.toggle}
-                    onChange={(e, checked) => {
+                    onChange={(e) => {
                       onChangeInvertScale()
                       field.onChange(e)
                     }}
