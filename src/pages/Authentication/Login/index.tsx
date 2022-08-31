@@ -119,6 +119,7 @@ const Login = () => {
             translation-key="field_password"
             name="password"
             type="password"
+            className={classes.textInput}
             showEyes
             placeholder={'Enter your password'}
             translation-key-placeholder="field_password_placeholder" 
