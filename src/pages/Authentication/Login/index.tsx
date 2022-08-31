@@ -102,23 +102,23 @@ const Login = () => {
           {/* Heading2: translation-key="login_title" !== text="Login" */}
           <ParagraphSmall className={classes.textHead} translation-key="login_head">{'Please login to manage your projects and save your work.'}</ParagraphSmall>
           {/* ParagraphSmall: translation-key="login_head" !== text="Please login to manage your projects and save your work." */}
-          <InputTextfield
-            title={'Email address'}
-            translation-key="field_email_address"
-            name="email"
-            className={classes.textInput}
-            placeholder={"Enter your email address"}
-            translation-key-placeholder="field_email_placeholder"
-            type="text"
-            inputRef={register('email')}
-            errorMessage={errors.email?.message}
-          /> 
+          <Grid className={classes.textInput}>
+            <InputTextfield
+              title={'Email address'}
+              translation-key="field_email_address"
+              name="email"
+              placeholder={"Enter your email address"}
+              translation-key-placeholder="field_email_placeholder"
+              type="text"
+              inputRef={register('email')}
+              errorMessage={errors.email?.message}
+            /> 
+          </Grid>
           <InputTextfield
             title={'Password'}
             translation-key="field_password"
             name="password"
             type="password"
-            className={classes.textInput}
             showEyes
             placeholder={'Enter your password'}
             translation-key-placeholder="field_password_placeholder" 
