@@ -1,5 +1,4 @@
 import images from "config/images";
-
 export interface TableHeaderLabel {
   name: string;
   label: string;
