@@ -48,7 +48,7 @@
   border-radius: 2px;
   margin-bottom: 24px;
 }
-.BtnLoginForm{
+.btnLoginForm{
   background-color: var(--cimigo-blue) !important;
   &:hover{
     background-color: var(--cimigo-blue-light) !important;
@@ -56,14 +56,14 @@
   &:hover p {
     color: #ffffff !important;
   }
+  >p {
+    color: #ffffff !important;
+    @media only screen and (max-width: 767px) {
+    font-size: 14px !important;
+    }
+  }
   @media only screen and (max-width: 767px) {
     padding: 4px 16px !important;
-  }
-}
-.BtnLoginForm p{
-  color: #ffffff !important;
-  @media only screen and (max-width: 767px) {
-    font-size: 14px !important;
   }
 }
 .checkbox {
@@ -104,6 +104,16 @@
     border-bottom: 1px solid rgba(28, 28, 28, 0.2);
   }
   span {
+    font-weight: 400;
+    color: rgba(28, 28, 28, 0.65);
+    margin: 0px 21px;
+    margin-top: -2px;
+    font-size: 14px;
+    @media only screen and (max-width: 767px) {
+      font-size: 12px;
+    }
+  }
+  .childrenSeparator {
     font-weight: 400;
     color: rgba(28, 28, 28, 0.65);
     margin: 0px 21px;

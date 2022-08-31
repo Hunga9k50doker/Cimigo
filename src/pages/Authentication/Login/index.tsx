@@ -5,7 +5,6 @@ import classes from './styles.module.scss';
 import { Box, Grid, Typography } from "@mui/material";
 import Header from "components/Header";
 import Footer from "components/Footer";
-import Inputs from "components/Inputs";
 import Buttons from "components/Buttons";
 import { routes } from 'routers/routes';
 import { LoginForm } from "models/user";
@@ -26,7 +25,6 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import Button, { BtnType } from "components/common/buttons/Button"
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
-import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmallUnderline from "components/common/text/ParagraphSmallUnderline";
 
 const Login = () => {
@@ -129,7 +127,8 @@ const Login = () => {
           <Grid className={classes.checkbox}>
             <div></div>
             <Link to={routes.forgotPassword} className={classes.linkText} translation-key="login_redirect_forgot_password">
-              {'Forgot password?'}
+              {/* {'Forgot password?'} */}
+              <ParagraphSmallUnderline>{'Forgot password?'}</ParagraphSmallUnderline>
             </Link>             
           </Grid>
           {errorSubmit && (
@@ -142,15 +141,18 @@ const Login = () => {
             type='submit'
             translation-key="login_form"
             children={<TextBtnSecondary>{"Login"}</TextBtnSecondary>}
-            className={classes.BtnLoginForm}
+            className={classes.btnLoginForm}
           />
           {/* Button: translation-key="login_form" !== text="Login" */}
           <div className={classes.separator}>
-            <span translation-key="login_login_with">{'or login with'}</span>
+            <ParagraphSmall className={classes.childrenSeparator} translation-key="login_login_with">{'or login with'}</ParagraphSmall>
           </div>
           {/* div: translation-key="login_login_with" !== text="or login with" */}
           <Google />
-          <Link className={classes.linkText} to={routes.register} translation-key="login_do_not_have_account">{"Don't have an account? Register now!"}</Link>
+          <Link className={classes.linkText} to={routes.register} translation-key="login_do_not_have_account">
+            <ParagraphSmallUnderline>{"Don't have an account? Register now!"}</ParagraphSmallUnderline>
+          </Link>
+
           {/* Link: translation-key="login_do_not_have_account" !== text="Don't have an account? Register now!" */}
         </Grid>
       </form>
