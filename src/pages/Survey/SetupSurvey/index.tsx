@@ -71,6 +71,7 @@ import PopupOpenQuestion from "../components/PopupOpenQuestion";
 import PopupSingleChoice from "../components/PopupSingleChoice";
 import PopupMultipleChoices from "../components/PopupMultipleChoices";
 import PopupNumericScale from "../components/PopupNumericScale";
+import PopupSmileyRating from "../components/PopupSmileyRating";
 import PopupStarRating from "../components/PopupStarRating";
 
 
@@ -134,6 +135,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [openPopupSingleChoice, setOpenPopupSingleChoice] = useState(false)
   const [openPopupMultipleChoices, setOpenPopupMultipleChoices] = useState(false)
   const [openPopupNumericScale, setOpenPopupNumericScale] = useState(false)
+  const [openPopupSmileyRating, setOpenPopupSmileyRating] = useState(false)
   const [openPopupStarRating, setOpenPopupStarRating] = useState(false)
 
   const [packs, setPacks] = useState<Pack[]>([]);
@@ -169,6 +171,7 @@ const SetupSurvey = memo(({ id }: Props) => {
   const [singleChoiceEdit, setSingleChoiceEdit] = useState<CustomQuestion>();
   const [multipleChoicesEdit, setMultipleChoicesEdit] = useState<CustomQuestion>();
   const [numericScaleEdit, setNumericScaleEdit] = useState<CustomQuestion>();
+  const [smileyRatingEdit, setSmileyRatingEdit] = useState<CustomQuestion>();
   const [starRatingEdit, setStarRatingEdit] = useState<CustomQuestion>();
   const [questionDelete, setQuestionDelete] = useState<CustomQuestion>();
 
@@ -253,6 +256,7 @@ const SetupSurvey = memo(({ id }: Props) => {
             setNumericScaleEdit(res.data);
             break;
           case ECustomQuestionType.Smiley_Rating:
+            setSmileyRatingEdit(res.data);
             break;
           case ECustomQuestionType.Star_Rating:
             setStarRatingEdit(res.data);
@@ -646,6 +650,9 @@ const SetupSurvey = memo(({ id }: Props) => {
   const questionTypeNumericScale = useMemo(() => findQuestionType(ECustomQuestionType.Numeric_Scale)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     , [customQuestionType]);
+  const questionTypeSmileyRating = useMemo(() => findQuestionType(ECustomQuestionType.Smiley_Rating)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    , [customQuestionType]);
   const questionTypeStarRating = useMemo(() => findQuestionType(ECustomQuestionType.Star_Rating)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     , [customQuestionType]);
@@ -665,7 +672,7 @@ const SetupSurvey = memo(({ id }: Props) => {
         setOpenPopupNumericScale(true);
         break;
       case ECustomQuestionType.Smiley_Rating:
-
+        setOpenPopupSmileyRating(true);
         break;
       case ECustomQuestionType.Star_Rating:
         setOpenPopupStarRating(true);
@@ -694,6 +701,11 @@ const SetupSurvey = memo(({ id }: Props) => {
   const onClosePopupNumericScale = () => {
     setOpenPopupNumericScale(false);
     setNumericScaleEdit(null);
+  }
+
+  const onClosePopupSmileyRating = () => {
+    setOpenPopupSmileyRating(false);
+    setSmileyRatingEdit(null);
   }
 
   const onClosePopupStarRating = () => {
@@ -783,6 +795,28 @@ const SetupSurvey = memo(({ id }: Props) => {
         .then(() => {
           getCustomQuestion();
           onClosePopupNumericScale();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
+  const onAddOrEditSmileyRating = (data: CreateOrEditCustomQuestionInput) => {
+    if (smileyRatingEdit) {
+      dispatch(setLoading(true));
+      CustomQuestionService.update(smileyRatingEdit.id, data)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupSmileyRating();
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true));
+      CustomQuestionService.create(data)
+        .then(() => {
+          getCustomQuestion();
+          onClosePopupSmileyRating();
         })
         .catch(e => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)))
@@ -1690,6 +1724,16 @@ const SetupSurvey = memo(({ id }: Props) => {
             onSubmit={onAddOrEditNumericScale}
             questionEdit={numericScaleEdit}
             questionType={questionTypeNumericScale}
+            project={project}
+          />
+        )}
+        {questionTypeSmileyRating && (
+          <PopupSmileyRating
+            isOpen={openPopupSmileyRating}
+            onClose={onClosePopupSmileyRating}
+            onSubmit={onAddOrEditSmileyRating}
+            questionEdit={smileyRatingEdit}
+            questionType={questionTypeSmileyRating}
             project={project}
           />
         )}
