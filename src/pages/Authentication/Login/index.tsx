@@ -26,6 +26,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import Button, { BtnType } from "components/common/buttons/Button"
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
+import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmallUnderline from "components/common/text/ParagraphSmallUnderline";
 
 const Login = () => {
@@ -97,14 +98,16 @@ const Login = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="login" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <Heading2 className={classes.textLogin} translation-key="login_title">{'Login'}</Heading2> 
+          <Heading2 className={classes.textLogin} translation-key="login_title">{'Login'}</Heading2>
+          {/* Heading2: translation-key="login_title" !== text="Login" */}
           <ParagraphSmall className={classes.textHead} translation-key="login_head">{'Please login to manage your projects and save your work.'}</ParagraphSmall>
+          {/* ParagraphSmall: translation-key="login_head" !== text="Please login to manage your projects and save your work." */}
           <InputTextfield
             title={'Email address'}
             translation-key="field_email_address"
             name="email"
             className={classes.textInput}
-            placeholder={'Enter your email address'}
+            placeholder={"Enter your email address"}
             translation-key-placeholder="field_email_placeholder"
             type="text"
             inputRef={register('email')}
@@ -114,11 +117,11 @@ const Login = () => {
             title={'Password'}
             translation-key="field_password"
             name="password"
-            className={classes.textInput}
             type="password"
+            className={classes.textInput}
             showEyes
             placeholder={'Enter your password'}
-            translation-key-placeholder="field_password_placeholder"
+            translation-key-placeholder="field_password_placeholder" 
             inputRef={register('password')}
             errorMessage={errors.password?.message}
           />
@@ -140,11 +143,14 @@ const Login = () => {
             children={<TextBtnSecondary>{"Login"}</TextBtnSecondary>}
             className={classes.BtnLoginForm}
           />
+          {/* Button: translation-key="login_form" !== text="Login" */}
           <div className={classes.separator}>
             <span translation-key="login_login_with">{'or login with'}</span>
           </div>
+          {/* div: translation-key="login_login_with" !== text="or login with" */}
           <Google />
           <Link className={classes.linkText} to={routes.register} translation-key="login_do_not_have_account">{"Don't have an account? Register now!"}</Link>
+          {/* Link: translation-key="login_do_not_have_account" !== text="Don't have an account? Register now!" */}
         </Grid>
       </form>
       <Footer />
@@ -165,12 +171,3 @@ const Login = () => {
   );
 };
 export default Login;
-
-/**
- * List translation-key !== text
- * Heading2 translation-key="login_title" text="Login"
- * ParagraphSmall translation-key="login_head" text="Please login to manage your projects and save your work."
- * Button translation-key="login_form" text="Login"
- * div translation-key="login_login_with" text="or login with"
- * Link translation-key="login_do_not_have_account" text="Don't have an account? Register now!"
- */
