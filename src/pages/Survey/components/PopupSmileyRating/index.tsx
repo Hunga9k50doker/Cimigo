@@ -316,31 +316,33 @@ const PopupSmileyRating = (props: Props) => {
                   }}
                 />
               </Grid>
-              <Grid className={classes.emojiContainer}>
+              <Grid className={classes.emojiContainer} spacing={3} container>
                 {fieldsEmojis?.map((field, index) => (
-                  <div className={classes.emojiItem} key={index}>
-                    <Emoji emojiId={field.emojiId} />
-                    <InputLineTextfield
-                      className={classes.inputEmojis}
-                      type="text"
-                      placeholder="Enter label"
-                      autoComplete="off"
-                      inputProps={{ tabIndex: 2 }}
-                      autoFocus
-                      inputRef={register(`customQuestionEmojis.${index}.label`)}
-                      errorMessage={errors.customQuestionEmojis?.[index]?.label?.message}
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <Tooltip
-                            translation-key="setup_survey_popup_question_tooltip_icon"
-                            title={t("setup_survey_popup_question_tooltip_icon")}
-                          >
-                            <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
-                          </Tooltip>
-                        </InputAdornment>
-                      }
-                    />
-                  </div>
+                  <Grid item className={classes.emojiContent}>
+                    <Grid className={classes.emojiItem}>
+                      <Emoji emojiId={field.emojiId} />
+                      <InputLineTextfield
+                        className={classes.inputEmojis}
+                        type="text"
+                        placeholder="Enter label"
+                        autoComplete="off"
+                        inputProps={{ tabIndex: 2 }}
+                        autoFocus
+                        inputRef={register(`customQuestionEmojis.${index}.label`)}
+                        errorMessage={errors.customQuestionEmojis?.[index]?.label?.message}
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <Tooltip
+                              translation-key="setup_survey_popup_question_tooltip_icon"
+                              title={t("setup_survey_popup_question_tooltip_icon")}
+                            >
+                              <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
+                            </Tooltip>
+                          </InputAdornment>
+                        }
+                      />
+                    </Grid>
+                  </Grid>
                 ))}
               </Grid>
             </Grid>
@@ -449,7 +451,7 @@ const PopupSmileyRating = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <Heading5 $colorName="--cimigo-green-dark"> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)} VND) VND</Heading5>
+            <Heading5 $colorName="--cimigo-green-dark"> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)} VND)</Heading5>
             <ParagraphExtraSmall $colorName="--gray-90">Tax exclusive</ParagraphExtraSmall>
           </Grid>
           <Button

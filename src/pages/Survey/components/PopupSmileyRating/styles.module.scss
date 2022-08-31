@@ -53,18 +53,6 @@
   }
 }
 
-.emojiContainer {
-  display: flex;
-  align-items: center;  
-  justify-content: center;
-  margin-top:16px;
-  flex-direction: row;
-  @media only screen and (max-width: 500px) {
-    display: block;
-    margin-top: 6px;
-  }
-}
-
 .selectBox {
   width: 128px;
   height: 40px;
@@ -73,23 +61,34 @@
   }
 }
 
-.emojiItem:first-child {
-  margin-left: 0;
+.emojiContainer {
+  display: flex;
+  align-items: center;  
+  justify-content: center;
+  margin-top:0;
+  flex-direction: row;
   @media only screen and (max-width: 500px) {
-    margin-top: 0;
+    display: block;
+    margin-top: 6px;
   }
 }
-.emojiItem:last-child {
-  margin-right: 0;
-}
 
-.emojiItem {
+.emojiContent {
   width: calc(100% / 5);
-  height: 86px;
+  padding-top: 16px !important;
+  @media only screen and (max-width: 500px) {
+    width: 100%;
+    padding-top: 0 !important;
+    &:not(:last-child) {
+      margin-bottom: 4px;
+    }
+  }
+}
+.emojiItem {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 12px;
+  justify-content: center;
   img {
     margin-bottom: 8px;
     width: 50px;
@@ -97,16 +96,13 @@
     @media only screen and (max-width: 500px) {
       width: 36px;
       height: 36px;
-      margin-bottom: 0;
+      margin-bottom: -7px !important;
     }
   }
 
   @media only screen and (max-width: 500px) {
-    width: 100%;
-    height: 36px;
     flex-direction: row;
     margin: 0;
-    margin-top: 16px;
     > [class~="MuiFormControl-root"] {
       margin-left: 16px;
     }
@@ -128,7 +124,10 @@
 .invertScaleContainer {
   display: flex;
   align-items: center;
-  margin-top: 24px;
+  margin-top: 20px;
+  @media only screen and (max-width: 500px) {
+    margin-top: 14px;
+  }
 }
 
 .rowInputAttributeControl {
