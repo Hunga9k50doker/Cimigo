@@ -124,6 +124,7 @@ const UserProfile = memo((props: Props) => {
         const form = new FormData()
         form.append('firstName', data.firstName)
         form.append('lastName', data.lastName)
+        form.append('title', data.title)
         form.append('countryId', `${data.countryId.id}`)
         form.append('company', data.company)
         form.append('phone', data.phone)
@@ -155,7 +156,7 @@ const UserProfile = memo((props: Props) => {
                 </div>
                 <div className={classes.personalInfo}>
                     <Heading3 $colorName="--eerie-black" className={classes.name}>{user?.fullName}</Heading3>
-                    <ParagraphSmall className={classes.country}>{user?.company}</ParagraphSmall>
+                    <ParagraphSmall>{user?.company}</ParagraphSmall>
                 </div>
             </Grid>
             <Grid container spacing={isMobile ? 0 : 1} className={classes.customMargin}>

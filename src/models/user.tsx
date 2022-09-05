@@ -115,6 +115,7 @@ export interface ChangePassword {
 export interface UpdatePaymentInfo {
     fullName: string,
     companyName: string,
+    title: string,
     email: string,
     phone: string,
     countryId: number,
