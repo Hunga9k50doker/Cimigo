@@ -126,10 +126,7 @@ const Login = () => {
           />
           <Grid className={classes.checkbox}>
             <div></div>
-            <Link to={routes.forgotPassword} className={classes.linkText} translation-key="login_redirect_forgot_password">
-              {/* {'Forgot password?'} */}
-              <ParagraphSmallUnderline>{'Forgot password?'}</ParagraphSmallUnderline>
-            </Link>             
+            <ParagraphSmallUnderline to={routes.forgotPassword} className={classes.linkText} translation-key="login_redirect_forgot_password">{'Forgot password?'}</ParagraphSmallUnderline>
           </Grid>
           {errorSubmit && (
             <Typography className={classes.errorText} translation-key="login_invalid_error">
@@ -149,10 +146,7 @@ const Login = () => {
           </div>
           {/* div: translation-key="login_login_with" !== text="or login with" */}
           <Google />
-          <Link className={classes.linkText} to={routes.register} translation-key="login_do_not_have_account">
-            <ParagraphSmallUnderline>{"Don't have an account? Register now!"}</ParagraphSmallUnderline>
-          </Link>
-
+          <ParagraphSmallUnderline to={routes.register} className={classes.linkText} translation-key="login_do_not_have_account">{"Don't have an account? Register now!"}</ParagraphSmallUnderline>
           {/* Link: translation-key="login_do_not_have_account" !== text="Don't have an account? Register now!" */}
         </Grid>
       </form>

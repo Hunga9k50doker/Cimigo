@@ -1,11 +1,11 @@
-import { Typography } from  '@mui/material';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface Props {
     $colorName?: string;
 }
 
-const ParagraphSmallUnderline = styled(Typography)<Props>`
+const ParagraphSmallUnderline = styled(Link)<Props>`
     font-family: 'Montserrat';
     font-style: normal;
     font-weight: 400;
