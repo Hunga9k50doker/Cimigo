@@ -46,6 +46,9 @@ const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unk
   valueContainer: (provided) => ({
     ...provided,
     padding: "6px 0 6px 16px", 
+    'div': {
+      paddingBottom: 0,
+    }
   }),   
   singleValue: (provided) => ({
     ...provided,

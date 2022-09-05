@@ -40,6 +40,7 @@ export interface User {
     firstName: string,
     lastName: string,
     fullName: string,
+    title: string,
     email: string,
     password: string,
     countryId: string,

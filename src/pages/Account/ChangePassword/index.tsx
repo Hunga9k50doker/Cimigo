@@ -4,10 +4,12 @@ import classes from "./styles.module.scss";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Inputs from "components/Inputs";
+import Inputs from "components/common/inputs/InputTextfield";
 import { VALIDATION } from "config/constans";
 import { useTranslation } from "react-i18next";
-import Buttons from "components/Buttons";
+import Buttons, {BtnType} from "components/common/buttons/Button";
+import Heading2 from "components/common/text/Heading2";
+import ParagraphBody from "components/common/text/ParagraphBody";
 import {
   setErrorMess,
   setLoading,
@@ -88,23 +90,25 @@ const ChangePassword = memo((props: Props) => {
 
   return (
     <Grid className={classes.root}>
-      <p className={classes.title} translation-key="auth_change_password_title">
+      <Heading2 className={classes.title} translation-key="auth_change_password_title">
         {t("auth_change_password_title")}
-      </p>
-      <p
+      </Heading2>
+      <ParagraphBody
+        $colorName="--gray-80"
         className={classes.subTitle}
         translation-key="auth_change_password_sub"
       >
         {t("auth_change_password_sub")}
-      </p>
+      </ParagraphBody>
       <Divider className={classes.divider} />
       {isEmptyPassword &&
-        <p
+        <ParagraphBody
+          $colorName="--gray-80"
           className={clsx(classes.subTitle, classes.emptyPasswordTitle)}
           translation-key="auth_change_empty_password"
         >
           {t("auth_change_empty_password")}
-        </p>
+        </ParagraphBody>
       }
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -115,48 +119,52 @@ const ChangePassword = memo((props: Props) => {
       >
         {
           !isEmptyPassword &&
-          (
-            <Inputs
-              title={t("field_current_password")}
-              translation-key="field_current_password"
-              name="currentPassword"
-              placeholder={t("field_current_password_placeholder")}
-              translation-key-placeholder="field_current_password_placeholder"
-              type="password"
-              showEyes
-              inputRef={register("currentPassword")}
-              errorMessage={errors.currentPassword?.message}
-            />
+          ( <Grid className={classes.fieldContainer}>
+              <Inputs
+                title={t("field_current_password")}
+                translation-key="field_current_password"
+                name="currentPassword"
+                placeholder={t("field_current_password_placeholder")}
+                translation-key-placeholder="field_current_password_placeholder"
+                type="password"
+                showEyes
+                inputRef={register("currentPassword")}
+                errorMessage={errors.currentPassword?.message}
+              />
+            </Grid>
           )
         }
-        <Inputs
-          title={t("field_new_password")}
-          translation-key="field_new_password"
-          name="newPassword"
-          placeholder={t("field_new_password_placeholder")}
-          translation-key-placeholder="field_new_password_placeholder"
-          type="password"
-          showEyes
-          inputRef={register("newPassword")}
-          errorMessage={errors.newPassword?.message}
-        />
-        <Inputs
-          title={t("field_confirm_new_password")}
-          translation-key="field_confirm_new_password"
-          name="confirmPassword"
-          placeholder={t("field_confirm_new_password_placeholder")}
-          translation-key-placeholder="field_confirm_new_password_placeholder"
-          type="password"
-          showEyes
-          inputRef={register("confirmPassword")}
-          errorMessage={errors.confirmPassword?.message}
-        />
+        <Grid className={classes.fieldContainer}>
+          <Inputs
+            title={t("field_new_password")}
+            translation-key="field_new_password"
+            name="newPassword"
+            placeholder={t("field_new_password_placeholder")}
+            translation-key-placeholder="field_new_password_placeholder"
+            type="password"
+            showEyes
+            inputRef={register("newPassword")}
+            errorMessage={errors.newPassword?.message}
+          />
+        </Grid>
+        <Grid className={classes.fieldContainer}>
+          <Inputs
+            title={t("field_confirm_new_password")}
+            translation-key="field_confirm_new_password"
+            name="confirmPassword"
+            placeholder={t("field_confirm_new_password_placeholder")}
+            translation-key-placeholder="field_confirm_new_password_placeholder"
+            type="password"
+            showEyes
+            inputRef={register("confirmPassword")}
+            errorMessage={errors.confirmPassword?.message}
+          />
+        </Grid>
         <Buttons
           type={"submit"}
           children={t("reset_password_btn_submit")}
           translation-key="reset_password_btn_submit"
-          btnType="Blue"
-          padding="12px 10px"
+          btnType={BtnType.Primary}
           className={classes.btnSubmit}
         />
       </form>
