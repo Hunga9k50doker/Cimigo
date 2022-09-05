@@ -12,7 +12,6 @@ const ParagraphSmallUnderline = styled(Link)<Props>`
     font-size: 14px;
     line-height: 24px;
     align-items: center;
-    text-decoration-line: underline;
     text-decoration: underline!important;
     text-underline-position: under;
     color: ${props => `var(${props.$colorName || '--cimigo-blue'})`};

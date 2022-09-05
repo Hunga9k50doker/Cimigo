@@ -97,38 +97,33 @@ const Login = () => {
         <Grid className={classes.body}>
           <Heading2 className={classes.textLogin} translation-key="login_title">{'Login'}</Heading2>
           {/* Heading2: translation-key="login_title" !== text="Login" */}
-          <ParagraphSmall className={classes.textHead} translation-key="login_head">{'Please login to manage your projects and save your work.'}</ParagraphSmall>
-          {/* ParagraphSmall: translation-key="login_head" !== text="Please login to manage your projects and save your work." */}
-          <Grid className={classes.textInput}>
-            <InputTextfield
-              title={'Email address'}
-              translation-key="field_email_address"
-              name="email"
-              placeholder={"Enter your email address"}
-              translation-key-placeholder="field_email_placeholder"
-              type="text"
-              inputRef={register('email')}
-              errorMessage={errors.email?.message}
-            />
-            {/*InputTextfield: translation-key="field_email_address" !== text="Enter your email address"*/}
-          </Grid>
-            <InputTextfield
-              title={'Password'}
-              translation-key="field_password"
-              name="password"
-              type="password"
-              className={classes.textInput}
-              showEyes
-              placeholder={'Enter your password'}
-              translation-key-placeholder="field_password_placeholder" 
-              inputRef={register('password')}
-              errorMessage={errors.password?.message}
-            />
-            {/*InputTextfield: translation-key="field_email_address" !== text="Enter your password"*/}
+          <ParagraphSmall className={classes.textHead}>{'Please login to manage your projects and save your work.'}</ParagraphSmall>
+          <InputTextfield
+            title={'Email address'}
+            translation-key="field_email_address"
+            name="email"
+            className={classes.textInput}
+            placeholder={t('field_email_placeholder')}             
+            translation-key-placeholder="field_email_placeholder"
+            type="text"
+            inputRef={register('email')}
+            errorMessage={errors.email?.message}
+          />
+          <InputTextfield
+            title={'Password'}
+            translation-key="field_password"
+            name="password"
+            type="password"
+            className={classes.textInput}
+            showEyes
+            placeholder={t('field_password_placeholder')}
+            translation-key-placeholder="field_password_placeholder" 
+            inputRef={register('password')}
+            errorMessage={errors.password?.message}
+          />
           <Grid className={classes.checkbox}>
             <div></div>
-            <ParagraphSmallUnderline to={routes.forgotPassword} className={classes.linkText} translation-key="login_redirect_forgot_password">{'Forgot password?'}</ParagraphSmallUnderline>
-            {/* ParagraphSmallUnderline: translation-key="login_redirect_forgot_password" !== text="Forgot password" */}
+            <ParagraphSmallUnderline to={routes.forgotPassword} translation-key="login_redirect_forgot_password">{t('login_redirect_forgot_password')}</ParagraphSmallUnderline>
           </Grid>
           {errorSubmit && (
             <Typography className={classes.errorText} translation-key="login_invalid_error">
@@ -139,17 +134,15 @@ const Login = () => {
             btnType={BtnType.Secondary}
             type='submit'
             translation-key="login_form"
-            children={<TextBtnSecondary>{"Login"}</TextBtnSecondary>}
+            children={<TextBtnSecondary>{'Login'}</TextBtnSecondary>}
             className={classes.btnLoginForm}
           />
           {/* Button: translation-key="login_form" !== text="Login" */}
           <div className={classes.separator}>
-            <ParagraphSmall className={classes.childrenSeparator} translation-key="login_login_with">{'or login with'}</ParagraphSmall>
-            {/* ParagraphSmall: translation-key="login_login_with" !== text="or login with" */}
+            <ParagraphSmall className={classes.childrenSeparator} translation-key="login_login_with">{t('login_login_with')}</ParagraphSmall>
           </div>
           <Google />
-          <ParagraphSmallUnderline to={routes.register} className={classes.linkText} translation-key="login_do_not_have_account">{"Don't have an account? Register now!"}</ParagraphSmallUnderline>
-          {/* ParagraphSmallUnderline: translation-key="login_do_not_have_account" !== text="Don't have an account? Register now!" */}
+          <ParagraphSmallUnderline to={routes.register} className={classes.linkText} translation-key="login_do_not_have_account">{t('login_do_not_have_account')}</ParagraphSmallUnderline>
         </Grid>
       </form>
       <Footer />
