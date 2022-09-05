@@ -15,8 +15,8 @@ export interface TableHeaderLabel {
 //   rawName: string;
 // }
 
-export interface OptionItem {
-  id: number;
+export interface OptionItem<T=number> {
+  id: T;
   name: string;
   translation?: string;
 }
