@@ -1,4 +1,3 @@
-import { OptionItem } from "models/general";
 import { Solution } from "./solution";
 
 export interface Plan {
@@ -6,10 +5,8 @@ export interface Plan {
   title: string;
   price: number;
   solutionId: number;
-  maxPack: number;
   sampleSize: number;
-  questionnaire: number;
-  daysToResults: number;
+  content: string[];
   isMostPopular: boolean;
   status: number;
   order: number;
@@ -33,19 +30,9 @@ export interface CreateOrUpdatePlanInput {
   title: string;
   price: number;
   solutionId: number;
-  maxPack: number;
   sampleSize: number;
-  questionnaire: number;
-  daysToResults: number;
+  content: string[];
   isMostPopular?: boolean;
   order?: number;
   language?: string;
 }
-
-export enum EQuestionnaireType {
-  Standard = 1
-}
-
-export const questionnaireTypes: OptionItem[] = [
-  { id: EQuestionnaireType.Standard, name: 'Standard'}
-]

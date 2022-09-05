@@ -318,7 +318,7 @@ const PopupSmileyRating = (props: Props) => {
               </Grid>
               <Grid className={classes.emojiContainer} spacing={3} container>
                 {fieldsEmojis?.map((field, index) => (
-                  <Grid item className={classes.emojiContent}>
+                  <Grid item className={classes.emojiContent} key={field.id}>
                     <Grid className={classes.emojiItem}>
                       <Emoji emojiId={field.emojiId} />
                       <InputLineTextfield
