@@ -60,7 +60,7 @@ const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unk
   control: (provided, state) => ({
     ...provided,
     cursor: state.isDisabled ? "not-allowed" : "pointer",
-    background: state.isDisabled ? "var(--gray-5)" : "var(--gray-10)",
+    background: state.isDisabled ? "var(--gray-5)" : "#FFFFFF",
     border: state.isFocused ? "1px solid var(--cimigo-blue-light-1)" : "1px solid var(--gray-40)",
     // borderColor:"var(--gray-40)",
     "svg": {

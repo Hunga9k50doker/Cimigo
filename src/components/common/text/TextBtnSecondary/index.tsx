@@ -11,7 +11,7 @@ const TextBtnSecondary = styled(Typography)<Props>`
     font-weight: 500;
     font-size: 18px;
     line-height: 32px;
-    color: ${props => `var(${props.$colorName || '--gray-10'})`};
+    color: ${props => `var(${props.$colorName})` || "#FFFFFF"};
 `
 
 export default TextBtnSecondary;

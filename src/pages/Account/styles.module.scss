@@ -7,13 +7,13 @@
     justify-content: center;
     margin-top: 10px;
     padding-bottom: 28px;
-    background: var(--gray-10);
+    background: #FFFFFF;
     @media only screen and (max-width: 767px) {
         margin-top: 0px;
         padding-bottom:0;
     }
     .content {
-        background-color: var(--gray-10);
+        background-color: #FFFFFF;
         width: 764px;
         max-width: 764px;
         margin-bottom: 10px;
@@ -89,7 +89,7 @@
     margin-top: 0px;
     width: 240px;
     max-width: 240px;
-    background-color: var(--gray-10);
+    background-color: #FFFFFF;
     margin-bottom: 10px;
     transition: 0.4s;
     ul {
