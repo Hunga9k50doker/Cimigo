@@ -127,6 +127,7 @@ const Login = () => {
           <Grid className={classes.checkbox}>
             <div></div>
             <ParagraphSmallUnderline to={routes.forgotPassword} className={classes.linkText} translation-key="login_redirect_forgot_password">{'Forgot password?'}</ParagraphSmallUnderline>
+             {/* Link: translation-key="login_redirect_forgot_password" !== text="Forgot password" */}
           </Grid>
           {errorSubmit && (
             <Typography className={classes.errorText} translation-key="login_invalid_error">
