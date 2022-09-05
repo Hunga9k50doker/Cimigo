@@ -117,48 +117,50 @@ const ChangePassword = memo((props: Props) => {
         autoComplete="off"
         className={classes.form}
       >
-        {
-          !isEmptyPassword &&
-          ( <Grid className={classes.fieldContainer}>
-              <Inputs
-                title={t("field_current_password")}
-                translation-key="field_current_password"
-                name="currentPassword"
-                placeholder={t("field_current_password_placeholder")}
-                translation-key-placeholder="field_current_password_placeholder"
-                type="password"
-                showEyes
-                inputRef={register("currentPassword")}
-                errorMessage={errors.currentPassword?.message}
-              />
-            </Grid>
-          )
-        }
-        <Grid className={classes.fieldContainer}>
-          <Inputs
-            title={t("field_new_password")}
-            translation-key="field_new_password"
-            name="newPassword"
-            placeholder={t("field_new_password_placeholder")}
-            translation-key-placeholder="field_new_password_placeholder"
-            type="password"
-            showEyes
-            inputRef={register("newPassword")}
-            errorMessage={errors.newPassword?.message}
-          />
-        </Grid>
-        <Grid className={classes.fieldContainer}>
-          <Inputs
-            title={t("field_confirm_new_password")}
-            translation-key="field_confirm_new_password"
-            name="confirmPassword"
-            placeholder={t("field_confirm_new_password_placeholder")}
-            translation-key-placeholder="field_confirm_new_password_placeholder"
-            type="password"
-            showEyes
-            inputRef={register("confirmPassword")}
-            errorMessage={errors.confirmPassword?.message}
-          />
+        <Grid container spacing={3}>
+          {
+            !isEmptyPassword &&
+            ( <Grid item xs={12} sm={12}>
+                <Inputs
+                  title={t("field_current_password")}
+                  translation-key="field_current_password"
+                  name="currentPassword"
+                  placeholder={t("field_current_password_placeholder")}
+                  translation-key-placeholder="field_current_password_placeholder"
+                  type="password"
+                  showEyes
+                  inputRef={register("currentPassword")}
+                  errorMessage={errors.currentPassword?.message}
+                />
+              </Grid>
+            )
+          }
+          <Grid item xs={12} sm={12}> 
+            <Inputs
+              title={t("field_new_password")}
+              translation-key="field_new_password"
+              name="newPassword"
+              placeholder={t("field_new_password_placeholder")}
+              translation-key-placeholder="field_new_password_placeholder"
+              type="password"
+              showEyes
+              inputRef={register("newPassword")}
+              errorMessage={errors.newPassword?.message}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <Inputs
+              title={t("field_confirm_new_password")}
+              translation-key="field_confirm_new_password"
+              name="confirmPassword"
+              placeholder={t("field_confirm_new_password_placeholder")}
+              translation-key-placeholder="field_confirm_new_password_placeholder"
+              type="password"
+              showEyes
+              inputRef={register("confirmPassword")}
+              errorMessage={errors.confirmPassword?.message}
+            />
+          </Grid>
         </Grid>
         <Buttons
           type={"submit"}

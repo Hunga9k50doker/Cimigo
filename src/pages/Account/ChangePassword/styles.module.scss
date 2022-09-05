@@ -28,21 +28,9 @@
        padding: 10px 0px 29px 0px;
     }
     .btnSubmit{
-        margin-top: 8px;
+        margin-top: 32px;
         @media only screen and (max-width: 767px) { 
-            margin-top: 24px;
+            width: 100%;
         }
-    }
-}
-.btnSubmit {
-    @media only screen and (max-width: 767px) { 
-        width: 100%;
-    }
-}
-
-.fieldContainer {
-    margin-bottom: 24px;
-    @media only screen and (max-width: 767px) { 
-        margin-bottom: 16px;
     }
 }

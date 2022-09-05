@@ -144,8 +144,8 @@ const PaymentInfoPage = memo((props: Props) => {
       </ParagraphBody>
       <Divider className={classes.divider} />
       <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={isMobile ? 0 : 1}>
-          <Grid item xs={12} sm={6} className={classes.fieldContainer}>
+        <Grid container columnSpacing={isMobile ? 0 : 1} rowSpacing={3}> 
+          <Grid item xs={12} sm={6}>
             <Inputs
               title={t("field_full_name")}
               translation-key="field_full_name"
@@ -156,7 +156,7 @@ const PaymentInfoPage = memo((props: Props) => {
               errorMessage={errors.fullName?.message}
             />
           </Grid>
-          <Grid item xs={12} sm={6} className={classes.fieldContainer}>
+          <Grid item xs={12} sm={6}>
             <Inputs
               title={t("field_company")}
               translation-key="field_company"
@@ -167,7 +167,7 @@ const PaymentInfoPage = memo((props: Props) => {
               errorMessage={errors.companyName?.message}
             />
           </Grid>
-          <Grid item xs={12} sm={12} className={classes.fieldContainer}>
+          <Grid item xs={12} sm={12}>
             <Inputs
               title="Your title"
               translation-key=""
@@ -179,7 +179,7 @@ const PaymentInfoPage = memo((props: Props) => {
               errorMessage={errors.title?.message}
             />
           </Grid>
-          <Grid item xs={12} sm={12} className={classes.fieldContainer}>
+          <Grid item xs={12} sm={12}>
             <Inputs
               title={t("field_email")}
               translation-key="field_email"
@@ -191,7 +191,7 @@ const PaymentInfoPage = memo((props: Props) => {
               errorMessage={errors.email?.message}
             />
           </Grid>
-          <Grid item xs={12} sm={6} className={classes.fieldContainer}>
+          <Grid item xs={12} sm={6}>
             <Inputs
               title={t("field_phone_number")}
               name="phone"
@@ -202,7 +202,7 @@ const PaymentInfoPage = memo((props: Props) => {
               errorMessage={errors.phone?.message}
             />
           </Grid>
-          <Grid item xs={12} sm={6} className={classes.fieldContainer}>
+          <Grid item xs={12} sm={6}>
             <InputSelect
               fullWidth
               title={t("field_country")}
@@ -215,7 +215,7 @@ const PaymentInfoPage = memo((props: Props) => {
               errorMessage={(errors.countryId as any)?.id?.message}
             />
           </Grid>
-          <Grid item xs={12} sm={12} className={classes.fieldContainer}>
+          <Grid item xs={12} sm={12}>
             <Inputs
               title={t("field_company_address")}
               translation-key="field_company_address"
@@ -226,7 +226,7 @@ const PaymentInfoPage = memo((props: Props) => {
               errorMessage={errors.companyAddress?.message}
             />
           </Grid>
-          <Grid item xs={12} sm={12} className={classes.fieldContainer}>
+          <Grid item xs={12} sm={12}>
             <Inputs
               optional
               title={t("field_tax_code_for_invoice")}
