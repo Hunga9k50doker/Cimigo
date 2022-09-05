@@ -1,11 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowBackOutlined, Save } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
+import InputCreatableSelect from "components/InputCreatableSelect";
 import Inputs from "components/Inputs";
 import TextTitle from "components/Inputs/components/TextTitle";
 import InputSelect from "components/InputsSelect";
 import { push } from "connected-react-router";
-import { CreateOrUpdatePlanInput, Plan, questionnaireTypes } from "models/Admin/plan";
+import { CreateOrUpdatePlanInput, Plan } from "models/Admin/plan";
 import { Solution } from "models/Admin/solution";
 import { OptionItem } from "models/general";
 import { memo, useEffect, useState } from "react"
@@ -19,10 +20,11 @@ const schema = yup.object().shape({
   title: yup.string().required('Title is required.'),
   price: yup.number().typeError('Price is required.').positive('Price must be a positive number').required('Price is required.'),
   solutionId: yup.mixed().required('Solution is required.'),
-  maxPack: yup.number().typeError('Max pack is required.').positive('Max pack must be a positive number').required('Max pack is required.'),
   sampleSize: yup.number().typeError('Sample size is required.').positive('Sample size must be a positive number').required('Sample size is required.'),
-  questionnaire: yup.mixed().required('Questionnaire is required.'),
-  daysToResults: yup.number().typeError('Working days to results is required.').required('Working days to results is required.'),
+  content: yup.array(yup.object({
+    id: yup.string().required('Content is required.'),
+    name: yup.string().required('Content is required.')
+  })).required('Content is required.').min(1, 'Content is required.'),
   isMostPopular: yup.boolean().notRequired(),
   order: yup.number().typeError('Order is required.').required('Order is required.'),
 })
@@ -31,10 +33,8 @@ export interface PlanFormData {
   title: string;
   price: number;
   solutionId: OptionItem;
-  maxPack: number;
   sampleSize: number;
-  questionnaire: OptionItem;
-  daysToResults: number;
+  content: OptionItem<string>[];
   isMostPopular: boolean;
   order: number;
 
@@ -70,10 +70,8 @@ const FormContent = memo(({ langEdit, itemEdit, onSubmit }: PlanFormDataProps) =
       title: data.title,
       price: data.price,
       solutionId: data.solutionId?.id,
-      maxPack: data.maxPack,
       sampleSize: data.sampleSize,
-      questionnaire: data.questionnaire?.id,
-      daysToResults: data.daysToResults,
+      content: data.content.map(it => it.id),
       isMostPopular: data.isMostPopular,
       order: data.order,
       language: langEdit
@@ -86,10 +84,8 @@ const FormContent = memo(({ langEdit, itemEdit, onSubmit }: PlanFormDataProps) =
         title: itemEdit.title,
         price: itemEdit.price,
         solutionId: itemEdit.solution ? { id: itemEdit.solution.id, name: itemEdit.solution.title } : null,
-        maxPack: itemEdit.maxPack,
         sampleSize: itemEdit.sampleSize,
-        questionnaire: questionnaireTypes.find(it => it.id === itemEdit.questionnaire),
-        daysToResults: itemEdit.daysToResults,
+        content: itemEdit.content.map(it => ({ id: it, name: it})),
         isMostPopular: itemEdit.isMostPopular,
         order: itemEdit.order,
       })
@@ -164,16 +160,6 @@ const FormContent = memo(({ langEdit, itemEdit, onSubmit }: PlanFormDataProps) =
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Inputs
-                      title="Max pack"
-                      name="maxPack"
-                      type="number"
-                      disabled={!!langEdit}
-                      inputRef={register('maxPack')}
-                      errorMessage={errors.maxPack?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Inputs
                       title="Sample size"
                       name="sampleSize"
                       type="number"
@@ -183,25 +169,17 @@ const FormContent = memo(({ langEdit, itemEdit, onSubmit }: PlanFormDataProps) =
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <InputSelect
-                      title="Questionnaire"
-                      name="questionnaire"
+                    <InputCreatableSelect
+                      title="Content"
+                      name="content"
                       control={control}
                       selectProps={{
-                        options: questionnaireTypes,
+                        options: [],
+                        isMulti: true,
+                        placeholder: "Create content item",
                         isDisabled: !!langEdit
                       }}
-                      errorMessage={(errors.questionnaire as any)?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Inputs
-                      title="Working days to results"
-                      name="daysToResults"
-                      type="number"
-                      disabled={!!langEdit}
-                      inputRef={register('daysToResults')}
-                      errorMessage={errors.daysToResults?.message}
+                      errorMessage={(errors.content as any)?.message}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
