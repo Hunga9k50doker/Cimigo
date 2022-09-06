@@ -5,7 +5,7 @@ import ForgotPassword from 'pages/Authentication/ForgotPassword';
 import ResetPassword from 'pages/Authentication/ResetPassword';
 import ProjectManagement from 'pages/ProjectManagement';
 import CreateProject from 'pages/ProjectManagement/CreateProject';
-import Survey from 'pages/Survey';
+import Survey from 'pages/SurveyNew';
 import { Suspense } from 'react';
 import { Redirect, Switch, Route } from 'react-router-dom';
 import { routes } from './routes';
