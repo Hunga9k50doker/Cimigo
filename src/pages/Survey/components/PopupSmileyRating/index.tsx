@@ -264,8 +264,8 @@ const PopupSmileyRating = (props: Props) => {
     >
       <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle>
-          <Heading3 translation-key="">
-            Add Smiley Rating
+          <Heading3 translation-key="setup_survey_popup_add_smiley_rating_title">
+            {t("setup_survey_popup_add_smiley_rating_title")}
           </Heading3>
           <ButtonCLose
             onClick={() => _onClose()}>
@@ -273,10 +273,8 @@ const PopupSmileyRating = (props: Props) => {
         </DialogTitle>
         <DialogContent dividers>
           <Grid className={classes.classForm}>
-            <ParagraphBody $colorName="--eerie-black" translation-key="" className={classes.titleAdvice} >
-              The price of this demand will change based on the number of
-              attributes you add, ${fCurrency2(questionType?.price || 0)} for the first attribute, ${fCurrency2(questionType?.priceAttribute || 0)} for each
-              subsequent attribute.
+            <ParagraphBody $colorName="--eerie-black" translation-key="setup_survey_popup_advice_subtitle" className={classes.titleAdvice} >
+            {t("setup_survey_popup_advice_subtitle", {firstPrice:fCurrency2(questionType?.price || 0), secondPrice:fCurrency2(questionType?.priceAttribute || 0)})}
             </ParagraphBody>
             <Heading5
               translation-key="setup_survey_popup_question_title"
@@ -306,7 +304,7 @@ const PopupSmileyRating = (props: Props) => {
             />
             <Grid className={classes.smileyRatingContainer}>
               <Grid className={classes.emojiHeader}>
-                <Heading5>Smiley scale</Heading5>
+                <Heading5 translation-key="setup_survey_popup_smiley_rating_scale">{t("setup_survey_popup_smiley_rating_scale")}</Heading5>
                 <InputSelect
                   className={classes.selectBox}
                   selectProps={{
@@ -324,7 +322,8 @@ const PopupSmileyRating = (props: Props) => {
                       <InputLineTextfield
                         className={classes.inputEmojis}
                         type="text"
-                        placeholder="Enter label"
+                        translation-key-placeholder="setup_survey_popup_label_emoji_placeholder"
+                        placeholder={t("setup_survey_popup_label_emoji_placeholder")}
                         autoComplete="off"
                         inputProps={{ tabIndex: 2 }}
                         autoFocus
@@ -347,8 +346,8 @@ const PopupSmileyRating = (props: Props) => {
               </Grid>
             </Grid>
             <Grid className={classes.invertScaleContainer}>
-              <Heading5 $colorName={!invertScale && "--gray-60"} translation-key="">
-                Invert scale
+              <Heading5 $colorName={!invertScale && "--gray-60"} translation-key="setup_survey_popup_invert_scale">
+                {t("setup_survey_popup_invert_scale")}
               </Heading5>
               <Controller
                 name="invertScale"
@@ -366,8 +365,8 @@ const PopupSmileyRating = (props: Props) => {
             </Grid>
             <Grid>
               <div className={classes.multiAttributeControl}>
-                <Heading5 $colorName={!isShowMultiAttributes && "--gray-60"} translation-key="">
-                  Multiple attributes
+                <Heading5 $colorName={!isShowMultiAttributes && "--gray-60"} translation-key="setup_survey_popup_multiple_attributes_title">
+                  {t("setup_survey_popup_multiple_attributes_title")}
                 </Heading5>
                 <Toggle
                   checked={isShowMultiAttributes}
@@ -375,9 +374,9 @@ const PopupSmileyRating = (props: Props) => {
                   onChange={onToggleMultipleAttributes}
                 />
               </div>
-              <ParagraphBody $colorName={isShowMultiAttributes ? "--gray-80" : "--gray-60"}>
-                Your question will be evaluated based on the following list of
-                attributes.
+              <ParagraphBody 
+              $colorName={isShowMultiAttributes ? "--gray-80" : "--gray-60"} translation-key="setup_survey_popup_multiple_attributes_subtitle">
+                {t("setup_survey_popup_multiple_attributes_subtitle")}
               </ParagraphBody>
               {!!fieldsAttributes?.length && (
                 <Grid sx={{ position: "relative", marginTop: "24px" }}>
@@ -407,7 +406,8 @@ const PopupSmileyRating = (props: Props) => {
                                       <InputLineTextfield
                                         className={classes.inputAttribute}
                                         type="text"
-                                        placeholder="Enter attribute"
+                                        translation-key-placeholder="setup_survey_popup_attribute_label_placeholder"
+                                        placeholder={t("setup_survey_popup_attribute_label_placeholder")}
                                         autoComplete="off"
                                         inputProps={{ tabIndex: 3 }}
                                         autoFocus={index === focusEleIdx}
@@ -451,8 +451,9 @@ const PopupSmileyRating = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <Heading5 $colorName="--cimigo-green-dark"> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)} VND)</Heading5>
-            <ParagraphExtraSmall $colorName="--gray-90">Tax exclusive</ParagraphExtraSmall>
+            <Heading5 $colorName="--cimigo-green-dark"  translation-key="setup_survey_popup_currency_unit"> 
+            {t("setup_survey_popup_currency_unit", {priceUS:fCurrency2(price?.priceUSD || 0), priceVND:fCurrency2VND(price?.priceVND || 0)})}</Heading5>
+            <ParagraphExtraSmall $colorName="--gray-90" translation-key="setup_survey_popup_tax_exclusive">{t("setup_survey_popup_tax_exclusive")}</ParagraphExtraSmall>
           </Grid>
           <Button
             btnType={BtnType.Raised}

@@ -35,7 +35,7 @@ const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unk
     color: 'var(--eerie-black)',
     padding: '14px 15px',
     cursor: state.isDisabled ? "not-allowed" : "pointer",
-    background: state.isSelected || state.isFocused ? 'var(--cimigo-blue-light-4)' : '#ffffff',
+    background: state.isSelected || state.isFocused ? 'var(--cimigo-blue-light-4)' : '#FFFFFF',
   }),
   placeholder: (provided, state) => ({
     ...provided,
@@ -58,7 +58,7 @@ const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unk
   control: (provided, state) => ({
     ...provided,
     cursor: state.isDisabled ? "not-allowed" : "pointer",
-    background: state.isDisabled ? "var(--gray-5)" : "var(--gray-10)",
+    background: state.isDisabled ? "var(--gray-5)" : "#FFFFFF",
     border: state.isFocused ? "1px solid var(--cimigo-blue-light-1)" : "1px solid var(--gray-40)",
     // borderColor:"var(--gray-40)",
     "svg": {
