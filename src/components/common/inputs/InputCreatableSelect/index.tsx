@@ -35,7 +35,7 @@ const customStyles = (error?: boolean): StylesConfig<any, boolean, GroupBase<unk
     color: 'var(--eerie-black)',
     padding: '14px 15px',
     cursor: state.isDisabled ? "not-allowed" : "pointer",
-    background: state.isSelected || state.isFocused ? 'var(--cimigo-blue-light-4)' : '#ffffff',
+    background: state.isSelected || state.isFocused ? 'var(--cimigo-blue-light-4)' : '#FFFFFF',
   }),
   placeholder: (provided, state) => ({
     ...provided,
