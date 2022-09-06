@@ -51,7 +51,7 @@ const UserProfile = memo((props: Props) => {
             lastName: yup.string()
                 .required(t('field_last_name_vali_required')),
             title: yup.string()
-                .required("Title is required"),
+                .required(t("field_your_title_vali_required")),
             email: yup.string()
                 .email(t('field_email_vali_email')),
             phone: yup.string().matches(VALIDATION.phone,
@@ -186,12 +186,12 @@ const UserProfile = memo((props: Props) => {
                 </Grid>
                 <Grid item xs={12} sm={12}>
                     <Inputs
-                        title="Your title"
-                        translation-key=""
+                        title={t('field_your_title')}
+                        translation-key="field_your_title"
                         name="title"
                         type="text"
-                        placeholder="Enter your title"
-                        translation-key-placeholder=""
+                        placeholder={t('field_your_title_placeholder')}
+                        translation-key-placeholder="field_your_title_placeholder"
                         inputRef={register('title')}
                         errorMessage={errors.title?.message}
                     />
