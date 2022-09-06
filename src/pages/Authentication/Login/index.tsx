@@ -100,7 +100,7 @@ const Login = () => {
           <ParagraphSmall className={classes.textHead}>{'Please login to manage your projects and save your work.'}</ParagraphSmall>
           {/* ParagraphSmall: translation-key={null} */}
           <InputTextfield
-            title={'Email address'}
+            title={t('field_email_address')}
             translation-key="field_email_address"
             name="email"
             className={classes.textInput}
@@ -111,7 +111,7 @@ const Login = () => {
             errorMessage={errors.email?.message}
           />
           <InputTextfield
-            title={'Password'}
+            title={t('field_password')}
             translation-key="field_password"
             name="password"
             type="password"
