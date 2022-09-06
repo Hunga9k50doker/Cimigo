@@ -124,7 +124,8 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
         sx={{ mt: 2 }}
         type="submit"
         btnType={BtnType.Outlined}
-        children={<TextBtnSmall>Save changes</TextBtnSmall>}
+        translation-key="common_save_changes"
+        children={<TextBtnSmall>{t('common_save_changes')}</TextBtnSmall>}
         startIcon={<SaveIcon />}
       />
     </Grid>
