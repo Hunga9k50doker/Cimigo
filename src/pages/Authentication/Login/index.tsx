@@ -132,13 +132,12 @@ const Login = () => {
             </Typography>
           )}
           <Button
-            btnType={BtnType.Secondary}
+            btnType={BtnType.Raised}
             type='submit'
-            translation-key="login_form"
-            children={<TextBtnSecondary>{'Login'}</TextBtnSecondary>}
+            translation-key="login_btn_login"
+            children={<TextBtnSecondary>{t('login_btn_login')}</TextBtnSecondary>}
             className={classes.btnLoginForm}
           />
-          {/* Button: translation-key="login_form" !== text="Login" */}
           <div className={classes.separator}>
             <ParagraphSmall className={classes.childrenSeparator} translation-key="login_login_with">{t('login_login_with')}</ParagraphSmall>
           </div>
