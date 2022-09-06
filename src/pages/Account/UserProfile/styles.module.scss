@@ -1,11 +1,11 @@
 .rowInfo {
     display: flex;
-    margin-bottom: 34px;
+    margin-bottom: 16px;
 }
 
 .form {
-    background-color: rgba(255, 255, 255, 1);
-    padding: 35px 100px 35px 100px;
+    background-color: #FFFFFF;
+    padding: 32px 56px;
     max-width: 764px;
     height: 100%;
     width: 100%;
@@ -44,52 +44,25 @@
         justify-content: center;
         align-items: center;
         border-radius: 50%;
-        background-color: rgba(238, 240, 242, 1);
+        background-color: #EEF0F2;
         z-index: 2;
         svg {
-            width: 17px;
-            height: 16px;
-            color: rgba(28, 28, 28, 0.65);
+            width: 17.14px;
+            height: 15.43px;
+            color: var(--eerie-black-65);
         }
     }
 }
 
 .personalInfo {
-    margin: 10px 10px 0px 35px;
+    margin: 10px 10px 0px 32px;
     .name {
-        font-size: 24px;
-        line-height: 30px;
-        font-weight: 600;
-        margin-bottom: 6px;
         margin-top: 5px;
-    }
-
-    .country {
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 20px;
-        color: rgba(28, 28, 28, 0.65);
     }
 }
 
 .btnSave {
-    background-color: rgba(31, 97, 169, 1);
-    color: rgba(250, 250, 255, 1);
-    font-size: 14px;
-    font-weight: 600;
-    padding: 16px 34px;
-    text-transform: none;
-    line-height: 16px;
-    float: right;
-    margin: 21px 0 36px 0px;
-
-    @media only screen and (max-width: 767px) {
-        margin: 9px 0 24px 0px;
-    }
-
-    &:hover {
-        background-color: rgba(31, 97, 169, 1);
-    }
+    margin-top: 32px;
 }
 
 @media only screen and (max-width: 1024px) {
@@ -97,7 +70,7 @@
         display: none;
     }
     .form {
-        padding: 30px 24px 25px 24px;
+        padding: 12px 24px 25px 24px;
 
     }
 }
@@ -106,10 +79,6 @@
        margin-left: -8px;
     }
 
-    input {
-        font-size: 14px !important;
-        font-weight: 400;
-    }
     .selectOfForm {
         margin-bottom: 15px;
 
@@ -138,19 +107,12 @@
     .personalInfo {
         margin: 5px 10px 0px 24px;
         .name {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 0px;
-            line-height: 19px;
-            margin-bottom: 4px;
-        }
-        .country {
-            font-size: 14px;
-            font-weight: 500;
+            margin-bottom: 0;
         }
     }
     .form {
-        padding: 30px 24px 25px 24px;
+        padding: 12px 24px 24px 24px;
     }
+
 }
 

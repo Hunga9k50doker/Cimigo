@@ -6,6 +6,7 @@ export interface PaymentInfo {
   fullName: string;
   companyName: string;
   companyAddress: string;
+  title: string;
   email: string;
   phone: string;
   countryId: number;

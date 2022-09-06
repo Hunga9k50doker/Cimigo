@@ -1,14 +1,17 @@
-import { Button, Divider, Grid, useMediaQuery, useTheme } from "@mui/material";
-import Inputs from "components/Inputs";
+import {Divider, Grid, useMediaQuery, useTheme } from "@mui/material";
+import Inputs from "components/common/inputs/InputTextfield";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import classes from "./styles.module.scss";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
-import InputSelect from "components/InputsSelect";
+import InputSelect from "components/common/inputs/InputSelect";
 import { VALIDATION } from "config/constans";
 import { OptionItem } from "models/general";
+import Heading2 from "components/common/text/Heading2";
+import ParagraphBody from "components/common/text/ParagraphBody";
+import Button, {BtnType} from "components/common/buttons/Button";
 import {
   setErrorMess,
   setLoading,
@@ -25,6 +28,7 @@ interface Props {}
 export interface PaymentFormData {
   fullName: string;
   companyName: string;
+  title: string;
   email: string;
   phone: string;
   countryId: OptionItem;
@@ -44,6 +48,7 @@ const PaymentInfoPage = memo((props: Props) => {
     return yup.object().shape({
       fullName: yup.string().required(t("field_full_name_vali_required")),
       companyName: yup.string().required(t("field_company_vali_required")),
+      title: yup.string().required(t("field_your_title_vali_required")),
       email: yup
         .string()
         .email(t("field_email_vali_email"))
@@ -100,6 +105,7 @@ const PaymentInfoPage = memo((props: Props) => {
     reset({
       fullName: paymentInfo?.fullName || "",
       companyName: paymentInfo?.companyName || "",
+      title: paymentInfo?.title || "",
       email: paymentInfo?.email || "",
       phone: paymentInfo?.phone || "",
       countryId: paymentInfo?.country
@@ -115,6 +121,7 @@ const PaymentInfoPage = memo((props: Props) => {
       fullName: data.fullName,
       companyName: data.companyName,
       companyAddress: data.companyAddress,
+      title: data.title,
       email: data.email,
       phone: data.phone,
       countryId: data.countryId.id,
@@ -131,13 +138,13 @@ const PaymentInfoPage = memo((props: Props) => {
 
   return (
     <Grid className={classes.root}>
-      <p className={classes.title} translation-key="auth_payment_info_title">{t("auth_payment_info_title")}</p>
-      <p className={classes.subTitle} translation-key="auth_payment_info_sub">
+      <Heading2 className={classes.title} translation-key="auth_payment_info_title">{t("auth_payment_info_title")}</Heading2>
+      <ParagraphBody $colorName="--gray-80" className={classes.subTitle} translation-key="auth_payment_info_sub">
         {t("auth_payment_info_sub")}
-      </p>
+      </ParagraphBody>
       <Divider className={classes.divider} />
       <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={isMobile ? 0 : 1}>
+        <Grid container columnSpacing={isMobile ? 0 : 1} rowSpacing={3}> 
           <Grid item xs={12} sm={6}>
             <Inputs
               title={t("field_full_name")}
@@ -158,6 +165,18 @@ const PaymentInfoPage = memo((props: Props) => {
               name="companyName"
               inputRef={register("companyName")}
               errorMessage={errors.companyName?.message}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <Inputs
+              title={t("field_your_title")}
+              translation-key="field_your_title"
+              name="title"
+              type="text"
+              placeholder={t("field_your_title_placeholder")}
+              translation-key-placeholder="field_your_title_placeholder"
+              inputRef={register("title")}
+              errorMessage={errors.title?.message}
             />
           </Grid>
           <Grid item xs={12} sm={12}>
@@ -185,6 +204,7 @@ const PaymentInfoPage = memo((props: Props) => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <InputSelect
+              fullWidth
               title={t("field_country")}
               name="countryId"
               control={control}
@@ -220,6 +240,7 @@ const PaymentInfoPage = memo((props: Props) => {
           </Grid>
         </Grid>
         <Button
+          btnType={BtnType.Primary}
           type="submit"
           children={t("common_save_changes")}
           translation-key="common_save_changes"
