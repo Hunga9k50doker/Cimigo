@@ -1,14 +1,17 @@
-import { Button, Grid, useMediaQuery, useTheme } from "@mui/material"
+import { Grid, useMediaQuery, useTheme } from "@mui/material"
 import { memo, useEffect, useMemo, useState } from "react";
 import classes from './styles.module.scss';
 import { CameraAlt } from '@mui/icons-material';
-import Inputs from "components/Inputs";
+import Inputs from "components/common/inputs/InputTextfield";
+import InputSelect from "components/common/inputs/InputSelect";
+import Button, {BtnType} from "components/common/buttons/Button"
+import Heading3 from "components/common/text/Heading3";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Controller, useForm } from "react-hook-form";
 import images from "config/images";
 import { OptionItem } from "models/general";
-import InputSelect from "components/InputsSelect";
 import { useTranslation } from "react-i18next";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { useDispatch } from "react-redux";
@@ -22,6 +25,7 @@ export interface UserFormData {
     avatar: File | string;
     firstName: string;
     lastName: string;
+    title: string;
     email: string;
     phone: string;
     countryId: OptionItem;
@@ -46,6 +50,8 @@ const UserProfile = memo((props: Props) => {
                 .required(t('field_first_name_vali_required')),
             lastName: yup.string()
                 .required(t('field_last_name_vali_required')),
+            title: yup.string()
+                .required(t("field_your_title_vali_required")),
             email: yup.string()
                 .email(t('field_email_vali_email')),
             phone: yup.string().matches(VALIDATION.phone,
@@ -85,6 +91,7 @@ const UserProfile = memo((props: Props) => {
                 avatar: user.avatar || images.icProfile || '',
                 firstName: user.firstName || '',
                 lastName: user.lastName || '',
+                title: user.title || '',
                 email: user.email || '',
                 countryId: user.country ? { id: user.country.id, name: user.country.name } : undefined,
                 company: user.company || '',
@@ -117,6 +124,7 @@ const UserProfile = memo((props: Props) => {
         const form = new FormData()
         form.append('firstName', data.firstName)
         form.append('lastName', data.lastName)
+        form.append('title', data.title)
         form.append('countryId', `${data.countryId.id}`)
         form.append('company', data.company)
         form.append('phone', data.phone)
@@ -147,11 +155,11 @@ const UserProfile = memo((props: Props) => {
                     </label>
                 </div>
                 <div className={classes.personalInfo}>
-                    <p className={classes.name}>{user?.fullName}</p>
-                    <p className={classes.country}>{user?.company}</p>
+                    <Heading3 $colorName="--eerie-black" className={classes.name}>{user?.fullName}</Heading3>
+                    <ParagraphSmall>{user?.company}</ParagraphSmall>
                 </div>
             </Grid>
-            <Grid container spacing={isMobile ? 0 : 1} className={classes.customMargin}>
+            <Grid container columnSpacing={isMobile ? 0 : 1} rowSpacing={3} className={classes.customMargin}>
                 <Grid item xs={12} sm={6}>
                     <Inputs
                         title={t('field_first_name')}
@@ -174,6 +182,18 @@ const UserProfile = memo((props: Props) => {
                         translation-key-placeholder="field_last_name_placeholder"
                         inputRef={register('lastName')}
                         errorMessage={errors.lastName?.message}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                    <Inputs
+                        title={t('field_your_title')}
+                        translation-key="field_your_title"
+                        name="title"
+                        type="text"
+                        placeholder={t('field_your_title_placeholder')}
+                        translation-key-placeholder="field_your_title_placeholder"
+                        inputRef={register('title')}
+                        errorMessage={errors.title?.message}
                     />
                 </Grid>
                 <Grid item xs={12} sm={12}>
@@ -203,6 +223,7 @@ const UserProfile = memo((props: Props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <InputSelect
+                        fullWidth
                         title={t('field_country')}
                         name="countryId"
                         control={control}
@@ -227,7 +248,7 @@ const UserProfile = memo((props: Props) => {
                     />
                 </Grid>
             </Grid>
-            <Button type='submit' children={t("common_save_changes")} translation-key="common_save_changes" className={classes.btnSave} />
+            <Button btnType={BtnType.Primary} type='submit' children={t("common_save_changes")} translation-key="common_save_changes" className={classes.btnSave}/>
         </form>
     )
 })

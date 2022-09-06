@@ -40,6 +40,7 @@ export interface User {
     firstName: string,
     lastName: string,
     fullName: string,
+    title: string,
     email: string,
     password: string,
     countryId: string,
@@ -114,6 +115,7 @@ export interface ChangePassword {
 export interface UpdatePaymentInfo {
     fullName: string,
     companyName: string,
+    title: string,
     email: string,
     phone: string,
     countryId: number,

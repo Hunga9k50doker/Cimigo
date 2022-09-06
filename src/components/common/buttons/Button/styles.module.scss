@@ -6,7 +6,7 @@
 .btnPrimary {
   background: var(--cimigo-blue);
   border: 1px solid transparent;
-  color: var(--gray-10);
+  color: #FFFFFF;
   &:hover {
     background: var(--cimigo-blue-light-1);
   }
@@ -103,7 +103,7 @@
   background: var(--cimigo-blue);
   border: 1px solid transparent;
   box-shadow: 0px 8px 16px rgba(31, 97, 169, 0.12);
-  color: var(--gray-10);
+  color: #FFFFFF;
   &:hover {
     background: var(--cimigo-blue-light-1);
     box-shadow: 0px 12px 20px rgba(59, 135, 219, 0.24);

@@ -1,29 +1,17 @@
 .root{
-    padding: 36px 54px 0px 54px;
+    padding: 32px 56px;
     @media only screen and (max-width: 767px) { 
-        padding: 32px 24px 0px 24px;
+        padding: 24px 24px 0px 24px;
      }
 }
 .title{
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 29px;
-    margin-bottom: 4px;
-    color: rgba(28, 28, 28, 1);
+    margin-bottom: 8px;
     @media only screen and (max-width: 767px) { 
-            font-weight: 600;
             margin-bottom: 10px;
     }
 }
 .subTitle{
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
     margin-bottom: 14px;
-    color: rgba(28, 28, 28, 0.65);
-    @media only screen and (max-width: 767px) { 
-        color:rgba(0, 0, 0, 1);
-    }
 }
 .emptyPasswordTitle{
     margin-top: 14px;
@@ -33,16 +21,16 @@
         display: none;
     }
 }
+
 .form{
-    padding: 32px 168px 190px 168px;
+    padding: 32px 336px 0px 0px;
     @media only screen and (max-width: 767px) { 
        padding: 10px 0px 29px 0px;
     }
     .btnSubmit{
-        margin-top: 8px;
-        width: 100%;
+        margin-top: 32px;
         @media only screen and (max-width: 767px) { 
-            margin-top: 16px;
+            width: 100%;
         }
     }
 }
