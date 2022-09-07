@@ -1,12 +1,8 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton } from '@mui/material';
+import { Dialog, Grid, IconButton } from '@mui/material';
 import classes from './styles.module.scss';
 import { useDropzone } from 'react-dropzone';
-
-import Buttons from 'components/Buttons';
-import Inputs from 'components/Inputs';
 import Images from "config/images";
-import InputSelect from 'components/InputsSelect';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from 'react-hook-form';
@@ -17,6 +13,16 @@ import useIsMountedRef from 'hooks/useIsMountedRef';
 import { fData } from 'utils/formatNumber';
 import { CameraAlt } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import {DialogTitle} from "components/common/dialogs/DialogTitle";
+import { DialogContent } from "components/common/dialogs/DialogContent";
+import { DialogActions } from "components/common/dialogs/DialogActions";
+import Heading3 from "components/common/text/Heading3";
+import Heading5 from "components/common/text/Heading5";
+import ButtonClose from "components/common/buttons/ButtonClose";
+import Button, {BtnType} from "components/common/buttons/Button";
+import ParagraphSmall from 'components/common/text/ParagraphSmall';
+import InputTextfield from "components/common/inputs/InputTextfield";
+import InputSelect from "components/common/inputs/InputSelect";
 
 const PHOTO_SIZE = 10 * 1000000; // bytes
 const FILE_FORMATS = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
@@ -183,22 +189,24 @@ const PopupPack = memo((props: Props) => {
   const getPopupTitle = () => {
     switch (positionId) {
       case PackPosition.Normal:
-        if (!itemEdit) return <p className={classes.title} translation-key="setup_survey_packs_popup_add_title">{t('setup_survey_packs_popup_add_title')}</p>
-        return <p className={classes.title} translation-key="setup_survey_packs_popup_edit_title">{t('setup_survey_packs_popup_edit_title')}</p>
+        if (!itemEdit) return <Heading3 translation-key="setup_survey_packs_popup_add_title">{t('setup_survey_packs_popup_add_title')}</Heading3>
+        return <Heading3 translation-key="setup_survey_packs_popup_edit_title">{t('setup_survey_packs_popup_edit_title')}</Heading3>
       case PackPosition.Eye_Tracking:
-        if (!itemEdit) return <p className={classes.title} translation-key="">Add other competitor packs</p>
-        return <p className={classes.title} translation-key="">Edit other competitor packs</p>
+        if (!itemEdit) return <Heading3 translation-key="setup_survey_packs_popup_add_competitor_title">{t("setup_survey_packs_popup_add_competitor_title")}</Heading3>
+        return <Heading3 translation-key="setup_survey_packs_popup_edit_competitor_title">{t("setup_survey_packs_popup_edit_competitor_title")}</Heading3>
     }
   }
 
   const getPopupSubTitle = () => {
     switch (positionId) {
       case PackPosition.Normal:
-        if (!itemEdit) return <p translation-key="setup_survey_packs_popup_add_sub_title">{t('setup_survey_packs_popup_add_sub_title')}</p>
-        return <p translation-key="setup_survey_packs_popup_edit_sub_title">{t('setup_survey_packs_popup_edit_sub_title')}</p>
+        if (!itemEdit) return <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_packs_popup_add_sub_title">{t('setup_survey_packs_popup_add_sub_title')}</ParagraphSmall>
+        return <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_packs_popup_edit_sub_title">{t('setup_survey_packs_popup_edit_sub_title')}</ParagraphSmall>
       case PackPosition.Eye_Tracking:
-        if (!itemEdit) return <p translation-key="">Upload your competitor pack image and enter corresponding information.</p>
-        return <p translation-key="">Edit your competitor pack image and enter corresponding information.</p>
+        if (!itemEdit) return <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_packs_popup_add_competitor_subtitle" 
+        dangerouslySetInnerHTML={{ __html: t("setup_survey_packs_popup_add_competitor_subtitle")}}></ParagraphSmall>
+        return <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_packs_popup_edit_competitor_subtitle"
+        dangerouslySetInnerHTML={{ __html: t("setup_survey_packs_popup_edit_competitor_subtitle")}}></ParagraphSmall>
     }
   }
 
@@ -212,9 +220,8 @@ const PopupPack = memo((props: Props) => {
       <form autoComplete="off" className={classes.form} noValidate onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle className={classes.header}>
           {getPopupTitle()}
-          <IconButton onClick={onCancel}>
-            <img src={Images.icClose} alt='icon close' />
-          </IconButton>
+          <ButtonClose  onClick={onCancel}>
+          </ButtonClose>
         </DialogTitle>
         <DialogContent className={classes.body} dividers>
           {getPopupSubTitle()}
@@ -239,35 +246,35 @@ const PopupPack = memo((props: Props) => {
                 ) : (
                   <>
                     <img className={classes.imgAddPhoto} src={Images.icAddPhoto} alt="ic-add" />
-                    <span translation-key="setup_survey_packs_popup_select_image">{t('setup_survey_packs_popup_select_image')}</span>
+                    <ParagraphSmall $colorName="--cimigo-blue" className={classes.selectImgTitle} translation-key="setup_survey_packs_popup_select_image">{t('setup_survey_packs_popup_select_image')}</ParagraphSmall>
                   </>
                 )}
               </Grid>
             </Grid>
             <Grid>
-              <p className={classes.textTitle} translation-key="setup_survey_packs_popup_image_instruction">{t('setup_survey_packs_popup_image_instruction')}:</p>
+            <Heading5 className={classes.textTitle} translation-key="setup_survey_packs_popup_image_instruction">{t('setup_survey_packs_popup_image_instruction')}:</Heading5>
               <div className={classes.textInfo}>
-                <p translation-key="setup_survey_packs_popup_image_instruction_1" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_1') }}></p>
+               <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_packs_popup_image_instruction_1" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_1') }}></ParagraphSmall>
               </div>
               <div className={classes.textInfo}>
-                <p translation-key="setup_survey_packs_popup_image_instruction_2" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_2') }}></p>
+                <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_packs_popup_image_instruction_2" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_2') }}></ParagraphSmall>
               </div>
               <div className={classes.textInfo}>
-                <p translation-key="setup_survey_packs_popup_image_instruction_3" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_3') }}></p>
+                <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_packs_popup_image_instruction_3" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_3') }}></ParagraphSmall>
               </div>
               <div className={classes.textInfo}>
-                <p translation-key="setup_survey_packs_popup_image_instruction_4" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_4') }}></p>
+                <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_packs_popup_image_instruction_4" dangerouslySetInnerHTML={{ __html: t('setup_survey_packs_popup_image_instruction_4') }}></ParagraphSmall>
               </div>
               <Grid container className={classes.input} spacing={1}>
                 <Grid item xs={isEyeTracking ? 12 : 6}>
                   <Controller
                     name="name"
                     control={control}
-                    render={({ field }) => <Inputs
+                    render={({ field }) => <InputTextfield
                       title={t('setup_survey_packs_popup_pack_name')}
                       translation-key="setup_survey_packs_popup_pack_name"
-                      placeholder={isEyeTracking ? "Enter competitor pack name" : t('setup_survey_packs_popup_pack_name_placeholder')}
-                      translation-key-placeholder={isEyeTracking ? "" : "setup_survey_packs_popup_pack_name_placeholder"}
+                      placeholder={isEyeTracking ? t('setup_survey_packs_popup_competitor_pack_name_placeholder') : t('setup_survey_packs_popup_pack_name_placeholder')}
+                      translation-key-placeholder={isEyeTracking ? "setup_survey_packs_popup_competitor_pack_name_placeholder" : "setup_survey_packs_popup_pack_name_placeholder"}
                       infor={isEyeTracking ? '' : t('setup_survey_packs_popup_pack_name_info')}
                       translation-key-infor={isEyeTracking ? '' : "setup_survey_packs_popup_pack_name_info"}
                       errorMessage={errors.name?.message}
@@ -298,81 +305,90 @@ const PopupPack = memo((props: Props) => {
             </Grid>
           </Grid>
           {errors.image?.message && <ErrorMessage>{errors.image?.message}</ErrorMessage>}
-          <Grid className={classes.inputMobile}>
-            <Controller
-              name="name"
-              control={control}
-              render={({ field }) => <Inputs
-                title={t('setup_survey_packs_popup_pack_name')}
-                translation-key="setup_survey_packs_popup_pack_name"
-                placeholder={t('setup_survey_packs_popup_pack_name_placeholder')}
-                translation-key-placeholder="setup_survey_packs_popup_pack_name_placeholder"
-                infor={t('setup_survey_packs_popup_pack_name_info')}
-                translation-key-infor="setup_survey_packs_popup_pack_name_info"
-                errorMessage={errors.name?.message}
-                name={field.name}
-                value={field.value || ''}
-                onBlur={field.onBlur}
-                onChange={field.onChange}
-              />}
-            />
-            {!isEyeTracking && (
-              <InputSelect
-                title={t('setup_survey_packs_popup_pack_type')}
-                name="packTypeId"
+          <Grid className={classes.inputMobile} container rowSpacing={3} columnSpacing={2}>
+            <Grid item xs={12} sm={12}>
+              <Controller
+                name="name"
                 control={control}
-                selectProps={{
-                  options: packTypes,
-                  menuPosition: "fixed",
-                  placeholder: t('setup_survey_packs_popup_pack_type_placeholder')
-                }}
-                errorMessage={(errors.packTypeId as any)?.message || errors.packTypeId?.id?.message}
+                render={({ field }) => <InputTextfield
+                  title={t('setup_survey_packs_popup_pack_name')}
+                  translation-key="setup_survey_packs_popup_pack_name"
+                  placeholder={t('setup_survey_packs_popup_pack_name_placeholder')}
+                  translation-key-placeholder="setup_survey_packs_popup_pack_name_placeholder"
+                  infor={t('setup_survey_packs_popup_pack_name_info')}
+                  translation-key-infor="setup_survey_packs_popup_pack_name_info"
+                  errorMessage={errors.name?.message}
+                  name={field.name}
+                  value={field.value || ''}
+                  onBlur={field.onBlur}
+                  onChange={field.onChange}
+                />}
               />
-            )}
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              {!isEyeTracking && (
+                <InputSelect
+                  title={t('setup_survey_packs_popup_pack_type')}
+                  name="packTypeId"
+                  control={control}
+                  selectProps={{
+                    options: packTypes,
+                    menuPosition: "fixed",
+                    placeholder: t('setup_survey_packs_popup_pack_type_placeholder')
+                  }}
+                  errorMessage={(errors.packTypeId as any)?.message || errors.packTypeId?.id?.message}
+                />
+              )}
+            </Grid>
           </Grid>
           <Grid className={classes.flex}>
-            <p translation-key="setup_survey_packs_popup_brand_related_title">{t('setup_survey_packs_popup_brand_related_title')} {isEyeTracking && <span>(optional)</span>}</p>
-            <span translation-key="setup_survey_packs_popup_brand_related_sub_title">{t('setup_survey_packs_popup_brand_related_sub_title')}</span>
-            <Grid>
-              <Inputs
-                title={t('setup_survey_packs_popup_pack_brand')}
-                translation-key="setup_survey_packs_popup_pack_brand"
-                name='brand'
-                placeholder={t('setup_survey_packs_popup_pack_brand_placeholder')}
-                translation-key-placeholder="setup_survey_packs_popup_pack_brand_placeholder"
-                inputRef={register('brand')}
-                errorMessage={errors.brand?.message}
-              />
-              <Inputs
-                title={t('setup_survey_packs_popup_pack_variant')}
-                translation-key="setup_survey_packs_popup_pack_variant"
-                name='variant'
-                placeholder={t('setup_survey_packs_popup_pack_variant_placeholder')}
-                translation-key-placeholder="setup_survey_packs_popup_pack_variant_placeholder"
-                inputRef={register('variant')}
-                errorMessage={errors.variant?.message}
-              />
-              <Inputs
-                title={t('setup_survey_packs_popup_pack_manufacturer')}
-                translation-key="setup_survey_packs_popup_pack_manufacturer"
-                name='manufacturer'
-                placeholder={t('setup_survey_packs_popup_pack_manufacturer_placeholder')}
-                translation-key-placeholder="setup_survey_packs_popup_pack_manufacturer_placeholder"
-                inputRef={register('manufacturer')}
-                errorMessage={errors.manufacturer?.message}
-              />
+            <Heading5 className={classes.brandTitle} translation-key="setup_survey_packs_popup_brand_related_title">{t('setup_survey_packs_popup_brand_related_title')} {isEyeTracking && <Heading5 $colorName="--cimigo-green-dark">&nbsp;(optional)</Heading5>}</Heading5>
+            <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_packs_popup_brand_related_sub_title">{t('setup_survey_packs_popup_brand_related_sub_title')}</ParagraphSmall>
+            <Grid container spacing={2}>
+              <Grid item>
+                <InputTextfield
+                  title={t('setup_survey_packs_popup_pack_brand')}
+                  translation-key="setup_survey_packs_popup_pack_brand"
+                  name='brand'
+                  placeholder={t('setup_survey_packs_popup_pack_brand_placeholder')}
+                  translation-key-placeholder="setup_survey_packs_popup_pack_brand_placeholder"
+                  inputRef={register('brand')}
+                  errorMessage={errors.brand?.message}
+                />
+              </Grid>
+              <Grid item>
+                <InputTextfield
+                  title={t('setup_survey_packs_popup_pack_variant')}
+                  translation-key="setup_survey_packs_popup_pack_variant"
+                  name='variant'
+                  placeholder={t('setup_survey_packs_popup_pack_variant_placeholder')}
+                  translation-key-placeholder="setup_survey_packs_popup_pack_variant_placeholder"
+                  inputRef={register('variant')}
+                  errorMessage={errors.variant?.message}
+                />
+              </Grid>
+              <Grid item>
+                <InputTextfield
+                  title={t('setup_survey_packs_popup_pack_manufacturer')}
+                  translation-key="setup_survey_packs_popup_pack_manufacturer"
+                  name='manufacturer'
+                  placeholder={t('setup_survey_packs_popup_pack_manufacturer_placeholder')}
+                  translation-key-placeholder="setup_survey_packs_popup_pack_manufacturer_placeholder"
+                  inputRef={register('manufacturer')}
+                  errorMessage={errors.manufacturer?.message}
+                />
+              </Grid>
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions className={classes.btn}>
-          <Buttons
+        <Button btnType={BtnType.Secondary} onClick={onCancel} translation-key="common_cancel">{t('common_cancel')}</Button>
+        <Button
             type="submit"
             children={!itemEdit ? t('setup_survey_packs_popup_add_btn') : t('setup_survey_packs_popup_edit_btn')}
             translation-key={!itemEdit ? "setup_survey_packs_popup_add_btn" : "setup_survey_packs_popup_edit_btn"}
-            btnType='Blue'
-            padding='11px 64px'
+            btnType={BtnType.Raised}
           />
-          <Button onClick={onCancel} translation-key="common_cancel">{t('common_cancel')}</Button>
         </DialogActions>
       </form>
     </Dialog>
