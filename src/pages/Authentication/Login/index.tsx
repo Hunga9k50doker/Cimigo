@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Buttons from "components/Buttons";
@@ -99,29 +99,29 @@ const Login = () => {
           {/* Heading2: translation-key="login_title" !== text="Login" */}
           <ParagraphSmall className={classes.textHead}>{'Please login to manage your projects and save your work.'}</ParagraphSmall>
           {/* ParagraphSmall: translation-key={null} */}
-          <InputTextfield
-            title={t('field_email_address')}
-            translation-key="field_email_address"
-            name="email"
-            className={classes.textInput}
-            placeholder={t('field_email_placeholder')}             
-            translation-key-placeholder="field_email_placeholder"
-            type="text"
-            inputRef={register('email')}
-            errorMessage={errors.email?.message}
-          />
-          <InputTextfield
-            title={t('field_password')}
-            translation-key="field_password"
-            name="password"
-            type="password"
-            className={classes.textInput}
-            showEyes
-            placeholder={t('field_password_placeholder')}
-            translation-key-placeholder="field_password_placeholder" 
-            inputRef={register('password')}
-            errorMessage={errors.password?.message}
-          />
+          <Stack spacing={2} className={classes.textInput}>
+            <InputTextfield
+              title={t('field_email_address')}
+              translation-key="field_email_address"
+              name="email"
+              placeholder={t('field_email_placeholder')}             
+              translation-key-placeholder="field_email_placeholder"
+              type="text"
+              inputRef={register('email')}
+              errorMessage={errors.email?.message}
+            />
+            <InputTextfield
+              title={t('field_password')}
+              translation-key="field_password"
+              name="password"
+              type="password"
+              showEyes
+              placeholder={t('field_password_placeholder')}
+              translation-key-placeholder="field_password_placeholder" 
+              inputRef={register('password')}
+              errorMessage={errors.password?.message}
+            />
+          </Stack>        
           <Grid className={classes.checkbox}>
             <div></div>
             <ParagraphSmallUnderline to={routes.forgotPassword} translation-key="login_redirect_forgot_password">{t('login_redirect_forgot_password')}</ParagraphSmallUnderline>
