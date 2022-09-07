@@ -96,7 +96,7 @@ const Login = () => {
       <form onSubmit={handleSubmit(onSubmit)} name="login" noValidate autoComplete="off">
         <Grid className={classes.body}>
           <Heading2 className={classes.textLogin} translation-key="login_title">{t('login_title')}</Heading2>
-          <ParagraphSmall className={classes.textHead}>{'Please login to manage your projects and save your work.'}</ParagraphSmall>
+          <ParagraphSmall className={classes.textHead} translation-key="login_text_login">{t('login_text_login')}</ParagraphSmall>
           {/* ParagraphSmall: translation-key={null} */}
           <Stack spacing={2} className={classes.textInput}>
             <InputTextfield
