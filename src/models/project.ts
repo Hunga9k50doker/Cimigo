@@ -10,6 +10,7 @@ import { ProjectAttribute } from './project_attribute';
 import { UserAttribute } from './user_attribute';
 import { User } from './user';
 import { CustomQuestion } from './custom_question';
+import { Plan } from './Admin/plan';
 export interface CreateProjectData {
   solutionId: number;
   name: string,
@@ -56,6 +57,7 @@ export interface Project {
   userAttributes?: UserAttribute[];
   customQuestions?: CustomQuestion[];
   user?: User;
+  plan?: Plan;
 }
 
 export enum ProjectStatus {
@@ -67,9 +69,9 @@ export enum ProjectStatus {
 
 export const projectStatus: OptionItem[] = [
   { id: ProjectStatus.DRAFT, name: 'Draft', translation: 'project_status_draft' },
-  { id: ProjectStatus.AWAIT_PAYMENT, name: 'Await payment', translation: 'project_status_await_payment' },
-  { id: ProjectStatus.IN_PROGRESS, name: 'In progress', translation: 'project_status_in_progress' },
-  { id: ProjectStatus.COMPLETED, name: 'Completed', translation: 'project_status_completed' }
+  { id: ProjectStatus.AWAIT_PAYMENT, name: 'Awaiting payment', translation: 'project_status_await_payment' },
+  { id: ProjectStatus.IN_PROGRESS, name: 'Launching', translation: 'project_status_in_progress' },
+  { id: ProjectStatus.COMPLETED, name: 'Results ready', translation: 'project_status_completed' }
 ]
 
 export interface GetMyProjects {

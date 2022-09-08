@@ -19,7 +19,7 @@ interface ButtonProps extends ButtonPropsMUI {
 }
 
 const Button = memo((props: ButtonProps) => {
-  const { width, padding, className, btnType, children, nowrap, ...rest } = props;
+  const { width, padding, className, btnType, children, nowrap, sx = {}, ...rest } = props;
   return (
     <ButtonMUI
       className={clsx(
@@ -35,7 +35,7 @@ const Button = memo((props: ButtonProps) => {
       )}
       type="button"
       {...rest}
-      sx={{minWidth: width, padding: padding, whiteSpace: nowrap ? "nowrap" : "unset"}}
+      sx={{...sx, minWidth: width, padding: padding, whiteSpace: nowrap ? "nowrap" : "unset"}}
     >
       {children}
     </ButtonMUI>
