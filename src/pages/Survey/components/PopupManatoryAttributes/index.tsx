@@ -77,7 +77,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button className={classes.btn} children={t('common_close')} translation-key="common_close" btnType={BtnType.Raised} width="123px" onClick={onClose} />
+        <Button className={classes.btn} children={t('common_close')} translation-key="common_close" btnType={BtnType.Raised} onClick={onClose} />
       </DialogActions>
     </Dialog>
   );

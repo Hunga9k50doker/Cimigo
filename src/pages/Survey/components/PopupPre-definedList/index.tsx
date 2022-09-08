@@ -17,6 +17,8 @@ import Button, {BtnType} from "components/common/buttons/Button";
 import ParagraphSmall from 'components/common/text/ParagraphSmall';
 import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
 import ParagraphBody from 'components/common/text/ParagraphBody';
+import InputCheckBox from 'components/common/inputs/InputCheckBox';
+
 interface Props {
   isOpen: boolean,
   project: Project,
@@ -118,11 +120,13 @@ const PopupPreDefinedList = memo((props: Props) => {
               style={{ background: item.id === expanded ? '#EEEEEE' : '' }}
             >
               <Grid classes={{ root: classes.rootCollapseMobile }}>
-                <Checkbox
+                <InputCheckBox
                   disabled={isDisabled(item)}
                   checked={attributesSelected.includes(item.id)}
                   onChange={(e) => onChange(item)}
-                  classes={{ root: classes.rootCheckboxMobile }}
+                  classes={{ root: classes.rootCheckbox }}
+                  padding="0"
+                  margin="0 10px 0 0"
                   onClick={e => e.stopPropagation()}
                   icon={<img src={Images.icCheck} alt="" />}
                   checkedIcon={<img src={Images.icCheckActive} alt="" />}
@@ -160,10 +164,12 @@ const PopupPreDefinedList = memo((props: Props) => {
               <ListItemText>
                 <Grid className={clsx(classes.listFlex, { [classes.listFlexChecked]: attributesSelected.includes(item.id) })}>
                   <Grid>
-                    <Checkbox
+                    <InputCheckBox
                       disabled={isDisabled(item)}
                       checked={attributesSelected.includes(item.id)}
                       classes={{ root: classes.rootCheckbox }}
+                      padding="0"
+                      margin="0 5px 2px 0"
                       icon={<img src={Images.icCheck} alt="" />}
                       checkedIcon={<img src={Images.icCheckActive} alt="" />} />
                   </Grid>
@@ -183,7 +189,7 @@ const PopupPreDefinedList = memo((props: Props) => {
         </Grid>
       </DialogContent>
       <DialogActions> 
-      <Button className={classes.btn} children={t('setup_survey_add_att_btn_add')} translation-key="setup_survey_add_att_btn_add" btnType={BtnType.Raised} width='123px' onClick={_onSubmit}/>
+      <Button className={classes.btn} children={t('setup_survey_add_att_btn_add')} translation-key="setup_survey_add_att_btn_add" btnType={BtnType.Raised} onClick={_onSubmit}/>
       </DialogActions>
     </Dialog>
   );

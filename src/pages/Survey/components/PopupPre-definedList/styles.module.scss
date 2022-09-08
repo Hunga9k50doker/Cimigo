@@ -87,9 +87,6 @@
   }
 }
 .rootCheckbox {
-  padding: 0;
-  margin-right: 5px;
-  margin-bottom: 2px;
   img {
     border-radius: 4px;
   }
@@ -170,12 +167,4 @@
   display: flex;
   width: 100%;
   align-items: center;
-}
-
-.rootCheckboxMobile {
-  padding: 0;
-  margin-right: 10px;
-  img {
-    border-radius: 4px;
-  }
 }
