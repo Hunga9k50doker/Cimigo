@@ -958,7 +958,7 @@ const SetupSurvey = memo(({ id }: Props) => {
         <Grid classes={{ root: classes.left }} >
           <p className={classes.title} translation-key="setup_survey_title">{t('setup_survey_title')}</p>
           <p className={classes.subTitle} id={SECTION.basic_information} translation-key="setup_survey_basic_infor_title">
-            1. {t('setup_survey_basic_infor_title')}
+            {t('setup_survey_basic_infor_title', { step: 1 })}
           </p>
           <Grid className={classes.flex}>
             <p translation-key="setup_survey_basic_infor_sub_title">{t('setup_survey_basic_infor_sub_title')}</p>
