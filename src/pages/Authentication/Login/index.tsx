@@ -95,9 +95,9 @@ const Login = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="login" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <Heading2 className={classes.textLogin} translation-key="login_title">{t('login_title')}</Heading2>
+          <Heading2 $colorName="--cimigo-blue" className={classes.textLogin} translation-key="login_title">{t('login_title')}</Heading2>
           <ParagraphSmall className={classes.textHead} translation-key="login_subtitle">{t('login_subtitle')}</ParagraphSmall>
-          <Stack spacing={2} className={classes.textInput}>
+          <Stack spacing={2} mb={2}>
             <InputTextfield
               title={t('field_email_address')}
               translation-key="field_email_address"

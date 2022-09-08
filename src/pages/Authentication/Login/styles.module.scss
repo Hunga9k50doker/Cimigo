@@ -27,9 +27,6 @@
     margin-bottom: 16px;
   }
 }
-.textInput {
-  margin-bottom: 16px;
-}
 .errorText {
   font-style: normal;
   font-weight: 400;
@@ -43,10 +40,10 @@
   border-radius: 2px;
   margin-bottom: 24px;
 }
-.btnLoginForm{
-  >p {
+.btnLoginForm {
+  > p {
     @media only screen and (max-width: 767px) {
-    font-size: 14px !important;
+      font-size: 14px !important;
     }
   }
   @media only screen and (max-width: 767px) {
