@@ -1,0 +1,208 @@
+.body {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px -9px;
+    padding: 0px 80px;
+    justify-content: space-between;
+    padding-bottom: 300px;
+    @media only screen and (max-width: 1169px) {
+        justify-content: center;
+    }
+    @media only screen and (max-width: 767px) {
+        justify-content: space-between;
+        justify-content: center;
+        padding: 0 0;
+        padding-bottom: 100px;
+        padding-left: 24px;
+        padding-right: 24px;
+        flex-direction: column;
+        margin: 0px;
+    }
+}
+.layout_card {
+    //padding-top: 40px;
+    // border: 1px solid #D2D2D2;
+    // box-shadow: 0px 2px 0px rgb(0 0 0 / 20%);
+    // border-radius: 8px;
+    @media only screen and (max-width: 1169px) {
+        margin-bottom: 24px
+    }
+    @media only screen and (max-width: 800px) {
+        //margin: 16px 0px;
+        //padding-bottom: 24px;
+    }
+    
+}
+.item_center {
+    justify-content: center;
+    margin-top: auto;
+    padding-bottom: 24px;
+}
+.card_plan {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+    border: 1px solid var(--gray-20);
+    @media only screen and (max-width: 367px) {
+        width: auto;
+    }
+    .tax {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 12px;
+        padding-top: 8px;
+        padding-bottom: 24px;
+    }
+    .line{
+        content: " ";
+        padding: 10px;
+        border-bottom: 1px solid;
+        color: var(--gray-20);
+    }
+    .start_at{
+        padding-top: 16px;
+    }
+    .price{
+        padding-top: 8px;
+    }
+    .content_in_plan{
+        padding: 16px 0px;
+    }
+    
+}
+.card_plan_popular {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+    border-radius: 0px 0px 8px 8px;
+    border: 1px solid var(--gray-20);
+    @media only screen and (max-width: 367px) {
+        width: auto;
+    }
+    .tax {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 12px;
+        padding-top: 8px;
+        padding-bottom: 24px;
+    }
+    .line{
+        content: " ";
+        padding: 10px;
+        border-bottom: 1px solid;
+        color: var(--gray-20);
+    }
+    .price{
+        padding-top: 8px;
+    }
+    .start_at{
+        padding-top: 16px;
+        .p{
+            font-family: 'Montserrat';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 24px;
+            color: #000000;
+        }
+    }
+    .content_in_plan{
+        padding: 16px 0px;
+    }
+    
+}
+.content_in_plan{
+    > p {
+        padding-top: 16px !important;
+    }
+}
+.header_cart {
+    margin-top: -40px;
+    background: #A6CC17;
+    border: 1px solid var(--gray-20);
+    border-radius: 8px 8px 0px 0px;
+    border-bottom: none;
+    @media only screen and (max-width: 800px) {
+        //margin-top: -110px;
+    }
+    p{  
+        text-align: center;
+        padding: 8px;
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        padding-left: 12px;
+    }
+    @media only screen and (max-width: 789px) {
+        margin-top: -0px;
+    }
+}
+.layout_card_popular {
+    @media only screen and (max-width: 1169px) {
+        margin-bottom: 24px;
+        margin-left: 24px;
+    }
+    @media only screen and (max-width: 790px) {
+        margin-top: 24px;
+        margin-bottom: 70px;
+        margin-left: 0px;
+    }
+    @media only screen and (max-width: 767px) {
+        margin-bottom: 24px;
+    }
+    
+}
+.content_plan {
+   display: flex;
+}
+.icon_content_plan{
+    color: var(--cimigo-blue);
+}
+.select_type_price {
+    padding-top: 20px;
+    text-align: right;
+    padding-right: 50px;
+    padding-bottom: 24px;
+    @media only screen and (max-width: 1169px) {
+       text-align: center;
+    }
+    @media only screen and (max-width: 767px) {
+        text-align: right;
+        padding-right: 0px;
+        padding-bottom: 0px;
+    }
+    @media only screen and (max-width: 386px) {
+        padding-right: 5px;
+    }
+    @media only screen and (max-width: 367px) {
+        padding-right: auto;
+    }
+}
+.custom_select {
+    fieldset{
+        border: none;
+    }
+    div {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        color: #333333;
+    }
+}
+.card_custom{
+    padding: 24px;
+}
+.card_plan:first {
+    margin-bottom: 24px;
+}

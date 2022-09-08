@@ -13,6 +13,7 @@ import { CustomQuestion } from './custom_question';
 import { Plan } from './Admin/plan';
 export interface CreateProjectData {
   solutionId: number;
+  planId: number;
   name: string,
   surveyLanguage: string,
   category?: string,
