@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 interface Props {
   $colorName?: string;
+  $fontSizeMobile?: string
 }
 
 const Heading4 = styled(Typography) <Props>`
@@ -13,7 +14,7 @@ const Heading4 = styled(Typography) <Props>`
     line-height: 24px;
     color: ${props => `var(${props.$colorName || '--gray-80'})`};
     @media only screen and (max-width: 767px) {
-      font-size: 14px;
+      font-size: ${props => props.$fontSizeMobile || "14px"};
     }
 `
 
