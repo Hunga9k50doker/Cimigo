@@ -1,14 +1,18 @@
 import { memo, useEffect, useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, ListItem, ListItemText } from '@mui/material';
+import { Dialog, Grid, ListItem, ListItemText } from '@mui/material';
 import classes from './styles.module.scss';
-
-import Buttons from 'components/Buttons';
-import Images from "config/images";
 import { AdditionalAttributeService } from 'services/additional_attribute';
 import { Attribute, AttributeType } from 'models/Admin/attribute';
 import { Project } from 'models/project';
 import { useTranslation } from 'react-i18next';
-
+import {DialogTitle} from "components/common/dialogs/DialogTitle";
+import { DialogContent } from "components/common/dialogs/DialogContent";
+import { DialogActions } from "components/common/dialogs/DialogActions";
+import Heading3 from "components/common/text/Heading3";
+import ButtonClose from "components/common/buttons/ButtonClose";
+import Button, {BtnType} from "components/common/buttons/Button";
+import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
+import ParagraphBody from 'components/common/text/ParagraphBody';
 interface Props {
   isOpen: boolean,
   project: Project,
@@ -38,15 +42,14 @@ const PopupManatoryAttributes = memo((props: Props) => {
       onClose={onClose}
       classes={{ paper: classes.paper }}
     >
-      <DialogTitle className={classes.header}>
-        <p className={classes.title} translation-key="setup_survey_add_att_popup_m_att_title">{t('setup_survey_add_att_popup_m_att_title')}</p>
-        <IconButton onClick={onClose}>
-          <img src={Images.icClose} alt='icon close' />
-        </IconButton>
+      <DialogTitle>
+        <Heading3 translation-key="setup_survey_add_att_popup_m_att_title">{t('setup_survey_add_att_popup_m_att_title')}</Heading3>
+        <ButtonClose onClick={onClose}>
+        </ButtonClose>
       </DialogTitle>
       <DialogContent className={classes.body} dividers>
-        <p translation-key="setup_survey_add_att_popup_m_att_sub_title">{t('setup_survey_add_att_popup_m_att_sub_title')}</p>
-        <Grid container classes={{ root: classes.rootList }}>
+      <ParagraphBody $colorName="--eerie-black" translation-key="setup_survey_add_att_popup_m_att_sub_title">{t('setup_survey_add_att_popup_m_att_sub_title')}</ParagraphBody>
+        <Grid container sx={{paddingTop:"24px"}}>
           {attributes.map((item) => (
             <ListItem
               alignItems="center"
@@ -58,14 +61,14 @@ const PopupManatoryAttributes = memo((props: Props) => {
               <ListItemText>
                 <Grid className={classes.listFlex}>
                   <Grid item xs={12} sm={4} className={classes.listTextLeft}>
-                    <p>{item.start}</p>
-                    <p className={classes.listTextRightMoblie}>{item.end}</p>
+                    <ParagraphExtraSmall $colorName="--eerie-black">{item.start}</ParagraphExtraSmall>
+                    <ParagraphExtraSmall $colorName="--eerie-black" className={classes.listTextRightMoblie}>{item.end}</ParagraphExtraSmall>
                   </Grid>
                   <Grid item xs={12} sm={4} className={classes.listNumber}>
                     <div>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
                   </Grid>
                   <Grid item xs={12} sm={4} className={classes.listTextRight}>
-                    <p>{item.end}</p>
+                  <ParagraphExtraSmall $colorName="--eerie-black">{item.end}</ParagraphExtraSmall>
                   </Grid>
                 </Grid>
               </ListItemText>
@@ -73,8 +76,8 @@ const PopupManatoryAttributes = memo((props: Props) => {
           ))}
         </Grid>
       </DialogContent>
-      <DialogActions className={classes.btn}>
-        <Buttons children={t('common_close')} translation-key="common_close" btnType='Blue' padding='10px 16px' width='25%' onClick={onClose} />
+      <DialogActions>
+        <Button className={classes.btn} children={t('common_close')} translation-key="common_close" btnType={BtnType.Raised} width="123px" onClick={onClose} />
       </DialogActions>
     </Dialog>
   );
