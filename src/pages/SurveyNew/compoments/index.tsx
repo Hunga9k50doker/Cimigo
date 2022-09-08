@@ -1,4 +1,4 @@
-import { Box, Grid, StepConnector, StepContent, StepLabel, Stepper, Tabs, Typography } from '@mui/material';
+import { Box, Chip, Grid, StepConnector, StepContent, StepLabel, Stepper, Tabs, Typography } from '@mui/material';
 import styled from 'styled-components';
 
 export const PageRoot = styled(Grid)`
@@ -18,7 +18,7 @@ export const LeftContent = styled(Grid)`
 
 export const RightContent = styled(Grid)`
   width: 342px;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 1024px) {
     display: none;
   }
 `
@@ -85,7 +85,7 @@ export const MobileAction = styled(Grid)`
   display: none;
   padding: 24px 34px;
   box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 1024px) {
     display: block;
   }
 `;
@@ -154,6 +154,7 @@ export const RPStepConnector = styled(StepConnector)`
 `;
 
 export const RPStepLabel = styled(StepLabel)`
+  cursor: pointer;
   .MuiStepLabel-iconContainer {
     padding: 0;
     margin-right: 16px;
@@ -189,4 +190,10 @@ export const RPStepIconBox = styled(Box) <RPStepIconBoxProps>`
     font-size: 18px;
     color: ${(props) => props.$active ? 'var(--cimigo-green-dark-2)' : 'var(--gray-60)'}
   }
+`;
+
+export const MaxChip = styled(Chip)`
+  background: #F4F4F4;
+  border-radius: 30px;
+  height: 24px;
 `;
