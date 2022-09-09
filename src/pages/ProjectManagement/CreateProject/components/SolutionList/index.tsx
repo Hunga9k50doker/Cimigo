@@ -19,7 +19,7 @@ import PopupInforSolution from "pages/ProjectManagement/components/PopupInforSol
 interface SolutionListProps{
     handleNextStep: () => void;
     solutionShow?: Solution ;
-    setSolutionShow?: (item: Solution) => void;
+    setSolutionShow?: (solution: Solution) => void;
 }
 
 
@@ -109,7 +109,7 @@ const SolutionList = memo(({handleNextStep,solutionShow,setSolutionShow}: Soluti
                 {t("select_solution_select_solution")}
               </p>
             </Grid>
-            <Grid className={classes.header_content_input2}>
+            <Grid className={classes.headerContentInput2}>
                 <InputSearch
                 placeholder={t("select_solution_search_solution")}
                 translation-key="select_solution_search_solution"
@@ -118,7 +118,7 @@ const SolutionList = memo(({handleNextStep,solutionShow,setSolutionShow}: Soluti
                 width={"100%"}
                 />
             </Grid>
-            <Grid className={classes.header_content}>
+            <Grid className={classes.headerContent}>
               <Stack direction="row" spacing={1} className={classes.stack}>
                 {solutionCategory?.data.map((item) => (
                   <Chip
@@ -133,7 +133,7 @@ const SolutionList = memo(({handleNextStep,solutionShow,setSolutionShow}: Soluti
                   />
                 ))}
               </Stack>
-              <Grid className={classes.header_content_input}>
+              <Grid className={classes.headerContentInput}>
                 <InputSearch
                   placeholder={t("select_solution_search_solution")}
                   translation-key="select_solution_search_solution"
@@ -157,7 +157,7 @@ const SolutionList = memo(({handleNextStep,solutionShow,setSolutionShow}: Soluti
                         onClick={() => hendleSolutionShow(item)}
                       >
                         <div>
-                          <Grid className={classes.title_card}>
+                          <Grid className={classes.titleCard}>
                             <img
                               className={classes.imgCard}
                               src={item.image}

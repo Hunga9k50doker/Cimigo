@@ -1,7 +1,7 @@
 .title{
     text-align: center;
 }
-.handle_link {
+.handleLink {
     display: grid;
     padding-top: 32px;
 }
@@ -23,7 +23,7 @@
 }
 .form{
     padding-top: 16px;
-    .button_submit{
+    .buttonSubmit{
         padding-left: 15px;
         padding-top: 32px;
         padding-bottom: 200px;
@@ -32,21 +32,21 @@
             width: 100%;
         }
     }
-    .select_language{
+    .selectLeaguage{
         width: 100%;
     }
 }
 .accordion{
     padding-left: 15px;
     padding-top: 20px;
-    .accordion_content{
+    .accordionContent{
         background-color: var(--gray-5);
     }
 }
-.input_accordion {
+.inputAccordion {
     background-color: var(--white);
 }
-.handle_link{
+.handleLink{
     b{
         font-family: 'Montserrat';
         font-style: normal;
@@ -58,7 +58,7 @@
         color: var(--cimigo-blue);
         text-decoration: underline;
     }
-    .handle_link_format {
+    .handleLinkFormat {
         display: flex;
         a, b{
             padding-left: 5px;

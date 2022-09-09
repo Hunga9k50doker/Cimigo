@@ -40,27 +40,18 @@ import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 
 interface CreateProjectStepProps {
-  setActiveStepPlan: () => void;
-  setActiveStepSolution: () => void;
-  setPlanSelected?: (item: Plan) => void;
-  setSolutionSelected?: (item: Solution) => void;
   solutionSelected: Solution | null;
   planSelected: Plan | null;
-  
-}
-enum Step {
-  SOLUTION,
-  PLAN
+  onClickHandleBack?: (step: number) => void;
+  eStep: any
 }
 
 const CreateProjectStep = memo(
   ({
-    setActiveStepPlan,
-    setActiveStepSolution,
     solutionSelected,
     planSelected,
-    setPlanSelected,
-    setSolutionSelected
+    onClickHandleBack,
+    eStep,
   }: CreateProjectStepProps) => {
     const { t, i18n } = useTranslation();
     const dispatch = useDispatch();
@@ -88,20 +79,6 @@ const CreateProjectStep = memo(
       resolver: yupResolver(schema),
       mode: "onChange",
     });
-    const onClickHandleBack = (step: Step) => {
-      switch(step){
-        case Step.PLAN:  {
-            setPlanSelected(null)
-            setActiveStepPlan();
-          break;
-        }
-        default:{
-          setPlanSelected(null)
-          setSolutionSelected(null)
-          setActiveStepSolution();
-        }
-      }
-    }
     const onSubmit = (data: CreateProjectFormData) => {
       if (!solutionSelected) return;
       dispatch(setLoading(true));
@@ -131,8 +108,8 @@ const CreateProjectStep = memo(
               </Heading1>{" "}
             </p>
           </Grid>
-          <Grid className={classes.handle_link}>
-            <Grid className={classes.handle_link_format}>
+          <Grid className={classes.handleLink}>
+            <Grid className={classes.handleLinkFormat}>
               <ParagraphBody $colorName={"--eerie-black"}>
                 Solution:{" "}
               </ParagraphBody>
@@ -140,23 +117,18 @@ const CreateProjectStep = memo(
                 <b>{solutionSelected?.title}</b>
               </Grid>
               <Grid>
-                <a onClick={() => onClickHandleBack(Step.SOLUTION)}>(change)</a>
+                <a onClick={()=> {onClickHandleBack(eStep.SELECT_SOLUTION)}}>(change)</a>
               </Grid>
             </Grid>
-            <Grid className={classes.handle_link_format}>
+            <Grid className={classes.handleLinkFormat}>
               <ParagraphBody $colorName={"--eerie-black"}>Plan: </ParagraphBody>
               <Grid>
                 <b>
-                  {" "}
-                  {i18n.language === "vi"
-                    ? planSelected?.title + ": US$" + planSelected?.priceVND
-                    : planSelected?.title +
-                      ": US$" +
-                      planSelected?.priceUSD}{" "}
+                 {planSelected?.title + " (US$ " + planSelected?.priceUSD + ")"}
                 </b>
               </Grid>
               <Grid>
-                <a onClick={() => onClickHandleBack(Step.PLAN)}>(change)</a>
+                <a onClick={()=> {onClickHandleBack(eStep.SELECT_PLAN)}}>(change)</a>
               </Grid>
             </Grid>
           </Grid>
@@ -190,7 +162,7 @@ const CreateProjectStep = memo(
                 </Grid>
                 <Grid item xs={12} sm={5}>
                   <InputSelect
-                    className={classes.select_language}
+                    className={classes.selectLeaguage}
                     title={t("field_survey_language")}
                     name="surveyLanguage"
                     control={control}
@@ -209,7 +181,7 @@ const CreateProjectStep = memo(
                   />
                 </Grid>
                 <Grid className={classes.accordion}>
-                  <Accordion className={classes.accordion_content}>
+                  <Accordion className={classes.accordionContent}>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls="panel1a-content"
@@ -236,7 +208,7 @@ const CreateProjectStep = memo(
                           You can change it later when setting up your survey.
                         </ParagraphSmall>
                         <InputTextfield
-                          className={classes.input_accordion}
+                          className={classes.inputAccordion}
                           name="category"
                           type="text"
                           placeholder={t("field_project_category_placeholder")}
@@ -247,7 +219,7 @@ const CreateProjectStep = memo(
                           errorMessage={errors.category?.message}
                         />
                         <InputTextfield
-                          className={classes.input_accordion}
+                          className={classes.inputAccordion}
                           name="brand"
                           type="text"
                           placeholder={t("field_project_brand_placeholder")}
@@ -258,7 +230,7 @@ const CreateProjectStep = memo(
                           errorMessage={errors.brand?.message}
                         />
                         <InputTextfield
-                          className={classes.input_accordion}
+                          className={classes.inputAccordion}
                           name="variant"
                           type="text"
                           placeholder={t("field_project_variant_placeholder")}
@@ -269,7 +241,7 @@ const CreateProjectStep = memo(
                           errorMessage={errors.variant?.message}
                         />
                         <InputTextfield
-                          className={classes.input_accordion}
+                          className={classes.inputAccordion}
                           name="manufacturer"
                           type="text"
                           placeholder={t(
@@ -285,7 +257,7 @@ const CreateProjectStep = memo(
                     </AccordionDetails>
                   </Accordion>
                 </Grid>
-                <Grid className={classes.button_submit}>
+                <Grid className={classes.buttonSubmit}>
                   <Buttons
                     type="submit"
                     children={t("create_project_btn_submit")}

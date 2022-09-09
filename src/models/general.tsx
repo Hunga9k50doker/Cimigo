@@ -142,3 +142,11 @@ export enum ETypeVerifyCode {
   VERIFY_EMAIL = 1,
   RESET_PASSWORD = 2
 }
+export enum ECurrencyType {
+  USD = 1,
+  VND 
+}
+export const eCurrencyTypes: OptionItem[] = [
+  { id: ECurrencyType.USD, name: "USD" },
+  { id: ECurrencyType.VND, name: "VND" },
+]

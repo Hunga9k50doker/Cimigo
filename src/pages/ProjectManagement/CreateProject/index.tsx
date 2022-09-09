@@ -114,6 +114,24 @@ const CreateProject = () => {
     setActiveStep(EStep.SELECT_PLAN);
   };
 
+  const onClickHandleBack = (step: EStep) => {
+    switch(step){
+      case EStep.SELECT_PLAN:  {
+          setPlanSelected(null)
+          setActiveStep(EStep.SELECT_PLAN)
+        break;
+      }
+      default:{
+        setPlanSelected(null)
+        setSolutionSelected(null)
+        setActiveStep(EStep.SELECT_SOLUTION)
+      }
+    }
+  }
+  const onChangePlanSelected = (plan: Plan) => {
+    setPlanSelected(plan);
+  }
+
   useEffect(() => {
     if (solutionId) {
       SolutionService.getSolution(solutionId).then((res) => {
@@ -163,13 +181,13 @@ const CreateProject = () => {
                     label: classes.rootStepLabel,
                   }}
                 >{item.name}{" "}
-                  <p className={classes.title_estep}>
+                  <p className={classes.titleEstep}>
                     
                     {item.id === EStep.SELECT_SOLUTION
                       ? solutionSelected?.title ?? ""
                       : ""}{" "}
                     {
-                      item.id === EStep.SELECT_PLAN && planSelected ? (
+                      (item.id === EStep.SELECT_PLAN && planSelected) &&  (
                         <>
                           {i18n.language === 'vi' ? (
                             planSelected?.title + ': US$' + planSelected?.priceVND
@@ -177,8 +195,6 @@ const CreateProject = () => {
                             planSelected?.title + ': US$' + planSelected?.priceUSD
                           )}
                         </>
-                      ):(
-                        ''
                       )
                     }
                   </p>
@@ -188,7 +204,7 @@ const CreateProject = () => {
             );
           })}
         </Stepper>
-        {activeStep === EStep.SELECT_SOLUTION ? (
+        {activeStep === EStep.SELECT_SOLUTION && (
           <>
             <SolutionList 
               handleNextStep={() => {
@@ -198,40 +214,29 @@ const CreateProject = () => {
               setSolutionShow = {setSolutionShow}
             />
           </>
-        ) : (
-          <></>
         )}
-        {activeStep === EStep.SELECT_PLAN ? (
+        {activeStep === EStep.SELECT_PLAN && (
           <>
             <SelectPlan
               solution={solutionSelected}
               setActiveStep={() => {
                 setActiveStep(EStep.CREATE_PROJECT);
               }}
-              setPlanSelected={setPlanSelected}
+              onChangePlanSelected={onChangePlanSelected}
             />
           </>
-        ) : (
-          <></>
         )}
-        {activeStep === EStep.CREATE_PROJECT ? (
+        {activeStep === EStep.CREATE_PROJECT && (
           <>
             <CreateProjectStep 
-              setActiveStepPlan = {() => {
-                setActiveStep(EStep.SELECT_PLAN)
-              }}
-              setActiveStepSolution = {() => {
-                setActiveStep(EStep.SELECT_SOLUTION)
-              }}
               solutionSelected = {solutionSelected}
               planSelected = {planSelected}
-              setPlanSelected = {setPlanSelected}
-              setSolutionSelected = {setSolutionSelected}
+              onClickHandleBack = {onClickHandleBack}
+              eStep = {EStep}
+
             />
           </>
-        ) : (
-          <></>
-        )}
+        ) }
       </Grid>
       <Footer />
       <PopupInforSolution

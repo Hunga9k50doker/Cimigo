@@ -1,7 +1,7 @@
 .root {
   padding: 0px;
 }
-.title_card{
+.titleCard{
   display: flex;
   padding-bottom: 15px;
   @media only screen and (max-width: 767px) {
@@ -136,7 +136,7 @@
     margin: 0px;
   }
 }
-.header_content {
+.headerContent {
   display: flex;
   justify-content: space-between;
   @media only screen and (max-width: 767px) {
@@ -144,12 +144,12 @@
     display: block;
   }
 }
-.header_content_input {
+.headerContentInput {
   @media only screen and (max-width: 767px) {
     display: none;
   }
 }
-.header_content_input2 {
+.headerContentInput2 {
   @media only screen and (max-width: 767px) {
     display: block;
     padding-bottom: 19px;
@@ -494,16 +494,6 @@
 }
 .btnMobile {
   white-space: nowrap;
-}
-.title_estep {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  @media only screen and (max-width: 767px) {
-    display: none;
-}
 }
 
 
