@@ -46,7 +46,7 @@
   text-align: start;
 }
 .listNumber {
-  margin: auto 35px;
+  margin: auto 16px;
   max-width: 240px;
   div {
     display: flex;
@@ -86,11 +86,7 @@
     padding-right: 16px;
   }
 }
-.rootCheckbox {
-  img {
-    border-radius: 4px;
-  }
-}
+
 .btn {
   @media only screen and (max-width: 767px) {
       width: 100%;

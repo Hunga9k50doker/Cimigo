@@ -1,0 +1,21 @@
+
+.icon {
+  z-index: 1;
+  color: var(--gray-40);
+  &[class~="MuiSvgIcon-colorDisabled"] {
+    color: var(--gray-20);
+  }
+  &:hover {
+    color: var(--cimigo-green);
+  }
+}
+
+.checkIcon {
+  color:#293306;
+  background: var(--cimigo-green);
+  border-radius: 4px;
+  &[class~="MuiSvgIcon-colorDisabled"] {
+    background: --eerie-black-40;
+  }
+}
+

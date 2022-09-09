@@ -1,19 +1,20 @@
+import { Checkbox, CheckboxProps } from "@mui/material";
 import { memo } from "react";
-import { Checkbox as CheckBoxMUI, CheckboxProps as CkeckboxPropsMUI } from "@mui/material";
+import classes from './styles.module.scss'
+import CheckIcon from '@mui/icons-material/Check';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+interface Props extends CheckboxProps {
 
-interface ButtonProps extends CkeckboxPropsMUI {
-  padding?: string;
-  margin?: string;
 }
 
-const Checkbox = memo((props: ButtonProps) => {
-  const { padding, margin, className, sx = {}, ...rest } = props;
-  return (
-    <CheckBoxMUI
-      className={className}
-      {...rest}
-      sx={{...sx,  padding: padding, margin: margin}}
-    />
-  );
-});
-export default Checkbox;
+const InputCheckbox = memo((props: Props) => {
+
+  return <Checkbox
+    className={classes.root}
+    icon = {<CheckBoxOutlineBlankIcon className={classes.icon} />}
+    checkedIcon = {<CheckIcon className={classes.checkIcon} fontSize="small"/>}
+    {...props}
+  />
+})
+
+export default InputCheckbox

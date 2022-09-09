@@ -17,7 +17,7 @@ import Button, {BtnType} from "components/common/buttons/Button";
 import ParagraphSmall from 'components/common/text/ParagraphSmall';
 import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
 import ParagraphBody from 'components/common/text/ParagraphBody';
-import InputCheckBox from 'components/common/inputs/InputCheckBox';
+import InputCheckBox from 'components/common/inputs/InputCheckbox';
 
 interface Props {
   isOpen: boolean,
@@ -125,11 +125,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                   checked={attributesSelected.includes(item.id)}
                   onChange={(e) => onChange(item)}
                   classes={{ root: classes.rootCheckbox }}
-                  padding="0"
-                  margin="0 10px 0 0"
                   onClick={e => e.stopPropagation()}
-                  icon={<img src={Images.icCheck} alt="" />}
-                  checkedIcon={<img src={Images.icCheckActive} alt="" />}
                 />
                 {item.id === expanded ? '' :
                   <ParagraphSmall $colorName="--eerie-black" className={classes.titleAttributesMobile} >{item.start}</ParagraphSmall>
@@ -168,10 +164,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                       disabled={isDisabled(item)}
                       checked={attributesSelected.includes(item.id)}
                       classes={{ root: classes.rootCheckbox }}
-                      padding="0"
-                      margin="0 5px 2px 0"
-                      icon={<img src={Images.icCheck} alt="" />}
-                      checkedIcon={<img src={Images.icCheckActive} alt="" />} />
+                      />
                   </Grid>
                   <Grid item xs={4} className={classes.listTextLeft}>
                     <ParagraphExtraSmall $colorName="--eerie-black">{item.start}</ParagraphExtraSmall>
