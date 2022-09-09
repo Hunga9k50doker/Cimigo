@@ -12,6 +12,8 @@
 
 .checkIcon {
   color:#293306;
+  margin-left: 2px;
+  margin-top: 2px;
   background: var(--cimigo-green);
   border-radius: 4px;
   &[class~="MuiSvgIcon-colorDisabled"] {
