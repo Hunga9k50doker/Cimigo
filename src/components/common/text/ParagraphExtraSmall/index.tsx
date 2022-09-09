@@ -3,12 +3,13 @@ import styled from 'styled-components';
 
 interface Props {
     $colorName?: string;
+    $fontWeight?: number;
 }
 
 const ParagraphExtraSmall = styled(Typography)<Props>`
     font-family: 'Montserrat';
     font-style: normal;
-    font-weight: 400;
+    font-weight: ${props => props.$fontWeight || 400};
     font-size: 12px;
     line-height: 16px;
     letter-spacing: 0.015em;
