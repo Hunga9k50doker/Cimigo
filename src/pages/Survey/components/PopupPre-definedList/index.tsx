@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react';
-import { Checkbox, Collapse, Dialog, Grid, ListItem, ListItemText } from '@mui/material';
+import { Collapse, Dialog, Grid, ListItem, ListItemText } from '@mui/material';
 import classes from './styles.module.scss';
 import Images from "config/images";
 import { Attribute, AttributeType } from 'models/Admin/attribute';
