@@ -146,7 +146,7 @@ export enum ECurrencyType {
   USD = 1,
   VND 
 }
-export const eCurrencyTypes: OptionItem[] = [
-  { id: ECurrencyType.USD, name: "USD" },
-  { id: ECurrencyType.VND, name: "VND" },
+export const currencyTypes: OptionItem[] = [
+  { id: ECurrencyType.USD, name: "$ USD" },
+  { id: ECurrencyType.VND, name: "đ VND" },
 ]

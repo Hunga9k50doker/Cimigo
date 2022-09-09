@@ -3,22 +3,14 @@ import Grid from "@mui/material/Grid";
 import Heading1 from "components/common/text/Heading1";
 import Heading5 from "components/common/text/Heading5";
 
-import exp from "constants";
 import React, { memo, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { CreateProjectFormData } from "../..";
 import classes from "./styles.module.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import InputSelect from "components/common/inputs/InputSelect";
-import {
-  DataPagination,
-  EStatus,
-  langSupports,
-  OptionItemT,
-} from "models/general";
-import Input from "react-select/dist/declarations/src/components/Input";
+import { langSupports, OptionItemT } from "models/general";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Accordion from "@mui/material/Accordion";
@@ -28,8 +20,6 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import Buttons from "components/Buttons";
-import Heading3 from "components/common/text/Heading3";
 import { Solution } from "models/Admin/solution";
 import { Plan } from "models/Admin/plan";
 import { useDispatch } from "react-redux";
@@ -38,12 +28,23 @@ import { ProjectService } from "services/project";
 import { Project } from "models/project";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
+import { EStep } from "../..";
+import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
+import Button, { BtnType } from "components/common/buttons/Button";
+
+export interface CreateProjectFormData {
+  name: string;
+  surveyLanguage: OptionItemT<string>;
+  category: string;
+  brand: string;
+  variant: string;
+  manufacturer: string;
+}
 
 interface CreateProjectStepProps {
-  solutionSelected: Solution | null;
-  planSelected: Plan | null;
+  solutionSelected?: Solution;
+  planSelected?: Plan;
   onClickHandleBack?: (step: number) => void;
-  eStep: any
 }
 
 const CreateProjectStep = memo(
@@ -51,7 +52,6 @@ const CreateProjectStep = memo(
     solutionSelected,
     planSelected,
     onClickHandleBack,
-    eStep,
   }: CreateProjectStepProps) => {
     const { t, i18n } = useTranslation();
     const dispatch = useDispatch();
@@ -93,7 +93,9 @@ const CreateProjectStep = memo(
         manufacturer: data.manufacturer || "",
       })
         .then((res: Project) => {
-            dispatch(push(routes.project.detail.root.replace(":id", `${res.id}`)));
+          dispatch(
+            push(routes.project.detail.root.replace(":id", `${res.id}`))
+          );
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)));
@@ -103,7 +105,7 @@ const CreateProjectStep = memo(
         <Container maxWidth="sm">
           <Grid justifyContent="center">
             <p className={classes.title}>
-              <Heading1 $colorName="--cimigo-blue" fontWeight={"600"}>
+              <Heading1 $colorName="--cimigo-blue" $fontWeight={"600"}>
                 Create Your Project
               </Heading1>{" "}
             </p>
@@ -111,33 +113,49 @@ const CreateProjectStep = memo(
           <Grid className={classes.handleLink}>
             <Grid className={classes.handleLinkFormat}>
               <ParagraphBody $colorName={"--eerie-black"}>
-                Solution:{" "}
+                Solution:
               </ParagraphBody>
-              <Grid>
-                <b>{solutionSelected?.title}</b>
-              </Grid>
-              <Grid>
-                <a onClick={()=> {onClickHandleBack(eStep.SELECT_SOLUTION)}}>(change)</a>
-              </Grid>
+              <Heading5
+                mx={0.5}
+                sx={{ fontWeight: "600" }}
+                $colorName={"--eerie-black"}
+              >
+                {solutionSelected?.title}
+              </Heading5>
+              <ParagraphSmallUnderline2
+                className={classes.link}
+                onClick={() => {
+                  onClickHandleBack(EStep.SELECT_SOLUTION);
+                }}
+              >
+                (change)
+              </ParagraphSmallUnderline2>
             </Grid>
             <Grid className={classes.handleLinkFormat}>
-              <ParagraphBody $colorName={"--eerie-black"}>Plan: </ParagraphBody>
-              <Grid>
-                <b>
-                 {planSelected?.title + " (US$ " + planSelected?.priceUSD + ")"}
-                </b>
-              </Grid>
-              <Grid>
-                <a onClick={()=> {onClickHandleBack(eStep.SELECT_PLAN)}}>(change)</a>
-              </Grid>
+              <ParagraphBody $colorName={"--eerie-black"}>Plan:</ParagraphBody>
+              <Heading5
+                mx={0.5}
+                sx={{ fontWeight: "600" }}
+                $colorName={"--eerie-black"}
+              >{`${planSelected?.title} : US$ ${planSelected?.priceUSD}`}</Heading5>
+              <ParagraphSmallUnderline2
+                className={classes.link}
+                onClick={() => {
+                  onClickHandleBack(EStep.SELECT_PLAN);
+                }}
+              >
+                (change)
+              </ParagraphSmallUnderline2>
             </Grid>
           </Grid>
-          <Grid className={classes.note}>
-            <b>Note: </b> You cannot change the solution once you have created a
-            project.However, the cost will vary depending on your setup in the
-            next step.
+          <Grid className={classes.note} mt={2}>
+            <ParagraphBody $colorName={"--eerie-black"}>
+              <span>Note: </span> You cannot change the solution once you have
+              created a project.However, the cost will vary depending on your
+              setup in the next step.
+            </ParagraphBody>
           </Grid>
-          <ParagraphBody className={classes.note2} $colorName={"--eerie-black"}>
+          <ParagraphBody mt={4} $colorName={"--eerie-black"}>
             Please enter some details to create a new project.
           </ParagraphBody>
           <Grid className={classes.form}>
@@ -185,7 +203,6 @@ const CreateProjectStep = memo(
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls="panel1a-content"
-                      id="panel1a-header"
                     >
                       <Typography>
                         <Heading5 $colorName={"--cimigo-blue"}>
@@ -204,7 +221,6 @@ const CreateProjectStep = memo(
                           recognizing your product.
                         </ParagraphSmall>
                         <ParagraphSmall $colorName={"--gray-80"}>
-                          {" "}
                           You can change it later when setting up your survey.
                         </ParagraphSmall>
                         <InputTextfield
@@ -258,11 +274,10 @@ const CreateProjectStep = memo(
                   </Accordion>
                 </Grid>
                 <Grid className={classes.buttonSubmit}>
-                  <Buttons
-                    type="submit"
+                  <Button
                     children={t("create_project_btn_submit")}
                     translation-key="create_project_btn_submit"
-                    btnType="Blue"
+                    btnType={BtnType.Primary}
                     width="100%"
                     padding="11px 16px"
                   />

@@ -6,29 +6,18 @@ import {
   Stepper,
   StepLabel,
   StepConnector,
-  Stack,
-  Chip,
   useMediaQuery,
   useTheme,
-  Button,
 } from "@mui/material";
 
 import QontoStepIcon from "../components/QontoStepIcon";
 import Header from "components/Header";
 import Footer from "components/Footer";
-import PopupInforSolution from "../components/PopupInforSolution";
 import { useDispatch, useSelector } from "react-redux";
 import { SolutionService } from "services/solution";
-import {
-  DataPagination,
-  EStatus,
-  langSupports,
-  OptionItemT,
-} from "models/general";
+import { DataPagination } from "models/general";
 import { Solution, SolutionCategory } from "models/Admin/solution";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
 import { routes } from "routers/routes";
 import images from "config/images";
 import { useHistory } from "react-router-dom";
@@ -39,17 +28,9 @@ import SelectPlan from "./components/SelectPlan";
 import { Plan } from "models/Admin/plan";
 import CreateProjectStep from "./components/CreateProjectStep";
 import SolutionList from "./components/SolutionList";
+import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 
-export interface CreateProjectFormData {
-  name: string;
-  surveyLanguage: OptionItemT<string>;
-  category: string;
-  brand: string;
-  variant: string;
-  manufacturer: string;
-}
-
-enum EStep {
+export enum EStep {
   SELECT_SOLUTION,
   SELECT_PLAN,
   CREATE_PROJECT,
@@ -87,50 +68,43 @@ const CreateProject = () => {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const [isReadMore, setIsReadMore] = useState<boolean>(false);
   const [solutionShow, setSolutionShow] = useState<Solution>();
   const [solutionSelected, setSolutionSelected] = useState<Solution>();
-    useState<DataPagination<SolutionCategory>>();
+  useState<DataPagination<SolutionCategory>>();
   const [activeStep, setActiveStep] = useState<EStep>(EStep.SELECT_SOLUTION);
   const [planSelected, setPlanSelected] = useState<Plan>(null);
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down(767));
 
-  const {
-    formState: { errors },
-    control,
-  } = useForm<CreateProjectFormData>({
-    resolver: yupResolver(schema),
-    mode: "onChange",
-  });
-
-
   const handleNextStep = () => {
     if (!solutionShow) return;
     setSolutionSelected(solutionShow);
     setSolutionShow(undefined);
-    setIsReadMore(false);
     setActiveStep(EStep.SELECT_PLAN);
   };
 
   const onClickHandleBack = (step: EStep) => {
-    switch(step){
-      case EStep.SELECT_PLAN:  {
-          setPlanSelected(null)
-          setActiveStep(EStep.SELECT_PLAN)
+    switch (step) {
+      case EStep.SELECT_PLAN: {
+        setPlanSelected(null);
+        setActiveStep(EStep.SELECT_PLAN);
         break;
       }
-      default:{
-        setPlanSelected(null)
-        setSolutionSelected(null)
-        setActiveStep(EStep.SELECT_SOLUTION)
+      default: {
+        setPlanSelected(null);
+        setSolutionSelected(null);
+        setActiveStep(EStep.SELECT_SOLUTION);
       }
     }
-  }
+  };
   const onChangePlanSelected = (plan: Plan) => {
     setPlanSelected(plan);
-  }
+    setActiveStep(EStep.CREATE_PROJECT);
+  };
+  const onChangeSolution = (solution: Solution) => {
+    setSolutionShow(solution);
+  };
 
   useEffect(() => {
     if (solutionId) {
@@ -142,7 +116,6 @@ const CreateProject = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [solutionId]);
-
   return (
     <Grid className={classes.root}>
       <Header project />
@@ -180,25 +153,19 @@ const CreateProject = () => {
                     active: classes.rootStepLabelActive,
                     label: classes.rootStepLabel,
                   }}
-                >{item.name}{" "}
-                  <p className={classes.titleEstep}>
-                    
-                    {item.id === EStep.SELECT_SOLUTION
-                      ? solutionSelected?.title ?? ""
-                      : ""}{" "}
-                    {
-                      (item.id === EStep.SELECT_PLAN && planSelected) &&  (
+                >
+                  {item.name}{" "}
+                  {!isMobile && (
+                    <ParagraphExtraSmall $colorName={"--gray-60"}>
+                      {item.id === EStep.SELECT_SOLUTION &&
+                        solutionSelected?.title}
+                      {item.id === EStep.SELECT_PLAN && planSelected && (
                         <>
-                          {i18n.language === 'vi' ? (
-                            planSelected?.title + ': US$' + planSelected?.priceVND
-                          ):(
-                            planSelected?.title + ': US$' + planSelected?.priceUSD
-                          )}
+                          {`${planSelected?.title} : US$ ${planSelected?.priceUSD}`}
                         </>
-                      )
-                    }
-                  </p>
-                  
+                      )}
+                    </ParagraphExtraSmall>
+                  )}
                 </StepLabel>
               </Step>
             );
@@ -206,12 +173,12 @@ const CreateProject = () => {
         </Stepper>
         {activeStep === EStep.SELECT_SOLUTION && (
           <>
-            <SolutionList 
+            <SolutionList
               handleNextStep={() => {
-                handleNextStep()
+                handleNextStep();
               }}
-              solutionShow = {solutionShow}
-              setSolutionShow = {setSolutionShow}
+              solutionShow={solutionShow}
+              onChangeSolution={onChangeSolution}
             />
           </>
         )}
@@ -219,34 +186,21 @@ const CreateProject = () => {
           <>
             <SelectPlan
               solution={solutionSelected}
-              setActiveStep={() => {
-                setActiveStep(EStep.CREATE_PROJECT);
-              }}
               onChangePlanSelected={onChangePlanSelected}
             />
           </>
         )}
         {activeStep === EStep.CREATE_PROJECT && (
           <>
-            <CreateProjectStep 
-              solutionSelected = {solutionSelected}
-              planSelected = {planSelected}
-              onClickHandleBack = {onClickHandleBack}
-              eStep = {EStep}
-
+            <CreateProjectStep
+              solutionSelected={solutionSelected}
+              planSelected={planSelected}
+              onClickHandleBack={onClickHandleBack}
             />
           </>
-        ) }
+        )}
       </Grid>
       <Footer />
-      <PopupInforSolution
-        solution={(isMobile && isReadMore) || !isMobile ? solutionShow : null}
-        onSelect={() => handleNextStep()}
-        onCancel={() => {
-          setIsReadMore(false);
-          if (!isMobile) setSolutionShow(undefined);
-        }}
-      />
     </Grid>
   );
 };

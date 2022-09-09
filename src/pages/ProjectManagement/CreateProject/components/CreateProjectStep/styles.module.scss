@@ -6,20 +6,9 @@
     padding-top: 32px;
 }
 .note {
-    padding-top: 16px;
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: var(--eerie-black);
-    b{
+    span{
         font-weight: 600;
     }
-}
-.note2 {
-    padding-top: 32px;
-   
 }
 .form{
     padding-top: 16px;
@@ -47,21 +36,15 @@
     background-color: var(--white);
 }
 .handleLink{
-    b{
+    .link{
+        color: var(--cimigo-blue);
         font-family: 'Montserrat';
         font-style: normal;
         font-size: 16px;
         line-height: 24px;
-        color: var(--eerie-black);
-    }
-    a{
-        color: var(--cimigo-blue);
-        text-decoration: underline;
+        font-weight: 400;
     }
     .handleLinkFormat {
         display: flex;
-        a, b{
-            padding-left: 5px;
-        }
     }
 }

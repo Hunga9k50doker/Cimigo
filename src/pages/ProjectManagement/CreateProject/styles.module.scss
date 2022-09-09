@@ -94,7 +94,7 @@
     font-weight: 600;
     font-size: 32px;
     line-height: 48px;
-    color: #1f61a9;
+    color: var(--cimigo-blue);
     padding-right: 30px;
     margin: 0px;
     @media only screen and (max-width: 767px) {
@@ -185,7 +185,7 @@
     font-weight: 600;
     font-size: 16px;
     line-height: 20px;
-    color: #1f61a9;
+    color: var(--cimigo-blue);
     margin-top: 16px;
     margin-bottom: 16px;
     text-align: center;
@@ -215,10 +215,10 @@
   &:hover {
     background: var(--cimigo-blue);
     p {
-      color: #fafaff;
+      color: var(--ghost-white);
     }
     span {
-      color: #fafaff;
+      color: var(--ghost-white);
     }
     @media only screen and (max-width: 767px) {
       .btnReadMoreRoot {
@@ -264,7 +264,7 @@
   }
 }
 .cardComing {
-  background: #fafaff;
+  background: var(--ghost-white);
   min-height: 300px;
   max-width: 23%;
   display: flex;
@@ -340,7 +340,7 @@
 .title {
   font-weight: 500;
   font-size: 40px;
-  color: #1f61a9;
+  color: var(--cimigo-blue);
   text-align: center;
   margin: 0;
   @media only screen and (max-width: 767px) {
@@ -351,7 +351,7 @@
   cursor: pointer;
   font-weight: 500;
   font-size: 16px;
-  color: #1f61a9;
+  color: var(--cimigo-blue);
   display: flex;
   justify-content: center;
   margin-top: 10px;
@@ -365,7 +365,7 @@
 .textInfo {
   font-weight: 500;
   font-size: 16px;
-  color: #1f61a9;
+  color: var(--cimigo-blue);
   margin: 20px 0px;
   @media only screen and (max-width: 767px) {
     font-size: 14px;
@@ -373,7 +373,7 @@
   span {
     font-weight: 500;
     font-size: 12px;
-    color: #7c9911;
+    color: var(--cimigo-green-dark-1);
   }
   .inforSub {
     font-weight: 500;
@@ -396,7 +396,7 @@
 .linkTextHome {
   display: none;
   span{
-    color: #1f61a9;
+    color: var(--cimigo-blue);
   }
   @media only screen and (max-width: 767px) {
     display: flex;
@@ -415,7 +415,7 @@
       font-size: 16px;
       line-height: 20px;
       letter-spacing: 0.015em;
-      color: #53660C;
+      color: var(--cimigo-green-dark-2);
     }
   }
 }
@@ -469,7 +469,7 @@
         font-size: 14px;
         line-height: 140%;
         letter-spacing: 0.025em;
-        color: #1c1c1c;
+        color: var(--eerie-black);
         margin-bottom: 4px;
       }
       span {
@@ -478,7 +478,7 @@
         font-size: 16px;
         line-height: 20px;
         letter-spacing: 0.015em;
-        color: #53660c;
+        color: var(--cimigo-green-dark-2);
       }
       a {
         font-style: normal;
@@ -494,16 +494,6 @@
 }
 .btnMobile {
   white-space: nowrap;
-}
-.titleEstep {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  @media only screen and (max-width: 767px) {
-    display: none;
-}
 }
 
 
