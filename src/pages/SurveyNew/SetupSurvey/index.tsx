@@ -21,6 +21,7 @@ import { ETabRightPanel, SETUP_SURVEY_SECTION } from "models/project";
 import { useChangePrice } from "hooks/useChangePrice";
 import UploadPacks from "./compoments/UploadPacks";
 import AdditionalBrandList from "./compoments/AdditionalBrandList";
+import AdditionalAttributes from "./compoments/AdditionalAttributes";
 
 interface SetupSurvey {
   projectId: number;
@@ -89,6 +90,9 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
           <AdditionalBrandList
             project={project}
           />
+          <AdditionalAttributes
+            project={project}
+          />
         </Content>
         <MobileAction>
           <Button
@@ -152,7 +156,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
-                  <Step active={false} expanded>
+                  <Step active={!!project?.projectAttributes?.length || !!project?.userAttributes?.length} expanded>
                     <RPStepLabel
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.additional_attributes)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><PlaylistAddIcon /></RPStepIconBox>}
