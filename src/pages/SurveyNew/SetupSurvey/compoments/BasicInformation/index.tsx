@@ -74,7 +74,7 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
     <Grid component="form" autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)} id={SETUP_SURVEY_SECTION.basic_information}>
       <Heading4 $fontSizeMobile={"16px"} mb={1} $colorName="--eerie-black" translation-key="setup_survey_basic_infor_title">{t('setup_survey_basic_infor_title', { step: 1 })}</Heading4>
       <ParagraphBody $colorName="--gray-80" mb={{ xs: 1, sm: 2 }} translation-key="setup_survey_basic_infor_sub_title">{t('setup_survey_basic_infor_sub_title')}</ParagraphBody>
-      <Grid container spacing={2} maxWidth="684px">
+      <Grid container spacing={2} maxWidth={{ xs: "unset", sm: "684px" }}>
         <Grid item xs={12} sm={6}>
           <InputTextfield
             title={t('field_project_category')}
@@ -122,7 +122,7 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
       </Grid>
       {editable && (
         <Button
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, width: { xs: "100%", sm: "auto" } }}
           type="submit"
           btnType={BtnType.Outlined}
           translation-key="common_save_changes"

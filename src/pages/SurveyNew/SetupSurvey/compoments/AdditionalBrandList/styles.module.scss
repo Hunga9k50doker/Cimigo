@@ -6,7 +6,21 @@
 }
 
 .mobileTable {
+  display: none;
   @media only screen and (max-width: 767px) {
-    display: none;
+    display: block;
   }
 }
+
+.itemBrandMobile {
+  background: var(--cultured-gray);
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px 24px;
+  &:not(:first-child) {
+    margin-top: 16px;
+  }
+}
+

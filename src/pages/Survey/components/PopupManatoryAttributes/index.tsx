@@ -29,7 +29,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
           setAttributes(res.data)
         })
     }
-  }, [project])
+  }, [project?.solutionId])
 
   return (
     <Dialog

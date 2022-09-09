@@ -1,4 +1,4 @@
-import { AddCircle, MoreHoriz, Save as SaveIcon, Edit as EditIcon, DeleteForever as DeleteForeverIcon } from "@mui/icons-material"
+import { AddCircle, MoreHoriz, Save as SaveIcon, Edit as EditIcon, DeleteForever as DeleteForeverIcon, MoreVert } from "@mui/icons-material"
 import { Grid, IconButton, ListItemIcon, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import Button, { BtnType } from "components/common/buttons/Button"
 import InputLineTextField from "components/common/inputs/InputLineTextfield"
@@ -6,6 +6,7 @@ import { Menu } from "components/common/memu/Menu"
 import { SetupTable } from "components/common/table/SetupTable"
 import Heading4 from "components/common/text/Heading4"
 import ParagraphBody from "components/common/text/ParagraphBody"
+import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import ParagraphSmall from "components/common/text/ParagraphSmall"
 import SubTitle from "components/common/text/SubTitle"
 import TextBtnSmall from "components/common/text/TextBtnSmall"
@@ -168,6 +169,12 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
     setAdditionalBrandAction(null)
   }
 
+  const onShowBrandEditMobile = () => {
+    if (!additionalBrandAction) return
+    setBrandEditMobile(additionalBrandAction)
+    onCloseActionADB()
+  }
+
   const onShowAddRow = () => {
     setBrandFormData(null)
     setAdditionalBrandEdit(null)
@@ -179,12 +186,12 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
       <Heading4
         $fontSizeMobile={"16px"}
         $colorName="--eerie-black"
-        translation-key=""
+        translation-key="setup_survey_add_brand_title"
         sx={{ display: "inline-block", verticalAlign: "middle" }}
       >
-        STEP 3: Additional brand list
+        {t('setup_survey_add_brand_title', { step: 3 })}
       </Heading4>
-      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall>max {maxAdditionalBrand}</ParagraphSmall>} />
+      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall>{t('common_max')} {maxAdditionalBrand}</ParagraphSmall>} />
       <ParagraphBody
         $colorName="--gray-80"
         mt={1}
@@ -369,7 +376,6 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
               <TableRow onClick={onShowAddRow}>
                 <TableCell colSpan={4} variant="footer" align="center" scope="row">
                   <Button
-                    type="submit"
                     btnType={BtnType.Text}
                     translation-key="setup_survey_add_brand_btn_add"
                     children={<TextBtnSmall>{t('setup_survey_add_brand_btn_add')}</TextBtnSmall>}
@@ -381,21 +387,6 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
           </TableBody>
         </Table>
       </SetupTable>
-      {/* ===================end brand list desktop====================== */}
-      {/* ===================start brand list mobile====================== */}
-      <Grid className={classes.mobileTable}>
-        {project?.packs?.map(item => (
-          <Grid key={item.id} className={classes.itemBrandMobile}>
-
-          </Grid>
-        ))}
-        {project?.additionalBrands?.map(item => (
-          <Grid key={item.id} className={classes.itemBrandMobile}>
-
-          </Grid>
-        ))}
-      </Grid>
-      {/* ===================end brand list mobile====================== */}
       <Menu
         anchorEl={anchorElADB}
         open={Boolean(anchorElADB)}
@@ -416,6 +407,70 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
           <ParagraphBody translation-key="common_delete">{t('common_delete')}</ParagraphBody>
         </MenuItem>
       </Menu>
+      {/* ===================end brand list desktop====================== */}
+      {/* ===================start brand list mobile====================== */}
+      <Grid className={classes.mobileTable}>
+        {project?.packs?.map(item => (
+          <Grid key={item.id} className={classes.itemBrandMobile}>
+            <Grid>
+              <ParagraphExtraSmall $fontWeight={500} $colorName="--eerie-black" translation-key="project_brand">{t('project_brand')}: {item.brand}</ParagraphExtraSmall>
+              <ParagraphExtraSmall $colorName="--eerie-black" translation-key="project_variant">{t('project_variant')}: {item.variant}</ParagraphExtraSmall>
+              <ParagraphExtraSmall $colorName="--eerie-black" translation-key="project_manufacturer">{t('project_manufacturer')}: {item.manufacturer}</ParagraphExtraSmall>
+            </Grid>
+          </Grid>
+        ))}
+        {project?.additionalBrands?.map(item => (
+          <Grid key={item.id} className={classes.itemBrandMobile}>
+            <Grid>
+              <ParagraphExtraSmall $fontWeight={500} $colorName="--eerie-black" translation-key="project_brand">{t('project_brand')}: {item.brand}</ParagraphExtraSmall>
+              <ParagraphExtraSmall $colorName="--eerie-black" translation-key="project_variant">{t('project_variant')}: {item.variant}</ParagraphExtraSmall>
+              <ParagraphExtraSmall $colorName="--eerie-black" translation-key="project_manufacturer">{t('project_manufacturer')}: {item.manufacturer}</ParagraphExtraSmall>
+            </Grid>
+            {editable && (
+              <IconButton
+                onClick={(e) => {
+                  setAnchorElADBMobile(e.currentTarget)
+                  setAdditionalBrandAction(item)
+                }}
+              >
+                <MoreVert sx={{ fontSize: "16px" }} />
+              </IconButton>
+            )}
+          </Grid>
+        ))}
+        {enableAdditionalBrand && (
+          <Button
+            sx={{ mt: 3, width: { xs: "100%", sm: "auto" } }}
+            btnType={BtnType.Outlined}
+            translation-key="setup_survey_add_brand_btn_add"
+            children={<TextBtnSmall>{t('setup_survey_add_brand_btn_add')}</TextBtnSmall>}
+            startIcon={<AddCircle sx={{ fontSize: "16px !important" }} />}
+            onClick={() => setAddBrandMobile(true)}
+          />
+        )}
+      </Grid>
+      <Menu
+        anchorEl={anchorElADBMobile}
+        open={Boolean(anchorElADBMobile)}
+        onClose={onCloseActionADB}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <MenuItem onClick={() => onShowBrandEditMobile()}>
+          <ListItemIcon>
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          <ParagraphBody translation-key="common_edit">{t('common_edit')}</ParagraphBody>
+        </MenuItem>
+        <MenuItem onClick={() => onShowConfirmDeleteBrand()}>
+          <ListItemIcon>
+            <DeleteForeverIcon fontSize="small" />
+          </ListItemIcon>
+          <ParagraphBody translation-key="common_delete">{t('common_delete')}</ParagraphBody>
+        </MenuItem>
+      </Menu>
+      {/* ===================end brand list mobile====================== */}
+
       <PopupAddOrEditBrand
         isAdd={addBrandMobile}
         itemEdit={brandEditMobile}

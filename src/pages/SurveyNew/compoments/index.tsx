@@ -154,7 +154,7 @@ export const RPStepConnector = styled(StepConnector)`
 `;
 
 export const RPStepLabel = styled(StepLabel)`
-  cursor: pointer;
+  cursor: pointer !important;
   .MuiStepLabel-iconContainer {
     padding: 0;
     margin-right: 16px;
@@ -196,4 +196,28 @@ export const MaxChip = styled(Chip)`
   background: #F4F4F4;
   border-radius: 30px;
   height: 24px;
+`;
+
+export const Tip = styled(Grid)`
+  display: flex;
+  align-items: flex-start;
+  > svg {
+    margin-top: 3px;
+    margin-right: 8px;
+    color: var(--eerie-black-40);
+    font-size: 24px;
+  }
+  .MuiTypography-root {
+    margin: 0;
+    padding-left: 12px;
+    border-left: 1px solid var(--eerie-black-40);
+    span {
+      font-weight: 700;
+    }
+    color: var(--eerie-black);
+    @media only screen and (max-width: 767px) {
+      font-size: 10px;
+      line-height: 12px;
+    }
+  }
 `;
