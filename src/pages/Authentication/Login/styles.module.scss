@@ -1,5 +1,5 @@
 .root {
-  background-color: #fafaff;
+  background-color: #eef0f2;
   @media only screen and (max-width: 767px) {
     background-color: #fff;
   }
@@ -11,12 +11,15 @@
   margin: 70px auto 180px;
   display: grid;
   padding: 48px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
   @media only screen and (max-width: 767px) {
     margin: 8px auto 16px;
     padding: 24px;
   }
 }
 .textLogin {
+  color: #1F61A9 !important;
   text-align: left;
   margin: 0 0 16px;
 }
