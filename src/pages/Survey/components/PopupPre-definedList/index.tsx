@@ -1,8 +1,6 @@
 import { memo, useEffect, useState } from 'react';
-import { Checkbox, Collapse, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, ListItem, ListItemText } from '@mui/material';
+import { Collapse, Dialog, Grid, ListItem, ListItemText } from '@mui/material';
 import classes from './styles.module.scss';
-
-import Buttons from 'components/Buttons';
 import Images from "config/images";
 import { Attribute, AttributeType } from 'models/Admin/attribute';
 import { AdditionalAttributeService } from 'services/additional_attribute';
@@ -10,6 +8,16 @@ import { Project } from 'models/project';
 import { ProjectAttribute } from 'models/project_attribute';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
+import {DialogTitle} from "components/common/dialogs/DialogTitle";
+import { DialogContent } from "components/common/dialogs/DialogContent";
+import { DialogActions } from "components/common/dialogs/DialogActions";
+import Heading3 from "components/common/text/Heading3";
+import ButtonClose from "components/common/buttons/ButtonClose";
+import Button, {BtnType} from "components/common/buttons/Button";
+import ParagraphSmall from 'components/common/text/ParagraphSmall';
+import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
+import ParagraphBody from 'components/common/text/ParagraphBody';
+import InputCheckBox from 'components/common/inputs/InputCheckbox';
 
 interface Props {
   isOpen: boolean,
@@ -87,18 +95,17 @@ const PopupPreDefinedList = memo((props: Props) => {
       onClose={onClose}
       classes={{ paper: classes.paper }}
     >
-      <DialogTitle className={classes.header}>
-        <p className={classes.title} translation-key="setup_survey_add_att_popup_pre_defined_title">{t('setup_survey_add_att_popup_pre_defined_title')}</p>
-        <IconButton onClick={onClose}>
-          <img src={Images.icClose} alt='' />
-        </IconButton>
+      <DialogTitle>
+        <Heading3 translation-key="setup_survey_add_att_popup_pre_defined_title">{t('setup_survey_add_att_popup_pre_defined_title')}</Heading3>
+        <ButtonClose onClick={onClose}>
+        </ButtonClose>
       </DialogTitle>
       <DialogContent className={classes.body} dividers>
-        <p translation-key="setup_survey_add_att_popup_pre_defined_sub_title">{t('setup_survey_add_att_popup_pre_defined_sub_title')}</p>
+        <ParagraphBody $colorName="--eerie-black" translation-key="setup_survey_add_att_popup_pre_defined_sub_title">{t('setup_survey_add_att_popup_pre_defined_sub_title')}</ParagraphBody>
         <Grid className={classes.listNumberMobile}>
           <div className={classes.textMobile}>
-            <p translation-key="setup_survey_add_att_start_point_label">{t('setup_survey_add_att_start_point_label')}</p>
-            <p translation-key="setup_survey_add_att_end_point_label">{t('setup_survey_add_att_end_point_label')}</p>
+            <ParagraphExtraSmall translation-key="setup_survey_add_att_start_point_label">{t('setup_survey_add_att_start_point_label')}</ParagraphExtraSmall>
+            <ParagraphExtraSmall translation-key="setup_survey_add_att_end_point_label">{t('setup_survey_add_att_end_point_label')}</ParagraphExtraSmall>
           </div>
           <div className={classes.numberMobile}>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
         </Grid>
@@ -113,26 +120,24 @@ const PopupPreDefinedList = memo((props: Props) => {
               style={{ background: item.id === expanded ? '#EEEEEE' : '' }}
             >
               <Grid classes={{ root: classes.rootCollapseMobile }}>
-                <Checkbox
+                <InputCheckBox
                   disabled={isDisabled(item)}
                   checked={attributesSelected.includes(item.id)}
                   onChange={(e) => onChange(item)}
-                  classes={{ root: classes.rootCheckboxMobile }}
+                  classes={{ root: classes.rootCheckbox }}
                   onClick={e => e.stopPropagation()}
-                  icon={<img src={Images.icCheck} alt="" />}
-                  checkedIcon={<img src={Images.icCheckActive} alt="" />}
                 />
-                {item.id === expanded ? '' :
-                  <p className={classes.titleAttributesMobile} >{item.start}</p>
+                {item.id === expanded &&
+                  <ParagraphSmall $colorName="--eerie-black" className={classes.titleAttributesMobile} >{item.start}</ParagraphSmall>
                 }
                 <Collapse
                   in={item.id === expanded}
                   timeout={0}
                   unmountOnExit
                 >
-                  <div className={classes.CollapseAttributesMobile}>
-                    <p translation-key="setup_survey_add_att_start_label">{t('setup_survey_add_att_start_label')}: <span>{item.start}</span></p>
-                    <p translation-key="setup_survey_add_att_end_label">{t('setup_survey_add_att_end_label')}: <span>{item.end}</span></p>
+                  <div>
+                    <ParagraphExtraSmall sx={{fontWeight: '600 !important', marginBottom:'10px'}} $colorName="--eerie-black" translation-key="setup_survey_add_att_start_label">{t('setup_survey_add_att_start_label')}: &nbsp;<ParagraphExtraSmall sx={{display: 'inline'}}>{item.start}</ParagraphExtraSmall></ParagraphExtraSmall>
+                    <ParagraphExtraSmall sx={{fontWeight: '600 !important'}}$colorName="--eerie-black" translation-key="setup_survey_add_att_end_label">{t('setup_survey_add_att_end_label')}:&nbsp;<ParagraphExtraSmall sx={{display: 'inline'}}>{item.end}</ParagraphExtraSmall></ParagraphExtraSmall>
                   </div>
                 </Collapse >
               </Grid>
@@ -155,21 +160,20 @@ const PopupPreDefinedList = memo((props: Props) => {
               <ListItemText>
                 <Grid className={clsx(classes.listFlex, { [classes.listFlexChecked]: attributesSelected.includes(item.id) })}>
                   <Grid>
-                    <Checkbox
+                    <InputCheckBox
                       disabled={isDisabled(item)}
                       checked={attributesSelected.includes(item.id)}
                       classes={{ root: classes.rootCheckbox }}
-                      icon={<img src={Images.icCheck} alt="" />}
-                      checkedIcon={<img src={Images.icCheckActive} alt="" />} />
+                      />
                   </Grid>
                   <Grid item xs={4} className={classes.listTextLeft}>
-                    <p>{item.start}</p>
+                    <ParagraphExtraSmall $colorName="--eerie-black">{item.start}</ParagraphExtraSmall>
                   </Grid>
                   <Grid item xs={4} className={classes.listNumber}>
                     <div>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
                   </Grid>
                   <Grid item xs={4} className={classes.listTextRight}>
-                    <p>{item.end}</p>
+                    <ParagraphExtraSmall $colorName="--eerie-black">{item.end}</ParagraphExtraSmall>
                   </Grid>
                 </Grid>
               </ListItemText>
@@ -177,8 +181,8 @@ const PopupPreDefinedList = memo((props: Props) => {
           ))}
         </Grid>
       </DialogContent>
-      <DialogActions className={classes.btn}>
-        <Buttons children={t('setup_survey_add_att_btn_add')} translation-key="setup_survey_add_att_btn_add" btnType='Blue' padding='10px 16px' width='25%' onClick={_onSubmit} />
+      <DialogActions> 
+      <Button className={classes.btn} children={t('setup_survey_add_att_btn_add')} translation-key="setup_survey_add_att_btn_add" btnType={BtnType.Raised} onClick={_onSubmit}/>
       </DialogActions>
     </Dialog>
   );
