@@ -58,6 +58,12 @@ export const projectReducer = (state = initial, action: any) =>
           customQuestions: action.data
         };
         break;
+      case types.SET_EYE_TRACKING_PACKS_OF_PROJECT_REDUCER:
+        draft.project = {
+          ...draft.project,
+          eyeTrackingPacks: action.data
+        };
+        break;
       default:
         return state;
     }

@@ -1,4 +1,4 @@
-import { Box, Grid, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Box, Chip, Grid, IconButton, ListItemIcon, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import Heading4 from "components/common/text/Heading4";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
@@ -19,8 +19,8 @@ import { fCurrency2 } from "utils/formatNumber";
 import Switch from "components/common/inputs/Switch";
 import { SetupTable } from "components/common/table/SetupTable";
 import SubTitle from "components/common/text/SubTitle";
-import { DragIndicator, KeyboardArrowDown } from "@mui/icons-material";
-import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType, icCustomQuestions } from "models/custom_question";
+import { DragIndicator, KeyboardArrowDown, MoreHoriz, Edit as EditIcon, DeleteForever as DeleteForeverIcon, MoreVert } from "@mui/icons-material";
+import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType, icCustomQuestions, UpdateOrderQuestionParams } from "models/custom_question";
 import { CustomQuestionService } from "services/custom_question";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
@@ -34,6 +34,7 @@ import PopupNumericScale from "pages/Survey/components/PopupNumericScale";
 import PopupSmileyRating from "pages/Survey/components/PopupSmileyRating";
 import PopupStarRating from "pages/Survey/components/PopupStarRating";
 import PopupConfirmDisableCustomQuestion from "pages/Survey/components/PopupConfirmDisableCustomQuestion";
+import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 
 interface CustomQuestionsProps {
   project: Project;
@@ -50,6 +51,8 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
   const [openPopupNumericScale, setOpenPopupNumericScale] = useState(false)
   const [openPopupSmileyRating, setOpenPopupSmileyRating] = useState(false)
   const [openPopupStarRating, setOpenPopupStarRating] = useState(false)
+
+  const [questions, setQuestions] = useState<CustomQuestion[]>([]);
   const [openQuestionEdit, setOpenQuestionEdit] = useState<CustomQuestion>();
   const [singleChoiceEdit, setSingleChoiceEdit] = useState<CustomQuestion>();
   const [multipleChoicesEdit, setMultipleChoicesEdit] = useState<CustomQuestion>();
@@ -61,6 +64,10 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
   const [customQuestionType, setCustomQuestionType] = useState<CustomQuestionType[]>([]);
   const [openConfirmDisableCustomQuestion, setOpenConfirmDisableCustomQuestion] = useState(false);
   const [anchorElMenuQuestions, setAnchorElMenuQuestions] = useState<null | HTMLElement>(null);
+
+  const [anchorElAction, setAnchorElAction] = useState<null | HTMLElement>(null);
+  const [questionAction, setQuestionAction] = useState<CustomQuestion>();
+
 
   const { configs } = useSelector((state: ReducerType) => state.user)
 
@@ -122,6 +129,37 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
         break;
     }
     handleCloseMenuQuestions();
+  }
+
+  const getQuestionDetail = (question: CustomQuestion) => {
+    dispatch(setLoading(true))
+    CustomQuestionService.findOne(question.id)
+      .then((res) => {
+        switch (question.typeId) {
+          case ECustomQuestionType.Open_Question:
+            setOpenQuestionEdit(res.data);
+            break;
+          case ECustomQuestionType.Single_Choice:
+            setSingleChoiceEdit(res.data);
+            break;
+          case ECustomQuestionType.Multiple_Choices:
+            setMultipleChoicesEdit(res.data);
+            break;
+          case ECustomQuestionType.Numeric_Scale:
+            setNumericScaleEdit(res.data);
+            break;
+          case ECustomQuestionType.Smiley_Rating:
+            setSmileyRatingEdit(res.data);
+            break;
+          case ECustomQuestionType.Star_Rating:
+            setStarRatingEdit(res.data);
+            break;
+          default:
+            break;
+        }
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
   const onOpenPopupConfirmDisableCustomQuestion = () => {
@@ -349,6 +387,67 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
     }
   }
 
+  const getPrice = (customQuestion: CustomQuestion) => {
+    return PriceService.getCustomQuestionItemCost(customQuestion, configs)
+  }
+
+  const reorder = (items: CustomQuestion[], startIndex: number, endIndex: number) => {
+    const result: CustomQuestion[] = [...(items || [])];
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  };
+
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    if (!destination) return
+    const result: CustomQuestion[] = reorder(
+      project?.customQuestions,
+      source.index,
+      destination.index
+    );
+    setQuestions(result);
+    onUpdateOrderQuestion(result);
+  };
+
+  const onUpdateOrderQuestion = (list: CustomQuestion[]) => {
+    const params: UpdateOrderQuestionParams = {
+      projectId: project.id,
+      questions: list.map((item, index) => {
+        return {
+          id: item.id,
+          order: index + 1,
+        }
+      }),
+    }
+    CustomQuestionService.updateOrder(params)
+      .then(() => {
+        dispatch(getCustomQuestionsRequest(project.id))
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+  }
+
+  useEffect(() => {
+    setQuestions(project?.customQuestions || [])
+  }, [project?.customQuestions])
+
+  const onCloseAction = () => {
+    setAnchorElAction(null)
+    setQuestionAction(null)
+  }
+
+  const onEditQuestion = () => {
+    if (!questionAction) return
+    getQuestionDetail(questionAction);
+    onOpenPopupCustomQuestion(questionAction.typeId);
+    onCloseAction()
+  };
+
+  const onShowConfirmDeleteQuestion = () => {
+    if (!questionAction) return
+    setQuestionDelete(questionAction);
+    onCloseAction()
+  }
+
   return (
     <Grid id={SETUP_SURVEY_SECTION.custom_questions} mt={4}>
       <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap">
@@ -390,57 +489,156 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
       >
         {t('setup_survey_custom_question_sub_title')}
       </ParagraphBody>
-      {/* ===================start list desktop====================== */}
-      <SetupTable className={classes.desktopTable}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell width="80">
-              </TableCell>
-              <TableCell translation-key="">
-                <SubTitle>Question</SubTitle>
-              </TableCell>
-              <TableCell translation-key="">
-                <SubTitle>Cost</SubTitle>
-              </TableCell>
-              <TableCell align="center" translation-key="common_action">
-                <SubTitle>{t('common_action')}</SubTitle>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {project?.customQuestions?.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell sx={{verticalAlign: 'middle'}}>
-                  <DragIndicator className={classes.dragIcon} sx={{ fontSize: "24px" }} />
-                </TableCell>
-                <TableCell>
-                  <Box display="flex" alignItems="flex-start">
-                    <img className={classes.rowListImg} src={icCustomQuestions[item.typeId]} alt="icon custom question" />
-                    <ParagraphSmall ml={"12px"}>{item.title}</ParagraphSmall>
-                  </Box>
-                </TableCell>
-                <TableCell>
-
-                </TableCell>
-                <TableCell>
-
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </SetupTable>
-      {/* ===================end list desktop====================== */}
-      <Button
-        sx={{ mt: 3, width: { xs: "100%", sm: "auto" } }}
-        onClick={handleClickMenuQuestions}
-        disabled={!editable || project?.customQuestions?.length >= maxCustomQuestion}
-        btnType={BtnType.Outlined}
-        translation-key="setup_survey_custom_question_menu_action_placeholder"
-        children={<TextBtnSmall>{t('setup_survey_custom_question_menu_action_placeholder')}</TextBtnSmall>}
-        endIcon={<KeyboardArrowDown sx={{ fontSize: "16px !important" }} />}
-      />
+      {project?.enableCustomQuestion && (
+        <>
+          {/* ===================start list desktop====================== */}
+          <SetupTable className={classes.desktopTable}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell width="60">
+                  </TableCell>
+                  <TableCell translation-key="">
+                    <SubTitle>Question</SubTitle>
+                  </TableCell>
+                  <TableCell align="center" translation-key="" width="200">
+                    <SubTitle>Cost</SubTitle>
+                  </TableCell>
+                  <TableCell align="center" translation-key="common_action" width="150">
+                    <SubTitle>{t('common_action')}</SubTitle>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable-list-custom-question">
+                  {(provided) => (
+                    <TableBody
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {questions?.map((item, index) => (
+                        <Draggable
+                          draggableId={item.id.toString()}
+                          index={index}
+                          key={item.id}
+                          isDragDisabled={!editable || questions.length === 1}
+                        >
+                          {(provided, snapshot) => (
+                            <TableRow
+                              className={clsx(classes.rowItem, { [classes.rowItemDraging]: snapshot.isDragging })}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <TableCell width="60" valign="middle" sx={{ pl: "16px !important" }}>
+                                {editable && (
+                                  <Box display="flex" alignItems="center" justifyContent="center">
+                                    <DragIndicator className={classes.dragIcon} />
+                                  </Box>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                <Box display="flex" alignItems="flex-start">
+                                  <img className={classes.rowListImg} src={icCustomQuestions[item.typeId]} alt="icon custom question" />
+                                  <ParagraphSmall ml={"12px"}>{item.title}</ParagraphSmall>
+                                </Box>
+                              </TableCell>
+                              <TableCell align="center" width="200">
+                                <Chip className={classes.price} label={<ParagraphSmall $colorName="--cimigo-green-dark-2">US$ {fCurrency2(getPrice(item)?.priceUSD || 0)}</ParagraphSmall>} />
+                              </TableCell>
+                              <TableCell align="center" width="150">
+                                {editable && (
+                                  <IconButton
+                                    sx={{ padding: "6px" }}
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      setAnchorElAction(e.currentTarget)
+                                      setQuestionAction(item)
+                                    }}
+                                  >
+                                    <MoreHoriz sx={{ fontSize: "20px", color: "--eerie-black-65" }} />
+                                  </IconButton>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </TableBody>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </Table>
+          </SetupTable>
+          {/* ===================end list desktop====================== */}
+          {/* ===================start list mobile====================== */}
+          <Grid className={classes.mobileTable}>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable-list-custom-question-mobile">
+                {(provided) => (
+                  <Grid
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    {questions?.map((item, index) => (
+                      <Draggable
+                        draggableId={item.id.toString()}
+                        index={index}
+                        key={item.id}
+                        isDragDisabled={!editable || questions.length === 1}
+                      >
+                        {(provided) => (
+                          <Box
+                            className={classes.itemListMobile}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <Box pt={1} display="flex" alignItems="center" justifyContent="space-between">
+                              <Box display="flex" alignItems="center" ml={2} mr={1} overflow="hidden">
+                                <img className={classes.rowListImg} src={icCustomQuestions[item.typeId]} alt="icon custom question" />
+                                <ParagraphSmall className={classes.itemListTitle} ml={1} $colorName="--eerie-black">{item.title}</ParagraphSmall>
+                              </Box>
+                              {editable && (
+                                <IconButton
+                                  sx={{ p: 0 }}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    setAnchorElAction(e.currentTarget)
+                                    setQuestionAction(item)
+                                  }}
+                                >
+                                  <MoreVert sx={{ fontSize: "24px" }} />
+                                </IconButton>
+                              )}
+                            </Box>
+                            <Box my={1} ml={2} mr={1}>
+                              <Chip className={classes.priceMobile} label={<ParagraphExtraSmall $colorName="--cimigo-green-dark-2">US$ {fCurrency2(getPrice(item)?.priceUSD || 0)}</ParagraphExtraSmall>} />
+                            </Box>
+                          </Box>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </Grid>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </Grid>
+          {/* ===================end list mobile====================== */}
+          <Button
+            sx={{ mt: 3, width: { xs: "100%", sm: "auto" } }}
+            onClick={handleClickMenuQuestions}
+            disabled={!editable || project?.customQuestions?.length >= maxCustomQuestion}
+            btnType={BtnType.Outlined}
+            translation-key="setup_survey_custom_question_menu_action_placeholder"
+            children={<TextBtnSmall>{t('setup_survey_custom_question_menu_action_placeholder')}</TextBtnSmall>}
+            endIcon={<KeyboardArrowDown sx={{ fontSize: "16px !important" }} />}
+          />
+          {(editable && questions.length >= maxCustomQuestion) && <ParagraphSmall mt={1} $colorName="--red-error" translation-key="setup_survey_custom_question_error_max">{t("setup_survey_custom_question_error_max", { max: maxCustomQuestion })}</ParagraphSmall>}
+        </>
+      )}
       <Menu
         $minWidth={"unset"}
         anchorEl={anchorElMenuQuestions}
@@ -453,6 +651,26 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
             <ParagraphExtraSmall className={classes.menuItemText}>{item.title}</ParagraphExtraSmall>
           </MenuItem>
         ))}
+      </Menu>
+      <Menu
+        anchorEl={anchorElAction}
+        open={Boolean(anchorElAction)}
+        onClose={onCloseAction}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <MenuItem onClick={onEditQuestion}>
+          <ListItemIcon>
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          <ParagraphBody translation-key="common_edit">{t('common_edit')}</ParagraphBody>
+        </MenuItem>
+        <MenuItem onClick={onShowConfirmDeleteQuestion}>
+          <ListItemIcon>
+            <DeleteForeverIcon fontSize="small" />
+          </ListItemIcon>
+          <ParagraphBody translation-key="common_delete">{t('common_delete')}</ParagraphBody>
+        </MenuItem>
       </Menu>
       {questionTypeOpenQuestion && (
         <PopupOpenQuestion
@@ -526,7 +744,7 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
         onCancel={onClosePopupConfirmDisableCustomQuestion}
         onYes={onConfirmedDisableCustomQuestion}
       />
-    </Grid>
+    </Grid >
   )
 })
 

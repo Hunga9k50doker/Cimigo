@@ -1,6 +1,7 @@
 import { all } from 'redux-saga/effects';
 import getAdditionalBrands from './getAdditionalBrands';
 import getCustomQuestions from './getCustomQuestions';
+import getEyeTrackingPacks from './getEyeTrackingPacks';
 import getPacks from './getPacks';
 import getProject from './getProject';
 import getProjectAttributes from './getProjectAttributes';
@@ -13,6 +14,7 @@ export const projectSagas = function* root() {
     getAdditionalBrands(),
     getProjectAttributes(),
     getUserAttributes(),
-    getCustomQuestions()
+    getCustomQuestions(),
+    getEyeTrackingPacks()
   ]);
 };

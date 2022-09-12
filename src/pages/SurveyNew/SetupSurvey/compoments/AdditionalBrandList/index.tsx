@@ -373,7 +373,7 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
               </TableRow>
             )}
             {(enableAdditionalBrand && !addRow) && (
-              <TableRow onClick={onShowAddRow}>
+              <TableRow onClick={onShowAddRow} className="action-row">
                 <TableCell colSpan={4} variant="footer" align="center" scope="row">
                   <Button
                     btnType={BtnType.Text}
@@ -428,12 +428,13 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
             </Grid>
             {editable && (
               <IconButton
+                sx={{ p: 0 }}
                 onClick={(e) => {
                   setAnchorElADBMobile(e.currentTarget)
                   setAdditionalBrandAction(item)
                 }}
               >
-                <MoreVert sx={{ fontSize: "16px" }} />
+                <MoreVert sx={{ fontSize: "24px" }} />
               </IconButton>
             )}
           </Grid>

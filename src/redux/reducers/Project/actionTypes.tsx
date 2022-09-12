@@ -33,6 +33,10 @@ export const GET_CUSTOM_QUESTIONS_OF_PROJECT_REQUEST = 'GET_CUSTOM_QUESTIONS_OF_
 
 export const SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER = 'SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER';
 
+export const GET_EYE_TRACKING_PACKS_OF_PROJECT_REQUEST = 'GET_EYE_TRACKING_PACKS_OF_PROJECT_REQUEST';
+
+export const SET_EYE_TRACKING_PACKS_OF_PROJECT_REDUCER = 'SET_EYE_TRACKING_PACKS_OF_PROJECT_REDUCER';
+
 export const getProjectRequest = (id: number, callback?: () => void) => {
   return {
     type: GET_PROJECT_REQUEST,
@@ -129,6 +133,20 @@ export const getCustomQuestionsRequest = (projectId: number) => {
 export const setCustomQuestionsReducer = (data: CustomQuestion[]) => {
   return {
     type: SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER,
+    data
+  }
+}
+
+export const getEyeTrackingPacksRequest = (projectId: number) => {
+  return {
+    type: GET_EYE_TRACKING_PACKS_OF_PROJECT_REQUEST,
+    projectId
+  }
+}
+
+export const setEyeTrackingPacksReducer = (data: Pack[]) => {
+  return {
+    type: SET_EYE_TRACKING_PACKS_OF_PROJECT_REDUCER,
     data
   }
 }
