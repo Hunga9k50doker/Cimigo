@@ -21,6 +21,11 @@ export interface CreateProjectData {
   manufacturer?: string
 }
 
+export interface CreateProjectRedirect {
+  solutionId: number;
+  planId: number;
+}
+
 export interface Project {
   id: number;
   name: string;

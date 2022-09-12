@@ -39,7 +39,7 @@ import { useHistory } from 'react-router-dom';
 import { UserGetSolutions } from "models/solution";
 import { useTranslation } from "react-i18next";
 import { ReducerType } from "redux/reducers";
-import { setSolutionCreateProject } from "redux/reducers/Project/actionTypes";
+import { setCreateProjectRedirectReducer } from "redux/reducers/Project/actionTypes";
 import InputSelect from "components/InputsSelect";
 
 
@@ -83,7 +83,7 @@ const CreateProject = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
-  const { solutionId } = useSelector((state: ReducerType) => state.project)
+  const { createProjectRedirect } = useSelector((state: ReducerType) => state.project)
 
   const dispatch = useDispatch()
   const history = useHistory();
@@ -201,16 +201,16 @@ const CreateProject = () => {
   }
 
   useEffect(() => {
-    if (solutionId) {
-      SolutionService.getSolution(solutionId)
+    if (createProjectRedirect) {
+      SolutionService.getSolution(createProjectRedirect.solutionId)
         .then((res) => {
           setSolutionSelected(res)
           setActiveStep(EStep.CREATE_PROJECT)
         })
-      dispatch(setSolutionCreateProject(null))
+      dispatch(setCreateProjectRedirectReducer(null))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [solutionId])
+  }, [createProjectRedirect])
 
   return (
     <Grid className={classes.root}>
