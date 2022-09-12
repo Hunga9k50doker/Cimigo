@@ -23,6 +23,7 @@ export const SetupTable = styled(TableContainer)`
     .MuiTableRow-root {
       .MuiTableCell-root {
         padding: 12px 16px;
+        background: #ffffff;
         > .MuiTypography-root { 
           color: #333333;
         }
@@ -34,6 +35,13 @@ export const SetupTable = styled(TableContainer)`
         .MuiTableCell-root {
           padding-top: 8px;
           padding-bottom: 8px;
+        }
+      }
+      &:hover {
+        &:not(.edit-row, .action-row) {
+          .MuiTableCell-root {
+            background: var(--gray-5);
+          }
         }
       }
     }

@@ -1,4 +1,4 @@
-import { Grid, ListItemIcon, MenuItem } from "@mui/material"
+import { Grid, ListItemIcon, MenuItem, Box } from "@mui/material"
 import Button, { BtnType } from "components/common/buttons/Button"
 import Heading4 from "components/common/text/Heading4"
 import ParagraphBody from "components/common/text/ParagraphBody"
@@ -110,18 +110,22 @@ const UploadPacks = memo(({ project }: UploadPacksProps) => {
       >
         {t('setup_survey_summary_pack', { step: 2 })}
       </Heading4>
-      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall>{t('common_max')} {maxPack}</ParagraphSmall>} />
-      <ParagraphBody $colorName="--gray-80" mt={1} mb={{ xs: 3, sm: 2 }} translation-key="setup_survey_packs_sub_title">{t("setup_survey_packs_sub_title")}</ParagraphBody>
-      <Grid spacing={2} container>
-        {project?.packs?.map((item, index) => (
-          <PackItem
-            key={index}
-            item={item}
-            editable={editable}
-            onAction={onAction}
-          />
-        ))}
-      </Grid>
+      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxPack}</ParagraphSmall>} />
+      <ParagraphBody $colorName="--gray-80" mt={1} translation-key="setup_survey_packs_sub_title">{t("setup_survey_packs_sub_title")}</ParagraphBody>
+      {!!project?.packs?.length && (
+        <Box mt={{ xs: 3, sm: 2 }} >
+          <Grid spacing={2} container>
+            {project?.packs?.map((item, index) => (
+              <PackItem
+                key={index}
+                item={item}
+                editable={editable}
+                onAction={onAction}
+              />
+            ))}
+          </Grid>
+        </Box>
+      )}
       {(maxPack > project?.packs?.length && editable) && (
         <Button
           sx={{ mt: 3, width: { xs: "100%", sm: "auto" } }}

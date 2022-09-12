@@ -22,6 +22,9 @@ import { useChangePrice } from "hooks/useChangePrice";
 import UploadPacks from "./compoments/UploadPacks";
 import AdditionalBrandList from "./compoments/AdditionalBrandList";
 import AdditionalAttributes from "./compoments/AdditionalAttributes";
+import CustomQuestions from "./compoments/CustomQuestions";
+import { fCurrency2 } from "utils/formatNumber";
+import EyeTracking from "./compoments/EyeTracking";
 
 interface SetupSurvey {
   projectId: number;
@@ -93,6 +96,18 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
           <AdditionalAttributes
             project={project}
           />
+          {project?.solution?.enableCustomQuestion && (
+            <CustomQuestions
+              project={project}
+            />
+          )}
+          {project?.solution?.enableEyeTracking && (
+            <EyeTracking
+              price={price}
+              project={project}
+              step={project?.solution?.enableCustomQuestion ? 6 : 5}
+            />
+          )}
         </Content>
         <MobileAction>
           <Button
@@ -170,34 +185,38 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
-                  <Step active={false} expanded>
-                    <RPStepLabel
-                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.custom_questions)}
-                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><FormatAlignLeftIcon /></RPStepIconBox>}>
-                      <ParagraphExtraSmall $colorName="--gray-60">Step 5 - OPTIONAL</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60">Custom questions (4)</Heading5>
-                    </RPStepLabel>
-                    <RPStepContent>
-                      <Chip
-                        sx={{ height: 24, backgroundColor: "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
-                        label={<ParagraphExtraSmall $colorName="--ghost-white">$1000</ParagraphExtraSmall>}
-                        color="secondary"
-                      />
-                    </RPStepContent>
-                  </Step>
-                  <Step active={true} expanded>
-                    <RPStepLabel StepIconComponent={({ active }) => <RPStepIconBox $active={active}><RemoveRedEyeIcon /></RPStepIconBox>}>
-                      <ParagraphExtraSmall $colorName="--gray-60">Step 6 - OPTIONAL</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60">Eye tracking</Heading5>
-                    </RPStepLabel>
-                    <RPStepContent>
-                      <Chip
-                        sx={{ height: 24, backgroundColor: "var(--cimigo-green-dark-1)", "& .MuiChip-label": { px: 2 } }}
-                        label={<ParagraphExtraSmall $colorName="--ghost-white">$1000</ParagraphExtraSmall>}
-                        color="secondary"
-                      />
-                    </RPStepContent>
-                  </Step>
+                  {project?.solution?.enableCustomQuestion && (
+                    <Step active={project?.enableCustomQuestion} expanded>
+                      <RPStepLabel
+                        onClick={() => scrollToElement(SETUP_SURVEY_SECTION.custom_questions)}
+                        StepIconComponent={({ active }) => <RPStepIconBox $active={active}><FormatAlignLeftIcon /></RPStepIconBox>}>
+                        <ParagraphExtraSmall $colorName="--gray-60">Step 5 - OPTIONAL</ParagraphExtraSmall>
+                        <Heading5 className="title" $colorName="--gray-60">Custom questions ({project?.customQuestions?.length || 0})</Heading5>
+                      </RPStepLabel>
+                      <RPStepContent>
+                        <Chip
+                          sx={{ height: 24, backgroundColor: project?.enableCustomQuestion ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
+                          label={<ParagraphExtraSmall $colorName="--ghost-white">${fCurrency2(price?.customQuestionCostUSD)}</ParagraphExtraSmall>}
+                          color="secondary"
+                        />
+                      </RPStepContent>
+                    </Step>
+                  )}
+                  {project?.solution?.enableEyeTracking && (
+                    <Step active={project.enableEyeTracking} expanded>
+                      <RPStepLabel StepIconComponent={({ active }) => <RPStepIconBox $active={active}><RemoveRedEyeIcon /></RPStepIconBox>}>
+                        <ParagraphExtraSmall $colorName="--gray-60">Step {project?.solution?.enableCustomQuestion ? 6 : 5} - OPTIONAL</ParagraphExtraSmall>
+                        <Heading5 className="title" $colorName="--gray-60">Eye tracking</Heading5>
+                      </RPStepLabel>
+                      <RPStepContent>
+                        <Chip
+                          sx={{ height: 24, backgroundColor: project?.enableEyeTracking ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
+                          label={<ParagraphExtraSmall $colorName="--ghost-white">${fCurrency2(price?.eyeTrackingSampleSizeCostUSD)}</ParagraphExtraSmall>}
+                          color="secondary"
+                        />
+                      </RPStepContent>
+                    </Step>
+                  )}
                 </RPStepper>
               </RightPanelBody>
               <RightPanelAction>

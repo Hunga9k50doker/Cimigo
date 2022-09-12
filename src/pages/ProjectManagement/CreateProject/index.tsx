@@ -23,12 +23,12 @@ import images from "config/images";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ReducerType } from "redux/reducers";
-import { setSolutionCreateProject } from "redux/reducers/Project/actionTypes";
 import SelectPlan from "./components/SelectPlan";
 import { Plan } from "models/Admin/plan";
 import CreateProjectStep from "./components/CreateProjectStep";
 import SolutionList from "./components/SolutionList";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
+import { setCreateProjectRedirectReducer } from "redux/reducers/Project/actionTypes";
 
 export enum EStep {
   SELECT_SOLUTION,
@@ -64,7 +64,7 @@ const CreateProject = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
-  const { solutionId } = useSelector((state: ReducerType) => state.project);
+  const { createProjectRedirect } = useSelector((state: ReducerType) => state.project)
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -107,15 +107,17 @@ const CreateProject = () => {
   };
 
   useEffect(() => {
-    if (solutionId) {
-      SolutionService.getSolution(solutionId).then((res) => {
-        setSolutionSelected(res);
-        setActiveStep(EStep.CREATE_PROJECT);
-      });
-      dispatch(setSolutionCreateProject(null));
+    if (createProjectRedirect) {
+      SolutionService.getSolution(createProjectRedirect.solutionId)
+        .then((res) => {
+          setSolutionSelected(res)
+          setActiveStep(EStep.CREATE_PROJECT)
+        })
+      dispatch(setCreateProjectRedirectReducer(null))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [solutionId]);
+  }, [createProjectRedirect])
+
   return (
     <Grid className={classes.root}>
       <Header project />

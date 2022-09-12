@@ -191,7 +191,7 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
       >
         {t('setup_survey_add_brand_title', { step: 3 })}
       </Heading4>
-      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall>{t('common_max')} {maxAdditionalBrand}</ParagraphSmall>} />
+      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxAdditionalBrand}</ParagraphSmall>} />
       <ParagraphBody
         $colorName="--gray-80"
         mt={1}
@@ -200,7 +200,7 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
         dangerouslySetInnerHTML={{ __html: t('setup_survey_add_brand_sub_title') }}
       />
       {/* ===================start brand list desktop====================== */}
-      <SetupTable sx={{ borderRadius: 4 }} className={classes.desktopTable}>
+      <SetupTable className={classes.desktopTable}>
         <Table>
           <TableHead>
             <TableRow>
@@ -373,7 +373,7 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
               </TableRow>
             )}
             {(enableAdditionalBrand && !addRow) && (
-              <TableRow onClick={onShowAddRow}>
+              <TableRow onClick={onShowAddRow} className="action-row">
                 <TableCell colSpan={4} variant="footer" align="center" scope="row">
                   <Button
                     btnType={BtnType.Text}
@@ -428,12 +428,13 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
             </Grid>
             {editable && (
               <IconButton
+                sx={{ p: 0 }}
                 onClick={(e) => {
                   setAnchorElADBMobile(e.currentTarget)
                   setAdditionalBrandAction(item)
                 }}
               >
-                <MoreVert sx={{ fontSize: "16px" }} />
+                <MoreVert sx={{ fontSize: "24px" }} />
               </IconButton>
             )}
           </Grid>

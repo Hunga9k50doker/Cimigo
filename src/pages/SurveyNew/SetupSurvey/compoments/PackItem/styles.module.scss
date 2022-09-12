@@ -4,11 +4,11 @@
   }
 }
 .box {
-  max-width: 300px;
+  max-width: unset;
+  width: 300px;
   border: 1px solid var(--gray-10);
   border-radius: 12px;
   @media only screen and (max-width: 767px) {
-    max-width: unset;
     width: 100%;
   }
 }

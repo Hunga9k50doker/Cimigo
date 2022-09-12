@@ -22,6 +22,11 @@ export interface CreateProjectData {
   manufacturer?: string
 }
 
+export interface CreateProjectRedirect {
+  solutionId: number;
+  planId: number;
+}
+
 export interface Project {
   id: number;
   name: string;
@@ -123,6 +128,10 @@ export interface UpdateEnableCustomQuestion {
   enableCustomQuestion: boolean;
 }
 
+export interface UpdateEnableEyeTracking {
+  enableEyeTracking: boolean;
+}
+
 export interface UpdateQuota {
   quotaTableId: number
   quotas: {
@@ -142,7 +151,8 @@ export enum SETUP_SURVEY_SECTION {
   additional_brand_list = 'additional-brand-list',
   additional_attributes = 'additional-attributes',
   content_survey_setup = 'content-survey-setup',
-  custom_questions = 'custom_questions'
+  custom_questions = 'custom_questions',
+  eye_tracking = 'eye-tracking'
 }
 
 export enum ETabRightPanel {

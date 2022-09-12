@@ -342,7 +342,7 @@ const PopupPack = memo((props: Props) => {
             </Grid>
           </Grid>
           <Grid className={classes.flex}>
-            <Heading5 sx={{display: 'flex'}} translation-key="setup_survey_packs_popup_brand_related_title">{t('setup_survey_packs_popup_brand_related_title')} {isEyeTracking && <Heading5 $colorName="--cimigo-green-dark" translation-key="common_optional">&nbsp;({t("common_optional")})</Heading5>}</Heading5>
+            <Heading5 variantMapping={{body2: 'span'}} variant="body2" sx={{display: 'flex'}} translation-key="setup_survey_packs_popup_brand_related_title">{t('setup_survey_packs_popup_brand_related_title')} {isEyeTracking && <Heading5 variantMapping={{body2: 'span'}} variant="body2" $colorName="--cimigo-green-dark" translation-key="common_optional">&nbsp;({t("common_optional")})</Heading5>}</Heading5>
             <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_packs_popup_brand_related_sub_title">{t('setup_survey_packs_popup_brand_related_sub_title')}</ParagraphSmall>
             <Grid container spacing={2}>
               <Grid item>
