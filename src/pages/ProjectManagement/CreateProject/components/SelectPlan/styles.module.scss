@@ -1,15 +1,29 @@
 .titleSelectPlan {
   text-align: center;
   padding-top: 16px;
+  .description {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #1C1C1C;
+  }
 }
+
+//==================================card============================//
 .body {
   display: flex;
   flex-wrap: wrap;
   margin: 0px -9px;
-  padding: 0px 80px;
+  padding: 0px 60px;
   justify-content: space-between;
   padding-bottom: 300px;
-  @media only screen and (max-width: 1169px) {
+  .card {
+    padding: 0px 16px;
+    padding-bottom: 32px;
+  }
+  @media only screen and (max-width: 1225px) {
       justify-content: center;
   }
   @media only screen and (max-width: 767px) {
@@ -17,67 +31,66 @@
       justify-content: center;
       padding: 0 0;
       padding-bottom: 100px;
-      padding-left: 24px;
-      padding-right: 24px;
+      padding-left: 30px;
+      padding-right: auto;
       flex-direction: column;
       margin: 0px;
   }
+  
+}
+.card {
+  min-width: 300px;
+  @media only screen and (max-width: 1177px) {
+      padding-top: 32px !important;
+  }
+  @media only screen and (max-width: 600px) {
+      min-width: 0px;
+      width: auto;
+}
 }
 .layoutCard {
-  //padding-top: 40px;
-  // border: 1px solid #D2D2D2;
-  // box-shadow: 0px 2px 0px rgb(0 0 0 / 20%);
-  // border-radius: 8px;
-  @media only screen and (max-width: 1169px) {
-      margin-bottom: 24px
-  }
-  @media only screen and (max-width: 800px) {
-      //margin: 16px 0px;
-      //padding-bottom: 24px;
-  }
-  .cardPlan {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    height: 100%;
-    border: 1px solid var(--gray-20);
-    @media only screen and (max-width: 367px) {
-        width: auto;
-    }
-    .tax {
-        font-family: 'Montserrat';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 12px;
-        padding-top: 8px;
-        padding-bottom: 24px;
-    }
-    .line{
-        content: " ";
-        padding: 10px;
-        border-bottom: 1px solid;
-        color: var(--gray-20);
-    }
-    .startAt{
-        padding-top: 16px;
-    }
-    .price{
-        padding-top: 8px;
-    }
-    .contentInPlan{
-        padding: 16px 0px;
-    }
-    
-  }
-  
+  height: 100%;
 }
 .itemCenter {
   justify-content: center;
   margin-top: auto;
   padding-bottom: 24px;
 }
-
+.cardPlan {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  border-radius: 8px 8px 8px 8px;
+  border: 1px solid var(--gray-20);
+  @media only screen and (max-width: 367px) {
+      width: auto;
+  }
+  .tax {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 12px;
+      padding-top: 8px;
+      padding-bottom: 24px;
+  }
+  .line{
+      content: " ";
+      padding: 10px;
+      border-bottom: 1px solid;
+      color: var(--gray-20);
+  }
+  .startAt{
+      padding-top: 16px;
+  }
+  .price{
+      padding-top: 8px;
+  }
+  .contentInPlan{
+      padding: 16px 0px;
+  }
+}
 
 .contentInPlan{
   > p {
@@ -85,14 +98,10 @@
   }
 }
 .headerCart {
-  margin-top: -40px;
   background: #A6CC17;
   border: 1px solid var(--gray-20);
   border-radius: 8px 8px 0px 0px;
   border-bottom: none;
-  @media only screen and (max-width: 800px) {
-      //margin-top: -110px;
-  }
   .title{  
       text-align: center;
       padding: 8px;
@@ -103,24 +112,13 @@
   }
 }
 .layoutCardPopular {
-  @media only screen and (max-width: 1169px) {
-      margin-bottom: 24px;
-      margin-left: 24px;
-  }
-  @media only screen and (max-width: 790px) {
-      margin-top: 24px;
-      margin-bottom: 70px;
-      margin-left: 0px;
-  }
-  @media only screen and (max-width: 767px) {
-      margin-bottom: 24px;
-  }
+  margin-top: -42px;
+  height: 100%;
   .cardPlan { 
       height: 100%;
       display: flex;
       flex-direction: column;
       flex: 1;
-      height: 100%;
       border-radius: 0px 0px 8px 8px;
       border: 1px solid var(--gray-20);
       @media only screen and (max-width: 367px) {
@@ -156,49 +154,40 @@
           }
       }
       .contentInPlan{
-          padding: 16px 0px;
+          padding: 24px 0px;
       }
   } 
   
 }
 .contentPlan {
-display: flex;
+  display: flex;
+  padding: 8px 0px;
 }
 .iconContentPlan{
   color: var(--cimigo-blue);
 }
+//==================================endcard============================//
 .selectTypePrice {
   padding-top: 20px;
   text-align: right;
   padding-right: 50px;
   padding-bottom: 24px;
-  @media only screen and (max-width: 1169px) {
-    text-align: center;
-  }
   @media only screen and (max-width: 767px) {
       text-align: right;
       padding-right: 0px;
       padding-bottom: 0px;
   }
+  @media only screen and (max-width: 695px) {
+      margin-right: 20px !important;
+}
   @media only screen and (max-width: 386px) {
-      padding-right: 5px;
+      margin-right: -20px !important;
   }
-  @media only screen and (max-width: 367px) {
-      padding-right: auto;
+  @media only screen and (max-width: 341px) {
+      margin-right: 0px !important;
   }
 }
 .customSelect {
-  // fieldset{
-  //     border: none;
-  // }
-  // div {
-  //     font-family: 'Montserrat';
-  //     font-style: normal;
-  //     font-weight: 400;
-  //     font-size: 16px;
-  //     line-height: 24px;
-  //     color: #333333;
-  // }
   div{
     border: none;
   }

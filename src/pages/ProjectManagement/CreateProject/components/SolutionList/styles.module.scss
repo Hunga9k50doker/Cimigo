@@ -9,7 +9,9 @@
     text-align: center;
   }
   .imgCard {
-    padding-right: 15px;
+    max-width: 42px;
+    max-height: 42px;
+    margin-right: 10px;
   }
   p {
     margin-top: 20px;
@@ -236,10 +238,15 @@
         img:first-child {
           position: absolute;
         }
-        img:last-child {
+        svg {
           position: absolute;
           right: -13px;
           bottom: -10px;
+          width: 12px;
+          height: 9px;
+          path {
+            background-color: var(--cimigo-blue-dark-3);
+          }
         }
       }
     }
@@ -270,7 +277,8 @@
     min-height: 335px;
     margin: 0px 0px 24px 0px;
   }
-  div {
+  
+  .titleComing {
     background: rgba(28, 28, 28, 0.05);
     width: 100%;
     height: 36px;
@@ -290,17 +298,6 @@
     height: 48px;
     display: block;
     object-fit: cover;
-  }
-  p {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 20px;
-    letter-spacing: 0.015em;
-    color: rgba(28, 28, 28, 0.65);
-    padding: 0px 24px;
-    margin-top: 16px;
-    margin-bottom: 16px;
-    text-align: center;
   }
   span {
     text-align: left;
@@ -454,15 +451,6 @@
     bottom: 0;
     div {
       display: grid;
-      p {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 140%;
-        letter-spacing: 0.025em;
-        color: #1c1c1c;
-        margin-bottom: 4px;
-      }
       span {
         font-style: normal;
         font-weight: 600;
@@ -472,13 +460,8 @@
         color: #53660c;
       }
       a {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 140%;
         display: flex;
         align-items: center;
-        color: #af1c10;
       }
     }
   }

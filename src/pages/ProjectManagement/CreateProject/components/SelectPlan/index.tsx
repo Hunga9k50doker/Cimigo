@@ -7,12 +7,7 @@ import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { UserGetPlans } from "models/plan";
 import { PlanService } from "services/plan";
-import {
-  DataPagination,
-  ECurrencyType,
-  currencyTypes,
-  OptionItem,
-} from "models/general";
+import { DataPagination, currencyTypes, OptionItem } from "models/general";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -23,12 +18,12 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import { FormControl } from "@mui/material";
 import ParagraphBody from "components/common/text/ParagraphBody";
-import clsx from "clsx";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import { Solution } from "models/Admin/solution";
 import { useForm } from "react-hook-form";
 import InputSelect from "components/common/inputs/InputSelect";
 import { CreateProjectFormData } from "../CreateProjectStep";
+import clsx from "clsx";
 interface SelectPlanProps {
   solution?: Solution;
   onChangePlanSelected?: (plan: Plan) => void;
@@ -84,11 +79,8 @@ const SelectPlan = memo(
     const onClick = (plan: Plan) => {
       onChangePlanSelected(plan);
     };
-    const onChangeOptionSelectPrice = (event: any) => {
-      setSelectPrice({
-        id: event.id,
-        name: currencyTypes.find((it) => it.id === event.id)?.name,
-      });
+    const onChangeOptionSelectPrice = (item: OptionItem) => {
+      setSelectPrice(item);
     };
     return (
       <>
@@ -120,78 +112,79 @@ const SelectPlan = memo(
           <Grid className={classes.body}>
             {plan?.data.map((plan) => {
               return (
-                <Grid
-                  className={clsx(classes.layoutCardPopulate, {
-                    [classes.layoutCard]: plan?.isMostPopular,
-                  })}
-                >
-                  {plan?.isMostPopular && (
-                    <div className={classes.headerCart}>
-                      <ParagraphBody
-                        className={classes.title}
-                        $colorName={"--cimigo-green-dark-3"}
-                      >
-                        Most popular
-                      </ParagraphBody>
-                    </div>
-                  )}
-                  <Card sx={{ minWidth: 300 }} className={classes.cardPlan}>
-                    <CardContent className={classes.cardCustom}>
-                      <Typography>
-                        <Heading3
-                          $fontWeight={"500"}
-                          $colorName={"--eerie-black-00"}
+                <Grid className={classes.card}>
+                  <Grid
+                    className={clsx(classes.layoutCard, {
+                      [classes.layoutCardPopular]: plan?.isMostPopular,
+                    })}
+                  >
+                    {plan?.isMostPopular && (
+                      <div className={classes.headerCart}>
+                        <ParagraphBody
+                          className={classes.title}
+                          $colorName={"--cimigo-green-dark-3"}
                         >
-                          {plan.title}
-                        </Heading3>
-                      </Typography>
-                      <Typography className={classes.startAt}>
-                        <ParagraphBody $colorName={"--eerie-black-00"}>
-                          Start at
+                          Most popular
                         </ParagraphBody>
-                      </Typography>
-                      <Typography className={classes.price}>
-                        <Heading1
-                          $fontWeight={"600"}
-                          $colorName={"--cimigo-blue"}
-                        >
-                          {formatMoney(plan)}
-                        </Heading1>
-                      </Typography>
-                      <Typography className={classes.tax} color={"--gray-60"}>
-                        <ParagraphExtraSmall $colorName={"--gray-60"}>
-                          Tax exclusive
-                        </ParagraphExtraSmall>
-                      </Typography>
-                      <Typography>
-                        <div className={classes.line}></div>
-                      </Typography>
-                      <Grid className={classes.contentInPlan}>
-                        {plan?.content.map((item, index) => {
-                          return (
-                            <Typography variant="body2" key={index}>
-                              <Grid className={classes.contentPlan}>
+                      </div>
+                    )}
+                    <Card sx={{ minWidth: 300 }} className={classes.cardPlan}>
+                      <CardContent className={classes.cardCustom}>
+                        <Typography>
+                          <Heading3
+                            $fontWeight={"500"}
+                            $colorName={"--eerie-black-00"}
+                          >
+                            {plan.title}
+                          </Heading3>
+                        </Typography>
+                        <Typography className={classes.startAt}>
+                          <ParagraphBody $colorName={"--eerie-black-00"}>
+                            Start at
+                          </ParagraphBody>
+                        </Typography>
+                        <Typography className={classes.price}>
+                          <Heading1
+                            $fontWeight={"600"}
+                            $colorName={"--cimigo-blue"}
+                          >
+                            {formatMoney(plan)}
+                          </Heading1>
+                        </Typography>
+                        <Typography className={classes.tax} color={"--gray-60"}>
+                          <ParagraphExtraSmall $colorName={"--gray-60"}>
+                            Tax exclusive
+                          </ParagraphExtraSmall>
+                        </Typography>
+                        <Typography>
+                          <div className={classes.line}></div>
+                        </Typography>
+                        <Grid className={classes.contentInPlan}>
+                          {plan?.content.map((item, index) => {
+                            return (
+                              <Grid className={classes.contentPlan} key={index}>
                                 <DoneIcon className={classes.iconContentPlan} />
                                 <ParagraphBody $colorName={"--eerie-black-00"}>
                                   {item}
                                 </ParagraphBody>
                               </Grid>
-                            </Typography>
-                          );
-                        })}
-                      </Grid>
-                    </CardContent>
-                    <CardActions className={classes.itemCenter}>
-                      <Button
-                        sx={{ margin: "0 24px", width: "100%" }}
-                        btnType={BtnType.Raised}
-                        translation-key="setup_survey_popup_save_question_title"
-                        children={<TextBtnSmall>Select</TextBtnSmall>}
-                        className={classes.btnSave}
-                        onClick={() => onClick(plan)}
-                      />
-                    </CardActions>
-                  </Card>
+                            );
+                          })}
+                        </Grid>
+                      </CardContent>
+                      <CardActions className={classes.itemCenter}>
+                        <Button
+                          fullWidth
+                          sx={{ mx: 3 }}
+                          btnType={BtnType.Raised}
+                          translation-key="setup_survey_popup_save_question_title"
+                          children={<TextBtnSmall>Select</TextBtnSmall>}
+                          className={classes.btnSave}
+                          onClick={() => onClick(plan)}
+                        />
+                      </CardActions>
+                    </Card>
+                  </Grid>
                 </Grid>
               );
             })}
