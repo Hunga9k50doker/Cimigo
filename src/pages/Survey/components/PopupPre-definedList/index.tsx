@@ -127,7 +127,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                   classes={{ root: classes.rootCheckbox }}
                   onClick={e => e.stopPropagation()}
                 />
-                {item.id === expanded ? '' :
+                {item.id === expanded &&
                   <ParagraphSmall $colorName="--eerie-black" className={classes.titleAttributesMobile} >{item.start}</ParagraphSmall>
                 }
                 <Collapse
