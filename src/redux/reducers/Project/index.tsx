@@ -52,6 +52,12 @@ export const projectReducer = (state = initial, action: any) =>
           projectAttributes: action.data
         };
         break;
+      case types.SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER:
+        draft.project = {
+          ...draft.project,
+          customQuestions: action.data
+        };
+        break;
       default:
         return state;
     }

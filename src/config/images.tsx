@@ -63,6 +63,9 @@ import icDrag from 'assets/img/icon/ic-drag.svg';
 import icOpenQuestion from 'assets/img/icon/ic-open-question.svg';
 import icSingleChoice from 'assets/img/icon/ic-single-choice.png';
 import icMultipleChoices from 'assets/img/icon/ic-multiple-choices.svg';
+import icNumbericScale from 'assets/img/icon/ic-numberic-scale.svg';
+import icSmileyRating from 'assets/img/icon/ic-smiley-rating.svg';
+import icStarRating from 'assets/img/icon/ic-star-rating.svg';
 import icDeleteAnswer from 'assets/img/icon/ic-delete-answer.svg';
 import imgPaymentPending from 'assets/img/img-payment-pending.svg';
 import imgLangVi from 'assets/img/lang-vi.png';
@@ -153,6 +156,9 @@ const images = {
   icOpenQuestion,
   icSingleChoice,
   icMultipleChoices,
+  icNumbericScale,
+  icSmileyRating,
+  icStarRating,
   icDeleteAnswer,
   imgPaymentPending,
   imgLaugh,

@@ -1,0 +1,34 @@
+.titleDisabled {
+  color: var(--gray-40) !important;
+}
+
+.titleSubDisabled {
+  color: var(--gray-60) !important;
+}
+
+.desktopTable {
+  margin-top: 24px;
+  .rowListImg {
+    width: 20px;
+    height: 20px;
+    margin-top: 3px;
+    object-fit: contain;
+  }
+}
+
+.menuItem {
+  img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+  .menuItemText {
+    margin-left: 12px;
+    color: var(--eerie-black-90);
+  }
+  &:hover {
+    .menuItemText {
+      color: var(--eerie-black-90) !important;
+    }
+  }
+}

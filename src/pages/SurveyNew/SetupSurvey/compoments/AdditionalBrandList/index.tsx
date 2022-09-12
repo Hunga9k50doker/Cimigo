@@ -191,7 +191,7 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
       >
         {t('setup_survey_add_brand_title', { step: 3 })}
       </Heading4>
-      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall>{t('common_max')} {maxAdditionalBrand}</ParagraphSmall>} />
+      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxAdditionalBrand}</ParagraphSmall>} />
       <ParagraphBody
         $colorName="--gray-80"
         mt={1}
@@ -200,7 +200,7 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
         dangerouslySetInnerHTML={{ __html: t('setup_survey_add_brand_sub_title') }}
       />
       {/* ===================start brand list desktop====================== */}
-      <SetupTable sx={{ borderRadius: 4 }} className={classes.desktopTable}>
+      <SetupTable className={classes.desktopTable}>
         <Table>
           <TableHead>
             <TableRow>

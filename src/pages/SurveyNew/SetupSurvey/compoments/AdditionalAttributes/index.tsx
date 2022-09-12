@@ -174,7 +174,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
     setUserAttributeDelete(null)
     setProjectAttributeDelete(null)
   }
-  
+
   const onDeleteAttribute = () => {
     if (userAttributeDelete) {
       dispatch(setLoading(true))
@@ -208,7 +208,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
       >
         {t('setup_survey_add_att_title', { step: 4 })}
       </Heading4>
-      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall>{t('common_max')} {maxAdditionalAttribute}</ParagraphSmall>} />
+      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxAdditionalAttribute}</ParagraphSmall>} />
       <ParagraphBody
         $colorName="--gray-80"
         mt={1}
@@ -328,7 +328,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
       )}
       <Tip sx={{ mt: { sm: 3, xs: 1 } }}>
         <LightbulbOutlined />
-        <ParagraphSmall translation-key="setup_survey_add_att_tip" dangerouslySetInnerHTML={{ __html: t('setup_survey_add_att_tip') }}/>
+        <ParagraphSmall translation-key="setup_survey_add_att_tip" dangerouslySetInnerHTML={{ __html: t('setup_survey_add_att_tip') }} />
       </Tip>
       <PopupManatoryAttributes
         isOpen={openPopupMandatory}

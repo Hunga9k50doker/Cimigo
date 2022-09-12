@@ -1,4 +1,5 @@
 import { AdditionalBrand } from "models/additional_brand";
+import { CustomQuestion } from "models/custom_question";
 import { Pack } from "models/pack";
 import { Project } from "models/project";
 import { ProjectAttribute } from "models/project_attribute";
@@ -27,6 +28,10 @@ export const SET_USER_ATTRIBUTES_OF_PROJECT_REDUCER = 'SET_USER_ATTRIBUTES_OF_PR
 export const GET_PROJECT_ATTRIBUTES_OF_PROJECT_REQUEST = 'GET_PROJECT_ATTRIBUTES_OF_PROJECT_REQUEST';
 
 export const SET_PROJECT_ATTRIBUTES_OF_PROJECT_REDUCER = 'SET_PROJECT_ATTRIBUTES_OF_PROJECT_REDUCER';
+
+export const GET_CUSTOM_QUESTIONS_OF_PROJECT_REQUEST = 'GET_CUSTOM_QUESTIONS_OF_PROJECT_REQUEST';
+
+export const SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER = 'SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER';
 
 export const getProjectRequest = (id: number, callback?: () => void) => {
   return {
@@ -110,6 +115,20 @@ export const getProjectAttributesRequest = (projectId: number) => {
 export const setProjectAttributesReducer = (data: ProjectAttribute[]) => {
   return {
     type: SET_PROJECT_ATTRIBUTES_OF_PROJECT_REDUCER,
+    data
+  }
+}
+
+export const getCustomQuestionsRequest = (projectId: number) => {
+  return {
+    type: GET_CUSTOM_QUESTIONS_OF_PROJECT_REQUEST,
+    projectId
+  }
+}
+
+export const setCustomQuestionsReducer = (data: CustomQuestion[]) => {
+  return {
+    type: SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER,
     data
   }
 }

@@ -22,6 +22,7 @@ import { useChangePrice } from "hooks/useChangePrice";
 import UploadPacks from "./compoments/UploadPacks";
 import AdditionalBrandList from "./compoments/AdditionalBrandList";
 import AdditionalAttributes from "./compoments/AdditionalAttributes";
+import CustomQuestions from "./compoments/CustomQuestions";
 
 interface SetupSurvey {
   projectId: number;
@@ -93,6 +94,11 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
           <AdditionalAttributes
             project={project}
           />
+          {project?.solution?.enableCustomQuestion && (
+            <CustomQuestions
+              project={project}
+            />
+          )}
         </Content>
         <MobileAction>
           <Button
