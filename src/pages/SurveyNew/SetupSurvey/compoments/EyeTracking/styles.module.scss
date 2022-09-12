@@ -7,12 +7,18 @@
 }
 
 .packItem {
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+  }
   .packItemBox {
     max-width: unset;
     border-radius: 12px;
     width: 315px;
     display: flex;
     border: 1px solid var(--gray-10);
+    @media only screen and (max-width: 767px) {
+      width: 100%;
+    }
     .packItemImgBox {
       display: flex;
       img {
@@ -29,6 +35,11 @@
       overflow: hidden;
       padding: 4px 8px;
       .packItemChipPackType {
+        background: transparent;
+        height: auto;
+        [class~="MuiChip-label"] {
+          padding: 0px;
+        }
       }
     }
   }

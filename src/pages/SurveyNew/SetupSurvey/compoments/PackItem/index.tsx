@@ -35,15 +35,15 @@ const PackItem = memo(({ item, editable, onAction }: PackItemProps) => {
           <Grid className={classes.itemInfor}>
             <Box>
               <ParagraphSmall className="ellipsis" $colorName="--eerie-black-65" translation-key="project_brand">{t('project_brand')}:</ParagraphSmall>
-              <Heading6 className="ellipsis" $fontWeight={500} $colorName="--eerie-black">{item.brand}</Heading6>
+              <Heading6 className="ellipsis" $fontWeight={500} $colorName="--eerie-black">{item.brand || "--"}</Heading6>
             </Box>
             <Box mt={1}>
               <ParagraphSmall className="ellipsis" $colorName="--eerie-black-65" translation-key="project_variant">{t('project_variant')}:</ParagraphSmall>
-              <Heading6 className="ellipsis" $fontWeight={500} $colorName="--eerie-black">{item.variant}</Heading6>
+              <Heading6 className="ellipsis" $fontWeight={500} $colorName="--eerie-black">{item.variant || "--"}</Heading6>
             </Box>
             <Box mt={1}>
               <ParagraphSmall className="ellipsis" $colorName="--eerie-black-65" translation-key="project_manufacturer">{t('project_manufacturer')}:</ParagraphSmall>
-              <Heading6 className="ellipsis" $fontWeight={500} $colorName="--eerie-black">{item.manufacturer}</Heading6>
+              <Heading6 className="ellipsis" $fontWeight={500} $colorName="--eerie-black">{item.manufacturer || "--"}</Heading6>
             </Box>
           </Grid>
         </Grid>
