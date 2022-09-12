@@ -6,6 +6,7 @@ import { UserAttribute } from 'models/user_attribute';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
+import { Project } from "models/project";
 import InputTextField from 'components/common/inputs/InputTextfield';
 import { useTranslation } from 'react-i18next';
 import {DialogTitle} from "components/common/dialogs/DialogTitle";
@@ -28,12 +29,13 @@ export interface UserAttributeFormData {
 interface Props {
   isAdd?: boolean,
   itemEdit?: UserAttribute,
+  project: Project;
   onCancel: () => void,
   onSubmit: (data: UserAttributeFormData) => void,
 }
 
 const PopupAddOrEditAttribute = memo((props: Props) => {
-  const { isAdd, itemEdit, onCancel, onSubmit } = props;
+  const { isAdd, itemEdit, onCancel, project, onSubmit } = props;
 
   const { t, i18n } = useTranslation()
 
@@ -131,7 +133,7 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
                             translation-key="setup_survey_popup_question_tooltip_icon"
                             title={t("setup_survey_popup_question_tooltip_icon")}
                           >
-                            <div className={classes.iconLanguage}>VI</div>
+                            <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
                           </Tooltip>
                         </InputAdornment>
                       }
@@ -156,7 +158,7 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
                             translation-key="setup_survey_popup_question_tooltip_icon"
                             title={t("setup_survey_popup_question_tooltip_icon")}
                           >
-                            <div className={classes.iconLanguage}>VI</div>
+                            <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
                           </Tooltip>
                         </InputAdornment>
                       }
