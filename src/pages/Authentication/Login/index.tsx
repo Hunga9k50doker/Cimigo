@@ -2,14 +2,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import Header from "components/Header";
 import Footer from "components/Footer";
-import Inputs from "components/Inputs";
 import Buttons from "components/Buttons";
 import { routes } from 'routers/routes';
 import { LoginForm } from "models/user";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
 import UserService from "services/user";
@@ -21,8 +19,12 @@ import { push } from "connected-react-router";
 import Google from "components/SocialButton/Google";
 import { useTranslation } from 'react-i18next';
 import { ReducerType } from "redux/reducers";
-
-
+import Heading2 from "components/common/text/Heading2";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
+import InputTextfield from "components/common/inputs/InputTextfield";
+import Button, { BtnType } from "components/common/buttons/Button"
+import TextBtnSecondary from "components/common/text/TextBtnSecondary";
+import ParagraphSmallUnderline from "components/common/text/ParagraphSmallUnderline";
 
 const Login = () => {
   const { t, i18n } = useTranslation()
@@ -75,6 +77,7 @@ const Login = () => {
   };
 
   const onSendVerify = () => {
+
     setIsNotVerified(false)
     const email = getValues('email');
     if (!email || errors.email) return
@@ -92,45 +95,52 @@ const Login = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="login" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <p className={classes.textLogin} translation-key="login_title">{t('login_title')}</p>
-          <Inputs
-            title={t('field_email_address')}
-            translation-key="field_email_address"
-            name="email"
-            placeholder={t('field_email_placeholder')}
-            translation-key-placeholder="field_email_placeholder"
-            type="text"
-            inputRef={register('email')}
-            errorMessage={errors.email?.message}
-          />
-          <Inputs
-            title={t('field_password')}
-            translation-key="field_password"
-            name="password"
-            type="password"
-            showEyes
-            placeholder={t('field_password_placeholder')}
-            translation-key-placeholder="field_password_placeholder"
-            inputRef={register('password')}
-            errorMessage={errors.password?.message}
-          />
+          <Heading2 className={classes.titleText} $colorName="--cimigo-blue" translation-key="login_title">{t('login_title')}</Heading2>
+          <ParagraphSmall className={classes.subText} translation-key="login_subtitle">{t('login_subtitle')}</ParagraphSmall>
+          <Stack spacing={2} mb={2}>
+            <InputTextfield
+              title={t('field_email_address')}
+              translation-key="field_email_address"
+              name="email"
+              placeholder={t('field_email_placeholder')}             
+              translation-key-placeholder="field_email_placeholder"
+              type="text"
+              inputRef={register('email')}
+              errorMessage={errors.email?.message}
+            />
+            <InputTextfield
+              title={t('field_password')}
+              translation-key="field_password"
+              name="password"
+              type="password"
+              showEyes
+              placeholder={t('field_password_placeholder')}
+              translation-key-placeholder="field_password_placeholder" 
+              inputRef={register('password')}
+              errorMessage={errors.password?.message}
+            />
+          </Stack>        
           <Grid className={classes.checkbox}>
             <div></div>
-            <Link to={routes.forgotPassword} className={classes.linkText} translation-key="login_redirect_forgot_password">
-              {t('login_redirect_forgot_password')}
-            </Link>
+            <ParagraphSmallUnderline to={routes.forgotPassword} translation-key="login_redirect_forgot_password">{t('login_redirect_forgot_password')}</ParagraphSmallUnderline>
           </Grid>
           {errorSubmit && (
             <Typography className={classes.errorText} translation-key="login_invalid_error">
               {t('login_invalid_error')}
             </Typography>
           )}
-          <Buttons type={'submit'} children={t('login_btn_login')} btnType="Blue" padding="11px 16px" translation-key="login_btn_login" />
+          <Button
+            btnType={BtnType.Raised}
+            type='submit'
+            translation-key="login_btn_login"
+            children={<TextBtnSecondary>{t('login_btn_login')}</TextBtnSecondary>}
+            className={classes.btnLoginForm}
+          />
           <div className={classes.separator}>
-            <span translation-key="login_login_with">{t('login_login_with')}</span>
+            <ParagraphSmall className={classes.childrenSeparator} translation-key="login_login_with">{t('login_login_with')}</ParagraphSmall>
           </div>
           <Google />
-          <Link className={classes.linkText} to={routes.register} translation-key="login_do_not_have_account">{t('login_do_not_have_account')}</Link>
+          <ParagraphSmallUnderline to={routes.register} className={classes.linkText} translation-key="login_do_not_have_account">{t('login_do_not_have_account')}</ParagraphSmallUnderline>
         </Grid>
       </form>
       <Footer />

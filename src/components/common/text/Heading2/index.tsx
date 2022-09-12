@@ -11,6 +11,7 @@ const Heading2 = styled(Typography)<Props>`
     font-weight: 600;
     font-size: 24px;
     line-height: 32px;
+    letter-spacing: -0.03em;
     color: ${props => `var(${props.$colorName || '--eerie-black'})`};
     @media only screen and (max-width: 767px) {
         font-size: 22px;

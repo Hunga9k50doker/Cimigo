@@ -59,7 +59,7 @@ export class PriceService {
     }
   }
 
-  
+
   static getCustomQuestionNumericScaleCost = (customQuestionType: CustomQuestionType, numberOfAttributes: number, configs: ConfigData) => {
     const _numberOfAttributes = numberOfAttributes > 1 ? numberOfAttributes - 1 : 0;
     const priceUSD = round((customQuestionType?.price || 0) + (_numberOfAttributes * (customQuestionType?.priceAttribute || 0)))
@@ -112,7 +112,7 @@ export class PriceService {
     return customQuestions?.reduce((total, item) => total + PriceService.getCustomQuestionItemCost(item, configs).priceUSD, 0) || 0;
   }
 
-  static getTotal = (project: Project, configs: ConfigData) => {
+  static getTotal = (project: Project, configs: ConfigData): TotalPrice => {
     const sampleSize: number = project.sampleSize;
 
     const sampleSizeCostUSD: number = PriceService.getSampleSizeCost(project);
@@ -146,4 +146,20 @@ export class PriceService {
       totalAmountUSD
     }
   }
+}
+
+export interface TotalPrice {
+  sampleSize: number,
+  sampleSizeCost: number,
+  sampleSizeCostUSD: number,
+  eyeTrackingSampleSizeCost: number,
+  eyeTrackingSampleSizeCostUSD: number,
+  customQuestionCost: number,
+  customQuestionCostUSD: number,
+  amount: number,
+  amountUSD: number,
+  vat: number,
+  vatUSD: number,
+  totalAmount: number,
+  totalAmountUSD: number,
 }
