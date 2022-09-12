@@ -1,8 +1,6 @@
 import { Grid } from "@mui/material"
-import { Project } from "models/project"
-import { memo, useEffect } from "react"
-import { SETUP_SURVEY_SECTION } from "../.."
-import classes from "./styles.module.scss"
+import { Project, SETUP_SURVEY_SECTION } from "models/project"
+import { memo, useEffect, useMemo } from "react"
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -34,7 +32,9 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
 
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  
+
+  const editable = useMemo(() => editableProject(project), [project])
+
   const schema = yup.object().shape({
     category: yup.string(),
     brand: yup.string(),
@@ -48,7 +48,7 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
   });
 
   const onSubmit = (data: BasicInformationForm) => {
-    if (!editableProject(project)) return
+    if (!editable) return
     dispatch(setLoading(true))
     ProjectService.updateProjectBasicInformation(project.id, data)
       .then(() => {
@@ -71,10 +71,10 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
   }, [project])
 
   return (
-    <Grid component="form" autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)} className={classes.root} id={SETUP_SURVEY_SECTION.basic_information}>
-      <Heading4 mb={1} $colorName="--eerie-black">STEP 1: Basic information</Heading4>
-      <ParagraphBody $colorName="--gray-80" mb={2}> Your product basic information. Some basic information about your product is necessary, and this information will be used in our survey when we interview the respondents.</ParagraphBody>
-      <Grid container spacing={2} maxWidth="684px">
+    <Grid component="form" autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)} id={SETUP_SURVEY_SECTION.basic_information}>
+      <Heading4 $fontSizeMobile={"16px"} mb={1} $colorName="--eerie-black" translation-key="setup_survey_basic_infor_title">{t('setup_survey_basic_infor_title', { step: 1 })}</Heading4>
+      <ParagraphBody $colorName="--gray-80" mb={{ xs: 1, sm: 2 }} translation-key="setup_survey_basic_infor_sub_title">{t('setup_survey_basic_infor_sub_title')}</ParagraphBody>
+      <Grid container spacing={2} maxWidth={{ xs: "unset", sm: "684px" }}>
         <Grid item xs={12} sm={6}>
           <InputTextfield
             title={t('field_project_category')}
@@ -120,14 +120,16 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
           />
         </Grid>
       </Grid>
-      <Button
-        sx={{ mt: 2 }}
-        type="submit"
-        btnType={BtnType.Outlined}
-        translation-key="common_save_changes"
-        children={<TextBtnSmall>{t('common_save_changes')}</TextBtnSmall>}
-        startIcon={<SaveIcon />}
-      />
+      {editable && (
+        <Button
+          sx={{ mt: 2, width: { xs: "100%", sm: "auto" } }}
+          type="submit"
+          btnType={BtnType.Outlined}
+          translation-key="common_save_changes"
+          children={<TextBtnSmall>{t('common_save_changes')}</TextBtnSmall>}
+          startIcon={<SaveIcon sx={{ fontSize: "16px !important" }} />}
+        />
+      )}
     </Grid>
   )
 })

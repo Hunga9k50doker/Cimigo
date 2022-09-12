@@ -1,4 +1,4 @@
-import { Box, Grid, StepConnector, StepContent, StepLabel, Stepper, Tabs, Typography } from '@mui/material';
+import { Box, Chip, Grid, StepConnector, StepContent, StepLabel, Stepper, Tabs, Typography } from '@mui/material';
 import styled from 'styled-components';
 
 export const PageRoot = styled(Grid)`
@@ -18,7 +18,7 @@ export const LeftContent = styled(Grid)`
 
 export const RightContent = styled(Grid)`
   width: 342px;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 1024px) {
     display: none;
   }
 `
@@ -85,7 +85,7 @@ export const MobileAction = styled(Grid)`
   display: none;
   padding: 24px 34px;
   box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 1024px) {
     display: block;
   }
 `;
@@ -154,6 +154,7 @@ export const RPStepConnector = styled(StepConnector)`
 `;
 
 export const RPStepLabel = styled(StepLabel)`
+  cursor: pointer !important;
   .MuiStepLabel-iconContainer {
     padding: 0;
     margin-right: 16px;
@@ -188,5 +189,55 @@ export const RPStepIconBox = styled(Box) <RPStepIconBoxProps>`
   > * {
     font-size: 18px;
     color: ${(props) => props.$active ? 'var(--cimigo-green-dark-2)' : 'var(--gray-60)'}
+  }
+`;
+
+export const MaxChip = styled(Chip)`
+  background: #F4F4F4;
+  border-radius: 30px;
+  height: 24px;
+`;
+
+export const Tip = styled(Grid)`
+  display: flex;
+  align-items: flex-start;
+  > svg {
+    margin-top: 3px;
+    margin-right: 8px;
+    color: var(--eerie-black-40);
+    font-size: 24px;
+  }
+  .MuiTypography-root {
+    margin: 0;
+    padding-left: 12px;
+    border-left: 1px solid var(--eerie-black-40);
+    span {
+      font-weight: 700;
+    }
+    color: var(--eerie-black);
+    @media only screen and (max-width: 767px) {
+      font-size: 10px;
+      line-height: 12px;
+    }
+  }
+`;
+
+export const PriceChip = styled(Chip)`
+  background: var(--cimigo-green-dark-1);
+  border-radius: 30px;
+  height: 24px;
+  .MuiChip-label {
+    padding: 0px 16px;
+    > * {
+      color: var(--ghost-white)
+    }
+  }
+  &.disabled {
+    background: var(--gray-10);
+    .MuiChip-label {
+      > * {
+        color: var(--gray-40)
+      }
+    }
   }
 `;

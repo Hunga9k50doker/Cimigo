@@ -504,12 +504,12 @@ const PaymentPage = memo(({ }: PaymentProps) => {
           <Grid classes={{ root: classes.bodyOrder }}>
             <p translation-key="payment_billing_sub_tab_payment_summary">{t('payment_billing_sub_tab_payment_summary')}</p>
             <div className={classes.flexOrder}>
-              <span translation-key="payment_billing_sub_tab_payment_summary_sample_size">{t('payment_billing_sub_tab_payment_summary_sample_size')} {`(${project?.sampleSize || 0})`}</span>
+              <span translation-key="common_sample_size">{t('common_sample_size')} {`(${project?.sampleSize || 0})`}</span>
               <span>{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</span>
             </div>
             {project?.customQuestions?.length > 0 && (
               <div className={classes.flexOrder}>
-                <span translation-key="payment_billing_sub_tab_payment_summary_custom_question">{t("payment_billing_sub_tab_payment_summary_custom_question")} {`(${(project?.customQuestions?.length) || 0})`}</span>
+                <span translation-key="common_custom_question">{t("common_custom_question")} {`(${(project?.customQuestions?.length) || 0})`}</span>
                 <span>{`$`}{fCurrency2(price?.customQuestionCostUSD)}</span>
               </div>
             )}

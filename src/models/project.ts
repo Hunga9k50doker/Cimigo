@@ -123,6 +123,10 @@ export interface UpdateEnableCustomQuestion {
   enableCustomQuestion: boolean;
 }
 
+export interface UpdateEnableEyeTracking {
+  enableEyeTracking: boolean;
+}
+
 export interface UpdateQuota {
   quotaTableId: number
   quotas: {
@@ -134,4 +138,19 @@ export interface UpdateQuota {
 
 export interface ResetQuota {
   quotaTableId: number
+}
+
+export enum SETUP_SURVEY_SECTION {
+  basic_information = 'basic-information',
+  upload_packs = 'upload-packs',
+  additional_brand_list = 'additional-brand-list',
+  additional_attributes = 'additional-attributes',
+  content_survey_setup = 'content-survey-setup',
+  custom_questions = 'custom_questions',
+  eye_tracking = 'eye-tracking'
+}
+
+export enum ETabRightPanel {
+  OUTLINE,
+  COST_SUMMARY
 }
