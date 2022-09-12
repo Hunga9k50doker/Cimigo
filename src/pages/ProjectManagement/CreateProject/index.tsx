@@ -15,11 +15,8 @@ import Header from "components/Header";
 import Footer from "components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { SolutionService } from "services/solution";
-import { DataPagination } from "models/general";
-import { Solution, SolutionCategory } from "models/Admin/solution";
-import * as yup from "yup";
+import { Solution } from "models/Admin/solution";
 import { routes } from "routers/routes";
-import images from "config/images";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ReducerType } from "redux/reducers";
@@ -29,6 +26,9 @@ import CreateProjectStep from "./components/CreateProjectStep";
 import SolutionList from "./components/SolutionList";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import { setCreateProjectRedirectReducer } from "redux/reducers/Project/actionTypes";
+import HomeIcon from "@mui/icons-material/Home";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import SubTitle from "components/common/text/SubTitle";
 
 export enum EStep {
   SELECT_SOLUTION,
@@ -48,29 +48,12 @@ const CreateProject = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
-  const schema = useMemo(() => {
-    return yup.object().shape({
-      name: yup.string().required(t("field_project_name_vali_required")),
-      surveyLanguage: yup
-        .object({
-          id: yup.string().required(t("field_survey_language_vali_required")),
-        })
-        .required(t("field_survey_language_vali_required")),
-      category: yup.string(),
-      brand: yup.string(),
-      variant: yup.string(),
-      manufacturer: yup.string(),
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i18n.language]);
-
   const { createProjectRedirect } = useSelector((state: ReducerType) => state.project)
 
   const dispatch = useDispatch();
   const history = useHistory();
   const [solutionShow, setSolutionShow] = useState<Solution>();
   const [solutionSelected, setSolutionSelected] = useState<Solution>();
-  useState<DataPagination<SolutionCategory>>();
   const [activeStep, setActiveStep] = useState<EStep>(EStep.SELECT_SOLUTION);
   const [planSelected, setPlanSelected] = useState<Plan>(null);
   const theme = useTheme();
@@ -123,13 +106,19 @@ const CreateProject = () => {
       <Header project />
       <Grid className={classes.container}>
         <div className={classes.linkTextHome}>
-          <img
-            src={images.icHomeMobile}
-            alt=""
+          <HomeIcon
+            className={classes.icHome}
             onClick={() => history.push(routes.project.management)}
-          />
-          <img src={images.icNextMobile} alt="" />
-          <span translation-key="header_projects">{t("header_projects")}</span>
+          >
+            {" "}
+          </HomeIcon>
+          <ArrowForwardIosIcon className={classes.icHome}></ArrowForwardIosIcon>
+          <SubTitle
+            $colorName={"--cimigo-green-dark-2"}
+            translation-key="header_projects"
+          >
+            {t("header_projects")}
+          </SubTitle>
         </div>
         <Stepper
           alternativeLabel
@@ -174,32 +163,24 @@ const CreateProject = () => {
           })}
         </Stepper>
         {activeStep === EStep.SELECT_SOLUTION && (
-          <>
-            <SolutionList
-              handleNextStep={() => {
-                handleNextStep();
-              }}
-              solutionShow={solutionShow}
-              onChangeSolution={onChangeSolution}
-            />
-          </>
+          <SolutionList
+            solutionShow={solutionShow}
+            onChangeSolution={onChangeSolution}
+            handleNextStep={handleNextStep}
+          />
         )}
         {activeStep === EStep.SELECT_PLAN && (
-          <>
-            <SelectPlan
-              solution={solutionSelected}
-              onChangePlanSelected={onChangePlanSelected}
-            />
-          </>
+          <SelectPlan
+            solution={solutionSelected}
+            onChangePlanSelected={onChangePlanSelected}
+          />
         )}
         {activeStep === EStep.CREATE_PROJECT && (
-          <>
-            <CreateProjectStep
-              solutionSelected={solutionSelected}
-              planSelected={planSelected}
-              onClickHandleBack={onClickHandleBack}
-            />
-          </>
+          <CreateProjectStep
+            solutionSelected={solutionSelected}
+            planSelected={planSelected}
+            onClickHandleBack={onClickHandleBack}
+          />
         )}
       </Grid>
       <Footer />

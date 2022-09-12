@@ -18,10 +18,14 @@ import PopupInforSolution from "pages/ProjectManagement/components/PopupInforSol
 import Heading1 from "components/common/text/Heading1";
 import SubTitle from "components/common/text/SubTitle";
 import BodySmall from "components/common/text/BodySmall";
+import LaunchIcon from '@mui/icons-material/Launch';
+import MobileBody from "components/common/text/MobileBody";
+import CheckIcon from '@mui/icons-material/Check';
+import TextBtnSmall from "components/common/text/TextBtnSmall";
 
 interface SolutionListProps {
-  handleNextStep: () => void;
   solutionShow?: Solution;
+  handleNextStep: () => void;
   onChangeSolution?: (solution: Solution) => void;
 }
 
@@ -182,24 +186,16 @@ const SolutionList = memo(
                         onClick={() => setIsReadMore(true)}
                         startIcon={
                           <>
-                            <img
-                              className={classes.icReadMore}
-                              src={images.icReadMore}
-                              alt=""
-                            />
-                            <img
-                              className={classes.icReadMoreGray}
-                              src={images.icReadMoreGray}
-                              alt=""
-                            />
+                            <LaunchIcon className={classes.icReadMore}></LaunchIcon>
+                            <LaunchIcon className={classes.icReadMoreGray}></LaunchIcon>
                           </>
                         }
                       >
-                        {t("common_read_more")}
+                        <TextBtnSmall>{t("common_read_more")}</TextBtnSmall>
                       </Button>
                       <div className={classes.ticketBox}>
                         <img src={images.icTicked} alt="" />
-                        <img src={images.icTick} alt="" />
+                        <CheckIcon></CheckIcon>
                       </div>
                     </Grid>
                   </Grid>
@@ -207,14 +203,26 @@ const SolutionList = memo(
               case EStatus.Coming_Soon:
                 return (
                   <Grid key={index} className={classes.cardComing}>
-                    <div translation-key="select_solution_coming_soon">
-                      {t("select_solution_coming_soon")}
-                    </div>
-                    <img src={item.image} alt="solution" />
-                    <SubTitle $colorName={"--gray-60"}>{item.title}</SubTitle>
-                    <BodySmall $colorName={"--gray-40"}>
-                      {item.description}
-                    </BodySmall>
+                    <Grid className={classes.titleComing}> 
+                      <MobileBody $colorName={"--eerie-black-65"} translation-key="select_solution_coming_soon">
+                        {t("select_solution_coming_soon")}
+                      </MobileBody>
+                    </Grid>
+                    <Grid sx={{px : "24px"}}>
+                      <Grid className={classes.titleCard}>
+                        <img
+                          className={classes.imgCard}
+                          src={item.image}
+                          alt="solution"
+                        />
+                        <SubTitle $colorName={"--gray-60"}>
+                            {item.title}
+                        </SubTitle>
+                      </Grid>
+                      <BodySmall $fontWeight={"500px"} $colorName={"--gray-40"}>
+                        {item.description}
+                      </BodySmall>
+                    </Grid>
                   </Grid>
                 );
               default:
@@ -225,15 +233,11 @@ const SolutionList = memo(
         <Grid className={classes.footerSelected}>
           <Grid>
             {!solutionShow ? (
-              <a translation-key="select_solution_no_solution_select">
-                {t("select_solution_no_solution_select")}
-              </a>
+              <MobileBody $colorName={"--cimigo-danger"} translation-key="select_solution_no_solution_select">{t("select_solution_no_solution_select")}</MobileBody>
             ) : (
               <>
-                <p translation-key="select_solution_selected_solution">
-                  {t("select_solution_selected_solution")}
-                </p>
-                <span>{solutionShow?.title}</span>
+                <MobileBody $colorName={"--eerie-black"} translation-key="select_solution_selected_solution">{t("select_solution_selected_solution")}</MobileBody>
+                <SubTitle $colorName={"--cimigo-green-dark-2"}>{solutionShow?.title}</SubTitle>
               </>
             )}
           </Grid>

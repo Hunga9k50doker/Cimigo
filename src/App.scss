@@ -22,6 +22,7 @@
   --cimigo-blue-light-4: #e8f1fb;
   --cimigo-blue-dark-1: #17497f;
   --cimigo-blue-dark-2: #103055;
+  --cimigo-blue-dark-3:#08182A;
   --cimigo-green-light-2: #d9f180;
   --cimigo-green-light-4: #f0f9cc;
   --cimigo-green-dark-1: #7c9911;
@@ -37,9 +38,11 @@
   --gray-60: #767676;
   --gray-80: #494949;
   --gray-90: #333333;
-  --ghost-white:#FAFAFF;
-  --eerie-black:#1C1C1C;
+  --ghost-white: #fafaff;
+  --eerie-black: #1c1c1c;
   --eerie-black-00: #000000;
+  --eerie-black-65: #1c1c1ca6;
+  --eerie-black-40: #1c1c1c66;
   --eerie-black-5: #1c1c1c0d;
   --eerie-black-20: #1c1c1c33;
   --eerie-black-40: #1c1c1c66;
@@ -50,6 +53,7 @@
   --orange-dark: #753e00;
   --cultured-gray: #EEF0F2;
   --red-error: #AF1C10;
+  --white: #FFFFFF;
   font-size: 16px;
   font-weight: 500;
   @media only screen and (max-width: 1024px) {
