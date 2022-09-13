@@ -16,9 +16,12 @@
         padding-left: 15px;
         padding-top: 32px;
         padding-bottom: 200px;
-        width: 224px;
-        @media only screen and (max-width: 367px) {
+        width: 239px;
+        @media only screen and (max-width: 767px) {
             width: 100%;
+        }
+        button{
+            min-height: 48px;
         }
     }
     .selectLeaguage{

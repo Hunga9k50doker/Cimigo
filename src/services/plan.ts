@@ -1,6 +1,5 @@
 import { API } from 'config/constans';
 import { UserGetPlans } from 'models/plan';
-import { UserGetSolutionCategories, UserGetSolutions } from 'models/solution';
 import api from 'services/configApi';
 
 export class PlanService {
@@ -13,6 +12,15 @@ export class PlanService {
         })
         .catch((e) => {
         return Promise.reject(e?.response?.data);
+        })
+    }
+    static async getPlan(id: number): Promise<any> {
+        return await api.get(`${API.PLAN.DEFAULT}/${id}`)
+        .then((res) => {
+            return Promise.resolve(res.data.data)
+        })
+        .catch((e) => {
+            return Promise.reject(e?.response?.data);
         })
     }
 }

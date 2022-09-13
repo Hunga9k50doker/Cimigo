@@ -29,6 +29,8 @@ import { setCreateProjectRedirectReducer } from "redux/reducers/Project/actionTy
 import HomeIcon from "@mui/icons-material/Home";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import SubTitle from "components/common/text/SubTitle";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { PlanService } from "services/plan";
 
 export enum EStep {
   SELECT_SOLUTION,
@@ -48,7 +50,9 @@ const CreateProject = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
-  const { createProjectRedirect } = useSelector((state: ReducerType) => state.project)
+  const { createProjectRedirect } = useSelector(
+    (state: ReducerType) => state.project
+  );
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -57,7 +61,6 @@ const CreateProject = () => {
   const [activeStep, setActiveStep] = useState<EStep>(EStep.SELECT_SOLUTION);
   const [planSelected, setPlanSelected] = useState<Plan>(null);
   const theme = useTheme();
-
   const isMobile = useMediaQuery(theme.breakpoints.down(767));
 
   const handleNextStep = () => {
@@ -88,19 +91,40 @@ const CreateProject = () => {
   const onChangeSolution = (solution: Solution) => {
     setSolutionShow(solution);
   };
-
+  const stepLabel = (id: number) => {
+    switch (id) {
+      case EStep.SELECT_SOLUTION: {
+        return solutionSelected?.title;
+      }
+      case EStep.SELECT_PLAN: {
+        return planSelected
+          && `${planSelected?.title} : US$ ${planSelected?.price}`;
+      }
+    }
+    return null;
+  };
   useEffect(() => {
-    if (createProjectRedirect) {
-      SolutionService.getSolution(createProjectRedirect.solutionId)
+    if (createProjectRedirect?.solutionId && createProjectRedirect.planId) {
+      dispatch(setLoading(true));
+      Promise.all([
+        SolutionService.getSolution(createProjectRedirect.solutionId),
+        PlanService.getPlan(createProjectRedirect.planId),
+      ])
         .then((res) => {
-          setSolutionSelected(res)
-          setActiveStep(EStep.CREATE_PROJECT)
+          setSolutionSelected(res[0]);
+          setPlanSelected(res[1]);
+          setActiveStep(EStep.CREATE_PROJECT);
         })
-      dispatch(setCreateProjectRedirectReducer(null))
+        .catch((e) => {
+          dispatch(setErrorMess(e));
+        })
+        .finally(() => {
+          dispatch(setLoading(false));
+          dispatch(setCreateProjectRedirectReducer(null));
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createProjectRedirect])
-
+  }, [createProjectRedirect]);
   return (
     <Grid className={classes.root}>
       <Header project />
@@ -109,9 +133,7 @@ const CreateProject = () => {
           <HomeIcon
             className={classes.icHome}
             onClick={() => history.push(routes.project.management)}
-          >
-            {" "}
-          </HomeIcon>
+          ></HomeIcon>
           <ArrowForwardIosIcon className={classes.icHome}></ArrowForwardIosIcon>
           <SubTitle
             $colorName={"--cimigo-green-dark-2"}
@@ -148,13 +170,7 @@ const CreateProject = () => {
                   {item.name}{" "}
                   {!isMobile && (
                     <ParagraphExtraSmall $colorName={"--gray-60"}>
-                      {item.id === EStep.SELECT_SOLUTION &&
-                        solutionSelected?.title}
-                      {item.id === EStep.SELECT_PLAN && planSelected && (
-                        <>
-                          {`${planSelected?.title} : US$ ${planSelected?.priceUSD}`}
-                        </>
-                      )}
+                      {stepLabel(item.id)}
                     </ParagraphExtraSmall>
                   )}
                 </StepLabel>

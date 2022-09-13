@@ -131,7 +131,7 @@ const CreateProjectStep = memo(
               mx={0.5}
               $fontWeight={"600"}
               $colorName={"--eerie-black"}
-            >{`${planSelected?.title} : US$ ${planSelected?.priceUSD}`}</Heading5>
+            >{`${planSelected?.title} : US$ ${planSelected?.price}`}</Heading5>
             <ParagraphSmallUnderline2
               className={classes.link}
               onClick={() => {
@@ -269,7 +269,7 @@ const CreateProjectStep = memo(
                   children={t("create_project_btn_submit")}
                   translation-key="create_project_btn_submit"
                   btnType={BtnType.Primary}
-                  padding="11px 16px"
+                  padding={"8px 47px"}
                 />
               </Grid>
             </Grid>

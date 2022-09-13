@@ -18,9 +18,9 @@ import PopupInforSolution from "pages/ProjectManagement/components/PopupInforSol
 import Heading1 from "components/common/text/Heading1";
 import SubTitle from "components/common/text/SubTitle";
 import BodySmall from "components/common/text/BodySmall";
-import LaunchIcon from '@mui/icons-material/Launch';
+import LaunchIcon from "@mui/icons-material/Launch";
 import MobileBody from "components/common/text/MobileBody";
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from "@mui/icons-material/Check";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 
 interface SolutionListProps {
@@ -186,8 +186,12 @@ const SolutionList = memo(
                         onClick={() => setIsReadMore(true)}
                         startIcon={
                           <>
-                            <LaunchIcon className={classes.icReadMore}></LaunchIcon>
-                            <LaunchIcon className={classes.icReadMoreGray}></LaunchIcon>
+                            <LaunchIcon
+                              className={classes.icReadMore}
+                            ></LaunchIcon>
+                            <LaunchIcon
+                              className={classes.icReadMoreGray}
+                            ></LaunchIcon>
                           </>
                         }
                       >
@@ -203,12 +207,15 @@ const SolutionList = memo(
               case EStatus.Coming_Soon:
                 return (
                   <Grid key={index} className={classes.cardComing}>
-                    <Grid className={classes.titleComing}> 
-                      <MobileBody $colorName={"--eerie-black-65"} translation-key="select_solution_coming_soon">
+                    <Grid className={classes.titleComing}>
+                      <MobileBody
+                        $colorName={"--eerie-black-65"}
+                        translation-key="select_solution_coming_soon"
+                      >
                         {t("select_solution_coming_soon")}
                       </MobileBody>
                     </Grid>
-                    <Grid sx={{px : "24px"}}>
+                    <Grid sx={{ px: "24px" }}>
                       <Grid className={classes.titleCard}>
                         <img
                           className={classes.imgCard}
@@ -216,7 +223,7 @@ const SolutionList = memo(
                           alt="solution"
                         />
                         <SubTitle $colorName={"--gray-60"}>
-                            {item.title}
+                          {item.title}
                         </SubTitle>
                       </Grid>
                       <BodySmall $fontWeight={"500px"} $colorName={"--gray-40"}>
@@ -233,11 +240,23 @@ const SolutionList = memo(
         <Grid className={classes.footerSelected}>
           <Grid>
             {!solutionShow ? (
-              <MobileBody $colorName={"--cimigo-danger"} translation-key="select_solution_no_solution_select">{t("select_solution_no_solution_select")}</MobileBody>
+              <MobileBody
+                $colorName={"--cimigo-danger"}
+                translation-key="select_solution_no_solution_select"
+              >
+                {t("select_solution_no_solution_select")}
+              </MobileBody>
             ) : (
               <>
-                <MobileBody $colorName={"--eerie-black"} translation-key="select_solution_selected_solution">{t("select_solution_selected_solution")}</MobileBody>
-                <SubTitle $colorName={"--cimigo-green-dark-2"}>{solutionShow?.title}</SubTitle>
+                <MobileBody
+                  $colorName={"--eerie-black"}
+                  translation-key="select_solution_selected_solution"
+                >
+                  {t("select_solution_selected_solution")}
+                </MobileBody>
+                <SubTitle $colorName={"--cimigo-green-dark-2"}>
+                  {solutionShow?.title}
+                </SubTitle>
               </>
             )}
           </Grid>

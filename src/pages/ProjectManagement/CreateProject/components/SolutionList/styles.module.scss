@@ -55,7 +55,7 @@
   }
 }
 .rootStepLabelCompleted {
-  color: #53660c !important;
+  color: var(--cimigo-green-dark-2) !important;
   font-weight: 600 !important;
   font-size: 16px;
   @media only screen and (max-width: 767px) {
@@ -64,7 +64,7 @@
   }
 }
 .rootStepLabelActive {
-  color: #53660c !important;
+  color: var(--cimigo-green-dark-2) !important;
   font-weight: 600 !important;
   font-size: 16px;
   @media only screen and (max-width: 767px) {
@@ -78,7 +78,7 @@
 }
 .activeConnector {
   span {
-    border-color: #7c9911;
+    border-color: var(--cimigo-green-dark);
   }
 }
 
@@ -96,7 +96,7 @@
     font-weight: 600;
     font-size: 32px;
     line-height: 48px;
-    color: #1f61a9;
+    color: var(--cimigo-blue);
     padding-right: 30px;
     margin: 0px;
     @media only screen and (max-width: 767px) {
@@ -164,7 +164,7 @@
   }
 }
 .card {
-  background: #eef0f2;
+  background: var(--cultured-gray);
   cursor: pointer;
   min-height: 300px;
   max-width: 23%;
@@ -190,7 +190,7 @@
     font-size: 14px;
     line-height: 20px;
     letter-spacing: 0.015em;
-    color: #1c1c1c;
+    color: var(--eerie-black);
     @media only screen and (max-width: 767px) {
       text-align: start;
     }
@@ -208,10 +208,10 @@
   &:hover {
     background: var(--cimigo-blue);
     p {
-      color: #fafaff;
+      color: var(--ghost-white);
     }
     span {
-      color: #fafaff;
+      color: var(--ghost-white);
     }
     @media only screen and (max-width: 767px) {
       .btnReadMoreRoot {
@@ -262,7 +262,7 @@
   }
 }
 .cardComing {
-  background: #fafaff;
+  background: var(--ghost-white);
   min-height: 300px;
   max-width: 23%;
   display: flex;
@@ -279,7 +279,7 @@
   }
   
   .titleComing {
-    background: rgba(28, 28, 28, 0.05);
+    background: var(--eerie-black-5);
     width: 100%;
     height: 36px;
     display: flex;
@@ -289,7 +289,7 @@
     font-size: 14px;
     line-height: 20px;
     letter-spacing: 0.025em;
-    color: rgba(28, 28, 28, 0.65);
+    color: var(--eerie-black-65);
     margin-bottom: 24px;
   }
   > img {
@@ -314,61 +314,6 @@
   }
 }
 
-// ========================= Create project =====================
-
-.form {
-  max-width: 380px;
-  margin: auto;
-  margin-bottom: 100px;
-  // min-width: 360px;
-  @media only screen and (max-width: 767px) {
-    padding: 0px 19px;
-  }
-}
-.title {
-  font-weight: 500;
-  font-size: 40px;
-  color: #1f61a9;
-  text-align: center;
-  margin: 0;
-  @media only screen and (max-width: 767px) {
-    font-size: 24px;
-  }
-}
-.textLink {
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 16px;
-  color: #1f61a9;
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-  margin-bottom: 44px;
-  text-underline-position: under;
-  text-decoration: underline !important;
-  @media only screen and (max-width: 767px) {
-    font-size: 14px;
-  }
-}
-.textInfo {
-  font-weight: 500;
-  font-size: 16px;
-  color: #1f61a9;
-  margin: 20px 0px;
-  @media only screen and (max-width: 767px) {
-    font-size: 14px;
-  }
-  span {
-    font-weight: 500;
-    font-size: 12px;
-    color: #7c9911;
-  }
-  .inforSub {
-    font-weight: 500;
-    font-size: 12px;
-    color: rgba(28, 28, 28, 0.65);
-  }
-}
 .category {
   font-style: normal;
   font-weight: 500;
@@ -377,35 +322,9 @@
   letter-spacing: 0.015em;
 }
 .categorySelected {
-  background: #bed7f3;
-  color: #103055;
-  border: 1px solid #17497f;
-}
-.linkTextHome {
-  display: none;
-  span{
-    color: #1f61a9;
-  }
-  @media only screen and (max-width: 767px) {
-    display: flex;
-    align-items: center;
-    margin: 20px 19px 0px 19px;
-
-    img {
-      &:first-child {
-        cursor: pointer;
-      }
-      margin-right: 15px;
-    }
-    span {
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 20px;
-      letter-spacing: 0.015em;
-      color: #53660C;
-    }
-  }
+  background: var(--cimigo-blue-light-3);
+  color: var(--cimigo-blue-dark-2);
+  border: 1px solid var(--cimigo-blue-dark-1);
 }
 .btnReadMore {
   display: none;
@@ -430,8 +349,8 @@
   text-transform: none;
   padding: 5px 16px 5px 14px;
   white-space: nowrap;
-  color: rgba(28, 28, 28, 0.2);
-  background: rgba(28, 28, 28, 0.2);
+  color: var(--eerie-black-20);
+  background: var(--eerie-black-20);
 }
 .btndisabled {
   cursor: not-allowed;
@@ -441,7 +360,7 @@
   @media only screen and (max-width: 767px) {
     display: flex;
     justify-content: space-between;
-    background: #ffffff;
+    background: var(--white);
     box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
     border-radius: 0px;
     padding: 16px 19px;
@@ -457,7 +376,7 @@
         font-size: 16px;
         line-height: 20px;
         letter-spacing: 0.015em;
-        color: #53660c;
+        color: var(--cimigo-green-dark-2);
       }
       a {
         display: flex;

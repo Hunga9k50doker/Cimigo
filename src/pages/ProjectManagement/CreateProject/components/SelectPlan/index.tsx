@@ -24,11 +24,19 @@ import { useForm } from "react-hook-form";
 import InputSelect from "components/common/inputs/InputSelect";
 import { CreateProjectFormData } from "../CreateProjectStep";
 import clsx from "clsx";
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
 interface SelectPlanProps {
   solution?: Solution;
   onChangePlanSelected?: (plan: Plan) => void;
 }
-
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
 const SelectPlan = memo(
   ({ solution, onChangePlanSelected }: SelectPlanProps) => {
     const dispatch = useDispatch();
@@ -109,10 +117,23 @@ const SelectPlan = memo(
           </FormControl>
         </div>
         <div>
-          <Grid className={classes.body}>
+          <Grid
+            container
+            spacing={2}
+            className={classes.body}
+            justifyContent="center"
+          >
             {plan?.data.map((plan) => {
               return (
-                <Grid className={classes.card}>
+                <Grid
+                  className={clsx(classes.card, {
+                    [classes.cardPopular]: plan?.isMostPopular,
+                  })}
+                  item
+                  xs={12}
+                  md={6}
+                  lg={4}
+                >
                   <Grid
                     className={clsx(classes.layoutCard, {
                       [classes.layoutCardPopular]: plan?.isMostPopular,
@@ -175,7 +196,7 @@ const SelectPlan = memo(
                       <CardActions className={classes.itemCenter}>
                         <Button
                           fullWidth
-                          sx={{ mx: 3 }}
+                          sx={{ mx: 7.25 }}
                           btnType={BtnType.Raised}
                           translation-key="setup_survey_popup_save_question_title"
                           children={<TextBtnSmall>Select</TextBtnSmall>}
