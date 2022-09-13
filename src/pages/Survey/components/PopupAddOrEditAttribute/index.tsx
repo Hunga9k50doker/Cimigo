@@ -1,15 +1,23 @@
 import { memo, useState, useEffect, useMemo } from 'react';
-import { Collapse, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, ListItem, ListItemText } from '@mui/material';
+import { Collapse, Dialog, Grid, ListItem, ListItemText, InputAdornment, Tooltip } from '@mui/material';
 import classes from './styles.module.scss';
-
-import Buttons from 'components/Buttons';
 import Images from "config/images";
 import { UserAttribute } from 'models/user_attribute';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
-import Inputs from 'components/Inputs';
+import { Project } from "models/project";
+import InputTextField from 'components/common/inputs/InputTextfield';
 import { useTranslation } from 'react-i18next';
+import {DialogTitle} from "components/common/dialogs/DialogTitle";
+import { DialogContent } from "components/common/dialogs/DialogContent";
+import { DialogActions } from "components/common/dialogs/DialogActions";
+import Heading3 from "components/common/text/Heading3";
+import Heading6 from "components/common/text/Heading6";
+import ButtonClose from "components/common/buttons/ButtonClose";
+import Button, {BtnType} from "components/common/buttons/Button";
+import ParagraphSmall from 'components/common/text/ParagraphSmall';
+import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
 
 
 export interface UserAttributeFormData {
@@ -21,12 +29,13 @@ export interface UserAttributeFormData {
 interface Props {
   isAdd?: boolean,
   itemEdit?: UserAttribute,
+  project: Project;
   onCancel: () => void,
   onSubmit: (data: UserAttributeFormData) => void,
 }
 
 const PopupAddOrEditAttribute = memo((props: Props) => {
-  const { isAdd, itemEdit, onCancel, onSubmit } = props;
+  const { isAdd, itemEdit, onCancel, project, onSubmit } = props;
 
   const { t, i18n } = useTranslation()
 
@@ -84,20 +93,19 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
       <form autoComplete="off" className={classes.form} noValidate onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle className={classes.header}>
           {itemEdit ? (
-            <p className={classes.title} translation-key="setup_survey_popup_edit_your_own_att_title">{t('setup_survey_popup_edit_your_own_att_title')}</p>
+            <Heading3 $colorName="--ghost-white" translation-key="setup_survey_popup_edit_your_own_att_title">{t('setup_survey_popup_edit_your_own_att_title')}</Heading3>
           ) : (
-            <p className={classes.title} translation-key="setup_survey_popup_add_your_own_att_title">{t('setup_survey_popup_add_your_own_att_title')}</p>
+            <Heading3 $colorName="--ghost-white" translation-key="setup_survey_popup_add_your_own_att_title">{t('setup_survey_popup_add_your_own_att_title')}</Heading3>
           )}
-          <IconButton onClick={onCancel}>
-            <img src={Images.icClose} alt='' />
-          </IconButton>
+          <ButtonClose onClick={onCancel}>
+          </ButtonClose>
         </DialogTitle>
         <DialogContent className={classes.body} dividers>
-          <p translation-key="setup_survey_popup_your_own_att_sub_title">{t('setup_survey_popup_your_own_att_sub_title')}</p>
+          <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_popup_your_own_att_sub_title">{t('setup_survey_popup_your_own_att_sub_title')}</ParagraphSmall>
           <Grid className={classes.listNumberMobile}>
             <div className={classes.textMobile}>
-              <p translation-key="setup_survey_add_att_start_label">{t('setup_survey_add_att_start_label')}</p>
-              <p translation-key="setup_survey_add_att_end_label">{t('setup_survey_add_att_end_label')}</p>
+              <ParagraphExtraSmall translation-key="setup_survey_add_att_start_label">{t('setup_survey_add_att_start_label')}</ParagraphExtraSmall>
+              <ParagraphExtraSmall translation-key="setup_survey_add_att_end_label">{t('setup_survey_add_att_end_label')}</ParagraphExtraSmall>
             </div>
             <div className={classes.numberMobile}>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
           </Grid>
@@ -111,13 +119,24 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
               <ListItemText>
                 <Grid className={classes.listFlex}>
                   <Grid item xs={4} className={classes.listTextLeft}>
-                    <Inputs
+                    <InputTextField
+                      className={classes.inputPoint}
                       title={t('setup_survey_popup_your_own_att_start_point_label')}
                       translation-key="setup_survey_popup_your_own_att_start_point_label"
                       name="start"
                       placeholder={t('setup_survey_popup_your_own_att_start_point_label_placeholder')}
                       translation-key-placeholder="setup_survey_popup_your_own_att_start_point_label_placeholder"
                       inputRef={register('start')}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Tooltip
+                            translation-key="setup_survey_popup_question_tooltip_icon"
+                            title={t("setup_survey_popup_question_tooltip_icon")}
+                          >
+                            <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
+                          </Tooltip>
+                        </InputAdornment>
+                      }
                       errorMessage={errors.start?.message}
                     />
                   </Grid>
@@ -125,13 +144,24 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
                     <div>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
                   </Grid>
                   <Grid item xs={4} className={classes.listTextRight}>
-                    <Inputs
+                    <InputTextField
+                      className={classes.inputPoint}
                       title={t('setup_survey_popup_your_own_att_end_point_label')}
                       translation-key="setup_survey_popup_your_own_att_end_point_label"
                       name="end"
                       placeholder={t('setup_survey_popup_your_own_att_end_point_label_placeholder')}
                       translation-key-placeholder="setup_survey_popup_your_own_att_end_point_label_placeholder"
                       inputRef={register('end')}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Tooltip
+                            translation-key="setup_survey_popup_question_tooltip_icon"
+                            title={t("setup_survey_popup_question_tooltip_icon")}
+                          >
+                            <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
+                          </Tooltip>
+                        </InputAdornment>
+                      }
                       errorMessage={errors.end?.message}
                     />
                   </Grid>
@@ -141,32 +171,31 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
           </Grid>
           <Grid className={classes.tips}>
             <img src={expanded ? Images.icTipGray : Images.icTipBlue} alt="" onClick={handleExpandClick} />
-            <div style={{ display: expanded ? "flex" : "none" }} className={classes.border} />
-            <Grid className={classes.collapse} >
-              <p
+            <div style={{ display: expanded ? "flex" : "none" }}className={classes.border}/>
+            <Grid className={classes.collapse} > 
+              <Heading6
                 onClick={handleExpandClick}
                 style={{
-                  color: expanded ? "rgba(28, 28, 28, 0.65)" : "#1F61A9",
-                  fontWeight: expanded ? 600 : 500,
+                  color: expanded ? "var(--eerie-black-65)" : "var(--cimigo-blue)",
                   marginLeft: expanded ? "0px" : "12px"
                 }}
                 translation-key="setup_survey_popup_your_own_att_tip_title"
               >
                 {t('setup_survey_popup_your_own_att_tip_title')}
-              </p>
+              </Heading6>
               <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <p translation-key="setup_survey_popup_your_own_att_tip_sub">{t('setup_survey_popup_your_own_att_tip_sub')}</p>
+                <ParagraphSmall translation-key="setup_survey_popup_your_own_att_tip_sub">{t('setup_survey_popup_your_own_att_tip_sub')}</ParagraphSmall>
               </Collapse>
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions className={classes.btn}>
-          <Buttons
+          <Button btnType={BtnType.Secondary} onClick={onCancel} translation-key="common_cancel">{t('common_cancel')}</Button>
+          <Button
             type="submit"
             children={itemEdit ? t('setup_survey_add_att_btn_edit') : t('setup_survey_add_att_btn_add')}
             translation-key={itemEdit ? 'setup_survey_add_att_btn_edit' : 'setup_survey_add_att_btn_add'}
-            btnType='Blue'
-            padding='10px 16px'
+            btnType={BtnType.Raised}
           />
         </DialogActions>
       </form>

@@ -13,53 +13,12 @@
   flex-direction: column;
   overflow-y: auto;
 }
-.title {
-  margin: 0;
-  font-weight: 600;
-  font-size: 22px;
-  color: #08182a;
-}
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #17497f;
-  padding: 12px 24px;
-  p {
-    font-weight: 600;
-    font-size: 22px;
-    color: #fafaff;
-  }
-  button {
-    background-color: #ffffff !important;
-  }
-}
-.body {
-  min-height: 300px;
-  padding: 24px;
-  border: none !important;
-  @media only screen and (max-width: 767px) {
-    overflow: auto;
-    padding: 24px 24px 0px 24px;
-  }
-}
-.body > p {
-  margin: 0;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0.015em;
-  color: #1c1c1c;
-  @media only screen and (max-width: 767px) {
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 140%;
-    letter-spacing: 0.015em;
-    color: #1c1c1c;
-  }
-}
+
 .rootList {
-  padding: 30px 0px;
+  padding: 16px 0px 24px 0;
+  @media only screen and (max-width: 767px) {
+    padding-bottom: 16px;
+  }
 }
 .listFlex {
   display: flex;
@@ -82,26 +41,54 @@
     max-width: unset !important;
   }
 }
-.listTextLeft > p {
-  margin: 0;
-  font-weight: 400;
-  font-size: 14px;
-  color: #000000;
-  @media only screen and (max-width: 767px) {
-    padding-left: 14px;
+.listTextLeft {
+  p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--eerie-black);
+    @media only screen and (max-width: 767px) {
+      color: var(--gray-80);
+    }
   }
 }
-.listTextRight > p {
-  margin: 0;
-  font-weight: 400;
-  font-size: 14px;
-  color: #000000;
-  @media only screen and (max-width: 767px) {
-    padding-left: 14px;
+.listTextRight {
+  p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--eerie-black);
+    @media only screen and (max-width: 767px) {
+      color: var(--gray-80);
+    }
   }
+}
+
+.inputPoint {
+  min-height: 42px;
+  border-radius: 5px;
+  padding-left: 16px;
+  input {
+    padding: 0px;
+  }
+}
+
+.iconLanguage {
+  color: var(--eerie-black-65);
+  background-color: rgba(221, 221, 221, 1);
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 14.6px;
+  text-transform: uppercase;
 }
 .listNumber {
-  margin: auto 35px;
+  margin: 24px 24px 0 24px;
   max-width: 240px;
   @media only screen and (max-width: 767px) {
     display: none;
@@ -141,9 +128,6 @@
     display: flex;
     justify-content: space-between;
     p {
-      font-weight: 400;
-      font-size: 12px;
-      line-height: 15px;
       color: #000000;
       margin-bottom: 12px;
     }
@@ -182,8 +166,6 @@
 .rootListItem > div {
   &:first-child {
     display: block;
-    padding-left: 16px;
-    padding-right: 16px;
     @media only screen and (max-width: 767px) {
       padding: 0px;
     }
@@ -193,66 +175,39 @@
   display: flex;
   align-items: flex-start;
   padding-right: 40px;
-  margin-bottom: 46px;
   img {
     cursor: pointer;
   }
 }
+
 .border {
   background: rgba(28, 28, 28, 0.4);
   width: 1px;
   height: 135px;
   margin: auto 12px;
 }
+
 .collapse > p {
   margin-top: 3px;
-  font-size: 14px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   cursor: pointer;
 }
-.collapse > div {
-  p {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 140%;
-    text-align: justify;
-    letter-spacing: 0.015em;
-    color: rgba(28, 28, 28, 0.65);
-  }
-}
-.rootinput {
-  margin-bottom: 5px;
-  margin-top: 3px;
-}
-.input {
-  padding: 14px 16px;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 140%;
-  letter-spacing: 0.015em;
-}
 
-.input2 {
-  padding: 9px 16px;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 12px;
-  line-height: 120%;
-  letter-spacing: 0.05em;
-}
 .btn {
-  padding: 0;
-  margin: 24px;
-  display: flex;
-  justify-content: flex-end;
-  button {
-    width: 25%;
+  button:not(:first-child) {
+    margin-left: 16px;
   }
   @media only screen and (max-width: 767px) {
+    display: flex;
+    flex-direction: column-reverse;
     button {
       width: 100%;
+      &:not(:first-child) {
+        margin-left: 0;
+      }
+      &:first-child {
+        margin-top: 16px;
+      }
     }
   }
 }
