@@ -17,7 +17,7 @@ import Button, {BtnType} from "components/common/buttons/Button";
 import ParagraphSmall from 'components/common/text/ParagraphSmall';
 import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
 import ParagraphBody from 'components/common/text/ParagraphBody';
-import InputCheckBox from 'components/common/inputs/InputCheckbox';
+import InputCheckbox from 'components/common/inputs/InputCheckbox';
 
 interface Props {
   isOpen: boolean,
@@ -120,7 +120,7 @@ const PopupPreDefinedList = memo((props: Props) => {
               style={{ background: item.id === expanded ? '#EEEEEE' : '' }}
             >
               <Grid classes={{ root: classes.rootCollapseMobile }}>
-                <InputCheckBox
+                <InputCheckbox
                   disabled={isDisabled(item)}
                   checked={attributesSelected.includes(item.id)}
                   onChange={(e) => onChange(item)}
@@ -160,7 +160,7 @@ const PopupPreDefinedList = memo((props: Props) => {
               <ListItemText>
                 <Grid className={clsx(classes.listFlex, { [classes.listFlexChecked]: attributesSelected.includes(item.id) })}>
                   <Grid>
-                    <InputCheckBox
+                    <InputCheckbox
                       disabled={isDisabled(item)}
                       checked={attributesSelected.includes(item.id)}
                       classes={{ root: classes.rootCheckbox }}

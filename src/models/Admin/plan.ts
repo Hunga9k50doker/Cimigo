@@ -17,6 +17,8 @@ export interface Plan {
   deletedAt: Date;
   languages?: Plan[];
   solution?: Solution;
+  priceUSD?: string;
+  priceVND?: string;
 }
 
 export interface GetPlansParams {

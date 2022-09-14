@@ -1,17 +1,15 @@
 import produce from 'immer';
-import { Project } from 'models/project';
+import { CreateProjectRedirect, Project } from 'models/project';
 import * as types from './actionTypes';
 
 export interface ProjectState {
-  solutionId?: number,
-  planId?: number,
+  createProjectRedirect?: CreateProjectRedirect,
   project?: Project,
   cancelPayment?: boolean
 }
 
 const initial: ProjectState = {
-  solutionId: null,
-  planId: null,
+  createProjectRedirect: null,
   project: null,
   cancelPayment: false,
 }
@@ -22,8 +20,8 @@ export const projectReducer = (state = initial, action: any) =>
       case types.SET_PROJECT_REDUCER:
         draft.project = action.data;
         break;
-      case types.SET_SOLUTION_CREATE_PROJECT_REDUCER:
-        draft.solutionId = action.data;
+      case types.SET_CREATE_PROJECT_REDIRECT_OF_PROJECT_REDUCER:
+        draft.createProjectRedirect = action.data;
         break;
       case types.SET_CANCEL_PAYMENT_REDUCER:
         draft.cancelPayment = action.data;
@@ -50,6 +48,18 @@ export const projectReducer = (state = initial, action: any) =>
         draft.project = {
           ...draft.project,
           projectAttributes: action.data
+        };
+        break;
+      case types.SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER:
+        draft.project = {
+          ...draft.project,
+          customQuestions: action.data
+        };
+        break;
+      case types.SET_EYE_TRACKING_PACKS_OF_PROJECT_REDUCER:
+        draft.project = {
+          ...draft.project,
+          eyeTrackingPacks: action.data
         };
         break;
       default:

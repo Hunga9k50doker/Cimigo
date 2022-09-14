@@ -31,6 +31,9 @@ export const API = {
     CATEGORY: '/v1.0/solution/categories',
     CATEGORY_HOME: '/v1.0/solution/categories-home'
   },
+  PLAN: {
+    DEFAULT: '/v1.0/plan',
+  },
   PROJECT: {
     DEFAULT: '/v1.0/project',
     RENAME: '/v1.0/project/:id/rename',
@@ -39,6 +42,7 @@ export const API = {
     TARGET: '/v1.0/project/:id/target',
     SAMPLE_SIZE: '/v1.0/project/:id/sample-size',
     UPDATE_ENABLE_CUSTOM_QUESTION: '/v1.0/project/:id/update-enable-custom-question',
+    UPDATE_ENABLE_EYE_TRACKING: "/v1.0/project/:id/update-enable-eye-tracking",
     QUOTA: {
       DEFAULT: '/v1.0/project/:id/quota',
     }

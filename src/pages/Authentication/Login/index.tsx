@@ -40,7 +40,7 @@ const Login = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
-  const { solutionId } = useSelector((state: ReducerType) => state.project)
+  const { createProjectRedirect } = useSelector((state: ReducerType) => state.project)
 
   const dispatch = useDispatch()
   const [isNotVerified, setIsNotVerified] = useState(false)
@@ -65,7 +65,7 @@ const Login = () => {
       .then((res) => {
         localStorage.setItem(EKey.TOKEN, res.token)
         dispatch(setUserLogin(res.user))
-        if (solutionId) {
+        if (createProjectRedirect) {
           dispatch(push(routes.project.create));
         }
       })

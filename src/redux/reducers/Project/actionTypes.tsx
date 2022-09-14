@@ -1,6 +1,7 @@
 import { AdditionalBrand } from "models/additional_brand";
+import { CustomQuestion } from "models/custom_question";
 import { Pack } from "models/pack";
-import { Project } from "models/project";
+import { CreateProjectRedirect, Project } from "models/project";
 import { ProjectAttribute } from "models/project_attribute";
 import { UserAttribute } from "models/user_attribute";
 
@@ -8,7 +9,7 @@ export const GET_PROJECT_REQUEST = 'GET_PROJECT_REQUEST';
 
 export const SET_PROJECT_REDUCER = 'SET_PROJECT_REDUCER';
 
-export const SET_SOLUTION_CREATE_PROJECT_REDUCER = 'SET_SOLUTION_CREATE_PROJECT_REDUCER';
+export const SET_CREATE_PROJECT_REDIRECT_OF_PROJECT_REDUCER = 'SET_CREATE_PROJECT_REDIRECT_OF_PROJECT_REDUCER';
 
 export const SET_CANCEL_PAYMENT_REDUCER = 'SET_CANCEL_PAYMENT_REDUCER';
 
@@ -28,6 +29,14 @@ export const GET_PROJECT_ATTRIBUTES_OF_PROJECT_REQUEST = 'GET_PROJECT_ATTRIBUTES
 
 export const SET_PROJECT_ATTRIBUTES_OF_PROJECT_REDUCER = 'SET_PROJECT_ATTRIBUTES_OF_PROJECT_REDUCER';
 
+export const GET_CUSTOM_QUESTIONS_OF_PROJECT_REQUEST = 'GET_CUSTOM_QUESTIONS_OF_PROJECT_REQUEST';
+
+export const SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER = 'SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER';
+
+export const GET_EYE_TRACKING_PACKS_OF_PROJECT_REQUEST = 'GET_EYE_TRACKING_PACKS_OF_PROJECT_REQUEST';
+
+export const SET_EYE_TRACKING_PACKS_OF_PROJECT_REDUCER = 'SET_EYE_TRACKING_PACKS_OF_PROJECT_REDUCER';
+
 export const getProjectRequest = (id: number, callback?: () => void) => {
   return {
     type: GET_PROJECT_REQUEST,
@@ -43,10 +52,10 @@ export const setProjectReducer = (data: Project) => {
   }
 }
 
-export const setSolutionCreateProject = (id: number) => {
+export const setCreateProjectRedirectReducer = (data: CreateProjectRedirect) => {
   return {
-    type: SET_SOLUTION_CREATE_PROJECT_REDUCER,
-    data: id
+    type: SET_CREATE_PROJECT_REDIRECT_OF_PROJECT_REDUCER,
+    data: data
   }
 }
 
@@ -110,6 +119,34 @@ export const getProjectAttributesRequest = (projectId: number) => {
 export const setProjectAttributesReducer = (data: ProjectAttribute[]) => {
   return {
     type: SET_PROJECT_ATTRIBUTES_OF_PROJECT_REDUCER,
+    data
+  }
+}
+
+export const getCustomQuestionsRequest = (projectId: number) => {
+  return {
+    type: GET_CUSTOM_QUESTIONS_OF_PROJECT_REQUEST,
+    projectId
+  }
+}
+
+export const setCustomQuestionsReducer = (data: CustomQuestion[]) => {
+  return {
+    type: SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER,
+    data
+  }
+}
+
+export const getEyeTrackingPacksRequest = (projectId: number) => {
+  return {
+    type: GET_EYE_TRACKING_PACKS_OF_PROJECT_REQUEST,
+    projectId
+  }
+}
+
+export const setEyeTrackingPacksReducer = (data: Pack[]) => {
+  return {
+    type: SET_EYE_TRACKING_PACKS_OF_PROJECT_REDUCER,
     data
   }
 }

@@ -221,3 +221,23 @@ export const Tip = styled(Grid)`
     }
   }
 `;
+
+export const PriceChip = styled(Chip)`
+  background: var(--cimigo-green-dark-1);
+  border-radius: 30px;
+  height: 24px;
+  .MuiChip-label {
+    padding: 0px 16px;
+    > * {
+      color: var(--ghost-white)
+    }
+  }
+  &.disabled {
+    background: var(--gray-10);
+    .MuiChip-label {
+      > * {
+        color: var(--gray-40)
+      }
+    }
+  }
+`;

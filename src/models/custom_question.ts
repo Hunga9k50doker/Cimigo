@@ -1,3 +1,4 @@
+import images from "config/images";
 import { OptionItem } from "./general";
 
 export interface CustomQuestionType {
@@ -25,6 +26,15 @@ export enum ECustomQuestionType {
   Numeric_Scale = 4,
   Smiley_Rating = 5,
   Star_Rating = 6,
+}
+
+export const icCustomQuestions: { [key: string]: string } = {
+  [ECustomQuestionType.Open_Question]: images.icOpenQuestion,
+  [ECustomQuestionType.Single_Choice]: images.icSingleChoice,
+  [ECustomQuestionType.Multiple_Choices]: images.icMultipleChoices,
+  [ECustomQuestionType.Numeric_Scale]: images.icNumbericScale,
+  [ECustomQuestionType.Smiley_Rating]: images.icSmileyRating,
+  [ECustomQuestionType.Star_Rating]: images.icStarRating,
 }
 
 export interface CustomQuestion {
