@@ -31,6 +31,9 @@ export const API = {
     CATEGORY: '/v1.0/solution/categories',
     CATEGORY_HOME: '/v1.0/solution/categories-home'
   },
+  PLAN: {
+    DEFAULT: '/v1.0/plan',
+  },
   PROJECT: {
     DEFAULT: '/v1.0/project',
     RENAME: '/v1.0/project/:id/rename',

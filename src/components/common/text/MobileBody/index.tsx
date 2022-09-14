@@ -6,16 +6,13 @@ interface Props {
     $fontWeight?: number | string;
 }
 
-const Heading5 = styled(Typography)<Props>`
+const MobileBody = styled(Typography)<Props>`
     font-family: 'Montserrat';
     font-style: normal;
-    font-weight: ${props => props.$fontWeight || 600};
-    font-size: 16px;
-    line-height: 24px;
+    font-weight: ${props => props.$fontWeight || 400};
+    font-size: 14px;
+    line-height: 140%;
     color: ${props => `var(${props.$colorName || '--eerie-black'})`};
-    @media only screen and (max-width: 767px) {
-      font-size: 14px;
-    }
 `
 
-export default Heading5;
+export default MobileBody;
