@@ -1,0 +1,53 @@
+.title{
+    text-align: center;
+}
+.handleLink {
+    display: grid;
+    padding-top: 32px;
+}
+.note {
+    span{
+        font-weight: 600;
+    }
+}
+.form{
+    padding-top: 16px;
+    .buttonSubmit{
+        padding-left: 15px;
+        padding-top: 32px;
+        padding-bottom: 200px;
+        width: 239px;
+        @media only screen and (max-width: 767px) {
+            width: 100%;
+        }
+        button{
+            min-height: 48px;
+        }
+    }
+    .selectLeaguage{
+        width: 100%;
+    }
+}
+.accordion{
+    padding-left: 15px;
+    padding-top: 20px;
+    .accordionContent{
+        background-color: var(--gray-5);
+    }
+}
+.inputAccordion {
+    background-color: var(--white);
+}
+.handleLink{
+    .link{
+        color: var(--cimigo-blue);
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 400;
+    }
+    .handleLinkFormat {
+        display: flex;
+    }
+}

@@ -6,6 +6,7 @@ import Buttons from 'components/Buttons';
 import Images from "config/images";
 import { Solution } from 'models/Admin/solution';
 import { useTranslation } from 'react-i18next';
+import Heading3 from 'components/common/text/Heading3';
 
 
 interface PopupPopupInforSolution {
@@ -27,7 +28,7 @@ const PopupInforSolution = memo((props: PopupPopupInforSolution) => {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle className={classes.header}>
-        <p className={classes.title}>{solution?.title}</p>
+        <Heading3 $colorName={"--ghost-white"}>{solution?.title}</Heading3>
         <IconButton onClick={onCancel}>
           <img src={Images.icClose} alt='' />
         </IconButton>
