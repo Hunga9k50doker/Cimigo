@@ -1,0 +1,38 @@
+.paper {
+    width: 960px;
+    max-width: 960px;
+    @media only screen and (max-width: 767px) {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 !important;
+      overflow: hidden;
+    }
+  }
+
+.iconContainer {
+    display: flex;
+    cursor: pointer;
+    .iconAction:first-child {
+        margin-right: 8px;
+    }
+}
+.iconAction {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    background: var(--cimigo-blue);
+    color: var(--ghost-white);
+    border-radius: 50%;
+    svg {
+        width: 28px;
+        height: 23px;
+    }
+}
+
+.contentContainer {
+    text-align: justify;
+    height: 475px;
+    overflow-y: auto;
+}

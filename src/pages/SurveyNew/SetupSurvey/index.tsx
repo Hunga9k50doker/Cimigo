@@ -22,7 +22,7 @@ import { useChangePrice } from "hooks/useChangePrice";
 import UploadPacks from "./compoments/UploadPacks";
 import AdditionalBrandList from "./compoments/AdditionalBrandList";
 import AdditionalAttributes from "./compoments/AdditionalAttributes";
-
+import PopupHowToSetupPackTestSurvey from "pages/Survey/components/PopupHowToSetupPackTestSurvey";
 interface SetupSurvey {
   projectId: number;
 }
@@ -35,6 +35,8 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
   const { configs } = useSelector((state: ReducerType) => state.user)
 
   const { isHaveChangePrice, setIsHaveChangePrice } = useChangePrice()
+
+  const [onOpenHowToSetupPackTestSurvey, setOnOpenHowToSetupPackTestSurvey] = useState(false);
 
   const isValidBasic = useMemo(() => {
     return ProjectHelper.isValidBasic(project)
@@ -65,6 +67,14 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
     setTabRightPanel(tab)
   }
 
+  const onOpenPopupHowToSetupPackTestSurvey = () => {
+    setOnOpenHowToSetupPackTestSurvey(true);
+  }
+
+  const onSubmit = () => {
+
+  }
+
   return (
     <PageRoot className={classes.root}>
       <LeftContent>
@@ -76,7 +86,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
           {project?.solution?.enableHowToSetUpSurvey && (
             <PageTitleRight>
               <HelpIcon sx={{ fontSize: "16px", marginRight: "4px", color: "var(--cimigo-blue)" }} />
-              <ParagraphSmallUnderline2>How to set up pack test survey?</ParagraphSmallUnderline2>
+              <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupPackTestSurvey}>How to set up pack test survey?</ParagraphSmallUnderline2>
             </PageTitleRight>
           )}
         </PageTitle>
@@ -232,6 +242,12 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
           </TabPanelBox>
         </RightPanel>
       </RightContent>
+      <PopupHowToSetupPackTestSurvey
+        isOpen={onOpenHowToSetupPackTestSurvey}
+        project={project}
+        onClose={()=> {setOnOpenHowToSetupPackTestSurvey(false)}}
+        onSubmit={onSubmit}
+      />
     </PageRoot>
   )
 })
