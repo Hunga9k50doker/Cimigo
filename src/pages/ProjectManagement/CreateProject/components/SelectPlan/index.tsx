@@ -24,7 +24,7 @@ import { useForm } from "react-hook-form";
 import InputSelect from "components/common/inputs/InputSelect";
 import { CreateProjectFormData } from "../CreateProjectStep";
 import clsx from "clsx";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 interface SelectPlanProps {
   solution?: Solution;
   onChangePlanSelected?: (plan: Plan) => void;
@@ -32,6 +32,7 @@ interface SelectPlanProps {
 const SelectPlan = memo(
   ({ solution, onChangePlanSelected }: SelectPlanProps) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const [selectPrice, setSelectPrice] = React.useState<OptionItem>(
       currencyTypes[0]
     );
@@ -87,17 +88,18 @@ const SelectPlan = memo(
         <Grid justifyContent="center" className={classes.titleSelectPlan}>
           <Heading1
             $colorName={"--cimigo-blue"}
-            translation-key="select_plan_title"
+            translation-key="project_create_tab_plan_select_plan_title"
           >
-            {t("select_plan_title")}
+            {t("project_create_tab_plan_select_plan_title")}
           </Heading1>
           <Grid className={classes.titleSelectPlan}>
             <ParagraphBody
               $colorName={"--eerie-black"}
-              translation-key="description_plan"
-              dangerouslySetInnerHTML={{ __html: t("description_plan") }}
-            >
-            </ParagraphBody>
+              translation-key="project_create_tab_plan_description_plan"
+              dangerouslySetInnerHTML={{
+                __html: t("project_create_tab_plan_description_plan"),
+              }}
+            ></ParagraphBody>
           </Grid>
         </Grid>
         <div className={classes.selectTypePrice}>
@@ -142,9 +144,9 @@ const SelectPlan = memo(
                         <ParagraphBody
                           className={classes.title}
                           $colorName={"--cimigo-green-dark-3"}
-                          translation-key="most_pupular_plan"
+                          translation-key="common_solution"
                         >
-                          {t("most_pupular_plan")}
+                          {t("common_solution")}
                         </ParagraphBody>
                       </div>
                     )}
@@ -161,9 +163,9 @@ const SelectPlan = memo(
                         <Typography className={classes.startAt}>
                           <ParagraphBody
                             $colorName={"--eerie-black-00"}
-                            translation-key="start_at_plan"
+                            translation-key="project_create_tab_plan_start_at"
                           >
-                            {t("start_at_plan")}
+                            {t("project_create_tab_plan_start_at")}
                           </ParagraphBody>
                         </Typography>
                         <Typography className={classes.price}>
@@ -177,9 +179,9 @@ const SelectPlan = memo(
                         <Typography className={classes.tax} color={"--gray-60"}>
                           <ParagraphExtraSmall
                             $colorName={"--gray-60"}
-                            translation-key="tax_exclusive_plan"
+                            translation-key="common_tax_exclusive"
                           >
-                            {t("tax_exclusive_plan")}
+                            {t("common_tax_exclusive")}
                           </ParagraphExtraSmall>
                         </Typography>
                         <Typography>

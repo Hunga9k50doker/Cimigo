@@ -106,9 +106,9 @@ const CreateProjectStep = memo(
             <Heading1
               $colorName="--cimigo-blue"
               $fontWeight={"600"}
-              translation-key="create_project_title"
+              translation-key="project_create_tab_create_project_title"
             >
-              {t("create_project_title")}
+              {t("project_create_tab_create_project_title")}
             </Heading1>
           </p>
         </Grid>
@@ -116,9 +116,9 @@ const CreateProjectStep = memo(
           <Grid className={classes.handleLinkFormat}>
             <ParagraphBody
               $colorName={"--eerie-black"}
-              translation-key="solution"
+              translation-key="common_solution"
             >
-              {t("solution")}:
+              {t("common_solution")}:
             </ParagraphBody>
             <Heading5 mx={0.5} $fontWeight={"600"} $colorName={"--eerie-black"}>
               {solutionSelected?.title}
@@ -134,8 +134,8 @@ const CreateProjectStep = memo(
             </ParagraphSmallUnderline2>
           </Grid>
           <Grid className={classes.handleLinkFormat}>
-            <ParagraphBody $colorName={"--eerie-black"} translation-key="plan">
-              {t("plan")}:
+            <ParagraphBody $colorName={"--eerie-black"} translation-key="common_plan">
+              {t("common_plan")}:
             </ParagraphBody>
             <Heading5
               mx={0.5}
@@ -156,18 +156,18 @@ const CreateProjectStep = memo(
         <Grid className={classes.note} mt={2}>
           <ParagraphBody
             $colorName={"--eerie-black"}
-            translation-key="create_project_note_description"
+            translation-key="project_create_tab_create_project_note_description"
             dangerouslySetInnerHTML={{
-              __html: t("create_project_note_description"),
+              __html: t("project_create_tab_create_project_note_description"),
             }}
           ></ParagraphBody>
         </Grid>
         <ParagraphBody
           mt={4}
           $colorName={"--eerie-black"}
-          translation-key="create_project_note_description2"
+          translation-key="project_create_tab_create_project_note_description2"
         >
-          {t("create_project_note_description2")}
+          {t("project_create_tab_create_project_note_description2")}
         </ParagraphBody>
         <Grid className={classes.form}>
           <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -214,9 +214,9 @@ const CreateProjectStep = memo(
                     <Grid>
                       <Heading5
                         $colorName={"--cimigo-blue"}
-                        translation-key="create_project_infor"
+                        translation-key="project_create_tab_create_project_infor"
                       >
-                        {t("create_project_infor")}
+                        {t("project_create_tab_create_project_infor")}
                       </Heading5>
                       <ParagraphExtraSmall
                         $colorName={"--gray-60"}
@@ -230,9 +230,9 @@ const CreateProjectStep = memo(
                     <Grid>
                       <ParagraphSmall
                         $colorName={"--gray-80"}
-                        translation-key="create_project_description"
+                        translation-key="project_create_tab_create_project_description"
                         dangerouslySetInnerHTML={{
-                          __html: t("create_project_description"),
+                          __html: t("project_create_tab_create_project_description"),
                         }}
                       ></ParagraphSmall>
                       <InputTextfield
@@ -288,8 +288,8 @@ const CreateProjectStep = memo(
               <Grid className={classes.buttonSubmit}>
                 <Button
                   fullWidth
-                  children={t("create_project_btn_submit")}
-                  translation-key="create_project_btn_submit"
+                  children={t("project_create_tab_create_project_btn_submit")}
+                  translation-key="project_create_tab_create_project_btn_submit"
                   btnType={BtnType.Primary}
                   padding={"8px 47px"}
                   type="submit"
