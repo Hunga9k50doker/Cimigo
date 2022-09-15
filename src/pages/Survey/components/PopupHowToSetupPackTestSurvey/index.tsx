@@ -1,4 +1,6 @@
 import { memo, useState, useMemo, useEffect } from 'react';
+import { useDispatch } from "react-redux"
+import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes"
 import printJS from "print-js";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -21,7 +23,8 @@ import ButtonClose from "components/common/buttons/ButtonClose";
 import InputTextField from "components/common/inputs/InputTextfield";
 import Button, {BtnType} from "components/common/buttons/Button";
 import ParagraphBody from 'components/common/text/ParagraphBody';
-
+import { AttachmentService } from 'services/attachment';
+import {ProjectService} from 'services/project';
 interface EmailForm {
     name: string,
     email: string,
@@ -34,6 +37,8 @@ interface Props {
 
 const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
   const { isOpen, project, onClose } = props;
+
+  const dispatch = useDispatch()
 
   const { t, i18n } = useTranslation()
   
@@ -75,30 +80,35 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
   }
 
   const onPrint = () => {
-    var fileToLoad:any = project?.solution?.howToSetUpSurveyFile
-    var fileReader = new FileReader();
-    var base64;
-    if(typeof(fileToLoad) === 'object'){
-    fileReader.onload = (fileLoadEvent) => {
-        base64 = fileLoadEvent.target.result;
-        const pdfBlob = new Blob([base64], {type: 'application/pdf'});
-        const url = URL.createObjectURL(pdfBlob);
-        printJS({
-            printable: url, 
-            type: 'pdf', 
-            base64: true,
-        })
-    };
-    fileReader.readAsDataURL(fileToLoad);
+    dispatch(setLoading(true))
+    AttachmentService.downloadByUrl(project.solution?.howToSetUpSurveyFile.url)
+    .then(res => {
+      var fileReader = new FileReader();
+      let pdfBlob = new Blob([res.data], {type: 'application/pdf'});
+      const base64 = fileReader.readAsDataURL(pdfBlob);  //convert blob to base64
+      printJS({
+        printable: base64,
+        type: 'pdf',
+        base64: true,
+      })
+    })
+    .catch((e) => dispatch(setErrorMess(e)))
+    .finally(() => dispatch(setLoading(false)))
   }
-  }
+
   const _onClose = () => {
     onClose()
   }
 
-  const _onSubmit = () => {
-
-  }
+  const _onSubmit = (data: EmailForm) => {
+    dispatch(setLoading(true))
+    ProjectService.sendEmailHowToSetupSurvey(data.email)
+      .then(() => {
+        dispatch(setSuccessMess("Send email successfully!"))
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  };
 
   useEffect(() => {
     if (!isOpen) {
@@ -117,7 +127,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
         <Grid sx={{display: 'flex', alignItems: 'center'}}>
             <HelpIcon sx={{marginRight: '19px'}}/>
             <Heading3 translation-key="">
-                {/* {project.solution?.howToSetUpSurveyDialogTitle} */}
+                {project.solution?.howToSetUpSurveyDialogTitle}
             </Heading3>
         </Grid>
         <ButtonClose onClick={onClose}>
@@ -127,7 +137,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
         <Grid sx={{paddingBottom: '24px'}}>
             <Grid sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '24px'}}>
                 <Heading2 $colorName="--cimigo-blue">
-                    {/* {project.solution?.howToSetUpSurveyPageTitle} */}
+                    {project.solution?.howToSetUpSurveyPageTitle}
                 </Heading2>
                 <Grid className={classes.iconContainer}>
                     <div className={classes.iconAction} onClick={onPrint}>
@@ -189,7 +199,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                 </Grid>
             </Grid>
             <Grid className={classes.contentContainer}>
-                {/* <ParagraphBody dangerouslySetInnerHTML={{ __html: project.solution?.howToSetUpSurveyContent || '' }}></ParagraphBody> */}
+                <ParagraphBody dangerouslySetInnerHTML={{ __html: project.solution?.howToSetUpSurveyContent || '' }}></ParagraphBody>
             </Grid>
         </Grid>
       </DialogContent>

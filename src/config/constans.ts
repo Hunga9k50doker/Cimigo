@@ -43,6 +43,7 @@ export const API = {
     SAMPLE_SIZE: '/v1.0/project/:id/sample-size',
     UPDATE_ENABLE_CUSTOM_QUESTION: '/v1.0/project/:id/update-enable-custom-question',
     UPDATE_ENABLE_EYE_TRACKING: "/v1.0/project/:id/update-enable-eye-tracking",
+    SEND_EMAIL_HOW_TO_SETUP_SURVEY: "/v1.0/project/:id/send-email-how-to-setup-survey",
     QUOTA: {
       DEFAULT: '/v1.0/project/:id/quota',
     }

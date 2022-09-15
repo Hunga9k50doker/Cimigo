@@ -146,4 +146,16 @@ export class ProjectService {
       return Promise.reject(e?.response?.data);
     })
   }
+
+  static async sendEmailHowToSetupSurvey(email: string) {
+    return await api.post(API.PROJECT.SEND_EMAIL_HOW_TO_SETUP_SURVEY, {
+      email
+    })
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
 }
