@@ -67,6 +67,9 @@ export const PageTitleText = styled(Typography)`
   font-size: 16px;
   line-height: 24px;
   color: var(--eerie-black);
+  > span {
+    text-transform: lowercase;
+  }
 `;
 
 

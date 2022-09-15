@@ -105,7 +105,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
       <LeftContent>
         <PageTitle>
           <PageTitleLeft>
-            <PageTitleText>Setup your pack test survey</PageTitleText>
+            <PageTitleText>Setup your <span>{project?.solution?.title}</span> survey</PageTitleText>
             <LockIcon status={project?.status} />
           </PageTitleLeft>
           {project?.solution?.enableHowToSetUpSurvey && (
@@ -235,7 +235,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                     </Step>
                   )}
                   {project?.solution?.enableEyeTracking && (
-                    <Step active={isValidEyeTracking} expanded>
+                    <Step active={isValidEyeTracking && project?.enableEyeTracking} expanded>
                       <RPStepLabel
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.eye_tracking)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><RemoveRedEyeIcon /></RPStepIconBox>}>
@@ -244,7 +244,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
-                          sx={{ height: 24, backgroundColor: isValidEyeTracking ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
+                          sx={{ height: 24, backgroundColor: isValidEyeTracking && project?.enableEyeTracking ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
                           label={<ParagraphExtraSmall $colorName="--ghost-white">${fCurrency2(price?.eyeTrackingSampleSizeCostUSD)}</ParagraphExtraSmall>}
                           color="secondary"
                         />

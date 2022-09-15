@@ -346,6 +346,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
       <PopupAddOrEditAttribute
         isAdd={openPopupAddAttributes}
         itemEdit={userAttributeEdit}
+        project={project}
         onCancel={() => onClosePopupAttribute()}
         onSubmit={onAddOrEditUserAttribute}
       />
