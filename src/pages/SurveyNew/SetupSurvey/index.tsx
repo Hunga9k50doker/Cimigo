@@ -93,7 +93,13 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
     setOnOpenHowToSetupPackTestSurvey(true);
   }
 
+  const onClosePopupHowToSetupPackTestSurvey = () => {
+    setOnOpenHowToSetupPackTestSurvey(false);
+  }
+
   const onSubmit = () => {
+    
+  }
 
 
   const onCloseMissingRequirement = () => {
@@ -303,7 +309,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
       <PopupHowToSetupPackTestSurvey
         isOpen={onOpenHowToSetupPackTestSurvey}
         project={project}
-        onClose={()=> {setOnOpenHowToSetupPackTestSurvey(false)}}
+        onClose={onClosePopupHowToSetupPackTestSurvey}
       />
       <PopupMissingRequirement
         isOpen={openMissingRequirement}
