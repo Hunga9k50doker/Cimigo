@@ -161,9 +161,11 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
           >
             STEP {step}: Eye-tracking
           </Heading4>
-          <BasicTooltip arrow title={<div dangerouslySetInnerHTML={{ __html: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" }}></div>}>
-            <HelpIcon sx={{ fontSize: 20, ml: 1, color: !project?.enableEyeTracking ? "var(--gray-40)" : "var(--gray-60)" }} />
-          </BasicTooltip>
+          {!!project?.solution?.eyeTrackingHelp && (
+            <BasicTooltip arrow title={<div dangerouslySetInnerHTML={{ __html: project.solution.eyeTrackingHelp }}></div>}>
+              <HelpIcon sx={{ fontSize: 20, ml: 1, color: !project?.enableEyeTracking ? "var(--gray-40)" : "var(--gray-60)" }} />
+            </BasicTooltip>
+          )}
         </Box>
         <Box>
           <PriceChip

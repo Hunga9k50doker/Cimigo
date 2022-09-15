@@ -18,33 +18,47 @@ export class ProjectHelper {
     return true
   }
 
+  static minPack(solution: Solution) {
+    return solution?.minPack ?? 0
+  }
+
+  static minAdditionalBrand(solution: Solution) {
+    return solution?.minAdditionalBrand ?? 0
+  }
+
+  static minEyeTrackingPack(solution: Solution) {
+    return solution?.minEyeTrackingPack ?? 0
+  }
+
   static isValidSampleSize(project: Project) {
     return !!project?.sampleSize
   }
 
   static isValidPacks(solution: Solution, packs: Pack[]): boolean {
-    return (packs?.length ?? 0) >= (solution?.minPack ?? 0)
+    return (packs?.length ?? 0) >= ProjectHelper.minPack(solution)
   }
 
   static isValidAdditionalBrand(solution: Solution, additionalBrands: AdditionalBrand[]) {
-    return (additionalBrands?.length ?? 0) >= (solution?.minAdditionalBrand ?? 0)
+    return (additionalBrands?.length ?? 0) >= ProjectHelper.minAdditionalBrand(solution)
   }
 
-  static isValidEyeTracking(solution: Solution, eyeTrackingPacks: Pack[]) {
-    return ((eyeTrackingPacks?.length ?? 0) >= (solution?.minEyeTrackingPack ?? 0)) || solution?.enableEyeTracking
+  static isValidEyeTracking(project: Project) {
+    return ((project?.eyeTrackingPacks?.length ?? 0) >= ProjectHelper.minEyeTrackingPack(project?.solution)) || !project?.solution?.enableEyeTracking || !project?.enableEyeTracking
   }
 
   static isValidBasic(project: Project) {
     return !!project?.category && !!project?.brand && !!project?.variant && !!project?.manufacturer
   }
 
+  static isValidSetup(project: Project) {
+    return ProjectHelper.isValidBasic(project) &&
+      ProjectHelper.isValidPacks(project?.solution, project?.packs) &&
+      ProjectHelper.isValidAdditionalBrand(project?.solution, project?.additionalBrands) &&
+      ProjectHelper.isValidEyeTracking(project)
+  }
+
   static isValidCheckout(project: Project) {
-    return ProjectHelper.isValidSampleSize(project) && 
-    ProjectHelper.isValidTarget(project) && 
-    ProjectHelper.isValidPacks(project?.solution, project?.packs) && 
-    ProjectHelper.isValidAdditionalBrand(project?.solution, project?.additionalBrands) && 
-    ProjectHelper.isValidBasic(project) &&
-    ProjectHelper.isValidEyeTracking(project?.solution, project?.eyeTrackingPacks)
+    return ProjectHelper.isValidSetup(project) && ProjectHelper.isValidSampleSize(project) && ProjectHelper.isValidTarget(project)
   }
 }
 

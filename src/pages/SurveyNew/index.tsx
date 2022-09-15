@@ -28,6 +28,7 @@ import Target from "pages/Survey/Target";
 import Quotas from "pages/Survey/Quotas";
 import PaymentBilling from "pages/Survey/PaymentBilling";
 import Report from "pages/Survey/Report";
+import ProjectHelper from "helpers/project";
 
 export const Survey = () => {
 
@@ -48,6 +49,11 @@ export const Survey = () => {
     ]
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language, routes])
+
+  const isValidSetup = useMemo(() => {
+    return ProjectHelper.isValidSetup(project)
+  }, [project])
+  
 
   useEffect(() => {
     if (id && !isNaN(Number(id))) {
@@ -151,35 +157,31 @@ export const Survey = () => {
           <Tab
             value={0}
             label={<Box display="flex" alignItems="center">
-              <CheckCircle className={classes.tabItemIcon} />
+              {isValidSetup && <CheckCircle className={classes.tabItemIcon} />}
               <Heading4 className={classes.tabItemTitle}>Setup</Heading4>
             </Box>}
           />
           <Tab
             value={1}
             label={<Box display="flex" alignItems="center">
-              <CheckCircle className={classes.tabItemIcon} />
               <Heading4 className={classes.tabItemTitle}>Target</Heading4>
             </Box>}
           />
           <Tab
             value={2}
             label={<Box display="flex" alignItems="center">
-              {/* <CheckCircle className={classes.tabItemIcon} /> */}
               <Heading4 className={classes.tabItemTitle}>Quotas</Heading4>
             </Box>}
           />
           <Tab
             value={3}
             label={<Box display="flex" alignItems="center">
-              {/* <CheckCircle className={classes.tabItemIcon} /> */}
               <Heading4 className={classes.tabItemTitle}>Pay</Heading4>
             </Box>}
           />
           <Tab
             value={4}
             label={<Box display="flex" alignItems="center">
-              {/* <CheckCircle className={classes.tabItemIcon} /> */}
               <Heading4 className={classes.tabItemTitle}>Results</Heading4>
             </Box>}
           />

@@ -22,7 +22,7 @@
   --cimigo-blue-light-4: #e8f1fb;
   --cimigo-blue-dark-1: #17497f;
   --cimigo-blue-dark-2: #103055;
-  --cimigo-blue-dark-3:#08182A;
+  --cimigo-blue-dark-3: #08182A;
   --cimigo-green-light-2: #d9f180;
   --cimigo-green-light-4: #f0f9cc;
   --cimigo-green-dark-1: #7c9911;
@@ -53,6 +53,7 @@
   --orange-dark: #753e00;
   --cultured-gray: #EEF0F2;
   --red-error: #AF1C10;
+  --warning: #F2BB2E;
   --white: #FFFFFF;
   font-size: 16px;
   font-weight: 500;
@@ -97,4 +98,14 @@ input[type="number"] {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.underline {
+  color: var(--cimigo-blue);
+  text-decoration: underline!important;
+  text-underline-position: under;
 }

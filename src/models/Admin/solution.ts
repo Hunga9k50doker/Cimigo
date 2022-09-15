@@ -50,6 +50,7 @@ export interface Solution {
   enableEyeTracking: boolean;
   minEyeTrackingPack: number;
   maxEyeTrackingPack: number;
+  eyeTrackingHelp: string;
   enableHowToSetUpSurvey: boolean;
   howToSetUpSurveyPageTitle: string;
   howToSetUpSurveyDialogTitle: string;
