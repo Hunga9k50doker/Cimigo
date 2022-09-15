@@ -97,11 +97,6 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
     setOnOpenHowToSetupPackTestSurvey(false);
   }
 
-  const onSubmit = () => {
-    
-  }
-
-
   const onCloseMissingRequirement = () => {
     setOpenMissingRequirement(false)
   }
