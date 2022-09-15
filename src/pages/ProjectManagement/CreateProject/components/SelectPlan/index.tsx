@@ -24,6 +24,7 @@ import { useForm } from "react-hook-form";
 import InputSelect from "components/common/inputs/InputSelect";
 import { CreateProjectFormData } from "../CreateProjectStep";
 import clsx from "clsx";
+import { t } from "i18next";
 interface SelectPlanProps {
   solution?: Solution;
   onChangePlanSelected?: (plan: Plan) => void;
@@ -84,12 +85,18 @@ const SelectPlan = memo(
     return (
       <>
         <Grid justifyContent="center" className={classes.titleSelectPlan}>
-          <Heading1 $colorName={"--cimigo-blue"}>Select Plan</Heading1>
+          <Heading1
+            $colorName={"--cimigo-blue"}
+            translation-key="select_plan_title"
+          >
+            {t("select_plan_title")}
+          </Heading1>
           <Grid className={classes.titleSelectPlan}>
-            <ParagraphBody $colorName={"--eerie-black"}>
-              Choose a pricing plan that fits your project. You can always
-              change it later. You are only required to pay once the project is
-              launched.
+            <ParagraphBody
+              $colorName={"--eerie-black"}
+              translation-key="description_plan"
+              dangerouslySetInnerHTML={{ __html: t("description_plan") }}
+            >
             </ParagraphBody>
           </Grid>
         </Grid>
@@ -135,8 +142,9 @@ const SelectPlan = memo(
                         <ParagraphBody
                           className={classes.title}
                           $colorName={"--cimigo-green-dark-3"}
+                          translation-key="most_pupular_plan"
                         >
-                          Most popular
+                          {t("most_pupular_plan")}
                         </ParagraphBody>
                       </div>
                     )}
@@ -151,8 +159,11 @@ const SelectPlan = memo(
                           </Heading3>
                         </Typography>
                         <Typography className={classes.startAt}>
-                          <ParagraphBody $colorName={"--eerie-black-00"}>
-                            Start at
+                          <ParagraphBody
+                            $colorName={"--eerie-black-00"}
+                            translation-key="start_at_plan"
+                          >
+                            {t("start_at_plan")}
                           </ParagraphBody>
                         </Typography>
                         <Typography className={classes.price}>
@@ -164,8 +175,11 @@ const SelectPlan = memo(
                           </Heading1>
                         </Typography>
                         <Typography className={classes.tax} color={"--gray-60"}>
-                          <ParagraphExtraSmall $colorName={"--gray-60"}>
-                            Tax exclusive
+                          <ParagraphExtraSmall
+                            $colorName={"--gray-60"}
+                            translation-key="tax_exclusive_plan"
+                          >
+                            {t("tax_exclusive_plan")}
                           </ParagraphExtraSmall>
                         </Typography>
                         <Typography>
@@ -190,7 +204,11 @@ const SelectPlan = memo(
                           sx={{ mx: 7.25 }}
                           btnType={BtnType.Raised}
                           translation-key="setup_survey_popup_save_question_title"
-                          children={<TextBtnSmall>Select</TextBtnSmall>}
+                          children={
+                            <TextBtnSmall translation-key="common_select">
+                              {t("common_select")}
+                            </TextBtnSmall>
+                          }
                           className={classes.btnSave}
                           onClick={() => onClick(plan)}
                         />
