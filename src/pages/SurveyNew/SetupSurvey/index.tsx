@@ -2,7 +2,7 @@ import { useState, memo, useMemo } from "react";
 import classes from './styles.module.scss';
 import { Tab, Badge, Step, Chip } from "@mui/material";
 import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleRight, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../compoments";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import LockIcon from "../compoments/LockIcon";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
@@ -25,6 +25,11 @@ import AdditionalAttributes from "./compoments/AdditionalAttributes";
 import CustomQuestions from "./compoments/CustomQuestions";
 import { fCurrency2 } from "utils/formatNumber";
 import EyeTracking from "./compoments/EyeTracking";
+
+import PopupMissingRequirement from "pages/SurveyNew/compoments/PopupMissingRequirement";
+import { push } from "connected-react-router";
+import { routes } from "routers/routes";
+
 import PopupHowToSetupPackTestSurvey from "pages/Survey/components/PopupHowToSetupPackTestSurvey";
 interface SetupSurvey {
   projectId: number;
@@ -32,10 +37,15 @@ interface SetupSurvey {
 
 const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
 
+  const dispatch = useDispatch()
+
   const [tabRightPanel, setTabRightPanel] = useState(ETabRightPanel.OUTLINE);
 
   const { project } = useSelector((state: ReducerType) => state.project)
   const { configs } = useSelector((state: ReducerType) => state.user)
+
+  
+  const [openMissingRequirement, setOpenMissingRequirement] = useState(false);
 
   const { isHaveChangePrice, setIsHaveChangePrice } = useChangePrice()
 
@@ -51,6 +61,14 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
 
   const isValidAdditionalBrand = useMemo(() => {
     return ProjectHelper.isValidAdditionalBrand(project?.solution, project?.additionalBrands)
+  }, [project])
+
+  const isValidEyeTracking = useMemo(() => {
+    return ProjectHelper.isValidEyeTracking(project)
+  }, [project])
+
+  const isValidSetup = useMemo(() => {
+    return ProjectHelper.isValidSetup(project)
   }, [project])
 
   const price = useMemo(() => {
@@ -70,16 +88,28 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
     setTabRightPanel(tab)
   }
 
+
   const onOpenPopupHowToSetupPackTestSurvey = () => {
     setOnOpenHowToSetupPackTestSurvey(true);
   }
 
-  const onClosePopupHowToSetupPackTestSurvey = () => {
-    setOnOpenHowToSetupPackTestSurvey(false);
-  }
-
   const onSubmit = () => {
 
+
+  const onCloseMissingRequirement = () => {
+    setOpenMissingRequirement(false)
+  }
+
+  const onOpenMissingRequirement = () => {
+    setOpenMissingRequirement(true)
+  }
+
+  const onNextSetupTarget = () => {
+    if (isValidSetup) {
+      dispatch(push(routes.project.detail.target.replace(":id", `${projectId}`)))
+    } else {
+      onOpenMissingRequirement()
+    }
   }
 
   return (
@@ -87,7 +117,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
       <LeftContent>
         <PageTitle>
           <PageTitleLeft>
-            <PageTitleText>Setup your pack test survey</PageTitleText>
+            <PageTitleText>Setup your <span>{project?.solution?.title}</span> survey</PageTitleText>
             <LockIcon status={project?.status} />
           </PageTitleLeft>
           {project?.solution?.enableHowToSetUpSurvey && (
@@ -95,7 +125,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
               <HelpIcon sx={{ fontSize: "16px", marginRight: "4px", color: "var(--cimigo-blue)" }} />
               <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupPackTestSurvey}>How to set up pack test survey?</ParagraphSmallUnderline2>
             </PageTitleRight>
-          )} 
+          )}
         </PageTitle>
         <Content id={SETUP_SURVEY_SECTION.content_survey_setup}>
           <BasicInformation
@@ -217,14 +247,16 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                     </Step>
                   )}
                   {project?.solution?.enableEyeTracking && (
-                    <Step active={project.enableEyeTracking} expanded>
-                      <RPStepLabel StepIconComponent={({ active }) => <RPStepIconBox $active={active}><RemoveRedEyeIcon /></RPStepIconBox>}>
+                    <Step active={isValidEyeTracking && project?.enableEyeTracking} expanded>
+                      <RPStepLabel
+                        onClick={() => scrollToElement(SETUP_SURVEY_SECTION.eye_tracking)}
+                        StepIconComponent={({ active }) => <RPStepIconBox $active={active}><RemoveRedEyeIcon /></RPStepIconBox>}>
                         <ParagraphExtraSmall $colorName="--gray-60">Step {project?.solution?.enableCustomQuestion ? 6 : 5} - OPTIONAL</ParagraphExtraSmall>
                         <Heading5 className="title" $colorName="--gray-60">Eye tracking</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
-                          sx={{ height: 24, backgroundColor: project?.enableEyeTracking ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
+                          sx={{ height: 24, backgroundColor: isValidEyeTracking && project?.enableEyeTracking ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
                           label={<ParagraphExtraSmall $colorName="--ghost-white">${fCurrency2(price?.eyeTrackingSampleSizeCostUSD)}</ParagraphExtraSmall>}
                           color="secondary"
                         />
@@ -240,6 +272,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                   children={<TextBtnSecondary>Next: setup target</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
                   padding="13px 0px !important"
+                  onClick={onNextSetupTarget}
                 />
               </RightPanelAction>
             </RightPanelContent>
@@ -259,16 +292,30 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                   children={<TextBtnSecondary>Next: setup target</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
                   padding="13px 0px !important"
+                  onClick={onNextSetupTarget}
                 />
               </RightPanelAction>
             </RightPanelContent>
           </TabPanelBox>
         </RightPanel>
       </RightContent>
+
       <PopupHowToSetupPackTestSurvey
         isOpen={onOpenHowToSetupPackTestSurvey}
         project={project}
-        onClose={onClosePopupHowToSetupPackTestSurvey}
+        onClose={()=> {setOnOpenHowToSetupPackTestSurvey(false)}}
+      />
+      <PopupMissingRequirement
+        isOpen={openMissingRequirement}
+        isValidBasic={isValidBasic}
+        isValidPacks={isValidPacks}
+        isValidAdditionalBrand={isValidAdditionalBrand}
+        isValidEyeTracking={isValidEyeTracking}
+        onClose={onCloseMissingRequirement}
+        onScrollSection={(e) => {
+          onCloseMissingRequirement()
+          scrollToElement(e)
+        }}
       />
     </PageRoot>
   )
