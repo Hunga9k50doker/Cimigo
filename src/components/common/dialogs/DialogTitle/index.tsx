@@ -12,3 +12,12 @@ export const DialogTitle = styled(DialogTitleMUI)`
   font-size: 22px;
   line-height: 31px;
 `
+
+export const DialogTitleConfirm = styled(DialogTitleMUI)`
+  display: flex;
+  justify-content: space-between;
+  padding: 24px;
+  color: var(--cimigo-blue-dark-3);
+  font-size: 22px;
+  line-height: 32px;
+`

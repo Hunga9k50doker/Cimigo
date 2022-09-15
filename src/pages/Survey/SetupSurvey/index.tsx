@@ -1664,6 +1664,7 @@ const SetupSurvey = memo(({ id }: Props) => {
         <PopupAddOrEditAttribute
           isAdd={openPopupAddAttributes}
           itemEdit={userAttributeEdit}
+          project={project}
           onCancel={() => onClosePopupAttribute()}
           onSubmit={onAddOrEditUserAttribute}
         />

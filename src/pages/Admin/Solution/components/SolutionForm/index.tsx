@@ -98,6 +98,13 @@ const schema = yup.object().shape({
         .required('Max Pack Of Eye Tracking is required.'),
       otherwise: yup.mixed().notRequired().nullable()
     }),
+  eyeTrackingHelp: yup.string()
+    .when('enableEyeTracking', {
+      is: (val: number) => !!val,
+      then: yup.string()
+        .required('Help Of Eye Tracking is required.'),
+      otherwise: yup.string().notRequired().nullable()
+    }),
   enableHowToSetUpSurvey: yup.boolean().required(),
   howToSetUpSurveyPageTitle: yup.string()
     .when('enableHowToSetUpSurvey', {
@@ -142,6 +149,7 @@ export interface SolutionFormData {
   enableEyeTracking: boolean;
   minEyeTrackingPack: number;
   maxEyeTrackingPack: number;
+  eyeTrackingHelp: string;
   enableHowToSetUpSurvey: boolean;
   howToSetUpSurveyPageTitle: string;
   howToSetUpSurveyDialogTitle: string;
@@ -194,6 +202,7 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     if (data.enableEyeTracking) {
       formData.append('minEyeTrackingPack', `${data.minEyeTrackingPack}`)
       formData.append('maxEyeTrackingPack', `${data.maxEyeTrackingPack}`)
+      formData.append('eyeTrackingHelp', `${data.eyeTrackingHelp}`)
     }
     formData.append('enableHowToSetUpSurvey', `${data.enableHowToSetUpSurvey}`)
     formData.append('howToSetUpSurveyPageTitle', data.howToSetUpSurveyPageTitle || '')
@@ -226,6 +235,7 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         enableEyeTracking: itemEdit.enableEyeTracking,
         minEyeTrackingPack: itemEdit.minEyeTrackingPack,
         maxEyeTrackingPack: itemEdit.maxEyeTrackingPack,
+        eyeTrackingHelp: itemEdit.eyeTrackingHelp,
         enableHowToSetUpSurvey: itemEdit.enableHowToSetUpSurvey,
         howToSetUpSurveyPageTitle: itemEdit.howToSetUpSurveyPageTitle || '',
         howToSetUpSurveyDialogTitle: itemEdit.howToSetUpSurveyDialogTitle || '',
@@ -508,6 +518,21 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                           inputRef={register('maxEyeTrackingPack')}
                           errorMessage={errors.maxEyeTrackingPack?.message}
                         />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextTitle invalid={errors.content?.message}>Help Of Eye Tracking</TextTitle>
+                        <Controller
+                          name="eyeTrackingHelp"
+                          control={control}
+                          render={({ field }) => <ReactQuill
+                            modules={modules}
+                            className={clsx(classes.editor, { [classes.editorError]: !!errors.eyeTrackingHelp?.message })}
+                            value={field.value || ''}
+                            onBlur={() => field.onBlur()}
+                            onChange={(value) => field.onChange(value)}
+                          />}
+                        />
+                        {errors.content?.message && <ErrorMessage>{errors.eyeTrackingHelp?.message}</ErrorMessage>}
                       </Grid>
                     </>
                   )}

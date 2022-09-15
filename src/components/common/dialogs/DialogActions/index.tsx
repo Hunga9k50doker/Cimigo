@@ -9,3 +9,7 @@ export const DialogActions = styled(DialogActionsMUI)`
     padding-bottom: 24px;
   }
 `
+
+export const DialogActionsConfirm = styled(DialogActionsMUI)`
+  padding: 16px 24px 24px;
+`
