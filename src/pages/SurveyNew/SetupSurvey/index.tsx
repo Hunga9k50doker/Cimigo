@@ -299,12 +299,12 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
           </TabPanelBox>
         </RightPanel>
       </RightContent>
-<<<<<<< src/pages/SurveyNew/SetupSurvey/index.tsx
+
       <PopupHowToSetupPackTestSurvey
         isOpen={onOpenHowToSetupPackTestSurvey}
         project={project}
         onClose={()=> {setOnOpenHowToSetupPackTestSurvey(false)}}
-=======
+
       <PopupMissingRequirement
         isOpen={openMissingRequirement}
         isValidBasic={isValidBasic}
@@ -316,7 +316,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
           onCloseMissingRequirement()
           scrollToElement(e)
         }}
->>>>>>> src/pages/SurveyNew/SetupSurvey/index.tsx
+
       />
     </PageRoot>
   )
