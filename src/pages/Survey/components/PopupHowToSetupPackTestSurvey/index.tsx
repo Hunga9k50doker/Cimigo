@@ -102,7 +102,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
 
   const _onSubmit = (data: EmailForm) => {
     dispatch(setLoading(true))
-    ProjectService.sendEmailHowToSetupSurvey(data.email)
+    ProjectService.sendEmailHowToSetupSurvey(data.name, data.email)
       .then(() => {
         dispatch(setSuccessMess("Send email successfully!"))
       })

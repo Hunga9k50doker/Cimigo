@@ -147,8 +147,9 @@ export class ProjectService {
     })
   }
 
-  static async sendEmailHowToSetupSurvey(email: string) {
+  static async sendEmailHowToSetupSurvey(name: string, email: string, ) {
     return await api.post(API.PROJECT.SEND_EMAIL_HOW_TO_SETUP_SURVEY, {
+      name,
       email
     })
       .then((res) => {
