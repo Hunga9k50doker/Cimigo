@@ -11,15 +11,16 @@
 
 .iconContainer {
     display: flex;
-    cursor: pointer;
     .iconAction:first-child {
         margin-right: 8px;
     }
 }
+
 .iconAction {
     width: 36px;
     height: 36px;
     display: flex;
+    cursor: pointer;
     justify-content:center;
     align-items:center;
     background: var(--cimigo-blue);
@@ -29,10 +30,4 @@
         width: 28px;
         height: 23px;
     }
-}
-
-.contentContainer {
-    text-align: justify;
-    height: 475px;
-    overflow-y: auto;
 }

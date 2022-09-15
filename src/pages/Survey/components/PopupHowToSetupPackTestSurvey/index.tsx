@@ -73,6 +73,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
 
   const handleClosePopoverEmail = () => {
     setAnchorEl(null);
+    clearForm();
   }
 
   const openMenuEmail = (event) => {
@@ -81,13 +82,10 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
 
   const onPrint = () => {
     dispatch(setLoading(true))
-    AttachmentService.downloadByUrl(project.solution?.howToSetUpSurveyFile.url)
+    AttachmentService.blobToBase64(project.solution?.howToSetUpSurveyFile)
     .then(res => {
-      var fileReader = new FileReader();
-      let pdfBlob = new Blob([res.data], {type: 'application/pdf'});
-      const base64 = fileReader.readAsDataURL(pdfBlob);  //convert blob to base64
       printJS({
-        printable: base64,
+        printable: res,
         type: 'pdf',
         base64: true,
       })
@@ -105,17 +103,12 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
     ProjectService.sendEmailHowToSetupSurvey(data.name, data.email)
       .then(() => {
         dispatch(setSuccessMess("Send email successfully!"))
+        handleClosePopoverEmail()
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
   };
 
-  useEffect(() => {
-    if (!isOpen) {
-      clearForm()
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen])
   return (
     <Dialog
       scroll="paper"
@@ -152,17 +145,16 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                         open={Boolean(anchorEl)}
                         onClose={handleClosePopoverEmail}
                         anchorOrigin={{
-                            vertical: 230,
-                            horizontal: 611,
+                            vertical: 'bottom',
+                            horizontal: 'left',
                         }}
                         transformOrigin={{
-                            vertical:180,
-                            horizontal: 925,
+                            vertical: 'top',
+                            horizontal: 'right',
                         }}
                         className={classes.popOverEmail}
                         >
-                            <form onSubmit={handleSubmit(_onSubmit)}>
-                            <Grid sx={{display: 'flex', padding: '10px', alignItems: 'flex-start', background: 'var(--gray-5)'}}>
+                            <Grid sx={{padding: '10px', background: 'var(--gray-5)'}} component="form" onSubmit={handleSubmit(_onSubmit)}>
                                 <Grid container spacing={1} direction="column" sx={{marginRight: '10px'}}>
                                   <Grid item>
                                     <InputTextField
@@ -188,12 +180,11 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                                     />
                                   </Grid>
                                 </Grid>
-                                <Button btnType={BtnType.Primary} type="submit"  >
+                                <Button btnType={BtnType.Primary} type="submit" sx={{marginTop: '8px'}}>
                                     <NearMeIcon fontSize="small" sx={{marginRight: '7px'}}/>
                                 <TextBtnSmall transition-key="">Send</TextBtnSmall>
                                 </Button>
-                            </Grid>   
-                            </form>                       
+                            </Grid>                        
                         </Popover>
                     </Grid>
                 </Grid>
