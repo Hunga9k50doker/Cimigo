@@ -90,12 +90,12 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
             <PageTitleText>Setup your pack test survey</PageTitleText>
             <LockIcon status={project?.status} />
           </PageTitleLeft>
-          {/* {project?.solution?.enableHowToSetUpSurvey && ( */}
+          {project?.solution?.enableHowToSetUpSurvey && (
             <PageTitleRight>
               <HelpIcon sx={{ fontSize: "16px", marginRight: "4px", color: "var(--cimigo-blue)" }} />
               <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupPackTestSurvey}>How to set up pack test survey?</ParagraphSmallUnderline2>
             </PageTitleRight>
-          {/* )} */}
+          )} 
         </PageTitle>
         <Content id={SETUP_SURVEY_SECTION.content_survey_setup}>
           <BasicInformation
