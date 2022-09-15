@@ -155,7 +155,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                         className={classes.popOverEmail}
                         >
                             <Grid sx={{padding: '10px', background: 'var(--gray-5)'}} component="form" onSubmit={handleSubmit(_onSubmit)}>
-                                <Grid container spacing={1} direction="column" sx={{marginRight: '10px'}}>
+                                <Grid container spacing={1} direction="column">
                                   <Grid item>
                                     <InputTextField
                                         translation-key-placeholder=""
