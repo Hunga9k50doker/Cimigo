@@ -25,6 +25,7 @@ import AdditionalAttributes from "./compoments/AdditionalAttributes";
 import CustomQuestions from "./compoments/CustomQuestions";
 import { fCurrency2 } from "utils/formatNumber";
 import EyeTracking from "./compoments/EyeTracking";
+import PopupHowToSetupPackTestSurvey from "pages/Survey/components/PopupHowToSetupPackTestSurvey";
 interface SetupSurvey {
   projectId: number;
 }
@@ -85,12 +86,12 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
             <PageTitleText>Setup your pack test survey</PageTitleText>
             <LockIcon status={project?.status} />
           </PageTitleLeft>
-          {project?.solution?.enableHowToSetUpSurvey && (
+          {/* {project?.solution?.enableHowToSetUpSurvey && ( */}
             <PageTitleRight>
               <HelpIcon sx={{ fontSize: "16px", marginRight: "4px", color: "var(--cimigo-blue)" }} />
               <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupPackTestSurvey}>How to set up pack test survey?</ParagraphSmallUnderline2>
             </PageTitleRight>
-          )}
+          {/* )} */}
         </PageTitle>
         <Content id={SETUP_SURVEY_SECTION.content_survey_setup}>
           <BasicInformation
@@ -264,7 +265,6 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
         isOpen={onOpenHowToSetupPackTestSurvey}
         project={project}
         onClose={()=> {setOnOpenHowToSetupPackTestSurvey(false)}}
-        onSubmit={onSubmit}
       />
     </PageRoot>
   )

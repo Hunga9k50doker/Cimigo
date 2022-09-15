@@ -23,17 +23,17 @@ import Button, {BtnType} from "components/common/buttons/Button";
 import ParagraphBody from 'components/common/text/ParagraphBody';
 
 interface EmailForm {
+    name: string,
     email: string,
 }
 interface Props {
   isOpen: boolean,
   project: Project,
   onClose: () => void,
-  onSubmit: (attributeIds: number[]) => void,
 }
 
 const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
-  const { isOpen, project, onClose, onSubmit } = props;
+  const { isOpen, project, onClose } = props;
 
   const { t, i18n } = useTranslation()
   
@@ -41,6 +41,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
 
   const schema = useMemo(() => {
     return yup.object().shape({
+      name: yup.string().required("Name is required"),
       email: yup.string()
       .email(t("field_email_vali_email"))
       .required(t("field_email_vali_required")),
@@ -60,6 +61,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
 
   const clearForm = () => {
     reset({
+      name: "",
       email: ""
     })
   };
@@ -115,7 +117,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
         <Grid sx={{display: 'flex', alignItems: 'center'}}>
             <HelpIcon sx={{marginRight: '19px'}}/>
             <Heading3 translation-key="">
-                {project.solution?.howToSetUpSurveyDialogTitle}
+                {/* {project.solution?.howToSetUpSurveyDialogTitle} */}
             </Heading3>
         </Grid>
         <ButtonClose onClick={onClose}>
@@ -125,7 +127,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
         <Grid sx={{paddingBottom: '24px'}}>
             <Grid sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '24px'}}>
                 <Heading2 $colorName="--cimigo-blue">
-                    {project.solution?.howToSetUpSurveyPageTitle}
+                    {/* {project.solution?.howToSetUpSurveyPageTitle} */}
                 </Heading2>
                 <Grid className={classes.iconContainer}>
                     <div className={classes.iconAction} onClick={onPrint}>
@@ -151,16 +153,30 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                         >
                             <form onSubmit={handleSubmit(_onSubmit)}>
                             <Grid sx={{display: 'flex', padding: '10px', alignItems: 'flex-start', background: 'var(--gray-5)'}}>
-                                <Grid sx={{marginRight: '10px'}}>
+                                <Grid container spacing={1} direction="column" sx={{marginRight: '10px'}}>
+                                  <Grid item>
+                                    <InputTextField
+                                        translation-key-placeholder=""
+                                        placeholder="Enter your name"
+                                        autoFocus={true}
+                                        inputProps={{tabIndex: 1}}
+                                        type="text"
+                                        autoComplete="off"
+                                        inputRef={register('name')}
+                                        errorMessage={errors.name?.message}
+                                    />
+                                  </Grid>
+                                  <Grid item>
                                     <InputTextField
                                         translation-key-placeholder="field_email_placeholder"
                                         placeholder={t("field_email_placeholder")}
-                                        autoFocus={true}
                                         type="text"
+                                        inputProps={{tabIndex: 2}}
                                         autoComplete="off"
                                         inputRef={register('email')}
                                         errorMessage={errors.email?.message}
                                     />
+                                  </Grid>
                                 </Grid>
                                 <Button btnType={BtnType.Primary} type="submit"  >
                                     <NearMeIcon fontSize="small" sx={{marginRight: '7px'}}/>
@@ -173,7 +189,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                 </Grid>
             </Grid>
             <Grid className={classes.contentContainer}>
-                <ParagraphBody dangerouslySetInnerHTML={{ __html: project.solution?.howToSetUpSurveyContent || '' }}></ParagraphBody>
+                {/* <ParagraphBody dangerouslySetInnerHTML={{ __html: project.solution?.howToSetUpSurveyContent || '' }}></ParagraphBody> */}
             </Grid>
         </Grid>
       </DialogContent>
