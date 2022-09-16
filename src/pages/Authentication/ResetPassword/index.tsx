@@ -3,11 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
 import { Grid } from "@mui/material";
-
 import Header from "components/Header";
 import Footer from "components/Footer";
-import Inputs from "components/Inputs";
-import Buttons from "components/Buttons";
 import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
 import UserService from "services/user";
@@ -18,7 +15,10 @@ import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import QueryString from 'query-string';
 import { VALIDATION } from "config/constans";
-
+import Heading2 from "components/common/text/Heading2";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
+import InputTextField from "components/common/inputs/InputTextfield";
+import Button , {BtnType} from "components/common/buttons/Button";
 
 interface IQueryString {
   email?: string
@@ -79,31 +79,37 @@ const ResetPassword = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="forgot-password" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <p className={classes.textLogin} translation-key="reset_password_title">{t('reset_password_title')}</p>
-          <p className={classes.subTextLogin} translation-key="reset_password_sub_title">{t('reset_password_sub_title')} {email}</p>
-          <Inputs
-            title={t('field_new_password')}
-            translation-key="field_new_password"
-            name="password"
-            placeholder={t('field_new_password_placeholder')}
-            translation-key-placeholder="field_new_password_placeholder"
-            type="password"
-            showEyes
-            inputRef={register('password')}
-            errorMessage={errors.password?.message}
-          />
-          <Inputs
-            title={t('field_confirm_new_password')}
-            translation-key="field_confirm_new_password"
-            name="confirmPassword"
-            placeholder={t('field_confirm_new_password_placeholder')}
-            translation-key-placeholder="field_confirm_new_password_placeholder"
-            type="password"
-            showEyes
-            inputRef={register('confirmPassword')}
-            errorMessage={errors.confirmPassword?.message}
-          />
-          <Buttons type={"submit"} children={t('reset_password_btn_submit')} translation-key="reset_password_btn_submit" btnType="Blue" padding="11px 16px" />
+          <Heading2 $colorName="--cimigo-blue" translation-key="reset_password_title">{t('reset_password_title')}</Heading2>
+          <ParagraphSmall sx={{paddingTop: '16px', paddingBottom: '24px'}} $colorName="--eerie-black-90" translation-key="reset_password_sub_title">{t('reset_password_sub_title')} {email}</ParagraphSmall>
+          <Grid container spacing={2} sx={{marginBottom: '24px'}}>
+            <Grid item xs={12}> 
+              <InputTextField
+                title={t('field_new_password')}
+                translation-key="field_new_password"
+                name="password"
+                placeholder={t('field_new_password_placeholder')}
+                translation-key-placeholder="field_new_password_placeholder"
+                type="password"
+                showEyes
+                inputRef={register('password')}
+                errorMessage={errors.password?.message}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <InputTextField
+                title={t('field_confirm_new_password')}
+                translation-key="field_confirm_new_password"
+                name="confirmPassword"
+                placeholder={t('field_confirm_new_password_placeholder')}
+                translation-key-placeholder="field_confirm_new_password_placeholder"
+                type="password"
+                showEyes
+                inputRef={register('confirmPassword')}
+                errorMessage={errors.confirmPassword?.message}
+              />
+            </Grid>
+          </Grid>
+          <Button type={"submit"} children={t('reset_password_btn_submit')} translation-key="reset_password_btn_submit" btnType={BtnType.Primary}/>
         </Grid>
       </form>
       <Footer />
