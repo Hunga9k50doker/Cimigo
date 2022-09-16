@@ -152,9 +152,8 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                             vertical: 'top',
                             horizontal: 'right',
                         }}
-                        className={classes.popOverEmail}
                         >
-                            <Grid sx={{padding: '10px', background: 'var(--gray-5)'}} component="form" onSubmit={handleSubmit(_onSubmit)}>
+                            <Grid sx={{minWidth: '300px',padding: '10px', background: 'var(--gray-5)'}} component="form" onSubmit={handleSubmit(_onSubmit)}>
                                 <Grid container spacing={1} direction="column">
                                   <Grid item>
                                     <InputTextField
@@ -180,10 +179,12 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                                     />
                                   </Grid>
                                 </Grid>
-                                <Button btnType={BtnType.Primary} type="submit" sx={{marginTop: '8px'}}>
+                                <Grid sx={{display: 'flex', justifyContent: 'end', marginTop: '8px'}}>
+                                  <Button btnType={BtnType.Primary} type="submit">
                                     <NearMeIcon fontSize="small" sx={{marginRight: '7px'}}/>
-                                <TextBtnSmall transition-key="">Send</TextBtnSmall>
-                                </Button>
+                                    <TextBtnSmall transition-key="">Send</TextBtnSmall>
+                                  </Button>
+                                </Grid>
                             </Grid>                        
                         </Popover>
                     </Grid>
