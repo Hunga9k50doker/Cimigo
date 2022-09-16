@@ -103,54 +103,71 @@ const CreateProjectStep = memo(
       <Container maxWidth="sm">
         <Grid justifyContent="center">
           <p className={classes.title}>
-            <Heading1 $colorName="--cimigo-blue" $fontWeight={"600"}>
-              Create Your Project
+            <Heading1
+              $colorName="--cimigo-blue"
+              $fontWeight={"600"}
+              translation-key="project_create_tab_create_project_title"
+            >
+              {t("project_create_tab_create_project_title")}
             </Heading1>
           </p>
         </Grid>
         <Grid className={classes.handleLink}>
           <Grid className={classes.handleLinkFormat}>
-            <ParagraphBody $colorName={"--eerie-black"}>
-              Solution:
+            <ParagraphBody
+              $colorName={"--eerie-black"}
+              translation-key="common_solution"
+            >
+              {t("common_solution")}:
             </ParagraphBody>
             <Heading5 mx={0.5} $fontWeight={"600"} $colorName={"--eerie-black"}>
               {solutionSelected?.title}
             </Heading5>
             <ParagraphSmallUnderline2
+              translation-key="common_change"
               className={classes.link}
               onClick={() => {
                 onClickHandleBack(EStep.SELECT_SOLUTION);
               }}
             >
-              (change)
+              ({t("common_change")})
             </ParagraphSmallUnderline2>
           </Grid>
           <Grid className={classes.handleLinkFormat}>
-            <ParagraphBody $colorName={"--eerie-black"}>Plan:</ParagraphBody>
+            <ParagraphBody $colorName={"--eerie-black"} translation-key="common_plan">
+              {t("common_plan")}:
+            </ParagraphBody>
             <Heading5
               mx={0.5}
               $fontWeight={"600"}
               $colorName={"--eerie-black"}
             >{`${planSelected?.title} : US$ ${planSelected?.price}`}</Heading5>
             <ParagraphSmallUnderline2
+              translation-key="common_change"
               className={classes.link}
               onClick={() => {
                 onClickHandleBack(EStep.SELECT_PLAN);
               }}
             >
-              (change)
+              ({t("common_change")})
             </ParagraphSmallUnderline2>
           </Grid>
         </Grid>
         <Grid className={classes.note} mt={2}>
-          <ParagraphBody $colorName={"--eerie-black"}>
-            <span>Note: </span> You cannot change the solution once you have
-            created a project.However, the cost will vary depending on your
-            setup in the next step.
-          </ParagraphBody>
+          <ParagraphBody
+            $colorName={"--eerie-black"}
+            translation-key="project_create_tab_create_project_note_description"
+            dangerouslySetInnerHTML={{
+              __html: t("project_create_tab_create_project_note_description"),
+            }}
+          ></ParagraphBody>
         </Grid>
-        <ParagraphBody mt={4} $colorName={"--eerie-black"}>
-          Please enter some details to create a new project.
+        <ParagraphBody
+          mt={4}
+          $colorName={"--eerie-black"}
+          translation-key="project_create_tab_create_project_note_description2"
+        >
+          {t("project_create_tab_create_project_note_description2")}
         </ParagraphBody>
         <Grid className={classes.form}>
           <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -195,24 +212,29 @@ const CreateProjectStep = memo(
                     aria-controls="panel1a-content"
                   >
                     <Grid>
-                      <Heading5 $colorName={"--cimigo-blue"}>
-                        Pack test specific information
+                      <Heading5
+                        $colorName={"--cimigo-blue"}
+                        translation-key="project_create_tab_create_project_infor"
+                      >
+                        {t("project_create_tab_create_project_infor")}
                       </Heading5>
-                      <ParagraphExtraSmall $colorName={"--gray-60"}>
-                        OPTIONAL
+                      <ParagraphExtraSmall
+                        $colorName={"--gray-60"}
+                        translation-key="common_optional_upper"
+                      >
+                        {t("common_optional_upper")}
                       </ParagraphExtraSmall>
                     </Grid>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Grid>
-                      <ParagraphSmall $colorName={"--gray-80"}>
-                        These are the details that will appear in the survey.
-                        Entering them correctly will assist respondents in
-                        recognizing your product.
-                      </ParagraphSmall>
-                      <ParagraphSmall $colorName={"--gray-80"}>
-                        You can change it later when setting up your survey.
-                      </ParagraphSmall>
+                      <ParagraphSmall
+                        $colorName={"--gray-80"}
+                        translation-key="project_create_tab_create_project_description"
+                        dangerouslySetInnerHTML={{
+                          __html: t("project_create_tab_create_project_description"),
+                        }}
+                      ></ParagraphSmall>
                       <InputTextfield
                         className={classes.inputAccordion}
                         name="category"
@@ -266,10 +288,11 @@ const CreateProjectStep = memo(
               <Grid className={classes.buttonSubmit}>
                 <Button
                   fullWidth
-                  children={t("create_project_btn_submit")}
-                  translation-key="create_project_btn_submit"
+                  children={t("project_create_tab_create_project_btn_submit")}
+                  translation-key="project_create_tab_create_project_btn_submit"
                   btnType={BtnType.Primary}
                   padding={"8px 47px"}
+                  type="submit"
                 />
               </Grid>
             </Grid>

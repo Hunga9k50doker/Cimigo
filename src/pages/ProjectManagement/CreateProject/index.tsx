@@ -43,9 +43,9 @@ const CreateProject = () => {
 
   const steps = useMemo(() => {
     return [
-      { id: EStep.SELECT_SOLUTION, name: t("select_solution_title") },
-      { id: EStep.SELECT_PLAN, name: "Select Plan" },
-      { id: EStep.CREATE_PROJECT, name: t("create_project_title") },
+      { id: EStep.SELECT_SOLUTION, name: t("project_create_tab_solution_select_solution_title") },
+      { id: EStep.SELECT_PLAN, name: t("project_create_tab_plan_select_plan_title") },
+      { id: EStep.CREATE_PROJECT, name: t("project_create_tab_create_project_title") },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
