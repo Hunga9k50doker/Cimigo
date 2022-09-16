@@ -187,7 +187,7 @@ const Target = memo(({ projectId }: Props) => {
           )
         } else return <a translation-key="target_sub_tab_location_sub">{t('target_sub_tab_location_sub')}</a>
       case ETab.Economic_Class:
-        const targetECs = project?.targets?.filter(it => it.targetQuestion?.typeId === TargetQuestionType.Economic_Class)
+        const targetECs = project?.targets?.filter(it => it.targetQuestion?.typeId === TargetQuestionType.Household_Income)
         if (targetECs?.length) {
           return (
             <li>
@@ -217,7 +217,7 @@ const Target = memo(({ projectId }: Props) => {
         .then((res) => res.data)
         .catch(() => Promise.resolve([]))
       const _questionsLocation = questions.filter(it => it.typeId === TargetQuestionType.Location)
-      const _questionsEconomicClass = questions.filter(it => it.typeId === TargetQuestionType.Economic_Class)
+      const _questionsEconomicClass = questions.filter(it => it.typeId === TargetQuestionType.Household_Income)
       const _questionsAgeGender = questions.filter(it => it.typeId === TargetQuestionType.Gender_And_Age_Quotas)
       const _questionsMum = questions.filter(it => it.typeId === TargetQuestionType.Mums_Only)
       setQuestionsLocation(_questionsLocation)

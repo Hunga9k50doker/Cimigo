@@ -155,6 +155,13 @@ export enum SETUP_SURVEY_SECTION {
   eye_tracking = 'eye-tracking'
 }
 
+export enum TARGET_SECTION {
+  CONTENT = 'target-content',
+  SAMPLE_SIZE = 'target-sample-size',
+  EYE_TRACKING_SAMPLE_SIZE = 'target-eye-tracking-sample-size',
+  SELECT_TARGET = 'target-select-target'
+}
+
 export enum ETabRightPanel {
   OUTLINE,
   COST_SUMMARY

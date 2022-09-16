@@ -66,14 +66,14 @@ export interface UpdateQuestionParams {
 
 export enum TargetQuestionType {
   Location = 1,
-  Economic_Class,
+  Household_Income,
   Gender_And_Age_Quotas,
   Mums_Only
 }
 
 export const targetQuestionTypes: OptionItem[] = [
   { id: TargetQuestionType.Location, name: 'Location' },
-  { id: TargetQuestionType.Economic_Class, name: 'Economic class' },
+  { id: TargetQuestionType.Household_Income, name: 'Household income' },
   { id: TargetQuestionType.Gender_And_Age_Quotas, name: 'Gender and age quotas' },
   { id: TargetQuestionType.Mums_Only, name: 'Mums only' }
 ]

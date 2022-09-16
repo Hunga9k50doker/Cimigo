@@ -80,10 +80,15 @@ import imgSmile from 'assets/img/icon/smile.svg';
 import imgMeh from 'assets/img/icon/meh.svg';
 import imgSad from 'assets/img/icon/sad.svg';
 import imgPain from 'assets/img/icon/pain.svg';
-
+import imgTargetTabLocation from 'assets/img/target-tab-location.svg';
+import imgTargetTabAC from 'assets/img/target-tab-ac.svg';
+import imgTargetTabHI from 'assets/img/target-tab-hi.svg';
 
 const images = {
   // ===================== Images =========================
+  imgTargetTabLocation,
+  imgTargetTabAC,
+  imgTargetTabHI,
   imgVisa,
   imgJCB,
   imgMastercard,

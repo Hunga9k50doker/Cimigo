@@ -24,7 +24,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import SubTitle from "components/common/text/SubTitle";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import SetupSurvey from "./SetupSurvey";
-import Target from "pages/Survey/Target";
+import Target from "./Target";
 import Quotas from "pages/Survey/Quotas";
 import PaymentBilling from "pages/Survey/PaymentBilling";
 import Report from "pages/Survey/Report";
@@ -53,7 +53,10 @@ export const Survey = () => {
   const isValidSetup = useMemo(() => {
     return ProjectHelper.isValidSetup(project)
   }, [project])
-  
+
+  const isValidTargetTab = useMemo(() => {
+    return ProjectHelper.isValidTargetTab(project)
+  }, [project])
 
   useEffect(() => {
     if (id && !isNaN(Number(id))) {
@@ -137,7 +140,7 @@ export const Survey = () => {
               translation-key="common_save"
               children={t('common_save')}
               padding="3px 13px"
-              startIcon={<Check sx={{ fontSize: "16px !important" }}/>}
+              startIcon={<Check sx={{ fontSize: "16px !important" }} />}
               onClick={onChangeProjectName}
             />
           </div>
@@ -164,6 +167,7 @@ export const Survey = () => {
           <Tab
             value={1}
             label={<Box display="flex" alignItems="center">
+              {isValidTargetTab && <CheckCircle className={classes.tabItemIcon} />}
               <Heading4 className={classes.tabItemTitle}>Target</Heading4>
             </Box>}
           />

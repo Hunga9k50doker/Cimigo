@@ -95,6 +95,18 @@ export class ProjectService {
       })
   }
 
+  static async updateEyeTrackingSampleSize(id: number, eyeTrackingSampleSize: number): Promise<any> {
+    return await api.put(API.PROJECT.EYE_TRACKING_SAMPLE_SIZE.replace(":id", `${id}`), {
+      eyeTrackingSampleSize
+    })
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
   static async getQuota(id: number): Promise<any> {
     return await api.get(API.PROJECT.QUOTA.DEFAULT.replace(":id", `${id}`))
       .then((res) => {

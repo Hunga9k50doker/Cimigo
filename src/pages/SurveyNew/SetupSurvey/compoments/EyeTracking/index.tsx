@@ -74,8 +74,9 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
     }
     dispatch(setLoading(true))
     ProjectService.updateEnableEyeTracking(project.id, { enableEyeTracking: enableEyeTracking })
-      .then(() => {
-        dispatch(setProjectReducer({ ...project, enableEyeTracking: enableEyeTracking }));
+      .then((res) => {
+        const eyeTrackingSampleSize = (res.data as Project).eyeTrackingSampleSize
+        dispatch(setProjectReducer({ ...project, enableEyeTracking: enableEyeTracking, eyeTrackingSampleSize }));
         dispatch(getEyeTrackingPacksRequest(project.id));
       })
       .catch((e) => dispatch(setErrorMess(e)))

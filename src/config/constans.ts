@@ -41,6 +41,7 @@ export const API = {
     BASIC_INFORMATION: '/v1.0/project/:id/basic-information',
     TARGET: '/v1.0/project/:id/target',
     SAMPLE_SIZE: '/v1.0/project/:id/sample-size',
+    EYE_TRACKING_SAMPLE_SIZE: '/v1.0/project/:id/eye-tracking-sample-size',
     UPDATE_ENABLE_CUSTOM_QUESTION: '/v1.0/project/:id/update-enable-custom-question',
     UPDATE_ENABLE_EYE_TRACKING: "/v1.0/project/:id/update-enable-eye-tracking",
     QUOTA: {

@@ -33,7 +33,7 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
 
   useEffect(() => {
     const _dataSelected: DataSelected = {}
-    const targetLs = project?.targets?.filter(it => it.targetQuestion?.typeId === TargetQuestionType.Economic_Class) || []
+    const targetLs = project?.targets?.filter(it => it.targetQuestion?.typeId === TargetQuestionType.Household_Income) || []
     targetLs.forEach(item => {
       _dataSelected[item.questionId] = item.answers
     })
@@ -51,7 +51,7 @@ const PopupEconomicClassMobile = memo(({ isOpen, projectId, project, questions, 
   const onUpdateTargetRequest = () => {
     dispatch(setLoading(true))
     ProjectService.updateTarget(projectId, {
-      questionTypeId: TargetQuestionType.Economic_Class,
+      questionTypeId: TargetQuestionType.Household_Income,
       questionSelected: Object.keys(dataSelected).map(questionId => ({ questionId: Number(questionId), answerIds: dataSelected[Number(questionId)].map(it => it.id) }))
     })
       .then((res) => {

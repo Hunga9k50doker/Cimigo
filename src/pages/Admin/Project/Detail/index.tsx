@@ -357,13 +357,13 @@ const Detail = memo(({ }: Props) => {
                             </Paper>
                           </Grid>
                         )}
-                        {!!getTargets([TargetQuestionType.Economic_Class])?.length && (
+                        {!!getTargets([TargetQuestionType.Household_Income])?.length && (
                           <Grid item xs={12} md={4}>
                             <Paper elevation={3} sx={{ p: 2, height: '100%' }}>
                               <Typography variant="h6" mb={1}>
                                 Economic class
                               </Typography>
-                              {getTargets([TargetQuestionType.Economic_Class])?.map(it => (
+                              {getTargets([TargetQuestionType.Household_Income])?.map(it => (
                                 <Typography key={it.id} variant="subtitle1" ml={2}>
                                   <strong>{it.targetQuestion?.name}: </strong>{it.answers?.map(it => it.name).join(', ')}
                                 </Typography>

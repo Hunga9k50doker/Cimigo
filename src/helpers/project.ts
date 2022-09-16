@@ -11,7 +11,7 @@ export class ProjectHelper {
   static isValidTarget(project: Project) {
     const location = project?.targets.find(it => it.targetQuestion?.typeId === TargetQuestionType.Location)
     if (!location) return false
-    const economicClass = project?.targets.find(it => it.targetQuestion?.typeId === TargetQuestionType.Economic_Class)
+    const economicClass = project?.targets.find(it => it.targetQuestion?.typeId === TargetQuestionType.Household_Income)
     if (!economicClass) return false
     const ageCoverage = project?.targets.find(it => [TargetQuestionType.Mums_Only, TargetQuestionType.Gender_And_Age_Quotas].includes(it.targetQuestion?.typeId || 0))
     if (!ageCoverage) return false
@@ -32,6 +32,14 @@ export class ProjectHelper {
 
   static isValidSampleSize(project: Project) {
     return !!project?.sampleSize
+  }
+
+  static isValidEyeTrackingSampleSize(project: Project) {
+    return !!project?.eyeTrackingSampleSize || !project?.enableEyeTracking
+  }
+
+  static isValidTargetTab(project: Project) {
+    return ProjectHelper.isValidTarget(project) && ProjectHelper.isValidSampleSize(project) && ProjectHelper.isValidEyeTrackingSampleSize(project)
   }
 
   static isValidPacks(solution: Solution, packs: Pack[]): boolean {
