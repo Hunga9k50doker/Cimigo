@@ -55,7 +55,7 @@ const ForgotPassword = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="forgot-password" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <Heading2 $colorName="--cimigo-blue" className={classes.textLogin} translation-key="forgot_password_title">{t('forgot_password_title')}</Heading2>
+          <Heading2 $colorName="--cimigo-blue" translation-key="forgot_password_title">{t('forgot_password_title')}</Heading2>
           <ParagraphSmall sx={{paddingTop: '16px', paddingBottom: '24px', textAlign: 'justify'}} $colorName="--eerie-black-90" translation-key="forgot_password_sub_title">{t('forgot_password_sub_title')}</ParagraphSmall>
           <InputTextField
             title={t('field_email_address')}
