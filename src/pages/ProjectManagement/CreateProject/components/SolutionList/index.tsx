@@ -112,15 +112,15 @@ const SolutionList = memo(
         <Grid className={classes.header}>
           <Heading1
             $colorName={"--cimigo-blue"}
-            translation-key="select_solution_select_solution"
+            translation-key="project_create_tab_solution_select_solution"
           >
-            {t("select_solution_select_solution")}
+            {t("project_create_tab_solution_select_solution")}
           </Heading1>
         </Grid>
         <Grid className={classes.headerContentInput2}>
           <InputSearch
-            placeholder={t("select_solution_search_solution")}
-            translation-key="select_solution_search_solution"
+            placeholder={t("project_create_tab_solution_search_solution")}
+            translation-key="project_create_tab_solution_search_solution"
             value={keyword || ""}
             onChange={onSearch}
             width={"100%"}
@@ -143,8 +143,8 @@ const SolutionList = memo(
           </Stack>
           <Grid className={classes.headerContentInput}>
             <InputSearch
-              placeholder={t("select_solution_search_solution")}
-              translation-key="select_solution_search_solution"
+              placeholder={t("project_create_tab_solution_search_solution")}
+              translation-key="project_create_tab_solution_search_solution"
               value={keyword || ""}
               onChange={onSearch}
             />
@@ -210,9 +210,9 @@ const SolutionList = memo(
                     <Grid className={classes.titleComing}>
                       <MobileBody
                         $colorName={"--eerie-black-65"}
-                        translation-key="select_solution_coming_soon"
+                        translation-key="project_create_tab_solution_coming_soon"
                       >
-                        {t("select_solution_coming_soon")}
+                        {t("project_create_tab_solution_coming_soon")}
                       </MobileBody>
                     </Grid>
                     <Grid sx={{ px: "24px" }}>
@@ -242,17 +242,17 @@ const SolutionList = memo(
             {!solutionShow ? (
               <MobileBody
                 $colorName={"--cimigo-danger"}
-                translation-key="select_solution_no_solution_select"
+                translation-key="project_create_tab_solution_no_solution_select"
               >
-                {t("select_solution_no_solution_select")}
+                {t("project_create_tab_solution_no_solution_select")}
               </MobileBody>
             ) : (
               <>
                 <MobileBody
                   $colorName={"--eerie-black"}
-                  translation-key="select_solution_selected_solution"
+                  translation-key="project_create_tab_solution_selected_solution"
                 >
-                  {t("select_solution_selected_solution")}
+                  {t("project_create_tab_solution_selected_solution")}
                 </MobileBody>
                 <SubTitle $colorName={"--cimigo-green-dark-2"}>
                   {solutionShow?.title}
@@ -263,8 +263,8 @@ const SolutionList = memo(
           <Button
             onClick={() => handleNextStep()}
             disabled={!solutionShow}
-            children={t("select_solution_get_started")}
-            translation-key="select_solution_get_started"
+            children={t("project_create_tab_solution_get_started")}
+            translation-key="project_create_tab_solution_get_started"
             btnType={BtnType.Primary}
             padding="16px"
             className={classes.btnMobile}
