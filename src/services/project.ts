@@ -73,6 +73,16 @@ export class ProjectService {
       })
   }
 
+  static async getTargets(id: number): Promise<any> {
+    return await api.get(API.PROJECT.TARGET.replace(":id", `${id}`))
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
   static async updateTarget(id: number, data: UpdateTarget): Promise<any> {
     return await api.put(API.PROJECT.TARGET.replace(":id", `${id}`), data)
       .then((res) => {

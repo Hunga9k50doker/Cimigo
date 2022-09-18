@@ -5,6 +5,7 @@ import getEyeTrackingPacks from './getEyeTrackingPacks';
 import getPacks from './getPacks';
 import getProject from './getProject';
 import getProjectAttributes from './getProjectAttributes';
+import getTarget from './getTarget';
 import getUserAttributes from './getUserAttributes';
 
 export const projectSagas = function* root() {
@@ -15,6 +16,7 @@ export const projectSagas = function* root() {
     getProjectAttributes(),
     getUserAttributes(),
     getCustomQuestions(),
-    getEyeTrackingPacks()
+    getEyeTrackingPacks(),
+    getTarget()
   ]);
 };

@@ -62,6 +62,12 @@ export const projectReducer = (state = initial, action: any) =>
           eyeTrackingPacks: action.data
         };
         break;
+      case types.SET_TARGET_OF_PROJECT_REDUCER:
+        draft.project = {
+          ...draft.project,
+          targets: action.data
+        };
+        break;
       default:
         return state;
     }

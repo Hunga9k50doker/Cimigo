@@ -1,7 +1,7 @@
 import { AdditionalBrand } from "models/additional_brand";
 import { CustomQuestion } from "models/custom_question";
 import { Pack } from "models/pack";
-import { CreateProjectRedirect, Project } from "models/project";
+import { CreateProjectRedirect, Project, ProjectTarget } from "models/project";
 import { ProjectAttribute } from "models/project_attribute";
 import { UserAttribute } from "models/user_attribute";
 
@@ -36,6 +36,10 @@ export const SET_CUSTOM_QUESTIONS_OF_PROJECT_REDUCER = 'SET_CUSTOM_QUESTIONS_OF_
 export const GET_EYE_TRACKING_PACKS_OF_PROJECT_REQUEST = 'GET_EYE_TRACKING_PACKS_OF_PROJECT_REQUEST';
 
 export const SET_EYE_TRACKING_PACKS_OF_PROJECT_REDUCER = 'SET_EYE_TRACKING_PACKS_OF_PROJECT_REDUCER';
+
+export const GET_TARGET_OF_PROJECT_REQUEST = 'GET_TARGET_OF_PROJECT_REQUEST';
+
+export const SET_TARGET_OF_PROJECT_REDUCER = 'SET_TARGET_OF_PROJECT_REDUCER';
 
 export const getProjectRequest = (id: number, callback?: () => void) => {
   return {
@@ -147,6 +151,20 @@ export const getEyeTrackingPacksRequest = (projectId: number) => {
 export const setEyeTrackingPacksReducer = (data: Pack[]) => {
   return {
     type: SET_EYE_TRACKING_PACKS_OF_PROJECT_REDUCER,
+    data
+  }
+}
+
+export const getTargetRequest = (projectId: number) => {
+  return {
+    type: GET_TARGET_OF_PROJECT_REQUEST,
+    projectId
+  }
+}
+
+export const setTargetReducer = (data: ProjectTarget[]) => {
+  return {
+    type: SET_TARGET_OF_PROJECT_REDUCER,
     data
   }
 }

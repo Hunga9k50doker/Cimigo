@@ -161,6 +161,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
             children={<TextBtnSecondary>Next: setup target</TextBtnSecondary>}
             endIcon={<ArrowForward />}
             padding="13px 0px !important"
+            onClick={onNextSetupTarget}
           />
         </MobileAction>
       </LeftContent>

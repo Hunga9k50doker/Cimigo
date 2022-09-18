@@ -91,8 +91,9 @@
       flex-direction: column;
       cursor: pointer;
       border: 2px solid #ffffff;
+      border-bottom: none;
       .tabHeader {
-        border: 1px solid var(--gray-10);
+        border: 2px solid var(--gray-10);
         border-bottom: none;
         border-radius: 4px 4px 0px 0px;
         height: 150px;
@@ -119,7 +120,7 @@
       }
       .tabBody {
         flex: 1;
-        border: 1px solid var(--gray-10);
+        border: 2px solid var(--gray-10);
         border-top: none;
         min-height: 112px;
         border-radius: 0px 0px 4px 4px;
@@ -131,23 +132,42 @@
           padding: 8px 16px;
         }
         .tabBodyDefault {
+          height: 100%;
           display: flex;
           align-items: center;
           justify-content: center;
+          > p {
+            text-align: center;
+          }
+        }
+      }
+      &.tabError {
+        .tabHeader {
+          .tabBoxTitle {
+            > * {
+              color: var(--red-error);
+            }
+          }
+          border-color: var(--red-error);
+        }
+        .tabBody {
+          .tabBodyDefault {
+            > * {
+              color: var(--red-error);
+            }
+          }
+          border-color: var(--red-error);
         }
       }
       &.targetTabActive {
         position: relative;
-        border: 2px solid var(--cimigo-blue-light-3);
-        border-bottom: none;
+        border-color: var(--cimigo-blue-light-3);
         border-radius: 4px 4px 0px 0px;
         .tabHeader {
-          border: 1px solid var(--cultured-gray);
-          border-bottom: none;
+          border-color: var(--cultured-gray);
         }
         .tabBody {
-          border: 1px solid #ffffff;
-          border-top: none;
+          border-color: #ffffff;
           border-radius: unset;
         }
         &::after {
@@ -161,7 +181,7 @@
           z-index: 999;
         }
         &:first-child {
-          ::before {
+          &::before {
             content: "";
             position: absolute;
             width: 2px;
@@ -172,7 +192,7 @@
           }
         }
         &:last-child {
-          ::before {
+          &::before {
             content: "";
             position: absolute;
             width: 2px;
@@ -182,22 +202,65 @@
             bottom: -3px;
           }
         }
+        &.tabError {
+          border-color: var(--red-error);
+          &:first-child,
+          &:last-child {
+            &::before {
+              background: var(--red-error);
+            }
+          }
+        }
       }
     }
     .tabIconBox {
       display: flex;
       align-items: center;
-      justify-content: content;
+      justify-content: center;
       padding: 0px 6px;
       svg {
         font-size: 24px;
         color: var(--gray-40);
       }
     }
+    @media only screen and (max-width: 1200px) {
+      .tabIconBox {
+        padding: 0px;
+        svg {
+          font-size: 20px;
+        }
+      }
+    }
   }
   .tabPanel {
     border: 2px solid var(--cimigo-blue-light-3);
     border-radius: 4px;
-    min-height: 300px;
+    padding: 32px 24px;
+    &.error {
+      border-color: var(--red-error);
+    }
+    @media only screen and (max-width: 1024px) {
+      display: none;
+    }
+  }
+  @media only screen and (max-width: 1024px) {
+    .targetTabs {
+      flex-direction: column;
+      .targetTab {
+        padding: 0px;
+        .tabHeader {
+          border-width: 1px;
+        }
+        .tabBody {
+          border-width: 1px;
+        }
+        &:not(:first-child) {
+          margin-top: 16px;
+        }
+      }
+      .tabIconBox {
+        display: none;
+      }
+    }
   }
 }

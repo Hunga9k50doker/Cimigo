@@ -1,5 +1,5 @@
 import { ArrowForward, Check as CheckIcon, Edit, KeyboardArrowRight, Save } from "@mui/icons-material";
-import { Tab, Badge, Step, Grid, Chip, OutlinedInput, Tabs, Box } from "@mui/material";
+import { Tab, Badge, Step, Grid, Chip, Box, useTheme, useMediaQuery } from "@mui/material";
 import Button, { BtnType } from "components/common/buttons/Button";
 import ChipCustom from "components/common/chip/ChipCustom";
 import Heading4 from "components/common/text/Heading4";
@@ -21,7 +21,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
 import { fCurrency2 } from "utils/formatNumber";
-import { Content, LeftContent, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../compoments";
+import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../compoments";
 import CostSummary from "../compoments/CostSummary";
 import LockIcon from "../compoments/LockIcon";
 import { CustomEyeTrackingSampleSizeForm, CustomSampleSizeForm, ETab, TabItem, _listEyeTrackingSampleSize, _listSampleSize } from "./models";
@@ -36,10 +36,26 @@ import InputTextfield from "components/common/inputs/InputTextfield";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "../compoments/PopupConfirmChangeSampleSize";
 import images from "config/images";
-import { TargetQuestionType } from "models/Admin/target";
+import { TargetQuestion, TargetQuestionType } from "models/Admin/target";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import clsx from "clsx";
 import React from "react";
+import LocationTab from "./LocationTab";
+import { TargetService } from "services/target";
+import HouseholdIncomeTab from "./HouseholdIncomeTab";
+import AgeCoverageTab from "./AgeCoverageTab";
+import PopupLocationMobile from "./components/PopupLocationMobile";
+import PopupHouseholdIncomeMobile from "./components/PopupHouseholdIncomeMobile";
+import PopupAgeCoverageMobile from "./components/PopupAgeCoverageMobile";
+
+enum ErrorKeyAdd {
+  SAMPLE_SIZE = "SAMPLE_SIZE",
+  EYE_TRACKING_SAMPLE_SIZE = "EYE_TRACKING_SAMPLE_SIZE"
+}
+
+type ErrorsTarget = {
+  [key in ETab | ErrorKeyAdd]?: boolean
+}
 
 interface TargetProps {
   projectId: number
@@ -49,6 +65,8 @@ const Target = memo(({ projectId }: TargetProps) => {
 
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation()
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down(1024));
 
   const { configs } = useSelector((state: ReducerType) => state.user)
   const { project } = useSelector((state: ReducerType) => state.project)
@@ -56,10 +74,16 @@ const Target = memo(({ projectId }: TargetProps) => {
   const { isHaveChangePrice, setIsHaveChangePrice } = useChangePrice()
 
   const [tabRightPanel, setTabRightPanel] = useState(ETabRightPanel.OUTLINE);
-  const [activeTab, setActiveTab] = useState(ETab.Location);
   const [showCustomSampleSize, setShowCustomSampleSize] = useState(false);
   const [confirmChangeSampleSizeData, setConfirmChangeSampleSizeData] = useState<DataConfirmChangeSampleSize>();
   const [showCustomEyeTrackingSampleSize, setShowCustomEyeTrackingSampleSize] = useState(false);
+
+  const [activeTab, setActiveTab] = useState<ETab>();
+  const [errorsTarget, setErrorsTarget] = useState<ErrorsTarget>({});
+  const [questionsLocation, setQuestionsLocation] = useState<TargetQuestion[]>([])
+  const [questionsHouseholdIncome, setQuestionsHouseholdIncome] = useState<TargetQuestion[]>([])
+  const [questionsAgeGender, setQuestionsAgeGender] = useState<TargetQuestion[]>([])
+  const [questionsMum, setQuestionsMum] = useState<TargetQuestion[]>([])
 
   const editable = useMemo(() => editableProject(project), [project])
 
@@ -119,7 +143,12 @@ const Target = memo(({ projectId }: TargetProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language, minSampeSize, maxSampeSize])
 
-  const { handleSubmit: handleSubmitSS, formState: { errors: errorsSS, isValid: isValidSS }, reset: resetSS, register: registerSS } = useForm<CustomSampleSizeForm>({
+  const {
+    handleSubmit: handleSubmitSS,
+    formState: { errors: errorsSS, isValid: isValidSS },
+    reset: resetSS,
+    register: registerSS,
+  } = useForm<CustomSampleSizeForm>({
     resolver: yupResolver(schemaSS),
     mode: 'onChange'
   });
@@ -235,7 +264,12 @@ const Target = memo(({ projectId }: TargetProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language, maxEyeTrackingSampeSize, minEyeTrackingSampeSize, project?.sampleSize])
 
-  const { handleSubmit: handleSubmitESS, formState: { errors: errorsESS, isValid: isValidESS }, reset: resetESS, register: registerESS } = useForm<CustomEyeTrackingSampleSizeForm>({
+  const {
+    handleSubmit: handleSubmitESS,
+    formState: { errors: errorsESS, isValid: isValidESS },
+    reset: resetESS,
+    register: registerESS,
+  } = useForm<CustomEyeTrackingSampleSizeForm>({
     resolver: yupResolver(schemaESS),
     mode: 'onChange'
   });
@@ -305,15 +339,74 @@ const Target = memo(({ projectId }: TargetProps) => {
     document.getElementById(TARGET_SECTION.CONTENT).scrollTo({ behavior: 'smooth', top: el.offsetTop - content.offsetTop })
   }
 
-  const onNextQuotas = () => {
-    if (isValidTargetTab) {
-      dispatch(push(routes.project.detail.quotas.replace(":id", `${projectId}`)))
-    } else {
-
+  const triggerErrors = () => {
+    const _errorsTarget: ErrorsTarget = {}
+    if (!ProjectHelper.isValidSampleSize(project)) {
+      _errorsTarget[ErrorKeyAdd.SAMPLE_SIZE] = true
+      return _errorsTarget
     }
+    if (!ProjectHelper.isValidEyeTrackingSampleSize(project)) {
+      _errorsTarget[ErrorKeyAdd.EYE_TRACKING_SAMPLE_SIZE] = true
+      return _errorsTarget
+    }
+    if (!ProjectHelper.isValidTargetTabLocation(project)) {
+      _errorsTarget[ETab.Location] = true
+      return _errorsTarget
+    }
+    if (!ProjectHelper.isValidTargetTabHI(project)) {
+      _errorsTarget[ETab.Household_Income] = true
+      return _errorsTarget
+    }
+    if (!ProjectHelper.isValidTargetTabAC(project)) {
+      _errorsTarget[ETab.Age_Coverage] = true
+      return _errorsTarget
+    }
+    return _errorsTarget
   }
 
-  const onChangeTab = (tab: number) => {
+  useEffect(() => {
+    if (project && !_.isEmpty(errorsTarget)) {
+      setErrorsTarget(triggerErrors())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project])
+
+  const onNextQuotas = () => {
+    const _errorsTarget = triggerErrors()
+    setErrorsTarget(_errorsTarget)
+    if (_errorsTarget[ErrorKeyAdd.SAMPLE_SIZE]) {
+      scrollToElement(TARGET_SECTION.SAMPLE_SIZE)
+      return
+    }
+    if (_errorsTarget[ErrorKeyAdd.EYE_TRACKING_SAMPLE_SIZE]) {
+      scrollToElement(TARGET_SECTION.EYE_TRACKING_SAMPLE_SIZE)
+      return
+    }
+    if (_errorsTarget[ETab.Location] || _errorsTarget[ETab.Household_Income] || _errorsTarget[ETab.Age_Coverage]) {
+      scrollToElement(TARGET_SECTION.SELECT_TARGET)
+      return
+    }
+    dispatch(push(routes.project.detail.quotas.replace(":id", `${projectId}`)))
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const questions: TargetQuestion[] = await TargetService.getQuestions({ take: 9999 })
+        .then((res) => res.data)
+        .catch(() => Promise.resolve([]))
+      const _questionsLocation = questions.filter(it => it.typeId === TargetQuestionType.Location)
+      const _questionsHouseholdIncome = questions.filter(it => it.typeId === TargetQuestionType.Household_Income)
+      const _questionsAgeGender = questions.filter(it => it.typeId === TargetQuestionType.Gender_And_Age_Quotas)
+      const _questionsMum = questions.filter(it => it.typeId === TargetQuestionType.Mums_Only)
+      setQuestionsLocation(_questionsLocation)
+      setQuestionsHouseholdIncome(_questionsHouseholdIncome)
+      setQuestionsAgeGender(_questionsAgeGender)
+      setQuestionsMum(_questionsMum)
+    }
+    fetchData()
+  }, [])
+
+  const onChangeTab = (tab?: ETab) => {
     if (activeTab === tab) return
     setActiveTab(tab)
   };
@@ -556,7 +649,7 @@ const Target = memo(({ projectId }: TargetProps) => {
                   <React.Fragment key={index}>
                     <Box
                       onClick={() => onChangeTab(item.id)}
-                      className={clsx(classes.targetTab, { [classes.targetTabActive]: activeTab === item.id })}
+                      className={clsx(classes.targetTab, { [classes.targetTabActive]: activeTab === item.id && !isMobile, [classes.tabError]: errorsTarget[item.id] })}
                     >
                       <Box className={classes.tabHeader}>
                         <Box className={classes.tabBoxTitle}>
@@ -574,12 +667,44 @@ const Target = memo(({ projectId }: TargetProps) => {
                   </React.Fragment>
                 ))}
               </Box>
-              <Box className={classes.tabPanel}>
-
-              </Box>
+              {(activeTab && !isMobile) && (
+                <Box className={clsx(classes.tabPanel, { [classes.error]: errorsTarget[activeTab] })}>
+                  {activeTab === ETab.Location && (
+                    <LocationTab
+                      project={project}
+                      questions={questionsLocation}
+                      onNextStep={() => onChangeTab(ETab.Household_Income)}
+                    />
+                  )}
+                  {activeTab === ETab.Household_Income && (
+                    <HouseholdIncomeTab
+                      project={project}
+                      questions={questionsHouseholdIncome}
+                      onNextStep={() => onChangeTab(ETab.Age_Coverage)}
+                    />
+                  )}
+                  {activeTab === ETab.Age_Coverage && (
+                    <AgeCoverageTab
+                      project={project}
+                      questionsAgeGender={questionsAgeGender}
+                      questionsMum={questionsMum}
+                    />
+                  )}
+                </Box>
+              )}
             </Grid>
           </Grid>
         </Content>
+        <MobileAction>
+          <Button
+            fullWidth
+            btnType={BtnType.Raised}
+            children={<TextBtnSecondary>Next: setup quotas</TextBtnSecondary>}
+            endIcon={<ArrowForward />}
+            padding="13px 0px !important"
+            onClick={onNextQuotas}
+          />
+        </MobileAction>
       </LeftContent>
       <RightContent>
         <RightPanel>
@@ -675,6 +800,27 @@ const Target = memo(({ projectId }: TargetProps) => {
           </TabPanelBox>
         </RightPanel>
       </RightContent>
+      {isMobile && (<>
+        <PopupLocationMobile
+          isOpen={activeTab === ETab.Location}
+          project={project}
+          questions={questionsLocation}
+          onCancel={() => onChangeTab()}
+        />
+        <PopupHouseholdIncomeMobile
+          isOpen={activeTab === ETab.Household_Income}
+          project={project}
+          questions={questionsHouseholdIncome}
+          onCancel={() => onChangeTab()}
+        />
+        <PopupAgeCoverageMobile
+          isOpen={activeTab === ETab.Age_Coverage}
+          project={project}
+          questionsAgeGender={questionsAgeGender}
+          questionsMum={questionsMum}
+          onCancel={() => onChangeTab()}
+        />
+      </>)}
       <PopupConfirmChangeSampleSize
         data={confirmChangeSampleSizeData}
         onClose={onCloseConfirmChangeSampleSize}

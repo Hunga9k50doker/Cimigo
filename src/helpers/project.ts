@@ -8,14 +8,23 @@ export const editableProject = (project: Project) => {
   return project?.editable
 }
 export class ProjectHelper {
+
+  static isValidTargetTabLocation(project: Project) {
+    return !!project?.targets?.find(it => it.targetQuestion?.typeId === TargetQuestionType.Location)
+  }
+
+  static isValidTargetTabHI(project: Project) {
+    return !!project?.targets?.find(it => it.targetQuestion?.typeId === TargetQuestionType.Household_Income)
+  }
+
+  static isValidTargetTabAC(project: Project) {
+    return !!project?.targets?.find(it => [TargetQuestionType.Mums_Only, TargetQuestionType.Gender_And_Age_Quotas].includes(it.targetQuestion?.typeId || 0))
+  }
+
   static isValidTarget(project: Project) {
-    const location = project?.targets.find(it => it.targetQuestion?.typeId === TargetQuestionType.Location)
-    if (!location) return false
-    const economicClass = project?.targets.find(it => it.targetQuestion?.typeId === TargetQuestionType.Household_Income)
-    if (!economicClass) return false
-    const ageCoverage = project?.targets.find(it => [TargetQuestionType.Mums_Only, TargetQuestionType.Gender_And_Age_Quotas].includes(it.targetQuestion?.typeId || 0))
-    if (!ageCoverage) return false
-    return true
+    return ProjectHelper.isValidTargetTabLocation(project) &&
+    ProjectHelper.isValidTargetTabHI(project) &&
+    ProjectHelper.isValidTargetTabAC(project)
   }
 
   static minPack(solution: Solution) {

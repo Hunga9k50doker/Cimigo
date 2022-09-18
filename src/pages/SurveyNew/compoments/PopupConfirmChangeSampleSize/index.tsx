@@ -12,11 +12,11 @@ import { Help } from '@mui/icons-material';
 import ParagraphBody from 'components/common/text/ParagraphBody';
 
 export interface DataConfirmChangeSampleSize {
-  isConfirmQuotas: boolean,
-  isConfirmEyeTrackingSampleSize: boolean,
-  newSampleSize: number,
-  oldEyeTrackingSampleSize: number,
-  newEyeTrackingSampleSize: number,
+  isConfirmQuotas?: boolean,
+  isConfirmEyeTrackingSampleSize?: boolean,
+  newSampleSize?: number,
+  oldEyeTrackingSampleSize?: number,
+  newEyeTrackingSampleSize?: number,
 }
 
 interface Props {
