@@ -231,7 +231,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, project, questionsAgeGender, ques
               <Box mt={3}>
                 <AnswerListMobile>
                   {question.targetAnswers.map((answer) => (
-                    <Grid item xs={6}>
+                    <Grid item xs={6} key={answer.id}>
                       <ControlCheckbox
                         $cleanPadding={true}
                         control={
@@ -263,7 +263,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, project, questionsAgeGender, ques
               <Box mt={3}>
                 <AnswerListMobile>
                   {question.targetAnswers.map((answer) => (
-                    <Grid item xs={12}>
+                    <Grid item xs={12} key={answer.id}>
                       <ControlCheckbox
                         $cleanPadding={true}
                         control={

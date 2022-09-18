@@ -318,9 +318,9 @@ const Target = memo(({ projectId }: TargetProps) => {
     return ProjectHelper.isValidTarget(project)
   }, [project])
 
-  const isValidTargetTab = useMemo(() => {
-    return ProjectHelper.isValidTargetTab(project)
-  }, [project])
+  // const isValidTargetTab = useMemo(() => {
+  //   return ProjectHelper.isValidTargetTab(project)
+  // }, [project])
 
   const price = useMemo(() => {
     if (!project || !configs) return null
