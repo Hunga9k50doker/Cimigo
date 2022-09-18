@@ -2,12 +2,9 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
-import { Box, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
+import { Box, FormControlLabel, Grid, Typography } from "@mui/material";
 import Header from "components/Header";
 import Footer from "components/Footer";
-import Inputs from "components/Inputs";
-import InputSelect from "components/InputsSelect";
-import Buttons from "components/Buttons";
 import { useEffect, useState, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import CountryService from "services/country";
@@ -16,10 +13,17 @@ import { OptionItem } from "models/general";
 import UserService from "services/user";
 import Popup from "components/Popup";
 import Google from "components/SocialButton/Google";
-import Images from "config/images";
 import { useTranslation } from "react-i18next";
 import { routesOutside } from "routers/routes";
 import { VALIDATION } from "config/constans";
+import Heading2 from "components/common/text/Heading2";
+import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
+import InputTextField from "components/common/inputs/InputTextfield";
+import InputSelect from "components/common/inputs/InputSelect";
+import InputCheckbox from "components/common/inputs/InputCheckbox";
+import Button , {BtnType} from "components/common/buttons/Button";
+
 
 interface DataForm {
   firstName: string;
@@ -30,6 +34,7 @@ interface DataForm {
   isNotify: boolean;
   phone: string;
   company: string;
+  title: string;
 }
 
 const Register = () => {
@@ -54,6 +59,7 @@ const Register = () => {
       isNotify: yup.bool(),
       phone: yup.string().matches(VALIDATION.phone, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true }),
       company: yup.string(),
+      title: yup.string(),
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
@@ -116,114 +122,136 @@ const Register = () => {
       <Header />
       <form onSubmit={handleSubmit(onSubmit)} name="register" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <p className={classes.textLogin} translation-key="register_title">{t('register_title')}</p>
+          <Grid sx={{marginBottom: '24px'}}>
+            <Heading2 $colorName="--cimigo-blue" sx={{marginBottom: '16px'}} translation-key="register_title">{t('register_title')}</Heading2>
+            <ParagraphExtraSmall $colorName="--eerie-black-65" translation-key="register_sub_title">{t('register_sub_title')}</ParagraphExtraSmall>
+          </Grid>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Inputs
-                title={t('field_first_name')}
-                translation-key="field_first_name"
-                name="firstName"
-                placeholder={t('field_first_name_placeholder')}
-                translation-key-placeholder="field_first_name_placeholder"
+              <Grid item xs={12} sm={6}>
+                <InputTextField
+                  title={t('field_first_name')}
+                  translation-key="field_first_name"
+                  name="firstName"
+                  placeholder={t('field_first_name_placeholder')}
+                  translation-key-placeholder="field_first_name_placeholder"
+                  type="text"
+                  inputRef={register('firstName')}
+                  errorMessage={errors.firstName?.message}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <InputTextField
+                  title={t('field_last_name')}
+                  translation-key="field_last_name"
+                  name="lastName"
+                  placeholder={t('field_last_name_placeholder')}
+                  translation-key-placeholder="field_last_name_placeholder"
+                  type="text"
+                  inputRef={register('lastName')}
+                  errorMessage={errors.lastName?.message}
+                />
+              </Grid>
+            <Grid item xs={12} sm={12}>
+              <InputTextField
+                title={t('field_email')}
+                translation-key="field_email"
+                name="email"
+                placeholder={t('field_email_placeholder')}
+                translation-key-placeholder="field_email_placeholder"
                 type="text"
-                inputRef={register('firstName')}
-                errorMessage={errors.firstName?.message}
+                inputRef={register('email')}
+                errorMessage={errors.email?.message}
               />
             </Grid>
-            <Grid item xs={6}>
-              <Inputs
-                title={t('field_last_name')}
-                translation-key="field_last_name"
-                name="lastName"
-                placeholder={t('field_last_name_placeholder')}
-                translation-key-placeholder="field_last_name_placeholder"
-                type="text"
-                inputRef={register('lastName')}
-                errorMessage={errors.lastName?.message}
+            <Grid item xs={12} sm={12}> 
+              <InputTextField
+                title={t('field_password')}
+                translation-key="field_password"
+                name="password"
+                type="password"
+                showEyes
+                placeholder={t('field_password_placeholder')}
+                translation-key-placeholder="field_password_placeholder"
+                inputRef={register('password')}
+                errorMessage={errors.password?.message}
               />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <InputSelect
+                fullWidth
+                title={t('field_country')}
+                name="countryId"
+                control={control}
+                selectProps={{
+                  options: countries,
+                  placeholder: t('field_country_placeholder'),
+                }}
+                errorMessage={(errors.countryId as any)?.id?.message}
+              />
+            </Grid >
+            <Grid item xs={12} sm={12}>
+              <InputTextField
+                title={t('field_phone_number')}
+                translation-key="field_phone_number"
+                optional
+                name="phone"
+                type="text"
+                inputRef={register('phone')}
+                placeholder={t('field_phone_number_placeholder')}
+                translation-key-placeholder="field_phone_number_placeholder"
+                errorMessage={errors.phone?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <InputTextField
+                title={t('field_company')}
+                translation-key="field_company"
+                name="company"
+                type="text"
+                optional
+                inputRef={register('company')}
+                placeholder={t('field_company_placeholder')}
+                translation-key-placeholder="field_company_placeholder"
+                errorMessage={errors.company?.message}
+            />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <InputTextField
+                title={t('field_your_title')}
+                translation-key="field_your_title"
+                name="title"
+                type="text"
+                optional
+                placeholder={t('field_your_title_placeholder')}
+                translation-key-placeholder="field_your_title_placeholder"
+                inputRef={register('title')}
+                errorMessage={errors.title?.message}
+            />
             </Grid>
           </Grid>
-          <Inputs
-            title={t('field_email')}
-            translation-key="field_email"
-            name="email"
-            placeholder={t('field_email_placeholder')}
-            translation-key-placeholder="field_email_placeholder"
-            type="text"
-            inputRef={register('email')}
-            errorMessage={errors.email?.message}
-          />
-          <Inputs
-            title={t('field_password')}
-            translation-key="field_password"
-            name="password"
-            type="password"
-            showEyes
-            placeholder={t('field_password_placeholder')}
-            translation-key-placeholder="field_password_placeholder"
-            inputRef={register('password')}
-            errorMessage={errors.password?.message}
-          />
-          <InputSelect
-            title={t('field_country')}
-            name="countryId"
-            control={control}
-            selectProps={{
-              options: countries,
-              placeholder: t('field_country_placeholder'),
-            }}
-            errorMessage={(errors.countryId as any)?.id?.message}
-          />
-          <Inputs
-            title={t('field_phone_number')}
-            translation-key="field_phone_number"
-            optional
-            name="phone"
-            type="text"
-            inputRef={register('phone')}
-            placeholder={t('field_phone_number_placeholder')}
-            translation-key-placeholder="field_phone_number_placeholder"
-            errorMessage={errors.phone?.message}
-          />
-          <Inputs
-            title={t('field_company')}
-            translation-key="field_company"
-            name="company"
-            type="text"
-            optional
-            inputRef={register('company')}
-            placeholder={t('field_company_placeholder')}
-            translation-key-placeholder="field_company_placeholder"
-            errorMessage={errors.company?.message}
-          />
-
           <FormControlLabel
             classes={{
               root: classes.checkbox,
-              label: classes.labelCheckbox,
             }}
             control={
               <Controller
                 name="isNotify"
                 control={control}
-                render={({ field }) => <Checkbox
-                  color="secondary"
+                render={({ field }) => <InputCheckbox
                   checked={field.value}
-                  icon={<img src={Images.icCheck} alt="" />}
-                  checkedIcon={<img src={Images.icCheckActive} alt="" />}
                   {...field}
                 />}
               />
             }
-            label={<span translation-key="register_notify_checkbox">{t('register_notify_checkbox')}</span>}
+            label={<ParagraphExtraSmall $colorName="--eerie-black-65" translation-key="register_notify_checkbox">{t('register_notify_checkbox')}</ParagraphExtraSmall>}
           />
-          <Buttons type={"submit"} padding="11px 16px" translation-key="register_btn_register" children={t('register_btn_register')} btnType="Blue" />
+          <Button type={"submit"}  translation-key="register_btn_register" children={t('register_btn_register')} btnType={BtnType.Primary} />
           <div className={classes.separator}>
-            <span translation-key="register_register_with">{t('register_register_with')}</span>
+            <ParagraphSmall $colorName="--eerie-black-65" translation-key="register_register_with">{t('register_register_with')}</ParagraphSmall>
           </div>
           <Google />
           <span className={classes.text}>
-            <span translation-key="register_agree_message_1">{t('register_agree_message_1')}</span> <a href={routesOutside(i18n.language)?.rapidsurveyTermsOfService} translation-key="register_agree_message_2">{t('register_agree_message_2')}</a>
+            <ParagraphExtraSmall $colorName="--eerie-black-65" translation-key="register_agree_message_1">{t('register_agree_message_1')}</ParagraphExtraSmall> <a href={routesOutside(i18n.language)?.rapidsurveyTermsOfService} translation-key="register_agree_message_2">{t('register_agree_message_2')}</a>
           </span>
         </Grid>
       </form>
@@ -237,9 +265,9 @@ const Register = () => {
           {t('register_success_popup_sub_title')}
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "2rem" }}>
-          <Buttons btnType="Blue" padding="7px 16px" onClick={onSendVerify} translation-key="register_success_popup_resend_email">
+          <Button btnType={BtnType.Primary} onClick={onSendVerify} translation-key="register_success_popup_resend_email">
             {t('register_success_popup_resend_email')}
-          </Buttons>
+          </Button>
         </Box>
       </Popup>
       <Footer />
