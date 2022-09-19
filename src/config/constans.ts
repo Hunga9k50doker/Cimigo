@@ -98,7 +98,9 @@ export const API = {
   },
   ATTACHMENT: {
     DOWNLOAD: '/v1.0/attachment/:id/download',
+    DOWNLOAD_BASE64: '/v1.0/attachment/:id/download-base64',
     DOWNLOAD_BY_URL: '/v1.0/attachment/download',
+    
   },
   CUSTOM_QUESTION_TYPE: {
     DEFAULT: '/v1.0/custom-question-type',

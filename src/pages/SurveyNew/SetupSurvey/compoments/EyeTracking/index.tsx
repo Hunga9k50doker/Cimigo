@@ -163,7 +163,7 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
             STEP {step}: Eye-tracking
           </Heading4>
           {!!project?.solution?.eyeTrackingHelp && (
-            <BasicTooltip arrow title={<div dangerouslySetInnerHTML={{ __html: project.solution.eyeTrackingHelp }}></div>}>
+            <BasicTooltip arrow title={<div dangerouslySetInnerHTML={{ __html: project?.solution.eyeTrackingHelp }}></div>}>
               <HelpIcon sx={{ fontSize: 20, ml: 1, color: !project?.enableEyeTracking ? "var(--gray-40)" : "var(--gray-60)" }} />
             </BasicTooltip>
           )}

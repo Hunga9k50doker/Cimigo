@@ -42,7 +42,12 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     if (!isValid) return
     if (!ProjectHelper.isValidQuotas(project)) {
       setIsShowConfirmQuotaAllocation(true)
+      return
     }
+    gotoPayment()
+  }
+
+  const gotoPayment = () => {
     dispatch(push(routes.project.detail.paymentBilling.previewAndPayment.payment.replace(':id', `${project.id}`)))
   }
 
@@ -145,7 +150,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       .then(() => {
         dispatch(setProjectReducer({ ...project, agreeQuota: true }))
         onCloseConfirmQuotaAllocation()
-        onConfirmProject()
+        gotoPayment()
       })
       .catch(e => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
