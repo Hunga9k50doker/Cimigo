@@ -109,7 +109,10 @@ export const Survey = () => {
     })
       .then(() => {
         onCloseChangeProjectName()
-        dispatch(getProjectRequest(Number(id)))
+        dispatch(setProjectReducer({
+          ...project,
+          name: projectName
+        }))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(true)))

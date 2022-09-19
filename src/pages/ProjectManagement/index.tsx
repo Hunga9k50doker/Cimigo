@@ -81,7 +81,7 @@ enum SortedField {
   updatedAt = "updatedAt",
 }
 
-interface Props {}
+interface Props { }
 
 const ProjectManagement = memo((props: Props) => {
   const { t, i18n } = useTranslation();
@@ -418,8 +418,6 @@ const ProjectManagement = memo((props: Props) => {
                         e.stopPropagation();
                         setFolderEdit(item);
                       }}
-                      edge="end"
-                      aria-label="Edit"
                     >
                       <DriveFileRenameOutlineIcon />
                     </IconButton>
@@ -429,8 +427,6 @@ const ProjectManagement = memo((props: Props) => {
                         e.stopPropagation();
                         setFolderDelete(item);
                       }}
-                      edge="end"
-                      aria-label="Delete"
                     >
                       <DeleteForeverIcon />
                     </IconButton>
@@ -452,82 +448,81 @@ const ProjectManagement = memo((props: Props) => {
             ))}
             <Button
               className={classes.btnFolder}
-              children={
-                <TextBtnSmall $colorName={"--cimigo-blue"}>
-                  {t("project_mgmt_create_folder")}
-                </TextBtnSmall>
-              }
               translation-key="project_mgmt_create_folder"
               btnType={BtnType.Outlined}
               startIcon={<AddCircleIcon />}
-              type="button"
               onClick={() => setCreateFolder(true)}
-            />
+            >
+              <TextBtnSmall $colorName={"--cimigo-blue"}>
+                {t("project_mgmt_create_folder")}
+              </TextBtnSmall>
+            </Button>
           </List>
         </Grid>
         <Grid className={classes.right}>
           <Grid className={classes.header}>
-            <Heading1
-              className={classes.titleRight}
-              $colorName={"--cimigo-blue"}
-              translation-key="project_mgmt_title"
-            >
-              {t("project_mgmt_title")}
-            </Heading1>
-            <Box sx={{ flex: 1 }}>
-              <InputSearch
-                className={classes.inputSearch}
-                placeholder={t("project_mgmt_search")}
-                translation-key="project_mgmt_search"
-                value={keyword || ""}
-                onChange={onSearch}
-              />
-              <FormControl classes={{ root: classes.rootSelect }}>
-                <Select
-                  variant="outlined"
-                  value={statusId?.id || 0}
-                  onChange={(e) => onChangeStatus(e.target.value as number)}
-                  classes={{
-                    select: classes.selectType,
-                    icon: classes.icSelect,
-                  }}
-                  IconComponent={ExpandIcon}
-                  MenuProps={{
-                    classes: {
-                      paper: classes.selectMenu,
-                    },
-                  }}
-                >
-                  <MenuItem
-                    value={0}
-                    translation-key="project_mgmt_status_all_status"
+            <Box className={classes.headerLeft}>
+              <Heading1
+                className={classes.titleRight}
+                $colorName={"--cimigo-blue"}
+                translation-key="project_mgmt_title"
+              >
+                {t("project_mgmt_title")}
+              </Heading1>
+              <Box className={classes.headerLeftSub}>
+                <InputSearch
+                  className={classes.inputSearch}
+                  placeholder={t("project_mgmt_search")}
+                  translation-key="project_mgmt_search"
+                  value={keyword || ""}
+                  onChange={onSearch}
+                />
+                <FormControl classes={{ root: classes.rootSelect }}>
+                  <Select
+                    variant="outlined"
+                    value={statusId?.id || 0}
+                    onChange={(e) => onChangeStatus(e.target.value as number)}
+                    classes={{
+                      select: classes.selectType,
+                      icon: classes.icSelect,
+                    }}
+                    IconComponent={ExpandIcon}
+                    MenuProps={{
+                      classes: {
+                        paper: classes.selectMenu,
+                      },
+                    }}
                   >
-                    {t("project_mgmt_status_all_status")}
-                  </MenuItem>
-                  {projectStatus.map((item) => (
                     <MenuItem
-                      key={item.id}
-                      value={item.id}
-                      translation-key={item.translation}
+                      value={0}
+                      translation-key="project_mgmt_status_all_status"
                     >
-                      {t(item.translation)}
+                      {t("project_mgmt_status_all_status")}
                     </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                    {projectStatus.map((item) => (
+                      <MenuItem
+                        key={item.id}
+                        value={item.id}
+                        translation-key={item.translation}
+                      >
+                        {t(item.translation)}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
             </Box>
-            <Button
-              children={
-                <TextBtnSmall $colorName={"--white"}>
-                  {t("project_mgmt_create_project")}
-                </TextBtnSmall>
-              }
-              translation-key="project_mgmt_create_project"
-              btnType={BtnType.Primary}
-              startIcon={<AddCircleIcon />}
-              type="button"
-              onClick={() => history.push(routes.project.create)}
-            />
+            <Box className={classes.headerRight}>
+              <Button
+                translation-key="project_mgmt_create_project"
+                btnType={BtnType.Primary}
+                startIcon={<AddCircleIcon />}
+                type="button"
+                onClick={() => history.push(routes.project.create)}
+              >
+                <TextBtnSmall $colorName={"--white"}>{t("project_mgmt_create_project")}</TextBtnSmall>
+              </Button>
+            </Box>
           </Grid>
           <TableContainer className={classes.table}>
             <Table>
@@ -748,7 +743,7 @@ const ProjectManagement = memo((props: Props) => {
                 {t("project_mgmt_your_folders")}
               </MenuItem>
               {folders?.map((item) => (
-                <MenuItem 
+                <MenuItem
                   key={item.id}
                   value={item.id}
                 >
