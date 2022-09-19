@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { DataSelected, isDisableSubmit, onToggleAnswer } from '../../models';
 import { ProjectService } from 'services/project';
 import { setErrorMess, setLoading, setSuccessMess } from 'redux/reducers/Status/actionTypes';
-import { getTargetRequest } from 'redux/reducers/Project/actionTypes';
+import { getTargetRequest, setProjectReducer } from 'redux/reducers/Project/actionTypes';
 import { editableProject } from 'helpers/project';
 import { useTranslation } from 'react-i18next';
 import TabPanelMobile from '../TabPanelMobile';
@@ -173,7 +173,8 @@ const PopupAgeCoverageMobile = memo(({ isOpen, project, questionsAgeGender, ques
     switch (activeTab) {
       case ETab.Gender_And_Age_Quotas:
         ProjectService.resetQuota(project.id)
-          .then(() => {
+          .then((res) => {
+            dispatch(setProjectReducer({ ...project, agreeQuota: res.data.agreeQuota }))
             onUpdateTargetGenderAgeRequest()
           })
           .catch(e => dispatch(setErrorMess(e)))
@@ -181,7 +182,8 @@ const PopupAgeCoverageMobile = memo(({ isOpen, project, questionsAgeGender, ques
         break;
       case ETab.Mums_Only:
         ProjectService.resetQuota(project.id)
-          .then(() => {
+          .then((res) => {
+            dispatch(setProjectReducer({ ...project, agreeQuota: res.data.agreeQuota }))
             onUpdateTargetMumRequest()
           })
           .catch(e => dispatch(setErrorMess(e)))

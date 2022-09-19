@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { DataSelected, isDisableSubmit, onToggleAnswer } from "../models";
 import { ProjectService } from "services/project";
 import { setLoading, setSuccessMess, setErrorMess } from "redux/reducers/Status/actionTypes";
-import { getTargetRequest } from "redux/reducers/Project/actionTypes";
+import { getTargetRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { editableProject } from "helpers/project";
 import { useTranslation } from "react-i18next";
 import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "pages/SurveyNew/compoments/PopupConfirmChangeSampleSize";
@@ -153,7 +153,8 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum }: Prop
       case ETab.Gender_And_Age_Quotas:
         if (isDisableGenderAge) return
         ProjectService.resetQuota(project.id)
-          .then(() => {
+          .then((res) => {
+            dispatch(setProjectReducer({ ...project, agreeQuota: res.data.agreeQuota }))
             onUpdateTargetGenderAgeRequest()
           })
           .catch(e => dispatch(setErrorMess(e)))
@@ -162,7 +163,8 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum }: Prop
       case ETab.Mums_Only:
         if (isDisableMum) return
         ProjectService.resetQuota(project.id)
-          .then(() => {
+          .then((res) => {
+            dispatch(setProjectReducer({ ...project, agreeQuota: res.data.agreeQuota }))
             onUpdateTargetMumRequest()
           })
           .catch(e => dispatch(setErrorMess(e)))

@@ -4,8 +4,14 @@ import styled from "styled-components";
 
 const ListDot = styled(Box)`
   color: var(--gray-80);
-  list-style-position: inside;
-  padding-left: 8px;
+  list-style-position: outside;
+  padding-left: 16px;
+  li {
+    &::marker {
+      font-size: 10px;
+      color: var(--gray-80);
+    }
+  }
 `
 
 export default ListDot;

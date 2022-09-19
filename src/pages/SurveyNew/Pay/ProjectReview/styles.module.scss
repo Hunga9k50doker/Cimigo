@@ -1,0 +1,230 @@
+.root {
+  max-width: 1000px;
+  margin: auto;
+}
+.title {
+  span {
+    font-weight: 600;
+  }
+}
+.body {
+  background: var(--ghost-white);
+  border: 1px solid var(--eerie-black-20);
+  border-radius: 4px;
+  padding: 32px 40px;
+  margin-top: 36px;
+  @media only screen and (max-width: 992px) {
+    background: #ffffff;
+    border: none;
+    border-radius: 0px;
+    padding: 0px;
+    margin-top: 0px;
+  }
+}
+
+.rowItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  &:not(:first-child) {
+    margin-top: 32px;
+  }
+  .leftItem {
+    flex: 2;
+  }
+  .rightItem {
+    flex: 3;
+    margin-left: 8px;
+    .solutionImg {
+      width: 24px;
+      height: 24;
+      margin-right: 8px;
+      object-fit: contain;
+    }
+  }
+  @media only screen and (max-width: 992px) {
+    padding: 16px 0px;
+    &:not(:last-child) {
+      border-bottom: 1px solid #dddddd;
+    }
+    &:not(:first-child) {
+      margin-top: 0px;
+    }
+    .leftItem {
+      flex: unset;
+    }
+    .rightItem {
+      flex: unset;
+    }
+  }
+}
+
+.rowItemBox {
+  flex-direction: column;
+  align-items: unset;
+  justify-content: unset;
+  .itemHead {
+    display: flex;
+    align-items: center;
+    .btnGoto {
+      margin-left: 24px;
+    }
+  }
+  .itemContent {
+    margin-top: 16px;
+    margin-left: 8px;
+    padding-left: 16px;
+    border-left: 1px dashed var(--gray-20);
+    .itemSubBox {
+      display: flex;
+      &:not(:first-child) {
+        margin-top: 16px;
+      }
+      .itemSubLeft {
+        flex: 2;
+      }
+      .itemSubRight {
+        margin-left: 4px;
+        flex: 3;
+        > p {
+          word-break: normal;
+          overflow-wrap: anywhere;
+          &:not(:first-child) {
+            margin-top: 8px;
+          }
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 992px) {
+    .itemHead {
+      justify-content: space-between;
+    }
+    .itemContent {
+      .itemSubBox {
+        .itemSubRightCustom {
+          > p {
+            color: var(--eerie-black-65);
+            > span {
+              color: var(--eerie-black);
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.btnGoto {
+  white-space: nowrap;
+  padding: 0px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 29px;
+  border-radius: 50px;
+  background: var(--cultured-gray);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: var(--cimigo-blue-dark-2);
+  text-transform: unset;
+  svg {
+    font-size: 12px !important;
+  }
+  &:hover {
+    background-color: var(--cimigo-blue-light-4);
+  }
+  @media only screen and (max-width: 992px) {
+    font-size: 12px;
+    line-height: 15px;
+    height: 27px;
+  }
+}
+
+.colorDanger {
+  color: var(--red-error) !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.smallText {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  > * {
+    &:not(:first-child) {
+      margin-left: 16px;
+    }
+    flex: 1;
+  }
+  @media only screen and (max-width: 992px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: unset;
+    > * {
+      &:not(:first-child) {
+        margin-left: 0px;
+      }
+      &:not(:last-child) {
+        border-bottom: 1px solid #dddddd;
+      }
+      flex: unset;
+    }
+  }
+}
+
+.textExpected {
+  padding: 16px 0px 0px;
+  @media only screen and (max-width: 992px) {
+    padding: 16px 8px 0px;
+  }
+}
+
+.materialBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 16px 48px;
+  .materialItem {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &:not(:first-child) {
+      margin-left: 24px;
+    }
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      margin-bottom: 4px;
+    }
+  }
+  @media only screen and (max-width: 992px) {
+    padding: 32px 0px 42px;
+  }
+}
+
+.btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.textEnd {
+  @media only screen and (max-width: 992px) {
+    margin-top: 32px;
+  }
+  text-align: center;
+}
+

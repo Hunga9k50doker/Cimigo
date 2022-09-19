@@ -109,11 +109,11 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
 
   const inValidTargetMess = () => {
     const mess: string[] = []
-    const location = project?.targets.find(it => it.targetQuestion?.typeId === TargetQuestionType.Location)
+    const location = project?.targets?.find(it => it.targetQuestion?.typeId === TargetQuestionType.Location)
     if (!location) mess.push(t('target_sub_tab_location'))
-    const economicClass = project?.targets.find(it => it.targetQuestion?.typeId === TargetQuestionType.Household_Income)
+    const economicClass = project?.targets?.find(it => it.targetQuestion?.typeId === TargetQuestionType.Household_Income)
     if (!economicClass) mess.push(t('target_sub_tab_economic_class'))
-    const ageCoverage = project?.targets.find(it => [TargetQuestionType.Mums_Only, TargetQuestionType.Gender_And_Age_Quotas].includes(it.targetQuestion?.typeId || 0))
+    const ageCoverage = project?.targets?.find(it => [TargetQuestionType.Mums_Only, TargetQuestionType.Gender_And_Age_Quotas].includes(it.targetQuestion?.typeId || 0))
     if (!ageCoverage) mess.push(t('target_sub_tab_age_coverage'))
     return mess
   }

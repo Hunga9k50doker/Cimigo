@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { Dialog, Grid, IconButton, FormControlLabel, Checkbox, Box } from '@mui/material';
+import { Dialog, Grid, Box } from '@mui/material';
 import classes from './styles.module.scss';
 
 import { Project } from 'models/project';
@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { DataSelected, isDisableSubmit, onToggleAnswer } from '../../models';
 import { setLoading, setSuccessMess, setErrorMess } from 'redux/reducers/Status/actionTypes';
 import { ProjectService } from 'services/project';
-import { getTargetRequest } from 'redux/reducers/Project/actionTypes';
+import { getTargetRequest, setProjectReducer } from 'redux/reducers/Project/actionTypes';
 import { editableProject } from 'helpers/project';
 import { useTranslation } from 'react-i18next';
 import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from 'pages/SurveyNew/compoments/PopupConfirmChangeSampleSize';
@@ -90,7 +90,8 @@ const PopupHouseholdIncomeMobile = memo(({ isOpen, project, questions, onCancel 
   const onConfimedChangeTarget = () => {
     if (isDisable) return
     ProjectService.resetQuota(project.id)
-      .then(() => {
+      .then((res) => {
+        dispatch(setProjectReducer({ ...project, agreeQuota: res.data.agreeQuota }))
         onUpdateTargetRequest()
       })
       .catch(e => dispatch(setErrorMess(e)))

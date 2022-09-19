@@ -6,7 +6,7 @@ import { TargetAnswer, TargetQuestionType, TargetQuestion } from "models/Admin/t
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
 import { DataSelected, onToggleAnswer, isDisableSubmit } from "../models";
 import { ProjectService } from "services/project";
-import { getTargetRequest } from "redux/reducers/Project/actionTypes";
+import { getTargetRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { editableProject } from "helpers/project";
 import { useTranslation } from "react-i18next";
 import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "pages/SurveyNew/compoments/PopupConfirmChangeSampleSize";
@@ -82,7 +82,8 @@ const HouseholdIncomeTab = memo(({ project, questions, onNextStep }: Props) => {
   const onConfimedChangeTarget = () => {
     if (isDisable) return
     ProjectService.resetQuota(project.id)
-      .then(() => {
+      .then((res) => {
+        dispatch(setProjectReducer({ ...project, agreeQuota: res.data.agreeQuota }))
         onUpdateTargetRequest()
       })
       .catch(e => dispatch(setErrorMess(e)))

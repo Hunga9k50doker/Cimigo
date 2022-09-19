@@ -207,7 +207,8 @@ const Target = memo(({ projectId }: TargetProps) => {
   const onConfirmedChangeSamleSize = () => {
     if (!confirmChangeSampleSizeData || !editable) return
     ProjectService.resetQuota(projectId)
-      .then(() => {
+      .then((res) => {
+        dispatch(setProjectReducer({ ...project, agreeQuota: res.data.agreeQuota }))
         serviceUpdateSampleSize(confirmChangeSampleSizeData.newSampleSize)
       })
       .catch(e => dispatch(setErrorMess(e)))
