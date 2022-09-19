@@ -161,32 +161,32 @@ export const Survey = () => {
             value={0}
             label={<Box display="flex" alignItems="center">
               {isValidSetup && <CheckCircle className={classes.tabItemIcon} />}
-              <Heading4 className={classes.tabItemTitle}>Setup</Heading4>
+              <Heading4 className={classes.tabItemTitle} translation-key="setup_tab">{t("setup_tab")}</Heading4>
             </Box>}
           />
           <Tab
             value={1}
             label={<Box display="flex" alignItems="center">
               {isValidTargetTab && <CheckCircle className={classes.tabItemIcon} />}
-              <Heading4 className={classes.tabItemTitle}>Target</Heading4>
+              <Heading4 className={classes.tabItemTitle} translation-key="target_tab">{t("target_tab")}</Heading4>
             </Box>}
           />
           <Tab
             value={2}
             label={<Box display="flex" alignItems="center">
-              <Heading4 className={classes.tabItemTitle}>Quotas</Heading4>
+              <Heading4 className={classes.tabItemTitle} translation-key="quotas_tab">{t("quotas_tab")}</Heading4>
             </Box>}
           />
           <Tab
             value={3}
             label={<Box display="flex" alignItems="center">
-              <Heading4 className={classes.tabItemTitle}>Pay</Heading4>
+              <Heading4 className={classes.tabItemTitle} translation-key="payment_tab">{t("payment_tab")}</Heading4>
             </Box>}
           />
           <Tab
             value={4}
             label={<Box display="flex" alignItems="center">
-              <Heading4 className={classes.tabItemTitle}>Results</Heading4>
+              <Heading4 className={classes.tabItemTitle} translation-key="results_tab">{t("results_tab")}</Heading4>
             </Box>}
           />
         </Tabs>

@@ -157,10 +157,10 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
           <Heading4
             $fontSizeMobile={"16px"}
             $colorName="--eerie-black"
-            translation-key=""
+            translation-key="setup_eye_tracking_step"
             className={clsx({ [classes.titleDisabled]: !project?.enableEyeTracking })}
           >
-            STEP {step}: Eye-tracking
+            {t("setup_eye_tracking_step", {step: step})}
           </Heading4>
           {!!project?.solution?.eyeTrackingHelp && (
             <BasicTooltip arrow title={<div dangerouslySetInnerHTML={{ __html: project.solution.eyeTrackingHelp }}></div>}>
@@ -180,18 +180,18 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
       <ParagraphBody
         $colorName="--gray-80"
         mt={1}
-        translation-key=""
+        translation-key="setup_eye_tracking_title"
         className={clsx({ [classes.titleSubDisabled]: !project?.enableEyeTracking })}
       >
-        Đánh giá bao bì và sự xuất hiện trên kệ hàng thông qua công nghệ theo dõi chuyển động mắt.
+        {t("setup_eye_tracking_title")}
       </ParagraphBody>
       {project?.enableEyeTracking && (
         <>
           <Box mt={2}>
             <Circle sx={{ color: "var(--gray-30)", fontSize: 12, verticalAlign: "middle", display: "inline-flex" }} />
-            <Heading5 sx={{ verticalAlign: "middle", display: "inline-flex", ml: 1 }} $colorName="--eerie-black">Điểm thu hút trên bao bì:</Heading5>
+            <Heading5 sx={{ verticalAlign: "middle", display: "inline-flex", ml: 1 }} $colorName="--eerie-black" translation-key="setup_eye_tracking_option_attraction">{t("setup_eye_tracking_option_attraction")}</Heading5>
           </Box>
-          <ParagraphBody mt={1} $colorName="--gray-80">Tất cả các bao bì sau đây sẽ được chúng tôi thực hiện đánh giá theo dõi chuyển động mắt nhằm mục đích tìm ra điểm thu hút trên các bao bì.</ParagraphBody>
+          <ParagraphBody mt={1} $colorName="--gray-80" translation-key="setup_eye_tracking_option_attraction_subtitle">{t("setup_eye_tracking_option_attraction_subtitle")}</ParagraphBody>
           {project?.packs?.length && (
             <Box mt={2}>
               <Grid spacing={2} container>
@@ -213,15 +213,17 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
           )}
           <Box mt={3}>
             <Circle sx={{ color: "var(--gray-30)", fontSize: 12, verticalAlign: "middle", display: "inline-flex" }} />
-            <Heading5 sx={{ verticalAlign: "middle", display: "inline-flex", ml: 1 }} $colorName="--eerie-black">Hiệu quả xuất hiện trên kệ hàng:</Heading5>
+            <Heading5 sx={{ verticalAlign: "middle", display: "inline-flex", ml: 1 }} $colorName="--eerie-black"  translation-key="setup_eye_tracking_option_effect">{t("setup_eye_tracking_option_effect")}</Heading5>
           </Box>
-          <ParagraphBody mt={1} $colorName="--gray-80">
-            Ngoài ra, chúng tôi còn thực hiện đánh giá hiệu quả thu hút của các bao bì của bạn khi xuất hiện trên kệ hàng thông qua công nghệ theo dõi chuyển động mắt.
+          <ParagraphBody mt={1} $colorName="--gray-80"  translation-key="setup_eye_tracking_option_effect_subtitle_1">
+          {t("setup_eye_tracking_option_effect_subtitle_1")}
           </ParagraphBody>
-          <ParagraphBody mt={2} $colorName="--gray-80">
-            Các <strong>bao bì hiện tại</strong> và <strong>bao bì thử nghiệm</strong> sẽ được thực hiện đánh giá hiệu quả xuất trên kệ hàng cùng với bao bì của các đối thủ cạnh tranh khác. Để tăng hiệu quả của việc đánh giá, chúng tôi đề xuất bạn đăng tải thêm một số bao bì của đối thủ cạnh tranh.
+          <ParagraphBody mt={2} $colorName="--gray-80" translation-key="setup_eye_tracking_option_effect_subtitle_2"
+            dangerouslySetInnerHTML={{
+            __html: t("setup_eye_tracking_option_effect_subtitle_2"),
+            }}>
           </ParagraphBody>
-          <ParagraphBody mt={2} $colorName="--gray-80">Bạn có thể đăng tải tối đa {maxEyeTrackingPack} bao bì.</ParagraphBody>
+          <ParagraphBody mt={2} $colorName="--gray-80" translation-key="setup_eye_tracking_option_effect_subtitle_3">{t("setup_eye_tracking_option_effect", {maxEyeTrackingPack: maxEyeTrackingPack})}</ParagraphBody>
           {!!project?.eyeTrackingPacks?.length && (
             <Box mt={{ xs: 3, sm: 2 }} >
               <Grid spacing={2} container>
