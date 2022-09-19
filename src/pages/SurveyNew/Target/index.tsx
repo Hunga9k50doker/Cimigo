@@ -556,83 +556,85 @@ const Target = memo(({ projectId }: TargetProps) => {
               <Grid className={classes.popularSampleSize} translation-key="target_sample_size_popular"><span className={classes.iconPopular}></span>{t('target_sample_size_popular')}</Grid>
             </Grid>
           </Grid>
-          <Grid mt={4} id={TARGET_SECTION.EYE_TRACKING_SAMPLE_SIZE}>
-            <Heading4
-              $fontSizeMobile={"16px"}
-              $colorName="--eerie-black"
-              translation-key=""
-            >
-              STEP 2: How many respondents do you want to target for eye-tracking?
-            </Heading4>
-            <ParagraphBody $colorName="--gray-80" mt={1} translation-key="">
-              You could choose fewer respondents than your survey's targeted respondents. To ensure quality, a minimum of {minEyeTrackingSampeSize} samples are required.
-            </ParagraphBody>
-            <Grid mt={2}>
-              <Grid className={classes.customSizeBox}>
-                {listEyeTrackingSampleSize?.map((item, index) => (
-                  <Badge key={index} color="secondary" invisible={!item.popular} variant="dot" classes={{ dot: classes.badge }}>
-                    <ChipCustom
-                      clickable
-                      disabled={!editable}
-                      label={item.value}
-                      selected={item.value === project?.eyeTrackingSampleSize}
-                      variant={item.value === project?.eyeTrackingSampleSize ? "outlined" : "filled"}
-                      onClick={() => updateEyeTrackingSampleSize(item.value)}
-                    />
-                  </Badge>
-                ))}
-                {showCustomEyeTrackingSampleSize ? (
-                  <Grid className={classes.customSizeInputBox} component="form" onSubmit={handleSubmitESS(_onSubmitESS)} autoComplete="off" noValidate>
-                    <InputTextfield
-                      fullWidth
-                      autoFocus
-                      type="number"
-                      placeholder={t('target_sample_size_placeholder')}
-                      translation-key-placeholder="target_sample_size_placeholder"
-                      inputRef={registerESS("eyeTrackingSampleSize")}
-                    />
-                    {isValidESS ? (
-                      <Button
-                        type="submit"
-                        btnType={BtnType.Outlined}
-                        className={classes.btnSize}
-                        children={<TextBtnSmall translation-key="common_save">{t("common_save")}</TextBtnSmall>}
-                        startIcon={<Save />}
+          {project?.enableEyeTracking && (
+            <Grid mt={4} id={TARGET_SECTION.EYE_TRACKING_SAMPLE_SIZE}>
+              <Heading4
+                $fontSizeMobile={"16px"}
+                $colorName="--eerie-black"
+                translation-key=""
+              >
+                STEP 2: How many respondents do you want to target for eye-tracking?
+              </Heading4>
+              <ParagraphBody $colorName="--gray-80" mt={1} translation-key="">
+                You could choose fewer respondents than your survey's targeted respondents. To ensure quality, a minimum of {minEyeTrackingSampeSize} samples are required.
+              </ParagraphBody>
+              <Grid mt={2}>
+                <Grid className={classes.customSizeBox}>
+                  {listEyeTrackingSampleSize?.map((item, index) => (
+                    <Badge key={index} color="secondary" invisible={!item.popular} variant="dot" classes={{ dot: classes.badge }}>
+                      <ChipCustom
+                        clickable
+                        disabled={!editable}
+                        label={item.value}
+                        selected={item.value === project?.eyeTrackingSampleSize}
+                        variant={item.value === project?.eyeTrackingSampleSize ? "outlined" : "filled"}
+                        onClick={() => updateEyeTrackingSampleSize(item.value)}
+                      />
+                    </Badge>
+                  ))}
+                  {showCustomEyeTrackingSampleSize ? (
+                    <Grid className={classes.customSizeInputBox} component="form" onSubmit={handleSubmitESS(_onSubmitESS)} autoComplete="off" noValidate>
+                      <InputTextfield
+                        fullWidth
+                        autoFocus
+                        type="number"
+                        placeholder={t('target_sample_size_placeholder')}
+                        translation-key-placeholder="target_sample_size_placeholder"
+                        inputRef={registerESS("eyeTrackingSampleSize")}
+                      />
+                      {isValidESS ? (
+                        <Button
+                          type="submit"
+                          btnType={BtnType.Outlined}
+                          className={classes.btnSize}
+                          children={<TextBtnSmall translation-key="common_save">{t("common_save")}</TextBtnSmall>}
+                          startIcon={<Save />}
+                        />
+                      ) : (
+                        <Button
+                          btnType={BtnType.Outlined}
+                          className={classes.btnSize}
+                          onClick={onClearCustomEyeTrackingSampleSize}
+                          children={<TextBtnSmall translation-key="common_cancel">{t('common_cancel')}</TextBtnSmall>}
+                        />
+                      )}
+                    </Grid>
+                  ) : (
+                    isCustomEyeTrackingSampleSize ? (
+                      <ChipCustom
+                        selected
+                        disabled={!editable}
+                        label={project?.eyeTrackingSampleSize || "0"}
+                        variant="outlined"
+                        deleteIcon={<Edit />}
+                        onDelete={onCustomEyeTrackingSampleSize}
                       />
                     ) : (
-                      <Button
-                        btnType={BtnType.Outlined}
-                        className={classes.btnSize}
-                        onClick={onClearCustomEyeTrackingSampleSize}
-                        children={<TextBtnSmall translation-key="common_cancel">{t('common_cancel')}</TextBtnSmall>}
+                      <ChipCustom
+                        clickable
+                        variant="filled"
+                        disabled={!editable}
+                        label={t('target_sample_size_custom')}
+                        translation-key="target_sample_size_custom"
+                        onClick={onCustomEyeTrackingSampleSize}
                       />
-                    )}
-                  </Grid>
-                ) : (
-                  isCustomEyeTrackingSampleSize ? (
-                    <ChipCustom
-                      selected
-                      disabled={!editable}
-                      label={project?.eyeTrackingSampleSize || "0"}
-                      variant="outlined"
-                      deleteIcon={<Edit />}
-                      onDelete={onCustomEyeTrackingSampleSize}
-                    />
-                  ) : (
-                    <ChipCustom
-                      clickable
-                      variant="filled"
-                      disabled={!editable}
-                      label={t('target_sample_size_custom')}
-                      translation-key="target_sample_size_custom"
-                      onClick={onCustomEyeTrackingSampleSize}
-                    />
-                  )
-                )}
+                    )
+                  )}
+                </Grid>
+                {(errorsESS.eyeTrackingSampleSize && showCustomEyeTrackingSampleSize) && <ParagraphSmall mt={1} $colorName="--red-error">{errorsESS.eyeTrackingSampleSize?.message}</ParagraphSmall>}
               </Grid>
-              {(errorsESS.eyeTrackingSampleSize && showCustomEyeTrackingSampleSize) && <ParagraphSmall mt={1} $colorName="--red-error">{errorsESS.eyeTrackingSampleSize?.message}</ParagraphSmall>}
             </Grid>
-          </Grid>
+          )}
           <Grid mt={4} id={TARGET_SECTION.SELECT_TARGET}>
             <Heading4
               $fontSizeMobile={"16px"}
