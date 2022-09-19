@@ -7,7 +7,7 @@ import { DataSelected, isDisableSubmit, isSelectedSuggestion, onClickSuggestion,
 import { useDispatch } from 'react-redux';
 import { setLoading, setSuccessMess, setErrorMess } from 'redux/reducers/Status/actionTypes';
 import { ProjectService } from 'services/project';
-import { getTargetRequest } from 'redux/reducers/Project/actionTypes';
+import { getTargetRequest, setProjectReducer } from 'redux/reducers/Project/actionTypes';
 import { editableProject } from 'helpers/project';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
@@ -112,7 +112,8 @@ const PopupLocationMobile = memo(({ isOpen, project, questions, onCancel }: Prop
   const onConfimedChangeTarget = () => {
     if (isDisable) return
     ProjectService.resetQuota(project.id)
-      .then(() => {
+      .then((res) => {
+        dispatch(setProjectReducer({ ...project, agreeQuota: res.data.agreeQuota }))
         onUpdateTargetRequest()
       })
       .catch(e => dispatch(setErrorMess(e)))

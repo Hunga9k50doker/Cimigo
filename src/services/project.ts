@@ -151,29 +151,39 @@ export class ProjectService {
 
   static async updateEnableCustomQuestion(id: number, data: UpdateEnableCustomQuestion): Promise<any> {
     return await api.put(API.PROJECT.UPDATE_ENABLE_CUSTOM_QUESTION.replace(":id", `${id}`), data)
-    .then((res) => {
-      return Promise.resolve(res.data);
-    })
-    .catch((e) => {
-      return Promise.reject(e?.response?.data);
-    })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
   }
 
   static async updateEnableEyeTracking(id: number, data: UpdateEnableEyeTracking): Promise<any> {
     return await api.put(API.PROJECT.UPDATE_ENABLE_EYE_TRACKING.replace(":id", `${id}`), data)
-    .then((res) => {
-      return Promise.resolve(res.data);
-    })
-    .catch((e) => {
-      return Promise.reject(e?.response?.data);
-    })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
   }
 
-  static async sendEmailHowToSetupSurvey(name: string, email: string, ) {
+  static async sendEmailHowToSetupSurvey(name: string, email: string,) {
     return await api.post(API.PROJECT.SEND_EMAIL_HOW_TO_SETUP_SURVEY, {
       name,
       email
     })
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async updateAgreeQuota(id: number, agreeQuota: boolean) {
+    return await api.post(API.PROJECT.UPDATE_AGREE_QUOTA.replace(":id", `${id}`), { agreeQuota })
       .then((res) => {
         return Promise.resolve(res.data.data)
       })

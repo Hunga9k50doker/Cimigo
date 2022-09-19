@@ -25,8 +25,8 @@ import SubTitle from "components/common/text/SubTitle";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import SetupSurvey from "./SetupSurvey";
 import Target from "./Target";
-import Quotas from "pages/Survey/Quotas";
-import PaymentBilling from "pages/Survey/PaymentBilling";
+import Quotas from "./Quotas";
+import Pay from "./Pay";
 import Report from "pages/Survey/Report";
 import ProjectHelper from "helpers/project";
 
@@ -67,19 +67,18 @@ export const Survey = () => {
     }
   }, [dispatch, id])
 
-  const activeRoute = (routeName: string, exact: boolean = false) => {
-    const match = matchPath(window.location.pathname, {
-      path: routeName,
-      exact: exact
-    })
-    return !!match
-  };
-
-  const getActiveTab = () => {
+  const acitveTab = useMemo(() => {
+    const activeRoute = (routeName: string, exact: boolean = false) => {
+      const match = matchPath(window.location.pathname, {
+        path: routeName,
+        exact: exact
+      })
+      return !!match
+    };
     const index = tabs.findIndex(it => activeRoute(it))
     if (index === -1) return 0
     return index
-  }
+  }, [window.location.pathname, tabs])
 
   const onChangeTab = (_: any, newTab: number) => {
     dispatch(push(tabs[newTab].replace(":id", id)))
@@ -148,7 +147,7 @@ export const Survey = () => {
       </Grid>
       <Box className={classes.tabsBox}>
         <Tabs
-          value={getActiveTab()}
+          value={acitveTab}
           onChange={onChangeTab}
           variant="scrollable"
           classes={{
@@ -174,6 +173,7 @@ export const Survey = () => {
           <Tab
             value={2}
             label={<Box display="flex" alignItems="center">
+              {project?.agreeQuota && <CheckCircle className={classes.tabItemIcon} />}
               <Heading4 className={classes.tabItemTitle}>Quotas</Heading4>
             </Box>}
           />
@@ -199,7 +199,7 @@ export const Survey = () => {
           <Route exact path={routes.project.detail.setupSurvey} render={(routeProps) => <SetupSurvey {...routeProps} projectId={Number(id)} />} />
           <Route exact path={routes.project.detail.target} render={(routeProps) => <Target {...routeProps} projectId={Number(id)} />} />
           <Route exact path={routes.project.detail.quotas} render={(routeProps) => <Quotas {...routeProps} projectId={Number(id)} />} />
-          <Route path={routes.project.detail.paymentBilling.root} render={(routeProps) => <PaymentBilling {...routeProps} projectId={Number(id)} />} />
+          <Route path={routes.project.detail.paymentBilling.root} render={(routeProps) => <Pay {...routeProps} projectId={Number(id)} />} />
           <Route exact path={routes.project.detail.report} render={(routeProps) => <Report {...routeProps} projectId={Number(id)} />} />
 
           <Redirect from={routes.project.detail.root} to={routes.project.detail.setupSurvey} />

@@ -6,7 +6,7 @@ import { TargetAnswer, TargetAnswerGroup, TargetAnswerSuggestion, TargetQuestion
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
 import _ from "lodash";
 import { ProjectService } from "services/project";
-import { getTargetRequest } from "redux/reducers/Project/actionTypes";
+import { getTargetRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { Project } from "models/project";
 import { DataSelected, onClickSuggestion, onToggleAnswer, isDisableSubmit, isSelectedSuggestion } from "../models";
 import { editableProject } from "helpers/project";
@@ -116,7 +116,8 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
   const onConfimedChangeTarget = () => {
     if (isDisable) return
     ProjectService.resetQuota(project.id)
-      .then(() => {
+      .then((res) => {
+        dispatch(setProjectReducer({ ...project, agreeQuota: res.data.agreeQuota }))
         onUpdateTargetRequest()
       })
       .catch(e => dispatch(setErrorMess(e)))
