@@ -154,8 +154,8 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                     <Grid container spacing={1} direction="column">
                       <Grid item>
                         <InputTextField
-                          translation-key-placeholder=""
-                          placeholder="Enter your name"
+                          translation-key-placeholder="field_name_placeholder"
+                          placeholder={t("field_name_placeholder")}
                           autoFocus={true}
                           inputProps={{ tabIndex: 1 }}
                           type="text"
