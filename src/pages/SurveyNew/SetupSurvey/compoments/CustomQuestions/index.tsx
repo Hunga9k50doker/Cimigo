@@ -498,11 +498,11 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
                 <TableRow>
                   <TableCell width="60">
                   </TableCell>
-                  <TableCell translation-key="">
-                    <SubTitle>Question</SubTitle>
+                  <TableCell translation-key="project_question">
+                    <SubTitle>{t("project_question")}</SubTitle>
                   </TableCell>
-                  <TableCell align="center" translation-key="" width="200">
-                    <SubTitle>Cost</SubTitle>
+                  <TableCell align="center" translation-key="project_cost" width="200">
+                    <SubTitle>{t("project_cost")}</SubTitle>
                   </TableCell>
                   <TableCell align="center" translation-key="common_action" width="150">
                     <SubTitle>{t('common_action')}</SubTitle>
@@ -734,8 +734,8 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
       )}
       <PopupConfirmDelete
         isOpen={!!questionDelete}
-        title={"Delete question?"}
-        description={"Are you sure you want to delete this question?"}
+        title={t("common_confirm_delete_question_title")}
+        description={t("common_confirm_delete_question_desc")}
         onCancel={() => onCloseConfirmDeleteQuestion()}
         onDelete={onDeleteQuestion}
       />

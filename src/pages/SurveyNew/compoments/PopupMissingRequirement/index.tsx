@@ -82,7 +82,7 @@ const PopupMissingRequirement = ({ isOpen, isValidBasic, isValidPacks, isValidAd
         <Button
           btnType={BtnType.Raised}
           translation-key=""
-          children={<TextBtnSmall translation-key="setup_survey_popup_missing_required_btn">{t("setup_survey_popup_missing_required_btn")}</TextBtnSmall>}
+          children={<TextBtnSmall translation-key="common_ok_got_it">{t("common_ok_got_it")}</TextBtnSmall>}
           onClick={onClose}
         />
       </DialogActionsConfirm>

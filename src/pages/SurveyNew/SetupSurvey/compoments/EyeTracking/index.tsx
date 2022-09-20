@@ -157,10 +157,10 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
           <Heading4
             $fontSizeMobile={"16px"}
             $colorName="--eerie-black"
-            translation-key="setup_eye_tracking_step"
+            translation-key="setup_survey_eye_tracking_title"
             className={clsx({ [classes.titleDisabled]: !project?.enableEyeTracking })}
           >
-            {t("setup_eye_tracking_step", {step: step})}
+            {t("setup_survey_eye_tracking_title", {step: step})}
           </Heading4>
           {!!project?.solution?.eyeTrackingHelp && (
             <BasicTooltip arrow title={<div dangerouslySetInnerHTML={{ __html: project.solution.eyeTrackingHelp }}></div>}>
@@ -171,8 +171,8 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
         <Box>
           <PriceChip
             className={clsx({ 'disabled': !project?.enableEyeTracking })}
-            label={<ParagraphSmall translation-key="">
-              {project?.enableEyeTracking ? `$${fCurrency2(price?.eyeTrackingSampleSizeCostUSD)} ( ${project?.eyeTrackingSampleSize || 0} samples)` : "Extra cost"}
+            label={<ParagraphSmall translation-key="common_samples, setup_survey_custom_question_cost_description">
+              {project?.enableEyeTracking ? `$${fCurrency2(price?.eyeTrackingSampleSizeCostUSD)} ( ${project?.eyeTrackingSampleSize || 0} ${t("common_samples")})` : `${t("setup_survey_custom_question_cost_description")}`}
             </ParagraphSmall>}
           />
         </Box>
@@ -180,10 +180,10 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
       <ParagraphBody
         $colorName="--gray-80"
         mt={1}
-        translation-key="setup_eye_tracking_title"
+        translation-key="setup_survey_eye_tracking_sub_title"
         className={clsx({ [classes.titleSubDisabled]: !project?.enableEyeTracking })}
       >
-        {t("setup_eye_tracking_title")}
+        {t("setup_survey_eye_tracking_sub_title")}
       </ParagraphBody>
       {project?.enableEyeTracking && (
         <>
@@ -215,15 +215,15 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
             <Circle sx={{ color: "var(--gray-30)", fontSize: 12, verticalAlign: "middle", display: "inline-flex" }} />
             <Heading5 sx={{ verticalAlign: "middle", display: "inline-flex", ml: 1 }} $colorName="--eerie-black"  translation-key="setup_eye_tracking_option_effect">{t("setup_eye_tracking_option_effect")}</Heading5>
           </Box>
-          <ParagraphBody mt={1} $colorName="--gray-80"  translation-key="setup_eye_tracking_option_effect_subtitle_1">
-          {t("setup_eye_tracking_option_effect_subtitle_1")}
+          <ParagraphBody mt={1} $colorName="--gray-80"  translation-key="setup_eye_tracking_option_effect_subtitle_head">
+          {t("setup_eye_tracking_option_effect_subtitle_head")}
           </ParagraphBody>
-          <ParagraphBody mt={2} $colorName="--gray-80" translation-key="setup_eye_tracking_option_effect_subtitle_2"
+          <ParagraphBody mt={2} $colorName="--gray-80" translation-key="setup_eye_tracking_option_effect_subtitle_content"
             dangerouslySetInnerHTML={{
-            __html: t("setup_eye_tracking_option_effect_subtitle_2"),
+            __html: t("setup_eye_tracking_option_effect_subtitle_content"),
             }}>
           </ParagraphBody>
-          <ParagraphBody mt={2} $colorName="--gray-80" translation-key="setup_eye_tracking_option_effect_subtitle_3">{t("setup_eye_tracking_option_effect", {maxEyeTrackingPack: maxEyeTrackingPack})}</ParagraphBody>
+          <ParagraphBody mt={2} $colorName="--gray-80" translation-key="setup_eye_tracking_option_effect_subtitle_max_packs">{t("setup_eye_tracking_option_effect_subtitle_max_packs", {maxEyeTrackingPack: maxEyeTrackingPack})}</ParagraphBody>
           {!!project?.eyeTrackingPacks?.length && (
             <Box mt={{ xs: 3, sm: 2 }} >
               <Grid spacing={2} container>

@@ -35,9 +35,14 @@ export const LockIcon = memo(({ status, className, ...rest }: LockIconProps) => 
       arrow
       title={(
         <>
-          <Heading6 mb={0.5}>Uneditable content</Heading6>
-          <ParagraphExtraSmall $colorName="--gray-02" variant="caption">
-            Content cannot be edited due to the <span style={{ fontWeight: 500, fontStyle: "italic" }}>{statusLabel}</span> status.
+          <Heading6 mb={0.5} translation-key="project_lock_icon_title">{t("project_lock_icon_title")}</Heading6>
+          <ParagraphExtraSmall $colorName="--gray-02" variant="caption" 
+          translation-key="project_lock_icon_content"
+          dangerouslySetInnerHTML={{
+            __html: t("project_create_tab_create_project_note_description", {statusLabel: statusLabel}),
+          }}
+          className={classes.lockIconContent}
+          >
           </ParagraphExtraSmall>
         </>
       )}
