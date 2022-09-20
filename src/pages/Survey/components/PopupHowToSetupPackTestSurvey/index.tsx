@@ -179,7 +179,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                     <Grid sx={{ display: 'flex', justifyContent: 'end', marginTop: '8px' }}>
                       <Button btnType={BtnType.Primary} type="submit">
                         <NearMeIcon fontSize="small" sx={{ marginRight: '7px' }} />
-                        <TextBtnSmall transition-key="">Send</TextBtnSmall>
+                        <TextBtnSmall transition-key="common_send">{t("common_send")}</TextBtnSmall>
                       </Button>
                     </Grid>
                   </Grid>
