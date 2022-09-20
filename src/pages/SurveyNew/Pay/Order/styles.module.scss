@@ -1,0 +1,213 @@
+.root {
+  max-width: 800px;
+  margin: auto;
+  display: block;
+  @media only screen and (max-width: 767px) {
+    padding: 22px 19px;
+  }
+  a {
+    margin: 0;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    color: #1f61a9;
+    @media only screen and (max-width: 767px) {
+      font-size: 14px;
+    }
+    &.aLink {
+      display: block;
+      margin-top: 55px;
+      margin-bottom: 25px;
+    }
+  }
+}
+.root > img {
+  margin: 15px auto 22px auto;
+  display: block;
+}
+.title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 49px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: #1f61a9;
+  margin-bottom: 32px;
+  @media only screen and (max-width: 767px) {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+  }
+}
+.subTitle {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: 0.015em;
+  color: #1c1c1c;
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+    text-align: start;
+  }
+}
+.subTitleMain {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: 0.015em;
+  color: #000000;
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+    text-align: start;
+  }
+}
+.textBlack {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  text-align: center;
+  letter-spacing: 0.015em;
+  color: #000000;
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+    text-align: start;
+  }
+  span {
+    color: #1f61a9;
+  }
+}
+.textGreen {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 49px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: #7c9911;
+  @media only screen and (max-width: 767px) {
+    font-size: 20px;
+    line-height: 24px;
+  }
+}
+.textBlue {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+  color: #17497f;
+  margin-bottom: 25px;
+  margin-top: 8px;
+  @media only screen and (max-width: 767px) {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 140%;
+  }
+}
+.box {
+  background: rgba(28, 28, 28, 0.05);
+  border: 0.5px solid rgba(28, 28, 28, 0.4);
+  border-radius: 5px;
+  padding: 19px 44px;
+  margin: 16px auto;
+  max-width: 600px;
+  @media only screen and (max-width: 767px) {
+    padding: 24px 32px;
+  }
+  p {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: 0.04em;
+    color: #293306;
+  }
+  span {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 140%;
+    letter-spacing: 0.015em;
+    color: #1c1c1c;
+  }
+}
+.flex {
+  display: flex;
+  margin-top: 16px;
+  @media only screen and (max-width: 767px) {
+    display: grid;
+    margin-top: 0px;
+    div {
+      margin-top: 16px;
+    }
+  }
+  div:not(:last-child) {
+    padding-right: 25px;
+    border-right: 0.5px solid rgba(28, 28, 28, 0.4);
+    @media only screen and (max-width: 767px) {
+      padding-right: 0px;
+      border-right: unset;
+    }
+  }
+  div:not(:first-child) {
+    padding-left: 25px;
+    @media only screen and (max-width: 767px) {
+      padding-left: 0px;
+    }
+  }
+}
+.btn {
+  margin: 16px auto 48px auto;
+  display: block;
+  @media only screen and (max-width: 767px) {
+    margin: 16px auto 24px auto;
+  }
+}
+.subTitleSpan {
+  > span {
+    color: #7c9911;
+    font-weight: 600;
+  }
+}
+.clickOpenInvoice {
+  font-weight: 400;
+}
+.cancelPaymentOrder {
+  display: block;
+  padding-top: 56px;
+  font-size: 24px;
+  font-weight: 500;
+  color: rgba(31, 97, 169, 1);
+  text-underline-position: under;
+  text-decoration: underline !important;
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+    font-weight: 400;
+    &:last-child {
+      margin-bottom: 16px;
+    }
+  }
+}
+.cancelPaymentBank {
+  display: inline-block;
+  padding-top: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(31, 97, 169, 1);
+  text-underline-position: under;
+  text-decoration: underline !important;
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+    font-weight: 400;
+    &:last-child {
+      margin-bottom: 16px;
+    }
+  }
+}

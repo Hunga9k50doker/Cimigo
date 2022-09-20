@@ -15,7 +15,7 @@ import { editableProject } from "helpers/project"
 import { useDispatch } from "react-redux"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { ProjectService } from "services/project"
-import { getProjectRequest } from "redux/reducers/Project/actionTypes"
+import { setProjectReducer } from "redux/reducers/Project/actionTypes"
 
 interface BasicInformationForm {
   category: string,
@@ -52,7 +52,13 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
     dispatch(setLoading(true))
     ProjectService.updateProjectBasicInformation(project.id, data)
       .then(() => {
-        dispatch(getProjectRequest(project.id))
+        dispatch(setProjectReducer({
+          ...project,
+          category: data.category,
+          brand: data.brand,
+          variant: data.variant,
+          manufacturer: data.manufacturer
+        }))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))

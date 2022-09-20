@@ -49,6 +49,7 @@ export interface Project {
   enableCustomQuestion: boolean;
   enableEyeTracking: boolean;
   surveyLanguage: string,
+  agreeQuota: boolean,
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
@@ -160,6 +161,10 @@ export enum TARGET_SECTION {
   SAMPLE_SIZE = 'target-sample-size',
   EYE_TRACKING_SAMPLE_SIZE = 'target-eye-tracking-sample-size',
   SELECT_TARGET = 'target-select-target'
+}
+
+export enum QUOTAS_SECTION {
+  CONTENT = 'quotas-content',
 }
 
 export enum ETabRightPanel {

@@ -16,3 +16,9 @@ export interface Quota {
   rows: QuotaTableRow[],
   edited: boolean,
 }
+
+export interface GetAll {
+  take?: number;
+  page?: number;
+  keyword?: string;
+}

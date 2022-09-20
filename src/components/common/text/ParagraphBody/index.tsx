@@ -3,12 +3,13 @@ import styled from 'styled-components';
 
 interface Props {
     $colorName?: string;
+    $fontWeight?: number | string;
 }
 
 const ParagraphBody = styled(Typography)<Props>`
     font-family: 'Montserrat';
     font-style: normal;
-    font-weight: 400;
+    font-weight: ${props => props.$fontWeight || 400};
     font-size: 16px;
     line-height: 24px;
     color: ${props => `var(${props.$colorName || '--gray-50'})`};

@@ -9,6 +9,10 @@ export const editableProject = (project: Project) => {
 }
 export class ProjectHelper {
 
+  static isValidQuotas(project: Project) {
+    return project?.agreeQuota
+  }
+
   static isValidTargetTabLocation(project: Project) {
     return !!project?.targets?.find(it => it.targetQuestion?.typeId === TargetQuestionType.Location)
   }
@@ -23,8 +27,8 @@ export class ProjectHelper {
 
   static isValidTarget(project: Project) {
     return ProjectHelper.isValidTargetTabLocation(project) &&
-    ProjectHelper.isValidTargetTabHI(project) &&
-    ProjectHelper.isValidTargetTabAC(project)
+      ProjectHelper.isValidTargetTabHI(project) &&
+      ProjectHelper.isValidTargetTabAC(project)
   }
 
   static minPack(solution: Solution) {

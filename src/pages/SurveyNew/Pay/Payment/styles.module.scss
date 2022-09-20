@@ -1,0 +1,406 @@
+.root {
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  @media only screen and (max-width: 767px) {
+    max-width: 1000px;
+    display: grid;
+  }
+}
+.divider1 {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: flex;
+    margin-bottom: 25px;
+  }
+}
+.left {
+  border: 0.5px solid #c4c4c4;
+  border-radius: 4px;
+  margin-right: 57px;
+  padding: 20px;
+  width: 70%;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    border: unset;
+    border-radius: 0px;
+    margin-right: 0px;
+    padding: 0px;
+  }
+}
+.left > form {
+  padding-top: 15px;
+  padding-right: 70px;
+  @media only screen and (max-width: 767px) {
+    padding-right: 19px;
+    padding-left: 19px;
+  }
+}
+.left > p {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  color: #1f61a9;
+  margin-bottom: 10px;
+  @media only screen and (max-width: 767px) {
+    padding: 0px 19px;
+  }
+}
+.left > p > span {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 0.04em;
+  color: #7c9911;
+}
+.right {
+  width: 50%;
+  height: fit-content;
+  .sumaryBox {
+    border: 0.5px solid #c4c4c4;
+    border-radius: 4px;
+    height: fit-content;
+    @media only screen and (max-width: 767px) {
+      border: unset;
+      border-radius: 0px;
+      margin-right: 0px;
+      margin-bottom: 32px;
+      padding: 0px;
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    margin-right: 0px;
+    padding: 0px;
+  }
+}
+.informationBox {
+  @media only screen and (max-width: 767px) {
+    padding: 0px 19px;
+  }
+}
+.checkRadio {
+  color: #a6cc17 !important;
+}
+.rootRadio {
+  color: #a5a5a5;
+  padding: 0;
+  margin-right: 16px;
+}
+
+.title {
+  display: flex;
+  align-items: flex-start;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #1f61a9;
+  cursor: pointer;
+  img {
+    margin-right: 10px;
+  }
+}
+.titleSub {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: rgba(28, 28, 28, 0.65);
+  margin-top: 10px;
+  margin-bottom: 24px;
+}
+.titleSub1 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: rgba(28, 28, 28, 0.65);
+  margin-top: 10px;
+  margin-bottom: 16px;
+  @media only screen and (max-width: 767px) {
+    padding: 0px 19px;
+  }
+}
+.lable {
+  display: flex;
+  align-items: flex-start;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+.radioGroup {
+  padding: 0px 20px;
+  margin-bottom: 25px;
+  @media only screen and (max-width: 767px) {
+    padding: 0px;
+    .lable,
+    label {
+      padding: 0px 19px;
+    }
+  }
+  hr {
+    width: 65%;
+    display: flex;
+    margin: auto;
+    @media only screen and (max-width: 767px) {
+      width: 100%;
+    }
+  }
+}
+.flex {
+  display: flex;
+  @media only screen and (max-width: 767px) {
+    display: grid;
+  }
+  > div:first-child {
+    padding-right: 30px;
+    @media only screen and (max-width: 767px) {
+      padding-right: 0px;
+    }
+  }
+}
+.order {
+  form {
+    padding-left: 20px;
+    padding-right: 80px;
+    @media only screen and (max-width: 767px) {
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+  }
+}
+.tips {
+  display: flex;
+  [class~="MuiFormControlLabel-root"] {
+    margin-right: 5px;
+    [class~="MuiTypography-root"] {
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 120%;
+      letter-spacing: 0.05em;
+      color: rgba(28, 28, 28, 0.65);
+    }
+  }
+}
+.rootCheckbox {
+  padding: 12px;
+  img {
+    border-radius: 4px;
+  }
+}
+.popper {
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  box-sizing: border-box;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  line-height: 120%;
+  letter-spacing: 0.05em;
+  padding: 8px 16px;
+  font-weight: 500;
+  font-size: 12px;
+  color: rgba(28, 28, 28, 0.9);
+}
+.bodyOrder {
+  padding: 20px 40px 40px;
+  @media only screen and (max-width: 767px) {
+    padding: 0px 40px;
+  }
+  p {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 29px;
+    color: #1f61a9;
+    text-align: center;
+    margin-bottom: 30px;
+    @media only screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+  hr {
+    margin: 8px 0px;
+  }
+}
+.isMobile {
+  display: none !important;
+  @media only screen and (max-width: 767px) {
+    display: flex !important;
+  }
+}
+.notMobile {
+  @media only screen and (max-width: 767px) {
+    display: none !important;
+  }
+}
+.bodyOrder > span {
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: right;
+  letter-spacing: 0.015em;
+  color: #17497f;
+  display: block;
+  @media only screen and (max-width: 767px) {
+    font-size: 12px;
+  }
+}
+.btn {
+  border-radius: 0px 0px 4px 4px;
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
+}
+.flexOrder {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0px;
+  span {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: 0.015em;
+    color: #1c1c1c;
+    @media only screen and (max-width: 767px) {
+      font-size: 14px;
+    }
+  }
+}
+.flexTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  span {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.015em;
+    color: #1c1c1c;
+    @media only screen and (max-width: 767px) {
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+  a {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 29px;
+    color: #7c9911;
+    @media only screen and (max-width: 767px) {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+}
+.flexTotalMobile {
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: flex;
+    justify-content: space-between;
+    background: #ffffff;
+    box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 0px;
+    padding: 16px 19px;
+    margin-top: 32px;
+    align-items: center;
+    position: sticky;
+    div {
+      display: grid;
+      p {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0.015em;
+        color: #1c1c1c;
+        margin-bottom: 14px;
+      }
+      a {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 29px;
+        color: #7c9911;
+      }
+      span {
+        font-style: normal;
+        font-weight: 800;
+        font-size: 12px;
+        line-height: 15px;
+        letter-spacing: 0.015em;
+        color: #103055;
+      }
+    }
+  }
+}
+.btnMobile {
+  white-space: nowrap;
+}
+.methodImg {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  img {
+    height: 22px;
+    width: auto;
+    &:not(:first-child) {
+      margin-left: 5px;
+    }
+  }
+}
+.chargedBy {
+  margin-top: 15px;
+  text-align: right;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 120%;
+  letter-spacing: 0.05em;
+  color: rgba(28, 28, 28, 0.68);
+  svg {
+    top: 2px;
+    position: relative;
+    cursor: pointer;
+    margin-left: 2px;
+    font-size: 14px;
+  }
+}
+.popperClass {
+  [class^="MuiTooltip-tooltip"] {
+    padding: 8px 16px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 120%;
+    letter-spacing: 0.05em;
+    color: rgba(28, 28, 28, 0.9);
+  }
+}
+.cancelPayment {
+  padding: 24px 19px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: rgba(28, 28, 28, 0.65);
+  span {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+      color: var(--cimigo-blue);
+      text-underline-position: under;
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    border-top: 2px solid rgba(28, 28, 28, 0.05);
+  }
+}
