@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from "react";
-import { Box, Dialog} from "@mui/material";
+import { Box, Dialog } from "@mui/material";
 import classes from "./styles.module.scss";
 import { Folder } from "models/folder";
 import { Project } from "models/project";
@@ -76,8 +76,11 @@ const PopupConfirmMoveProject = memo((props: PopupConfirmMoveProjectProps) => {
     >
       <DialogTitleConfirm>
         <Box display="flex">
-          <Heading3 $colorName="--cimigo-blue-dark-3" translation-key="">
-            Move project
+          <Heading3
+            $colorName="--cimigo-blue-dark-3"
+            translation-key="project_mgmt_move_title"
+          >
+            {t("project_mgmt_move_title")}
           </Heading3>
         </Box>
         <ButtonClose
@@ -87,9 +90,17 @@ const PopupConfirmMoveProject = memo((props: PopupConfirmMoveProjectProps) => {
         />
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
-        <ParagraphBody sx={{padding: "0px 0px 16px 0px"}} $colorName="--gray-80" className={classes.description}>
-          Move “<span>{project?.name}</span>” project to:
-        </ParagraphBody>
+        <ParagraphBody
+          sx={{ padding: "0px 0px 16px 0px" }}
+          $colorName="--gray-80"
+          className={classes.description}
+          translation-key="project_mgmt_description_move_project"
+          dangerouslySetInnerHTML={{
+            __html: t("project_mgmt_description_move_project", {
+              projectName: project?.name,
+            }),
+          }}
+        ></ParagraphBody>
         <InputSelect
           fullWidth
           name=""
@@ -101,7 +112,6 @@ const PopupConfirmMoveProject = memo((props: PopupConfirmMoveProjectProps) => {
             onChange: (val: any, _: any) => onChangeProject(val),
           }}
         />
-        
       </DialogContentConfirm>
       <DialogActionsConfirm className={classes.btn}>
         <Button
@@ -113,8 +123,8 @@ const PopupConfirmMoveProject = memo((props: PopupConfirmMoveProjectProps) => {
         </Button>
         <Button
           btnType={BtnType.Raised}
-          translation-key=""
-          children={<TextBtnSmall>Move Project</TextBtnSmall>}
+          translation-key="project_mgmt_move_title"
+          children={<TextBtnSmall>{t("project_mgmt_move_title")}</TextBtnSmall>}
           type="button"
           onClick={() => _onMove()}
         />

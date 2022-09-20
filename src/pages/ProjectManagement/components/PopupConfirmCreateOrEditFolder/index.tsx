@@ -9,14 +9,16 @@ import { DialogActionsConfirm } from "components/common/dialogs/DialogActions";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo } from "react";
 import Inputs from "components/Inputs";
 import { Folder } from "models/folder";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-export interface RenameProjectFormData {
+interface RenameFolderFormData {
   name: string;
 }
-
 interface PopupConfirmCreateOrEditFolderProps {
   isOpen: boolean;
   folder?: Folder;
@@ -26,26 +28,49 @@ interface PopupConfirmCreateOrEditFolderProps {
 
 const PopupConfirmCreateOrEditFolder = memo(
   (props: PopupConfirmCreateOrEditFolderProps) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const { onCancel, onSubmit, folder, isOpen } = props;
-    const [name, setName] = useState<string>("");
+    const schema = useMemo(() => {
+      return yup.object().shape({
+        name: yup
+          .string()
+          .required(t("field_project_name_vali_required"))
+          .max(20, t("project_field_folder_name_max")),
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [i18n.language]);
+    const {
+      register,
+      formState: { errors },
+      handleSubmit,
+      reset,
+    } = useForm<RenameFolderFormData>({
+      resolver: yupResolver(schema),
+      mode: "onChange",
+    });
+
     useEffect(() => {
       if (folder) {
-        setName(folder.name);
+        reset({
+          name: folder.name,
+        });
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [folder]);
 
     const _onCancel = () => {
-      setName("");
+      reset({
+        name: "",
+      });
       onCancel();
     };
-
-    const _onSubmit = () => {
-      if (!name) return;
-      onSubmit(name, folder?.id);
-      setName("");
+    const _onSubmit = (data: RenameFolderFormData) => {
+      if (!data) return;
+      onSubmit(data.name, folder?.id);
+      reset({
+        name: "",
+      });
     };
 
     return (
@@ -55,79 +80,103 @@ const PopupConfirmCreateOrEditFolder = memo(
         onClose={_onCancel}
         classes={{ paper: classes.paper }}
       >
-        <DialogTitleConfirm>
-          <Box display="flex">
-            <Heading3 $colorName="--cimigo-blue-dark-3" translation-key="">
-              {folder ? "Rename folder" : "Create folder"}
-            </Heading3>
-          </Box>
-          <ButtonClose
-            $backgroundColor="--eerie-black-5"
-            $colorName="--eerie-black-40"
-            onClick={_onCancel}
-          />
-        </DialogTitleConfirm>
-        <DialogContentConfirm dividers>
-          {!folder ? (
-            <>
-              <ParagraphBody
-                $colorName="--gray-80"
-                className={classes.description}
-              >
-                Create a new folder to store your projects
-              </ParagraphBody>
-            </>
-          ) : (
-            <>
-              <ParagraphBody
-                $colorName="--gray-80"
-                className={classes.description}
-              >
-                Rename “<span>{folder?.name}</span>” folder to:
-              </ParagraphBody>
-            </>
-          )}
-          <Inputs
-            sx={{ margin: "16px 0px" }}
-            name="name"
-            placeholder={t("project_mgmt_create_folder_placeholder")}
-            translation-key-placeholder="project_mgmt_create_folder_placeholder"
-            value={name}
-            onChange={(e: any) => {
-              setName(e.target.value || "");
-            }}
-          />
-        </DialogContentConfirm>
-        <DialogActionsConfirm className={classes.btn}>
-          <Button
-            btnType={BtnType.Secondary}
-            onClick={_onCancel}
-            translation-key="common_cancel"
-          >
-            {t("common_cancel")}
-          </Button>
-          {folder ? (
-            <>
-              <Button
-                btnType={BtnType.Raised}
-                translation-key="common_rename"
-                children={<TextBtnSmall>Rename</TextBtnSmall>}
-                type="button"
-                onClick={_onSubmit}
-              />
-            </>
-          ) : (
-            <>
-              <Button
-                btnType={BtnType.Raised}
-                translation-key="common_save"
-                children={<TextBtnSmall>Save</TextBtnSmall>}
-                type="button"
-                onClick={_onSubmit}
-              />
-            </>
-          )}
-        </DialogActionsConfirm>
+        <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
+          <DialogTitleConfirm>
+            <Box display="flex">
+              {folder ? (
+                <>
+                  <>
+                    <Heading3
+                      $colorName="--cimigo-blue-dark-3"
+                      translation-key="project_mgmt_title_rename_folder"
+                    >
+                      {t("project_mgmt_title_rename_folder")}
+                    </Heading3>
+                  </>
+                </>
+              ) : (
+                <>
+                  <Heading3
+                    $colorName="--cimigo-blue-dark-3"
+                    translation-key="project_mgmt_create_folder_btn"
+                  >
+                    {t("project_mgmt_create_folder_btn")}
+                  </Heading3>
+                </>
+              )}
+            </Box>
+            <ButtonClose
+              $backgroundColor="--eerie-black-5"
+              $colorName="--eerie-black-40"
+              onClick={_onCancel}
+            />
+          </DialogTitleConfirm>
+          <DialogContentConfirm dividers>
+            {!folder ? (
+              <>
+                <ParagraphBody
+                  $colorName="--gray-80"
+                  className={classes.description}
+                  translation-key="project_mgmt_description_create_folder"
+                >
+                  {t("project_mgmt_description_create_folder")}
+                </ParagraphBody>
+              </>
+            ) : (
+              <>
+                <ParagraphBody
+                  $colorName="--gray-80"
+                  className={classes.description}
+                  translation-key="project_mgmt_description_rename_folder"
+                  dangerouslySetInnerHTML={{
+                    __html: t("project_mgmt_description_rename_folder", {
+                      folderName: folder?.name,
+                    }),
+                  }}
+                ></ParagraphBody>
+              </>
+            )}
+            <Inputs
+              titleRequired
+              sx={{ margin: "16px 0px" }}
+              name="name"
+              type="text"
+              placeholder={t("project_mgmt_create_folder_placeholder")}
+              translation-key-placeholder="project_mgmt_create_folder_placeholder"
+              translation-key="project_mgmt_create_folder_placeholder"
+              inputRef={register("name")}
+              errorMessage={errors.name?.message}
+            />
+          </DialogContentConfirm>
+          <DialogActionsConfirm className={classes.btn}>
+            <Button
+              btnType={BtnType.Secondary}
+              onClick={_onCancel}
+              translation-key="common_cancel"
+            >
+              {t("common_cancel")}
+            </Button>
+            {folder ? (
+              <>
+                <Button
+                  btnType={BtnType.Raised}
+                  translation-key="project_mgmt_action_rename"
+                  children={<TextBtnSmall>{t("project_mgmt_action_rename")}</TextBtnSmall>}
+                  type="submit"
+                />
+              </>
+            ) : (
+              <>
+                <Button
+                  btnType={BtnType.Raised}
+                  translation-key="common_save"
+                  children={<TextBtnSmall>{t("common_save")}</TextBtnSmall>}
+                  type="submit"
+                />
+              </>
+            )}
+          </DialogActionsConfirm>
+        </form>
       </Dialog>
     );
   }

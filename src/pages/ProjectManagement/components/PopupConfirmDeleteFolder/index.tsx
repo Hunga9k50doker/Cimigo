@@ -48,8 +48,11 @@ const PopupConfirmDeleteFolder = memo(
             <CancelIcon
               sx={{ fontSize: 32, color: "var(--red-error)", mr: 2 }}
             />
-            <Heading3 $colorName="--cimigo-blue-dark-3" translation-key="">
-              Delete Folder?
+            <Heading3
+              $colorName="--cimigo-blue-dark-3"
+              translation-key="project_mgmt_title_delete_folder"
+            >
+              {t("project_mgmt_title_delete_folder")}
             </Heading3>
           </Box>
           <ButtonClose
@@ -59,10 +62,16 @@ const PopupConfirmDeleteFolder = memo(
           />
         </DialogTitleConfirm>
         <DialogContentConfirm dividers>
-          <ParagraphBody $colorName="--gray-80" className={classes.description}>
-            Are you sure you want to delete the “<span>{folder?.name}</span>”
-            folder?
-          </ParagraphBody>
+          <ParagraphBody
+            $colorName="--gray-80"
+            className={classes.description}
+            translation-key="project_mgmt_description_delete_folder"
+            dangerouslySetInnerHTML={{
+              __html: t("project_mgmt_description_delete_folder", {
+                folderName: folder?.name,
+              }),
+            }}
+          ></ParagraphBody>
         </DialogContentConfirm>
         <DialogActionsConfirm className={classes.btn}>
           <Button
@@ -74,8 +83,8 @@ const PopupConfirmDeleteFolder = memo(
           </Button>
           <Button
             className={classes.buttonDelete}
-            translation-key=""
-            children={<TextBtnSmall>Delete</TextBtnSmall>}
+            translation-key="common_delete"
+            children={<TextBtnSmall>{t("common_delete")}</TextBtnSmall>}
             type="button"
             onClick={() => _onDelete()}
           />

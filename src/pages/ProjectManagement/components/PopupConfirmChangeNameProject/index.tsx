@@ -77,8 +77,11 @@ const PopupConfirmChangeNameProject = memo(
         <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
           <DialogTitleConfirm>
             <Box display="flex">
-              <Heading3 $colorName="--cimigo-blue-dark-3" translation-key="">
-                Rename project
+              <Heading3
+                $colorName="--cimigo-blue-dark-3"
+                translation-key="project_mgmt_rename_title"
+              >
+                {t("project_mgmt_rename_title")}
               </Heading3>
             </Box>
             <ButtonClose
@@ -91,9 +94,13 @@ const PopupConfirmChangeNameProject = memo(
             <ParagraphBody
               $colorName="--gray-80"
               className={classes.description}
-            >
-              Rename “<span>{project?.name}</span>” project to:
-            </ParagraphBody>
+              translation-key="project_mgmt_description_rename_project"
+              dangerouslySetInnerHTML={{
+                __html: t("project_mgmt_description_rename_project", {
+                  projectName: project?.name,
+                }),
+              }}
+            ></ParagraphBody>
             <Inputs
               titleRequired
               name="name"
@@ -115,8 +122,8 @@ const PopupConfirmChangeNameProject = memo(
             </Button>
             <Button
               btnType={BtnType.Raised}
-              translation-key="common_rename"
-              children={<TextBtnSmall>Rename</TextBtnSmall>}
+              translation-key="project_mgmt_action_rename"
+              children={<TextBtnSmall>{t("project_mgmt_action_rename")}</TextBtnSmall>}
               type="submit"
             />
           </DialogActionsConfirm>
