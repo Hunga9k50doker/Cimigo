@@ -16,7 +16,7 @@ interface Props {
 const PayTab = memo((_: Props) => {
 
   return (
-    <Grid>
+    <>
       <Switch>
         <Route path={routes.project.detail.paymentBilling.previewAndPayment.root} render={(routeProps) => <ProjectReviewAndPayment {...routeProps} />} />
         <Route path={routes.project.detail.paymentBilling.order} render={(routeProps) => <Order {...routeProps} />} />
@@ -28,7 +28,7 @@ const PayTab = memo((_: Props) => {
         
         <Redirect from={routes.project.detail.paymentBilling.root} to={routes.project.detail.paymentBilling.previewAndPayment.preview} />
       </Switch>
-    </Grid>
+    </>
   )
 })
 

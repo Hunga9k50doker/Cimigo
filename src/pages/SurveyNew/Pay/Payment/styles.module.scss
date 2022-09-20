@@ -1,10 +1,13 @@
 .root {
-  max-width: 1000px;
+  max-width: 1048px;
   margin: auto;
   display: flex;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 96px;
   @media only screen and (max-width: 767px) {
-    max-width: 1000px;
     display: grid;
+    padding: 0px;
   }
 }
 .divider1 {
@@ -15,52 +18,30 @@
   }
 }
 .left {
-  border: 0.5px solid #c4c4c4;
+  border: 1px solid var(--gray-10);
   border-radius: 4px;
-  margin-right: 57px;
-  padding: 20px;
+  margin-right: 32px;
+  padding: 24px;
   width: 70%;
+  .heading1 {
+    margin-bottom: 16px;
+  }
   @media only screen and (max-width: 767px) {
     width: 100%;
     border: unset;
     border-radius: 0px;
     margin-right: 0px;
     padding: 0px;
+    .heading1 {
+      padding: 0px 24px;
+    }
   }
-}
-.left > form {
-  padding-top: 15px;
-  padding-right: 70px;
-  @media only screen and (max-width: 767px) {
-    padding-right: 19px;
-    padding-left: 19px;
-  }
-}
-.left > p {
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 20px;
-  letter-spacing: 0.015em;
-  color: #1f61a9;
-  margin-bottom: 10px;
-  @media only screen and (max-width: 767px) {
-    padding: 0px 19px;
-  }
-}
-.left > p > span {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 15px;
-  letter-spacing: 0.04em;
-  color: #7c9911;
 }
 .right {
   width: 50%;
   height: fit-content;
   .sumaryBox {
-    border: 0.5px solid #c4c4c4;
+    border: 1px solid var(--gray-10);
     border-radius: 4px;
     height: fit-content;
     @media only screen and (max-width: 767px) {
@@ -79,11 +60,11 @@
 }
 .informationBox {
   @media only screen and (max-width: 767px) {
-    padding: 0px 19px;
+    padding: 0px 24px 16px;
   }
 }
 .checkRadio {
-  color: #a6cc17 !important;
+  color: var(--cimigo-green) !important;
 }
 .rootRadio {
   color: #a5a5a5;
@@ -94,38 +75,21 @@
 .title {
   display: flex;
   align-items: flex-start;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 140%;
-  letter-spacing: 0.015em;
-  color: #1f61a9;
   cursor: pointer;
   img {
-    margin-right: 10px;
+    margin-right: 8px;
   }
 }
 .titleSub {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 140%;
-  letter-spacing: 0.015em;
-  color: rgba(28, 28, 28, 0.65);
-  margin-top: 10px;
-  margin-bottom: 24px;
+  margin-top: 8px;
+  margin-bottom: 32px;
 }
 .titleSub1 {
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 140%;
-  letter-spacing: 0.015em;
-  color: rgba(28, 28, 28, 0.65);
-  margin-top: 10px;
-  margin-bottom: 16px;
-  @media only screen and (max-width: 767px) {
-    padding: 0px 19px;
-  }
+  
+}
+.titleInfo {
+  display: flex;
+  align-items: center;
 }
 .lable {
   display: flex;
@@ -134,13 +98,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 .radioGroup {
-  padding: 0px 20px;
-  margin-bottom: 25px;
+  padding: 0px 24px 0px 32px;
+  margin-bottom: 24px;
   @media only screen and (max-width: 767px) {
+    margin-bottom: 16px;
     padding: 0px;
     .lable,
     label {
-      padding: 0px 19px;
+      padding: 0px 24px;
     }
   }
   hr {
@@ -152,73 +117,29 @@
     }
   }
 }
-.flex {
-  display: flex;
-  @media only screen and (max-width: 767px) {
-    display: grid;
-  }
-  > div:first-child {
-    padding-right: 30px;
-    @media only screen and (max-width: 767px) {
-      padding-right: 0px;
-    }
-  }
-}
-.order {
-  form {
-    padding-left: 20px;
-    padding-right: 80px;
-    @media only screen and (max-width: 767px) {
-      padding-left: 0px;
-      padding-right: 0px;
-    }
-  }
-}
+
 .tips {
   display: flex;
+  align-items: center;
   [class~="MuiFormControlLabel-root"] {
-    margin-right: 5px;
+    margin-right: 4px;
     [class~="MuiTypography-root"] {
-      font-weight: 500;
+      font-weight: 400;
       font-size: 12px;
       line-height: 120%;
       letter-spacing: 0.05em;
-      color: rgba(28, 28, 28, 0.65);
+      color: var(--eerie-black-65);
     }
   }
 }
-.rootCheckbox {
-  padding: 12px;
-  img {
-    border-radius: 4px;
-  }
-}
-.popper {
-  background: #ffffff;
-  border: 1px solid #eeeeee;
-  box-sizing: border-box;
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
-  border-radius: 4px;
-  line-height: 120%;
-  letter-spacing: 0.05em;
-  padding: 8px 16px;
-  font-weight: 500;
-  font-size: 12px;
-  color: rgba(28, 28, 28, 0.9);
-}
 .bodyOrder {
-  padding: 20px 40px 40px;
+  padding: 32px 40px 48px;
   @media only screen and (max-width: 767px) {
     padding: 0px 40px;
   }
-  p {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 29px;
-    color: #1f61a9;
+  .sumaryTitle {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 32px;
     @media only screen and (max-width: 767px) {
       display: none;
     }
@@ -238,18 +159,6 @@
     display: none !important;
   }
 }
-.bodyOrder > span {
-  font-weight: 800;
-  font-size: 14px;
-  line-height: 17px;
-  text-align: right;
-  letter-spacing: 0.015em;
-  color: #17497f;
-  display: block;
-  @media only screen and (max-width: 767px) {
-    font-size: 12px;
-  }
-}
 .btn {
   border-radius: 0px 0px 4px 4px;
   @media only screen and (max-width: 767px) {
@@ -259,46 +168,13 @@
 .flexOrder {
   display: flex;
   justify-content: space-between;
-  padding: 4px 0px;
-  span {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 140%;
-    letter-spacing: 0.015em;
-    color: #1c1c1c;
-    @media only screen and (max-width: 767px) {
-      font-size: 14px;
-    }
-  }
+  padding: 2px 0px;
 }
 .flexTotal {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
-  span {
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 20px;
-    letter-spacing: 0.015em;
-    color: #1c1c1c;
-    @media only screen and (max-width: 767px) {
-      font-size: 14px;
-      font-weight: 600;
-    }
-  }
-  a {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 29px;
-    color: #7c9911;
-    @media only screen and (max-width: 767px) {
-      font-size: 16px;
-      font-weight: 600;
-    }
-  }
+  margin-bottom: 8px;
 }
 .flexTotalMobile {
   display: none;
@@ -308,36 +184,12 @@
     background: #ffffff;
     box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
     border-radius: 0px;
-    padding: 16px 19px;
-    margin-top: 32px;
+    padding: 16px 24px;
+    margin-top: 24px;
     align-items: center;
     position: sticky;
     div {
       display: grid;
-      p {
-        font-style: normal;
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.015em;
-        color: #1c1c1c;
-        margin-bottom: 14px;
-      }
-      a {
-        font-style: normal;
-        font-weight: 600;
-        font-size: 24px;
-        line-height: 29px;
-        color: #7c9911;
-      }
-      span {
-        font-style: normal;
-        font-weight: 800;
-        font-size: 12px;
-        line-height: 15px;
-        letter-spacing: 0.015em;
-        color: #103055;
-      }
     }
   }
 }
@@ -357,42 +209,27 @@
   }
 }
 .chargedBy {
-  margin-top: 15px;
-  text-align: right;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 120%;
-  letter-spacing: 0.05em;
-  color: rgba(28, 28, 28, 0.68);
-  svg {
-    top: 2px;
-    position: relative;
-    cursor: pointer;
-    margin-left: 2px;
-    font-size: 14px;
-  }
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
-.popperClass {
-  [class^="MuiTooltip-tooltip"] {
-    padding: 8px 16px;
-    font-weight: 500;
-    font-size: 12px;
+.popperClass.popperClass {
+  [class~="MuiTooltip-tooltip"] {
+    padding: 8px 12px;
+    font-weight: 400;
+    font-size: 10px;
     line-height: 120%;
     letter-spacing: 0.05em;
-    color: rgba(28, 28, 28, 0.9);
+    color: var(--eerie-black-65);
   }
 }
 .cancelPayment {
-  padding: 24px 19px 0px;
+  padding: 24px 16px 0px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 140%;
-  letter-spacing: 0.015em;
-  color: rgba(28, 28, 28, 0.65);
-  span {
+  > * {
     cursor: pointer;
     &:hover {
       text-decoration: underline;
@@ -402,5 +239,11 @@
   }
   @media only screen and (max-width: 767px) {
     border-top: 2px solid rgba(28, 28, 28, 0.05);
+  }
+}
+.paddingMobile {
+  @media only screen and (max-width: 767px) {
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }

@@ -32,9 +32,10 @@ interface Props {
   project: Project,
   questionsAgeGender: TargetQuestion[],
   questionsMum: TargetQuestion[]
+  onNextStep: () => void
 }
 
-const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum }: Props) => {
+const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum, onNextStep }: Props) => {
 
   const { t } = useTranslation()
 
@@ -96,6 +97,7 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum }: Prop
         })
           .then(() => {
             dispatch(getTargetRequest(project.id))
+            onNextStep()
           })
           .catch((e) => dispatch(setErrorMess(e)))
       })
@@ -117,6 +119,7 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum }: Prop
         })
           .then(() => {
             dispatch(getTargetRequest(project.id))
+            onNextStep()
           })
           .catch((e) => dispatch(setErrorMess(e)))
       })

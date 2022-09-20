@@ -23,7 +23,7 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
-import PopupConfirmQuotaAllocation from "pages/SurveyNew/compoments/PopupConfirmQuotaAllocation";
+import PopupConfirmQuotaAllocation from "pages/SurveyNew/compoments/AgreeQuotaWarning";
 import { ProjectService } from "services/project";
 
 interface ProjectReviewProps {
@@ -86,7 +86,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const inValidTargetMess = () => {
     const mess: string[] = []
     if (!ProjectHelper.isValidTargetTabLocation(project)) mess.push(t('target_sub_tab_location'))
-    if (!ProjectHelper.isValidTargetTabHI(project)) mess.push(t('target_sub_tab_economic_class'))
+    if (!ProjectHelper.isValidTargetTabHI(project)) mess.push(t('target_sub_tab_household_income'))
     if (!ProjectHelper.isValidTargetTabAC(project)) mess.push(t('target_sub_tab_age_coverage'))
     return mess
   }
@@ -105,6 +105,10 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
 
   const isValidAdditionalBrand = useMemo(() => {
     return ProjectHelper.isValidAdditionalBrand(project?.solution, project?.additionalBrands)
+  }, [project])
+
+  const isValidEyeTracking = useMemo(() => {
+    return ProjectHelper.isValidEyeTracking(project)
   }, [project])
 
   const getInvoice = () => {
@@ -225,18 +229,20 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     </ParagraphBody>
                   </Box>
                   <Box className={classes.itemSubRight}>
-                    <ParagraphSmallUnderline2 className={clsx({ [classes.colorDanger]: !isValidTarget })} onClick={gotoTarget}>
+                    <ParagraphBody  $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !isValidTarget })} onClick={gotoTarget}>
                       {!isValidTarget ? (
                         <>
                           <Box sx={{ fontWeight: 600 }} component="span" translation-key="payment_billing_sub_tab_preview_solution">
                             {t('payment_billing_sub_tab_preview_missing_setup')}:
                           </Box>
-                          {" " + inValidTargetMess().join(', ')}
+                          {inValidTargetMess()?.map((mess, index) => (
+                            <Box ml={1} key={index}>{mess}</Box>
+                          ))}
                         </>
                       ) : (
                         t('payment_billing_sub_tab_preview_view_detail')
                       )}
-                    </ParagraphSmallUnderline2>
+                    </ParagraphBody>
                   </Box>
                 </Box>
               </Box>
@@ -359,6 +365,28 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       </ParagraphBody>
                     </Box>
                   </Box>
+                )}
+                {project?.enableEyeTracking && (
+                  <Box className={classes.itemSubBox}>
+                  <Box className={classes.itemSubLeft}>
+                    <ParagraphBody $colorName="--eerie-black-00" translation-key="common_eye_tracking">
+                      {t('common_eye_tracking')}
+                    </ParagraphBody>
+                  </Box>
+                  <Box className={classes.itemSubRight}>
+                    <ParagraphBody
+                      $colorName="--eerie-black"
+                      translation-key=""
+                      className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidAdditionalBrand })}
+                      onClick={() => {
+                        if (!isValidPacks) onRedirect(routes.project.detail.setupSurvey)
+                      }}
+                    >
+                      {project?.eyeTrackingPacks?.length} competitor packs <br />
+                      {!isValidEyeTracking && <span className={classes.smallText} translation-key="">Required at least {project?.solution?.minEyeTrackingPack} competitor packs</span>}
+                    </ParagraphBody>
+                  </Box>
+                </Box>
                 )}
               </Box>
             </Grid>

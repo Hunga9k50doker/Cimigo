@@ -1,5 +1,5 @@
 import { useState, memo } from 'react';
-import { OutlinedInput, FormControl, InputAdornment, IconButton, OutlinedInputProps } from '@mui/material';
+import { OutlinedInput, FormControl, FormControlProps, InputAdornment, IconButton, OutlinedInputProps, SxProps, Theme } from '@mui/material';
 import classes from './styles.module.scss';
 import iconEyeOpen from 'assets/img/icon/eye-open.svg';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -27,6 +27,7 @@ interface InputsProps extends OutlinedInputProps {
   optional?: boolean,
   infor?: string,
   isShowError?: boolean,
+  rootProps?: FormControlProps
 }
 const InputTextfield = memo((props: InputsProps) => {
   const { t } = useTranslation()
@@ -48,6 +49,7 @@ const InputTextfield = memo((props: InputsProps) => {
     infor,
     titleRequired,
     isShowError,
+    rootProps,
     ...rest
   } = props;
 
@@ -58,7 +60,7 @@ const InputTextfield = memo((props: InputsProps) => {
   const { ref: refInput, ...inputProps } = inputRef || { ref: null }
 
   return (
-    <FormControl className={clsx(classes.root, root)}>
+    <FormControl className={clsx(classes.root, root)} {...rootProps}>
       {title && (
         <TextTitle invalid={errorMessage}>{title}
           {optional ? <span className={classes.optional}> ({t('common_optional')})</span> : ""}

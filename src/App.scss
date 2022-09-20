@@ -21,7 +21,7 @@
   --cimigo-blue-light-4: #e8f1fb;
   --cimigo-blue-dark-1: #17497f;
   --cimigo-blue-dark-2: #103055;
-  --cimigo-blue-dark-3: #08182A;
+  --cimigo-blue-dark-3: #08182a;
   --cimigo-green-light-2: #d9f180;
   --cimigo-green-light-4: #f0f9cc;
   --cimigo-green-dark-1: #7c9911;
@@ -31,7 +31,7 @@
   --gray-5: #f4f4f4;
   --gray-10: #e8e8e8;
   --gray-20: #d2d2d2;
-  --gray-30: #BBBBBB;
+  --gray-30: #bbbbbb;
   --gray-40: #a4a4a4;
   --gray-50: #8d8d8d;
   --gray-60: #767676;
@@ -43,16 +43,16 @@
   --eerie-black-5: #1c1c1c0d;
   --eerie-black-20: #1c1c1c33;
   --eerie-black-40: #1c1c1c66;
-  --eerie-black-65:#1c1c1ca6;
-  --white: #FFFFFF;
+  --eerie-black-65: #1c1c1ca6;
+  --white: #ffffff;
   --eerie-black-90: rgba(28, 28, 28, 0.9);
   --orange-light: #f8e8bf;
   --orange-dark: #753e00;
-  --cultured-gray: #EEF0F2;
-  --red-error: #AF1C10;
-  --warning: #F2BB2E;
-  --white: #FFFFFF;
-  --warning-dark: #9B6907;
+  --cultured-gray: #eef0f2;
+  --red-error: #af1c10;
+  --warning: #f2bb2e;
+  --white: #ffffff;
+  --warning-dark: #9b6907;
   font-size: 16px;
   font-weight: 500;
   @media only screen and (max-width: 1024px) {
@@ -104,6 +104,52 @@ input[type="number"] {
 
 .underline {
   color: var(--cimigo-blue);
-  text-decoration: underline!important;
+  text-decoration: underline !important;
   text-underline-position: under;
+}
+
+::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  border: none;
+}
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  background-clip: padding-box;
+  border-radius: 8px;
+  cursor: pointer;
+  &:vertical {
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+  }
+  &:horizontal {
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+* {
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      background: var(--gray-40);
+      background-clip: padding-box;
+      border-radius: 8px;
+      cursor: pointer;
+      &:vertical {
+        border-left: 1px solid transparent;
+        border-right: 1px solid transparent;
+      }
+      &:horizontal {
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+      }
+    }
+  }
 }

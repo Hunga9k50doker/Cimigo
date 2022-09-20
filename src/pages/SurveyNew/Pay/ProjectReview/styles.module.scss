@@ -1,6 +1,12 @@
 .root {
-  max-width: 1000px;
+  max-width: 1048px;
   margin: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 96px;
+  @media only screen and (max-width: 767px) {
+    padding-bottom: 85px;
+  }
 }
 .title {
   span {
@@ -12,7 +18,7 @@
   border: 1px solid var(--eerie-black-20);
   border-radius: 4px;
   padding: 32px 40px;
-  margin-top: 36px;
+  margin-top: 32px;
   @media only screen and (max-width: 992px) {
     background: #ffffff;
     border: none;

@@ -119,7 +119,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
         <PageTitle>
           <PageTitleLeft>
             <PageTitleText>Setup your <span>{project?.solution?.title}</span> survey</PageTitleText>
-            <LockIcon status={project?.status} />
+            {!editable && <LockIcon status={project?.status} />}
           </PageTitleLeft>
           {project?.solution?.enableHowToSetUpSurvey && (
             <PageTitleRight>
