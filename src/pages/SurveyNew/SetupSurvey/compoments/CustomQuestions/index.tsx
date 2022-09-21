@@ -735,7 +735,7 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
       <PopupConfirmDelete
         isOpen={!!questionDelete}
         title={t("setup_survey_popup_confirm_delete_question_title")}
-        description={t("setup_survey_popup_confirm_delete__question_desc")}
+        description={t("setup_survey_popup_confirm_delete_question_desc")}
         onCancel={() => onCloseConfirmDeleteQuestion()}
         onDelete={onDeleteQuestion}
       />
