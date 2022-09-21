@@ -22,24 +22,6 @@
         color: var(--warning-dark);
     }
 }
-
-.btn {
-    button:not(:first-child) {
-      margin-left: 16px;
-    }
-    @media only screen and (max-width: 767px) {
-      flex-direction: column-reverse;
-      button {
-        width: 100%;
-        &:not(:first-child) {
-          margin-left: 0;
-        }
-        &:first-child {
-          margin-top: 16px;
-        }
-      }
-    }
-  }
-  .description > span {
-    font-weight: 800;
-  }
+.description > span {
+  font-weight: 800;
+}

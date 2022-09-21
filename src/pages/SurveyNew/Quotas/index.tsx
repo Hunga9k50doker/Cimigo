@@ -276,7 +276,7 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
         <PageTitle>
           <PageTitleLeft>
             <PageTitleText>Review quota allocation</PageTitleText>
-            <LockIcon status={project?.status} />
+            {!editable && <LockIcon status={project?.status} />}
           </PageTitleLeft>
         </PageTitle>
         <Content id={QUOTAS_SECTION.CONTENT}>

@@ -30,16 +30,16 @@ const CostSummary = memo(({ project, price }: CostSummaryProps) => {
         <ParagraphSmall $colorName="--eerie-black" translation-key="common_sample_size">{t('common_sample_size')} ({project?.sampleSize || 0})</ParagraphSmall>
         <ParagraphSmall $colorName="--eerie-black">{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</ParagraphSmall>
       </Box>
-      {project.enableEyeTracking && (
-        <Box display="flex" alignItems="center" justifyContent="space-between" mt={0.5}>
-          <ParagraphSmall $colorName="--eerie-black" translation-key="common_eye_tracking">{t('common_eye_tracking')} ({project?.eyeTrackingSampleSize || 0})</ParagraphSmall>
-          <ParagraphSmall $colorName="--eerie-black">{`$`}{fCurrency2(price?.eyeTrackingSampleSizeCostUSD || 0)}</ParagraphSmall>
-        </Box>
-      )}
       {project?.enableCustomQuestion && (
         <Box display="flex" alignItems="center" justifyContent="space-between" mt={0.5}>
           <ParagraphSmall $colorName="--eerie-black" translation-key="common_custom_question">{t("common_custom_question")} ({project?.customQuestions?.length || 0})</ParagraphSmall>
           <ParagraphSmall $colorName="--eerie-black">{`$`}{fCurrency2(price?.customQuestionCostUSD)}</ParagraphSmall>
+        </Box>
+      )}
+      {project.enableEyeTracking && (
+        <Box display="flex" alignItems="center" justifyContent="space-between" mt={0.5}>
+          <ParagraphSmall $colorName="--eerie-black" translation-key="common_eye_tracking">{t('common_eye_tracking')} ({project?.eyeTrackingSampleSize || 0})</ParagraphSmall>
+          <ParagraphSmall $colorName="--eerie-black">{`$`}{fCurrency2(price?.eyeTrackingSampleSizeCostUSD || 0)}</ParagraphSmall>
         </Box>
       )}
       <Divider sx={{ my: 2, borderColor: 'var(--gray-20)' }} />

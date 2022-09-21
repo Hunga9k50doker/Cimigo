@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useDropzone } from 'react-dropzone';
 import { fData } from 'utils/formatNumber';
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import useIsMountedRef from 'hooks/useIsMountedRef';
 import {
   Box,
@@ -59,10 +59,10 @@ const UploadFile = memo(({
   const [isError, setIsError] = useState<string>('');
   const isMountedRef = useIsMountedRef();
 
-  const files = (): FileUpload[] => {
+  const files = useMemo(() => {
     if (multiple) return (value || []) as FileUpload[]
     else return (value ? [value] : []) as FileUpload[]
-  }
+  }, [value])
 
   const convertFile = (file: File): FileUpload => {
     return {
@@ -161,7 +161,7 @@ const UploadFile = memo(({
           <input {...getInputProps()} />
           <div className={classes.content}>
             <div className={classes.preview}>
-              {files().map((it, index) => {
+              {files.map((it, index) => {
                 return (
                   <Paper key={index} className={classes.previewItem} onClick={(e) => e.stopPropagation()}>
                     <div className={classes.boxImgFile}>

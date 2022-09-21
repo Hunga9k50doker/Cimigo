@@ -1,4 +1,4 @@
-import { Step, StepConnector, StepLabel, Stepper } from "@mui/material";
+import { Box, Step, StepConnector, StepLabel, Stepper } from "@mui/material";
 import WarningBox from "components/WarningBox";
 import QontoStepIcon from "pages/ProjectManagement/components/QontoStepIcon";
 import { Content, LeftContent, PageRoot } from "pages/SurveyNew/compoments";
@@ -42,11 +42,13 @@ const ProjectReviewAndPayment = memo(({ }: Props) => {
   return (
     <PageRoot>
       <LeftContent>
-        <Content>
+        <Content className={classes.content}>
           {cancelPayment && (
-            <WarningBox sx={{ maxWidth: '1000px' }} translation-key="payment_billing_sub_tab_preview_warning">
-              {t("payment_billing_sub_tab_preview_warning")}
-            </WarningBox>
+            <Box className={classes.warningBox}>
+              <WarningBox translation-key="payment_billing_sub_tab_preview_warning">
+                {t("payment_billing_sub_tab_preview_warning")}
+              </WarningBox>
+            </Box>
           )}
           <Stepper
             alternativeLabel

@@ -1,10 +1,19 @@
 import { createTheme } from '@mui/material/styles';
 
 
-const CIMIGO_BLUE       = '#1F61A9';
-const CIMIGO_GREEN  = '#A6CC17';
+const CIMIGO_BLUE = '#1F61A9';
+const CIMIGO_GREEN = '#A6CC17';
 
 const defaultTheme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 768,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   typography: {
     fontFamily: [
       'Montserrat',
@@ -23,7 +32,7 @@ const defaultTheme = createTheme({
   palette: {
     primary: {
       main: CIMIGO_BLUE,
-    
+
     },
     secondary: {
       main: CIMIGO_GREEN,
@@ -42,4 +51,4 @@ const defaultTheme = createTheme({
   }
 });
 
-export {defaultTheme};
+export { defaultTheme };

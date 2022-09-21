@@ -1,16 +1,17 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowBackOutlined, QuestionAnswer, Save } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
 import { memo, useEffect } from "react"
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { routes } from "routers/routes";
 import * as yup from 'yup';
 import { OptionItem } from "models/general";
 import InputSelect from "components/InputsSelect";
 import { TargetQuestion, targetQuestionRenderTypes, targetQuestionTypes } from "models/Admin/target";
+import TextTitle from "components/Inputs/components/TextTitle";
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required.'),
@@ -24,7 +25,8 @@ const schema = yup.object().shape({
   renderTypeId: yup.object().shape({
     id: yup.number().required('Render type is required.'),
     name: yup.string().required()
-  }).required()
+  }).required(),
+  showOptionAll: yup.boolean().required()
 })
 
 export interface QuestionFormData {
@@ -34,6 +36,7 @@ export interface QuestionFormData {
   answerGroupName: string;
   typeId: OptionItem;
   renderTypeId: OptionItem;
+  showOptionAll: boolean;
 }
 
 interface Props {
@@ -50,7 +53,8 @@ const QuestionForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
-      order: 99
+      order: 99,
+      showOptionAll: false
     }
   });
 
@@ -71,6 +75,7 @@ const QuestionForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
         answerGroupName: itemEdit.answerGroupName,
         typeId: itemEdit.type ? { id: itemEdit.type.id, name: itemEdit.type.name } : undefined,
         renderTypeId: itemEdit.renderType ? { id: itemEdit.renderType.id, name: itemEdit.renderType.name } : undefined,
+        showOptionAll: itemEdit.showOptionAll
       })
     }
   }, [reset, itemEdit])
@@ -100,7 +105,7 @@ const QuestionForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
           {itemEdit && (
             <>
               <Button
-                sx={{marginRight: 2}}
+                sx={{ marginRight: 2 }}
                 variant="contained"
                 color="primary"
                 onClick={onRedirectAnswerSuggestions}
@@ -108,7 +113,7 @@ const QuestionForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
                 Suggestions
               </Button>
               <Button
-                sx={{marginRight: 2}}
+                sx={{ marginRight: 2 }}
                 variant="contained"
                 color="primary"
                 onClick={onRedirectAnswerGroups}
@@ -116,7 +121,7 @@ const QuestionForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
                 Answer Groups
               </Button>
               <Button
-                sx={{marginRight: 2}}
+                sx={{ marginRight: 2 }}
                 variant="contained"
                 color="primary"
                 onClick={onRedirectAnswers}
@@ -210,7 +215,23 @@ const QuestionForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
                       errorMessage={(errors.renderTypeId as any)?.id?.message}
                     />
                   </Grid>
-                  
+                  <Grid item xs={12} sm={6}>
+                    <TextTitle>Show select all</TextTitle>
+                    <FormControlLabel
+                      control={
+                        <Controller
+                          name="showOptionAll"
+                          control={control}
+                          render={({ field }) => <Checkbox
+                            checked={field.value}
+                            {...field}
+                            disabled={!!langEdit}
+                          />}
+                        />
+                      }
+                      label="Select all"
+                    />
+                  </Grid>
                 </Grid>
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <Button

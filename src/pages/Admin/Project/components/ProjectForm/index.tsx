@@ -13,7 +13,7 @@ import InputSelect from "components/InputsSelect";
 import { Project, projectStatus } from "models/project";
 import { FileUpload } from "models/attachment";
 import TextTitle from "components/Inputs/components/TextTitle";
-import UploadFile from "../UploadFile";
+import UploadFile from "components/UploadFile";
 
 const schema = yup.object().shape({
   status: yup.object().required('Status is required.'),

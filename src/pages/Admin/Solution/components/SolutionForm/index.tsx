@@ -19,7 +19,7 @@ import clsx from "clsx";
 import UploadImage from "components/UploadImage";
 import { setErrorMess } from "redux/reducers/Status/actionTypes";
 import AdminSolutionService from "services/admin/solution";
-import UploadFile from "pages/Admin/Project/components/UploadFile";
+import UploadFile from "components/UploadFile";
 import { FileUpload } from "models/attachment";
 
 const modules = {

@@ -96,7 +96,7 @@ const Target = memo(({ projectId }: TargetProps) => {
       },
       {
         id: ETab.Household_Income,
-        title: "Household income",
+        title: t("target_sub_tab_household_income"),
         img: images.imgTargetTabHI
       },
       {
@@ -474,7 +474,7 @@ const Target = memo(({ projectId }: TargetProps) => {
         <PageTitle>
           <PageTitleLeft>
             <PageTitleText>Setup your target respondents</PageTitleText>
-            <LockIcon status={project?.status} />
+            {!editable && <LockIcon status={project?.status} />}
           </PageTitleLeft>
         </PageTitle>
         <Content id={TARGET_SECTION.CONTENT}>
@@ -691,6 +691,7 @@ const Target = memo(({ projectId }: TargetProps) => {
                       project={project}
                       questionsAgeGender={questionsAgeGender}
                       questionsMum={questionsMum}
+                      onNextStep={() => onChangeTab()}
                     />
                   )}
                 </Box>

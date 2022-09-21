@@ -11,10 +11,10 @@ import TextBtnSmall from "components/common/text/TextBtnSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { Project } from "models/project";
 import { memo, useEffect, useMemo } from "react";
-import Inputs from "components/Inputs";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import InputTextfield from "components/common/inputs/InputTextfield";
 
 export interface RenameProjectFormData {
   name: string;
@@ -77,8 +77,11 @@ const PopupConfirmChangeNameProject = memo(
         <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
           <DialogTitleConfirm>
             <Box display="flex">
-              <Heading3 $colorName="--cimigo-blue-dark-3" translation-key="">
-                Rename project
+              <Heading3
+                $colorName="--cimigo-blue-dark-3"
+                translation-key="project_mgmt_rename_title"
+              >
+                {t("project_mgmt_rename_title")}
               </Heading3>
             </Box>
             <ButtonClose
@@ -91,10 +94,14 @@ const PopupConfirmChangeNameProject = memo(
             <ParagraphBody
               $colorName="--gray-80"
               className={classes.description}
-            >
-              Rename “<span>{project?.name}</span>” project to:
-            </ParagraphBody>
-            <Inputs
+              translation-key="project_mgmt_description_rename_project"
+              dangerouslySetInnerHTML={{
+                __html: t("project_mgmt_description_rename_project", {
+                  projectName: project?.name,
+                }),
+              }}
+            ></ParagraphBody>
+            <InputTextfield
               titleRequired
               name="name"
               type="text"
@@ -105,7 +112,7 @@ const PopupConfirmChangeNameProject = memo(
               errorMessage={errors.name?.message}
             />
           </DialogContentConfirm>
-          <DialogActionsConfirm className={classes.btn}>
+          <DialogActionsConfirm>
             <Button
               btnType={BtnType.Secondary}
               onClick={_onCancel}
@@ -115,8 +122,8 @@ const PopupConfirmChangeNameProject = memo(
             </Button>
             <Button
               btnType={BtnType.Raised}
-              translation-key="common_rename"
-              children={<TextBtnSmall>Rename</TextBtnSmall>}
+              translation-key="project_mgmt_action_rename"
+              children={<TextBtnSmall>{t("project_mgmt_action_rename")}</TextBtnSmall>}
               type="submit"
             />
           </DialogActionsConfirm>

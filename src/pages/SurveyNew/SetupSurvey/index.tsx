@@ -15,7 +15,7 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import CostSummary from "../compoments/CostSummary";
 import BasicInformation from "./compoments/BasicInformation";
-import ProjectHelper from "helpers/project";
+import ProjectHelper, { editableProject } from "helpers/project";
 import { PriceService } from "helpers/price";
 import { ETabRightPanel, SETUP_SURVEY_SECTION } from "models/project";
 import { useChangePrice } from "hooks/useChangePrice";
@@ -47,6 +47,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
   const { project } = useSelector((state: ReducerType) => state.project)
   const { configs } = useSelector((state: ReducerType) => state.user)
 
+  const editable = useMemo(() => editableProject(project), [project])
   
   const [openMissingRequirement, setOpenMissingRequirement] = useState(false);
 
@@ -124,7 +125,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
             <PageTitleText translation-key="setup_survey_title_left_panel"
             dangerouslySetInnerHTML={{ __html: t('setup_survey_title_left_panel', {title: project?.solution?.title})}}
             ></PageTitleText>
-            <LockIcon status={project?.status} />
+            {!editable && <LockIcon status={project?.status} />}
           </PageTitleLeft>
           {project?.solution?.enableHowToSetUpSurvey && (
             <PageTitleRight>

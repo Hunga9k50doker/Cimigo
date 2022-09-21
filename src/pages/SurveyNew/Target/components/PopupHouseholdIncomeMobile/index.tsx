@@ -5,7 +5,7 @@ import classes from './styles.module.scss';
 import { Project } from 'models/project';
 import { TargetAnswer, TargetQuestion, TargetQuestionType } from 'models/Admin/target';
 import { useDispatch } from 'react-redux';
-import { DataSelected, isDisableSubmit, onToggleAnswer } from '../../models';
+import { DataSelected, isDisableSubmit, isSelectAll, onSelectAll, onToggleAnswer } from '../../models';
 import { setLoading, setSuccessMess, setErrorMess } from 'redux/reducers/Status/actionTypes';
 import { ProjectService } from 'services/project';
 import { getTargetRequest, setProjectReducer } from 'redux/reducers/Project/actionTypes';
@@ -136,6 +136,20 @@ const PopupHouseholdIncomeMobile = memo(({ isOpen, project, questions, onCancel 
                     )}
                   </Grid>
                 ))}
+                {question.showOptionAll && (
+                  <Grid item xs={12}>
+                    <ControlCheckbox
+                      $cleanPadding={true}
+                      control={
+                        <InputCheckbox
+                          checked={isSelectAll(question.id, dataSelected, question.targetAnswers)}
+                          onChange={(_, checked) => onSelectAll(question.id, question.targetAnswers, checked, dataSelected, setDataSelected)}
+                        />
+                      }
+                      label={<>{t("common_select_all")}</>}
+                    />
+                  </Grid>
+                )}
               </AnswerListMobile>
             </Box>
           </Grid>

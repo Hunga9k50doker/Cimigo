@@ -40,13 +40,9 @@ const EditConfig = memo((props: Props) => {
     }
   }, [id, lang, dispatch])
 
-  const onSubmit = (data: ConfigFormData) => {
+  const onSubmit = (data: FormData) => {
     dispatch(setLoading(true))
-    const form: UpdateConfig = {
-      name: data.name,
-      value: data.value,
-    }
-    AdminConfigService.update(Number(id), form)
+    AdminConfigService.update(Number(id), data)
       .then(() => {
         dispatch(push(routes.admin.config.root))
       })

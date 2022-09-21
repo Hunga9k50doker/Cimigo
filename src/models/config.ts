@@ -1,6 +1,9 @@
+import { Attachment } from "./attachment";
+
 export interface ConfigData {
   usdToVND: number,
-  vat: number
+  vat: number,
+  viewContract: number
 }
 
 export interface ConfigAttributes {
@@ -9,10 +12,12 @@ export interface ConfigAttributes {
   key: string;
   value: string;
   type: ConfigType;
+  attachment?: Attachment;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export enum ConfigType {
-  number = 'number'
+  number = 'number',
+  attachment = 'attachment'
 }

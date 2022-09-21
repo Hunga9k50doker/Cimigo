@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowBackOutlined, Save } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
-import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
 import { memo, useEffect } from "react"
 import { Controller, useForm } from "react-hook-form";
@@ -9,16 +8,26 @@ import { useDispatch } from "react-redux";
 import { routes } from "routers/routes";
 import * as yup from 'yup';
 import { ConfigAttributes, ConfigType } from "models/config";
+import { FileUpload } from "models/attachment";
+import UploadFile from "components/UploadFile";
+import InputTextfield from "components/common/inputs/InputTextfield";
+import TextTitle from "components/common/text/TextTitle";
 
 const schema = yup.object().shape({
-  name: yup.string().required('Name to is required.'),
-  type: yup.string().required('Type to is required.'),
+  name: yup.string().required('Name is required.'),
+  type: yup.string().required('Type is required.'),
   valueNumber: yup.number()
     .when('type', {
       is: (val: string) => val === ConfigType.number,
-      then: yup.number().typeError('Value to is required.').required('Value to is required.'),
-      otherwise: yup.number()
-    })
+      then: yup.number().typeError('Value is required.').required('Value is required.'),
+      otherwise: yup.number().notRequired()
+    }),
+  valueFile: yup.mixed().nullable().notRequired()
+    .when('type', {
+      is: (val: string) => val === ConfigType.attachment,
+      then: yup.mixed().required('File is required.'),
+      otherwise: yup.mixed().nullable().notRequired()
+    }),
 })
 
 export interface ConfigFormData {
@@ -26,12 +35,13 @@ export interface ConfigFormData {
   type?: string;
   value?: any;
   valueNumber?: number;
+  valueFile?: FileUpload;
 }
 
 interface Props {
   title: string;
   itemEdit?: ConfigAttributes;
-  onSubmit: (data: ConfigFormData) => void
+  onSubmit: (data: FormData) => void;
 }
 
 const ConfigForm = memo(({ title, itemEdit, onSubmit }: Props) => {
@@ -50,56 +60,49 @@ const ConfigForm = memo(({ title, itemEdit, onSubmit }: Props) => {
   }
 
   const _onSubmit = (data: ConfigFormData) => {
-    let value: any
+    const _data = new FormData();
+    _data.append("name", data.name);
     switch (data.type) {
       case ConfigType.number:
-        value = Number(data.valueNumber)
+        _data.append("value", `${data.valueNumber}`);
+        break;
+      case ConfigType.attachment:
+        if (data.valueFile?.file) _data.append('file', data.valueFile.file)
         break;
     }
-    onSubmit({
-      name: data.name,
-      value: value
-    })
+    onSubmit(_data)
   }
 
   useEffect(() => {
     if (itemEdit) {
       let valueNumber = 0
+      let valueFile: FileUpload
       switch (itemEdit.type) {
         case ConfigType.number:
           valueNumber = Number(itemEdit.value)
+          break;
+        case ConfigType.attachment:
+          if (itemEdit.attachment) {
+            valueFile = {
+              id: itemEdit.attachment.id,
+              fileName: itemEdit.attachment.fileName,
+              fileSize: itemEdit.attachment.fileSize,
+              mimeType: itemEdit.attachment.mimeType,
+              url: itemEdit.attachment.url,
+            }
+          }
           break;
       }
       reset({
         name: itemEdit.name,
         type: itemEdit.type,
-        valueNumber: valueNumber
+        valueNumber,
+        valueFile
       })
     }
   }, [reset, itemEdit])
 
   const type = watch("type")
-
-  const renderInputValue = () => {
-    switch (type) {
-      case ConfigType.number:
-        return (
-          <Controller
-            name="valueNumber"
-            control={control}
-            render={({ field }) => <Inputs
-              title='Value'
-              placeholder='Enter value'
-              errorMessage={errors.valueNumber?.message}
-              name={field.name}
-              value={field.value || ''}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-            />}
-          />
-        )
-    }
-  }
 
   return (
     <div>
@@ -126,7 +129,7 @@ const ConfigForm = memo(({ title, itemEdit, onSubmit }: Props) => {
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <Inputs
+                    <InputTextfield
                       title="Name"
                       name="name"
                       type="text"
@@ -134,9 +137,44 @@ const ConfigForm = memo(({ title, itemEdit, onSubmit }: Props) => {
                       errorMessage={errors.name?.message}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    {renderInputValue()}
-                  </Grid>
+                  <Controller
+                    name="valueNumber"
+                    key="valueNumber1"
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Grid item xs={12} sm={6} hidden={type !== ConfigType.number}>
+                          <InputTextfield
+                            title='Value'
+                            placeholder='Enter value'
+                            errorMessage={errors.valueNumber?.message}
+                            name={field.name}
+                            value={field.value || ''}
+                            onBlur={field.onBlur}
+                            onChange={field.onChange}
+                          />
+                        </Grid>
+                      )
+                    }}
+                  />
+                  <Controller
+                    name="valueFile"
+                    key="valueFile1"
+                    control={control}
+                    render={({ field }) => (
+                      <Grid item xs={12} sm={6} hidden={type !== ConfigType.attachment}>
+                        <TextTitle invalid={(errors.valueFile as any)?.message}>File</TextTitle>
+                        <UploadFile
+                          value={field.value}
+                          caption="Allowed pdf"
+                          typeInvalidMess="File type must be pdf"
+                          fileFormats={['application/pdf']}
+                          errorMessage={(errors.valueFile as any)?.message}
+                          onChange={(value) => field.onChange(value)}
+                        />
+                      </Grid>
+                    )}
+                  />
                 </Grid>
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <Button

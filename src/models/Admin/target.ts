@@ -10,6 +10,7 @@ export interface TargetQuestion {
   renderType: OptionItem;
   renderTypeId: number;
   answerGroupName: string;
+  showOptionAll: boolean;
   parentLanguage: string;
   language: string;
   createdAt: Date;
@@ -51,6 +52,7 @@ export interface CreateQuestionParams {
   typeId: number;
   renderTypeId: number;
   answerGroupName: string;
+  showOptionAll: boolean;
 }
 
 export interface UpdateQuestionParams {
@@ -61,6 +63,7 @@ export interface UpdateQuestionParams {
   typeId?: number;
   renderTypeId?: number;
   answerGroupName?: string;
+  showOptionAll?: boolean;
 }
 
 

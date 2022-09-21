@@ -4,7 +4,7 @@ import classes from './styles.module.scss';
 import { Project } from "models/project";
 import { TargetAnswer, TargetQuestion, TargetQuestionType } from "models/Admin/target";
 import { useDispatch } from "react-redux";
-import { DataSelected, isDisableSubmit, onToggleAnswer } from "../models";
+import { DataSelected, isDisableSubmit, isSelectAll, onSelectAll, onToggleAnswer } from "../models";
 import { ProjectService } from "services/project";
 import { setLoading, setSuccessMess, setErrorMess } from "redux/reducers/Status/actionTypes";
 import { getTargetRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
@@ -32,9 +32,10 @@ interface Props {
   project: Project,
   questionsAgeGender: TargetQuestion[],
   questionsMum: TargetQuestion[]
+  onNextStep: () => void
 }
 
-const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum }: Props) => {
+const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum, onNextStep }: Props) => {
 
   const { t } = useTranslation()
 
@@ -96,6 +97,7 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum }: Prop
         })
           .then(() => {
             dispatch(getTargetRequest(project.id))
+            onNextStep()
           })
           .catch((e) => dispatch(setErrorMess(e)))
       })
@@ -117,6 +119,7 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum }: Prop
         })
           .then(() => {
             dispatch(getTargetRequest(project.id))
+            onNextStep()
           })
           .catch((e) => dispatch(setErrorMess(e)))
       })
@@ -258,6 +261,20 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum }: Prop
                           )}
                         </AnswerListItem>
                       ))}
+                      {question.showOptionAll && (
+                        <AnswerListItem item xs={6}>
+                          <ControlCheckbox
+                            $cleanPadding={true}
+                            control={
+                              <InputCheckbox
+                                checked={isSelectAll(question.id, dataSelectedGenderAge, question.targetAnswers)}
+                                onChange={(_, checked) => onSelectAll(question.id, question.targetAnswers, checked, dataSelectedGenderAge, setDataSelectedGenderAge)}
+                              />
+                            }
+                            label={<>{t("common_select_all")}</>}
+                          />
+                        </AnswerListItem>
+                      )}
                     </AnswerList>
                   </QuestionBoxBody>
                 </QuestionBoxContainer>
@@ -313,6 +330,20 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum }: Prop
                           )}
                         </AnswerListItem>
                       ))}
+                      {question.showOptionAll && (
+                        <AnswerListItem item xs={6}>
+                          <ControlCheckbox
+                            $cleanPadding={true}
+                            control={
+                              <InputCheckbox
+                                checked={isSelectAll(question.id, dataSelectedMum, question.targetAnswers)}
+                                onChange={(_, checked) => onSelectAll(question.id, question.targetAnswers, checked, dataSelectedMum, setDataSelectedMum)}
+                              />
+                            }
+                            label={<>{t("common_select_all")}</>}
+                          />
+                        </AnswerListItem>
+                      )}
                     </AnswerList>
                   </QuestionBoxBody>
                 </QuestionBoxContainer>
