@@ -36,7 +36,7 @@
 .list {
   background-color: rgba(28, 28, 28, 0.05);
   border-radius: 4px;
-  margin-top: 16px;
+  margin-top: 22px;
   padding-top: 0px !important;
 }
 .subTitle {
@@ -89,9 +89,6 @@
 .folderListItem {
   padding-left: 32px;
   padding-right: 92px !important;
-  .item {
-   
-  }
   &:hover {
     color: #1c1c1c;
     background-color: rgba(28, 28, 28, 0.05) !important;
@@ -242,6 +239,12 @@
   font-weight: 500;
   font-size: 12px;
   color: #1f61a9;
+  button{
+    display: none;
+  }
+}
+.selectMobile{
+  max-height: 200px;
 }
 .selectMenu {
   ul {
@@ -257,6 +260,11 @@
       &[class~="Mui-selected"],
       &:hover {
         background: #e8f1fb;
+      }
+      &[class~="Mui-selected"]{
+        p{
+          color: var(--cimigo-blue);
+        }
       }
     }
   }
@@ -313,6 +321,13 @@
   letter-spacing: 0.015em;
   color: #1c1c1c;
   margin-bottom: 4px;
+  white-space: nowrap; 
+  width: 300px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  @media only screen and (max-width: 359px) {
+    width: 200px; 
+  }
 }
 .itemDateMobile {
   font-style: normal;
@@ -320,6 +335,7 @@
   font-size: 12px;
   line-height: 140%;
   color: rgba(28, 28, 28, 0.65);
+  padding-bottom: 8px;
 }
 .itemStatusMobile {
   font-weight: 400;
@@ -366,5 +382,19 @@
     .successBtn {
       margin-left: 10px;
     }
+  }
+}
+.itemStatus:hover{
+  p{
+    color: var(--cimigo-blue);
+  }
+}
+.itemSelectMobie{
+  white-space: nowrap; 
+  width: 100%; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  @media only screen and (max-width: 360px) {
+    width: 150px;
   }
 }

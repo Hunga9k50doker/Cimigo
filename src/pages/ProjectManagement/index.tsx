@@ -19,6 +19,8 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -28,9 +30,7 @@ import Header from "components/Header";
 import Footer from "components/Footer";
 import { routes } from "routers/routes";
 import Images from "config/images";
-import Buttons from "components/Buttons";
 import InputSearch from "components/InputSearch";
-import PopupCreateOrEditFolder from "./components/PopupCreateOrEditFolder";
 import { useDispatch, useSelector } from "react-redux";
 import { DataPagination, OptionItem, SortItem } from "models/general";
 import { GetMyProjects, Project, projectStatus } from "models/project";
@@ -43,9 +43,6 @@ import { push } from "connected-react-router";
 import { FolderService } from "services/folder";
 import { Folder } from "models/folder";
 import clsx from "clsx";
-import PopupDeleteFolder from "./components/PopupDeleteFolder";
-import { RenameProjectFormData } from "./components/PopupRenameProject";
-import LabelStatusMobile from "./components/LableStatusMobile";
 import { ReducerType } from "redux/reducers";
 import { setVerifiedSuccess } from "redux/reducers/User/actionTypes";
 import { CheckCircle, Close } from "@mui/icons-material";
@@ -57,14 +54,14 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import Heading1 from "components/common/text/Heading1";
 import Heading5 from "components/common/text/Heading5";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ChipProjectStatus from "components/common/status/ChipProjectStatus";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import DriveFileMoveIcon from "@mui/icons-material/DriveFileMove";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import PopupConfirmChangeNameProject from "./components/PopupConfirmChangeNameProject";
+import PopupConfirmChangeNameProject, {
+  RenameProjectFormData,
+} from "./components/PopupConfirmChangeNameProject";
 import PopupConfirmMoveProject from "./components/PopupConfirmMoveProject";
 import PopupConfirmDeleteProject from "./components/PopupConfirmDeleteProject";
 import PopupConfirmCreateOrEditFolder from "./components/PopupConfirmCreateOrEditFolder";
@@ -81,7 +78,7 @@ enum SortedField {
   updatedAt = "updatedAt",
 }
 
-interface Props { }
+interface Props {}
 
 const ProjectManagement = memo((props: Props) => {
   const { t, i18n } = useTranslation();
@@ -110,6 +107,16 @@ const ProjectManagement = memo((props: Props) => {
   const [folderEdit, setFolderEdit] = useState<Folder>(null);
   const [folderDelete, setFolderDelete] = useState<Folder>(null);
   const [createFolder, setCreateFolder] = useState(false);
+
+  const theme = useTheme();
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: 250,
+        minWidth: (!useMediaQuery(theme.breakpoints.down(360)) ?  300 : 200 ),
+      },
+    },
+  };
 
   const fetchData = async (value?: {
     sort?: SortItem;
@@ -496,16 +503,23 @@ const ProjectManagement = memo((props: Props) => {
                     <MenuItem
                       value={0}
                       translation-key="project_mgmt_status_all_status"
+                      className={classes.itemStatus}
                     >
-                      {t("project_mgmt_status_all_status")}
+                      <ParagraphBody $colorName="--gray-80">
+                        {t("project_mgmt_status_all_status")}
+                      </ParagraphBody>
                     </MenuItem>
                     {projectStatus.map((item) => (
                       <MenuItem
+                        className={classes.itemStatus}
                         key={item.id}
                         value={item.id}
                         translation-key={item.translation}
                       >
-                        {t(item.translation)}
+                        <ParagraphBody $colorName="--gray-80">
+                          {" "}
+                          {t(item.translation)}
+                        </ParagraphBody>
                       </MenuItem>
                     ))}
                   </Select>
@@ -520,7 +534,9 @@ const ProjectManagement = memo((props: Props) => {
                 type="button"
                 onClick={() => history.push(routes.project.create)}
               >
-                <TextBtnSmall $colorName={"--white"}>{t("project_mgmt_create_project")}</TextBtnSmall>
+                <TextBtnSmall $colorName={"--white"}>
+                  {t("project_mgmt_create_project")}
+                </TextBtnSmall>
               </Button>
             </Box>
           </Grid>
@@ -735,21 +751,36 @@ const ProjectManagement = memo((props: Props) => {
               onChange={(e) => onChangeFolderMobile(e.target.value as number)}
               classes={{ select: classes.selectType, icon: classes.icSelect }}
               IconComponent={ExpandIcon}
+              MenuProps = {MenuProps}
             >
-              <MenuItem
-                value={0}
-                translation-key="project_mgmt_your_folders"
-              >
-                {t("project_mgmt_your_folders")}
+              <MenuItem value={0} translation-key="project_mgmt_all_projects">
+                {t("project_mgmt_all_projects")}
               </MenuItem>
               {folders?.map((item) => (
-                <MenuItem
-                  key={item.id}
-                  value={item.id}
-                >
-                  {item.name}
+                <MenuItem key={item.id} value={item.id} sx={{display: "flex",justifyContent: "space-between"}}>
+                  <div className={classes.itemSelectMobie}>{item.name}</div> 
+                  <div>
+                    <IconButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFolderEdit(item);
+                      }}
+                    >
+                      <DriveFileRenameOutlineIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFolderDelete(item);
+                      }}
+                      sx={{color: "var(--cimigo-danger)"}}
+                    >
+                      <DeleteForeverIcon />
+                    </IconButton>
+                  </div>
                 </MenuItem>
               ))}
+              
             </Select>
           </FormControl>
         </Grid>

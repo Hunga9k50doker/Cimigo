@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Box, Dialog} from "@mui/material";
+import { Box, Dialog } from "@mui/material";
 import classes from "./styles.module.scss";
 
 import { Project } from "models/project";
@@ -13,7 +13,7 @@ import { DialogActionsConfirm } from "components/common/dialogs/DialogActions";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
-import CancelIcon from '@mui/icons-material/Cancel';
+import CancelIcon from "@mui/icons-material/Cancel";
 
 interface PopupConfirmDeleteProjectProps {
   project: Project;
@@ -45,9 +45,14 @@ const PopupConfirmDeleteProject = memo(
       >
         <DialogTitleConfirm>
           <Box display="flex">
-            <CancelIcon sx={{ fontSize: 32, color: "var(--red-error)", mr: 2 }} />
-            <Heading3 $colorName="--cimigo-blue-dark-3" translation-key="">
-              Delete project?
+            <CancelIcon
+              sx={{ fontSize: 32, color: "var(--red-error)", mr: 2 }}
+            />
+            <Heading3
+              $colorName="--cimigo-blue-dark-3"
+              translation-key="project_mgmt_confirm_delete_title"
+            >
+              {t("project_mgmt_confirm_delete_title")}
             </Heading3>
           </Box>
           <ButtonClose
@@ -57,12 +62,18 @@ const PopupConfirmDeleteProject = memo(
           />
         </DialogTitleConfirm>
         <DialogContentConfirm dividers>
-          <ParagraphBody $colorName="--gray-80" className={classes.description}>
-            Are you sure you want to delete the “<span>{project?.name}</span>”
-            project?
-          </ParagraphBody>
+          <ParagraphBody
+            $colorName="--gray-80"
+            className={classes.description}
+            translation-key="project_mgmt_confirm_delete_sub_title"
+            dangerouslySetInnerHTML={{
+              __html: t("project_mgmt_confirm_delete_sub_title", {
+                projectName: project?.name,
+              }),
+            }}
+          ></ParagraphBody>
         </DialogContentConfirm>
-        <DialogActionsConfirm className={classes.btn}>
+        <DialogActionsConfirm>
           <Button
             btnType={BtnType.Secondary}
             onClick={_onCancel}
@@ -72,8 +83,8 @@ const PopupConfirmDeleteProject = memo(
           </Button>
           <Button
             className={classes.buttonDelete}
-            translation-key=""
-            children={<TextBtnSmall>Delete</TextBtnSmall>}
+            translation-key="project_mgmt_action_delete"
+            children={<TextBtnSmall>{t("project_mgmt_action_delete")}</TextBtnSmall>}
             type="button"
             onClick={() => _onDelete()}
           />
