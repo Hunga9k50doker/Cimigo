@@ -25,6 +25,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import PopupConfirmQuotaAllocation from "pages/SurveyNew/compoments/AgreeQuotaWarning";
 import { ProjectService } from "services/project";
+import { AttachmentService } from "services/attachment";
 
 interface ProjectReviewProps {
 }
@@ -33,6 +34,8 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const { t, i18n } = useTranslation()
 
   const dispatch = useDispatch()
+
+  const { configs } = useSelector((state: ReducerType) => state.user)
   const { project, cancelPayment } = useSelector((state: ReducerType) => state.project)
 
   const [isValid, setIsValid] = useState<boolean>(false)
@@ -122,9 +125,16 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  // const openNewTabContact = () => {
-  //   window.open(`${process.env.REACT_APP_BASE_API_URL}/static/contract/contract.pdf`, '_blank').focus()
-  // }
+  const onDownLoadContract = () => {
+    if (!configs.viewContract) return
+    dispatch(setLoading(true))
+    AttachmentService.download(configs.viewContract)
+      .then(res => {
+        FileSaver.saveAs(res.data, `contract-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
 
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)))
@@ -229,14 +239,14 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     </ParagraphBody>
                   </Box>
                   <Box className={classes.itemSubRight}>
-                    <ParagraphBody  $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !isValidTarget })} onClick={gotoTarget}>
+                    <ParagraphBody $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !isValidTarget })} onClick={gotoTarget}>
                       {!isValidTarget ? (
                         <>
                           <Box sx={{ fontWeight: 600 }} component="span" translation-key="payment_billing_sub_tab_preview_solution">
                             {t('payment_billing_sub_tab_preview_missing_setup')}:
                           </Box>
                           {inValidTargetMess()?.map((mess, index) => (
-                            <Box ml={1} key={index}>{mess}</Box>
+                            <Box component="span" ml={1} key={index}>{mess}</Box>
                           ))}
                         </>
                       ) : (
@@ -368,25 +378,25 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 )}
                 {project?.enableEyeTracking && (
                   <Box className={classes.itemSubBox}>
-                  <Box className={classes.itemSubLeft}>
-                    <ParagraphBody $colorName="--eerie-black-00" translation-key="common_eye_tracking">
-                      {t('common_eye_tracking')}
-                    </ParagraphBody>
+                    <Box className={classes.itemSubLeft}>
+                      <ParagraphBody $colorName="--eerie-black-00" translation-key="common_eye_tracking">
+                        {t('common_eye_tracking')}
+                      </ParagraphBody>
+                    </Box>
+                    <Box className={classes.itemSubRight}>
+                      <ParagraphBody
+                        $colorName="--eerie-black"
+                        translation-key=""
+                        className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidEyeTracking })}
+                        onClick={() => {
+                          if (!isValidPacks) onRedirect(routes.project.detail.setupSurvey)
+                        }}
+                      >
+                        {project?.eyeTrackingPacks?.length} competitor packs <br />
+                        {!isValidEyeTracking && <span className={classes.smallText} translation-key="">Required at least {project?.solution?.minEyeTrackingPack} competitor packs</span>}
+                      </ParagraphBody>
+                    </Box>
                   </Box>
-                  <Box className={classes.itemSubRight}>
-                    <ParagraphBody
-                      $colorName="--eerie-black"
-                      translation-key=""
-                      className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidEyeTracking })}
-                      onClick={() => {
-                        if (!isValidPacks) onRedirect(routes.project.detail.setupSurvey)
-                      }}
-                    >
-                      {project?.eyeTrackingPacks?.length} competitor packs <br />
-                      {!isValidEyeTracking && <span className={classes.smallText} translation-key="">Required at least {project?.solution?.minEyeTrackingPack} competitor packs</span>}
-                    </ParagraphBody>
-                  </Box>
-                </Box>
                 )}
               </Box>
             </Grid>
@@ -405,10 +415,12 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
           <img className={classes.imgAddPhoto} src={Images.icInvoice} />
           <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_completed_invoice">{t("payment_billing_completed_invoice")}</ParagraphBody>
         </Box>
-        <Box className={classes.materialItem}>
-          <img className={classes.imgAddPhoto} src={Images.icContract} />
-          <ParagraphBody $colorName="--cimigo-blue" translation-key="">View contract</ParagraphBody>
-        </Box>
+        {!!configs?.viewContract && (
+          <Box className={classes.materialItem} onClick={onDownLoadContract}>
+            <img className={classes.imgAddPhoto} src={Images.icContract} />
+            <ParagraphBody $colorName="--cimigo-blue" translation-key="">View contract</ParagraphBody>
+          </Box>
+        )}
       </Box>
       <Grid className={classes.btn}>
         <Button
@@ -425,11 +437,11 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
           <span translation-key="payment_billing_sub_tab_preview_confirm_des_3">{t('payment_billing_sub_tab_preview_confirm_des_3')}</span>
         </ParagraphExtraSmall>
       </Grid>
-      <PopupConfirmQuotaAllocation 
+      <PopupConfirmQuotaAllocation
         isOpen={isShowConfirmQuotaAllocation}
         onCancel={onCloseConfirmQuotaAllocation}
-        onConfirm={onConfirmAgreeQuota}  
-        onRedirectQuotas={() => gotoQuotas()}      
+        onConfirm={onConfirmAgreeQuota}
+        onRedirectQuotas={() => gotoQuotas()}
       />
     </Grid>
   )

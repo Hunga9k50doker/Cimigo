@@ -25,8 +25,12 @@ export class AdminConfigService {
       })
   }
 
-  static async update(id: number, data: UpdateConfig): Promise<any> {
-    return await api.put(`${API.ADMIN.CONFIG.DEFAULT}/${id}`, data)
+  static async update(id: number, data: FormData): Promise<any> {
+    return await api.put(`${API.ADMIN.CONFIG.DEFAULT}/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
       .then((res) => {
         return Promise.resolve(res.data)
       })
