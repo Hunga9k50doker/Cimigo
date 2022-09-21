@@ -47,7 +47,8 @@ const EditQuestion = memo((props: Props) => {
       order: data.order,
       typeId: data.typeId.id,
       renderTypeId: data.renderTypeId.id,
-      answerGroupName: data.answerGroupName
+      answerGroupName: data.answerGroupName,
+      showOptionAll: data.showOptionAll
     }
     if (lang) form.language = lang
     TargetQuestionService.update(Number(id), form)

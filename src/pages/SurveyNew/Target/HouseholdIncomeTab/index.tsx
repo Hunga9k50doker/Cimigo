@@ -4,7 +4,7 @@ import { memo, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { TargetAnswer, TargetQuestionType, TargetQuestion } from "models/Admin/target";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
-import { DataSelected, onToggleAnswer, isDisableSubmit } from "../models";
+import { DataSelected, onToggleAnswer, isDisableSubmit, isSelectAll, onSelectAll } from "../models";
 import { ProjectService } from "services/project";
 import { getTargetRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { editableProject } from "helpers/project";
@@ -123,6 +123,21 @@ const HouseholdIncomeTab = memo(({ project, questions, onNextStep }: Props) => {
                     )}
                   </AnswerListItem>
                 ))}
+                {question.showOptionAll && (
+                  <AnswerListItem item xs={6}>
+                    <ControlCheckbox
+                      $cleanPadding={true}
+                      control={
+                        <InputCheckbox
+                          checked={isSelectAll(question.id, dataSelected, question.targetAnswers)}
+                          onChange={(_, checked) => onSelectAll(question.id, question.targetAnswers, checked, dataSelected, setDataSelected)}
+                        />
+                      }
+                      label={<>{t("common_select_all")}</>}
+                    />
+                  </AnswerListItem>
+                )}
+
               </AnswerList>
             </QuestionBoxBody>
           </QuestionBoxContainer>

@@ -377,7 +377,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     <ParagraphBody
                       $colorName="--eerie-black"
                       translation-key=""
-                      className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidAdditionalBrand })}
+                      className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidEyeTracking })}
                       onClick={() => {
                         if (!isValidPacks) onRedirect(routes.project.detail.setupSurvey)
                       }}

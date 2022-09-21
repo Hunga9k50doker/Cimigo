@@ -23,6 +23,7 @@ const CreateQuestion = memo((props: Props) => {
       typeId: value.typeId.id,
       renderTypeId: value.renderTypeId.id,
       answerGroupName: value.answerGroupName,
+      showOptionAll: value.showOptionAll
     })
       .then(() => {
         dispatch(push(routes.admin.target.question.root))

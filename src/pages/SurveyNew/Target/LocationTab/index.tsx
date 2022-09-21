@@ -8,7 +8,7 @@ import _ from "lodash";
 import { ProjectService } from "services/project";
 import { getTargetRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { Project } from "models/project";
-import { DataSelected, onClickSuggestion, onToggleAnswer, isDisableSubmit, isSelectedSuggestion } from "../models";
+import { DataSelected, onClickSuggestion, onToggleAnswer, isDisableSubmit, isSelectedSuggestion, isSelectAll, onSelectAll } from "../models";
 import { editableProject } from "helpers/project";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, Done, InfoOutlined } from "@mui/icons-material";
@@ -158,6 +158,17 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
                       />
                     </BasicTooltip>
                   ))}
+                  {question.showOptionAll && (
+                    <ControlCheckbox
+                      control={
+                        <InputCheckbox
+                          checked={isSelectAll(question.id, dataSelected, question.targetAnswers)}
+                          onChange={(_, checked) => onSelectAll(question.id, question.targetAnswers, checked, dataSelected, setDataSelected)}
+                        />
+                      }
+                      label={<>{t("common_select_all")}</>}
+                    />
+                  )}
                 </Grid>
               </Grid>
             )
@@ -241,6 +252,21 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
                                 </BasicTooltip>
                               </AnswerListItem>
                             ))}
+                            {question.showOptionAll && (
+                              <AnswerListItem item xs={6}>
+                                <ControlCheckbox
+                                  $cleanPadding={true}
+                                  control={
+                                    <InputCheckbox
+                                      disabled={!!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === groupsSelected[question.id]?.id)}
+                                      checked={isSelectAll(question.id, dataSelected, groupsSelected[question.id]?.targetAnswers)}
+                                      onChange={(_, checked) => onSelectAll(question.id, groupsSelected[question.id]?.targetAnswers, checked, dataSelected, setDataSelected, groupsSelected[question.id]?.id)}
+                                    />
+                                  }
+                                  label={"Select all"}
+                                />
+                              </AnswerListItem>
+                            )}
                           </AnswerList>
                         </Box>
                       </QuestionBoxRightContent>

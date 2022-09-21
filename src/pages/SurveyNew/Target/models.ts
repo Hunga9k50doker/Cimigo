@@ -41,7 +41,7 @@ export interface DataSelected {
   [key: number]: TargetAnswer[]
 }
 
-export const onToggleAnswer = (questionId: number, answer: TargetAnswer, checked: boolean, dataSelected: DataSelected, setDataSelected: React.Dispatch<React.SetStateAction<{[key: number]: TargetAnswer[];}>>) => {
+export const onToggleAnswer = (questionId: number, answer: TargetAnswer, checked: boolean, dataSelected: DataSelected, setDataSelected: React.Dispatch<React.SetStateAction<{ [key: number]: TargetAnswer[]; }>>) => {
   let _dataSelected = { ...dataSelected }
   if (checked) {
     if (answer.exclusive) {
@@ -55,7 +55,7 @@ export const onToggleAnswer = (questionId: number, answer: TargetAnswer, checked
   setDataSelected(_dataSelected)
 }
 
-export const onClickSuggestion = (suggestion: TargetAnswerSuggestion, questions: TargetQuestion[], setDataSelected: React.Dispatch<React.SetStateAction<{[key: number]: TargetAnswer[];}>>) => {
+export const onClickSuggestion = (suggestion: TargetAnswerSuggestion, questions: TargetQuestion[], setDataSelected: React.Dispatch<React.SetStateAction<{ [key: number]: TargetAnswer[]; }>>) => {
   let _answers: TargetAnswer[] = []
   if (suggestion.answerIds?.length) {
     const iQ = questions.findIndex(it => it.id === suggestion.questionId)
@@ -85,7 +85,7 @@ export const onClickSuggestion = (suggestion: TargetAnswerSuggestion, questions:
   exclusiveAnswers.forEach(it => {
     _answers = _answers.filter(temp => it.questionId !== temp.questionId || it.groupId !== temp.groupId || temp.exclusive)
   })
-  setDataSelected(pre => ({ ...pre, [suggestion.questionId]: _answers}))
+  setDataSelected(pre => ({ ...pre, [suggestion.questionId]: _answers }))
 }
 
 export const isSelectedSuggestion = (suggestion: TargetAnswerSuggestion, dataSelected: DataSelected) => {
@@ -103,4 +103,31 @@ export const isSelectedSuggestion = (suggestion: TargetAnswerSuggestion, dataSel
 
 export const isDisableSubmit = (questions: TargetQuestion[], dataSelected: DataSelected) => {
   return !!questions.find(it => !dataSelected[it.id]?.length)
+}
+
+export const onSelectAll = (
+  questionId: number,
+  answers: TargetAnswer[],
+  checked: boolean,
+  dataSelected: DataSelected,
+  setDataSelected: React.Dispatch<React.SetStateAction<DataSelected>>,
+  groupId?: number
+) => {
+  let _dataSelected = { ...dataSelected }
+  const allAnswers = answers?.filter(it => !it.exclusive) || []
+  let otherAnswers = []
+  if (groupId) {
+    otherAnswers = _dataSelected[questionId]?.filter(it => it.groupId !== groupId) || []
+  }
+  if (checked) {
+    _dataSelected[questionId] = [...allAnswers, ...otherAnswers]
+  } else {
+    _dataSelected[questionId] = [...otherAnswers]
+  }
+  setDataSelected(_dataSelected)
+}
+
+export const isSelectAll = (questionId: number, dataSelected: DataSelected, answers: TargetAnswer[]) => {
+  const allAnswers = answers?.filter(it => !it.exclusive) || []
+  return !allAnswers.find(it => !dataSelected[questionId]?.find(temp => temp.id === it.id))
 }

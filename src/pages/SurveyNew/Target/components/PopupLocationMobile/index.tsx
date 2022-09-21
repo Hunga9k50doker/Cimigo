@@ -3,7 +3,7 @@ import { Dialog, Grid, IconButton, Collapse, Box } from '@mui/material';
 import classes from './styles.module.scss';
 import { Project } from 'models/project';
 import { TargetAnswer, TargetAnswerSuggestion, TargetQuestion, TargetQuestionRenderType, TargetQuestionType } from 'models/Admin/target';
-import { DataSelected, isDisableSubmit, isSelectedSuggestion, onClickSuggestion, onToggleAnswer } from '../../models';
+import { DataSelected, isDisableSubmit, isSelectAll, isSelectedSuggestion, onClickSuggestion, onSelectAll, onToggleAnswer } from '../../models';
 import { useDispatch } from 'react-redux';
 import { setLoading, setSuccessMess, setErrorMess } from 'redux/reducers/Status/actionTypes';
 import { ProjectService } from 'services/project';
@@ -169,6 +169,18 @@ const PopupLocationMobile = memo(({ isOpen, project, questions, onCancel }: Prop
                         />
                       </BasicTooltip>
                     ))}
+                    {question.showOptionAll && (
+                      <ControlCheckbox
+                        $cleanPadding={true}
+                        control={
+                          <InputCheckbox
+                            checked={isSelectAll(question.id, dataSelected, question.targetAnswers)}
+                            onChange={(_, checked) => onSelectAll(question.id, question.targetAnswers, checked, dataSelected, setDataSelected)}
+                          />
+                        }
+                        label={<>{t("common_select_all")}</>}
+                      />
+                    )}
                   </Grid>
                 </Grid>
               )
@@ -247,6 +259,21 @@ const PopupLocationMobile = memo(({ isOpen, project, questions, onCancel }: Prop
                                       </BasicTooltip>
                                     </Grid>
                                   ))}
+                                  {question.showOptionAll && (
+                                    <Grid item xs={12} sm={12} md={6}>
+                                      <ControlCheckbox
+                                        $cleanPadding={true}
+                                        control={
+                                          <InputCheckbox
+                                            disabled={!!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === group.id)}
+                                            checked={isSelectAll(question.id, dataSelected, group.targetAnswers)}
+                                            onChange={(_, checked) => onSelectAll(question.id, group.targetAnswers, checked, dataSelected, setDataSelected, group.id)}
+                                          />
+                                        }
+                                        label={<>{t("common_select_all")}</>}
+                                      />
+                                    </Grid>
+                                  )}
                                 </AnswerListMobile>
                               </Box>
                             </Collapse>

@@ -1,8 +1,7 @@
 import { memo, useEffect, useMemo, useState } from "react";
-import { Box, Checkbox, Collapse, Divider, FormControlLabel, Grid, IconButton, Radio, RadioGroup, Tooltip, useMediaQuery, useTheme } from "@mui/material"
+import { Box, Collapse, Divider, FormControlLabel, Grid, IconButton, Radio, RadioGroup, useMediaQuery, useTheme } from "@mui/material"
 import classes from './styles.module.scss';
 import images from "config/images";
-import Buttons from "components/Buttons";
 import InputSelect from "components/common/inputs/InputSelect";
 import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,14 +32,13 @@ import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import InputTextField from "components/common/inputs/InputTextfield";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
-import ControlCheckbox from "components/common/control/ControlCheckbox";
 import InputCheckbox from "components/common/inputs/InputCheckbox";
 import Heading2 from "components/common/text/Heading2";
 import Heading6 from "components/common/text/Heading6";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
-// import PopupConfirmCancelOrder from "pages/Survey/components/PopupConfirmCancelOrder";
+import PopupConfirmCancelOrder from "pages/SurveyNew/compoments/PopupConfirmCancelOrder";
 
 interface DataForm {
   paymentMethodId: number,
@@ -155,7 +153,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
   const [countries, setCountries] = useState<OptionItem[]>([])
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>()
   const [showSkipInfor, setShowSkipInfor] = useState<DataForm>()
-  // const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false)
+  const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false)
   const [isExpandedInfo, setIsExpandedInfo] = useState<boolean>(true)
 
   useEffect(() => {
@@ -317,13 +315,13 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview)
   }
 
-  // const onShowConfirmCancel = () => {
-  //   setIsConfirmCancel(true)
-  // }
+  const onShowConfirmCancel = () => {
+    setIsConfirmCancel(true)
+  }
 
-  // const onCloseConfirmCancel = () => {
-  //   setIsConfirmCancel(false)
-  // }
+  const onCloseConfirmCancel = () => {
+    setIsConfirmCancel(false)
+  }
 
   return (
     <Grid component={'form'} classes={{ root: classes.root }} onSubmit={handleSubmit(onConfirm)} noValidate autoComplete="off">
@@ -679,7 +677,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
           </Button>
         </Grid>
         <Box className={classes.cancelPayment}>
-          <TextBtnSmall $colorName="--gray-60" onClick={onCancelPayment}>{t("common_cancel_payment")}</TextBtnSmall>
+          <TextBtnSmall $colorName="--gray-60" onClick={onShowConfirmCancel}>{t("common_cancel_payment")}</TextBtnSmall>
         </Box>
       </Grid>
       <Grid className={classes.flexTotalMobile}>
@@ -704,11 +702,11 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         onClose={onUpdateInfo}
         onYes={onSkipUpdateInfo}
       />
-      {/* <PopupConfirmCancelOrder 
+      <PopupConfirmCancelOrder 
         isOpen={isConfirmCancel}
         onClose={onCloseConfirmCancel}
-        onYes={onCancelPayment}
-      /> */}
+        onConfirm={onCancelPayment}
+      />
     </Grid>
   )
 })
