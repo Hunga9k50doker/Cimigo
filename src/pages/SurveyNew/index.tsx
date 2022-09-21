@@ -177,7 +177,7 @@ export const Survey = () => {
             value={2}
             label={<Box display="flex" alignItems="center">
               {project?.agreeQuota && <CheckCircle className={classes.tabItemIcon} />}
-              <Heading4 className={classes.tabItemTitle}>Quotas</Heading4>
+              <Heading4 className={classes.tabItemTitle} translation-key="quotas_tab">{t("quotas_tab")}</Heading4>
             </Box>}
           />
           <Tab
