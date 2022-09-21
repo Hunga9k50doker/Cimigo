@@ -10,7 +10,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { memo, useEffect, useMemo } from "react";
-import Inputs from "components/Inputs";
+import InputTextfield from "components/common/inputs/InputTextfield";
 import { Folder } from "models/folder";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -36,7 +36,7 @@ const PopupConfirmCreateOrEditFolder = memo(
         name: yup
           .string()
           .required(t("field_project_name_vali_required"))
-          .max(20, t("project_field_folder_name_max")),
+          .max(20, t("project_mgmt_field_folder_name_max")),
       });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
@@ -83,27 +83,18 @@ const PopupConfirmCreateOrEditFolder = memo(
         <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
           <DialogTitleConfirm>
             <Box display="flex">
-              {folder ? (
-                <>
-                  <>
-                    <Heading3
-                      $colorName="--cimigo-blue-dark-3"
-                      translation-key="project_mgmt_title_rename_folder"
-                    >
-                      {t("project_mgmt_title_rename_folder")}
-                    </Heading3>
-                  </>
-                </>
-              ) : (
-                <>
-                  <Heading3
-                    $colorName="--cimigo-blue-dark-3"
-                    translation-key="project_mgmt_create_folder_btn"
-                  >
-                    {t("project_mgmt_create_folder_btn")}
-                  </Heading3>
-                </>
-              )}
+              <Heading3
+                $colorName="--cimigo-blue-dark-3"
+                translation-key={
+                  folder
+                    ? "project_mgmt_title_rename_folder"
+                    : "project_mgmt_create_folder_btn"
+                }
+              >
+                {folder
+                  ? t("project_mgmt_title_rename_folder")
+                  : t("project_mgmt_create_folder_btn")}
+              </Heading3>
             </Box>
             <ButtonClose
               $backgroundColor="--eerie-black-5"
@@ -113,30 +104,26 @@ const PopupConfirmCreateOrEditFolder = memo(
           </DialogTitleConfirm>
           <DialogContentConfirm dividers>
             {!folder ? (
-              <>
-                <ParagraphBody
-                  $colorName="--gray-80"
-                  className={classes.description}
-                  translation-key="project_mgmt_description_create_folder"
-                >
-                  {t("project_mgmt_description_create_folder")}
-                </ParagraphBody>
-              </>
+              <ParagraphBody
+                $colorName="--gray-80"
+                className={classes.description}
+                translation-key="project_mgmt_description_create_folder"
+              >
+                {t("project_mgmt_description_create_folder")}
+              </ParagraphBody>
             ) : (
-              <>
-                <ParagraphBody
-                  $colorName="--gray-80"
-                  className={classes.description}
-                  translation-key="project_mgmt_description_rename_folder"
-                  dangerouslySetInnerHTML={{
-                    __html: t("project_mgmt_description_rename_folder", {
-                      folderName: folder?.name,
-                    }),
-                  }}
-                ></ParagraphBody>
-              </>
+              <ParagraphBody
+                $colorName="--gray-80"
+                className={classes.description}
+                translation-key="project_mgmt_description_rename_folder"
+                dangerouslySetInnerHTML={{
+                  __html: t("project_mgmt_description_rename_folder", {
+                    folderName: folder?.name,
+                  }),
+                }}
+              ></ParagraphBody>
             )}
-            <Inputs
+            <InputTextfield
               titleRequired
               sx={{ margin: "16px 0px" }}
               name="name"
@@ -148,7 +135,7 @@ const PopupConfirmCreateOrEditFolder = memo(
               errorMessage={errors.name?.message}
             />
           </DialogContentConfirm>
-          <DialogActionsConfirm className={classes.btn}>
+          <DialogActionsConfirm>
             <Button
               btnType={BtnType.Secondary}
               onClick={_onCancel}
@@ -156,25 +143,18 @@ const PopupConfirmCreateOrEditFolder = memo(
             >
               {t("common_cancel")}
             </Button>
-            {folder ? (
-              <>
-                <Button
-                  btnType={BtnType.Raised}
-                  translation-key="project_mgmt_action_rename"
-                  children={<TextBtnSmall>{t("project_mgmt_action_rename")}</TextBtnSmall>}
-                  type="submit"
-                />
-              </>
-            ) : (
-              <>
-                <Button
-                  btnType={BtnType.Raised}
-                  translation-key="common_save"
-                  children={<TextBtnSmall>{t("common_save")}</TextBtnSmall>}
-                  type="submit"
-                />
-              </>
-            )}
+            <Button
+              btnType={BtnType.Raised}
+              translation-key={
+                folder ? "project_mgmt_action_rename" : "common_save"
+              }
+              children={
+                <TextBtnSmall>
+                  {folder ? t("project_mgmt_action_rename") : t("common_save")}
+                </TextBtnSmall>
+              }
+              type="submit"
+            />
           </DialogActionsConfirm>
         </form>
       </Dialog>

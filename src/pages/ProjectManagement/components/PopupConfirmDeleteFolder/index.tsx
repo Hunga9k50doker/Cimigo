@@ -73,7 +73,7 @@ const PopupConfirmDeleteFolder = memo(
             }}
           ></ParagraphBody>
         </DialogContentConfirm>
-        <DialogActionsConfirm className={classes.btn}>
+        <DialogActionsConfirm>
           <Button
             btnType={BtnType.Secondary}
             onClick={_onCancel}

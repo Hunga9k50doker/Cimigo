@@ -113,7 +113,7 @@ const PopupConfirmMoveProject = memo((props: PopupConfirmMoveProjectProps) => {
           }}
         />
       </DialogContentConfirm>
-      <DialogActionsConfirm className={classes.btn}>
+      <DialogActionsConfirm >
         <Button
           btnType={BtnType.Secondary}
           onClick={_onCancel}

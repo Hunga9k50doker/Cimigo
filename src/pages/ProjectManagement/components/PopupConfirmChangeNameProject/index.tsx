@@ -11,10 +11,10 @@ import TextBtnSmall from "components/common/text/TextBtnSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { Project } from "models/project";
 import { memo, useEffect, useMemo } from "react";
-import Inputs from "components/Inputs";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import InputTextfield from "components/common/inputs/InputTextfield";
 
 export interface RenameProjectFormData {
   name: string;
@@ -101,7 +101,7 @@ const PopupConfirmChangeNameProject = memo(
                 }),
               }}
             ></ParagraphBody>
-            <Inputs
+            <InputTextfield
               titleRequired
               name="name"
               type="text"
@@ -112,7 +112,7 @@ const PopupConfirmChangeNameProject = memo(
               errorMessage={errors.name?.message}
             />
           </DialogContentConfirm>
-          <DialogActionsConfirm className={classes.btn}>
+          <DialogActionsConfirm>
             <Button
               btnType={BtnType.Secondary}
               onClick={_onCancel}
