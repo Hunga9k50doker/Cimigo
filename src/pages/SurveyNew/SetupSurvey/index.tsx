@@ -131,8 +131,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
             <PageTitleRight>
               <HelpIcon sx={{ fontSize: "16px", marginRight: "4px", color: "var(--cimigo-blue)" }} />
               <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupPackTestSurvey}
-              translation-key="setup_survey_how_to_setup"
-              >{t("setup_survey_how_to_setup")}</ParagraphSmallUnderline2>
+              >{project?.solution?.howToSetUpSurveyPageTitle}</ParagraphSmallUnderline2>
             </PageTitleRight>
           )} 
         </PageTitle>
@@ -178,8 +177,8 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab label={"Outline"} value={ETabRightPanel.OUTLINE} />
             <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} 
-            translation-key="right_panel_cost_summary"
-            >{t("right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
+            translation-key="project_right_panel_cost_summary"
+            >{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
           </TabRightPanel>
           <TabPanelBox value={tabRightPanel} index={ETabRightPanel.OUTLINE}>
             <RightPanelContent>
@@ -191,11 +190,11 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
                     >
                       <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 1})}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="right_panel_step_basic_info">{t("right_panel_step_basic_info")}</Heading5>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_basic_info">{t("project_right_panel_step_basic_info")}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black" translation-key="right_panel_step_basic_info_subtitle">
-                        {t("right_panel_step_basic_info_subtitle")}
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_basic_info_subtitle">
+                        {t("project_right_panel_step_basic_info_subtitle")}
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
@@ -205,11 +204,11 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><BurstModeIcon /></RPStepIconBox>}
                     >
                       <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 2})}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="right_panel_step_upload_packs">{t("right_panel_step_upload_packs", {packLength: project?.packs?.length || 0})}</Heading5>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_upload_packs">{t("project_right_panel_step_upload_packs", {packLength: project?.packs?.length || 0})}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black" translation-key="right_panel_step_upload_packs_subtitle"> 
-                      {t("right_panel_step_upload_packs_subtitle")}
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_upload_packs_subtitle"> 
+                      {t("project_right_panel_step_upload_packs_subtitle")}
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
@@ -219,11 +218,11 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><FactCheckIcon /></RPStepIconBox>}
                     >
                       <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 3})}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="right_panel_step_add_brands_list">{t("right_panel_step_add_brands_list", {brandsLength: project?.additionalBrands?.length || 0})}</Heading5>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_add_brands_list">{t("project_right_panel_step_add_brands_list", {brandsLength: project?.additionalBrands?.length || 0})}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black" translation-key="right_panel_step_add_brands_list_subtitle">
-                      {t("right_panel_step_add_brands_list_subtitle")}
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_add_brands_list_subtitle">
+                      {t("project_right_panel_step_add_brands_list_subtitle")}
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
@@ -233,11 +232,11 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><PlaylistAddIcon /></RPStepIconBox>}
                     >
                       <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: 4})}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="right_panel_step_add_attributes">{t("right_panel_step_add_attributes")}</Heading5>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_add_attributes">{t("project_right_panel_step_add_attributes")}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black" translation-key="right_panel_step_add_attributes_subtitle">
-                        {t("right_panel_step_add_attributes_subtitle")}
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_add_attributes_subtitle">
+                        {t("project_right_panel_step_add_attributes_subtitle")}
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
@@ -247,7 +246,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.custom_questions)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><FormatAlignLeftIcon /></RPStepIconBox>}>
                         <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: 5})}</ParagraphExtraSmall>
-                        <Heading5 className="title" $colorName="--gray-60" translation-key="right_panel_step_custom_question">{t("right_panel_step_custom_question", {customQuestionLength: project?.customQuestions?.length || 0})}</Heading5>
+                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_custom_question">{t("project_right_panel_step_custom_question", {customQuestionLength: project?.customQuestions?.length || 0})}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
@@ -264,7 +263,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.eye_tracking)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><RemoveRedEyeIcon /></RPStepIconBox>}>
                         <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: project?.solution?.enableCustomQuestion ? 6 : 5})}</ParagraphExtraSmall>
-                        <Heading5 className="title" $colorName="--gray-60" translation-key="right_panel_step_eye_tracking">{t("right_panel_step_eye_tracking")}</Heading5>
+                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_eye_tracking">{t("project_right_panel_step_eye_tracking")}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip

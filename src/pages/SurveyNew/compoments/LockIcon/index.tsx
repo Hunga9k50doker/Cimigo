@@ -39,7 +39,7 @@ export const LockIcon = memo(({ status, className, ...rest }: LockIconProps) => 
           <ParagraphExtraSmall $colorName="--gray-02" variant="caption" 
           translation-key="project_lock_icon_content"
           dangerouslySetInnerHTML={{
-            __html: t("project_create_tab_create_project_note_description", {statusLabel: statusLabel}),
+            __html: t("project_lock_icon_content", {statusLabel: statusLabel}),
           }}
           className={classes.lockIconContent}
           >
