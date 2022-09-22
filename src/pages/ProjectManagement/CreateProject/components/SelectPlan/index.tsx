@@ -157,8 +157,8 @@ const SelectPlan = memo(
                           <Heading3
                             $fontWeight={"500"}
                             $colorName={"--eerie-black-00"}
-                            variant="body2" 
-                            variantMapping={{"body2": "span"}}
+                            variant="body2"
+                            variantMapping={{ body2: "span" }}
                           >
                             {plan.title}
                           </Heading3>
@@ -167,8 +167,8 @@ const SelectPlan = memo(
                           <ParagraphBody
                             $colorName={"--eerie-black-00"}
                             translation-key="project_create_tab_plan_start_at"
-                            variant="body2" 
-                            variantMapping={{"body2": "span"}}
+                            variant="body2"
+                            variantMapping={{ body2: "span" }}
                           >
                             {t("project_create_tab_plan_start_at")}
                           </ParagraphBody>
@@ -177,8 +177,8 @@ const SelectPlan = memo(
                           <Heading1
                             $fontWeight={"600"}
                             $colorName={"--cimigo-blue"}
-                            variant="body2" 
-                            variantMapping={{"body2": "span"}}
+                            variant="body2"
+                            variantMapping={{ body2: "span" }}
                           >
                             {formatMoney(plan)}
                           </Heading1>
@@ -187,21 +187,31 @@ const SelectPlan = memo(
                           <ParagraphExtraSmall
                             $colorName={"--gray-60"}
                             translation-key="common_tax_exclusive"
-                            variant="body2" 
-                            variantMapping={{"body2": "span"}}
+                            variant="body2"
+                            variantMapping={{ body2: "span" }}
                           >
                             {t("common_tax_exclusive")}
                           </ParagraphExtraSmall>
                         </Typography>
-                        <Typography variant="body2" variantMapping={{"body2": "div"}}>
+                        <Typography
+                          variant="body2"
+                          variantMapping={{ body2: "div" }}
+                        >
                           <div className={classes.line}></div>
                         </Typography>
                         <Grid className={classes.contentInPlan}>
+                          <Grid className={classes.contentPlan}>
+                            <DoneIcon className={classes.iconContentPlan} />
+                            <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"} variant="body2"
+                          variantMapping={{ body2: "span" }}>
+                              <span className={classes.sampleSize}>{plan.sampleSize +' '}</span> interviews
+                            </ParagraphBody>
+                          </Grid>
                           {plan?.content.map((item, index) => {
                             return (
                               <Grid className={classes.contentPlan} key={index}>
                                 <DoneIcon className={classes.iconContentPlan} />
-                                <ParagraphBody $colorName={"--eerie-black-00"}>
+                                <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"}>
                                   {item}
                                 </ParagraphBody>
                               </Grid>

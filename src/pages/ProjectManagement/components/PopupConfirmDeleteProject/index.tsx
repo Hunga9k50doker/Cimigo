@@ -3,7 +3,6 @@ import { Box, Dialog } from "@mui/material";
 import classes from "./styles.module.scss";
 
 import { Project } from "models/project";
-import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { DialogTitleConfirm } from "components/common/dialogs/DialogTitle";
 import Heading3 from "components/common/text/Heading3";

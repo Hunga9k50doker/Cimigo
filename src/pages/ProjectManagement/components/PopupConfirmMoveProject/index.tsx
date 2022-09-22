@@ -3,7 +3,6 @@ import { Box, Dialog } from "@mui/material";
 import classes from "./styles.module.scss";
 import { Folder } from "models/folder";
 import { Project } from "models/project";
-import _ from "lodash";
 import InputSelect from "components/InputsSelect";
 import { OptionItem } from "models/general";
 import { useTranslation } from "react-i18next";
