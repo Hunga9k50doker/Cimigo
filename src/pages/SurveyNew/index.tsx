@@ -27,8 +27,8 @@ import SetupSurvey from "./SetupSurvey";
 import Target from "./Target";
 import Quotas from "./Quotas";
 import Pay from "./Pay";
-import Report from "pages/Survey/Report";
 import ProjectHelper from "helpers/project";
+import Report from "./Report";
 
 export const Survey = () => {
 
