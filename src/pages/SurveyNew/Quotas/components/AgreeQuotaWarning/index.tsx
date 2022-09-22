@@ -32,16 +32,16 @@ const AgreeQuotaWarning = memo(({ isOpen, onCancel, onConfirm }: AgreeQuotaWarni
       <DialogTitleConfirm>
         <Box display="flex">
           <Help sx={{ fontSize: 32, color: "var(--warning)", mr: 2 }} />
-          <Heading3 $colorName='--cimigo-blue-dark-3' translation-key="">Agree to quota allocation?</Heading3>
+          <Heading3 $colorName='--cimigo-blue-dark-3' translation-key="quotas_agree_quota_warning_title">{t("quotas_agree_quota_warning_title")}</Heading3>
         </Box>
         <ButtonClose $backgroundColor='--eerie-black-5' $colorName='--eerie-black-40' onClick={onCancel} />
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
         <ParagraphBody
           $colorName='--gray-80'
-          translation-key=""
+          translation-key="quotas_agree_quota_warning_content"
         >
-          To continue, please confirm that you agree to the quota allocation.
+          {t("quotas_agree_quota_warning_content")}
         </ParagraphBody>
       </DialogContentConfirm>
       <DialogActionsConfirm>
@@ -54,7 +54,7 @@ const AgreeQuotaWarning = memo(({ isOpen, onCancel, onConfirm }: AgreeQuotaWarni
         <Button
           btnType={BtnType.Raised}
           translation-key=""
-          children={<TextBtnSmall>OK, I agree</TextBtnSmall>}
+          children={<TextBtnSmall translation-key="common_ok_i_agree">{t("common_ok_i_agree")}</TextBtnSmall>}
           onClick={onConfirm}
         />
       </DialogActionsConfirm>
