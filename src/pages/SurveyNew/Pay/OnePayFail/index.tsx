@@ -146,7 +146,6 @@ const OnePayFail = memo(({}: Props) => {
                 $colorName="--cimigo-danger"
                 translation-key="payment_billing_fail_title"
               >
-                {" "}
                 {t("payment_billing_fail_title")}
               </Heading1>
               <Heading2

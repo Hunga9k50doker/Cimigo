@@ -42,23 +42,24 @@ const SelectPlan = memo(
       mode: "onChange",
     });
 
-    const getPlans = async () => {
-      dispatch(setLoading(true));
-      const params: UserGetPlans = {
-        take: 99999,
-        solutionId: solution?.id || undefined,
-      };
-      PlanService.getPlans(params)
-        .then((res) => {
-          setPlan({
-            data: res.data,
-            meta: res.meta,
-          });
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)));
-    };
+    
     useEffect(() => {
+      const getPlans = async () => {
+        dispatch(setLoading(true));
+        const params: UserGetPlans = {
+          take: 99999,
+          solutionId: solution?.id || undefined,
+        };
+        PlanService.getPlans(params)
+          .then((res) => {
+            setPlan({
+              data: res.data,
+              meta: res.meta,
+            });
+          })
+          .catch((e) => dispatch(setErrorMess(e)))
+          .finally(() => dispatch(setLoading(false)));
+      };
       getPlans();
     }, [solution]);
 
