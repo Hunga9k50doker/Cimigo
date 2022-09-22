@@ -46,7 +46,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
 
   const schema = useMemo(() => {
     return yup.object().shape({
-      name: yup.string().required("Name is required"),
+      name: yup.string().required(t("field_name_vali_required")),
       email: yup.string()
         .email(t("field_email_vali_email"))
         .required(t("field_email_vali_required")),
@@ -99,7 +99,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
     dispatch(setLoading(true))
     ProjectService.sendEmailHowToSetupSurvey(data.name, data.email)
       .then(() => {
-        dispatch(setSuccessMess("Send email successfully!"))
+        dispatch(setSuccessMess(t("forgot_password_send_success")))
         handleClosePopoverEmail()
       })
       .catch((e) => dispatch(setErrorMess(e)))
@@ -154,8 +154,8 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                     <Grid container spacing={1} direction="column">
                       <Grid item>
                         <InputTextField
-                          translation-key-placeholder=""
-                          placeholder="Enter your name"
+                          translation-key-placeholder="field_name_placeholder"
+                          placeholder={t("field_name_placeholder")}
                           autoFocus={true}
                           inputProps={{ tabIndex: 1 }}
                           type="text"
@@ -179,7 +179,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                     <Grid sx={{ display: 'flex', justifyContent: 'end', marginTop: '8px' }}>
                       <Button btnType={BtnType.Primary} type="submit">
                         <NearMeIcon fontSize="small" sx={{ marginRight: '7px' }} />
-                        <TextBtnSmall transition-key="">Send</TextBtnSmall>
+                        <TextBtnSmall transition-key="common_send">{t("common_send")}</TextBtnSmall>
                       </Button>
                     </Grid>
                   </Grid>

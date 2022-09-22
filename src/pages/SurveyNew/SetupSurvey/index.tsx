@@ -25,6 +25,7 @@ import AdditionalAttributes from "./compoments/AdditionalAttributes";
 import CustomQuestions from "./compoments/CustomQuestions";
 import { fCurrency2 } from "utils/formatNumber";
 import EyeTracking from "./compoments/EyeTracking";
+import { useTranslation } from "react-i18next";
 
 import PopupMissingRequirement from "pages/SurveyNew/compoments/PopupMissingRequirement";
 import { push } from "connected-react-router";
@@ -36,6 +37,8 @@ interface SetupSurvey {
 }
 
 const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
+  
+  const { t } = useTranslation();
 
   const dispatch = useDispatch()
 
@@ -119,15 +122,18 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
       <LeftContent>
         <PageTitle>
           <PageTitleLeft>
-            <PageTitleText>Setup your <span>{project?.solution?.title}</span> survey</PageTitleText>
+            <PageTitleText translation-key="setup_survey_title_left_panel"
+            dangerouslySetInnerHTML={{ __html: t('setup_survey_title_left_panel', {title: project?.solution?.title})}}
+            ></PageTitleText>
             {!editable && <LockIcon status={project?.status} />}
           </PageTitleLeft>
           {project?.solution?.enableHowToSetUpSurvey && (
             <PageTitleRight>
               <HelpIcon sx={{ fontSize: "16px", marginRight: "4px", color: "var(--cimigo-blue)" }} />
-              <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupPackTestSurvey}>How to set up pack test survey?</ParagraphSmallUnderline2>
+              <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupPackTestSurvey}
+              >{project?.solution?.howToSetUpSurveyPageTitle}</ParagraphSmallUnderline2>
             </PageTitleRight>
-          )}
+          )} 
         </PageTitle>
         <Content id={SETUP_SURVEY_SECTION.content_survey_setup}>
           <BasicInformation
@@ -159,7 +165,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
           <Button
             fullWidth
             btnType={BtnType.Raised}
-            children={<TextBtnSecondary>Next: setup target</TextBtnSecondary>}
+            children={<TextBtnSecondary translation-key="setup_next_btn">{t("setup_next_btn")}</TextBtnSecondary>}
             endIcon={<ArrowForward />}
             padding="13px 0px !important"
             onClick={onNextSetupTarget}
@@ -170,7 +176,9 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab label={"Outline"} value={ETabRightPanel.OUTLINE} />
-            <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice}>Cost summary</Badge>} value={ETabRightPanel.COST_SUMMARY} />
+            <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} 
+            translation-key="project_right_panel_cost_summary"
+            >{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
           </TabRightPanel>
           <TabPanelBox value={tabRightPanel} index={ETabRightPanel.OUTLINE}>
             <RightPanelContent>
@@ -181,12 +189,12 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.basic_information)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
                     >
-                      <ParagraphExtraSmall $colorName="--gray-60">Step 1</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60">Basic information</Heading5>
+                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 1})}</ParagraphExtraSmall>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_basic_info">{t("project_right_panel_step_basic_info")}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black">
-                        Thông tin cơ bản của sản phẩm.
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_basic_info_subtitle">
+                        {t("project_right_panel_step_basic_info_subtitle")}
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
@@ -195,12 +203,12 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.upload_packs)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><BurstModeIcon /></RPStepIconBox>}
                     >
-                      <ParagraphExtraSmall $colorName="--gray-60">Step 2</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60">Upload packs ({project?.packs?.length || 0})</Heading5>
+                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 2})}</ParagraphExtraSmall>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_upload_packs">{t("project_right_panel_step_upload_packs", {packLength: project?.packs?.length || 0})}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black">
-                        Hình ảnh bao bì sản phẩm bạn muốn khảo sát.
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_upload_packs_subtitle"> 
+                      {t("project_right_panel_step_upload_packs_subtitle")}
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
@@ -209,12 +217,12 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.additional_brand_list)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><FactCheckIcon /></RPStepIconBox>}
                     >
-                      <ParagraphExtraSmall $colorName="--gray-60">Step 3</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60">Additional brands list ({project?.additionalBrands?.length || 0})</Heading5>
+                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 3})}</ParagraphExtraSmall>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_add_brands_list">{t("project_right_panel_step_add_brands_list", {brandsLength: project?.additionalBrands?.length || 0})}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black">
-                        Danh sách nhãn hiệu.
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_add_brands_list_subtitle">
+                      {t("project_right_panel_step_add_brands_list_subtitle")}
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
@@ -223,12 +231,12 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.additional_attributes)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><PlaylistAddIcon /></RPStepIconBox>}
                     >
-                      <ParagraphExtraSmall $colorName="--gray-60">Step 4 - OPTIONAL</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60">Additional attributes</Heading5>
+                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: 4})}</ParagraphExtraSmall>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_add_attributes">{t("project_right_panel_step_add_attributes")}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black">
-                        Các yếu tố đánh giá liên kết bao bì.
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_add_attributes_subtitle">
+                        {t("project_right_panel_step_add_attributes_subtitle")}
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
@@ -237,8 +245,8 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       <RPStepLabel
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.custom_questions)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><FormatAlignLeftIcon /></RPStepIconBox>}>
-                        <ParagraphExtraSmall $colorName="--gray-60">Step 5 - OPTIONAL</ParagraphExtraSmall>
-                        <Heading5 className="title" $colorName="--gray-60">Custom questions ({project?.customQuestions?.length || 0})</Heading5>
+                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: 5})}</ParagraphExtraSmall>
+                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_custom_question">{t("project_right_panel_step_custom_question", {customQuestionLength: project?.customQuestions?.length || 0})}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
@@ -254,8 +262,8 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                       <RPStepLabel
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.eye_tracking)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><RemoveRedEyeIcon /></RPStepIconBox>}>
-                        <ParagraphExtraSmall $colorName="--gray-60">Step {project?.solution?.enableCustomQuestion ? 6 : 5} - OPTIONAL</ParagraphExtraSmall>
-                        <Heading5 className="title" $colorName="--gray-60">Eye tracking</Heading5>
+                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: project?.solution?.enableCustomQuestion ? 6 : 5})}</ParagraphExtraSmall>
+                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_eye_tracking">{t("project_right_panel_step_eye_tracking")}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
@@ -272,7 +280,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
-                  children={<TextBtnSecondary>Next: setup target</TextBtnSecondary>}
+                  children={<TextBtnSecondary translation-key="setup_next_btn">{t("setup_next_btn")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
                   padding="13px 0px !important"
                   onClick={onNextSetupTarget}
@@ -292,7 +300,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
-                  children={<TextBtnSecondary>Next: setup target</TextBtnSecondary>}
+                  children={<TextBtnSecondary translation-key="setup_next_btn">{t("setup_next_btn")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
                   padding="13px 0px !important"
                   onClick={onNextSetupTarget}
