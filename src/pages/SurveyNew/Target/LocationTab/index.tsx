@@ -131,7 +131,7 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
           <Heading5 $colorName="--eerie-black" translation-key="target_country_title">{t('target_country_title')}:</Heading5>
         </Grid>
         <Grid className={classes.rowItemRight}>
-          <ParagraphBody $colorName="--eerie-black-00">Vietnam</ParagraphBody>
+          <ParagraphBody $colorName="--eerie-black-00" translation-key="target_country_name">{t("target_country_name")}</ParagraphBody>
           <ParagraphExtraSmall $colorName="--gray-80" translation-key="target_country_sub_title">{t('target_country_sub_title')}</ParagraphExtraSmall>
         </Grid>
       </Grid>
@@ -282,10 +282,10 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
           <Button
             disabled={isDisable}
             btnType={BtnType.Secondary}
-            children={<TextBtnSecondary>Save & Next</TextBtnSecondary>}
+            children={<TextBtnSecondary translation-key="common_save_and_next">{t("common_save_and_next")}</TextBtnSecondary>}
             onClick={onUpdateTarget}
           />
-          <ParagraphSmall mt={0.5} $colorName="--gray-60">Next: Choose household income</ParagraphSmall>
+          <ParagraphSmall mt={0.5} $colorName="--gray-60" translation-key="target_sub_tab_next_choose_household_income">{t("target_sub_tab_next_choose_household_income")}</ParagraphSmall>
         </Box>
       </Box>
       <PopupConfirmChangeSampleSize

@@ -92,9 +92,11 @@ const HouseholdIncomeTab = memo(({ project, questions, onNextStep }: Props) => {
 
   return (
     <>
-      <ParagraphSmall $colorName="--gray-80">
-        Please choose your targeted audience household income.<br />
-        Selected economic class (SEC) will be displayed in your results as A, B, C, D, E, F separately or collapsed as groups depending on your sample size.
+      <ParagraphSmall $colorName="--gray-80" translation-key="target_sub_tab_choose_household_and_select_economic"
+        dangerouslySetInnerHTML={{
+        __html: t("target_sub_tab_choose_household_and_select_economic"),
+        }}
+      >
       </ParagraphSmall>
       {questions.map(question => (
         <Grid mt={3} key={question.id}>
@@ -148,10 +150,10 @@ const HouseholdIncomeTab = memo(({ project, questions, onNextStep }: Props) => {
           <Button
             disabled={isDisable}
             btnType={BtnType.Secondary}
-            children={<TextBtnSecondary>Save & Next</TextBtnSecondary>}
+            children={<TextBtnSecondary translation-key="common_save_and_next">{t("common_save_and_next")}</TextBtnSecondary>}
             onClick={onUpdateTarget}
           />
-          <ParagraphSmall mt={0.5} $colorName="--gray-60">Next: Choose age coverage</ParagraphSmall>
+          <ParagraphSmall mt={0.5} $colorName="--gray-60" translation-key="target_sub_tab_next_choose_age_coverage">{t("target_sub_tab_next_choose_age_coverage")}</ParagraphSmall>
         </Box>
       </Box>
       <PopupConfirmChangeSampleSize

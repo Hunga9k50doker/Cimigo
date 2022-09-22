@@ -39,25 +39,33 @@ const PopupConfirmChangeSampleSize = ({ data, onClose, onConfirm }: Props) => {
       <DialogTitleConfirm>
         <Box display="flex">
           <Help sx={{ fontSize: 32, color: "var(--warning)", mr: 2 }} />
-          <Heading3 $colorName='--cimigo-blue-dark-3' translation-key="">Change survey sample size?</Heading3>
+          <Heading3 $colorName='--cimigo-blue-dark-3' translation-key="target_popup_change_sample_size_title">{t("target_popup_change_sample_size_title")}</Heading3>
         </Box>
         <ButtonClose $backgroundColor='--eerie-black-5' $colorName='--eerie-black-40' onClick={onClose} />
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
-        <ParagraphBody $colorName='--gray-80'>Changes in the survey sample size may have impact on some of these settings below:</ParagraphBody>
+        <ParagraphBody $colorName='--gray-80' translation-key="target_popup_change_sample_size_sub_title">{t("target_popup_change_sample_size_sub_title")}</ParagraphBody>
         <ul className={classes.list}>
           {data?.isConfirmQuotas && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              Your adjusted quota: <span>reset to Cimigo recommended default state.</span>
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'
+            translation-key="target_popup_change_sample_size_your_adjusted_quota"
+            dangerouslySetInnerHTML={{
+              __html: t("target_popup_change_sample_size_your_adjusted_quota"),
+            }}
+            >
             </ParagraphBody>
           )}
           {data?.isConfirmEyeTrackingSampleSize && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              Your adjusted eye-tracking sample size: <span>reset from {data?.oldEyeTrackingSampleSize} to {data?.newEyeTrackingSampleSize} as a bare minimum.</span>
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'
+            translation-key="target_popup_change_sample_size_your_adjusted_eye_tracking"
+            dangerouslySetInnerHTML={{
+              __html: t("target_popup_change_sample_size_your_adjusted_eye_tracking",{oldEyeTrackingSampleSize: data?.oldEyeTrackingSampleSize, newEyeTrackingSampleSize: data?.newEyeTrackingSampleSize}),
+            }}
+            >
             </ParagraphBody>
           )}
         </ul>
-        <ParagraphBody mt={4} $colorName='--gray-80'>Do you want to change the survey sample size?</ParagraphBody>
+        <ParagraphBody mt={4} $colorName='--gray-80' translation-key="target_popup_change_sample_size_do_you_want_question">{t("target_popup_change_sample_size_do_you_want_question")}</ParagraphBody>
       </DialogContentConfirm>
       <DialogActionsConfirm className={classes.btn}>
         <Button btnType={BtnType.Secondary} onClick={onClose} translation-key="common_cancel">{t('common_cancel')}</Button>

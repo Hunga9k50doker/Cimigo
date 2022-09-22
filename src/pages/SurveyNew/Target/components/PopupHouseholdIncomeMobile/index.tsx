@@ -106,7 +106,7 @@ const PopupHouseholdIncomeMobile = memo(({ isOpen, project, questions, onCancel 
       classes={{ paper: classes.paper }}
     >
       <DialogTitle sx={{ alignItems: 'center' }}>
-        <Heading5 $colorName="--ghost-white" translation-key="">Household income</Heading5>
+        <Heading5 $colorName="--ghost-white" translation-key="target_sub_tab_household_income">{t("target_sub_tab_household_income")}</Heading5>
         <ButtonClose onClick={onCancel} />
       </DialogTitle>
       <DialogContent>

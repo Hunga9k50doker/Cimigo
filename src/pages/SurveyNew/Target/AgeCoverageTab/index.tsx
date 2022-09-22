@@ -181,13 +181,13 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum, onNext
       case ETab.Main:
         return (
           <Grid>
-            <ParagraphSmall $colorName="--gray-80">Please choose one of two options for age and gender coverage.</ParagraphSmall>
+            <ParagraphSmall $colorName="--gray-80" translation-key="target_sub_tab_tow_option_age_and_gender_coverage">{t("target_sub_tab_tow_option_age_and_gender_coverage")}</ParagraphSmall>
             <ListDot component="ul">
-              <ParagraphSmall variant="body2" variantMapping={{ body2: "li" }} $colorName="--gray-80">
-                If you are targeting males or/and females by specific age, then select the option for gender and age quotas.
+              <ParagraphSmall variant="body2" variantMapping={{ body2: "li" }} $colorName="--gray-80" translation-key="target_sub_tab_targeting_gender">
+                {t("target_sub_tab_targeting_gender")}
               </ParagraphSmall>
-              <ParagraphSmall variant="body2" variantMapping={{ body2: "li" }} $colorName="--gray-80">
-                If you are targeting mums of children then select mums only with specific quotas for age of their child.
+              <ParagraphSmall variant="body2" variantMapping={{ body2: "li" }} $colorName="--gray-80" translation-key="target_sub_tab_targeting_age">
+                {t("target_sub_tab_targeting_age")}
               </ParagraphSmall>
             </ListDot>
             <Box className={classes.selectTab}>
@@ -230,9 +230,11 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum, onNext
                 {t('target_sub_tab_age_coverage_switch_mum_only')}
               </ParagraphSmallUnderline2>
             </Box>
-            <ParagraphSmall mt={2} $colorName="--gray-80">
-              Select the gender and age which you wish to include in your sample.<br />
-              Selected age quotas displayed in 5 or 10 year ranges (depending on your sample size) will be included in your results.
+            <ParagraphSmall mt={2} $colorName="--gray-80" translation-key="target_sub_tab_select_gender_age_quotas"
+              dangerouslySetInnerHTML={{
+              __html: t("target_sub_tab_select_gender_age_quotas"),
+              }}
+            >
             </ParagraphSmall>
             {questionsAgeGender.map(question => (
               <Grid mt={3} key={question.id}>
@@ -299,9 +301,11 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum, onNext
                 {t('target_sub_tab_age_coverage_switch_gender_and_age')}
               </ParagraphSmallUnderline2>
             </Box>
-            <ParagraphSmall mt={2} $colorName="--gray-80">
-              Select the age of the child which you wish to include in your sample of mums.<br />
-              Selected age of child quotas will be included in your results.
+            <ParagraphSmall mt={2} $colorName="--gray-80" translation-key="target_sub_tab_select_age_child_quotas"
+              dangerouslySetInnerHTML={{
+              __html: t("target_sub_tab_select_age_child_quotas"),
+              }}
+            >
             </ParagraphSmall>
             {questionsMum.map(question => (
               <Grid mt={3} key={question.id}>
