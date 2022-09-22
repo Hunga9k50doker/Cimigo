@@ -18,7 +18,10 @@ export const projectReducer = (state = initial, action: any) =>
   produce(state, draft => {
     switch (action.type) {
       case types.SET_PROJECT_REDUCER:
-        draft.project = action.data;
+        draft.project = {
+          ...draft.project,
+          ...action.data
+        };
         break;
       case types.SET_CREATE_PROJECT_REDIRECT_OF_PROJECT_REDUCER:
         draft.createProjectRedirect = action.data;

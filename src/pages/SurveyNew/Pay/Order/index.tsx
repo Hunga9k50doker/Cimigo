@@ -26,6 +26,8 @@ import { DownLoadItem, ImageMain, InforBox, InforBoxItem } from "../components";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import Heading6 from "components/common/text/Heading6";
 import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCancelOrder";
+import FileSaver from "file-saver";
+import moment from "moment";
 
 interface Props {
 
@@ -91,6 +93,17 @@ const Order = memo(({ }: Props) => {
       })
       .catch(e => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
+  }
+
+  const getInvoice = () => {
+    if (!project || !payment) return
+    dispatch(setLoading(true))
+    PaymentService.getInvoiceDemo(project.id, payment.id)
+      .then(res => {
+        FileSaver.saveAs(res.data, `invoice-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
   const render = () => {
@@ -317,7 +330,7 @@ const Order = memo(({ }: Props) => {
             <Heading1 className={classes.title} $colorName="--cimigo-blue" translation-key="payment_billing_order_title">{t('payment_billing_order_title')}</Heading1>
             {render()}
             <Box py={3} display="flex" justifyContent="center" alignItems="center">
-              <DownLoadItem>
+              <DownLoadItem onClick={getInvoice}>
                 <img className={classes.imgAddPhoto} src={images.icInvoice} />
                 <ParagraphBody $colorName="--cimigo-blue" translation-key="">Download invoice</ParagraphBody>
               </DownLoadItem>

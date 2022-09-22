@@ -98,10 +98,11 @@ export class PaymentService {
       })
   }
 
-  static async getInvoiceDemo(projectId: number) {
+  static async getInvoiceDemo(projectId: number, paymentId?: number) {
     return await api.get(API.PAYMENT.INVOICE_DEMO, {
       params: {
-        projectId
+        projectId,
+        paymentId
       },
       responseType: 'blob'
     })

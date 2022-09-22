@@ -115,7 +115,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   }, [project])
 
   const getInvoice = () => {
-    if (!project) return
+    if (!project || !isValid) return
     dispatch(setLoading(true))
     PaymentService.getInvoiceDemo(project.id)
       .then(res => {
@@ -126,7 +126,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   }
 
   const onDownLoadContract = () => {
-    if (!configs.viewContract) return
+    if (!configs.viewContract || !isValid) return
     dispatch(setLoading(true))
     AttachmentService.download(configs.viewContract)
       .then(res => {
@@ -410,18 +410,20 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       <ParagraphSmall mt={0.5} $colorName="--eerie-black" translation-key="payment_billing_sub_tab_preview_materials_sub">
         {t("payment_billing_sub_tab_preview_materials_sub")}
       </ParagraphSmall>
-      <Box className={classes.materialBox}>
-        <Box className={classes.materialItem} onClick={getInvoice}>
-          <img className={classes.imgAddPhoto} src={Images.icInvoice} />
-          <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_completed_invoice">{t("payment_billing_completed_invoice")}</ParagraphBody>
-        </Box>
-        {!!configs?.viewContract && (
-          <Box className={classes.materialItem} onClick={onDownLoadContract}>
-            <img className={classes.imgAddPhoto} src={Images.icContract} />
-            <ParagraphBody $colorName="--cimigo-blue" translation-key="">View contract</ParagraphBody>
+      {isValid && (
+        <Box className={classes.materialBox}>
+          <Box className={classes.materialItem} onClick={getInvoice}>
+            <img className={classes.imgAddPhoto} src={Images.icInvoice} />
+            <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_completed_invoice">{t("payment_billing_completed_invoice")}</ParagraphBody>
           </Box>
-        )}
-      </Box>
+          {!!configs?.viewContract && (
+            <Box className={classes.materialItem} onClick={onDownLoadContract}>
+              <img className={classes.imgAddPhoto} src={Images.icContract} />
+              <ParagraphBody $colorName="--cimigo-blue" translation-key="">View contract</ParagraphBody>
+            </Box>
+          )}
+        </Box>
+      )}
       <Grid className={classes.btn}>
         <Button
           disabled={!isValid}
