@@ -139,7 +139,7 @@ const PopupLocationMobile = memo(({ isOpen, project, questions, onCancel }: Prop
             </Heading5>
           </Grid>
           <Grid className={classes.rightItem}>
-            <ParagraphSmall $colorName="--eerie-black-00">Vietnam</ParagraphSmall>
+            <ParagraphSmall $colorName="--eerie-black-00" translation-key="target_country_name">{t("target_country_name")}</ParagraphSmall>
             <ParagraphExtraSmall mt={0.5} $colorName="--gray-80" translation-key="target_country_sub_title">{t('target_country_sub_title')}</ParagraphExtraSmall>
           </Grid>
         </Grid>

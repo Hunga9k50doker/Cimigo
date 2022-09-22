@@ -442,7 +442,7 @@ const Target = memo(({ projectId }: TargetProps) => {
           )
         } else return (
           <Grid className={classes.tabBodyDefault}>
-            <ParagraphSmallUnderline2 translation-key="">Choose household income</ParagraphSmallUnderline2>
+            <ParagraphSmallUnderline2 translation-key="target_choose_household_income">{t("target_choose_household_income")}</ParagraphSmallUnderline2>
           </Grid>
         )
       case ETab.Age_Coverage:
@@ -470,7 +470,7 @@ const Target = memo(({ projectId }: TargetProps) => {
       <LeftContent>
         <PageTitle>
           <PageTitleLeft>
-            <PageTitleText>Setup your target respondents</PageTitleText>
+            <PageTitleText translation-key="target_title_left_panel">{t('target_title_left_panel')}</PageTitleText>
             {!editable && <LockIcon status={project?.status} />}
           </PageTitleLeft>
         </PageTitle>
@@ -479,12 +479,12 @@ const Target = memo(({ projectId }: TargetProps) => {
             <Heading4
               $fontSizeMobile={"16px"}
               $colorName="--eerie-black"
-              translation-key=""
+              translation-key="target_how_many_respondents_target_title"
             >
-              STEP 1: How many respondents do you want to target?
+              {t('target_how_many_respondents_target_title', {step: 1})}
             </Heading4>
-            <ParagraphBody $colorName="--gray-80" mt={1} translation-key="">
-              Choose the total number of complete responses you need from your target audience.
+            <ParagraphBody $colorName="--gray-80" mt={1} translation-key="target_how_many_respondents_target_sub_title">
+              {t('target_how_many_respondents_target_sub_title')}
             </ParagraphBody>
             <Grid mt={2}>
               <Grid className={classes.customSizeBox}>
@@ -515,7 +515,7 @@ const Target = memo(({ projectId }: TargetProps) => {
                         type="submit"
                         btnType={BtnType.Outlined}
                         className={classes.btnSize}
-                        children={<TextBtnSmall>Save</TextBtnSmall>}
+                        children={<TextBtnSmall translation-key="common_save">{t("common_save")}</TextBtnSmall>}
                         startIcon={<Save />}
                       />
                     ) : (
@@ -558,12 +558,12 @@ const Target = memo(({ projectId }: TargetProps) => {
               <Heading4
                 $fontSizeMobile={"16px"}
                 $colorName="--eerie-black"
-                translation-key=""
+                translation-key="target_how_many_respondents_eye_tracking_title"
               >
-                STEP 2: How many respondents do you want to target for eye-tracking?
+                {t('target_how_many_respondents_eye_tracking_title', {step: 2})}
               </Heading4>
-              <ParagraphBody $colorName="--gray-80" mt={1} translation-key="">
-                You could choose fewer respondents than your survey's targeted respondents. To ensure quality, a minimum of {minEyeTrackingSampeSize} samples are required.
+              <ParagraphBody $colorName="--gray-80" mt={1} translation-key="target_how_many_respondents_eye_tracking_sub_title">
+              {t('target_how_many_respondents_eye_tracking_sub_title', {minEyeTrackingSampeSize: minEyeTrackingSampeSize})}
               </ParagraphBody>
               <Grid mt={2}>
                 <Grid className={classes.customSizeBox}>
@@ -636,12 +636,12 @@ const Target = memo(({ projectId }: TargetProps) => {
             <Heading4
               $fontSizeMobile={"16px"}
               $colorName="--eerie-black"
-              translation-key=""
+              translation-key="target_who_do_you_want_target_title"
             >
-              STEP {project?.enableEyeTracking ? 3 : 2}: Who do you want to target?
+              {t("target_who_do_you_want_target_title", {project: project?.enableEyeTracking ? 3 : 2})}
             </Heading4>
-            <ParagraphBody $colorName="--gray-80" mt={1} translation-key="">
-              Choose your target audience. We'll deliver your survey to the right people that satisfy your criteria.
+            <ParagraphBody $colorName="--gray-80" mt={1} translation-key="target_who_do_you_want_target_sub_title">
+              {t("target_who_do_you_want_target_sub_title")}
             </ParagraphBody>
             <Grid className={classes.targetBox}>
               <Box className={classes.targetTabs}>
@@ -700,7 +700,7 @@ const Target = memo(({ projectId }: TargetProps) => {
           <Button
             fullWidth
             btnType={BtnType.Raised}
-            children={<TextBtnSecondary>Next: setup quotas</TextBtnSecondary>}
+            children={<TextBtnSecondary translation-key="target_next_btn">{t("target_next_btn")}</TextBtnSecondary>}
             endIcon={<ArrowForward />}
             padding="13px 0px !important"
             onClick={onNextQuotas}
@@ -711,7 +711,7 @@ const Target = memo(({ projectId }: TargetProps) => {
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab label={"Outline"} value={ETabRightPanel.OUTLINE} />
-            <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice}>Cost summary</Badge>} value={ETabRightPanel.COST_SUMMARY} />
+            <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} translation-key="project_right_panel_cost_summary">{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
           </TabRightPanel>
           <TabPanelBox value={tabRightPanel} index={ETabRightPanel.OUTLINE}>
             <RightPanelContent>
@@ -722,8 +722,8 @@ const Target = memo(({ projectId }: TargetProps) => {
                       onClick={() => scrollToElement(TARGET_SECTION.SAMPLE_SIZE)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
                     >
-                      <ParagraphExtraSmall $colorName="--gray-60">Step 1</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60">Total survey sample size ({project?.sampleSize || 0})</Heading5>
+                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 1})}</ParagraphExtraSmall>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_total_survey_samples">{t("project_right_panel_step_total_survey_samples", {project: project?.sampleSize || 0})}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
                       <Chip
@@ -739,8 +739,8 @@ const Target = memo(({ projectId }: TargetProps) => {
                         onClick={() => scrollToElement(TARGET_SECTION.EYE_TRACKING_SAMPLE_SIZE)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
                       >
-                        <ParagraphExtraSmall $colorName="--gray-60">Step 2</ParagraphExtraSmall>
-                        <Heading5 className="title" $colorName="--gray-60">Eye-tracking sample size ({project?.eyeTrackingSampleSize || 0})</Heading5>
+                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 2})}</ParagraphExtraSmall>
+                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_eye_tracking_samples">{t("project_right_panel_step_eye_tracking_samples", {project: project?.eyeTrackingSampleSize || 0})}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
@@ -756,12 +756,12 @@ const Target = memo(({ projectId }: TargetProps) => {
                       onClick={() => scrollToElement(TARGET_SECTION.SELECT_TARGET)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
                     >
-                      <ParagraphExtraSmall $colorName="--gray-60">Step {project?.enableEyeTracking ? 3 : 2}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60">Target criteria</Heading5>
+                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: project?.enableEyeTracking ? 3 : 2})}</ParagraphExtraSmall>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_target_criteria_title">{t("project_right_panel_step_target_criteria_title")}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black">
-                        Điều kiện chọn lựa đối tượng khảo sát.
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_target_criteria_sub_title">
+                        {t("project_right_panel_step_target_criteria_sub_title")}
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
@@ -771,7 +771,7 @@ const Target = memo(({ projectId }: TargetProps) => {
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
-                  children={<TextBtnSecondary>Next: review quota</TextBtnSecondary>}
+                  children={<TextBtnSecondary translation-key="target_next_btn_review">{t("target_next_btn_review")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
                   padding="13px 0px !important"
                   onClick={onNextQuotas}
@@ -791,7 +791,7 @@ const Target = memo(({ projectId }: TargetProps) => {
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
-                  children={<TextBtnSecondary>Next: review quota</TextBtnSecondary>}
+                  children={<TextBtnSecondary translation-key="target_next_btn_review">{t("target_next_btn_review")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
                   padding="13px 0px !important"
                   onClick={onNextQuotas}
