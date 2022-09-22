@@ -23,7 +23,7 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
-import PopupConfirmQuotaAllocation from "pages/SurveyNew/compoments/AgreeQuotaWarning";
+import PopupConfirmQuotaAllocation from "pages/SurveyNew/components/AgreeQuotaWarning";
 import { ProjectService } from "services/project";
 import { AttachmentService } from "services/attachment";
 

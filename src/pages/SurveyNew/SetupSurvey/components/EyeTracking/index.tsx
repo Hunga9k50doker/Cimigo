@@ -8,7 +8,7 @@ import { TotalPrice } from "helpers/price";
 import { editableProject } from "helpers/project";
 import { Project, SETUP_SURVEY_SECTION } from "models/project";
 import PopupConfirmDisableEyeTracking from "pages/Survey/components/PopupConfirmDisableEyeTracking";
-import { PriceChip } from "pages/SurveyNew/compoments";
+import { PriceChip } from "pages/SurveyNew/components";
 import { memo, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,7 +28,7 @@ import { Pack, PackPosition } from "models/pack";
 import PackItem from "../PackItem";
 import { PackService } from "services/pack";
 import { Menu } from "components/common/memu/Menu";
-import PopupPack from "pages/SurveyNew/compoments/PopupPack";
+import PopupPack from "pages/SurveyNew/components/PopupPack";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
 
 interface EyeTrackingProps {
@@ -76,8 +76,7 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
     ProjectService.updateEnableEyeTracking(project.id, { enableEyeTracking: enableEyeTracking })
       .then((res) => {
         const eyeTrackingSampleSize = (res.data as Project).eyeTrackingSampleSize
-        dispatch(setProjectReducer({ ...project, enableEyeTracking: enableEyeTracking, eyeTrackingSampleSize }));
-        dispatch(getEyeTrackingPacksRequest(project.id));
+        dispatch(setProjectReducer({ ...project, enableEyeTracking: enableEyeTracking, eyeTrackingSampleSize, eyeTrackingPacks: [] }));
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))

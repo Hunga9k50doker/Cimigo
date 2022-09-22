@@ -1,7 +1,7 @@
 import { Box, Step, StepConnector, StepLabel, Stepper } from "@mui/material";
 import WarningBox from "components/WarningBox";
 import QontoStepIcon from "pages/ProjectManagement/components/QontoStepIcon";
-import { Content, LeftContent, PageRoot } from "pages/SurveyNew/compoments";
+import { Content, LeftContent, PageRoot } from "pages/SurveyNew/components";
 import { memo, useMemo } from "react"
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";

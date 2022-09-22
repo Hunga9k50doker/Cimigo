@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material"
+import { Box, Grid } from "@mui/material"
 import classes from './styles.module.scss';
 import images from "config/images";
 import Buttons from "components/Buttons";
@@ -18,6 +18,16 @@ import clsx from "clsx";
 import WarningBox from "components/WarningBox";
 import PopupInvoiceInformation from "pages/Survey/components/PopupInvoiceInformation";
 import PopupConfirmCancelOrder from "pages/Survey/components/PopupConfirmCancelOrder";
+import { Content, LeftContent, PageRoot } from "pages/SurveyNew/components";
+import ParagraphBody from "components/common/text/ParagraphBody";
+import Heading1 from "components/common/text/Heading1";
+import Heading2 from "components/common/text/Heading2";
+import Heading4 from "components/common/text/Heading4";
+import Button, { BtnType } from "components/common/buttons/Button";
+import TextBtnSmall from "components/common/text/TextBtnSmall";
+import { DownLoadItem, ImageMain, InforBox, InforBoxItem } from "../components";
+import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
+import Heading6 from "components/common/text/Heading6";
 
 interface Props {
 
@@ -34,10 +44,6 @@ const Order = memo(({ }: Props) => {
   const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false);
 
   const payment = useMemo(() => getPayment(project?.payments), [project])
-
-  const onBackToProjects = () => {
-    dispatch(push(routes.project.management))
-  }
 
   const [isOpenPopupInvoice, setIsOpenPopupInvoice] = useState(false);
   const confirmedPayment = () => {
@@ -90,6 +96,102 @@ const Order = memo(({ }: Props) => {
   }
 
   const render = () => {
+    return (
+      <>
+        <ParagraphBody sx={{ mt: 1, mb: { xs: 2, sm: 4 } }} $colorName="--eerie-black" translation-key="payment_billing_order_make_an_order_sub_1">
+          {t('payment_billing_order_make_an_order_sub_1')}
+        </ParagraphBody>
+        <InforBox sx={{ width: "auto !important" }}>
+          <Grid container>
+            <InforBoxItem item xs={12}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_name">{t('payment_billing_name')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">{payment?.contactName}</Heading6>
+            </InforBoxItem>
+            <InforBoxItem item xs={12} sm={4}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_phone">{t('payment_billing_phone')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">{payment?.contactPhone}</Heading6>
+            </InforBoxItem>
+            <InforBoxItem item xs={12} sm={8}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_email">{t('payment_billing_email')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">{payment?.contactEmail}</Heading6>
+            </InforBoxItem>
+          </Grid>
+        </InforBox>
+        <ParagraphBody
+          sx={{ mb: { xs: 2, sm: 3 }, mt: { xs: 2, sm: 4 } }}
+          className={classes.greenSpan}
+          $colorName="--eerie-black"
+          translation-key="payment_billing_order_bank_transfer_sub_3"
+          dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_3', { total: fCurrency2(payment?.totalAmountUSD || 0) }) }}
+        />
+        <InforBox>
+          <Grid container>
+            <InforBoxItem item xs={12}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_bank_name">{t('payment_billing_bank_name')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">{t('payment_billing_bank_name_name')}</Heading6>
+            </InforBoxItem>
+            <InforBoxItem item xs={6} sm={4}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
+            </InforBoxItem>
+            <InforBoxItem item xs={6} sm={4}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
+            </InforBoxItem>
+            <InforBoxItem item xs={6} sm={4}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_SWIFT_code">{t('payment_billing_SWIFT_code')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">VTCB VNVX</Heading6>
+            </InforBoxItem>
+            <InforBoxItem item xs={6} sm={4}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">USD</Heading6>
+            </InforBoxItem>
+            <InforBoxItem item xs={12} sm={8}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">{payment?.orderId}</Heading6>
+            </InforBoxItem>
+          </Grid>
+        </InforBox>
+        <ParagraphBody
+          sx={{ my: { xs: 2, sm: 3 } }}
+          className={classes.greenSpan}
+          $colorName="--eerie-black"
+          translation-key="payment_billing_order_bank_transfer_sub_4"
+          dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_4', { total: fCurrency2VND(payment?.totalAmount || 0) }) }}
+        />
+        <InforBox>
+          <Grid container>
+            <InforBoxItem item xs={12}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_bank_name">{t('payment_billing_bank_name')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">{t('payment_billing_bank_name_name')}</Heading6>
+            </InforBoxItem>
+            <InforBoxItem item xs={6} sm={4}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
+            </InforBoxItem>
+            <InforBoxItem item xs={6} sm={4}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
+            </InforBoxItem>
+            <InforBoxItem item xs={6} sm={4}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">VND</Heading6>
+            </InforBoxItem>
+            <InforBoxItem item xs={6} sm={12}>
+              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
+              <Heading6 $colorName="--eerie-black">{payment?.orderId}</Heading6>
+            </InforBoxItem>
+          </Grid>
+        </InforBox>
+        <ParagraphBody
+          sx={{ mt: 2 }}
+          $colorName="--eerie-black"
+          className={classes.blueA}
+          translation-key="payment_billing_order_make_an_order_sub_2"
+          dangerouslySetInnerHTML={{ __html: t('payment_billing_order_make_an_order_sub_2') }}
+        />
+      </>
+    )
     switch (payment?.paymentMethodId) {
       case EPaymentMethod.MAKE_AN_ORDER:
         return (
@@ -117,98 +219,156 @@ const Order = memo(({ }: Props) => {
       case EPaymentMethod.BANK_TRANSFER:
         return (
           <>
-            <p className={classes.textGreen} translation-key="payment_billing_total_amount">{t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}</p>
-            <p className={classes.textBlue} translation-key="payment_billing_equivalent_to">({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)</p>
-            <p className={classes.subTitleMain} translation-key="payment_billing_order_bank_transfer_sub_1">{t('payment_billing_order_bank_transfer_sub_1')}</p>
-            <Buttons onClick={confirmedPayment} btnType="TransparentBlue" children={t('payment_billing_order_bank_transfer_btn_confirm')} translation-key="payment_billing_order_bank_transfer_btn_confirm" padding="11px 16px" className={classes.btn} />
-            <p className={classes.subTitle} style={{ textAlign: "start", marginBottom: 16 }} translation-key="payment_billing_order_bank_transfer_sub_2">{t('payment_billing_order_bank_transfer_sub_2')}</p>
-            <p className={clsx(classes.subTitle, classes.subTitleSpan)} style={{ textAlign: "start" }} translation-key="payment_billing_order_bank_transfer_sub_3"
+            <Heading2 className={classes.price} $colorName="--cimigo-green-dark-1" translation-key="payment_billing_total_amount">
+              {t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}
+            </Heading2>
+            <Heading4 className={classes.priceSub} $colorName="--cimigo-blue-dark-1">
+              ({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)
+            </Heading4>
+            <ParagraphBody className={classes.titleSub} $colorName="--eerie-black-00" translation-key="payment_billing_order_bank_transfer_sub_1">
+              {t('payment_billing_order_bank_transfer_sub_1')}
+            </ParagraphBody>
+            <Button
+              className={classes.btnConfirm}
+              btnType={BtnType.Outlined}
+              onClick={confirmedPayment}
+            >
+              <TextBtnSmall translation-key="payment_billing_order_bank_transfer_btn_confirm">
+                {t('payment_billing_order_bank_transfer_btn_confirm')}
+              </TextBtnSmall>
+            </Button>
+            <ParagraphBody sx={{ mb: { xs: 2, sm: 3 } }} $colorName="--eerie-black" translation-key="payment_billing_order_bank_transfer_sub_2">{t('payment_billing_order_bank_transfer_sub_2')}</ParagraphBody>
+            <ParagraphBody
+              sx={{ mb: 2 }}
+              className={classes.greenSpan}
+              $colorName="--eerie-black"
+              translation-key="payment_billing_order_bank_transfer_sub_3"
               dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_3', { total: fCurrency2(payment?.totalAmountUSD || 0) }) }}
-            >
-            </p>
-            <Grid classes={{ root: classes.box }}>
-              <p translation-key="payment_billing_bank_name">{t('payment_billing_bank_name')}</p>
-              <span translation-key="payment_billing_bank_name_name">{t('payment_billing_bank_name_name')}</span>
-              <Grid classes={{ root: classes.flex }}>
-                <div style={{ minWidth: 125 }}>
-                  <p translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</p>
-                  <span>CIMIGO</span>
-                </div>
-                <div>
-                  <p translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</p>
-                  <span>19026245046022</span>
-                </div>
-                <div>
-                  <p translation-key="payment_billing_SWIFT_code">{t('payment_billing_SWIFT_code')}</p>
-                  <span>VTCB VNVX</span>
-                </div>
+            />
+            <InforBox>
+              <Grid container>
+                <InforBoxItem item xs={12}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_bank_name">{t('payment_billing_bank_name')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">{t('payment_billing_bank_name_name')}</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_SWIFT_code">{t('payment_billing_SWIFT_code')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">VTCB VNVX</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">USD</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={12} sm={8}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">{payment?.orderId}</Heading6>
+                </InforBoxItem>
               </Grid>
-              <Grid classes={{ root: classes.flex }}>
-                <div style={{ minWidth: 125 }}>
-                  <p translation-key="payment_billing_currency">{t('payment_billing_currency')}</p>
-                  <span>USD</span>
-                </div>
-                <div>
-                  <p translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</p>
-                  <span>{payment?.orderId}</span>
-                </div>
-              </Grid>
-            </Grid>
-            <p className={clsx(classes.subTitle, classes.subTitleSpan)} style={{ textAlign: "start" }} translation-key="payment_billing_order_bank_transfer_sub_4"
+            </InforBox>
+            <ParagraphBody
+              sx={{ my: { xs: 2, sm: 3 } }}
+              className={classes.greenSpan}
+              $colorName="--eerie-black"
+              translation-key="payment_billing_order_bank_transfer_sub_4"
               dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_4', { total: fCurrency2VND(payment?.totalAmount || 0) }) }}
-            >
-            </p>
-            <Grid classes={{ root: classes.box }}>
-              <p translation-key="payment_billing_bank_name">{t('payment_billing_bank_name')}</p>
-              <span translation-key="payment_billing_bank_name_name">{t('payment_billing_bank_name_name')}</span>
-              <Grid classes={{ root: classes.flex }} sx={{ mb: "15px" }}>
-                <div style={{ minWidth: 125 }}>
-                  <p translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</p>
-                  <span>CIMIGO</span>
-                </div>
-                <div>
-                  <p translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</p>
-                  <span>19026245046022</span>
-                </div>
-                <div>
-                  <p translation-key="payment_billing_currency">{t('payment_billing_currency')}</p>
-                  <span>VND</span>
-                </div>
+            />
+            <InforBox>
+              <Grid container>
+                <InforBoxItem item xs={12}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_bank_name">{t('payment_billing_bank_name')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">{t('payment_billing_bank_name_name')}</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">VND</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={12}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">{payment?.orderId}</Heading6>
+                </InforBoxItem>
               </Grid>
-              <p translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</p>
-              <span>{payment?.orderId}</span>
-            </Grid>
-            <p className={classes.subTitle} style={{ textAlign: "start", marginBottom: 16 }} translation-key="payment_billing_order_bank_transfer_sub_5">{t('payment_billing_order_bank_transfer_sub_5')}</p>
-            <p className={classes.textBlack} style={{ textAlign: "start" }} translation-key="payment_billing_order_bank_transfer_sub_6"
+            </InforBox>
+            <ParagraphBody sx={{ my: { xs: 2, sm: 3 } }} $colorName="--eerie-black" translation-key="payment_billing_order_bank_transfer_sub_5">
+              {t('payment_billing_order_bank_transfer_sub_5')}
+            </ParagraphBody>
+            <ParagraphBody
+              className={classes.blueA}
+              $colorName="--eerie-black"
+              translation-key="payment_billing_order_bank_transfer_sub_6"
               dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_6') }}
-            >
-            </p>
-            <a onClick={onShowConfirmCancel} className={classes.cancelPaymentBank} translation-key="common_cancel_payment">{t("common_cancel_payment")}</a>
+            />
           </>
         )
     }
   }
 
   return (
-    <Grid classes={{ root: classes.root }}>
-      <WarningBox sx={{ maxWidth: '1000px' }}>
-        <p translation-key="payment_billing_order_fill_purpose"> <a className={classes.clickOpenInvoice} onClick={() => setIsOpenPopupInvoice(true)} translation-key="payment_billing_order_fill_click">{t('payment_billing_order_fill_click')}</a> {t('payment_billing_order_fill_purpose')}</p>
-      </WarningBox>
-      <img src={images.imgOrder} alt="" />
-      <p className={classes.title} translation-key="payment_billing_order_title">{t('payment_billing_order_title')}</p>
-      {render()}
-      <a className={classes.aLink} onClick={onBackToProjects} translation-key="payment_billing_order_btn_back_to_projects">{t('payment_billing_order_btn_back_to_projects')}</a>
-      <PopupInvoiceInformation
-        payment={payment}
-        isOpen={isOpenPopupInvoice}
-        onClose={() => setIsOpenPopupInvoice(false)}
-      />
-      <PopupConfirmCancelOrder
-        isOpen={isConfirmCancel}
-        onClose={onCloseConfirmCancel}
-        onYes={onCancelPayment}
-      />
-    </Grid>
+    <PageRoot>
+      <LeftContent>
+        <Content className={classes.root}>
+          <WarningBox sx={{ maxWidth: '946px' }}>
+            <span translation-key="payment_billing_order_fill_purpose">
+              <ParagraphBody
+                variant="body2"
+                variantMapping={{ body2: "span" }}
+                translation-key="payment_billing_order_fill_click"
+                $colorName="--cimigo-blue"
+                className="underline cursor-pointer"
+                onClick={() => setIsOpenPopupInvoice(true)}
+              >
+                {t('payment_billing_order_fill_click')}
+              </ParagraphBody> {t('payment_billing_order_fill_purpose')}
+            </span>
+          </WarningBox>
+          <Grid className={classes.content}>
+            <ImageMain src={images.imgOrder} alt="" />
+            <Heading1 className={classes.title} $colorName="--cimigo-blue" translation-key="payment_billing_order_title">{t('payment_billing_order_title')}</Heading1>
+            {render()}
+            <Box py={3} display="flex" justifyContent="center" alignItems="center">
+              <DownLoadItem>
+                <img className={classes.imgAddPhoto} src={images.icInvoice} />
+                <ParagraphBody $colorName="--cimigo-blue" translation-key="">Download invoice</ParagraphBody>
+              </DownLoadItem>
+            </Box>
+            <ParagraphBody
+              align="center"
+              $colorName="--cimigo-blue"
+              className="cursor-pointer"
+              translation-key="common_cancel_payment"
+              onClick={onShowConfirmCancel}
+            >
+              {t("common_cancel_payment")}
+            </ParagraphBody>
+          </Grid>
+          <PopupInvoiceInformation
+            payment={payment}
+            isOpen={isOpenPopupInvoice}
+            onClose={() => setIsOpenPopupInvoice(false)}
+          />
+          <PopupConfirmCancelOrder
+            isOpen={isConfirmCancel}
+            onClose={onCloseConfirmCancel}
+            onYes={onCancelPayment}
+          />
+        </Content>
+      </LeftContent>
+    </PageRoot>
   )
 })
 

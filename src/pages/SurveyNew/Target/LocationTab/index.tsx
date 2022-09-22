@@ -24,7 +24,7 @@ import ControlCheckbox from "components/common/control/ControlCheckbox";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import Button, { BtnType } from "components/common/buttons/Button";
-import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "pages/SurveyNew/compoments/PopupConfirmChangeSampleSize";
+import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "pages/SurveyNew/components/PopupConfirmChangeSampleSize";
 
 interface Props {
   project: Project,

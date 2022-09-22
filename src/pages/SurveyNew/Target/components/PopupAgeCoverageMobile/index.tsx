@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import TabPanelMobile from '../TabPanelMobile';
 import { DialogTitle } from 'components/common/dialogs/DialogTitle';
 import Heading5 from 'components/common/text/Heading5';
-import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from 'pages/SurveyNew/compoments/PopupConfirmChangeSampleSize';
+import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from 'pages/SurveyNew/components/PopupConfirmChangeSampleSize';
 import ButtonClose from 'components/common/buttons/ButtonClose';
 import { DialogContent } from 'components/common/dialogs/DialogContent';
 import { DialogActions } from 'components/common/dialogs/DialogActions';

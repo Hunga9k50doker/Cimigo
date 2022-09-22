@@ -10,7 +10,7 @@ import { setLoading, setSuccessMess, setErrorMess } from "redux/reducers/Status/
 import { getTargetRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { editableProject } from "helpers/project";
 import { useTranslation } from "react-i18next";
-import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "pages/SurveyNew/compoments/PopupConfirmChangeSampleSize";
+import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "pages/SurveyNew/components/PopupConfirmChangeSampleSize";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import ListDot from "components/common/list/ListDot";
 import Heading5 from "components/common/text/Heading5";

@@ -9,7 +9,7 @@ import { ProjectService } from "services/project";
 import { getTargetRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { editableProject } from "helpers/project";
 import { useTranslation } from "react-i18next";
-import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "pages/SurveyNew/compoments/PopupConfirmChangeSampleSize";
+import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "pages/SurveyNew/components/PopupConfirmChangeSampleSize";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";

@@ -4,7 +4,7 @@ import Heading4 from "components/common/text/Heading4"
 import ParagraphBody from "components/common/text/ParagraphBody"
 import ParagraphSmall from "components/common/text/ParagraphSmall"
 import { Project, SETUP_SURVEY_SECTION } from "models/project"
-import { MaxChip } from "pages/SurveyNew/compoments"
+import { MaxChip } from "pages/SurveyNew/components"
 import { memo, useMemo, useState } from "react"
 import PackItem from "../PackItem"
 import { AddAPhoto, Edit as EditIcon, DeleteForever as DeleteForeverIcon } from '@mui/icons-material';
@@ -18,7 +18,7 @@ import { Menu } from "components/common/memu/Menu";
 import { PackService } from "services/pack"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { getPacksRequest } from "redux/reducers/Project/actionTypes"
-import PopupPack from "pages/SurveyNew/compoments/PopupPack"
+import PopupPack from "pages/SurveyNew/components/PopupPack"
 
 interface UploadPacksProps {
   project: Project

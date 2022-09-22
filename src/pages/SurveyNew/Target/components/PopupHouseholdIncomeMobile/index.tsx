@@ -11,7 +11,7 @@ import { ProjectService } from 'services/project';
 import { getTargetRequest, setProjectReducer } from 'redux/reducers/Project/actionTypes';
 import { editableProject } from 'helpers/project';
 import { useTranslation } from 'react-i18next';
-import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from 'pages/SurveyNew/compoments/PopupConfirmChangeSampleSize';
+import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from 'pages/SurveyNew/components/PopupConfirmChangeSampleSize';
 import { DialogTitle } from 'components/common/dialogs/DialogTitle';
 import Heading5 from 'components/common/text/Heading5';
 import ButtonClose from 'components/common/buttons/ButtonClose';

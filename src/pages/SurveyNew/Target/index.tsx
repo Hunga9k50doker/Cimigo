@@ -21,9 +21,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
 import { fCurrency2 } from "utils/formatNumber";
-import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../compoments";
-import CostSummary from "../compoments/CostSummary";
-import LockIcon from "../compoments/LockIcon";
+import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
+import CostSummary from "../components/CostSummary";
+import LockIcon from "../components/LockIcon";
 import { CustomEyeTrackingSampleSizeForm, CustomSampleSizeForm, ETab, TabItem, _listEyeTrackingSampleSize, _listSampleSize } from "./models";
 import classes from './styles.module.scss';
 import * as yup from 'yup';
@@ -34,7 +34,7 @@ import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/
 import { setProjectReducer } from "redux/reducers/Project/actionTypes";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
-import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "../compoments/PopupConfirmChangeSampleSize";
+import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "../components/PopupConfirmChangeSampleSize";
 import images from "config/images";
 import { TargetQuestion, TargetQuestionType } from "models/Admin/target";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
@@ -352,15 +352,12 @@ const Target = memo(({ projectId }: TargetProps) => {
     }
     if (!ProjectHelper.isValidTargetTabLocation(project)) {
       _errorsTarget[ETab.Location] = true
-      return _errorsTarget
     }
     if (!ProjectHelper.isValidTargetTabHI(project)) {
       _errorsTarget[ETab.Household_Income] = true
-      return _errorsTarget
     }
     if (!ProjectHelper.isValidTargetTabAC(project)) {
       _errorsTarget[ETab.Age_Coverage] = true
-      return _errorsTarget
     }
     return _errorsTarget
   }

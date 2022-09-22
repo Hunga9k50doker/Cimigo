@@ -38,7 +38,7 @@ import Heading6 from "components/common/text/Heading6";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
-import PopupConfirmCancelOrder from "pages/SurveyNew/compoments/PopupConfirmCancelOrder";
+import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCancelOrder";
 
 interface DataForm {
   paymentMethodId: number,

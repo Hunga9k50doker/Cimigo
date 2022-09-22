@@ -5,7 +5,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { PriceService } from "helpers/price";
 import { editableProject } from "helpers/project";
 import { Project, SETUP_SURVEY_SECTION } from "models/project";
-import { MaxChip, PriceChip } from "pages/SurveyNew/compoments";
+import { MaxChip, PriceChip } from "pages/SurveyNew/components";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
