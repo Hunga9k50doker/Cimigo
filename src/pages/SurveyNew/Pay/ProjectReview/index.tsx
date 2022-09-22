@@ -386,14 +386,14 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     <Box className={classes.itemSubRight}>
                       <ParagraphBody
                         $colorName="--eerie-black"
-                        translation-key=""
+                        translation-key="payment_billing_sub_tab_preview_eye_tracking_packs"
                         className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidEyeTracking })}
                         onClick={() => {
                           if (!isValidPacks) onRedirect(routes.project.detail.setupSurvey)
                         }}
                       >
-                        {project?.eyeTrackingPacks?.length} competitor packs <br />
-                        {!isValidEyeTracking && <span className={classes.smallText} translation-key="">Required at least {project?.solution?.minEyeTrackingPack} competitor packs</span>}
+                        {t("payment_billing_sub_tab_preview_eye_tracking_packs", {project: project?.eyeTrackingPacks?.length})} <br />
+                        {!isValidEyeTracking && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_eye_tracking_packs_required">{t("payment_billing_sub_tab_preview_eye_tracking_packs_required", {project: project?.solution?.minEyeTrackingPack})}</span>}
                       </ParagraphBody>
                     </Box>
                   </Box>
@@ -419,7 +419,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
           {!!configs?.viewContract && (
             <Box className={classes.materialItem} onClick={onDownLoadContract}>
               <img className={classes.imgAddPhoto} src={Images.icContract} />
-              <ParagraphBody $colorName="--cimigo-blue" translation-key="">View contract</ParagraphBody>
+              <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_view_contract">{t("payment_billing_view_contract")}</ParagraphBody>
             </Box>
           )}
         </Box>

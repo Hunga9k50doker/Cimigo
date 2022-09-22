@@ -138,13 +138,13 @@ const PopupInvoiceInformation = memo((props: Props) => {
     >
       <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
         <DialogTitle>
-          <Heading3 translation-key="">
-            Invoice information
+          <Heading3 translation-key="pay_popup_invoice_infor_title">
+            {t("pay_popup_invoice_infor_title")}
           </Heading3>
           <ButtonCLose onClick={onClose} />
         </DialogTitle>
         <DialogContent className={classes.body}>
-          <ParagraphBody sx={{ mb: { xs: 2, sm: 3 } }} $colorName="--gray-90">These information will be used to export the invoice. Please make sure all fields are correct.</ParagraphBody>
+          <ParagraphBody sx={{ mb: { xs: 2, sm: 3 } }} $colorName="--gray-90" translation-key="pay_popup_invoice_infor_sub_title"></ParagraphBody>
           <Grid container spacing={1}>
             <Grid item xs={12} sm={6}>
               <InputTextfield
@@ -265,7 +265,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
             btnType={BtnType.Raised}
             type="submit"
             translation-key=""
-            children={<TextBtnSecondary>Save information</TextBtnSecondary>}
+            children={<TextBtnSecondary translation-key="common_save_information">{t("common_save_information")}</TextBtnSecondary>}
           />
         </DialogActions>
       </form>

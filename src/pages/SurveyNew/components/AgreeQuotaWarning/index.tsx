@@ -33,16 +33,16 @@ const PopupConfirmQuotaAllocation = memo(({ isOpen, onCancel, onConfirm, onRedir
       <DialogTitleConfirm>
         <Box display="flex">
           <Info sx={{ fontSize: 32, color: "var(--gray-60)", mr: 2 }} />
-          <Heading3 $colorName='--gray-90' translation-key="">Confirm quota allocation</Heading3>
+          <Heading3 $colorName='--gray-90' translation-key="payment_popup_confirm_quota_allocation_title">{t("payment_popup_confirm_quota_allocation_title")}</Heading3>
         </Box>
         <ButtonClose $backgroundColor='--eerie-black-5' $colorName='--eerie-black-40' onClick={onCancel} />
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
-        <ParagraphBody $colorName='--gray-90' translation-key="">
-          You haven’t agree with the quota allocation. Please <span onClick={onRedirectQuotas} className="underline cursor-pointer">review the quota allocation</span> before process to the next step.
+        <ParagraphBody $colorName='--gray-90' translation-key="payment_popup_confirm_quota_allocation_content_1, payment_popup_confirm_quota_allocation_content_2">
+          {t("payment_popup_confirm_quota_allocation_content_1")} <span onClick={onRedirectQuotas} className="underline cursor-pointer" translation-key="payment_popup_confirm_quota_allocation_content_underline">{t("payment_popup_confirm_quota_allocation_content_underline")}</span> {t("payment_popup_confirm_quota_allocation_content_2")}
         </ParagraphBody>
-        <ParagraphBody mt={3} $colorName='--gray-90' translation-key="">
-          Do you agree with our quota allocation?
+        <ParagraphBody mt={3} $colorName='--gray-90' translation-key="payment_popup_confirm_quota_allocation_question">
+          {t("payment_popup_confirm_quota_allocation_question")}
         </ParagraphBody>
       </DialogContentConfirm>
       <DialogActionsConfirm>
@@ -50,12 +50,12 @@ const PopupConfirmQuotaAllocation = memo(({ isOpen, onCancel, onConfirm, onRedir
           btnType={BtnType.Secondary}
           onClick={onCancel}
           translation-key="common_cancel"
-          children={<TextBtnSmall>No, review quota allocation</TextBtnSmall>}
+          children={<TextBtnSmall translation-key="payment_popup_confirm_quota_allocation_no">{t("payment_popup_confirm_quota_allocation_no")}</TextBtnSmall>}
         />
         <Button
           btnType={BtnType.Raised}
           translation-key=""
-          children={<TextBtnSmall>Yes, process the payment</TextBtnSmall>}
+          children={<TextBtnSmall translation-key="payment_popup_confirm_quota_allocation_yes">{t("payment_popup_confirm_quota_allocation_yes")}</TextBtnSmall>}
           onClick={onConfirm}
         />
       </DialogActionsConfirm>
