@@ -167,7 +167,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
             btnType={BtnType.Raised}
             children={<TextBtnSecondary translation-key="setup_next_btn">{t("setup_next_btn")}</TextBtnSecondary>}
             endIcon={<ArrowForward />}
-            padding="13px 0px !important"
+            padding="13px 8px !important"
             onClick={onNextSetupTarget}
           />
         </MobileAction>
@@ -282,7 +282,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                   btnType={BtnType.Raised}
                   children={<TextBtnSecondary translation-key="setup_next_btn">{t("setup_next_btn")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
-                  padding="13px 0px !important"
+                  padding="13px 8px !important"
                   onClick={onNextSetupTarget}
                 />
               </RightPanelAction>
@@ -302,7 +302,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
                   btnType={BtnType.Raised}
                   children={<TextBtnSecondary translation-key="setup_next_btn">{t("setup_next_btn")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
-                  padding="13px 0px !important"
+                  padding="13px 8px !important"
                   onClick={onNextSetupTarget}
                 />
               </RightPanelAction>

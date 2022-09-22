@@ -506,7 +506,7 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
             btnType={BtnType.Raised}
             children={<TextBtnSecondary>Next: Pay</TextBtnSecondary>}
             endIcon={<ArrowForward />}
-            padding="13px 0px !important"
+            padding="13px 8px !important"
             onClick={onNextPay}
           />
         </MobileAction>
@@ -561,7 +561,7 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
                   btnType={BtnType.Raised}
                   children={<TextBtnSecondary>Next: Pay</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
-                  padding="13px 0px !important"
+                  padding="13px 8px !important"
                   onClick={onNextPay}
                 />
               </RightPanelAction>
@@ -593,7 +593,7 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
                   btnType={BtnType.Raised}
                   children={<TextBtnSecondary>Next: Pay</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
-                  padding="13px 0px !important"
+                  padding="13px 8px !important"
                   onClick={onNextPay}
                 />
               </RightPanelAction>

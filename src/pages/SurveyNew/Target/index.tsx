@@ -702,7 +702,7 @@ const Target = memo(({ projectId }: TargetProps) => {
             btnType={BtnType.Raised}
             children={<TextBtnSecondary translation-key="target_next_btn">{t("target_next_btn")}</TextBtnSecondary>}
             endIcon={<ArrowForward />}
-            padding="13px 0px !important"
+            padding="13px 8px !important"
             onClick={onNextQuotas}
           />
         </MobileAction>
@@ -773,7 +773,7 @@ const Target = memo(({ projectId }: TargetProps) => {
                   btnType={BtnType.Raised}
                   children={<TextBtnSecondary translation-key="target_next_btn_review">{t("target_next_btn_review")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
-                  padding="13px 0px !important"
+                  padding="13px 8px !important"
                   onClick={onNextQuotas}
                 />
               </RightPanelAction>
@@ -793,7 +793,7 @@ const Target = memo(({ projectId }: TargetProps) => {
                   btnType={BtnType.Raised}
                   children={<TextBtnSecondary translation-key="target_next_btn_review">{t("target_next_btn_review")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
-                  padding="13px 0px !important"
+                  padding="13px 8px !important"
                   onClick={onNextQuotas}
                 />
               </RightPanelAction>
