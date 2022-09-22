@@ -45,13 +45,13 @@ const PopupInforSolution = memo((props: PopupPopupInforSolution) => {
       </DialogContent>
       <DialogActions className={classes.btnBox}>
         <Button
+          fullWidth
           children={
             <TextBtnSecondary translation-key="project_create_tab_solution_get_started">
               {t("project_create_tab_solution_get_started")}
             </TextBtnSecondary>
           }
           btnType={BtnType.Primary}
-          padding="11px 16px"
           width="100%"
           onClick={onSelect}
         />
