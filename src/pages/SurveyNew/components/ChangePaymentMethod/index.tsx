@@ -143,6 +143,7 @@ const ChangePaymentMethod = memo(
           <Divider className={classes.divider1} />
           <Grid classes={{ root: classes.left }}>
             <Heading5
+              className={classes.titleLeft}
               mb={1.3}
               $colorName="--cimigo-blue"
               translation-key="payment_billing_sub_tab_payment_method"
@@ -372,7 +373,7 @@ const ChangePaymentMethod = memo(
                       $colorName="--eerie-black"
                       translation-key="common_eye_tracking"
                     >
-                      {t("common_eye_tracking")} ({project?.sampleSize || 0})
+                      {t("common_eye_tracking")} ({payment?.eyeTrackingSampleSize || 0})
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black">
                       {`$`}
@@ -410,7 +411,7 @@ const ChangePaymentMethod = memo(
                     $colorName="--eerie-black"
                     translation-key="common_vat"
                   >
-                    {t("common_vat", { percent: (configs?.vat || 0) * 100 })}
+                    {t("common_vat", { percent: (payment?.vatRate || 0) * 100 })}
                   </ParagraphBody>
                   <ParagraphBody $colorName="--eerie-black">
                     {`$`}

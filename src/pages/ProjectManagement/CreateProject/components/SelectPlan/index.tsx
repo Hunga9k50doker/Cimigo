@@ -15,7 +15,6 @@ import Heading3 from "components/common/text/Heading3";
 import DoneIcon from "@mui/icons-material/Done";
 import CardActions from "@mui/material/CardActions";
 import Button, { BtnType } from "components/common/buttons/Button";
-import TextBtnSmall from "components/common/text/TextBtnSmall";
 import { FormControl } from "@mui/material";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
@@ -25,6 +24,7 @@ import InputSelect from "components/common/inputs/InputSelect";
 import { CreateProjectFormData } from "../CreateProjectStep";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 interface SelectPlanProps {
   solution?: Solution;
   onChangePlanSelected?: (plan: Plan) => void;
@@ -228,9 +228,9 @@ const SelectPlan = memo(
                           btnType={BtnType.Raised}
                           translation-key="setup_survey_popup_save_question_title"
                           children={
-                            <TextBtnSmall translation-key="common_select">
+                            <TextBtnSecondary translation-key="common_select">
                               {t("common_select")}
-                            </TextBtnSmall>
+                            </TextBtnSecondary>
                           }
                           className={classes.btnSave}
                           onClick={() => onClick(plan)}

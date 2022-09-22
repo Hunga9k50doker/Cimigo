@@ -15,14 +15,11 @@
     font-size: 25px;
   }
 }
-.changePaymentMethodSubTitle {
-  margin-bottom: 48px;
-}
 .divider1 {
   display: none;
   @media only screen and (max-width: 767px) {
     display: flex;
-    margin-bottom: 25px;
+    margin-bottom: 16px;
   }
 }
 .left {
@@ -38,34 +35,6 @@
     margin-right: 0px;
     padding: 0px;
   }
-}
-.left > form {
-  padding-top: 15px;
-  padding-right: 70px;
-  @media only screen and (max-width: 767px) {
-    padding-right: 19px;
-    padding-left: 19px;
-  }
-}
-// .left > p {
-//   font-style: normal;
-//   font-weight: 600;
-//   font-size: 16px;
-//   line-height: 20px;
-//   letter-spacing: 0.015em;
-//   color: #1f61a9;
-//   margin-bottom: 10px;
-//   @media only screen and (max-width: 767px) {
-//     padding: 0px 19px;
-//   }
-// }
-.left > p > span {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 15px;
-  letter-spacing: 0.04em;
-  color: #7c9911;
 }
 .right {
   width: 50%;
@@ -88,11 +57,6 @@
     padding: 0px;
   }
 }
-.informationBox {
-  @media only screen and (max-width: 767px) {
-    padding: 0px 19px;
-  }
-}
 .checkRadio {
   color: var(--cimigo-green) !important;
 }
@@ -101,17 +65,14 @@
   padding: 0px;
   margin-right: 16px;
 }
-
+.titleLeft{
+  @media only screen and (max-width: 767px) {
+    padding-left: 24px;
+  }
+}
 .titleSub {
   margin-top: 10px;
   margin-bottom: 24px;
-}
-.titleSub1 {
-  margin-top: 10px;
-  margin-bottom: 16px;
-  @media only screen and (max-width: 767px) {
-    padding: 0px 19px;
-  }
 }
 .title {
   display: flex;
