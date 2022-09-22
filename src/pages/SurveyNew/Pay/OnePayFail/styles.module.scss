@@ -1,11 +1,12 @@
-.root {
-
-}
 .rootContentShowPayment{
-  padding: 0px !important;
+  @media only screen and (max-width: 767px) {
+    padding: 0px !important;
+  }
 }
 .rootContent{
-
+  @media only screen and (max-width: 767px) {
+    padding: 12px 16px 85px
+  }
 }
 .content {
   max-width: 616px;
