@@ -32,13 +32,13 @@ export const ChipProjectStatus = memo(({ status, className, ...rest }: ProjectSt
   const statusContent = useMemo(() => {
     switch (status) {
       case ProjectStatus.AWAIT_PAYMENT:
-        return "waiting for payment confirmation."
+        return t('project_status_await_payment_content')
       case ProjectStatus.DRAFT:
-        return "working on project setup."
+        return t('project_status_draft_content')
       case ProjectStatus.IN_PROGRESS:
-        return "project has been kicked off, and fieldwork has begun."
+        return t('project_status_in_progress_content')
       case ProjectStatus.COMPLETED:
-        return "project results are available for viewing."
+        return t('project_status_completed_content')
     }
   }, [status]);
 
@@ -47,7 +47,7 @@ export const ChipProjectStatus = memo(({ status, className, ...rest }: ProjectSt
       arrow
       title={(
         <>
-          <Heading6 mb={0.5}>Project status</Heading6>
+          <Heading6 mb={0.5} translation-key="project_status"> {t('project_status')}</Heading6>
           <ParagraphExtraSmall $colorName="--gray-02" variant="caption" sx={{ fontWeight: "500 !important" }}>{statusLabel}: </ParagraphExtraSmall>
           <ParagraphExtraSmall $colorName="--gray-02" variant="caption">{statusContent}</ParagraphExtraSmall>
         </>

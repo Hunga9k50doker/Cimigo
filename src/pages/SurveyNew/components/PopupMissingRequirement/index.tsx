@@ -48,41 +48,41 @@ const PopupMissingRequirement = ({ isOpen, isValidBasic, isValidPacks, isValidAd
       <DialogTitleConfirm>
         <Box display="flex">
           <WarningIcon sx={{ fontSize: 32, color: "var(--warning)", mr: 2 }} />
-          <Heading3 $colorName='--cimigo-blue-dark-3' translation-key="">{"Missing some requirement"}</Heading3>
+          <Heading3 $colorName='--cimigo-blue-dark-3' translation-key="setup_survey_popup_missing_required_title">{t("setup_survey_popup_missing_required_title")}</Heading3>
         </Box>
         <ButtonClose $backgroundColor='--eerie-black-5' $colorName='--eerie-black-40' onClick={onClose} />
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
-        <ParagraphBody $colorName='--gray-80'>Some of the sections below must be completed before proceeding to the next step:</ParagraphBody>
+        <ParagraphBody $colorName='--gray-80' translation-key="setup_survey_popup_missing_required_subtitle">{t("setup_survey_popup_missing_required_subtitle")}</ParagraphBody>
         <ul className={classes.list}>
           {!isValidBasic && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.basic_information)} className="cursor-pointer underline">Basic information</span> (require all information)
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'translation-key="setup_survey_popup_missing_required_basic_information_required">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.basic_information)} className="cursor-pointer underline" translation-key="setup_survey_popup_missing_required_basic_information">{t("setup_survey_popup_missing_required_basic_information")}</span> {t("setup_survey_popup_missing_required_basic_information_required")}
             </ParagraphBody>
           )}
           {!isValidPacks && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.upload_packs)} className="cursor-pointer underline">Upload packs</span> (minimum of {minPack} packs are required)
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'translation-key="setup_survey_popup_missing_required_upload_pack_min">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.upload_packs)} className="cursor-pointer underline" translation-key="setup_survey_popup_missing_required_upload_pack">{t("setup_survey_popup_missing_required_upload_pack")}</span> {t("setup_survey_popup_missing_required_upload_pack_min", {minPack: minPack})}
             </ParagraphBody>
           )}
           {!isValidAdditionalBrand && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.additional_brand_list)} className="cursor-pointer underline">Additional brands list</span> (minimum of {minAdditionalBrand} brands are required)
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80' translation-key="setup_survey_popup_missing_required_add_brands_min">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.additional_brand_list)} className="cursor-pointer underline" translation-key="setup_survey_popup_missing_required_add_brands">{t("setup_survey_popup_missing_required_add_brands")}</span> {t("setup_survey_popup_missing_required_add_brands_min", {minAdditionalBrand: minAdditionalBrand})}
             </ParagraphBody>
           )}
           {!isValidEyeTracking && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.eye_tracking)} className="cursor-pointer underline">Eye-tracking</span> (minimum of {minEyeTrackingPack} additional competitor packs are required)
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'translation-key="setup_survey_popup_missing_required_eye_tracking_min">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.eye_tracking)} className="cursor-pointer underline"translation-key="setup_survey_popup_missing_required_eye_tracking">{t("setup_survey_popup_missing_required_eye_tracking")}</span> {t("setup_survey_popup_missing_required_eye_tracking_min", {minEyeTrackingPack: minEyeTrackingPack})}
             </ParagraphBody>
           )}
         </ul>
-        <ParagraphBody mt={4} $colorName='--gray-80'>Please complete these above before proceeding to the next step.</ParagraphBody>
+        <ParagraphBody mt={4} $colorName='--gray-80' translation-key="setup_survey_popup_missing_required_remind">{t("setup_survey_popup_missing_required_remind")}</ParagraphBody>
       </DialogContentConfirm>
       <DialogActionsConfirm>
         <Button
           btnType={BtnType.Raised}
           translation-key=""
-          children={<TextBtnSmall>OK, I got it</TextBtnSmall>}
+          children={<TextBtnSmall translation-key="common_ok_got_it">{t("common_ok_got_it")}</TextBtnSmall>}
           onClick={onClose}
         />
       </DialogActionsConfirm>
