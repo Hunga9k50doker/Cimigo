@@ -242,6 +242,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       saveForLater: data.saveForLater,
       fullName: data.fullName,
       companyName: data.companyName,
+      title: data.title,
       email: data.email,
       phone: data.phone,
       countryId: data.countryId?.id,

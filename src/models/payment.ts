@@ -16,6 +16,7 @@ export interface CheckoutParams {
   saveForLater: boolean,
   fullName: string,
   companyName: string,
+  title: string,
   email: string,
   phone: string,
   countryId: number,

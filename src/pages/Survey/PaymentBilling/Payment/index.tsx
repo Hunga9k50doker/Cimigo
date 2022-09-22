@@ -210,33 +210,33 @@ const PaymentPage = memo(({ }: PaymentProps) => {
   }
 
   const onCheckout = (data: DataForm) => {
-    dispatch(setLoading(true))
-    PaymentService.checkout({
-      projectId: project.id,
-      paymentMethodId: data.paymentMethodId,
-      contactName: data.contactName,
-      contactEmail: data.contactEmail,
-      contactPhone: data.contactPhone,
-      saveForLater: data.saveForLater,
-      fullName: data.fullName,
-      companyName: data.companyName,
-      email: data.email,
-      phone: data.phone,
-      countryId: data.countryId?.id,
-      companyAddress: data.companyAddress,
-      taxCode: data.taxCode,
-      returnUrl: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePay}?projectId=${project.id}`,
-      againLink: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePayAgainLink.replace(':id', `${project.id}`)}`
-    })
-      .then((res: { payment: Payment, checkoutUrl: string }) => {
-        if (res.checkoutUrl) {
-          window.location.href = res.checkoutUrl
-        } else {
-          dispatch(getProjectRequest(project.id))
-        }
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
+    // dispatch(setLoading(true))
+    // PaymentService.checkout({
+    //   projectId: project.id,
+    //   paymentMethodId: data.paymentMethodId,
+    //   contactName: data.contactName,
+    //   contactEmail: data.contactEmail,
+    //   contactPhone: data.contactPhone,
+    //   saveForLater: data.saveForLater,
+    //   fullName: data.fullName,
+    //   companyName: data.companyName,
+    //   email: data.email,
+    //   phone: data.phone,
+    //   countryId: data.countryId?.id,
+    //   companyAddress: data.companyAddress,
+    //   taxCode: data.taxCode,
+    //   returnUrl: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePay}?projectId=${project.id}`,
+    //   againLink: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePayAgainLink.replace(':id', `${project.id}`)}`
+    // })
+    //   .then((res: { payment: Payment, checkoutUrl: string }) => {
+    //     if (res.checkoutUrl) {
+    //       window.location.href = res.checkoutUrl
+    //     } else {
+    //       dispatch(getProjectRequest(project.id))
+    //     }
+    //   })
+    //   .catch((e) => dispatch(setErrorMess(e)))
+    //   .finally(() => dispatch(setLoading(false)))
   }
 
   const onConfirm = (data: DataForm) => {
