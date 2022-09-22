@@ -94,25 +94,25 @@ const PopupInvoiceInformation = memo((props: Props) => {
   }, [dispatch])
 
   const onSubmit = (data: InvoiceInfoData) => {
-    const form: UpdateInvoiceInfo = {
-      saveForLater: data.saveForLater,
-      fullName: data.fullName,
-      companyName: data.companyName,
-      email: data.email,
-      companyAddress: data.companyAddress,
-      phone: data.phone,
-      countryId: data.countryId.id,
-      taxCode: data.taxCode || '',
-    }
-    dispatch(setLoading(true))
-    PaymentService.updateInvoiceInfo(payment.id, form)
-      .then((res) => {
-        dispatch(getProjectRequest(project.id))
-        onClose()
-        dispatch(setSuccessMess(res.message));
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
+    // const form: UpdateInvoiceInfo = {
+    //   saveForLater: data.saveForLater,
+    //   fullName: data.fullName,
+    //   companyName: data.companyName,
+    //   email: data.email,
+    //   companyAddress: data.companyAddress,
+    //   phone: data.phone,
+    //   countryId: data.countryId.id,
+    //   taxCode: data.taxCode || '',
+    // }
+    // dispatch(setLoading(true))
+    // PaymentService.updateInvoiceInfo(payment.id, form)
+    //   .then((res) => {
+    //     dispatch(getProjectRequest(project.id))
+    //     onClose()
+    //     dispatch(setSuccessMess(res.message));
+    //   })
+    //   .catch((e) => dispatch(setErrorMess(e)))
+    //   .finally(() => dispatch(setLoading(false)))
   }
 
   return (

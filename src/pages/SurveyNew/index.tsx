@@ -60,7 +60,7 @@ export const Survey = () => {
 
   useEffect(() => {
     if (id && !isNaN(Number(id))) {
-      dispatch(getProjectRequest(Number(id)))
+      dispatch(getProjectRequest(Number(id), undefined, true))
       return () => {
         dispatch(setProjectReducer(null))
       }

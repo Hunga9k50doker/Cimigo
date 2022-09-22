@@ -5,18 +5,20 @@ import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
 import { routes } from 'routers/routes';
 import { ProjectService } from 'services/project';
 
-function* requestGetProject(data: { type: string, id: number, callback: () => void }) {
+function* requestGetProject(data: { type: string, id: number, callback: () => void, getFull: boolean}) {
   try {
     yield put(setLoading(true))
     const project = yield call(ProjectService.getProject, data.id);
     yield put(setProjectReducer(project))
-    yield put(getPacksRequest(data.id))
-    yield put(getAdditionalBrandsRequest(data.id))
-    yield put(getUserAttributesRequest(data.id))
-    yield put(getProjectAttributesRequest(data.id))
-    yield put(getCustomQuestionsRequest(data.id))
-    yield put(getEyeTrackingPacksRequest(data.id))
-    yield put(getTargetRequest(data.id))
+    if (data.getFull) {
+      yield put(getPacksRequest(data.id))
+      yield put(getAdditionalBrandsRequest(data.id))
+      yield put(getUserAttributesRequest(data.id))
+      yield put(getProjectAttributesRequest(data.id))
+      yield put(getCustomQuestionsRequest(data.id))
+      yield put(getEyeTrackingPacksRequest(data.id))
+      yield put(getTargetRequest(data.id))
+    }
     
     data.callback && data.callback()
   } catch (e: any) {

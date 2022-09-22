@@ -41,11 +41,12 @@ export const GET_TARGET_OF_PROJECT_REQUEST = 'GET_TARGET_OF_PROJECT_REQUEST';
 
 export const SET_TARGET_OF_PROJECT_REDUCER = 'SET_TARGET_OF_PROJECT_REDUCER';
 
-export const getProjectRequest = (id: number, callback?: () => void) => {
+export const getProjectRequest = (id: number, callback?: () => void, getFull: boolean = false) => {
   return {
     type: GET_PROJECT_REQUEST,
     id: id,
-    callback
+    callback,
+    getFull
   }
 }
 

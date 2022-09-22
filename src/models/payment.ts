@@ -50,6 +50,7 @@ export interface Payment {
   fullName: string;
   companyName: string;
   companyAddress: string;
+  title: string;
   email: string;
   phone: string;
   countryId: number;
@@ -105,6 +106,7 @@ export interface UpdateInvoiceInfo {
   saveForLater: boolean,
   fullName: string,
   companyName: string,
+  title: string,
   email: string,
   phone: string,
   countryId: number,

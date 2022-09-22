@@ -1,7 +1,6 @@
 import { Box, Grid } from "@mui/material"
 import classes from './styles.module.scss';
 import images from "config/images";
-import Buttons from "components/Buttons";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
@@ -14,10 +13,8 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest, setCancelPayment } from "redux/reducers/Project/actionTypes";
 import { authOrder, getPayment } from "../models";
 import { useTranslation } from "react-i18next";
-import clsx from "clsx";
 import WarningBox from "components/WarningBox";
-import PopupInvoiceInformation from "pages/Survey/components/PopupInvoiceInformation";
-import PopupConfirmCancelOrder from "pages/Survey/components/PopupConfirmCancelOrder";
+import PopupInvoiceInformation from "pages/SurveyNew/components/PopupInvoiceInformation";
 import { Content, LeftContent, PageRoot } from "pages/SurveyNew/components";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Heading1 from "components/common/text/Heading1";
@@ -28,6 +25,7 @@ import TextBtnSmall from "components/common/text/TextBtnSmall";
 import { DownLoadItem, ImageMain, InforBox, InforBoxItem } from "../components";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import Heading6 from "components/common/text/Heading6";
+import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCancelOrder";
 
 interface Props {
 
@@ -96,124 +94,102 @@ const Order = memo(({ }: Props) => {
   }
 
   const render = () => {
-    return (
-      <>
-        <ParagraphBody sx={{ mt: 1, mb: { xs: 2, sm: 4 } }} $colorName="--eerie-black" translation-key="payment_billing_order_make_an_order_sub_1">
-          {t('payment_billing_order_make_an_order_sub_1')}
-        </ParagraphBody>
-        <InforBox sx={{ width: "auto !important" }}>
-          <Grid container>
-            <InforBoxItem item xs={12}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_name">{t('payment_billing_name')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">{payment?.contactName}</Heading6>
-            </InforBoxItem>
-            <InforBoxItem item xs={12} sm={4}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_phone">{t('payment_billing_phone')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">{payment?.contactPhone}</Heading6>
-            </InforBoxItem>
-            <InforBoxItem item xs={12} sm={8}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_email">{t('payment_billing_email')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">{payment?.contactEmail}</Heading6>
-            </InforBoxItem>
-          </Grid>
-        </InforBox>
-        <ParagraphBody
-          sx={{ mb: { xs: 2, sm: 3 }, mt: { xs: 2, sm: 4 } }}
-          className={classes.greenSpan}
-          $colorName="--eerie-black"
-          translation-key="payment_billing_order_bank_transfer_sub_3"
-          dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_3', { total: fCurrency2(payment?.totalAmountUSD || 0) }) }}
-        />
-        <InforBox>
-          <Grid container>
-            <InforBoxItem item xs={12}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_bank_name">{t('payment_billing_bank_name')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">{t('payment_billing_bank_name_name')}</Heading6>
-            </InforBoxItem>
-            <InforBoxItem item xs={6} sm={4}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
-            </InforBoxItem>
-            <InforBoxItem item xs={6} sm={4}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
-            </InforBoxItem>
-            <InforBoxItem item xs={6} sm={4}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_SWIFT_code">{t('payment_billing_SWIFT_code')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">VTCB VNVX</Heading6>
-            </InforBoxItem>
-            <InforBoxItem item xs={6} sm={4}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">USD</Heading6>
-            </InforBoxItem>
-            <InforBoxItem item xs={12} sm={8}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">{payment?.orderId}</Heading6>
-            </InforBoxItem>
-          </Grid>
-        </InforBox>
-        <ParagraphBody
-          sx={{ my: { xs: 2, sm: 3 } }}
-          className={classes.greenSpan}
-          $colorName="--eerie-black"
-          translation-key="payment_billing_order_bank_transfer_sub_4"
-          dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_4', { total: fCurrency2VND(payment?.totalAmount || 0) }) }}
-        />
-        <InforBox>
-          <Grid container>
-            <InforBoxItem item xs={12}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_bank_name">{t('payment_billing_bank_name')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">{t('payment_billing_bank_name_name')}</Heading6>
-            </InforBoxItem>
-            <InforBoxItem item xs={6} sm={4}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
-            </InforBoxItem>
-            <InforBoxItem item xs={6} sm={4}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
-            </InforBoxItem>
-            <InforBoxItem item xs={6} sm={4}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">VND</Heading6>
-            </InforBoxItem>
-            <InforBoxItem item xs={6} sm={12}>
-              <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
-              <Heading6 $colorName="--eerie-black">{payment?.orderId}</Heading6>
-            </InforBoxItem>
-          </Grid>
-        </InforBox>
-        <ParagraphBody
-          sx={{ mt: 2 }}
-          $colorName="--eerie-black"
-          className={classes.blueA}
-          translation-key="payment_billing_order_make_an_order_sub_2"
-          dangerouslySetInnerHTML={{ __html: t('payment_billing_order_make_an_order_sub_2') }}
-        />
-      </>
-    )
     switch (payment?.paymentMethodId) {
       case EPaymentMethod.MAKE_AN_ORDER:
         return (
           <>
-            <p className={classes.subTitle} translation-key="payment_billing_order_make_an_order_sub_1">{t('payment_billing_order_make_an_order_sub_1')}:
-            </p>
-            <Grid classes={{ root: classes.box }} style={{ maxWidth: 450 }}>
-              <p translation-key="payment_billing_name">{t('payment_billing_name')}:</p>
-              <span>{payment?.contactName}</span>
-              <Grid classes={{ root: classes.flex }}>
-                <div>
-                  <p translation-key="payment_billing_phone">{t('payment_billing_phone')}:</p>
-                  <span>{payment?.contactPhone}</span>
-                </div>
-                <div>
-                  <p translation-key="payment_billing_email">{t('payment_billing_email')}:</p>
-                  <span>{payment?.contactEmail}</span>
-                </div>
+            <ParagraphBody sx={{ mt: 1, mb: { xs: 2, sm: 4 } }} $colorName="--eerie-black" translation-key="payment_billing_order_make_an_order_sub_1">
+              {t('payment_billing_order_make_an_order_sub_1')}
+            </ParagraphBody>
+            <InforBox sx={{ width: "auto !important" }}>
+              <Grid container>
+                <InforBoxItem item xs={12}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_name">{t('payment_billing_name')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">{payment?.contactName}</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={12} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_phone">{t('payment_billing_phone')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">{payment?.contactPhone}</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={12} sm={8}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_email">{t('payment_billing_email')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">{payment?.contactEmail}</Heading6>
+                </InforBoxItem>
               </Grid>
-            </Grid>
-            <p className={classes.textBlack} dangerouslySetInnerHTML={{ __html: t('payment_billing_order_make_an_order_sub_2') }} translation-key="payment_billing_order_make_an_order_sub_2"></p>
-            <a onClick={onShowConfirmCancel} className={classes.cancelPaymentOrder} translation-key="common_cancel_payment">{t("common_cancel_payment")}</a>
+            </InforBox>
+            <ParagraphBody
+              sx={{ mb: { xs: 2, sm: 3 }, mt: { xs: 2, sm: 4 } }}
+              className={classes.greenSpan}
+              $colorName="--eerie-black"
+              translation-key="payment_billing_order_bank_transfer_sub_3"
+              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_3', { total: fCurrency2(payment?.totalAmountUSD || 0) }) }}
+            />
+            <InforBox>
+              <Grid container>
+                <InforBoxItem item xs={12}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_bank_name">{t('payment_billing_bank_name')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">{t('payment_billing_bank_name_name')}</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_SWIFT_code">{t('payment_billing_SWIFT_code')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">VTCB VNVX</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">USD</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={12} sm={8}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">{payment?.orderId}</Heading6>
+                </InforBoxItem>
+              </Grid>
+            </InforBox>
+            <ParagraphBody
+              sx={{ my: { xs: 2, sm: 3 } }}
+              className={classes.greenSpan}
+              $colorName="--eerie-black"
+              translation-key="payment_billing_order_bank_transfer_sub_4"
+              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_4', { total: fCurrency2VND(payment?.totalAmount || 0) }) }}
+            />
+            <InforBox>
+              <Grid container>
+                <InforBoxItem item xs={12}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_bank_name">{t('payment_billing_bank_name')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">{t('payment_billing_bank_name_name')}</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={4}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">VND</Heading6>
+                </InforBoxItem>
+                <InforBoxItem item xs={6} sm={12}>
+                  <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
+                  <Heading6 $colorName="--eerie-black">{payment?.orderId}</Heading6>
+                </InforBoxItem>
+              </Grid>
+            </InforBox>
+            <ParagraphBody
+              sx={{ mt: 2 }}
+              $colorName="--eerie-black"
+              className={classes.blueA}
+              translation-key="payment_billing_order_make_an_order_sub_2"
+              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_make_an_order_sub_2') }}
+            />
           </>
         )
       case EPaymentMethod.BANK_TRANSFER:
@@ -364,7 +340,7 @@ const Order = memo(({ }: Props) => {
           <PopupConfirmCancelOrder
             isOpen={isConfirmCancel}
             onClose={onCloseConfirmCancel}
-            onYes={onCancelPayment}
+            onConfirm={onCancelPayment}
           />
         </Content>
       </LeftContent>

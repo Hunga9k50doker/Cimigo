@@ -1,10 +1,6 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, IconButton, Tooltip } from '@mui/material';
+import { Dialog, FormControlLabel, Grid } from '@mui/material';
 import classes from './styles.module.scss';
-import images from "config/images";
-import Buttons from 'components/Buttons';
-import Images from "config/images";
-import Inputs from 'components/Inputs';
 import { OptionItem } from 'models/general';
 import * as yup from 'yup';
 import { VALIDATION } from 'config/constans';
@@ -14,11 +10,24 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from 'react-redux';
 import { setErrorMess, setLoading, setSuccessMess } from 'redux/reducers/Status/actionTypes';
 import CountryService from 'services/country';
-import InputSelect from 'components/InputsSelect';
+import InputSelect from 'components/common/inputs/InputSelect';
 import { Payment, UpdateInvoiceInfo } from 'models/payment';
 import { getProjectRequest } from 'redux/reducers/Project/actionTypes';
 import { PaymentService } from 'services/payment';
 import { ReducerType } from 'redux/reducers';
+import { DialogTitle } from "components/common/dialogs/DialogTitle";
+import { DialogContent } from "components/common/dialogs/DialogContent";
+import { DialogActions } from "components/common/dialogs/DialogActions";
+import Heading3 from 'components/common/text/Heading3';
+import ButtonCLose from 'components/common/buttons/ButtonClose';
+import ParagraphBody from 'components/common/text/ParagraphBody';
+import TextBtnSecondary from 'components/common/text/TextBtnSecondary';
+import Button, { BtnType } from 'components/common/buttons/Button';
+import InputCheckbox from 'components/common/inputs/InputCheckbox';
+import InputTextfield from "components/common/inputs/InputTextfield";
+import TooltipCustom from 'components/Tooltip';
+import { InfoOutlined } from '@mui/icons-material';
+
 interface Props {
   payment: Payment,
   isOpen: boolean,
@@ -28,6 +37,7 @@ interface Props {
 export interface InvoiceInfoData {
   fullName: string,
   companyName: string,
+  title: string,
   email: string,
   phone: string,
   countryId: OptionItem,
@@ -43,11 +53,13 @@ const PopupInvoiceInformation = memo((props: Props) => {
   const [countries, setCountries] = useState<OptionItem[]>([])
   const dispatch = useDispatch()
   const { project } = useSelector((state: ReducerType) => state.project)
-  
+
   const schema = useMemo(() => {
     return yup.object().shape({
       fullName: yup.string().required(t('field_full_name_vali_required')),
       companyName: yup.string().required(t('field_company_vali_required')),
+      title: yup.string()
+        .required(t('field_your_title_vali_required')),
       email: yup.string().email(t('field_email_vali_email'))
         .required(t('field_email_vali_required')),
       phone: yup.string().matches(VALIDATION.phone, { message: t('field_phone_number_vali_phone'), excludeEmptyString: true })
@@ -71,6 +83,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
     reset({
       fullName: payment?.fullName || '',
       companyName: payment?.companyName || '',
+      title: payment?.title || '',
       email: payment?.email || '',
       phone: payment?.phone || '',
       countryId: payment?.country ? { id: payment.country.id, name: payment.country.name } : undefined,
@@ -98,6 +111,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
       saveForLater: data.saveForLater,
       fullName: data.fullName,
       companyName: data.companyName,
+      title: data.title,
       email: data.email,
       companyAddress: data.companyAddress,
       phone: data.phone,
@@ -122,18 +136,18 @@ const PopupInvoiceInformation = memo((props: Props) => {
       onClose={onClose}
       classes={{ paper: classes.paper }}
     >
-      <DialogTitle className={classes.header}>
-        <p className={classes.title}>Invoice information</p>
-        <IconButton onClick={onClose}>
-          <img src={Images.icClose} alt='icon close' />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent className={classes.body}>
-        <p className={classes.content}>These information will be used to export the invoice. Please make sure all fields are correct.</p>
-        <form onSubmit={handleSubmit(onSubmit)} id="my-form">
+      <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
+        <DialogTitle>
+          <Heading3 translation-key="">
+            Invoice information
+          </Heading3>
+          <ButtonCLose onClick={onClose} />
+        </DialogTitle>
+        <DialogContent className={classes.body}>
+          <ParagraphBody sx={{ mb: { xs: 2, sm: 3 } }} $colorName="--gray-90">These information will be used to export the invoice. Please make sure all fields are correct.</ParagraphBody>
           <Grid container spacing={1}>
             <Grid item xs={12} sm={6}>
-              <Inputs
+              <InputTextfield
                 title={t('field_full_name')}
                 translation-key="field_full_name"
                 placeholder={t('field_full_name_placeholder')}
@@ -144,7 +158,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Inputs
+              <InputTextfield
                 title={t('field_company')}
                 translation-key="field_company"
                 placeholder={t('field_company_placeholder')}
@@ -155,7 +169,18 @@ const PopupInvoiceInformation = memo((props: Props) => {
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <Inputs
+              <InputTextfield
+                title={t('field_your_title')}
+                translation-key="field_your_title"
+                placeholder={t('field_your_title_placeholder')}
+                translation-key-placeholder="field_your_title_placeholder"
+                name="title"
+                inputRef={register('title')}
+                errorMessage={errors.title?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <InputTextfield
                 title={t('field_email')}
                 translation-key="field_email"
                 placeholder={t('field_email_placeholder')}
@@ -166,7 +191,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Inputs
+              <InputTextfield
                 title={t('field_phone_number')}
                 translation-key="field_phone_number"
                 placeholder={t('field_phone_number_placeholder')}
@@ -178,6 +203,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <InputSelect
+                fullWidth
                 title={t('field_country')}
                 name="countryId"
                 control={control}
@@ -189,7 +215,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <Inputs
+              <InputTextfield
                 title={t('field_company_address')}
                 translation-key="field_company_address"
                 placeholder={t('field_company_address_placeholder')}
@@ -200,7 +226,7 @@ const PopupInvoiceInformation = memo((props: Props) => {
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <Inputs
+              <InputTextfield
                 optional
                 title={t('field_tax_code_for_invoice')}
                 translation-key="field_tax_code_for_invoice"
@@ -212,34 +238,37 @@ const PopupInvoiceInformation = memo((props: Props) => {
               />
             </Grid>
           </Grid>
-          <Grid classes={{ root: classes.tips }}>
+          <Grid item xs={12} className={classes.tips}>
             <FormControlLabel
               control={
                 <Controller
                   name="saveForLater"
                   control={control}
                   render={({ field }) =>
-                    <Checkbox
-                      classes={{ root: classes.rootCheckbox }}
-                      icon={<img src={images.icCheck} alt="" />}
-                      checkedIcon={<img src={images.icCheckActive} alt="" />}
+                    <InputCheckbox
                       checked={field.value}
-                      {...field}
+                      onChange={field.onChange}
                     />}
                 />
               }
               translation-key="payment_billing_sub_tab_payment_save_for_later"
               label={<>{t('payment_billing_sub_tab_payment_save_for_later')}</>}
             />
-            <Tooltip classes={{ tooltip: classes.popper }} placement="right" title={t('payment_billing_sub_tab_payment_save_for_later_tip')} translation-key="payment_billing_sub_tab_payment_save_for_later_tip">
-              <img src={images.icTip} alt="" />
-            </Tooltip>
+            <TooltipCustom popperClass={classes.popperClass} placement="right" title={t('payment_billing_sub_tab_payment_save_for_later_tip')} translation-key="payment_billing_sub_tab_payment_save_for_later_tip">
+              <InfoOutlined sx={{ fontSize: 16, color: "var(--eerie-black-40)" }} />
+            </TooltipCustom>
           </Grid>
-        </form>
-      </DialogContent>
-      <DialogActions className={classes.dialogBtn}>
-        <Buttons type='submit' children="Save information" className={classes.btnSave} btnType="Blue" form="my-form" />
-      </DialogActions>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            fullWidth
+            btnType={BtnType.Raised}
+            type="submit"
+            translation-key=""
+            children={<TextBtnSecondary>Save information</TextBtnSecondary>}
+          />
+        </DialogActions>
+      </form>
     </Dialog>
   );
 });
