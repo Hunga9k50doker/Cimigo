@@ -12,7 +12,14 @@ import { authWaiting, getPayment } from "../models";
 import { push } from "connected-react-router";
 import { useTranslation } from "react-i18next";
 import WarningBox from "components/WarningBox";
-import PopupInvoiceInformation from "pages/Survey/components/PopupInvoiceInformation";
+import PopupInvoiceInformation from "pages/SurveyNew/components/PopupInvoiceInformation";
+import { Content, LeftContent, PageRoot } from "pages/SurveyNew/components";
+import ParagraphBody from "components/common/text/ParagraphBody";
+import { ImageMain, ParagraphBodyBlueNestedA } from "../components";
+import Heading1 from "components/common/text/Heading1";
+import Heading2 from "components/common/text/Heading2";
+import Heading4 from "components/common/text/Heading4";
+import ParagraphBodyUnderline from "components/common/text/ParagraphBodyUnderline";
 
 interface Props {
 
@@ -57,28 +64,56 @@ const Waiting = memo(({ }: Props) => {
   }, [project])
 
   return (
-    <Grid classes={{ root: classes.root }}>
-      <WarningBox sx={{ maxWidth: '1000px' }}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <p translation-key="payment_billing_waiting_fill_purpose"> <a className={classes.clickOpenInvoice} onClick={() => setIsOpenPopupInvoice(true)} translation-key="payment_billing_waiting_fill_click">{t('payment_billing_waiting_fill_click')}</a> {t('payment_billing_waiting_fill_purpose')}</p>
-      </WarningBox>
-      <img src={images.imgPayment} alt="" />
-      <p className={classes.title} translation-key="payment_billing_waiting_title">{t('payment_billing_waiting_title')}</p>
-      <p className={classes.textGreen} translation-key="payment_billing_total_amount">{t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}</p>
-      <p className={classes.textBlue} translation-key="payment_billing_equivalent_to">({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)</p>
-      <p className={classes.subTitle} style={{ marginBottom: 24 }} translation-key="payment_billing_waiting_sub_1">{t('payment_billing_waiting_sub_1')}</p>
-      <p className={classes.subTitle} style={{ marginBottom: 24 }} translation-key="payment_billing_waiting_sub_2">
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        {t('payment_billing_waiting_sub_2')} <a onClick={unConfirmedPayment} translation-key="payment_billing_waiting_btn_back_transfer">{t('payment_billing_waiting_btn_back_transfer')}</a></p>
-      <p className={classes.subTitle} style={{ marginBottom: 24 }} translation-key="payment_billing_waiting_sub_3"
-        dangerouslySetInnerHTML={{ __html: t('payment_billing_waiting_sub_3') }}
-      ></p>
-      <PopupInvoiceInformation
-        payment={payment}
-        isOpen={isOpenPopupInvoice}
-        onClose={() => setIsOpenPopupInvoice(false)}
-      />
-    </Grid>
+    <PageRoot>
+      <LeftContent>
+        <Content className={classes.root}>
+          <WarningBox sx={{ maxWidth: '946px' }}>
+            <span translation-key="payment_billing_waiting_fill_purpose">
+              <ParagraphBody
+                variant="body2"
+                variantMapping={{ body2: "span" }}
+                translation-key="payment_billing_waiting_fill_click"
+                $colorName="--cimigo-blue"
+                className="underline cursor-pointer"
+                onClick={() => setIsOpenPopupInvoice(true)}
+              >
+                {t('payment_billing_waiting_fill_click')}
+              </ParagraphBody> {t('payment_billing_waiting_fill_purpose')}
+            </span>
+          </WarningBox>
+          <Grid classes={{ root: classes.content }}>
+            <ImageMain src={images.imgPayment} alt="" />
+            <Heading1 sx={{ mb: { xs: 3, sm: 2 } }} $colorName="--cimigo-blue" translation-key="payment_billing_waiting_title" align="center">
+              {t('payment_billing_waiting_title')}
+            </Heading1>
+            <Heading2 mb={1} $colorName="--cimigo-green-dark-1" translation-key="payment_billing_total_amount" align="center">
+              {t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}
+            </Heading2>
+            <Heading4 mb={3} $colorName="--cimigo-blue-dark-1" translation-key="payment_billing_equivalent_to" align="center">
+              ({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)
+            </Heading4>
+            <ParagraphBody sx={{ mb: { xs: 2, sm: 3 } }} $colorName="--eerie-black-00" translation-key="payment_billing_waiting_sub_1" align="center">
+              {t('payment_billing_waiting_sub_1')}
+            </ParagraphBody>
+            <ParagraphBody sx={{ mb: { xs: 2, sm: 3 } }} $colorName="--eerie-black" translation-key="payment_billing_waiting_sub_2" align="center">
+              {t('payment_billing_waiting_sub_2')} <ParagraphBodyUnderline onClick={unConfirmedPayment} className="cursor-pointer" variant="body2" variantMapping={{ "body2": "span" }} translation-key="payment_billing_waiting_btn_back_transfer">{t('payment_billing_waiting_btn_back_transfer')}</ParagraphBodyUnderline>
+            </ParagraphBody>
+            <ParagraphBodyBlueNestedA
+              $colorName="--eerie-black"
+              translation-key="payment_billing_waiting_sub_2"
+              align="center"
+              dangerouslySetInnerHTML={{ __html: t('payment_billing_waiting_sub_3') }}
+            />
+            <PopupInvoiceInformation
+              payment={payment}
+              isOpen={isOpenPopupInvoice}
+              onClose={() => setIsOpenPopupInvoice(false)}
+            />
+          </Grid>
+        </Content>
+      </LeftContent>
+    </PageRoot>
+
   )
 })
 

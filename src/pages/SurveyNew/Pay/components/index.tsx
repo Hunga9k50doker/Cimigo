@@ -1,4 +1,5 @@
 import { Box, Grid } from "@mui/material";
+import ParagraphBody from "components/common/text/ParagraphBody";
 import styled from "styled-components";
 
 
@@ -65,5 +66,11 @@ export const DownLoadItem = styled(Grid)`
     object-fit: cover;
     margin-bottom: 4px;
   }
+`
 
+export const ParagraphBodyBlueNestedA = styled(ParagraphBody)`
+ > a {
+  font-weight: 600;
+  color: var(--cimigo-blue);
+ }
 `
