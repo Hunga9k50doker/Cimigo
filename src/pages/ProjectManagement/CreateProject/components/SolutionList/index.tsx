@@ -111,6 +111,7 @@ const SolutionList = memo(
       <>
         <Grid className={classes.header}>
           <Heading1
+            className={classes.title}
             $colorName={"--cimigo-blue"}
             translation-key="project_create_tab_solution_select_solution"
           >

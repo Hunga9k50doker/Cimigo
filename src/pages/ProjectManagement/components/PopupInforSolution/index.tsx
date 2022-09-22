@@ -13,6 +13,8 @@ import { DialogTitle } from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import { DialogActions } from "components/common/dialogs/DialogActions";
 import Button, { BtnType } from "components/common/buttons/Button";
+import ButtonCLose from "components/common/buttons/ButtonClose";
+import ButtonClose from "components/common/buttons/ButtonClose";
 
 interface PopupPopupInforSolution {
   solution: Solution;
@@ -33,9 +35,11 @@ const PopupInforSolution = memo((props: PopupPopupInforSolution) => {
     >
       <DialogTitle className={classes.header}>
         <Heading3 $colorName={"--ghost-white"}>{solution?.title}</Heading3>
-        <IconButton onClick={onCancel}>
-          <img src={Images.icClose} alt="" />
-        </IconButton>
+        <ButtonClose
+          $backgroundColor="--ghost-white"
+          $colorName="--cimigo-blue-dark-1"
+          onClick={onCancel}
+        />
       </DialogTitle>
       <DialogContent className={classes.body} dividers>
         <div

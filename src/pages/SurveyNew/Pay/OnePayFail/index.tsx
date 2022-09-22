@@ -16,7 +16,7 @@ import {
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import { ChangePaymentMethodFormData, Payment } from "models/payment";
-import ChangePaymentMethod from "pages/SurveyNew/compoments/ChangePaymentMethod";
+import ChangePaymentMethod from "pages/SurveyNew/components/ChangePaymentMethod";
 import { Content, LeftContent, PageRoot } from "pages/SurveyNew/components";
 import Heading1 from "components/common/text/Heading1";
 import Heading2 from "components/common/text/Heading2";
@@ -26,6 +26,7 @@ import ParagraphBodyUnderline from "components/common/text/ParagraphBodyUnderlin
 import Button, { BtnType } from "components/common/buttons/Button";
 import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCancelOrder";
 import clsx from "clsx";
+import TextBtnSmall from "components/common/text/TextBtnSmall";
 
 interface Props {}
 
@@ -167,9 +168,7 @@ const OnePayFail = memo(({}: Props) => {
               <Button
                 className={classes.button}
                 btnType={BtnType.Outlined}
-                children={t("payment_billing_try_again")}
-                translation-key="payment_billing_try_again"
-                sx={{ padding: "16px 95px" }}
+                children={<TextBtnSmall $colorName="--cimigo-blue" translation-key="payment_billing_try_again">{t("payment_billing_try_again")}</TextBtnSmall>}
                 onClick={onTryAgain}
               />
               <ParagraphBodyUnderline

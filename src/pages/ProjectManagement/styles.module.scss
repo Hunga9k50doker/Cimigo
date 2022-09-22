@@ -246,6 +246,7 @@
 .selectMobile{
   max-height: 200px;
 }
+
 .selectMenu {
   ul {
     padding: 4px 0;
@@ -396,5 +397,15 @@
   text-overflow: ellipsis; 
   @media only screen and (max-width: 360px) {
     width: 150px;
+  }
+}
+.selectFolderMobile{
+  @media only screen and (max-width: 767px) {
+    max-width: 300px;
+    max-height: 250px;
+  }
+  @media only screen and (max-width: 360px) {
+    max-width: 200px;
+    max-height: 250px;
   }
 }

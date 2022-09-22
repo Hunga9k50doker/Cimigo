@@ -88,6 +88,7 @@ const SelectPlan = memo(
       <>
         <Grid justifyContent="center" className={classes.titleSelectPlan}>
           <Heading1
+            className={classes.title}
             $colorName={"--cimigo-blue"}
             translation-key="project_create_tab_plan_select_plan_title"
           >
@@ -204,8 +205,8 @@ const SelectPlan = memo(
                           <Grid className={classes.contentPlan}>
                             <DoneIcon className={classes.iconContentPlan} />
                             <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"} variant="body2"
-                          variantMapping={{ body2: "span" }}>
-                              <span className={classes.sampleSize}>{plan.sampleSize +' '}</span> interviews
+                          variantMapping={{ body2: "span" }} translation-key="project_create_tab_plan_interviews">
+                              <span className={classes.sampleSize}>{plan.sampleSize +' '}</span> {t("project_create_tab_plan_interviews")}
                             </ParagraphBody>
                           </Grid>
                           {plan?.content.map((item, index) => {
