@@ -275,7 +275,7 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
       <LeftContent>
         <PageTitle>
           <PageTitleLeft>
-            <PageTitleText>Review quota allocation</PageTitleText>
+            <PageTitleText translation-key="quotas_title_left_panel">{t("quotas_title_left_panel")}</PageTitleText>
             {!editable && <LockIcon status={project?.status} />}
           </PageTitleLeft>
         </PageTitle>
@@ -498,13 +498,14 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
                 onChange={(_, checked) => checked && onAgreeQuota()}
               />
             }
-            label={"I agree to the quota allocation"}
+            translation-key="project_right_panel_quotas_agree_allocation"
+            label={<>{t("project_right_panel_quotas_agree_allocation")}</>}
           />
           <Button
             sx={{ mt: 2 }}
             fullWidth
             btnType={BtnType.Raised}
-            children={<TextBtnSecondary>Next: Pay</TextBtnSecondary>}
+            children={<TextBtnSecondary translation-key="quotas_next_pay_btn">{t("quotas_next_pay_btn")}</TextBtnSecondary>}
             endIcon={<ArrowForward />}
             padding="13px 8px !important"
             onClick={onNextPay}
@@ -515,7 +516,7 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab label={"Outline"} value={ETabRightPanel.OUTLINE} />
-            <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice}>Cost summary</Badge>} value={ETabRightPanel.COST_SUMMARY} />
+            <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} translation-key="project_right_panel_cost_summary">{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
           </TabRightPanel>
           <TabPanelBox value={tabRightPanel} index={ETabRightPanel.OUTLINE}>
             <RightPanelContent>
@@ -533,8 +534,8 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
                         </RPStepLabel>
                         <RPStepContent>
                           {quota?.edited && (
-                            <ParagraphSmall $colorName="--gray-60">
-                              You have adjusted
+                            <ParagraphSmall $colorName="--gray-60" translation-key="project_right_panel_quotas_you_have_adjusted">
+                              {t("project_right_panel_quotas_you_have_adjusted")}
                             </ParagraphSmall>
                           )}
                         </RPStepContent>
@@ -553,13 +554,14 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
                       onChange={(_, checked) => checked && onAgreeQuota()}
                     />
                   }
-                  label={"I agree to the quota allocation"}
+                  translation-key="project_right_panel_quotas_agree_allocation"
+                  label={<>{t("project_right_panel_quotas_agree_allocation")}</>}
                 />
                 <Button
                   sx={{ mt: 2 }}
                   fullWidth
                   btnType={BtnType.Raised}
-                  children={<TextBtnSecondary>Next: Pay</TextBtnSecondary>}
+                  children={<TextBtnSecondary translation-key="quotas_next_pay_btn">{t("quotas_next_pay_btn")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
                   padding="13px 8px !important"
                   onClick={onNextPay}
@@ -585,13 +587,14 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
                       onChange={(_, checked) => checked && onAgreeQuota()}
                     />
                   }
-                  label={"I agree to the quota allocation"}
+                  translation-key="project_right_panel_quotas_agree_allocation"
+                  label={<>{t("project_right_panel_quotas_agree_allocation")}</>}
                 />
                 <Button
                   sx={{ mt: 2 }}
                   fullWidth
                   btnType={BtnType.Raised}
-                  children={<TextBtnSecondary>Next: Pay</TextBtnSecondary>}
+                  children={<TextBtnSecondary translation-key="quotas_next_pay_btn">{t("quotas_next_pay_btn")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
                   padding="13px 8px !important"
                   onClick={onNextPay}
