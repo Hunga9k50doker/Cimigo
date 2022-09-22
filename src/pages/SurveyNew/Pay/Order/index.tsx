@@ -208,10 +208,10 @@ const Order = memo(({ }: Props) => {
       case EPaymentMethod.BANK_TRANSFER:
         return (
           <>
-            <Heading2 className={classes.price} $colorName="--cimigo-green-dark-1" translation-key="payment_billing_total_amount">
+            <Heading2 $fontSizeMobile={"16px"} $lineHeightMobile="24px" className={classes.price} $colorName="--cimigo-green-dark-1" translation-key="payment_billing_total_amount">
               {t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}
             </Heading2>
-            <Heading4 className={classes.priceSub} $colorName="--cimigo-blue-dark-1">
+            <Heading4 $fontSizeMobile={"12px"} $lineHeightMobile="16px" className={classes.priceSub} $colorName="--cimigo-blue-dark-1">
               ({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)
             </Heading4>
             <ParagraphBody className={classes.titleSub} $colorName="--eerie-black-00" translation-key="payment_billing_order_bank_transfer_sub_1">

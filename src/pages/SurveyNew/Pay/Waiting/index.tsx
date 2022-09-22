@@ -86,17 +86,17 @@ const Waiting = memo(({ }: Props) => {
             <Heading1 sx={{ mb: { xs: 3, sm: 2 } }} $colorName="--cimigo-blue" translation-key="payment_billing_waiting_title" align="center">
               {t('payment_billing_waiting_title')}
             </Heading1>
-            <Heading2 mb={1} $colorName="--cimigo-green-dark-1" translation-key="payment_billing_total_amount" align="center">
+            <Heading2 mb={1} $fontSizeMobile={"16px"} $lineHeightMobile="24px" $colorName="--cimigo-green-dark-1" translation-key="payment_billing_total_amount" align="center">
               {t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}
             </Heading2>
-            <Heading4 mb={3} $colorName="--cimigo-blue-dark-1" translation-key="payment_billing_equivalent_to" align="center">
+            <Heading4 mb={3} $fontSizeMobile={"12px"} $lineHeightMobile="16px" $colorName="--cimigo-blue-dark-1" translation-key="payment_billing_equivalent_to" align="center">
               ({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)
             </Heading4>
             <ParagraphBody sx={{ mb: { xs: 2, sm: 3 } }} $colorName="--eerie-black-00" translation-key="payment_billing_waiting_sub_1" align="center">
               {t('payment_billing_waiting_sub_1')}
             </ParagraphBody>
             <ParagraphBody sx={{ mb: { xs: 2, sm: 3 } }} $colorName="--eerie-black" translation-key="payment_billing_waiting_sub_2" align="center">
-              {t('payment_billing_waiting_sub_2')} <ParagraphBodyUnderline onClick={unConfirmedPayment} className="cursor-pointer" variant="body2" variantMapping={{ "body2": "span" }} translation-key="payment_billing_waiting_btn_back_transfer">{t('payment_billing_waiting_btn_back_transfer')}</ParagraphBodyUnderline>
+              {t('payment_billing_waiting_sub_2')} <ParagraphBodyUnderline onClick={unConfirmedPayment} variant="body2" variantMapping={{ "body2": "span" }} translation-key="payment_billing_waiting_btn_back_transfer">{t('payment_billing_waiting_btn_back_transfer')}</ParagraphBodyUnderline>
             </ParagraphBody>
             <ParagraphBodyBlueNestedA
               $colorName="--eerie-black"

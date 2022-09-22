@@ -115,9 +115,17 @@ input[type="number"] {
 ::-webkit-scrollbar-track {
   background: transparent;
   border: none;
+  &:vertical {
+    border-left: 1px solid var(--gray-10);
+    border-right: 1px solid var(--gray-10);
+  }
+  &:horizontal {
+    border-top: 1px solid var(--gray-10);
+    border-bottom: 1px solid var(--gray-10);
+  }
 }
 ::-webkit-scrollbar-thumb {
-  background: transparent;
+  background: var(--gray-40);
   background-clip: padding-box;
   border-radius: 8px;
   cursor: pointer;
@@ -133,23 +141,4 @@ input[type="number"] {
 
 ::-webkit-scrollbar-corner {
   background: transparent;
-}
-
-* {
-  &:hover {
-    &::-webkit-scrollbar-thumb {
-      background: var(--gray-40);
-      background-clip: padding-box;
-      border-radius: 8px;
-      cursor: pointer;
-      &:vertical {
-        border-left: 1px solid transparent;
-        border-right: 1px solid transparent;
-      }
-      &:horizontal {
-        border-top: 1px solid transparent;
-        border-bottom: 1px solid transparent;
-      }
-    }
-  }
 }

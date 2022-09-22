@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 interface Props {
     $colorName?: string;
+    $fontSizeMobile?: string | number;
+    $lineHeightMobile?: string | number;
 }
 
 const Heading2 = styled(Typography)<Props>`
@@ -14,7 +16,8 @@ const Heading2 = styled(Typography)<Props>`
     letter-spacing: -0.03em;
     color: ${props => `var(${props.$colorName || '--eerie-black'})`};
     @media only screen and (max-width: 767px) {
-        font-size: 22px;
+        font-size: ${props => props.$fontSizeMobile || "22px"};
+        line-height: ${props => props.$lineHeightMobile || "32px"};
     }
 `
 

@@ -12,6 +12,7 @@ const ParagraphBodyUnderline = styled(Typography)<Props>`
     font-weight: ${props => props.$fontWeight || 400};
     font-size: 16px;
     line-height: 24px;
+    cursor: pointer;
     text-decoration: underline!important;
     text-underline-position: under;
     color: ${props => `var(${props.$colorName || '--cimigo-blue'})`};

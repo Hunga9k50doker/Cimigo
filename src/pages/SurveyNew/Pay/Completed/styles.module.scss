@@ -1,11 +1,19 @@
 .root {
-  max-width: 800px;
-  margin: auto;
-  display: block;
-  @media only screen and (max-width: 767px) {
-    padding: 22px 19px;
-  }
+ 
 }
+
+.content {
+  max-width: 616px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.img.img {
+  margin-top: 0px;
+}
+
 .root > img {
   margin: 15px auto 22px auto;
   display: block;
