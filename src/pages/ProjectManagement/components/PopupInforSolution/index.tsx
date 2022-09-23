@@ -52,7 +52,6 @@ const PopupInforSolution = memo((props: PopupPopupInforSolution) => {
             </TextBtnSecondary>
           }
           btnType={BtnType.Primary}
-          width="100%"
           onClick={onSelect}
         />
       </DialogActions>
