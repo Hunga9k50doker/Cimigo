@@ -110,7 +110,7 @@
   margin: 0 auto;
   box-sizing: border-box;
   padding-left: 64px;
-  padding-right: 64px;
+  padding-right: 48px;
 
   @media only screen and (max-width: 1024px) {
     padding-left: 24px;
@@ -384,7 +384,7 @@
   flex-grow: 1;
   text-overflow: ellipsis;
   overflow: hidden;
-  margin-left: 20px;
+  margin-left: 64px;
   margin-right: 5px;
   @media only screen and (max-width: 1024px) {
     left: 200px;
@@ -437,6 +437,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .detail:hover{
+    text-decoration: underline;
+    text-underline-position: under;
   }
 }
 
