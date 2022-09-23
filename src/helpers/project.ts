@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { AdditionalBrand } from "models/additional_brand";
 import { Solution } from "models/Admin/solution";
 import { TargetQuestionType } from "models/Admin/target";
@@ -17,7 +18,7 @@ export class ProjectHelper {
 
   static getProject(project: Project) {
     const payment = ProjectHelper.getPayment(project)
-    if (payment) {
+    if (payment && !_.isEmpty(payment?.projectData)) {
       return payment.projectData
     }
     return project
@@ -25,7 +26,7 @@ export class ProjectHelper {
 
   static getConfig(project: Project, config: ConfigData) {
     const payment = ProjectHelper.getPayment(project)
-    if (payment) {
+    if (payment && !_.isEmpty(payment.config)) {
       return payment.config
     }
     return config
