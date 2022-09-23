@@ -76,7 +76,7 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
   const maxCustomQuestion = useMemo(() => project?.solution?.maxCustomQuestion || 0, [project])
 
   const totalCustomQuestionPrice = useMemo(() => {
-    return PriceService.getCustomQuestionCost(project?.customQuestions, configs) || 0;
+    return PriceService.getCustomQuestionCost(project, configs) || 0;
   }, [project, configs])
 
   const findQuestionType = (type: ECustomQuestionType) => {

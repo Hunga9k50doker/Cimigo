@@ -115,12 +115,14 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
         )?.name;
       case "sampleSizeCost":
       case "customQuestionCost":
+      case "eyeTrackingSampleSizeCost":
       case "vat":
       case "totalAmount":
       case "usdToVNDRate":
         return payment[key] ?? 0;
       case "sampleSizeCostUSD":
       case "customQuestionCostUSD":
+      case "eyeTrackingSampleSizeCostUSD":
       case "vatUSD":
       case "totalAmountUSD":
         return payment[key] ?? 0;

@@ -1,3 +1,4 @@
+import { ConfigData } from "./config";
 import { Country } from "./country";
 import { CustomQuestion } from "./custom_question";
 import { OptionItem } from "./general";
@@ -67,8 +68,11 @@ export interface Payment {
   user: User;
   project: Project;
   onepays: OnePay[];
-  eyeTrackingSampleSizeCostUSD: number;
   eyeTrackingSampleSize: number;
+  eyeTrackingSampleSizeCost: number;
+  eyeTrackingSampleSizeCostUSD: number;
+  projectData: Project;
+  config: ConfigData;
 }
 
 export interface TryAgain {

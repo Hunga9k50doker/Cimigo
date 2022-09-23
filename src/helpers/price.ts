@@ -3,26 +3,31 @@ import { ConfigData } from "models/config";
 import { CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
 import { Project } from "models/project";
 import { round } from "utils/formatNumber";
+import ProjectHelper from "./project";
 
 export class PriceService {
   static getSampleSizeConstConfig = (project: Project) => {
-    return [...(project?.solution?.sampleSizes || [])].sort((a, b) => a.limit - b.limit)
+    const _project = ProjectHelper.getProject(project)
+    return [...(_project?.solution?.sampleSizes || [])].sort((a, b) => a.limit - b.limit)
   }
 
   static getSampleSizeCost = (project: Project) => {
-    const sampleSize = project?.sampleSize || 0
+    const _project = ProjectHelper.getProject(project)
+    const sampleSize = _project?.sampleSize || 0
     const sampleSizeConstConfig = PriceService.getSampleSizeConstConfig(project)
     const unitPrice = sampleSizeConstConfig.find((it, index) => it.limit > sampleSize || (it.limit === sampleSize && index === (sampleSizeConstConfig.length - 1)))?.price || 0
     return round(sampleSize * unitPrice)
   }
 
   static getEyeTrackingSampleSizeConstConfig = (project: Project) => {
-    return [...(project?.solution?.eyeTrackingSampleSizes || [])].sort((a, b) => a.limit - b.limit)
+    const _project = ProjectHelper.getProject(project)
+    return [...(_project?.solution?.eyeTrackingSampleSizes || [])].sort((a, b) => a.limit - b.limit)
   }
 
   static getEyeTrackingSampleSizeCost = (project: Project) => {
-    if (!project?.enableEyeTracking) return 0
-    const sampleSize = project?.eyeTrackingSampleSize || 0
+    const _project = ProjectHelper.getProject(project)
+    if (!_project?.enableEyeTracking) return 0
+    const sampleSize = _project?.eyeTrackingSampleSize || 0
     const eyeTrackingSampleSizeConstConfig = PriceService.getEyeTrackingSampleSizeConstConfig(project)
     const unitPrice = eyeTrackingSampleSizeConstConfig.find((it, index) => it.limit > sampleSize || (it.limit === sampleSize && index === (eyeTrackingSampleSizeConstConfig.length - 1)))?.price || 0
     return round(sampleSize * unitPrice)
@@ -108,27 +113,31 @@ export class PriceService {
     }
   }
 
-  static getCustomQuestionCost = (customQuestions: CustomQuestion[], configs: ConfigData) => {
-    return customQuestions?.reduce((total, item) => total + PriceService.getCustomQuestionItemCost(item, configs).priceUSD, 0) || 0;
+  static getCustomQuestionCost = (project: Project, config: ConfigData) => {
+    const _project = ProjectHelper.getProject(project)
+    const _config = ProjectHelper.getConfig(project, config)
+    return _project?.customQuestions?.reduce((total, item) => total + PriceService.getCustomQuestionItemCost(item, _config).priceUSD, 0) || 0;
   }
 
-  static getTotal = (project: Project, configs: ConfigData): TotalPrice => {
-    const sampleSize: number = project.sampleSize;
+  static getTotal = (project: Project, config: ConfigData): TotalPrice => {
+    const _project = ProjectHelper.getProject(project)
+    const _config = ProjectHelper.getConfig(project, config)
+    const sampleSize: number = _project.sampleSize;
 
     const sampleSizeCostUSD: number = PriceService.getSampleSizeCost(project);
-    const customQuestionCostUSD: number = PriceService.getCustomQuestionCost(project.customQuestions, configs);
+    const customQuestionCostUSD: number = PriceService.getCustomQuestionCost(project, config);
     const eyeTrackingSampleSizeCostUSD: number = PriceService.getEyeTrackingSampleSizeCost(project);
 
     const amountUSD = sampleSizeCostUSD + customQuestionCostUSD + eyeTrackingSampleSizeCostUSD;
-    const vatUSD = round(amountUSD * configs.vat);
+    const vatUSD = round(amountUSD * _config.vat);
     const totalAmountUSD = round(amountUSD + vatUSD);
 
-    const sampleSizeCost: number = Math.round(sampleSizeCostUSD * configs.usdToVND);
-    const customQuestionCost: number = Math.round(customQuestionCostUSD * configs.usdToVND);
-    const eyeTrackingSampleSizeCost: number = Math.round(eyeTrackingSampleSizeCostUSD * configs.usdToVND);
-    const amount = Math.round(amountUSD * configs.usdToVND);
-    const vat = Math.round(vatUSD * configs.usdToVND);
-    const totalAmount = Math.round(totalAmountUSD * configs.usdToVND);
+    const sampleSizeCost: number = Math.round(sampleSizeCostUSD * _config.usdToVND);
+    const customQuestionCost: number = Math.round(customQuestionCostUSD * _config.usdToVND);
+    const eyeTrackingSampleSizeCost: number = Math.round(eyeTrackingSampleSizeCostUSD * _config.usdToVND);
+    const amount = Math.round(amountUSD * _config.usdToVND);
+    const vat = Math.round(vatUSD * _config.usdToVND);
+    const totalAmount = Math.round(totalAmountUSD * _config.usdToVND);
 
     return {
       sampleSize,

@@ -3,7 +3,7 @@ import { ArrowBackOutlined, Save } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
-import { memo, useEffect, useState } from "react"
+import { memo, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { routes } from "routers/routes";
@@ -16,47 +16,6 @@ import { Payment } from "models/payment";
 import { VALIDATION } from "config/constans";
 import CountryService from "services/country";
 
-const schema = yup.object().shape({
-  fullName: yup.string().required('Full name is required.'),
-  companyName: yup.string().required('Company name is required.'),
-  companyAddress: yup.string().required('Company address is required.'),
-  email: yup.string().email('Please enter a valid email adress').required('Email is required.'),
-  phone: yup.string().matches(VALIDATION.phone, { message: "Please enter a valid phone number.", excludeEmptyString: true }).required('Phone is required.'),
-  countryId: yup.object().required('Country is required.'),
-  taxCode: yup.string().notRequired(),
-  sampleSizeCost: yup.number()
-    .typeError('Sample size cost VND is required.')
-    .positive('Sample size cost VND must be a positive number')
-    .required('Sample size cost VND is required.'),
-  sampleSizeCostUSD: yup.number()
-    .typeError('Sample size cost USD is required.')
-    .positive('Sample size cost USD must be a positive number')
-    .required('Sample size cost USD is required.'),
-  amount: yup.number()
-    .typeError('Total amount VND is required.')
-    .positive('Total amount VND must be a positive number')
-    .required('Total amount VND is required.'),
-  amountUSD: yup.number()
-    .typeError('Total amount USD is required.')
-    .positive('Total amount USD must be a positive number')
-    .required('Total amount USD is required.'),
-  vat: yup.number()
-    .typeError('VAT VND is required.')
-    .positive('VAT VND must be a positive number')
-    .required('VAT VND is required.'),
-  vatUSD: yup.number()
-    .typeError('VAT USD is required.')
-    .positive('VAT USD must be a positive number')
-    .required('VAT USD is required.'),
-  totalAmount: yup.number()
-    .typeError('Total payment VND is required.')
-    .positive('Total payment VND must be a positive number')
-    .required('Total payment VND is required.'),
-  totalAmountUSD: yup.number()
-    .typeError('Total payment USD is required.')
-    .positive('Total payment USD must be a positive number')
-    .required('Total payment USD is required.'),
-})
 
 export interface PaymentFormData {
   fullName: string;
@@ -68,6 +27,10 @@ export interface PaymentFormData {
   taxCode: string;
   sampleSizeCost: number;
   sampleSizeCostUSD: number;
+  customQuestionCost: number;
+  customQuestionCostUSD: number;
+  eyeTrackingSampleSizeCost: number;
+  eyeTrackingSampleSizeCostUSD: number;
   amount: number;
   amountUSD: number;
   vat: number;
@@ -83,9 +46,75 @@ interface Props {
 
 const PaymentForm = memo(({ itemEdit, onSubmit }: Props) => {
 
+  const schema = useMemo(() => yup.object().shape({
+    fullName: yup.string().required('Full name is required.'),
+    companyName: yup.string().required('Company name is required.'),
+    companyAddress: yup.string().required('Company address is required.'),
+    email: yup.string().email('Please enter a valid email adress').required('Email is required.'),
+    phone: yup.string().matches(VALIDATION.phone, { message: "Please enter a valid phone number.", excludeEmptyString: true }).required('Phone is required.'),
+    countryId: yup.object().required('Country is required.'),
+    taxCode: yup.string().notRequired(),
+    sampleSizeCost: yup.number()
+      .typeError('Sample size cost VND is required.')
+      .min(0, 'Sample size cost VND must be greater than or equal to 0')
+      .required('Sample size cost VND is required.'),
+    sampleSizeCostUSD: yup.number()
+      .typeError('Sample size cost USD is required.')
+      .min(0, 'Sample size cost USD must be greater than or equal to 0')
+      .required('Sample size cost USD is required.'),
+    amount: yup.number()
+      .typeError('Total amount VND is required.')
+      .min(0, 'Total amount VND must be greater than or equal to 0')
+      .required('Total amount VND is required.'),
+    amountUSD: yup.number()
+      .typeError('Total amount USD is required.')
+      .min(0, 'Total amount USD must be greater than or equal to 0')
+      .required('Total amount USD is required.'),
+    vat: yup.number()
+      .typeError('VAT VND is required.')
+      .min(0, 'VAT VND must be greater than or equal to 0')
+      .required('VAT VND is required.'),
+    vatUSD: yup.number()
+      .typeError('VAT USD is required.')
+      .min(0, 'VAT USD must be greater than or equal to 0')
+      .required('VAT USD is required.'),
+    totalAmount: yup.number()
+      .typeError('Total payment VND is required.')
+      .min(0, 'Total payment VND must be greater than or equal to 0')
+      .required('Total payment VND is required.'),
+    totalAmountUSD: yup.number()
+      .typeError('Total payment USD is required.')
+      .min(0, 'Total payment USD must be greater than or equal to 0')
+      .required('Total payment USD is required.'),
+    customQuestionCost: itemEdit?.customQuestions?.length ?
+      yup.number()
+        .typeError('Custom Question VND is required.')
+        .min(0, 'Custom Question VND must be greater than or equal to 0')
+        .required('Custom Question VND is required.') :
+      yup.mixed().notRequired(),
+    customQuestionCostUSD: itemEdit?.customQuestions?.length ?
+      yup.number()
+        .typeError('Custom Question USD is required.')
+        .min(0, 'Custom Question USD must be greater than or equal to 0')
+        .required('Custom Question USD is required.') :
+      yup.mixed().notRequired(),
+    eyeTrackingSampleSizeCost: itemEdit?.eyeTrackingSampleSize ?
+      yup.number()
+        .typeError('Eye Tracking Cost VND is required.')
+        .min(0, 'Eye Tracking Cost VND must be greater than or equal to 0')
+        .required('Eye Tracking Cost VND is required.') :
+      yup.mixed().notRequired(),
+    eyeTrackingSampleSizeCostUSD: itemEdit?.eyeTrackingSampleSize ?
+      yup.number()
+        .typeError('Eye Tracking Cost USD is required.')
+        .min(0, 'Eye Tracking Cost USD must be greater than or equal to 0')
+        .required('Eye Tracking Cost USD is required.') :
+      yup.mixed().notRequired(),
+  }), [itemEdit])
+
   const dispatch = useDispatch();
   const [countries, setCountries] = useState<OptionItem[]>([])
-  
+
   const { register, handleSubmit, formState: { errors }, reset, control } = useForm<PaymentFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
@@ -111,6 +140,10 @@ const PaymentForm = memo(({ itemEdit, onSubmit }: Props) => {
         taxCode: itemEdit.taxCode,
         sampleSizeCost: itemEdit.sampleSizeCost,
         sampleSizeCostUSD: itemEdit.sampleSizeCostUSD,
+        customQuestionCost: itemEdit.customQuestionCost || 0,
+        customQuestionCostUSD: itemEdit.customQuestionCostUSD || 0,
+        eyeTrackingSampleSizeCost: itemEdit.eyeTrackingSampleSizeCost || 0,
+        eyeTrackingSampleSizeCostUSD: itemEdit.eyeTrackingSampleSizeCostUSD || 0,
         amount: itemEdit.amount,
         amountUSD: itemEdit.amountUSD,
         vat: itemEdit.vat,
@@ -246,6 +279,50 @@ const PaymentForm = memo(({ itemEdit, onSubmit }: Props) => {
                       errorMessage={errors.sampleSizeCostUSD?.message}
                     />
                   </Grid>
+                  {!!itemEdit?.customQuestions?.length && (
+                    <>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Custom question cost VND"
+                          name="customQuestionCost"
+                          type="number"
+                          inputRef={register('customQuestionCost')}
+                          errorMessage={errors.customQuestionCost?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Custom question cost USD"
+                          name="customQuestionCostUSD"
+                          type="number"
+                          inputRef={register('customQuestionCostUSD')}
+                          errorMessage={errors.customQuestionCostUSD?.message}
+                        />
+                      </Grid>
+                    </>
+                  )}
+                  {!!itemEdit?.eyeTrackingSampleSize && (
+                    <>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Eye tracking cost VND"
+                          name="eyeTrackingSampleSizeCost"
+                          type="number"
+                          inputRef={register('eyeTrackingSampleSizeCost')}
+                          errorMessage={errors.eyeTrackingSampleSizeCost?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Eye tracking cost USD"
+                          name="eyeTrackingSampleSizeCostUSD"
+                          type="number"
+                          inputRef={register('eyeTrackingSampleSizeCostUSD')}
+                          errorMessage={errors.eyeTrackingSampleSizeCostUSD?.message}
+                        />
+                      </Grid>
+                    </>
+                  )}
                   <Grid item xs={12} sm={6}>
                     <Inputs
                       title="Total amount VND"

@@ -624,7 +624,8 @@ const SetupSurvey = memo(({ id }: Props) => {
   }
 
   const totalCustomQuestionPrice = useMemo(() => {
-    return PriceService.getCustomQuestionCost(questions, configs) || 0;
+    return 0
+    // return PriceService.getCustomQuestionCost(questions, configs) || 0;
   }, [questions, configs])
 
   const countQuestionType = (type: ECustomQuestionType) => {

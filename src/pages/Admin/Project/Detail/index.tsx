@@ -6,7 +6,7 @@ import { push } from "connected-react-router"
 import { routes } from "routers/routes"
 import { Project } from "models/project"
 import { AdminProjectService } from "services/admin/project"
-import { Box, Button, Card, CardContent, Grid, Paper, Tab, Table, TableBody, TableCell, TableHead, TableRow, Tabs, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Card, CardContent, Divider, Grid, Paper, Tab, Table, TableBody, TableCell, TableHead, TableRow, Tabs, Tooltip, Typography } from "@mui/material"
 import { ArrowBackOutlined, EditOutlined } from "@mui/icons-material"
 import classes from './styles.module.scss'
 import clsx from "clsx"
@@ -26,6 +26,8 @@ import { Quota, QuotaTableRow } from "models/quota"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import PaymentStatus from "components/PaymentStatus"
+import { CustomQuestion, ECustomQuestionType } from "models/custom_question"
+import Emoji from "components/common/images/Emojis";
 
 
 enum ETab {
@@ -115,6 +117,143 @@ const Detail = memo(({ }: Props) => {
     dispatch(push(routes.admin.project.edit.replace(':id', `${project.id}`)));
   }
 
+  const getContentCustomQuestion = (item: CustomQuestion) => {
+    switch (item.typeId) {
+      case ECustomQuestionType.Open_Question:
+        return null;
+      case ECustomQuestionType.Single_Choice:
+      case ECustomQuestionType.Multiple_Choices:
+        return (
+          <>
+            {!!item.answers?.length && (
+              <>
+                <Typography variant="subtitle1" component="div">
+                  Answers:
+                </Typography>
+                {item.answers.map((answer) => (
+                  <Typography key={answer.id} display="flex" alignItems="center" marginLeft={4} variant="subtitle1" component="div">
+                    Title: {" "}
+                    {answer.title}
+                    {answer.exclusive && <span className={classes.exclusiveBox}>exclusive</span>}
+                  </Typography>
+                ))}
+              </>
+            )}
+          </>
+        );
+      case ECustomQuestionType.Numeric_Scale:
+        return (
+          <>
+            <Box display="flex">
+              <Typography variant="subtitle1" component="div">
+                From: <span style={{ fontWeight: 500 }}>{item.scaleRangeFrom}</span>
+              </Typography>
+              <Typography ml={3} variant="subtitle1" component="div">
+                To: <span style={{ fontWeight: 500 }}>{item.scaleRangeTo}</span>
+              </Typography>
+            </Box>
+            {item.customQuestionAttributes?.length && (
+              <>
+                <Typography variant="subtitle1" component="div">
+                  Multiple attributes:
+                </Typography>
+                <Box ml={2} mt={1}>
+                  <Table className={classes.table}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Left label</TableCell>
+                        <TableCell>Right label</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {item.customQuestionAttributes?.map(item => (
+                        <TableRow key={item.id}>
+                          <TableCell>{item.leftLabel}</TableCell>
+                          <TableCell>{item.rightLabel}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Box>
+              </>
+            )}
+          </>
+        )
+      case ECustomQuestionType.Smiley_Rating:
+        return (
+          <>
+            <Typography variant="subtitle1" component="div">
+              Smiley scale: <span style={{ fontWeight: 500 }}>{item.customQuestionEmojis?.length || 0} faces</span>
+            </Typography>
+            <Box display="flex" flexWrap="wrap" alignItems="flex-start" justifyContent="flex-start">
+              {item.customQuestionEmojis?.map(customQuestionEmoji => (
+                <Box key={customQuestionEmoji.id} flex={1} ml={2} mt={2} display="flex" flexDirection="column" alignItems="center" justifyContent="center" minWidth="150px">
+                  <Emoji emojiId={customQuestionEmoji.emojiId} />
+                  <Typography variant="subtitle1" align="center" mt={0.5}>
+                    {customQuestionEmoji.label}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+            {item.customQuestionAttributes?.length && (
+              <>
+                <Typography variant="subtitle1" component="div">
+                  Multiple attributes:
+                </Typography>
+                <Box ml={2} mt={1}>
+                  <Table className={classes.table}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Attribute</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {item.customQuestionAttributes?.map(item => (
+                        <TableRow key={item.id}>
+                          <TableCell>{item.attribute}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Box>
+              </>
+            )}
+          </>
+        )
+      case ECustomQuestionType.Star_Rating:
+        return (
+          <>
+            <Typography variant="subtitle1" component="div">
+              Number of stars: <span style={{ fontWeight: 500 }}>{item.numberOfStars || 0}</span>
+            </Typography>
+            {item.customQuestionAttributes?.length && (
+              <>
+                <Typography variant="subtitle1" component="div">
+                  Multiple attributes:
+                </Typography>
+                <Box ml={2} mt={1}>
+                  <Table className={classes.table}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Attribute</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {item.customQuestionAttributes?.map(item => (
+                        <TableRow key={item.id}>
+                          <TableCell>{item.attribute}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Box>
+              </>
+            )}
+          </>
+        )
+    }
+  }
+
   return (
     <div>
       <Box display="flex" justifyContent="space-between" alignContent="center" mb={4}>
@@ -150,17 +289,17 @@ const Detail = memo(({ }: Props) => {
               <Box display={"flex"} justifyContent="space-between">
                 <Box>
                   <div className={classes.title}>Name: {project?.name}</div>
-                  <Typography mt={2} ml={4} variant="h6" sx={{fontWeight: 500}}>ID: <span className={classes.valueBox}>{project?.id}</span></Typography>
-                  <Typography mb={4} ml={4} variant="h6" sx={{fontWeight: 500}}>Survey language: <span className={classes.valueBox}>{langSupports.find(it => it.key === project?.surveyLanguage)?.name}</span></Typography>
+                  <Typography mt={2} ml={4} variant="h6" sx={{ fontWeight: 500 }}>ID: <span className={classes.valueBox}>{project?.id}</span></Typography>
+                  <Typography mb={4} ml={4} variant="h6" sx={{ fontWeight: 500 }}>Survey language: <span className={classes.valueBox}>{langSupports.find(it => it.key === project?.surveyLanguage)?.name}</span></Typography>
                 </Box>
                 {project && <LabelStatus typeStatus={project.status} />}
               </Box>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={activeTab} onChange={handleChange}>
-                  <Tab label={<Typography variant="subtitle1" sx={{fontWeight: 500}}>Setup Survey</Typography>} />
-                  <Tab label={<Typography variant="subtitle1" sx={{fontWeight: 500}}>Target</Typography>} />
-                  <Tab label={<Typography variant="subtitle1" sx={{fontWeight: 500}}>Quotas</Typography>} />
-                  <Tab label={<Typography variant="subtitle1" sx={{fontWeight: 500}}>Payment</Typography>} />
+                  <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Setup Survey</Typography>} />
+                  <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Target</Typography>} />
+                  <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Quotas</Typography>} />
+                  <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Payment</Typography>} />
                 </Tabs>
               </Box>
               <TabPanel value={activeTab} index={ETab.SETUP_SURVEY}>
@@ -284,43 +423,42 @@ const Detail = memo(({ }: Props) => {
                         Custom questions
                       </Typography>
                       <Box ml={2}>
-                        {
-                          project.customQuestions.map((question) => (
-                            <Box marginTop={2} key={question.id}>
+                        {project.customQuestions.map((question) => (
+                          <Paper sx={{ mt: 2, p: 2 }} key={question.id}>
+                            <Typography variant="subtitle1" component="div">
+                              Question title: <span style={{ fontWeight: 500 }}>{question.title}</span>
+                            </Typography>
+                            <Box marginLeft={4}>
                               <Typography variant="subtitle1" component="div">
-                                <span style={{ fontWeight: 500 }}>Title:</span> {question.title}
+                                Type: <span style={{ fontWeight: 500 }}>{question.type.title}</span>
                               </Typography>
-                            
-                              <Box marginLeft={4}>
-                                <Typography variant="subtitle1" component="div">
-                                  Type: {question.type.title}
-                                </Typography>
-
-                                <Typography variant="subtitle1" component="div">
-                                  Price: <span className={classes.valueBox}>{fCurrency2(question.type.price)} USD</span>
-                                </Typography>
-
-                                {!!question.answers?.length && (
-                                  <>
-                                    <Typography variant="subtitle1" component="div">
-                                      Answers:
-                                    </Typography>
-
-                                    {
-                                      question.answers.map((answer) => (
-                                        <Typography key={answer.id} display="flex" alignItems="center" marginLeft={4} variant="subtitle1" component="div">
-                                          Title: {" "}
-                                          {answer.title}
-                                          {answer.exclusive && <span className={classes.exclusiveBox}>exclusive</span>}
-                                        </Typography>
-                                      ))
-                                    }
-                                  </>
-                                )}
-                              </Box>
+                              {getContentCustomQuestion(question)}
                             </Box>
-                          ))
-                        }
+                          </Paper>
+                        ))}
+                      </Box>
+                    </>
+                  )}
+                  {project?.eyeTrackingPacks?.length && (
+                    <>
+                      <Typography variant="h6" mt={4} mb={2}>
+                        Eye-tracking (Competitor pack)
+                      </Typography>
+                      <Box className={classes.packBox}>
+                        {project?.eyeTrackingPacks?.map(item => (
+                          <Paper key={item.id} className={classes.packItem}>
+                            <Tooltip title={'Download'}>
+                              <img src={item.image} alt="" onClick={() => onDownloadPackImage(item)} />
+                            </Tooltip>
+                            <div className={classes.infor}>
+                              <div className={classes.inforItem}>Pack Name: <strong>{item.name}</strong></div>
+                              <div className={classes.inforItem}>Pack type: <strong>{item.packType?.name}</strong></div>
+                              <div className={classes.inforItem}>Brand: <strong>{item.brand}</strong></div>
+                              <div className={classes.inforItem}>Variant: <strong>{item.variant}</strong></div>
+                              <div className={classes.inforItem}>Manufacturer: <strong>{item.manufacturer}</strong></div>
+                            </div>
+                          </Paper>
+                        ))}
                       </Box>
                     </>
                   )}
@@ -331,20 +469,8 @@ const Detail = memo(({ }: Props) => {
                   {!!project?.targets?.length && (
                     <>
                       <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
-                          <Typography variant="h6" mb={1}>
-                            Sample size: <strong className={clsx(classes.valueBox, { [classes.danger]: !project?.sampleSize })}>{project?.sampleSize || 'None'}</strong>
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                          <Typography variant="h6">
-                            Sample size cost: <strong className={clsx(classes.valueBox, { [classes.danger]: !project?.sampleSize })}>{`$`}{fCurrency2(payment?.sampleSizeCostUSD || price?.sampleSizeCostUSD || 0)}</strong>
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                      <Grid container spacing={2} mt={2}>
                         {!!getTargets([TargetQuestionType.Location])?.length && (
-                          <Grid item xs={12} md={4}>
+                          <Grid item xs={12}>
                             <Paper elevation={3} sx={{ p: 2, height: '100%' }}>
                               <Typography variant="h6" mb={1}>
                                 Location
@@ -358,10 +484,10 @@ const Detail = memo(({ }: Props) => {
                           </Grid>
                         )}
                         {!!getTargets([TargetQuestionType.Household_Income])?.length && (
-                          <Grid item xs={12} md={4}>
+                          <Grid item xs={12}>
                             <Paper elevation={3} sx={{ p: 2, height: '100%' }}>
                               <Typography variant="h6" mb={1}>
-                                Economic class
+                                Household income
                               </Typography>
                               {getTargets([TargetQuestionType.Household_Income])?.map(it => (
                                 <Typography key={it.id} variant="subtitle1" ml={2}>
@@ -372,7 +498,7 @@ const Detail = memo(({ }: Props) => {
                           </Grid>
                         )}
                         {!!getTargets([TargetQuestionType.Gender_And_Age_Quotas, TargetQuestionType.Mums_Only])?.length && (
-                          <Grid item xs={12} md={4}>
+                          <Grid item xs={12}>
                             <Paper elevation={3} sx={{ p: 2, height: '100%' }}>
                               <Typography variant="h6" mb={1}>
                                 Age coverage
@@ -462,33 +588,111 @@ const Detail = memo(({ }: Props) => {
               </TabPanel>
               <TabPanel value={activeTab} index={ETab.PAYMENT}>
                 <Box>
-                  <p className={classes.textGreen}>Total amount: {'$'}{fCurrency2(payment?.totalAmountUSD || price?.totalAmountUSD || 0)}</p>
-                  <p className={classes.textBlue}>(Equivalent to {fCurrency2VND(payment?.totalAmount || price?.totalAmount || 0)} VND)</p>
-                  {payment && (
-                    <Grid container spacing={2} ml={2}>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="subtitle1" component="div">
-                        Payment reference: <strong>{payment?.orderId}</strong>
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="subtitle1" component="div">
-                        Payment method: <strong>{paymentMethods.find(it => it.id === payment?.paymentMethodId)?.name}</strong>
-                      </Typography>
-                    </Grid>
-                    {payment?.paymentMethodId === EPaymentMethod.BANK_TRANSFER && (
-                      <Grid item xs={12} sm={6}>
-                        <Typography variant="subtitle1" component="div">
-                          Confirm payment: <strong>{payment?.userConfirm ? "Yes" : 'No'}</strong>
-                        </Typography>
-                      </Grid>
-                    )}
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="subtitle1" component="div" sx={{ display: "flex", alignItems: "center" }}>
-                        Payment status: <Box ml={0.5}><PaymentStatus status={payment?.status} /></Box>
-                      </Typography>
-                    </Grid>
-                  </Grid>
+                  {!!payment ? (
+                    <>
+                      <Box mb={6}>
+                        <p className={classes.textGreen}>Total amount: {'$'}{fCurrency2(payment?.totalAmountUSD || 0)}</p>
+                        <p className={classes.textBlue}>(Equivalent to {fCurrency2VND(payment?.totalAmount || 0)} VND)</p>
+                      </Box>
+                      <Box maxWidth="600px" margin="auto">
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} sm={6}>
+                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                              <span>Sample size ({payment?.sampleSize || 0}):</span> <strong>{`$`}{fCurrency2(payment?.sampleSizeCostUSD || 0)}</strong>
+                            </Typography>
+                          </Grid>
+                          {!!payment?.customQuestions?.length && (
+                            <Grid item xs={12} sm={6}>
+                              <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                <span>Custom questions ({payment?.customQuestions?.length}):</span> <strong>{`$`}{fCurrency2(payment?.customQuestionCostUSD || 0)}</strong>
+                              </Typography>
+                            </Grid>
+                          )}
+                          {!!payment?.eyeTrackingSampleSize && (
+                            <Grid item xs={12} sm={6}>
+                              <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                <span>Eye-tracking ({payment?.eyeTrackingSampleSize || 0}):</span> <strong>{`$`}{fCurrency2(payment?.eyeTrackingSampleSizeCostUSD || 0)}</strong>
+                              </Typography>
+                            </Grid>
+                          )}
+                          <Grid item xs={12}><Divider /></Grid>
+                          <Grid item xs={12}>
+                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                              <span>Subtotal:</span> <strong>{`$`}{fCurrency2(payment?.amountUSD || 0)}</strong>
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                              <span>Tax (VAT {(payment?.vatRate || 0) * 100}%):</span> <strong>{`$`}{fCurrency2(payment?.vatUSD || 0)}</strong>
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={12}><Divider /></Grid>
+                          <Grid item xs={12} sm={6}>
+                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                              <span>Payment reference:</span> <strong>{payment?.orderId}</strong>
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                              <span>Payment method:</span> <strong>{paymentMethods.find(it => it.id === payment?.paymentMethodId)?.name}</strong>
+                            </Typography>
+                          </Grid>
+                          {payment?.paymentMethodId === EPaymentMethod.BANK_TRANSFER && (
+                            <Grid item xs={12} sm={6}>
+                              <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                <span>Confirm payment:</span> <strong>{payment?.userConfirm ? "Yes" : 'No'}</strong>
+                              </Typography>
+                            </Grid>
+                          )}
+                          <Grid item xs={12} sm={6}>
+                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                              <span>Payment status:</span> <Box ml={0.5}><PaymentStatus status={payment?.status} /></Box>
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </>
+                  ) : (
+                    <>
+                      <Box mb={6}>
+                        <p className={classes.textGreen}>Total amount: {'$'}{fCurrency2(price?.totalAmountUSD || 0)}</p>
+                        <p className={classes.textBlue}>(Equivalent to {fCurrency2VND(price?.totalAmount || 0)} VND)</p>
+                      </Box>
+                      <Box maxWidth="600px" margin="auto">
+                        <Grid container spacing={2}>
+                          <Grid item xs={12}>
+                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                              <span>Sample size ({project?.sampleSize || 0}):</span> <strong>{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</strong>
+                            </Typography>
+                          </Grid>
+                          {!!project?.customQuestions?.length && (
+                            <Grid item xs={12}>
+                              <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                <span>Custom questions ({project?.customQuestions?.length}):</span> <strong>{`$`}{fCurrency2(price?.customQuestionCostUSD || 0)}</strong>
+                              </Typography>
+                            </Grid>
+                          )}
+                          {!!project?.eyeTrackingSampleSize && (
+                            <Grid item xs={12}>
+                              <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                <span>Eye-tracking ({project?.eyeTrackingSampleSize || 0}):</span> <strong>{`$`}{fCurrency2(price?.eyeTrackingSampleSizeCostUSD || 0)}</strong>
+                              </Typography>
+                            </Grid>
+                          )}
+                          <Grid item xs={12}><Divider /></Grid>
+                          <Grid item xs={12}>
+                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                              <span>Subtotal:</span> <strong>{`$`}{fCurrency2(price?.amountUSD || 0)}</strong>
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                              <span>Tax (VAT {(configs?.vat || 0) * 100}%):</span> <strong>{`$`}{fCurrency2(price?.vatUSD || 0)}</strong>
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </>
                   )}
                 </Box>
               </TabPanel>

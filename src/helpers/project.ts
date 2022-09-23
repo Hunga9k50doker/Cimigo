@@ -1,13 +1,36 @@
 import { AdditionalBrand } from "models/additional_brand";
 import { Solution } from "models/Admin/solution";
 import { TargetQuestionType } from "models/Admin/target";
+import { ConfigData } from "models/config";
 import { Pack } from "models/pack";
+import { EPaymentStatus } from "models/payment";
 import { Project } from "models/project";
 
 export const editableProject = (project: Project) => {
   return project?.editable
 }
 export class ProjectHelper {
+
+  static getPayment(project: Project) {
+    return project?.payments?.filter(f => f.status !== EPaymentStatus.CANCEL)?.sort((a, b) => b.id - a.id)?.[0]
+  }
+
+  static getProject(project: Project) {
+    const payment = ProjectHelper.getPayment(project)
+    if (payment) {
+      return payment.projectData
+    }
+    return project
+  }
+
+  static getConfig(project: Project, config: ConfigData) {
+    const payment = ProjectHelper.getPayment(project)
+    if (payment) {
+      return payment.config
+    }
+    return config
+  }
+  
 
   static isValidQuotas(project: Project) {
     return project?.agreeQuota

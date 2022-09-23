@@ -8,6 +8,10 @@ export interface UpdatePayment {
   taxCode: string;
   sampleSizeCost: number;
   sampleSizeCostUSD: number;
+  customQuestionCost: number;
+  customQuestionCostUSD: number;
+  eyeTrackingSampleSizeCost: number;
+  eyeTrackingSampleSizeCostUSD: number;
   amount: number;
   amountUSD: number;
   vat: number;

@@ -6,6 +6,8 @@ export const worksheetCols = [
   { header: "Order Sample Size Cost - USD", key: "sampleSizeCostUSD" },
   { header: "Order Custom Question Cost - VND", key: "customQuestionCost" },
   { header: "Order Custom Question Cost - USD", key: "customQuestionCostUSD" },
+  { header: "Order Eye Tracking Cost - VND", key: "eyeTrackingSampleSizeCost" },
+  { header: "Order Eye Tracking Cost - USD", key: "eyeTrackingSampleSizeCostUSD" },
   { header: "Order VAT", key: "vat" },
   { header: "Order VAT USD", key: "vatUSD" },
   { header: "Order Total Amount - VND", key: "totalAmount" },
