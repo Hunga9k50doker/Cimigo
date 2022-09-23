@@ -203,9 +203,18 @@
 .rootSelect {
   min-width: 135px;
   margin-left: 15px;
+  @media only screen and (max-width: 860px) {
+    width: 100%;
+    max-width: 220px;
+  }
+  @media only screen and (max-width: 818px) {
+    max-width: 220px;
+  }
   @media only screen and (max-width: 767px) {
+    max-width: 127px;
     margin-right: 0px;
   }
+  
 }
 .rootSelect > div > div {
   padding: 4.5px 14px;
