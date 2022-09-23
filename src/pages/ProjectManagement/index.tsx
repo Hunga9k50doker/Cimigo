@@ -495,7 +495,7 @@ const ProjectManagement = memo((props: Props) => {
                       translation-key="project_mgmt_status_all_status"
                       className={classes.itemStatus}
                     >
-                      <ParagraphBody $colorName="--gray-80">
+                      <ParagraphBody pr={1} $colorName="--gray-80">
                         {t("project_mgmt_status_all_status")}
                       </ParagraphBody>
                     </MenuItem>
@@ -506,7 +506,7 @@ const ProjectManagement = memo((props: Props) => {
                         value={item.id}
                         translation-key={item.translation}
                       >
-                        <ParagraphBody $colorName="--gray-80">
+                        <ParagraphBody pr={1} $colorName="--gray-80">
                           {" "}
                           {t(item.translation)}
                         </ParagraphBody>
@@ -753,7 +753,7 @@ const ProjectManagement = memo((props: Props) => {
               }}
             >
               <MenuItem value={0} translation-key="project_mgmt_all_projects">
-                <ParagraphSmall $colorName="--gray-90"> {t("project_mgmt_all_projects")}</ParagraphSmall>
+                <ParagraphSmall pr={1} $colorName="--gray-90"> {t("project_mgmt_all_projects")}</ParagraphSmall>
               </MenuItem>
               {folders?.map((item) => (
                 <MenuItem
@@ -761,7 +761,7 @@ const ProjectManagement = memo((props: Props) => {
                   value={item.id}
                   sx={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <ParagraphSmall className={classes.itemSelectMobie} $colorName="--gray-90">{item.name}</ParagraphSmall>
+                  <ParagraphSmall pr={1} className={classes.itemSelectMobie} $colorName="--gray-90">{item.name}</ParagraphSmall>
                   <div>
                     <IconButton
                       onClick={(e) => {
