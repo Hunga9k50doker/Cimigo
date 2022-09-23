@@ -46,12 +46,12 @@ const PopupConfirmCancelOrder = memo(({ isOpen, onClose, onConfirm }: PopupConfi
           btnType={BtnType.Secondary}
           onClick={onClose}
           translation-key="common_cancel"
-          children={<TextBtnSmall>No, don’t cancel</TextBtnSmall>}
+          children={<TextBtnSmall translation-key="common_dont_cancel">{t("common_dont_cancel")}</TextBtnSmall>}
         />
         <Button
           btnType={BtnType.Raised}
           translation-key=""
-          children={<TextBtnSmall>Yes, cancel this payment</TextBtnSmall>}
+          children={<TextBtnSmall translation-key="common_cancel_this_payment">{t("common_cancel_this_payment")}</TextBtnSmall>}
           onClick={onConfirm}
         />
       </DialogActionsConfirm>

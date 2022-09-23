@@ -145,19 +145,19 @@ const Order = memo(({ }: Props) => {
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_beneficiary_name">{t("payment_billing_beneficiary_name")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_account_number_bank">{t("payment_billing_account_number_bank")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_SWIFT_code">{t('payment_billing_SWIFT_code')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">VTCB VNVX</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_SWIFT_code_name">{t("payment_billing_SWIFT_code_name")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">USD</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_currency_USD">{t("payment_billing_currency_unit")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={12} sm={8}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
@@ -180,15 +180,15 @@ const Order = memo(({ }: Props) => {
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_beneficiary_name">{t("payment_billing_beneficiary_name")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_account_number_bank">{t("payment_billing_account_number_bank")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">VND</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_currency_VND">{t("payment_billing_currency_VND")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={12}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
@@ -242,19 +242,19 @@ const Order = memo(({ }: Props) => {
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_beneficiary_name">{t("payment_billing_beneficiary_name")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_account_number_bank">{t("payment_billing_account_number_bank")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_SWIFT_code">{t('payment_billing_SWIFT_code')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">VTCB VNVX</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_SWIFT_code_name">{t("payment_billing_SWIFT_code_name")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">USD</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_currency_USD">{t("payment_billing_currency_USD")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={12} sm={8}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
@@ -277,15 +277,15 @@ const Order = memo(({ }: Props) => {
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_beneficiary">{t('payment_billing_beneficiary')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">CIMIGO</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_beneficiary_name">{t("payment_billing_beneficiary_name")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_account_number">{t('payment_billing_account_number')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">19026245046022</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_account_number_bank">{t("payment_billing_account_number_bank")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black">VND</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_currency_VND">{t("payment_billing_currency_VND")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={12}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
@@ -332,7 +332,7 @@ const Order = memo(({ }: Props) => {
             <Box py={3} display="flex" justifyContent="center" alignItems="center">
               <DownLoadItem onClick={getInvoice}>
                 <img className={classes.imgAddPhoto} src={images.icInvoice} />
-                <ParagraphBody $colorName="--cimigo-blue" translation-key="">Download invoice</ParagraphBody>
+                <ParagraphBody $colorName="--cimigo-blue" translation-key="pay_order_download_invoice">{t("pay_order_download_invoice")}</ParagraphBody>
               </DownLoadItem>
             </Box>
             <ParagraphBody
