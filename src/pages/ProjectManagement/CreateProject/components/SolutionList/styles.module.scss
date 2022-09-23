@@ -90,20 +90,12 @@
   align-items: center;
   margin-bottom: 30px;
   @media only screen and (max-width: 767px) {
-    padding: 0px 19px;
+    margin-bottom:8px;
   }
-  p {
-    font-weight: 600;
-    font-size: 32px;
-    line-height: 48px;
-    color: var(--cimigo-blue);
-    padding-right: 30px;
-    margin: 0px;
-    @media only screen and (max-width: 767px) {
-      font-size: 16px;
-      padding-right: 10px;
-      white-space: nowrap;
-    }
+  .title{
+    font-weight: 600 !important;
+    font-size: 32px !important;
+    line-height: 48px !important;
   }
 }
 .header > div {

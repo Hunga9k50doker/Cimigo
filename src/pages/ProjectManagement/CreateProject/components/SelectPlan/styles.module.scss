@@ -1,6 +1,13 @@
 .titleSelectPlan {
   text-align: center;
-  padding-top: 16px;
+  .title{
+    font-weight: 600 !important;
+    font-size: 32px !important;
+    line-height: 48px !important;
+  }
+  @media only screen and (max-width: 767px) {
+    padding-top: 16px;
+  }
 }
 
 //==================================card============================//
@@ -168,4 +175,7 @@
 }
 .selectOption:hover {
   color: blue;
+}
+.sampleSize{
+  font-weight: 600;
 }

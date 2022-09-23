@@ -67,6 +67,8 @@ export interface Payment {
   user: User;
   project: Project;
   onepays: OnePay[];
+  eyeTrackingSampleSizeCostUSD: number;
+  eyeTrackingSampleSize: number;
 }
 
 export interface TryAgain {

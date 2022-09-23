@@ -100,17 +100,16 @@ const CreateProjectStep = memo(
         .finally(() => dispatch(setLoading(false)));
     };
     return (
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" className={classes.bodyContent}>
         <Grid justifyContent="center">
-          <p className={classes.title}>
-            <Heading1
-              $colorName="--cimigo-blue"
-              $fontWeight={"600"}
-              translation-key="project_create_tab_create_project_title"
-            >
-              {t("project_create_tab_create_project_title")}
-            </Heading1>
-          </p>
+          <Heading1
+            className={classes.title}
+            $colorName="--cimigo-blue"
+            $fontWeight={"600"}
+            translation-key="project_create_tab_create_project_title"
+          >
+            {t("project_create_tab_create_project_title")}
+          </Heading1>
         </Grid>
         <Grid className={classes.handleLink}>
           <Grid className={classes.handleLinkFormat}>

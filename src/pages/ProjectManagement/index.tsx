@@ -19,8 +19,6 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -67,7 +65,6 @@ import PopupConfirmDeleteProject from "./components/PopupConfirmDeleteProject";
 import PopupConfirmCreateOrEditFolder from "./components/PopupConfirmCreateOrEditFolder";
 import PopupConfirmDeleteFolder from "./components/PopupConfirmDeleteFolder";
 import SubTitle from "components/common/text/SubTitle";
-
 const ExpandIcon = (props) => {
   return <img src={Images.icSelectBlue} alt="expand icon" {...props} />;
 };
@@ -107,16 +104,6 @@ const ProjectManagement = memo((props: Props) => {
   const [folderEdit, setFolderEdit] = useState<Folder>(null);
   const [folderDelete, setFolderDelete] = useState<Folder>(null);
   const [createFolder, setCreateFolder] = useState(false);
-
-  const theme = useTheme();
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: 250,
-        minWidth: (!useMediaQuery(theme.breakpoints.down(360)) ?  300 : 200 ),
-      },
-    },
-  };
 
   const fetchData = async (value?: {
     sort?: SortItem;
@@ -751,14 +738,22 @@ const ProjectManagement = memo((props: Props) => {
               onChange={(e) => onChangeFolderMobile(e.target.value as number)}
               classes={{ select: classes.selectType, icon: classes.icSelect }}
               IconComponent={ExpandIcon}
-              MenuProps = {MenuProps}
+              MenuProps={{
+                classes: {
+                  paper: classes.selectFolderMobile,
+                },
+              }}
             >
               <MenuItem value={0} translation-key="project_mgmt_all_projects">
                 {t("project_mgmt_all_projects")}
               </MenuItem>
               {folders?.map((item) => (
-                <MenuItem key={item.id} value={item.id} sx={{display: "flex",justifyContent: "space-between"}}>
-                  <div className={classes.itemSelectMobie}>{item.name}</div> 
+                <MenuItem
+                  key={item.id}
+                  value={item.id}
+                  sx={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <div className={classes.itemSelectMobie}>{item.name}</div>
                   <div>
                     <IconButton
                       onClick={(e) => {
@@ -773,14 +768,13 @@ const ProjectManagement = memo((props: Props) => {
                         e.stopPropagation();
                         setFolderDelete(item);
                       }}
-                      sx={{color: "var(--cimigo-danger)"}}
+                      sx={{ color: "var(--cimigo-danger)" }}
                     >
                       <DeleteForeverIcon />
                     </IconButton>
                   </div>
                 </MenuItem>
               ))}
-              
             </Select>
           </FormControl>
         </Grid>

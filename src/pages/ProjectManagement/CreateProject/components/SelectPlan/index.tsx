@@ -15,7 +15,6 @@ import Heading3 from "components/common/text/Heading3";
 import DoneIcon from "@mui/icons-material/Done";
 import CardActions from "@mui/material/CardActions";
 import Button, { BtnType } from "components/common/buttons/Button";
-import TextBtnSmall from "components/common/text/TextBtnSmall";
 import { FormControl } from "@mui/material";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
@@ -25,6 +24,7 @@ import InputSelect from "components/common/inputs/InputSelect";
 import { CreateProjectFormData } from "../CreateProjectStep";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 interface SelectPlanProps {
   solution?: Solution;
   onChangePlanSelected?: (plan: Plan) => void;
@@ -42,23 +42,24 @@ const SelectPlan = memo(
       mode: "onChange",
     });
 
-    const getPlans = async () => {
-      dispatch(setLoading(true));
-      const params: UserGetPlans = {
-        take: 99999,
-        solutionId: solution?.id || undefined,
-      };
-      PlanService.getPlans(params)
-        .then((res) => {
-          setPlan({
-            data: res.data,
-            meta: res.meta,
-          });
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)));
-    };
+    
     useEffect(() => {
+      const getPlans = async () => {
+        dispatch(setLoading(true));
+        const params: UserGetPlans = {
+          take: 99999,
+          solutionId: solution?.id || undefined,
+        };
+        PlanService.getPlans(params)
+          .then((res) => {
+            setPlan({
+              data: res.data,
+              meta: res.meta,
+            });
+          })
+          .catch((e) => dispatch(setErrorMess(e)))
+          .finally(() => dispatch(setLoading(false)));
+      };
       getPlans();
     }, [solution]);
 
@@ -87,6 +88,7 @@ const SelectPlan = memo(
       <>
         <Grid justifyContent="center" className={classes.titleSelectPlan}>
           <Heading1
+            className={classes.title}
             $colorName={"--cimigo-blue"}
             translation-key="project_create_tab_plan_select_plan_title"
           >
@@ -157,8 +159,8 @@ const SelectPlan = memo(
                           <Heading3
                             $fontWeight={"500"}
                             $colorName={"--eerie-black-00"}
-                            variant="body2" 
-                            variantMapping={{"body2": "span"}}
+                            variant="body2"
+                            variantMapping={{ body2: "span" }}
                           >
                             {plan.title}
                           </Heading3>
@@ -167,8 +169,8 @@ const SelectPlan = memo(
                           <ParagraphBody
                             $colorName={"--eerie-black-00"}
                             translation-key="project_create_tab_plan_start_at"
-                            variant="body2" 
-                            variantMapping={{"body2": "span"}}
+                            variant="body2"
+                            variantMapping={{ body2: "span" }}
                           >
                             {t("project_create_tab_plan_start_at")}
                           </ParagraphBody>
@@ -177,8 +179,8 @@ const SelectPlan = memo(
                           <Heading1
                             $fontWeight={"600"}
                             $colorName={"--cimigo-blue"}
-                            variant="body2" 
-                            variantMapping={{"body2": "span"}}
+                            variant="body2"
+                            variantMapping={{ body2: "span" }}
                           >
                             {formatMoney(plan)}
                           </Heading1>
@@ -187,21 +189,31 @@ const SelectPlan = memo(
                           <ParagraphExtraSmall
                             $colorName={"--gray-60"}
                             translation-key="common_tax_exclusive"
-                            variant="body2" 
-                            variantMapping={{"body2": "span"}}
+                            variant="body2"
+                            variantMapping={{ body2: "span" }}
                           >
                             {t("common_tax_exclusive")}
                           </ParagraphExtraSmall>
                         </Typography>
-                        <Typography variant="body2" variantMapping={{"body2": "div"}}>
+                        <Typography
+                          variant="body2"
+                          variantMapping={{ body2: "div" }}
+                        >
                           <div className={classes.line}></div>
                         </Typography>
                         <Grid className={classes.contentInPlan}>
+                          <Grid className={classes.contentPlan}>
+                            <DoneIcon className={classes.iconContentPlan} />
+                            <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"} variant="body2"
+                          variantMapping={{ body2: "span" }} translation-key="project_create_tab_plan_interviews">
+                              <span className={classes.sampleSize}>{plan.sampleSize +' '}</span> {t("project_create_tab_plan_interviews")}
+                            </ParagraphBody>
+                          </Grid>
                           {plan?.content.map((item, index) => {
                             return (
                               <Grid className={classes.contentPlan} key={index}>
                                 <DoneIcon className={classes.iconContentPlan} />
-                                <ParagraphBody $colorName={"--eerie-black-00"}>
+                                <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"}>
                                   {item}
                                 </ParagraphBody>
                               </Grid>
@@ -216,9 +228,9 @@ const SelectPlan = memo(
                           btnType={BtnType.Raised}
                           translation-key="setup_survey_popup_save_question_title"
                           children={
-                            <TextBtnSmall translation-key="common_select">
+                            <TextBtnSecondary translation-key="common_select">
                               {t("common_select")}
-                            </TextBtnSmall>
+                            </TextBtnSecondary>
                           }
                           className={classes.btnSave}
                           onClick={() => onClick(plan)}
