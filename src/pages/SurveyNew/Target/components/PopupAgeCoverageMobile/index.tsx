@@ -82,6 +82,11 @@ const PopupAgeCoverageMobile = memo(({ isOpen, project, questionsAgeGender, ques
       _dataSelectedMun[item.questionId] = item.answers
     })
     setDataSelectedMum(_dataSelectedMun)
+    if (targetMum?.length) {
+      setActiveTab(ETab.Mums_Only)
+    } else if(targetGenderAge?.length){
+      setActiveTab(ETab.Gender_And_Age_Quotas)
+    }
   }, [project])
 
   const _onToggleAnswerGenderAge = (questionId: number, answer: TargetAnswer, checked: boolean) => {

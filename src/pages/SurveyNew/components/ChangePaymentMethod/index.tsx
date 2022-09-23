@@ -367,7 +367,7 @@ const ChangePaymentMethod = memo(
                     </ParagraphBody>
                   </div>
                 )}
-                {project?.enableEyeTracking && (
+                {!!project?.enableEyeTracking && (
                   <div className={classes.flexOrder}>
                     <ParagraphBody
                       $colorName="--eerie-black"

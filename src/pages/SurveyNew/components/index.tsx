@@ -96,7 +96,7 @@ export const MobileAction = styled(Grid)`
 export const RightPanel = styled(Box)`
   background: #F9F9F9;
   border-left: 1px solid var(--gray-10);
-  max-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
 `;

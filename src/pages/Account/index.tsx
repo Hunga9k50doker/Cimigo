@@ -1,6 +1,4 @@
 import classes from './styles.module.scss';
-import Header from "components/Header";
-import Footer from "components/Footer";
 import { PersonOutline, Loop, Logout, Payment, KeyboardDoubleArrowLeft } from '@mui/icons-material';
 import { Button, Grid, Icon, ListItem, MenuList, Popper, ClickAwayListener, Paper, IconButton, List, ListItemText, Divider } from "@mui/material"
 import UseAuth from "hooks/useAuth";
@@ -12,6 +10,7 @@ import { useState, useRef, memo, useMemo } from 'react';
 import ChangePassword from './ChangePassword';
 import PaymentInfo from './PaymentInfo';
 import { useTranslation } from 'react-i18next';
+import BasicLayout from 'layout/BasicLayout';
 
 interface Props {
 
@@ -86,8 +85,10 @@ const AccountPage = memo(({}: Props) => {
     </List>
   );
   return (
-    <Grid className={classes.root}>
-      <Header project />
+    <BasicLayout 
+      className={classes.root}
+      HeaderProps={{ project: true }}
+    >
       <Grid className={classes.main}>
         <div className={classes.menuList}>
           {links}
@@ -124,8 +125,7 @@ const AccountPage = memo(({}: Props) => {
           </div>
         </div>
       </Grid>
-      <Footer />
-    </Grid>
+    </BasicLayout>
   );
 })
 export default AccountPage;

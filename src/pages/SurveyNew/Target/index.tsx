@@ -12,7 +12,6 @@ import TabPanelBox from "components/TabPanelBox";
 import { push } from "connected-react-router";
 import { PriceService } from "helpers/price";
 import ProjectHelper, { editableProject } from "helpers/project";
-import { useChangePrice } from "hooks/useChangePrice";
 import _ from "lodash";
 import { ETabRightPanel, TARGET_SECTION } from "models/project";
 import { memo, useState, useMemo, useEffect } from "react";
@@ -58,10 +57,13 @@ type ErrorsTarget = {
 }
 
 interface TargetProps {
-  projectId: number
+  projectId: number,
+  isHaveChangePrice: boolean;
+  tabRightPanel: ETabRightPanel;
+  onChangeTabRightPanel: (tab: number) => void;
 }
 
-const Target = memo(({ projectId }: TargetProps) => {
+const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: TargetProps) => {
 
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation()
@@ -71,9 +73,6 @@ const Target = memo(({ projectId }: TargetProps) => {
   const { configs } = useSelector((state: ReducerType) => state.user)
   const { project } = useSelector((state: ReducerType) => state.project)
 
-  const { isHaveChangePrice, setIsHaveChangePrice } = useChangePrice()
-
-  const [tabRightPanel, setTabRightPanel] = useState(ETabRightPanel.OUTLINE);
   const [showCustomSampleSize, setShowCustomSampleSize] = useState(false);
   const [confirmChangeSampleSizeData, setConfirmChangeSampleSizeData] = useState<DataConfirmChangeSampleSize>();
   const [showCustomEyeTrackingSampleSize, setShowCustomEyeTrackingSampleSize] = useState(false);
@@ -328,11 +327,6 @@ const Target = memo(({ projectId }: TargetProps) => {
     return PriceService.getTotal(project, configs)
   }, [project, configs])
 
-  const onChangeTabRightPanel = (tab: number) => {
-    if (tab === ETabRightPanel.COST_SUMMARY) setIsHaveChangePrice(false)
-    setTabRightPanel(tab)
-  }
-
   const scrollToElement = (id: string) => {
     const el = document.getElementById(id)
     if (!el) return
@@ -370,19 +364,21 @@ const Target = memo(({ projectId }: TargetProps) => {
   }, [project])
 
   const onNextQuotas = () => {
-    const _errorsTarget = triggerErrors()
-    setErrorsTarget(_errorsTarget)
-    if (_errorsTarget[ErrorKeyAdd.SAMPLE_SIZE]) {
-      scrollToElement(TARGET_SECTION.SAMPLE_SIZE)
-      return
-    }
-    if (_errorsTarget[ErrorKeyAdd.EYE_TRACKING_SAMPLE_SIZE]) {
-      scrollToElement(TARGET_SECTION.EYE_TRACKING_SAMPLE_SIZE)
-      return
-    }
-    if (_errorsTarget[ETab.Location] || _errorsTarget[ETab.Household_Income] || _errorsTarget[ETab.Age_Coverage]) {
-      scrollToElement(TARGET_SECTION.SELECT_TARGET)
-      return
+    if (editable) {
+      const _errorsTarget = triggerErrors()
+      setErrorsTarget(_errorsTarget)
+      if (_errorsTarget[ErrorKeyAdd.SAMPLE_SIZE]) {
+        scrollToElement(TARGET_SECTION.SAMPLE_SIZE)
+        return
+      }
+      if (_errorsTarget[ErrorKeyAdd.EYE_TRACKING_SAMPLE_SIZE]) {
+        scrollToElement(TARGET_SECTION.EYE_TRACKING_SAMPLE_SIZE)
+        return
+      }
+      if (_errorsTarget[ETab.Location] || _errorsTarget[ETab.Household_Income] || _errorsTarget[ETab.Age_Coverage]) {
+        scrollToElement(TARGET_SECTION.SELECT_TARGET)
+        return
+      }
     }
     dispatch(push(routes.project.detail.quotas.replace(":id", `${projectId}`)))
   }
@@ -648,7 +644,7 @@ const Target = memo(({ projectId }: TargetProps) => {
                 {listTabs.map((item, index) => (
                   <React.Fragment key={index}>
                     <Box
-                      onClick={() => onChangeTab(item.id)}
+                      onClick={() => onChangeTab(activeTab === item.id ? undefined : item.id)}
                       className={clsx(classes.targetTab, { [classes.targetTabActive]: activeTab === item.id && !isMobile, [classes.tabError]: errorsTarget[item.id] })}
                     >
                       <Box className={classes.tabHeader}>

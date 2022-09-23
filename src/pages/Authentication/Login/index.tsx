@@ -3,8 +3,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
 import { Box, Grid, Stack, Typography } from "@mui/material";
-import Header from "components/Header";
-import Footer from "components/Footer";
 import Buttons from "components/Buttons";
 import { routes } from 'routers/routes';
 import { LoginForm } from "models/user";
@@ -25,6 +23,7 @@ import InputTextfield from "components/common/inputs/InputTextfield";
 import Button, { BtnType } from "components/common/buttons/Button"
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import ParagraphSmallUnderline from "components/common/text/ParagraphSmallUnderline";
+import BasicLayout from "layout/BasicLayout";
 
 const Login = () => {
   const { t, i18n } = useTranslation()
@@ -91,8 +90,7 @@ const Login = () => {
   }
 
   return (
-    <Grid className={classes.root}>
-      <Header />
+    <BasicLayout className={classes.root}>
       <form onSubmit={handleSubmit(onSubmit)} name="login" noValidate autoComplete="off">
         <Grid className={classes.body}>
           <Heading2 className={classes.titleText} $colorName="--cimigo-blue" translation-key="login_title">{t('login_title')}</Heading2>
@@ -143,7 +141,6 @@ const Login = () => {
           <ParagraphSmallUnderline to={routes.register} className={classes.linkText} translation-key="login_do_not_have_account">{t('login_do_not_have_account')}</ParagraphSmallUnderline>
         </Grid>
       </form>
-      <Footer />
       <Popup
         open={isNotVerified}
         maxWidth="md"
@@ -157,7 +154,7 @@ const Login = () => {
           <Buttons btnType="Blue" padding="7px 16px" onClick={onSendVerify} translation-key="auth_verify_email_btn_send">{t('auth_verify_email_btn_send')}</Buttons>
         </Box>
       </Popup>
-    </Grid>
+    </BasicLayout>
   );
 };
 export default Login;

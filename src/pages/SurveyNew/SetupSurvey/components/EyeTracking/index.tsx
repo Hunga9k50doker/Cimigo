@@ -184,14 +184,14 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
       >
         {t("setup_survey_eye_tracking_sub_title")}
       </ParagraphBody>
-      {project?.enableEyeTracking && (
+      {!!project?.enableEyeTracking && (
         <>
           <Box mt={2}>
             <Circle sx={{ color: "var(--gray-30)", fontSize: 12, verticalAlign: "middle", display: "inline-flex" }} />
             <Heading5 sx={{ verticalAlign: "middle", display: "inline-flex", ml: 1 }} $colorName="--eerie-black" translation-key="setup_eye_tracking_option_attraction">{t("setup_eye_tracking_option_attraction")}</Heading5>
           </Box>
           <ParagraphBody mt={1} $colorName="--gray-80" translation-key="setup_eye_tracking_option_attraction_subtitle">{t("setup_eye_tracking_option_attraction_subtitle")}</ParagraphBody>
-          {project?.packs?.length && (
+          {!!project?.packs?.length && (
             <Box mt={2}>
               <Grid spacing={2} container>
                 {project?.packs?.map(item => (
@@ -276,7 +276,7 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
         </MenuItem>
         <MenuItem onClick={handleDelete}>
           <ListItemIcon>
-            <DeleteForeverIcon fontSize="small" />
+            <DeleteForeverIcon sx={{ color: "var(--red-error) !important" }} fontSize="small" />
           </ListItemIcon>
           <ParagraphBody translation-key="common_delete">{t('common_delete')}</ParagraphBody>
         </MenuItem>

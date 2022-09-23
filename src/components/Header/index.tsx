@@ -21,7 +21,7 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import UserService from "services/user";
 
-interface HeaderProps {
+export interface HeaderProps {
   project?: boolean;
   detail?: Project;
 }
@@ -62,6 +62,10 @@ const Header = memo((props: HeaderProps) => {
       {
         link: routesOutside(i18n.language)?.solution,
         name: t('header_menu_solution'),
+      },
+      {
+        link: routesOutside(i18n.language)?.pricingPlans,
+        name: t('header_menu_pricing'),
       },
       {
         link: routesOutside(i18n.language)?.faq,

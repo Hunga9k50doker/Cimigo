@@ -158,7 +158,7 @@ const UploadPacks = memo(({ project }: UploadPacksProps) => {
         </MenuItem>
         <MenuItem onClick={handleDelete}>
           <ListItemIcon>
-            <DeleteForeverIcon fontSize="small" />
+            <DeleteForeverIcon sx={{ color: "var(--red-error) !important" }} fontSize="small" />
           </ListItemIcon>
           <ParagraphBody translation-key="common_delete">{t('common_delete')}</ParagraphBody>
         </MenuItem>

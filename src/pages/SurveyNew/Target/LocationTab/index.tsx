@@ -126,7 +126,7 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
 
   return (
     <>
-      <Grid className={classes.rowItem} alignItems="center">
+      <Grid className={classes.rowItem}>
         <Grid className={classes.rowItemLeft}>
           <Heading5 $colorName="--eerie-black" translation-key="target_country_title">{t('target_country_title')}:</Heading5>
         </Grid>

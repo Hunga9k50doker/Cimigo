@@ -41,7 +41,7 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum, onNext
 
   const dispatch = useDispatch()
 
-  const [activeTab, setActiveTab] = useState(ETab.Gender_And_Age_Quotas);
+  const [activeTab, setActiveTab] = useState(ETab.Main);
   const [dataSelectedGenderAge, setDataSelectedGenderAge] = useState<DataSelected>({})
   const [dataSelectedMum, setDataSelectedMum] = useState<DataSelected>({})
   const [confirmChangeTarget, setConfirmChangeTarget] = useState<DataConfirmChangeSampleSize>();
@@ -60,6 +60,13 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum, onNext
     targetMum.forEach(item => {
       _dataSelectedMun[item.questionId] = item.answers
     })
+    if (activeTab === ETab.Main) {
+      if (targetMum?.length) {
+        setActiveTab(ETab.Mums_Only)
+      } else if(targetGenderAge?.length){
+        setActiveTab(ETab.Gender_And_Age_Quotas)
+      }
+    }
     setDataSelectedMum(_dataSelectedMun)
   }, [project])
 

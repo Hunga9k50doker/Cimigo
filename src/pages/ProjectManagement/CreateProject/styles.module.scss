@@ -9,12 +9,10 @@
   padding-right: 64px;
   min-height: 800px;
   @media only screen and (max-width: 1024px) {
-    max-width: 1024px !important;
     padding-left: 24px;
     padding-right: 24px;
   }
   @media only screen and (max-width: 767px) {
-    max-width: 550px !important;
     padding-left: 0px;
     padding-right: 0px;
   }

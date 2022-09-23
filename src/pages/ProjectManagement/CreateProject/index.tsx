@@ -9,10 +9,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-
 import QontoStepIcon from "../components/QontoStepIcon";
-import Header from "components/Header";
-import Footer from "components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { SolutionService } from "services/solution";
 import { Solution } from "models/Admin/solution";
@@ -31,6 +28,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import SubTitle from "components/common/text/SubTitle";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { PlanService } from "services/plan";
+import BasicLayout from "layout/BasicLayout";
 
 export enum EStep {
   SELECT_SOLUTION,
@@ -126,8 +124,10 @@ const CreateProject = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createProjectRedirect]);
   return (
-    <Grid className={classes.root}>
-      <Header project />
+    <BasicLayout 
+      className={classes.root}
+      HeaderProps={{ project: true }}
+    >
       <Grid className={classes.container}>
         <div className={classes.linkTextHome}>
           <HomeIcon
@@ -199,8 +199,7 @@ const CreateProject = () => {
           />
         )}
       </Grid>
-      <Footer />
-    </Grid>
+    </BasicLayout>
   );
 };
 export default CreateProject;

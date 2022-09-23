@@ -3,8 +3,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
 import { Grid } from "@mui/material";
-import Header from "components/Header";
-import Footer from "components/Footer";
 import { routes } from 'routers/routes';
 import { useDispatch } from "react-redux";
 import UserService from "services/user";
@@ -16,6 +14,7 @@ import ParagraphSmallUnderline from "components/common/text/ParagraphSmallUnderl
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import InputTextField from "components/common/inputs/InputTextfield";
 import Button , {BtnType} from "components/common/buttons/Button";
+import BasicLayout from "layout/BasicLayout";
 
 interface DataForm {
   email: string
@@ -51,8 +50,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <Grid className={classes.root}>
-      <Header />
+    <BasicLayout className={classes.root}>
       <form onSubmit={handleSubmit(onSubmit)} name="forgot-password" noValidate autoComplete="off">
         <Grid className={classes.body}>
           <Heading2 $colorName="--cimigo-blue" translation-key="forgot_password_title">{t('forgot_password_title')}</Heading2>
@@ -73,8 +71,7 @@ const ForgotPassword = () => {
           </Grid>
         </Grid>
       </form>
-      <Footer />
-    </Grid>
+    </BasicLayout>
   );
 };
 export default ForgotPassword;

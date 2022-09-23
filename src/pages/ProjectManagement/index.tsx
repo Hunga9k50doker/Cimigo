@@ -23,9 +23,6 @@ import {
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useHistory } from "react-router-dom";
-
-import Header from "components/Header";
-import Footer from "components/Footer";
 import { routes } from "routers/routes";
 import Images from "config/images";
 import InputSearch from "components/InputSearch";
@@ -65,6 +62,8 @@ import PopupConfirmDeleteProject from "./components/PopupConfirmDeleteProject";
 import PopupConfirmCreateOrEditFolder from "./components/PopupConfirmCreateOrEditFolder";
 import PopupConfirmDeleteFolder from "./components/PopupConfirmDeleteFolder";
 import SubTitle from "components/common/text/SubTitle";
+import BasicLayout from "layout/BasicLayout";
+
 const ExpandIcon = (props) => {
   return <img src={Images.icSelectBlue} alt="expand icon" {...props} />;
 };
@@ -341,8 +340,7 @@ const ProjectManagement = memo((props: Props) => {
     dispatch(setVerifiedSuccess(false));
   };
   return (
-    <Grid className={classes.root}>
-      <Header />
+    <BasicLayout className={classes.root}>
       {verifiedSuccess && (
         <Grid className={classes.successBoxContainer}>
           <div className={classes.successBox}>
@@ -818,7 +816,6 @@ const ProjectManagement = memo((props: Props) => {
           )}
         </Grid>
       </Grid>
-      <Footer />
       <PopupConfirmDeleteProject
         project={itemDelete}
         onCancel={onCloseConfirmDelete}
@@ -846,7 +843,7 @@ const ProjectManagement = memo((props: Props) => {
         onCancel={() => setFolderDelete(null)}
         onDelete={onDeleteFolder}
       />
-    </Grid>
+    </BasicLayout>
   );
 });
 export default ProjectManagement;

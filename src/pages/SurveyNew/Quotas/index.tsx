@@ -9,7 +9,6 @@ import classes from "./styles.module.scss"
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import { ArrowForward, Check as CheckIcon, Done, InfoOutlined, Restore, WarningAmber } from "@mui/icons-material"
-import { useChangePrice } from "hooks/useChangePrice"
 import { Badge, Box, Grid, IconButton, Step, Tab, Table, TableBody, TableCell, TableHead, TableRow, useMediaQuery, useTheme } from "@mui/material"
 import TabPanelBox from "components/TabPanelBox"
 import Heading5 from "components/common/text/Heading5"
@@ -39,10 +38,13 @@ import PopupInvalidQuota from "../components/PopupInvalidQuota"
 import AgreeQuotaWarning from "./components/AgreeQuotaWarning"
 
 interface QuotasProps {
-  projectId: number
+  projectId: number;
+  isHaveChangePrice: boolean;
+  tabRightPanel: ETabRightPanel;
+  onChangeTabRightPanel: (tab: number) => void;
 }
 
-const Quotas = memo(({ projectId }: QuotasProps) => {
+const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: QuotasProps) => {
 
   const theme = useTheme();
 
@@ -55,13 +57,10 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
   const { project } = useSelector((state: ReducerType) => state.project)
 
   const [quotaTables, setQuotaTables] = useState<QuotaTable[]>([]);
-  const [tabRightPanel, setTabRightPanel] = useState(ETabRightPanel.OUTLINE);
   const [quotas, setQuotas] = useState<Quota[]>([])
   const [quotaEdit, setQuotaEdit] = useState<number>()
   const [popupInvalidQuota, setPopupInvalidQuota] = useState(false)
   const [isShowAgreeQuotaWarning, setIsShowAgreeQuotaWarning] = useState(false)
-
-  const { isHaveChangePrice, setIsHaveChangePrice } = useChangePrice()
 
   const isMobile = useMediaQuery(theme.breakpoints.down(767));
 
@@ -97,11 +96,6 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project?.targets])
 
-  const onChangeTabRightPanel = (tab: number) => {
-    if (tab === ETabRightPanel.COST_SUMMARY) setIsHaveChangePrice(false)
-    setTabRightPanel(tab)
-  }
-
   const scrollToElement = (id: string) => {
     if (!quotas?.length) return
     const el = document.getElementById(id)
@@ -119,13 +113,13 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
     }
     getQuotaTables()
   }, [])
-
-  const onAgreeQuota = async (redirectPay?: boolean) => {
-    if (project?.agreeQuota) return
+  
+  const onToggleAgreeQuota = async (agreeQuota: boolean, redirectPay?: boolean) => {
+    if (!isReadyQuotas || !editable) return
     dispatch(setLoading(true))
-    return ProjectService.updateAgreeQuota(project.id, true)
+    return ProjectService.updateAgreeQuota(project.id, agreeQuota)
       .then(() => {
-        dispatch(setProjectReducer({ ...project, agreeQuota: true }))
+        dispatch(setProjectReducer({ ...project, agreeQuota: agreeQuota }))
         if (redirectPay) onRedirectPay()
       })
       .catch(e => dispatch(setErrorMess(e)))
@@ -254,7 +248,7 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
   }
 
   const onConfirmAgreeQuota = () => {
-    onAgreeQuota(true)
+    onToggleAgreeQuota(true, true)
     onCloseAgreeQuotaWarning()
   }
 
@@ -262,13 +256,19 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
     dispatch(push(routes.project.detail.paymentBilling.root.replace(":id", `${project.id}`)))
   }
 
+  const isReadyQuotas = useMemo(() => {
+    return !!quotas?.length && !!project?.sampleSize
+  }, [project, quotas])
+
   const onNextPay = () => {
-    if (project?.agreeQuota) {
+    if (project?.agreeQuota || !isReadyQuotas || !editable) {
       onRedirectPay()
     } else {
       onShowAgreeQuotaWarning()
     }
   }
+
+  
 
   return (
     <PageRoot>
@@ -280,7 +280,7 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
           </PageTitleLeft>
         </PageTitle>
         <Content id={QUOTAS_SECTION.CONTENT}>
-          {(!!quotas?.length && !!project?.sampleSize) ? (
+          {isReadyQuotas ? (
             <>
               <ParagraphBody id={`${QUOTAS_SECTION.CONTENT}-start`} $colorName="--eerie-black" $fontWeight={500} translation-key="quotas_sub_title_1">
                 {t('quotas_sub_title_1')}
@@ -494,8 +494,8 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
             control={
               <InputCheckbox
                 checked={!!project?.agreeQuota}
-                disabled={!!project?.agreeQuota}
-                onChange={(_, checked) => checked && onAgreeQuota()}
+                disabled={!isReadyQuotas || !editable}
+                onChange={(_, checked) => onToggleAgreeQuota(checked)}
               />
             }
             translation-key="project_right_panel_quotas_agree_allocation"
@@ -550,8 +550,8 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
                   control={
                     <InputCheckbox
                       checked={!!project?.agreeQuota}
-                      disabled={!!project?.agreeQuota}
-                      onChange={(_, checked) => checked && onAgreeQuota()}
+                      disabled={!isReadyQuotas || !editable}
+                      onChange={(_, checked) => onToggleAgreeQuota(checked)}
                     />
                   }
                   translation-key="project_right_panel_quotas_agree_allocation"
@@ -583,8 +583,8 @@ const Quotas = memo(({ projectId }: QuotasProps) => {
                   control={
                     <InputCheckbox
                       checked={!!project?.agreeQuota}
-                      disabled={!!project?.agreeQuota}
-                      onChange={(_, checked) => checked && onAgreeQuota()}
+                      disabled={!isReadyQuotas || !editable}
+                      onChange={(_, checked) => onToggleAgreeQuota(checked)}
                     />
                   }
                   translation-key="project_right_panel_quotas_agree_allocation"

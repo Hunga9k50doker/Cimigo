@@ -1,7 +1,4 @@
 import { Grid } from "@mui/material";
-import Buttons from "components/Buttons";
-import Footer from "components/Footer";
-import Header from "components/Header";
 import { push } from "connected-react-router";
 import { memo } from "react"
 import { useTranslation } from "react-i18next";
@@ -12,6 +9,7 @@ import classes from './styles.module.scss';
 import Heading2 from "components/common/text/Heading2";
 import Button , {BtnType} from "components/common/buttons/Button";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
+import BasicLayout from "layout/BasicLayout";
 
 interface Props {
 }
@@ -22,8 +20,7 @@ const InvalidResetPassword = memo(({ }: Props) => {
   const { t } = useTranslation()
 
   return (
-    <Grid className={classes.root}>
-      <Header />
+    <BasicLayout className={classes.root}>
       <Grid className={classes.body}>
         <Heading2 $colorName="--cimigo-blue" translation-key="invalid_reset_password_title">{t('invalid_reset_password_title')}</Heading2>
         <ParagraphSmall sx={{paddingTop: '16px', paddingBottom: '24px', textAlign: 'justify'}} translation-key="invalid_reset_password_sub_title">{t('invalid_reset_password_sub_title')}</ParagraphSmall>
@@ -32,8 +29,7 @@ const InvalidResetPassword = memo(({ }: Props) => {
           {t('invalid_reset_password_back_to_login')}
         </Link>
       </Grid>
-      <Footer />
-    </Grid>
+    </BasicLayout>
   )
 })
 

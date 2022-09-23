@@ -1,10 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
 import classes from './styles.module.scss';
 import { Box, FormControlLabel, Grid, Typography } from "@mui/material";
-import Header from "components/Header";
-import Footer from "components/Footer";
 import { useEffect, useState, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import CountryService from "services/country";
@@ -22,7 +19,9 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import InputTextField from "components/common/inputs/InputTextfield";
 import InputSelect from "components/common/inputs/InputSelect";
 import InputCheckbox from "components/common/inputs/InputCheckbox";
-import Button , {BtnType} from "components/common/buttons/Button";
+import Button, { BtnType } from "components/common/buttons/Button";
+import BasicLayout from "layout/BasicLayout";
+import yup from "config/yup.custom";
 
 
 interface DataForm {
@@ -48,6 +47,7 @@ const Register = () => {
         .required(t('field_last_name_vali_required')),
       email: yup.string()
         .email(t('field_email_vali_email'))
+        .businessEmail(t("field_email_vali_business"))
         .required(t('field_email_vali_required')),
       password: yup.string()
         .matches(VALIDATION.password, { message: t('field_password_vali_password'), excludeEmptyString: true })
@@ -118,39 +118,38 @@ const Register = () => {
   }, [dispatch])
 
   return (
-    <Grid className={classes.root}>
-      <Header />
+    <BasicLayout className={classes.root}>
       <form onSubmit={handleSubmit(onSubmit)} name="register" noValidate autoComplete="off">
         <Grid className={classes.body}>
-          <Grid sx={{marginBottom: '24px'}}>
-            <Heading2 $colorName="--cimigo-blue" sx={{marginBottom: '16px'}} translation-key="register_title">{t('register_title')}</Heading2>
+          <Grid sx={{ marginBottom: '24px' }}>
+            <Heading2 $colorName="--cimigo-blue" sx={{ marginBottom: '16px' }} translation-key="register_title">{t('register_title')}</Heading2>
             <ParagraphExtraSmall $colorName="--eerie-black-65" translation-key="register_sub_title">{t('register_sub_title')}</ParagraphExtraSmall>
           </Grid>
           <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <InputTextField
-                  title={t('field_first_name')}
-                  translation-key="field_first_name"
-                  name="firstName"
-                  placeholder={t('field_first_name_placeholder')}
-                  translation-key-placeholder="field_first_name_placeholder"
-                  type="text"
-                  inputRef={register('firstName')}
-                  errorMessage={errors.firstName?.message}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <InputTextField
-                  title={t('field_last_name')}
-                  translation-key="field_last_name"
-                  name="lastName"
-                  placeholder={t('field_last_name_placeholder')}
-                  translation-key-placeholder="field_last_name_placeholder"
-                  type="text"
-                  inputRef={register('lastName')}
-                  errorMessage={errors.lastName?.message}
-                />
-              </Grid>
+            <Grid item xs={12} sm={6}>
+              <InputTextField
+                title={t('field_first_name')}
+                translation-key="field_first_name"
+                name="firstName"
+                placeholder={t('field_first_name_placeholder')}
+                translation-key-placeholder="field_first_name_placeholder"
+                type="text"
+                inputRef={register('firstName')}
+                errorMessage={errors.firstName?.message}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <InputTextField
+                title={t('field_last_name')}
+                translation-key="field_last_name"
+                name="lastName"
+                placeholder={t('field_last_name_placeholder')}
+                translation-key-placeholder="field_last_name_placeholder"
+                type="text"
+                inputRef={register('lastName')}
+                errorMessage={errors.lastName?.message}
+              />
+            </Grid>
             <Grid item xs={12} sm={12}>
               <InputTextField
                 title={t('field_email')}
@@ -163,7 +162,7 @@ const Register = () => {
                 errorMessage={errors.email?.message}
               />
             </Grid>
-            <Grid item xs={12} sm={12}> 
+            <Grid item xs={12} sm={12}>
               <InputTextField
                 title={t('field_password')}
                 translation-key="field_password"
@@ -213,7 +212,7 @@ const Register = () => {
                 placeholder={t('field_company_placeholder')}
                 translation-key-placeholder="field_company_placeholder"
                 errorMessage={errors.company?.message}
-            />
+              />
             </Grid>
             <Grid item xs={12} sm={12}>
               <InputTextField
@@ -226,7 +225,7 @@ const Register = () => {
                 translation-key-placeholder="field_your_title_placeholder"
                 inputRef={register('title')}
                 errorMessage={errors.title?.message}
-            />
+              />
             </Grid>
           </Grid>
           <FormControlLabel
@@ -239,13 +238,13 @@ const Register = () => {
                 control={control}
                 render={({ field }) => <InputCheckbox
                   checked={field.value}
-                  {...field}
+                  onChange={field.onChange}
                 />}
               />
             }
             label={<ParagraphExtraSmall $colorName="--eerie-black-65" translation-key="register_notify_checkbox">{t('register_notify_checkbox')}</ParagraphExtraSmall>}
           />
-          <Button type={"submit"}  translation-key="register_btn_register" children={t('register_btn_register')} btnType={BtnType.Primary} />
+          <Button type={"submit"} translation-key="register_btn_register" children={t('register_btn_register')} btnType={BtnType.Primary} />
           <div className={classes.separator}>
             <ParagraphSmall $colorName="--eerie-black-65" translation-key="register_register_with">{t('register_register_with')}</ParagraphSmall>
           </div>
@@ -270,8 +269,7 @@ const Register = () => {
           </Button>
         </Box>
       </Popup>
-      <Footer />
-    </Grid>
+    </BasicLayout>
   );
 };
 export default Register;

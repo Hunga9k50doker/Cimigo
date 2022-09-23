@@ -29,6 +29,8 @@ import Quotas from "./Quotas";
 import Pay from "./Pay";
 import ProjectHelper from "helpers/project";
 import Report from "./Report";
+import { ETabRightPanel } from "models/project";
+import { useChangePrice } from "hooks/useChangePrice";
 
 export const Survey = () => {
 
@@ -38,6 +40,7 @@ export const Survey = () => {
   const { project } = useSelector((state: ReducerType) => state.project)
   const [isEditName, setIsEditName] = useState(false);
   const [projectName, setProjectName] = useState<string>('');
+  const { isHaveChangePrice, setIsHaveChangePrice, tabRightPanel, setTabRightPanel } = useChangePrice()
 
   const tabs: string[] = useMemo(() => {
     return [
@@ -116,6 +119,11 @@ export const Survey = () => {
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(true)))
+  }
+
+  const onChangeTabRightPanel = (tab: number) => {
+    if (tab === ETabRightPanel.COST_SUMMARY) setIsHaveChangePrice(false)
+    setTabRightPanel(tab)
   }
 
   return (
@@ -199,9 +207,39 @@ export const Survey = () => {
       </Box>
       <Box className={classes.tabContent}>
         <Switch>
-          <Route exact path={routes.project.detail.setupSurvey} render={(routeProps) => <SetupSurvey {...routeProps} projectId={Number(id)} />} />
-          <Route exact path={routes.project.detail.target} render={(routeProps) => <Target {...routeProps} projectId={Number(id)} />} />
-          <Route exact path={routes.project.detail.quotas} render={(routeProps) => <Quotas {...routeProps} projectId={Number(id)} />} />
+          <Route
+            exact
+            path={routes.project.detail.setupSurvey}
+            render={(routeProps) => <SetupSurvey
+              {...routeProps}
+              projectId={Number(id)}
+              isHaveChangePrice={isHaveChangePrice}
+              tabRightPanel={tabRightPanel}
+              onChangeTabRightPanel={onChangeTabRightPanel}
+            />}
+          />
+          <Route
+            exact
+            path={routes.project.detail.target}
+            render={(routeProps) => <Target
+              {...routeProps}
+              projectId={Number(id)}
+              isHaveChangePrice={isHaveChangePrice}
+              tabRightPanel={tabRightPanel}
+              onChangeTabRightPanel={onChangeTabRightPanel}
+            />}
+          />
+          <Route
+            exact
+            path={routes.project.detail.quotas}
+            render={(routeProps) => <Quotas
+              {...routeProps}
+              projectId={Number(id)}
+              isHaveChangePrice={isHaveChangePrice}
+              tabRightPanel={tabRightPanel}
+              onChangeTabRightPanel={onChangeTabRightPanel}
+            />}
+          />
           <Route path={routes.project.detail.paymentBilling.root} render={(routeProps) => <Pay {...routeProps} projectId={Number(id)} />} />
           <Route exact path={routes.project.detail.report} render={(routeProps) => <Report {...routeProps} projectId={Number(id)} />} />
 

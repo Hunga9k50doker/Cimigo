@@ -3,8 +3,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import classes from './styles.module.scss';
 import { Grid } from "@mui/material";
-import Header from "components/Header";
-import Footer from "components/Footer";
 import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
 import UserService from "services/user";
@@ -19,6 +17,7 @@ import Heading2 from "components/common/text/Heading2";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import InputTextField from "components/common/inputs/InputTextfield";
 import Button , {BtnType} from "components/common/buttons/Button";
+import BasicLayout from "layout/BasicLayout";
 
 interface IQueryString {
   email?: string
@@ -75,8 +74,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <Grid className={classes.root}>
-      <Header />
+    <BasicLayout className={classes.root}>
       <form onSubmit={handleSubmit(onSubmit)} name="forgot-password" noValidate autoComplete="off">
         <Grid className={classes.body}>
           <Heading2 $colorName="--cimigo-blue" translation-key="reset_password_title">{t('reset_password_title')}</Heading2>
@@ -112,8 +110,7 @@ const ResetPassword = () => {
           <Button type={"submit"} children={t('reset_password_btn_submit')} translation-key="reset_password_btn_submit" btnType={BtnType.Primary}/>
         </Grid>
       </form>
-      <Footer />
-    </Grid>
+    </BasicLayout>
   );
 };
 export default ResetPassword;

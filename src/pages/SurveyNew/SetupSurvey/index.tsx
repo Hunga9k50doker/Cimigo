@@ -18,7 +18,6 @@ import BasicInformation from "./components/BasicInformation";
 import ProjectHelper, { editableProject } from "helpers/project";
 import { PriceService } from "helpers/price";
 import { ETabRightPanel, SETUP_SURVEY_SECTION } from "models/project";
-import { useChangePrice } from "hooks/useChangePrice";
 import UploadPacks from "./components/UploadPacks";
 import AdditionalBrandList from "./components/AdditionalBrandList";
 import AdditionalAttributes from "./components/AdditionalAttributes";
@@ -26,23 +25,23 @@ import CustomQuestions from "./components/CustomQuestions";
 import { fCurrency2 } from "utils/formatNumber";
 import EyeTracking from "./components/EyeTracking";
 import { useTranslation } from "react-i18next";
-
 import PopupMissingRequirement from "pages/SurveyNew/components/PopupMissingRequirement";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
-
 import PopupHowToSetupPackTestSurvey from "pages/Survey/components/PopupHowToSetupPackTestSurvey";
+
 interface SetupSurvey {
   projectId: number;
+  isHaveChangePrice: boolean;
+  tabRightPanel: ETabRightPanel;
+  onChangeTabRightPanel: (tab: number) => void;
 }
 
-const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
+const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: SetupSurvey) => {
   
   const { t } = useTranslation();
 
   const dispatch = useDispatch()
-
-  const [tabRightPanel, setTabRightPanel] = useState(ETabRightPanel.OUTLINE);
 
   const { project } = useSelector((state: ReducerType) => state.project)
   const { configs } = useSelector((state: ReducerType) => state.user)
@@ -50,8 +49,6 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
   const editable = useMemo(() => editableProject(project), [project])
   
   const [openMissingRequirement, setOpenMissingRequirement] = useState(false);
-
-  const { isHaveChangePrice, setIsHaveChangePrice } = useChangePrice()
 
   const [onOpenHowToSetupPackTestSurvey, setOnOpenHowToSetupPackTestSurvey] = useState(false);
 
@@ -87,12 +84,6 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
     document.getElementById(SETUP_SURVEY_SECTION.content_survey_setup).scrollTo({ behavior: 'smooth', top: el.offsetTop - content.offsetTop })
   }
 
-  const onChangeTabRightPanel = (tab: number) => {
-    if (tab === ETabRightPanel.COST_SUMMARY) setIsHaveChangePrice(false)
-    setTabRightPanel(tab)
-  }
-
-
   const onOpenPopupHowToSetupPackTestSurvey = () => {
     setOnOpenHowToSetupPackTestSurvey(true);
   }
@@ -110,7 +101,7 @@ const SetupSurvey = memo(({ projectId }: SetupSurvey) => {
   }
 
   const onNextSetupTarget = () => {
-    if (isValidSetup) {
+    if (!editable || isValidSetup) {
       dispatch(push(routes.project.detail.target.replace(":id", `${projectId}`)))
     } else {
       onOpenMissingRequirement()
