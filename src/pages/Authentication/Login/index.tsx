@@ -24,6 +24,7 @@ import Button, { BtnType } from "components/common/buttons/Button"
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import ParagraphSmallUnderline from "components/common/text/ParagraphSmallUnderline";
 import BasicLayout from "layout/BasicLayout";
+import { Helmet } from "react-helmet";
 
 const Login = () => {
   const { t, i18n } = useTranslation()
@@ -91,6 +92,9 @@ const Login = () => {
 
   return (
     <BasicLayout className={classes.root}>
+      <Helmet>
+        <title>RapidSurvey - Login</title>
+      </Helmet>
       <form onSubmit={handleSubmit(onSubmit)} name="login" noValidate autoComplete="off">
         <Grid className={classes.body}>
           <Heading2 className={classes.titleText} $colorName="--cimigo-blue" translation-key="login_title">{t('login_title')}</Heading2>

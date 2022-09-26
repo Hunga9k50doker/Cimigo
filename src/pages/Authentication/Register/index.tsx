@@ -22,6 +22,7 @@ import InputCheckbox from "components/common/inputs/InputCheckbox";
 import Button, { BtnType } from "components/common/buttons/Button";
 import BasicLayout from "layout/BasicLayout";
 import yup from "config/yup.custom";
+import { Helmet } from "react-helmet";
 
 
 interface DataForm {
@@ -119,6 +120,9 @@ const Register = () => {
 
   return (
     <BasicLayout className={classes.root}>
+      <Helmet>
+        <title>RapidSurvey - Register</title>
+      </Helmet>
       <form onSubmit={handleSubmit(onSubmit)} name="register" noValidate autoComplete="off">
         <Grid className={classes.body}>
           <Grid sx={{ marginBottom: '24px' }}>

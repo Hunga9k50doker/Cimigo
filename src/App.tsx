@@ -15,6 +15,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from 'locales';
 import UseAuth from 'hooks/useAuth';
 import { langSupports } from 'models/general';
+import { Helmet } from 'react-helmet';
 
 
 interface AppProps {
@@ -30,7 +31,6 @@ const AppContainer = styled.div`
 const App = ({ history, dispatch }: AppProps) => {
   const theme = defaultTheme;
   const isLoadingAuth = useSelector((state: ReducerType) => state.status.isLoadingAuth)
-  const { user } = UseAuth();
 
   useEffect(() => {
     dispatch(getMe())
@@ -50,6 +50,9 @@ const App = ({ history, dispatch }: AppProps) => {
           <AppContainer>
             <ConnectedRouter history={history}>
               <AppStatus />
+              <Helmet>
+                <title>Cimigo RapidSurvey</title>
+              </Helmet>
               {!isLoadingAuth && <Routers />}
             </ConnectedRouter>
           </AppContainer>
