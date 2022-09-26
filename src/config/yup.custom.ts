@@ -3,14 +3,21 @@ import { AnyObject, Maybe, Message } from "yup/lib/types";
 import freeEmailDomains from "free-email-domains";
 import psl from "psl";
 
+export const isValidBusinessEmail = (value: string) => {
+  if (value && value.includes("@")) {
+    var parsed = psl.parse(value.toLocaleLowerCase().split('@').pop()) as psl.ParsedDomain
+    if(parsed?.domain && freeEmailDomains.includes(parsed?.domain)) {
+      return false
+    }
+  }
+  return true
+}
+
 yup.addMethod<yup.StringSchema>(yup.string, 'businessEmail', function(msg) {
-  return this.test("isValidCountry", msg, function(value) {
+  return this.test("isValidBusinessEmail", msg, function(value) {
     const { path, createError } = this;
-    if (value && value.includes("@")) {
-      var parsed = psl.parse(value.toLocaleLowerCase().split('@').pop()) as psl.ParsedDomain
-      if(parsed?.domain && freeEmailDomains.includes(parsed?.domain)) {
-        return createError({ path, message: msg ?? "Please use business email to register"})
-      }
+    if (!isValidBusinessEmail(value)) {
+      return createError({ path, message: msg ?? "Please use business email to register"}) 
     }
     return true
   })

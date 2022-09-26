@@ -7,6 +7,7 @@ import classes from './styles.module.scss';
 import icGoogle from 'assets/img/icon/ic-google.svg';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { isValidBusinessEmail } from 'config/yup.custom';
 
 const Google = () => {
   const dispatch = useDispatch()
@@ -14,10 +15,14 @@ const Google = () => {
   
   const onSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     const userInfo = res as GoogleLoginResponse
-    dispatch(userSocialLogin({
-      token: userInfo.tokenId,
-      provider: SocialProvider.GOOGLE
-    }))
+    if (isValidBusinessEmail(userInfo.profileObj.email)) {
+      dispatch(userSocialLogin({
+        token: userInfo.tokenId,
+        provider: SocialProvider.GOOGLE
+      }))
+    } else {
+      dispatch(setErrorMess({message: t('field_email_vali_business')}))
+    }
   }
 
   const onFailure = (error: any) => {
