@@ -317,10 +317,10 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
         onClose={handleCloseMenuAttributes}
       >
         <MenuItem onClick={onOpenPopupPreDefined}>
-          <ParagraphBody translation-key="setup_survey_add_att_menu_action_from_pre_defined_list">{t('setup_survey_add_att_menu_action_from_pre_defined_list')}</ParagraphBody>
+          <ParagraphBody translation-key="setup_survey_add_att_menu_action_from_pre_defined_list" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_from_pre_defined_list')}</ParagraphBody>
         </MenuItem>
         <MenuItem onClick={onOpenPopupAddAttributes}>
-          <ParagraphBody translation-key="setup_survey_add_att_menu_action_your_own_attribute">{t('setup_survey_add_att_menu_action_your_own_attribute')}</ParagraphBody>
+          <ParagraphBody translation-key="setup_survey_add_att_menu_action_your_own_attribute" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_your_own_attribute')}</ParagraphBody>
         </MenuItem>
       </Menu>
       {!enableAdditionalAttributes && (

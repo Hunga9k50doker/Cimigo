@@ -8,15 +8,20 @@ import ProjectReviewAndPayment from "./ProjectReviewAndPayment";
 import Waiting from "./Waiting";
 import OnePayFail from "./OnePayFail";
 import OnePayPending from "./OnePayPending";
-
+import { Helmet } from "react-helmet";
+import { useSelector } from "react-redux"
+import { ReducerType } from "redux/reducers"
 interface Props {
   projectId: number
 }
 
 const PayTab = memo((_: Props) => {
-
+  const { project } = useSelector((state: ReducerType) => state.project)
   return (
     <>
+      <Helmet>
+        <title>{`RapidSurvey - ${project?.name} - Pay`}</title>
+      </Helmet>
       <Switch>
         <Route path={routes.project.detail.paymentBilling.previewAndPayment.root} render={(routeProps) => <ProjectReviewAndPayment {...routeProps} />} />
         <Route path={routes.project.detail.paymentBilling.order} render={(routeProps) => <Order {...routeProps} />} />

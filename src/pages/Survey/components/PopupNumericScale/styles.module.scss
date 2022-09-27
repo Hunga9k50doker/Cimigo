@@ -201,7 +201,15 @@
 
 .inputScaleRange {
   margin: 0px 10px;
-  max-width: 50px;
+  max-width: 90px;
+  > [class~="MuiOutlinedInput-root"] {
+    padding-left: 0;
+  }
+  input {
+    &::placeholder {
+      text-align: center;
+    }
+  }
 }
 
 .multiAttributeControl {

@@ -36,6 +36,7 @@ import { push } from "connected-react-router"
 import { routes } from "routers/routes"
 import PopupInvalidQuota from "../components/PopupInvalidQuota"
 import AgreeQuotaWarning from "./components/AgreeQuotaWarning"
+import { Helmet } from "react-helmet";
 
 interface QuotasProps {
   projectId: number;
@@ -272,6 +273,9 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
 
   return (
     <PageRoot>
+      <Helmet>
+        <title>{`RapidSurvey - ${project?.name} - Quotas`}</title>
+      </Helmet>
       <LeftContent>
         <PageTitle>
           <PageTitleLeft>

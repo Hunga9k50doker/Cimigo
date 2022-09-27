@@ -169,10 +169,10 @@ export class ProjectService {
       })
   }
 
-  static async sendEmailHowToSetupSurvey(name: string, email: string,) {
-    return await api.post(API.PROJECT.SEND_EMAIL_HOW_TO_SETUP_SURVEY, {
+  static async sendEmailHowToSetupSurvey(id:number, name: string, email: string) {
+    return await api.post(API.PROJECT.SEND_EMAIL_HOW_TO_SETUP_SURVEY.replace(":id", `${id}`), {
       name,
-      email
+      email,
     })
       .then((res) => {
         return Promise.resolve(res.data.data)

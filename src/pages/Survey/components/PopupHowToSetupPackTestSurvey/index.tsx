@@ -18,6 +18,8 @@ import { DialogTitle } from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import Heading3 from "components/common/text/Heading3";
 import Heading2 from "components/common/text/Heading2";
+import Heading5 from "components/common/text/Heading5";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
 import TextBtnSmall from 'components/common/text/TextBtnSmall';
 import ButtonClose from "components/common/buttons/ButtonClose";
 import InputTextField from "components/common/inputs/InputTextfield";
@@ -97,7 +99,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
 
   const _onSubmit = (data: EmailForm) => {
     dispatch(setLoading(true))
-    ProjectService.sendEmailHowToSetupSurvey(data.name, data.email)
+    ProjectService.sendEmailHowToSetupSurvey(project.id, data.name, data.email)
       .then(() => {
         dispatch(setSuccessMess(t("forgot_password_send_success")))
         handleClosePopoverEmail()
@@ -150,12 +152,15 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                     horizontal: 'right',
                   }}
                 >
-                  <Grid sx={{ minWidth: '300px', padding: '10px', background: 'var(--gray-5)' }} component="form" onSubmit={handleSubmit(_onSubmit)}>
-                    <Grid container spacing={1} direction="column">
+                  <Grid sx={{ maxWidth: '372px', padding: '16px', background: 'var(--gray-5)' }} component="form" onSubmit={handleSubmit(_onSubmit)}>
+                    <Heading5 translation-key="setup_survey_how_to_setup_send_email_title">{t("setup_survey_how_to_setup_send_email_title")}</Heading5>
+                    <ParagraphSmall translate-key="setup_survey_how_to_setup_send_email_title_decs" sx={{marginBottom: '16px'}}>{t("setup_survey_how_to_setup_send_email_title_decs")}</ParagraphSmall>
+                    <Grid container spacing={2} direction="column">
                       <Grid item>
                         <InputTextField
-                          translation-key-placeholder="field_name_placeholder"
-                          placeholder={t("field_name_placeholder")}
+                          title={t("setup_survey_how_to_setup_name_recipient")}
+                          translation-key-placeholder="setup_survey_how_to_setup_name_recipient_placeholder"
+                          placeholder={t("setup_survey_how_to_setup_name_recipient_placeholder")}
                           autoFocus={true}
                           inputProps={{ tabIndex: 1 }}
                           type="text"
@@ -166,8 +171,9 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                       </Grid>
                       <Grid item>
                         <InputTextField
-                          translation-key-placeholder="field_email_placeholder"
-                          placeholder={t("field_email_placeholder")}
+                          title={t("setup_survey_how_to_setup_email_recipient")}
+                          translation-key-placeholder="setup_survey_how_to_setup_email_recipient_placeholder"
+                          placeholder={t("setup_survey_how_to_setup_email_recipient_placeholder")}
                           type="text"
                           inputProps={{ tabIndex: 2 }}
                           autoComplete="off"
@@ -176,7 +182,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                         />
                       </Grid>
                     </Grid>
-                    <Grid sx={{ display: 'flex', justifyContent: 'end', marginTop: '8px' }}>
+                    <Grid sx={{ display: 'flex', justifyContent: 'start', marginTop: '16px' }}>
                       <Button btnType={BtnType.Primary} type="submit">
                         <NearMeIcon fontSize="small" sx={{ marginRight: '7px' }} />
                         <TextBtnSmall transition-key="common_send">{t("common_send")}</TextBtnSmall>

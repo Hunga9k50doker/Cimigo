@@ -46,6 +46,7 @@ import AgeCoverageTab from "./AgeCoverageTab";
 import PopupLocationMobile from "./components/PopupLocationMobile";
 import PopupHouseholdIncomeMobile from "./components/PopupHouseholdIncomeMobile";
 import PopupAgeCoverageMobile from "./components/PopupAgeCoverageMobile";
+import { Helmet } from "react-helmet";
 
 enum ErrorKeyAdd {
   SAMPLE_SIZE = "SAMPLE_SIZE",
@@ -463,6 +464,9 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
 
   return (
     <PageRoot className={classes.root}>
+      <Helmet>
+        <title>{`RapidSurvey - ${project?.name} - Target`}</title>
+      </Helmet>
       <LeftContent>
         <PageTitle>
           <PageTitleLeft>
