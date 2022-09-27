@@ -29,7 +29,6 @@ import PopupMissingRequirement from "pages/SurveyNew/components/PopupMissingRequ
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import PopupHowToSetupPackTestSurvey from "pages/Survey/components/PopupHowToSetupPackTestSurvey";
-
 interface SetupSurvey {
   projectId: number;
   isHaveChangePrice: boolean;
@@ -124,7 +123,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
               <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupPackTestSurvey}
               >{project?.solution?.howToSetUpSurveyPageTitle}</ParagraphSmallUnderline2>
             </PageTitleRight>
-          )} 
+          )}  
         </PageTitle>
         <Content id={SETUP_SURVEY_SECTION.content_survey_setup}>
           <BasicInformation

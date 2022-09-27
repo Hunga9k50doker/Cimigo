@@ -8,13 +8,11 @@ import ProjectReviewAndPayment from "./ProjectReviewAndPayment";
 import Waiting from "./Waiting";
 import OnePayFail from "./OnePayFail";
 import OnePayPending from "./OnePayPending";
-
 interface Props {
   projectId: number
 }
 
 const PayTab = memo((_: Props) => {
-
   return (
     <>
       <Switch>
