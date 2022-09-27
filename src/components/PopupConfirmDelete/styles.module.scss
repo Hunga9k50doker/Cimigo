@@ -4,36 +4,32 @@
   max-width: 550px;
 }
 .title {
-  text-align: center;
-  span {
-    font-weight: 600;
-    font-size: 24px;
-    color: rgba(28, 28, 28, 0.65);
-    margin: 0;
-    margin-top: 8px;
-  }
   p {
     font-weight: 500;
     font-size: 16px;
     color: rgba(28, 28, 28, 0.65);
-    margin-top: 18px;
+    margin-top: 24px;
     margin-bottom: 32px;
   }
 }
-.input {
-  width: 60%;
-  margin: auto;
-  margin-top: 24px;
-  margin-bottom: 40px;
-}
+
 .header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+.closeIconTitle {
+  width: 26.67px;
+  height: 26.67px;
+  padding: 4px;
+  background-color: var(--cimigo-danger);
+  border-radius: 100%;
+  color: var(--ghost-white);
+  margin-right: 19px;
 }
 .btn {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   @media only screen and (max-width: 767px) {
     flex-direction: column-reverse;
     button {

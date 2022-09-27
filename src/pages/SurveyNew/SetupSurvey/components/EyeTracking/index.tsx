@@ -239,7 +239,7 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
           )}
           {(maxEyeTrackingPack > project?.eyeTrackingPacks?.length && editable) && (
             <Button
-              sx={{ mt: 3, width: { xs: "100%", sm: "auto" } }}
+              sx={{ mt: 3, width: { xs: "100%", sm: "300px" } }}
               btnType={BtnType.Outlined}
               translation-key="setup_survey_packs_add"
               children={<TextBtnSmall>{t('setup_survey_packs_add')}</TextBtnSmall>}

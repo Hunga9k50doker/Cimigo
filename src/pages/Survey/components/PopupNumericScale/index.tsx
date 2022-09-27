@@ -72,21 +72,21 @@ const PopupNumericScale = (props: Props) => {
 
   const schema = useMemo(() => {
     return yup.object().shape({
-      title: yup.string().required("Question title is required"),
+      title: yup.string().required(t("setup_survey_popup_numeric_scale_question_validate")),
       scaleRangeFrom: yup.number()
-        .typeError('From is required')
-        .integer("From must be an integer")
-        .required("From is required"),
+        .typeError(t("setup_survey_popup_numeric_scale_from_validate_required"))
+        .integer(t("setup_survey_popup_numeric_scale_from_validate_integer"))
+        .required(t("setup_survey_popup_numeric_scale_from_validate_required")),
       scaleRangeTo: yup.number()
-        .typeError('To is required')
-        .integer("To must be an integer")
-        .required("To is required")
-        .min(yup.ref("scaleRangeFrom"), "Greater from"),
+        .typeError(t("setup_survey_popup_numeric_scale_to_validate_required"))
+        .integer(t("setup_survey_popup_numeric_scale_to_validate_integer"))
+        .required(t("setup_survey_popup_numeric_scale_to_validate_required"))
+        .min(yup.ref("scaleRangeFrom"), t("setup_survey_popup_numeric_scale_validate_min")),
       customQuestionAttributes: yup
         .array(yup.object({
           id: yup.number().transform(value => (isNaN(value) ? undefined : value)).notRequired(),
-          leftLabel: yup.string().required("Left label is required"),
-          rightLabel: yup.string().required("Right label is required"),
+          leftLabel: yup.string().required(t("setup_survey_popup_numeric_scale_validate_left_label")),
+          rightLabel: yup.string().required(t("setup_survey_popup_numeric_scale_validate_right_label")),
         }))
         .required(),
     })

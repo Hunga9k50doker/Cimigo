@@ -1,6 +1,7 @@
-import { AddCircle, MoreHoriz, Save as SaveIcon, Edit as EditIcon, DeleteForever as DeleteForeverIcon, MoreVert } from "@mui/icons-material"
+import { AddCircle, MoreHoriz, Save as SaveIcon, Edit as EditIcon, DeleteForever as DeleteForeverIcon, MoreVert, ClassSharp } from "@mui/icons-material"
 import { Grid, IconButton, ListItemIcon, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import Button, { BtnType } from "components/common/buttons/Button"
+import ButtonClose from "components/common/buttons/ButtonClose"
 import InputLineTextField from "components/common/inputs/InputLineTextfield"
 import { Menu } from "components/common/memu/Menu"
 import { SetupTable } from "components/common/table/SetupTable"
@@ -361,14 +362,22 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
                   />
                 </TableCell>
                 <TableCell align="center">
-                  <Button
-                    btnType={BtnType.Outlined}
-                    translation-key="common_save"
-                    children={<TextBtnSmall>{t('common_save')}</TextBtnSmall>}
-                    startIcon={<SaveIcon sx={{ fontSize: "16px !important" }} />}
-                    disabled={!enableAddBrand}
-                    onClick={onAddOrEditBrand}
-                  />
+                  <Grid sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <Button
+                      btnType={BtnType.Outlined}
+                      translation-key="common_save"
+                      children={<TextBtnSmall>{t('common_save')}</TextBtnSmall>}
+                      startIcon={<SaveIcon sx={{ fontSize: "16px !important" }} />}
+                      disabled={!enableAddBrand}
+                      onClick={onAddOrEditBrand}
+                      className={classes.btnAddRow}
+                    />
+                    <ButtonClose className={classes.btnDeleteRow} 
+                      $backgroundColor="--ghost-white" 
+                      $colorName="--eerie-black-40" 
+                      onClick={() => onCancelAddOrEditBrand()}
+                    />
+                  </Grid>
                 </TableCell>
               </TableRow>
             )}

@@ -5,8 +5,10 @@ import classes from './styles.module.scss';
 import Buttons from 'components/Buttons';
 import Images from "config/images";
 import { useTranslation } from 'react-i18next';
-
-
+import CloseIcon from '@mui/icons-material/Close';
+import Heading3 from "components/common/text/Heading3";
+import ButtonClose from "components/common/buttons/ButtonClose";
+import Button, {BtnType} from "components/common/buttons/Button";
 
 interface Props {
   isOpen: boolean,
@@ -30,17 +32,18 @@ const PopupConfirmDelete = memo((props: Props) => {
     >
       <Grid>
         <Grid className={classes.header}>
-          <IconButton onClick={onCancel}>
-            <img src={Images.icClose} alt='' />
-          </IconButton>
+          <Grid sx={{display: 'flex', alignItems: 'center'}}>
+            <CloseIcon className={classes.closeIconTitle}/>
+            <Heading3 $colorName="--cimigo-blue-dark-3">{title}</Heading3>
+          </Grid>
+          <ButtonClose $backgroundColor='--eerie-black-5' $colorName='--eerie-black-40' onClick={onCancel}/>
         </Grid>
           <Grid className={classes.title}>
-            <span>{title}</span>
             <p>{description}</p>
           </Grid>
           <Grid className={classes.btn}>
-            <Buttons children={t('common_cancel')} translation-key="common_cancel" btnType='TransparentBlue' padding='11px 18px' onClick={onCancel} />
-            <Buttons children={t('common_delete')} translation-key="common_delete" btnType='Red' padding='11px 20px' onClick={onDelete}/>
+            <Button children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onCancel} />
+            <Buttons children={t('common_delete')} translation-key="common_delete" btnType='Red' padding='8px 16px' onClick={onDelete}/>
           </Grid>
       </Grid>
     </Dialog>
