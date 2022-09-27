@@ -31,6 +31,7 @@ import ProjectHelper from "helpers/project";
 import Report from "./Report";
 import { ETabRightPanel } from "models/project";
 import { useChangePrice } from "hooks/useChangePrice";
+import {Helmet} from "react-helmet";
 
 export const Survey = () => {
 
@@ -126,8 +127,26 @@ export const Survey = () => {
     setTabRightPanel(tab)
   }
 
+  const tabActiveTitle = (tabActive) => {
+    switch (tabActive) {
+        case 0: 
+            return t("setup_tab");
+        case 1: 
+            return t("target_tab");
+        case 2: 
+            return t("quotas_tab");
+        case 3: 
+            return t("payment_tab");
+        case 4: 
+            return t("results_tab");
+    }
+  }
+
   return (
     <Grid className={classes.root}>
+      <Helmet>
+        <title>{`RapidSurvey - ${project?.name} - ${tabActiveTitle(acitveTab)}`}</title>
+      </Helmet>
       <Header project detail={project} />
       <Grid className={classes.subHeaderMobile}>
         <HomeIcon className={classes.homeIcon} onClick={() => dispatch(push(routes.project.management))} />

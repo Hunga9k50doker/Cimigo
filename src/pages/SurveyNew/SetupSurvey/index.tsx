@@ -29,7 +29,6 @@ import PopupMissingRequirement from "pages/SurveyNew/components/PopupMissingRequ
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import PopupHowToSetupPackTestSurvey from "pages/Survey/components/PopupHowToSetupPackTestSurvey";
-import { Helmet } from "react-helmet";
 interface SetupSurvey {
   projectId: number;
   isHaveChangePrice: boolean;
@@ -110,9 +109,6 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
 
   return (
     <PageRoot className={classes.root}>
-      <Helmet>
-        <title>{`RapidSurvey - ${project?.name} - Setup`}</title>
-      </Helmet>
       <LeftContent>
         <PageTitle>
           <PageTitleLeft>

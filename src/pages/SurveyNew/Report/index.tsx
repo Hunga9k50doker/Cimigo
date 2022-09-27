@@ -13,7 +13,6 @@ import { t } from 'i18next';
 import { Content, LeftContent, PageRoot } from '../components';
 import Button, { BtnType } from 'components/common/buttons/Button';
 import TextBtnSecondary from 'components/common/text/TextBtnSecondary';
-import { Helmet } from "react-helmet";
 
 interface Props {
   projectId: number,
@@ -42,9 +41,6 @@ const Report = memo(({ projectId }: Props) => {
 
   return (
     <PageRoot>
-      <Helmet>
-        <title>{`RapidSurvey - ${project?.name} - Results`}</title>
-      </Helmet>
       <LeftContent>
         <Content className={classes.root}>
           {hasReport() ? (
