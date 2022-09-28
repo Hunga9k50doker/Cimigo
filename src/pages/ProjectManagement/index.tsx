@@ -64,10 +64,10 @@ import SubTitle from "components/common/text/SubTitle";
 import BasicLayout from "layout/BasicLayout";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 
 const ExpandIcon = (props) => {
-  return <ArrowDropDownIcon sx={{color: "var(--gray-60)"}} {...props}/>;
+  return <ArrowDropDownIcon {...props} sx={{ color: "var(--gray-60)" }}/>;
 };
 
 enum SortedField {
@@ -76,7 +76,7 @@ enum SortedField {
   updatedAt = "updatedAt",
 }
 
-interface Props {}
+interface Props { }
 
 const ProjectManagement = memo((props: Props) => {
   const { t, i18n } = useTranslation();
@@ -468,7 +468,7 @@ const ProjectManagement = memo((props: Props) => {
               </Heading1>
               <Box className={classes.headerLeftSub}>
                 <InputSearch
-                  sx={{minHeight: "40px",minWidth: "256px"}}
+                  sx={{ minHeight: "40px", minWidth: "256px" }}
                   className={classes.inputSearch}
                   placeholder={t("project_mgmt_search")}
                   translation-key="project_mgmt_search"
@@ -477,7 +477,7 @@ const ProjectManagement = memo((props: Props) => {
                 />
                 <FormControl classes={{ root: classes.rootSelect }}>
                   <Select
-                    sx={{minWidth: "147px", minHeight: "40px"}}
+                    sx={{ minWidth: "147px", minHeight: "40px" }}
                     variant="outlined"
                     value={statusId?.id || 0}
                     onChange={(e) => onChangeStatus(e.target.value as number)}
@@ -659,7 +659,6 @@ const ProjectManagement = memo((props: Props) => {
             <MenuItem className={classes.itemAciton} onClick={gotoDetail}>
               <RemoveRedEyeIcon />
               <ParagraphBody
-                pl={1.75}
                 $colorName={"--gray-80"}
                 translation-key="project_mgmt_action_view_details"
               >
@@ -672,7 +671,6 @@ const ProjectManagement = memo((props: Props) => {
             >
               <DriveFileRenameOutlineIcon />
               <ParagraphBody
-                pl={1.75}
                 $colorName={"--gray-80"}
                 translation-key="project_mgmt_action_rename"
               >
@@ -685,7 +683,6 @@ const ProjectManagement = memo((props: Props) => {
             >
               <DriveFileMoveIcon />
               <ParagraphBody
-                pl={1.75}
                 $colorName={"--gray-80"}
                 translation-key="project_mgmt_action_move"
               >
@@ -693,13 +690,12 @@ const ProjectManagement = memo((props: Props) => {
               </ParagraphBody>
             </MenuItem>
             <MenuItem
-              className={classes.itemAciton}
+              className={clsx(classes.itemAciton, classes.itemAcitonDelete)}
               onClick={onShowConfirmDelete}
             >
               <DeleteForeverIcon />
               <ParagraphBody
-                pl={1.75}
-                $colorName={"--gray-80"}
+                $colorName={"--red-error"}
                 translation-key="project_mgmt_action_delete"
               >
                 {t("project_mgmt_action_delete")}
@@ -742,7 +738,7 @@ const ProjectManagement = memo((props: Props) => {
           </SubTitle>
           <FormControl classes={{ root: classes.rootSelect }}>
             <Select
-              sx={{minHeight: "40px"}}
+              sx={{ minHeight: "40px" }}
               variant="outlined"
               value={folderId?.id || 0}
               onChange={(e) => onChangeFolderMobile(e.target.value as number)}

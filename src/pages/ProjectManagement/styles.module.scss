@@ -1,5 +1,4 @@
 .root {
-  
 }
 .container {
   margin: auto;
@@ -104,27 +103,42 @@
   margin: 50px auto 16px;
 }
 .menuAction {
-  width: 170px;
-  background: #ffffff;
-  border: 1px solid #eeeeee;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  min-width: 170px;
+  background: #FFFFFF;
+  border: none;
+  box-shadow: 0px 0px 8px rgba(28, 28, 28, 0.12);
   border-radius: 4px;
-  li {
-    &:hover {
-      background: #e8f1fb;
+  .itemAciton {
+    padding: 8px 16px;
+    min-height: 40px;
+    svg {
+      color: var(--gray-80);
+      font-size: 20px;
     }
-  }
-  .itemAciton:last-child {
-    color: var(--red-error) !important;
-  }
-}
-.itemAciton{
-  padding: 8px 16px;
-}
-.itemAciton:hover {
-  color: var(--cimigo-blue);
-  p {
-    color: var(--cimigo-blue);
+    p {
+      margin-left: 12px;
+      color: var(--gray-80);
+    }
+    &:hover {
+      background: var(--cimigo-blue-light-4);
+      &:not(.itemAcitonDelete) {
+        svg {
+          color: var(--cimigo-blue);
+          font-size: 20px;
+        }
+        p {
+          color: var(--cimigo-blue);
+        }
+      }
+    }
+    &.itemAcitonDelete {
+      svg {
+        color: var(--red-error);
+      }
+      p {
+        color: var(--red-error);
+      }
+    }
   }
 }
 
@@ -208,7 +222,6 @@
     max-width: 127px;
     margin-right: 0px;
   }
-  
 }
 .rootSelect > div > div {
   padding: 4.5px 14px;
@@ -224,18 +237,18 @@
   }
 }
 .icSelect {
-   right: 15px;
-   color: var(--gray-60);
+  right: 15px;
+  color: var(--gray-60);
 }
 .selectType {
   font-weight: 500;
   font-size: 12px;
   color: #1f61a9;
-  button{
+  button {
     display: none;
   }
 }
-.selectMobile{
+.selectMobile {
   max-height: 200px;
 }
 
@@ -255,8 +268,8 @@
       &:hover {
         background: #e8f1fb;
       }
-      &[class~="Mui-selected"]{
-        p{
+      &[class~="Mui-selected"] {
+        p {
           color: var(--cimigo-blue);
         }
       }
@@ -303,12 +316,12 @@
   letter-spacing: 0.015em;
   color: #1c1c1c;
   margin-bottom: 4px;
-  white-space: nowrap; 
-  width: 300px; 
+  white-space: nowrap;
+  width: 300px;
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
   @media only screen and (max-width: 359px) {
-    width: 200px; 
+    width: 200px;
   }
 }
 .itemDateMobile {
@@ -366,21 +379,21 @@
     }
   }
 }
-.itemStatus:hover{
-  p{
+.itemStatus:hover {
+  p {
     color: var(--cimigo-blue);
   }
 }
-.itemSelectMobie{
-  white-space: nowrap; 
-  width: 100%; 
+.itemSelectMobie {
+  white-space: nowrap;
+  width: 100%;
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
   @media only screen and (max-width: 360px) {
     width: 150px;
   }
 }
-.selectFolderMobile{
+.selectFolderMobile {
   @media only screen and (max-width: 767px) {
     max-width: 300px;
     max-height: 250px;
