@@ -52,6 +52,10 @@ const ChangePassword = memo((props: Props) => {
           message: t("field_new_password_vali_password"),
           excludeEmptyString: true,
         })
+        .notOneOf(
+          [yup.ref("currentPassword")],
+          t("field_confirm_new_password_different_current_password")
+        )
         .required(t("field_new_password_vali_required")),
       confirmPassword: yup
         .string()
