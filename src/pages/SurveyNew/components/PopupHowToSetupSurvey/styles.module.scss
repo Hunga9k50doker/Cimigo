@@ -27,3 +27,9 @@
     color: var(--ghost-white);
     border-radius: 50%;
 }
+.memu {
+  [class~="MuiPaper-root"] {
+    border: 1px solid var(--gray-6);
+    margin-top: 8px;
+  }
+}

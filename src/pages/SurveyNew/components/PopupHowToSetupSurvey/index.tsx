@@ -37,7 +37,7 @@ interface Props {
   onClose: () => void,
 }
 
-const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
+const PopupHowToSetupSurvey = memo((props: Props) => {
   const { isOpen, project, onClose } = props;
 
   const dispatch = useDispatch()
@@ -140,19 +140,21 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
                   <ForwardToInboxTwoToneIcon />
                 </div>
                 <Popover
+                  elevation={0}
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
                   onClose={handleClosePopoverEmail}
                   anchorOrigin={{
                     vertical: 'bottom',
-                    horizontal: 'left',
+                    horizontal: 'right',
                   }}
                   transformOrigin={{
                     vertical: 'top',
                     horizontal: 'right',
                   }}
+                  className={classes.memu}
                 >
-                  <Grid sx={{ maxWidth: '372px', padding: '16px', background: 'var(--gray-5)' }} component="form" onSubmit={handleSubmit(_onSubmit)}>
+                  <Grid sx={{ maxWidth: '372px', padding: '16px' }} component="form" onSubmit={handleSubmit(_onSubmit)}>
                     <Heading5 translation-key="setup_survey_how_to_setup_send_email_title">{t("setup_survey_how_to_setup_send_email_title")}</Heading5>
                     <ParagraphSmall translate-key="setup_survey_how_to_setup_send_email_title_decs" sx={{marginBottom: '16px'}}>{t("setup_survey_how_to_setup_send_email_title_decs")}</ParagraphSmall>
                     <Grid container spacing={2} direction="column">
@@ -201,7 +203,7 @@ const PopupHowToSetupPackTestSurvey = memo((props: Props) => {
     </Dialog>
   );
 });
-export default PopupHowToSetupPackTestSurvey;
+export default PopupHowToSetupSurvey;
 
 
 

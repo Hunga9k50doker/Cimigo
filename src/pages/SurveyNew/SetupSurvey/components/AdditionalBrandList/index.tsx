@@ -280,14 +280,21 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
                     />
                   </TableCell>
                   <TableCell align="center">
-                    <Button
-                      btnType={BtnType.Outlined}
-                      translation-key="common_save"
-                      children={<TextBtnSmall>{t('common_save')}</TextBtnSmall>}
-                      startIcon={<SaveIcon sx={{ fontSize: "16px !important" }} />}
-                      disabled={!enableAddBrand}
-                      onClick={onAddOrEditBrand}
-                    />
+                    <Grid sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Button
+                        btnType={BtnType.Outlined}
+                        translation-key="common_save"
+                        children={<TextBtnSmall>{t('common_save')}</TextBtnSmall>}
+                        startIcon={<SaveIcon sx={{ fontSize: "16px !important" }} />}
+                        disabled={!enableAddBrand}
+                        onClick={onAddOrEditBrand}
+                      />
+                      <ButtonClose className={classes.btnDeleteRow}
+                        $backgroundColor="--ghost-white"
+                        $colorName="--eerie-black-40"
+                        onClick={() => onCancelAddOrEditBrand()}
+                      />
+                    </Grid>
                   </TableCell>
                 </TableRow>
               ) : (
@@ -362,7 +369,7 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
                   />
                 </TableCell>
                 <TableCell align="center">
-                  <Grid sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <Grid sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Button
                       btnType={BtnType.Outlined}
                       translation-key="common_save"
@@ -372,9 +379,9 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
                       onClick={onAddOrEditBrand}
                       className={classes.btnAddRow}
                     />
-                    <ButtonClose className={classes.btnDeleteRow} 
-                      $backgroundColor="--ghost-white" 
-                      $colorName="--eerie-black-40" 
+                    <ButtonClose className={classes.btnDeleteRow}
+                      $backgroundColor="--ghost-white"
+                      $colorName="--eerie-black-40"
                       onClick={() => onCancelAddOrEditBrand()}
                     />
                   </Grid>

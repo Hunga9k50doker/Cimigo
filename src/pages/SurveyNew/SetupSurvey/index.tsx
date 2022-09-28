@@ -28,7 +28,7 @@ import { useTranslation } from "react-i18next";
 import PopupMissingRequirement from "pages/SurveyNew/components/PopupMissingRequirement";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
-import PopupHowToSetupPackTestSurvey from "pages/Survey/components/PopupHowToSetupPackTestSurvey";
+import PopupHowToSetupSurvey from "pages/SurveyNew/components/PopupHowToSetupSurvey";
 interface SetupSurvey {
   projectId: number;
   isHaveChangePrice: boolean;
@@ -49,7 +49,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
   
   const [openMissingRequirement, setOpenMissingRequirement] = useState(false);
 
-  const [onOpenHowToSetupPackTestSurvey, setOnOpenHowToSetupPackTestSurvey] = useState(false);
+  const [onOpenHowToSetupSurvey, setOnOpenHowToSetupSurvey] = useState(false);
 
   const isValidBasic = useMemo(() => {
     return ProjectHelper.isValidBasic(project)
@@ -83,12 +83,12 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
     document.getElementById(SETUP_SURVEY_SECTION.content_survey_setup).scrollTo({ behavior: 'smooth', top: el.offsetTop - content.offsetTop })
   }
 
-  const onOpenPopupHowToSetupPackTestSurvey = () => {
-    setOnOpenHowToSetupPackTestSurvey(true);
+  const onOpenPopupHowToSetupSurvey = () => {
+    setOnOpenHowToSetupSurvey(true);
   }
 
-  const onClosePopupHowToSetupPackTestSurvey = () => {
-    setOnOpenHowToSetupPackTestSurvey(false);
+  const onClosePopupHowToSetupSurvey = () => {
+    setOnOpenHowToSetupSurvey(false);
   }
 
   const onCloseMissingRequirement = () => {
@@ -120,7 +120,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
           {project?.solution?.enableHowToSetUpSurvey && (
             <PageTitleRight>
               <HelpIcon sx={{ fontSize: "16px", marginRight: "4px", color: "var(--cimigo-blue)" }} />
-              <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupPackTestSurvey}
+              <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupSurvey}
               >{project?.solution?.howToSetUpSurveyPageTitle}</ParagraphSmallUnderline2>
             </PageTitleRight>
           )}  
@@ -301,10 +301,10 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
         </RightPanel>
       </RightContent>
 
-      <PopupHowToSetupPackTestSurvey
-        isOpen={onOpenHowToSetupPackTestSurvey}
+      <PopupHowToSetupSurvey
+        isOpen={onOpenHowToSetupSurvey}
         project={project}
-        onClose={onClosePopupHowToSetupPackTestSurvey}
+        onClose={onClosePopupHowToSetupSurvey}
       />
       <PopupMissingRequirement
         isOpen={openMissingRequirement}
