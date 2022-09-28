@@ -418,7 +418,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                   {t('payment_billing_sub_tab_payment_method_make_an_order_sub')}
                 </ParagraphSmall>
                 {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
-                  <Box mb={4}>
+                  <Box mb={4} sx={{width: "325px"}}>
                     <InputTextField
                       title={t('field_contact_name')}
                       translation-key="field_contact_name"
