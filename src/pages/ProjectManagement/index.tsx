@@ -64,6 +64,7 @@ import SubTitle from "components/common/text/SubTitle";
 import BasicLayout from "layout/BasicLayout";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ParagraphSmall from "components/common/text/ParagraphSmall";
+import {Helmet} from "react-helmet";
 
 const ExpandIcon = (props) => {
   return <ArrowDropDownIcon sx={{color: "var(--gray-60)"}} {...props}/>;
@@ -342,6 +343,9 @@ const ProjectManagement = memo((props: Props) => {
   };
   return (
     <BasicLayout className={classes.root}>
+      <Helmet>
+        <title>RapidSurvey - Project management</title>
+      </Helmet>
       {verifiedSuccess && (
         <Grid className={classes.successBoxContainer}>
           <div className={classes.successBox}>

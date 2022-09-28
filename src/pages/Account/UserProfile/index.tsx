@@ -50,8 +50,7 @@ const UserProfile = memo((props: Props) => {
                 .required(t('field_first_name_vali_required')),
             lastName: yup.string()
                 .required(t('field_last_name_vali_required')),
-            title: yup.string()
-                .required(t("field_your_title_vali_required")),
+            title: yup.string(),
             email: yup.string()
                 .email(t('field_email_vali_email')),
             phone: yup.string().matches(VALIDATION.phone,
@@ -156,7 +155,7 @@ const UserProfile = memo((props: Props) => {
                 </div>
                 <div className={classes.personalInfo}>
                     <Heading3 $colorName="--eerie-black" className={classes.name}>{user?.fullName}</Heading3>
-                    <ParagraphSmall>{user?.company}</ParagraphSmall>
+                    <ParagraphSmall>{user?.company}, {user?.country.name}</ParagraphSmall>
                 </div>
             </Grid>
             <Grid container columnSpacing={isMobile ? 0 : 1} rowSpacing={3} className={classes.customMargin}>
@@ -188,6 +187,7 @@ const UserProfile = memo((props: Props) => {
                     <Inputs
                         title={t('field_your_title')}
                         translation-key="field_your_title"
+                        optional
                         name="title"
                         type="text"
                         placeholder={t('field_your_title_placeholder')}
