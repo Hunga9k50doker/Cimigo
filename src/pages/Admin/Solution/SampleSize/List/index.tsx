@@ -155,7 +155,7 @@ const SampleSizeList = memo(({ }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
-                            {item.limit}
+                            {`< `}{item.limit}
                           </TableCell>
                           <TableCell component="th">
                             {item.price}

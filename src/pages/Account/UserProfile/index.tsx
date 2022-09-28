@@ -185,19 +185,6 @@ const UserProfile = memo((props: Props) => {
                 </Grid>
                 <Grid item xs={12} sm={12}>
                     <Inputs
-                        title={t('field_your_title')}
-                        translation-key="field_your_title"
-                        optional
-                        name="title"
-                        type="text"
-                        placeholder={t('field_your_title_placeholder')}
-                        translation-key-placeholder="field_your_title_placeholder"
-                        inputRef={register('title')}
-                        errorMessage={errors.title?.message}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={12}>
-                    <Inputs
                         title={t('field_email')}
                         translation-key="field_email"
                         name="email"
@@ -245,6 +232,19 @@ const UserProfile = memo((props: Props) => {
                         translation-key-placeholder="field_company_placeholder"
                         inputRef={register('company')}
                         errorMessage={errors.company?.message}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                    <Inputs
+                        title={t('field_your_title')}
+                        translation-key="field_your_title"
+                        optional
+                        name="title"
+                        type="text"
+                        placeholder={t('field_your_title_placeholder')}
+                        translation-key-placeholder="field_your_title_placeholder"
+                        inputRef={register('title')}
+                        errorMessage={errors.title?.message}
                     />
                 </Grid>
             </Grid>
