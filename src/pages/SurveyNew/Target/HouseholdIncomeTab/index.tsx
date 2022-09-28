@@ -153,7 +153,7 @@ const HouseholdIncomeTab = memo(({ project, questions, onNextStep }: Props) => {
             children={<TextBtnSecondary translation-key="common_save_and_next">{t("common_save_and_next")}</TextBtnSecondary>}
             onClick={onUpdateTarget}
           />
-          <ParagraphSmall mt={0.5} $colorName="--gray-60" translation-key="target_sub_tab_next_choose_age_coverage">{t("target_sub_tab_next_choose_age_coverage")}</ParagraphSmall>
+          <ParagraphSmall sx={{ fontStyle: "italic !important" }} mt={0.5} $colorName="--gray-60" translation-key="target_sub_tab_next_choose_age_coverage">{t("target_sub_tab_next_choose_age_coverage")}</ParagraphSmall>
         </Box>
       </Box>
       <PopupConfirmChangeSampleSize
