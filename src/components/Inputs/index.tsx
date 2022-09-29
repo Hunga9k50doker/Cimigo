@@ -9,6 +9,8 @@ import TextTitle from './components/TextTitle';
 import ErrorMessage from './components/ErrorMessage';
 import { useTranslation } from 'react-i18next';
 
+export const classesInputs = classes
+
 interface InputsProps extends OutlinedInputProps {
   title?: string,
   titleRequired?: boolean,

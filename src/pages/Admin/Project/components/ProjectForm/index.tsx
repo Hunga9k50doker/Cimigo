@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowBackOutlined, Save } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
-import Inputs from "components/Inputs";
+import { Box, Button, Card, CardContent, Grid, TextField, Typography } from "@mui/material";
+import Inputs, { classesInputs } from "components/Inputs";
 import { push } from "connected-react-router";
 import { memo, useEffect } from "react"
 import { Controller, useForm } from "react-hook-form";
@@ -14,12 +14,16 @@ import { Project, projectStatus } from "models/project";
 import { FileUpload } from "models/attachment";
 import TextTitle from "components/Inputs/components/TextTitle";
 import UploadFile from "components/UploadFile";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import ErrorMessage from "components/common/text/ErrorMessage";
+import moment from "moment";
 
 const schema = yup.object().shape({
   status: yup.object().required('Status is required.'),
   dataStudio: yup.string().nullable().notRequired(),
   report: yup.mixed().nullable().notRequired(),
   invoice: yup.mixed().nullable().notRequired(),
+  reportReadyDate: yup.string().nullable().notRequired()
 })
 
 export interface ProjectFormData {
@@ -27,6 +31,7 @@ export interface ProjectFormData {
   report: FileUpload,
   status: OptionItem,
   invoice: FileUpload;
+  reportReadyDate: string;
 }
 
 interface Props {
@@ -50,6 +55,7 @@ const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
   const _onSubmit = (data: ProjectFormData) => {
     if (!itemEdit) return
     const form = new FormData()
+    form.append('reportReadyDate', data.reportReadyDate ? moment(data.reportReadyDate).format('YYYY-MM-DD') : '')
     if (data.dataStudio) form.append('dataStudio', data.dataStudio)
     if (data.report?.file) form.append('reports', data.report.file)
     if (!data.report || data.report?.file) form.append('deleteReport', 'true')
@@ -85,9 +91,10 @@ const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
       }
       reset({
         dataStudio: itemEdit.dataStudio,
-        status: projectStatus.find(it =>it.id === itemEdit.status),
+        status: projectStatus.find(it => it.id === itemEdit.status),
         report: report,
-        invoice: invoice
+        invoice: invoice,
+        reportReadyDate: itemEdit.reportReadyDate || null
       })
     }
   }, [reset, itemEdit])
@@ -140,6 +147,20 @@ const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
                       }}
                       errorMessage={(errors.status as any)?.message}
                     />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextTitle>Report ready date</TextTitle>
+                    <Controller
+                      name="reportReadyDate"
+                      control={control}
+                      render={({ field }) => <DatePicker
+                        inputFormat="DD/MM/YYYY"
+                        value={field.value}
+                        onChange={field.onChange}
+                        renderInput={(params) => <TextField fullWidth {...params}  classes={{ root: classesInputs.inputTextfield }}/>}
+                      />}
+                    />
+                    {!!errors.reportReadyDate && (<ErrorMessage>{errors.reportReadyDate.message}</ErrorMessage>)}
                   </Grid>
                   <Grid item xs={12}>
                     <TextTitle>Report</TextTitle>

@@ -13,10 +13,10 @@ import { getMe } from 'redux/reducers/User/actionTypes';
 import { History } from 'history';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'locales';
-import UseAuth from 'hooks/useAuth';
 import { langSupports } from 'models/general';
 import { Helmet } from 'react-helmet';
-
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 interface AppProps {
   history: History;
@@ -44,21 +44,23 @@ const App = ({ history, dispatch }: AppProps) => {
   }, [i18n.language])
 
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <I18nextProvider i18n={i18n}>
-          <AppContainer>
-            <ConnectedRouter history={history}>
-              <AppStatus />
-              <Helmet>
-                <title>Cimigo RapidSurvey</title>
-              </Helmet>
-              {!isLoadingAuth && <Routers />}
-            </ConnectedRouter>
-          </AppContainer>
-        </I18nextProvider>
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <LocalizationProvider dateAdapter={AdapterMoment}>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <I18nextProvider i18n={i18n}>
+            <AppContainer>
+              <ConnectedRouter history={history}>
+                <AppStatus />
+                <Helmet>
+                  <title>Cimigo RapidSurvey</title>
+                </Helmet>
+                {!isLoadingAuth && <Routers />}
+              </ConnectedRouter>
+            </AppContainer>
+          </I18nextProvider>
+        </ThemeProvider>
+      </StyledEngineProvider>
+    </LocalizationProvider>
   );
 }
 

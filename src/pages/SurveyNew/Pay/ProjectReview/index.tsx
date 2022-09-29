@@ -250,7 +250,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                           ))}
                         </>
                       ) : (
-                        <ParagraphSmallUnderline2>{t('payment_billing_sub_tab_preview_view_detail')}</ParagraphSmallUnderline2>            
+                        <ParagraphSmallUnderline2>{t('payment_billing_sub_tab_preview_view_detail')}</ParagraphSmallUnderline2>
                       )}
                     </ParagraphBody>
                   </Box>
@@ -392,8 +392,8 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                           if (!isValidPacks) onRedirect(routes.project.detail.setupSurvey)
                         }}
                       >
-                        {t("payment_billing_sub_tab_preview_eye_tracking_packs", {project: project?.eyeTrackingPacks?.length})} <br />
-                        {!isValidEyeTracking && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_eye_tracking_packs_required">{t("payment_billing_sub_tab_preview_eye_tracking_packs_required", {project: project?.solution?.minEyeTrackingPack})}</span>}
+                        {t("payment_billing_sub_tab_preview_eye_tracking_packs", { project: project?.eyeTrackingPacks?.length })} <br />
+                        {!isValidEyeTracking && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_eye_tracking_packs_required">{t("payment_billing_sub_tab_preview_eye_tracking_packs_required", { project: project?.solution?.minEyeTrackingPack })}</span>}
                       </ParagraphBody>
                     </Box>
                   </Box>
@@ -404,27 +404,27 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
         </Grid>
       </Grid>
       <ParagraphExtraSmall className={classes.textExpected} $colorName="--gray-60" translation-key="payment_billing_sub_tab_preview_expected">{t('payment_billing_sub_tab_preview_expected')}</ParagraphExtraSmall>
-      {isValid && (<div>
-      <Heading5 mt={4} $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_preview_materials">
-        {t('payment_billing_sub_tab_preview_materials')}
-      </Heading5>
-      <ParagraphSmall mt={0.5} $colorName="--eerie-black" translation-key="payment_billing_sub_tab_preview_materials_sub">
-        {t("payment_billing_sub_tab_preview_materials_sub")}
-      </ParagraphSmall>
-      </div>)}
       {isValid && (
-        <Box className={classes.materialBox}>
-          <Box className={classes.materialItem} onClick={getInvoice}>
-            <img className={classes.imgAddPhoto} src={Images.icInvoice} />
-            <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_completed_invoice">{t("payment_billing_completed_invoice")}</ParagraphBody>
-          </Box>
-          {!!configs?.viewContract && (
-            <Box className={classes.materialItem} onClick={onDownLoadContract}>
-              <img className={classes.imgAddPhoto} src={Images.icContract} />
-              <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_view_contract">{t("payment_billing_view_contract")}</ParagraphBody>
+        <>
+          <Heading5 mt={4} $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_preview_materials">
+            {t('payment_billing_sub_tab_preview_materials')}
+          </Heading5>
+          <ParagraphSmall mt={0.5} $colorName="--eerie-black" translation-key="payment_billing_sub_tab_preview_materials_sub">
+            {t("payment_billing_sub_tab_preview_materials_sub")}
+          </ParagraphSmall>
+          <Box className={classes.materialBox}>
+            <Box className={classes.materialItem} onClick={getInvoice}>
+              <img className={classes.imgAddPhoto} src={Images.icInvoice} />
+              <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_completed_invoice">{t("payment_billing_completed_invoice")}</ParagraphBody>
             </Box>
-          )}
-        </Box>
+            {!!configs?.viewContract && (
+              <Box className={classes.materialItem} onClick={onDownLoadContract}>
+                <img className={classes.imgAddPhoto} src={Images.icContract} />
+                <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_view_contract">{t("payment_billing_view_contract")}</ParagraphBody>
+              </Box>
+            )}
+          </Box>
+        </>
       )}
       <Grid className={classes.btn}>
         <Button

@@ -50,6 +50,7 @@ export interface Project {
   enableEyeTracking: boolean;
   surveyLanguage: string,
   agreeQuota: boolean,
+  reportReadyDate: string;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
