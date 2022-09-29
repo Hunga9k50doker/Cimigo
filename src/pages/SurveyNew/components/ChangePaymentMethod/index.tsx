@@ -291,7 +291,7 @@ const ChangePaymentMethod = memo(
                       </ParagraphSmall>
                       {Number(watch("paymentMethodId")) ===
                         EPaymentMethod.MAKE_AN_ORDER && (
-                        <Box mb={4}>
+                        <Box mb={4} sx={{maxWidth: "325px"}}>
                           <InputTextfield
                             title={t("field_contact_name")}
                             translation-key="field_contact_name"

@@ -10,7 +10,7 @@
 }
 .title {
   span {
-    font-weight: 600;
+    color: var(--cimigo-danger);
   }
 }
 .body {
@@ -190,6 +190,7 @@
 }
 
 .textExpected {
+  font-size: 14px !important;
   padding: 16px 0px 0px;
   @media only screen and (max-width: 992px) {
     padding: 16px 8px 0px;

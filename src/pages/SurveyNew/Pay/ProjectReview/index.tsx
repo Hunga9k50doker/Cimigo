@@ -250,7 +250,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                           ))}
                         </>
                       ) : (
-                        t('payment_billing_sub_tab_preview_view_detail')
+                        <ParagraphSmallUnderline2>{t('payment_billing_sub_tab_preview_view_detail')}</ParagraphSmallUnderline2>            
                       )}
                     </ParagraphBody>
                   </Box>
@@ -403,13 +403,15 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
           </Grid>
         </Grid>
       </Grid>
-      <ParagraphExtraSmall className={classes.textExpected} $colorName="--eerie-black-65" translation-key="payment_billing_sub_tab_preview_expected">{t('payment_billing_sub_tab_preview_expected')}</ParagraphExtraSmall>
+      <ParagraphExtraSmall className={classes.textExpected} $colorName="--gray-60" translation-key="payment_billing_sub_tab_preview_expected">{t('payment_billing_sub_tab_preview_expected')}</ParagraphExtraSmall>
+      {isValid && (<div>
       <Heading5 mt={4} $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_preview_materials">
         {t('payment_billing_sub_tab_preview_materials')}
       </Heading5>
       <ParagraphSmall mt={0.5} $colorName="--eerie-black" translation-key="payment_billing_sub_tab_preview_materials_sub">
         {t("payment_billing_sub_tab_preview_materials_sub")}
       </ParagraphSmall>
+      </div>)}
       {isValid && (
         <Box className={classes.materialBox}>
           <Box className={classes.materialItem} onClick={getInvoice}>
@@ -427,7 +429,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       <Grid className={classes.btn}>
         <Button
           disabled={!isValid}
-          btnType={BtnType.Raised}
+          btnType={BtnType.Primary}
           translation-key="payment_billing_sub_tab_preview_confirm"
           children={<TextBtnSmall>{t("payment_billing_sub_tab_preview_confirm")}</TextBtnSmall>}
           onClick={onConfirmProject}
