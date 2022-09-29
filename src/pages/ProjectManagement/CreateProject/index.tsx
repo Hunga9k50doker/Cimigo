@@ -29,7 +29,7 @@ import SubTitle from "components/common/text/SubTitle";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { PlanService } from "services/plan";
 import BasicLayout from "layout/BasicLayout";
-
+import {Helmet} from "react-helmet";
 export enum EStep {
   SELECT_SOLUTION,
   SELECT_PLAN,
@@ -128,6 +128,9 @@ const CreateProject = () => {
       className={classes.root}
       HeaderProps={{ project: true }}
     >
+      <Helmet>
+        <title>RapidSurvey - Create new project</title>
+      </Helmet>
       <Grid className={classes.container}>
         <div className={classes.linkTextHome}>
           <HomeIcon
