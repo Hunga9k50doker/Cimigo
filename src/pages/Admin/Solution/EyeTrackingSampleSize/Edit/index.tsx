@@ -40,7 +40,7 @@ const EditEyeTrackingSampleSize = memo((props: Props) => {
       price: data.price
     })
       .then(() => {
-        dispatch(push(routes.admin.solution.sampleSize.root.replace(":solutionId", solutionId)))
+        dispatch(push(routes.admin.solution.eyeTrackingSampleSize.root.replace(":solutionId", solutionId)))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
