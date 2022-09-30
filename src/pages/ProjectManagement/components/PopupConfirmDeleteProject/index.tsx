@@ -127,6 +127,7 @@ const PopupConfirmDeleteProject = memo(
               {t("common_cancel")}
             </Button>
             <Button
+              btnType={BtnType.Primary}
               disabled={watch("delete") === "DELETE" ? false : true}
               className={classes.buttonDelete}
               translation-key="project_mgmt_action_delete"
