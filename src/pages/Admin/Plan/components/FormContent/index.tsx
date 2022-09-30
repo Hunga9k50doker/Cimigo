@@ -177,7 +177,6 @@ const FormContent = memo(({ langEdit, itemEdit, onSubmit }: PlanFormDataProps) =
                         options: [],
                         isMulti: true,
                         placeholder: "Create content item",
-                        isDisabled: !!langEdit
                       }}
                       errorMessage={(errors.content as any)?.message}
                     />
