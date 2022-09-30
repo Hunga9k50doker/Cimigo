@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 import { Box, Dialog } from "@mui/material";
 import classes from "./styles.module.scss";
 import { useForm } from "react-hook-form";
@@ -41,7 +41,7 @@ const PopupConfirmDeleteProject = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const { register, reset, handleSubmit, formState: { errors } } = useForm<DeleteForm>({
+    const { register, reset, watch, handleSubmit, formState: { errors } } = useForm<DeleteForm>({
       resolver: yupResolver(schema),
       mode: 'onChange'
     });
@@ -57,16 +57,10 @@ const PopupConfirmDeleteProject = memo(
       clearForm();
     };
 
-    const _onDelete = (data) => {
-      // eslint-disable-next-line no-cond-assign
-      if(data.delete === "DELETE") {
-        if (!project.id) return;
-        onDelete(project.id);
-        clearForm();
-      }
-      else {
-        return;
-      }
+    const _onDelete = () => {
+      if (!project.id) return;
+      onDelete(project.id);
+      clearForm();
     };
 
     return (
@@ -114,13 +108,14 @@ const PopupConfirmDeleteProject = memo(
             {t("project_mgmt_confirm_delete_sub_title_no_operation")}
             </ParagraphBody>
             <InputTextField
-            title={t("project_mgmt_confirm_delete_type_delete")}
-            autoComplete="off"
-            inputRef={register("delete")}
-            placeholder={t('project_mgmt_confirm_delete_type_delete_valid')}
-            translation-key-placeholder="project_mgmt_confirm_delete_type_delete_valid"
-            type="text"
-            errorMessage={errors.delete?.message}
+              title={t("project_mgmt_confirm_delete_type_delete")}
+              autoComplete="off"
+
+              inputRef={register("delete")}
+              placeholder={t('project_mgmt_confirm_delete_type_delete_valid')}
+              translation-key-placeholder="project_mgmt_confirm_delete_type_delete_valid"
+              type="text"
+              errorMessage={errors.delete?.message}
             />
           </DialogContentConfirm>
           <DialogActionsConfirm>
@@ -132,6 +127,7 @@ const PopupConfirmDeleteProject = memo(
               {t("common_cancel")}
             </Button>
             <Button
+              disabled={watch("delete") === "DELETE" ? false : true}
               className={classes.buttonDelete}
               translation-key="project_mgmt_action_delete"
               children={<TextBtnSmall>{t("project_mgmt_action_delete")}</TextBtnSmall>}
