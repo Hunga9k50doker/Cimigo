@@ -71,6 +71,12 @@ const PopupConfirmDeleteFolder = memo(
               }),
             }}
           ></ParagraphBody>
+          <ParagraphBody
+            $colorName="--gray-80"
+            translation-key="project_mgmt_description_delete_folder_worry"
+          >
+           {t("project_mgmt_description_delete_folder_worry")}
+          </ParagraphBody>
         </DialogContentConfirm>
         <DialogActionsConfirm>
           <Button
