@@ -57,6 +57,8 @@ const PopupConfirmDeleteProject = memo(
       clearForm();
     };
 
+    const isValid = () => watch("delete") === "DELETE"
+
     const _onDelete = () => {
       if (!project.id) return;
       onDelete(project.id);
@@ -128,7 +130,7 @@ const PopupConfirmDeleteProject = memo(
             </Button>
             <Button
               btnType={BtnType.Primary}
-              disabled={watch("delete") === "DELETE" ? false : true}
+              disabled={!isValid()}
               className={classes.buttonDelete}
               translation-key="project_mgmt_action_delete"
               children={<TextBtnSmall>{t("project_mgmt_action_delete")}</TextBtnSmall>}
