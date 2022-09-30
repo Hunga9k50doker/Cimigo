@@ -121,7 +121,7 @@ const SelectPlan = memo(
         <div>
           <Grid
             container
-            spacing={2}
+            columnSpacing={4}
             className={classes.body}
             justifyContent="center"
           >
@@ -147,9 +147,9 @@ const SelectPlan = memo(
                         <ParagraphBody
                           className={classes.title}
                           $colorName={"--cimigo-green-dark-3"}
-                          translation-key="common_solution"
+                          translation-key="common_most_pupular"
                         >
-                          {t("common_solution")}
+                          {t("common_most_pupular")}
                         </ParagraphBody>
                       </div>
                     )}
@@ -175,7 +175,7 @@ const SelectPlan = memo(
                             {t("project_create_tab_plan_start_at")}
                           </ParagraphBody>
                         </Typography>
-                        <Typography className={classes.price}>
+                        <Typography>
                           <Heading1
                             $fontWeight={"600"}
                             $colorName={"--cimigo-blue"}

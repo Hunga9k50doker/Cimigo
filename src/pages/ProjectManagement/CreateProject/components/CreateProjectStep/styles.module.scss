@@ -42,11 +42,13 @@
     padding-top: 20px;
     .accordionContent{
         background-color: var(--gray-5);
+        box-shadow: 0 0 transparent;
     }
 }
 .inputAccordion {
     background-color: var(--white);
 }
+
 .handleLink{
     .link{
         color: var(--cimigo-blue);

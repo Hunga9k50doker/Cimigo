@@ -129,6 +129,13 @@ const SolutionList = memo(
         </Grid>
         <Grid className={classes.headerContent}>
           <Stack direction="row" spacing={1} className={classes.stack}>
+            <Chip 
+            label={t('common_all')} 
+            translation-key="common_all" 
+            className={clsx(classes.category, { [classes.categorySelected]: !category?.id })} 
+            clickable 
+            variant="outlined" 
+            onClick={() => onChangeCategory()}/>
             {solutionCategory?.data.map((item) => (
               <Chip
                 key={item.id}
@@ -216,7 +223,7 @@ const SolutionList = memo(
                         {t("project_create_tab_solution_coming_soon")}
                       </MobileBody>
                     </Grid>
-                    <Grid sx={{ px: "24px" }}>
+                    <Grid sx={{ padding: "0 24px 32px" }}>
                       <Grid className={classes.titleCard}>
                         <img
                           className={classes.imgCard}

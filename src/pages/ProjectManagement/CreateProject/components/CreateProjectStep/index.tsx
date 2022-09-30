@@ -225,7 +225,7 @@ const CreateProjectStep = memo(
                       </ParagraphExtraSmall>
                     </Grid>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{paddingBottom: '24px'}}>
                     <Grid>
                       <ParagraphSmall
                         $colorName={"--gray-80"}
@@ -234,52 +234,66 @@ const CreateProjectStep = memo(
                           __html: t("project_create_tab_create_project_description"),
                         }}
                       ></ParagraphSmall>
-                      <InputTextfield
-                        className={classes.inputAccordion}
-                        name="category"
-                        type="text"
-                        placeholder={t("field_project_category_placeholder")}
-                        translation-key-placeholder="field_project_category_placeholder"
-                        title={t("field_project_category")}
-                        translation-key="field_project_category"
-                        inputRef={register("category")}
-                        errorMessage={errors.category?.message}
-                      />
-                      <InputTextfield
-                        className={classes.inputAccordion}
-                        name="brand"
-                        type="text"
-                        placeholder={t("field_project_brand_placeholder")}
-                        translation-key-placeholder="field_project_brand_placeholder"
-                        title={t("field_project_brand")}
-                        translation-key="field_project_brand"
-                        inputRef={register("brand")}
-                        errorMessage={errors.brand?.message}
-                      />
-                      <InputTextfield
-                        className={classes.inputAccordion}
-                        name="variant"
-                        type="text"
-                        placeholder={t("field_project_variant_placeholder")}
-                        translation-key-placeholder="field_project_variant_placeholder"
-                        title={t("field_project_variant")}
-                        translation-key="field_project_variant"
-                        inputRef={register("variant")}
-                        errorMessage={errors.variant?.message}
-                      />
-                      <InputTextfield
-                        className={classes.inputAccordion}
-                        name="manufacturer"
-                        type="text"
-                        placeholder={t(
-                          "field_project_manufacturer_placeholder"
-                        )}
-                        translation-key-placeholder="field_project_manufacturer_placeholder"
-                        title={t("field_project_manufacturer")}
-                        translation-key="field_project_manufacturer"
-                        inputRef={register("manufacturer")}
-                        errorMessage={errors.manufacturer?.message}
-                      />
+                      <Grid container rowSpacing={2}>  
+                        <Grid item xs={12}>
+                          <InputTextfield
+                            className={classes.inputAccordion}
+                            name="category"
+                            type="text"
+                            inputProps={{maxLength: "50"}}
+                            placeholder={t("field_project_category_placeholder")}
+                            translation-key-placeholder="field_project_category_placeholder"
+                            title={t("field_project_category")}
+                            translation-key="field_project_category"
+                            inputRef={register("category")}
+                            errorMessage={errors.category?.message}
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <InputTextfield
+                            className={classes.inputAccordion}
+                            name="brand"
+                            type="text"
+                            inputProps={{maxLength: "50"}}
+                            placeholder={t("field_project_brand_placeholder")}
+                            translation-key-placeholder="field_project_brand_placeholder"
+                            title={t("field_project_brand")}
+                            translation-key="field_project_brand"
+                            inputRef={register("brand")}
+                            errorMessage={errors.brand?.message}
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <InputTextfield
+                            className={classes.inputAccordion}
+                            name="variant"
+                            type="text"
+                            inputProps={{maxLength: "50"}}
+                            placeholder={t("field_project_variant_placeholder")}
+                            translation-key-placeholder="field_project_variant_placeholder"
+                            title={t("field_project_variant")}
+                            translation-key="field_project_variant"
+                            inputRef={register("variant")}
+                            errorMessage={errors.variant?.message}
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <InputTextfield
+                            className={classes.inputAccordion}
+                            name="manufacturer"
+                            type="text"
+                            inputProps={{maxLength: "50"}}
+                            placeholder={t(
+                              "field_project_manufacturer_placeholder"
+                            )}
+                            translation-key-placeholder="field_project_manufacturer_placeholder"
+                            title={t("field_project_manufacturer")}
+                            translation-key="field_project_manufacturer"
+                            inputRef={register("manufacturer")}
+                            errorMessage={errors.manufacturer?.message}
+                          />
+                        </Grid>
+                      </Grid>
                     </Grid>
                   </AccordionDetails>
                 </Accordion>
