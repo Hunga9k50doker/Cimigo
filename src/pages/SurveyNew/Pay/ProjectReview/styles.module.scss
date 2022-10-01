@@ -10,6 +10,12 @@
 }
 .title {
   span {
+    font-weight: 600;
+    color: var(--eerie-black);
+  }
+}
+.titleDanger {
+  span {
     color: var(--cimigo-danger);
   }
 }

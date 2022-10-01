@@ -6,14 +6,48 @@ import { ConfigData } from "models/config";
 import { Pack } from "models/pack";
 import { EPaymentStatus } from "models/payment";
 import { Project } from "models/project";
+import moment from "moment";
 
 export const editableProject = (project: Project) => {
   return project?.editable
 }
 export class ProjectHelper {
 
+  static getExpectedDelivery = (project: Project) => {
+    return project?.sampleSize <= 500 ? 10 : 15
+  }
+
+  static addBusinessDate = (numDaysToAdd: number) => {
+    const Sunday = 0;
+    const Saturday = 6;
+    let daysRemaining = numDaysToAdd;
+    const date = moment().add(1, "days").startOf("day");
+    while (daysRemaining > 0) {
+      date.add(1, 'days');
+      if (date.day() !== Sunday && date.day() !== Saturday) {
+        daysRemaining--;
+      }
+    }
+    return date;
+  }
+
+  static getReportReadyDate(project: Project, lang: string) {
+    moment.locale(lang)
+    if (project?.reportReadyDate) {
+      return moment(project.reportReadyDate)
+    } else {
+      const expectedDelivery = ProjectHelper.getExpectedDelivery(project)
+      return ProjectHelper.addBusinessDate(expectedDelivery)
+    }
+  }
+
   static getPayment(project: Project) {
     return project?.payments?.filter(f => f.status !== EPaymentStatus.CANCEL)?.sort((a, b) => b.id - a.id)?.[0]
+  }
+
+  static isPaymentPaid(project: Project) {
+    const payment = ProjectHelper.getPayment(project)
+    return payment?.status === EPaymentStatus.PAID
   }
 
   static getProject(project: Project) {

@@ -13,7 +13,7 @@ import moment from "moment";
 import { PaymentService } from "services/payment";
 import { authPreviewOrPayment } from "../models";
 import { useTranslation } from "react-i18next";
-import { setCancelPayment, setProjectReducer } from "redux/reducers/Project/actionTypes";
+import { setCancelPayment, setProjectReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import ProjectHelper from "helpers/project";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Heading5 from "components/common/text/Heading5";
@@ -26,6 +26,7 @@ import TextBtnSmall from "components/common/text/TextBtnSmall";
 import PopupConfirmQuotaAllocation from "pages/SurveyNew/components/AgreeQuotaWarning";
 import { ProjectService } from "services/project";
 import { AttachmentService } from "services/attachment";
+import { SETUP_SURVEY_SECTION } from "models/project";
 
 interface ProjectReviewProps {
 }
@@ -170,6 +171,16 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
+  const onGotoEyeTracking = () => {
+    if (isValidEyeTracking) return
+    dispatch(setScrollToSectionReducer(SETUP_SURVEY_SECTION.eye_tracking))
+    onRedirect(routes.project.detail.setupSurvey)
+  }
+
+  const getExpectedDelivery = () => {
+    return ProjectHelper.getExpectedDelivery(project)
+  }
+
   return (
     <Grid classes={{ root: classes.root }}>
       {isValid ? (
@@ -201,7 +212,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
               </Grid>
               <Grid className={classes.rightItem}>
                 <ParagraphBody $colorName="--eerie-black">
-                  {project?.sampleSize <= 500 ? 10 : 15} {t('payment_billing_sub_tab_preview_working_days')}
+                  {getExpectedDelivery()} {t('payment_billing_sub_tab_preview_working_days')}
                 </ParagraphBody>
               </Grid>
             </Grid>
@@ -232,6 +243,20 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     </ParagraphBody>
                   </Box>
                 </Box>
+                {project?.enableEyeTracking && (
+                  <Box className={classes.itemSubBox}>
+                    <Box className={classes.itemSubLeft}>
+                      <ParagraphBody $colorName="--eerie-black-00" translation-key="common_eye_tracking">
+                        {t('common_eye_tracking')}
+                      </ParagraphBody>
+                    </Box>
+                    <Box className={classes.itemSubRight}>
+                      <ParagraphBody $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !project?.eyeTrackingSampleSize })}>
+                        {project?.eyeTrackingSampleSize || t('common_none')}
+                      </ParagraphBody>
+                    </Box>
+                  </Box>
+                )}
                 <Box className={classes.itemSubBox}>
                   <Box className={classes.itemSubLeft}>
                     <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_billing_sub_tab_preview_target_criteria">
@@ -335,7 +360,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       translation-key="payment_billing_sub_tab_preview_brands"
                       className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidAdditionalBrand })}
                       onClick={() => {
-                        if (!isValidPacks) onRedirect(routes.project.detail.setupSurvey)
+                        if (!isValidAdditionalBrand) onRedirect(routes.project.detail.setupSurvey)
                       }}
                     >
                       {project?.additionalBrands?.length || 0} {t('payment_billing_sub_tab_preview_brands')} <br />
@@ -353,7 +378,6 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     <ParagraphBody
                       $colorName="--eerie-black"
                       translation-key="payment_billing_sub_tab_preview_attributes"
-                      className={clsx({ [classes.colorDanger]: !isValidAdditionalBrand })}
                     >
                       {(project?.projectAttributes?.length || 0) + (project?.userAttributes?.length || 0)} {t('payment_billing_sub_tab_preview_attributes')}
                     </ParagraphBody>
@@ -388,9 +412,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                         $colorName="--eerie-black"
                         translation-key="payment_billing_sub_tab_preview_eye_tracking_packs"
                         className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidEyeTracking })}
-                        onClick={() => {
-                          if (!isValidPacks) onRedirect(routes.project.detail.setupSurvey)
-                        }}
+                        onClick={onGotoEyeTracking}
                       >
                         {t("payment_billing_sub_tab_preview_eye_tracking_packs", { project: project?.eyeTrackingPacks?.length })} <br />
                         {!isValidEyeTracking && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_eye_tracking_packs_required">{t("payment_billing_sub_tab_preview_eye_tracking_packs_required", { project: project?.solution?.minEyeTrackingPack })}</span>}

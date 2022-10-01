@@ -1,5 +1,5 @@
 import { Box, Grid } from '@mui/material';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import classes from './styles.module.scss';
 import Images from "config/images";
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,10 +9,14 @@ import { Download } from '@mui/icons-material';
 import { AttachmentService } from 'services/attachment';
 import FileSaver from 'file-saver';
 import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
-import { t } from 'i18next';
 import { Content, LeftContent, PageRoot } from '../components';
 import Button, { BtnType } from 'components/common/buttons/Button';
 import TextBtnSecondary from 'components/common/text/TextBtnSecondary';
+import ProjectHelper from 'helpers/project';
+import Heading1 from 'components/common/text/Heading1';
+import Heading4 from 'components/common/text/Heading4';
+import Heading3 from 'components/common/text/Heading3';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   projectId: number,
@@ -22,12 +26,19 @@ const Report = memo(({ projectId }: Props) => {
 
   const dispatch = useDispatch()
 
+  const { t, i18n } = useTranslation()
 
   const { project } = useSelector((state: ReducerType) => state.project)
 
-  const hasReport = () => {
+  const isPaymentPaid = useMemo(() => ProjectHelper.isPaymentPaid(project), [project])
+
+  const hasReport = useMemo(() => {
     return project && (project.reports?.length || project.dataStudio) && project.status === ProjectStatus.COMPLETED
-  }
+  }, [project])
+
+  const reportReadyDate = useMemo(() => {
+    return ProjectHelper.getReportReadyDate(project, i18n.language).format("DD MMMM, YYYY")
+  }, [i18n.language, project])
 
   const onDownLoad = () => {
     dispatch(setLoading(true))
@@ -43,7 +54,7 @@ const Report = memo(({ projectId }: Props) => {
     <PageRoot>
       <LeftContent>
         <Content className={classes.root}>
-          {hasReport() ? (
+          {hasReport ? (
             <Grid className={classes.content}>
               {!!project.reports?.length && (
                 <Box display={"flex"} justifyContent="flex-end">
@@ -72,8 +83,21 @@ const Report = memo(({ projectId }: Props) => {
             </Grid>
           ) : (
             <Grid className={classes.noSetup}>
-              <img src={Images.icSad} alt="" />
-              <p translation-key="report_coming_soon">{t('report_coming_soon')}</p>
+              {isPaymentPaid ? (
+                <img src={Images.imgNoResultPaid} alt="" />
+              ) : (
+                <img src={Images.imgNoResultNotPay} alt="" />
+              )}
+              <Heading1 align="center" mb={2} $colorName="--gray-80" translation-key="report_coming_soon">{t('report_coming_soon')}</Heading1>
+              {isPaymentPaid ? (
+                <Heading4 align="center" sx={{ fontWeight: "400 !important" }} $colorName="--gray-80" translation-key="report_coming_soon_des_paid">
+                  {t("report_coming_soon_des_paid")} <Heading3 align="center" variant="body2" variantMapping={{ body2: "span" }} $colorName='--cimigo-blue'>{reportReadyDate}.</Heading3>
+                </Heading4>
+              ) : (
+                <Heading4 align="center" sx={{ fontWeight: "400 !important" }} $colorName="--gray-80" translation-key="report_coming_soon_des_not_pay">
+                  {t("report_coming_soon_des_not_pay")}
+                </Heading4>
+              )}
             </Grid>
           )}
         </Content>

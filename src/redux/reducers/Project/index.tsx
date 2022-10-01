@@ -6,13 +6,15 @@ import * as types from './actionTypes';
 export interface ProjectState {
   createProjectRedirect?: CreateProjectRedirect,
   project?: Project,
-  cancelPayment?: boolean
+  cancelPayment?: boolean,
+  scrollToSection?: string
 }
 
 const initial: ProjectState = {
   createProjectRedirect: null,
   project: null,
   cancelPayment: false,
+  scrollToSection: null
 }
 
 export const projectReducer = (state = initial, action: any) =>
@@ -76,6 +78,9 @@ export const projectReducer = (state = initial, action: any) =>
           targets: action.data
         };
         break;
+        case types.SET_SCROLL_TO_SECTION_OF_PROJECT_REDUCER:
+          draft.scrollToSection = action.data
+          break;
       default:
         return state;
     }

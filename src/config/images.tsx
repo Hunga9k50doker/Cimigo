@@ -84,9 +84,13 @@ import imgPain from 'assets/img/icon/pain.svg';
 import imgTargetTabLocation from 'assets/img/target-tab-location.svg';
 import imgTargetTabAC from 'assets/img/target-tab-ac.svg';
 import imgTargetTabHI from 'assets/img/target-tab-hi.svg';
+import imgNoResultNotPay from 'assets/img/no-result-not-pay.svg';
+import imgNoResultPaid from 'assets/img/no-result-paid.svg';
 
 const images = {
   // ===================== Images =========================
+  imgNoResultNotPay,
+  imgNoResultPaid,
   imgTargetTabLocation,
   imgTargetTabAC,
   imgTargetTabHI,

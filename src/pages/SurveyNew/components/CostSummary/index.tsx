@@ -53,7 +53,7 @@ const CostSummary = memo(({ project, price }: CostSummaryProps) => {
       </Box>
       <Divider sx={{ my: 2, borderColor: 'var(--gray-20)' }} />
       <Box display="flex" justifyContent="space-between">
-        <Heading3 $fontWeight={500} $colorName="--eerie-black" translation-key="common_total">{t('common_total')} (USD)</Heading3>
+        <ParagraphSmall $fontWeight={"bold"} $colorName="--eerie-black" translation-key="common_total_2">{t('common_total_2')} (USD)</ParagraphSmall>
         <Box sx={{ textAlign: 'right' }}>
           <Heading3 $fontWeight={500} $colorName="--eerie-black">{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</Heading3>
           <ParagraphSmall $fontWeight={500} $colorName="--eerie-black">({fCurrency2VND(price?.totalAmount || 0)} VND)</ParagraphSmall>

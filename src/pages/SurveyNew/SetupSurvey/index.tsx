@@ -1,4 +1,4 @@
-import { useState, memo, useMemo } from "react";
+import { useState, memo, useMemo, useEffect } from "react";
 import classes from './styles.module.scss';
 import { Tab, Badge, Step, Chip } from "@mui/material";
 import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleRight, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
@@ -29,6 +29,7 @@ import PopupMissingRequirement from "pages/SurveyNew/components/PopupMissingRequ
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import PopupHowToSetupSurvey from "pages/SurveyNew/components/PopupHowToSetupSurvey";
+import { setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 interface SetupSurvey {
   projectId: number;
   isHaveChangePrice: boolean;
@@ -42,7 +43,8 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
 
   const dispatch = useDispatch()
 
-  const { project } = useSelector((state: ReducerType) => state.project)
+  const { project, scrollToSection } = useSelector((state: ReducerType) => state.project)
+
   const { configs } = useSelector((state: ReducerType) => state.user)
 
   const editable = useMemo(() => editableProject(project), [project])
@@ -106,6 +108,13 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
       onOpenMissingRequirement()
     }
   }
+
+  useEffect(() => {
+    if (scrollToSection) {
+      scrollToElement(scrollToSection)
+      dispatch(setScrollToSectionReducer(null))
+    }
+  }, [scrollToSection, dispatch])
 
   return (
     <PageRoot className={classes.root}>

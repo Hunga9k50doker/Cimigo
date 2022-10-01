@@ -4,33 +4,30 @@ import images from "config/images";
 import { memo, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
-import Images from "config/images";
 import { PaymentService } from "services/payment";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import FileSaver from 'file-saver';
 import moment from "moment";
 import { push } from "connected-react-router";
-import { authCompleted, getPayment } from "../models";
+import { authCompleted } from "../models";
 import { useTranslation } from "react-i18next";
 import { Content, LeftContent, PageRoot } from "pages/SurveyNew/components";
 import { DownLoadItem, ImageMain, ParagraphBodyBlueNestedA } from "../components";
 import Heading1 from "components/common/text/Heading1";
-import Heading2 from "components/common/text/Heading2";
-import Heading4 from "components/common/text/Heading4";
 import ParagraphBody from "components/common/text/ParagraphBody";
+import ProjectHelper from "helpers/project";
+import Heading5 from "components/common/text/Heading5";
 
 interface Props {
 
 }
 
 const Completed = memo(({ }: Props) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const dispatch = useDispatch();
+  
   const { project } = useSelector((state: ReducerType) => state.project)
-
-  const payment = useMemo(() => getPayment(project?.payments), [project])
 
   const getInvoice = () => {
     if (!project) return
@@ -43,10 +40,6 @@ const Completed = memo(({ }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  // const openNewTabContact = () => {
-  //   window.open(`${process.env.REACT_APP_BASE_API_URL}/static/contract/contract.pdf`, '_blank').focus()
-  // }
-
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)))
   }
@@ -55,6 +48,10 @@ const Completed = memo(({ }: Props) => {
     authCompleted(project, onRedirect)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project])
+
+  const reportReadyDate = useMemo(() => {
+    return ProjectHelper.getReportReadyDate(project, i18n.language).format("DD MMMM, YYYY")
+  }, [i18n.language, project])
 
   return (
     <PageRoot>
@@ -65,14 +62,14 @@ const Completed = memo(({ }: Props) => {
             <Heading1 sx={{ mb: { xs: 3, sm: 2 } }} $colorName="--cimigo-blue" translation-key="payment_billing_completed_title" align="center">
               {t('payment_billing_completed_title')}
             </Heading1>
-            <Heading2 mb={1} $fontSizeMobile={"16px"} $lineHeightMobile="24px" $colorName="--cimigo-green-dark-1" translation-key="payment_billing_total_amount" align="center">
-              {t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}
-            </Heading2>
-            <Heading4 mb={3} $fontSizeMobile={"12px"} $lineHeightMobile="16px" $colorName="--cimigo-blue-dark-1" translation-key="payment_billing_equivalent_to" align="center">
-              ({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)
-            </Heading4>
-            <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_billing_completed_sub_1" align="center">
+            <ParagraphBody mb={3} $colorName="--eerie-black" translation-key="payment_billing_completed_sub_1" align="center">
               {t('payment_billing_completed_sub_1')}
+            </ParagraphBody>
+            <Heading5 mb={3} $colorName="--eerie-black" translation-key="payment_billing_completed_sub_3" align="center">
+              {t("payment_billing_completed_sub_3", { date: reportReadyDate })}
+            </Heading5>
+            <ParagraphBody $colorName="--eerie-black" translation-key="payment_billing_completed_sub_4" align="center">
+              {t('payment_billing_completed_sub_4')}
             </ParagraphBody>
             <Box py={2} display="flex" justifyContent="center">
               <DownLoadItem onClick={getInvoice}>
