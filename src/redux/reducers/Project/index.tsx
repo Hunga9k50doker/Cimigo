@@ -1,4 +1,5 @@
 import produce from 'immer';
+import _ from 'lodash';
 import { CreateProjectRedirect, Project } from 'models/project';
 import * as types from './actionTypes';
 
@@ -18,10 +19,14 @@ export const projectReducer = (state = initial, action: any) =>
   produce(state, draft => {
     switch (action.type) {
       case types.SET_PROJECT_REDUCER:
-        draft.project = {
-          ...draft.project,
-          ...action.data
-        };
+        if (action.data && !_.isEmpty(action.data)) {
+          draft.project = {
+            ...draft.project,
+            ...action.data
+          };
+        } else {
+          draft.project = null
+        }
         break;
       case types.SET_CREATE_PROJECT_REDIRECT_OF_PROJECT_REDUCER:
         draft.createProjectRedirect = action.data;

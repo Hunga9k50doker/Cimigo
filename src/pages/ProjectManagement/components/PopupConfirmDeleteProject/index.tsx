@@ -60,7 +60,7 @@ const PopupConfirmDeleteProject = memo(
     const isValid = () => watch("delete") === "DELETE"
 
     const _onDelete = () => {
-      if (!project.id) return;
+      if (!project.id || !isValid()) return;
       onDelete(project.id);
       clearForm();
     };

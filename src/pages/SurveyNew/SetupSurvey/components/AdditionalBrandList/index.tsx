@@ -389,7 +389,7 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
               </TableRow>
             )}
             {(enableAdditionalBrand && !addRow) && (
-              <TableRow onClick={onShowAddRow} className="action-row">
+              <TableRow onClick={onShowAddRow} className="action-row" sx={{ cursor: "pointer" }}>
                 <TableCell colSpan={4} variant="footer" align="center" scope="row">
                   <Button
                     btnType={BtnType.Text}
