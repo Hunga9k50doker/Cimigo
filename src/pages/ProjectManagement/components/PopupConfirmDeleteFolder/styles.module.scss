@@ -23,9 +23,13 @@
   }
 }
 
-.description > span {
-  font-weight: 800;
+.description {
+  margin-bottom: 32px;
+  > span {
+    font-weight: 800;
+  }
 }
+
 .buttonDelete {
   background-color: var(--red-error);
   color: var(--white);

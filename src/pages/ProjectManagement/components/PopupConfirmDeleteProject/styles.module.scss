@@ -25,6 +25,10 @@
 .description > span {
   font-weight: 800;
 }
+.descriptionNoOperation {
+  font-weight: 800 !important;
+  margin-bottom: 16px;
+}
 .buttonDelete {
   background-color: var(--red-error);
   color: var(--white);
