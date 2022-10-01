@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
   const { pathname } = useLocation();
 
   useEffect(() => {
+    document.getElementById("basic-content")?.scrollTo(0, 0)
     window.scrollTo(0, 0);
   }, [pathname]);
   return null;

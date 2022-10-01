@@ -123,6 +123,11 @@ const CreateProject = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createProjectRedirect]);
+
+  useEffect(() => {
+    document.getElementById("basic-content")?.scrollTo(0, 0)
+  }, [activeStep]);
+
   return (
     <BasicLayout 
       className={classes.root}

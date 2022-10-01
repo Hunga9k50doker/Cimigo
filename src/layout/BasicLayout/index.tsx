@@ -14,7 +14,7 @@ const BasicLayout = memo(({ children, className, HeaderProps = {}, ...rest }: Ba
   return (
     <BasicRoot {...rest} className={clsx(classes.root, className)}>
       <Header {...HeaderProps}/>
-      <BasicContent className="basic-content">
+      <BasicContent className="basic-content" id="basic-content">
         <BasicSubContent className="basic-sub-content">
           {children}
         </BasicSubContent>
