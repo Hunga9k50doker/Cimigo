@@ -6,7 +6,7 @@ import { ConfigData } from "models/config";
 import { Pack } from "models/pack";
 import { EPaymentStatus } from "models/payment";
 import { Project, ProjectStatus } from "models/project";
-import moment from "moment";
+import moment from "moment-timezone";
 
 export const editableProject = (project: Project) => {
   return project?.editable
@@ -34,7 +34,7 @@ export class ProjectHelper {
   static getReportReadyDate(project: Project, lang: string) {
     moment.locale(lang)
     if (project?.reportReadyDate) {
-      return moment(project.reportReadyDate)
+      return moment.tz(project.reportReadyDate, "Asia/Ho_Chi_Minh")
     } else {
       const payment = ProjectHelper.getPayment(project)
       const expectedDelivery = ProjectHelper.getExpectedDelivery(project)
