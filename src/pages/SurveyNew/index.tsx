@@ -62,6 +62,10 @@ export const Survey = () => {
     return ProjectHelper.isValidTargetTab(project)
   }, [project])
 
+  const isPaymentPaid = useMemo(() => ProjectHelper.isPaymentPaid(project), [project])
+
+  const isReportReady = useMemo(() => ProjectHelper.isReportReady(project), [project])
+
   useEffect(() => {
     if (id && !isNaN(Number(id))) {
       dispatch(getProjectRequest(Number(id), undefined, true))
@@ -210,12 +214,14 @@ export const Survey = () => {
           <Tab
             value={3}
             label={<Box display="flex" alignItems="center">
+              {isPaymentPaid && <CheckCircle className={classes.tabItemIcon} />}
               <Heading4 className={classes.tabItemTitle} translation-key="payment_tab">{t("payment_tab")}</Heading4>
             </Box>}
           />
           <Tab
             value={4}
             label={<Box display="flex" alignItems="center">
+              {isReportReady && <CheckCircle className={classes.tabItemIcon} />}
               <Heading4 className={classes.tabItemTitle} translation-key="results_tab">{t("results_tab")}</Heading4>
             </Box>}
           />

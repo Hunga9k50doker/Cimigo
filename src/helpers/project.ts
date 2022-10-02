@@ -5,7 +5,7 @@ import { TargetQuestionType } from "models/Admin/target";
 import { ConfigData } from "models/config";
 import { Pack } from "models/pack";
 import { EPaymentStatus } from "models/payment";
-import { Project } from "models/project";
+import { Project, ProjectStatus } from "models/project";
 import moment from "moment";
 
 export const editableProject = (project: Project) => {
@@ -17,11 +17,11 @@ export class ProjectHelper {
     return project?.sampleSize <= 500 ? 10 : 15
   }
 
-  static addBusinessDate = (numDaysToAdd: number) => {
+  static addBusinessDate = (value: moment.MomentInput, numDaysToAdd: number) => {
     const Sunday = 0;
     const Saturday = 6;
     let daysRemaining = numDaysToAdd;
-    const date = moment().add(1, "days").startOf("day");
+    const date = moment(value).add(1, "days").startOf("day");
     while (daysRemaining > 0) {
       date.add(1, 'days');
       if (date.day() !== Sunday && date.day() !== Saturday) {
@@ -36,8 +36,9 @@ export class ProjectHelper {
     if (project?.reportReadyDate) {
       return moment(project.reportReadyDate)
     } else {
+      const payment = ProjectHelper.getPayment(project)
       const expectedDelivery = ProjectHelper.getExpectedDelivery(project)
-      return ProjectHelper.addBusinessDate(expectedDelivery)
+      return ProjectHelper.addBusinessDate(payment?.completedDate, expectedDelivery)
     }
   }
 
@@ -48,6 +49,10 @@ export class ProjectHelper {
   static isPaymentPaid(project: Project) {
     const payment = ProjectHelper.getPayment(project)
     return payment?.status === EPaymentStatus.PAID
+  }
+
+  static isReportReady(project: Project) {
+    return project && (project.reports?.length || project.dataStudio) && project.status === ProjectStatus.COMPLETED
   }
 
   static getProject(project: Project) {

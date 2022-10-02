@@ -29,7 +29,8 @@ import PopupMissingRequirement from "pages/SurveyNew/components/PopupMissingRequ
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import PopupHowToSetupSurvey from "pages/SurveyNew/components/PopupHowToSetupSurvey";
-import { setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
+import { setHowToSetupSurveyReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
+
 interface SetupSurvey {
   projectId: number;
   isHaveChangePrice: boolean;
@@ -43,7 +44,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
 
   const dispatch = useDispatch()
 
-  const { project, scrollToSection } = useSelector((state: ReducerType) => state.project)
+  const { project, scrollToSection, showHowToSetup } = useSelector((state: ReducerType) => state.project)
 
   const { configs } = useSelector((state: ReducerType) => state.user)
 
@@ -115,6 +116,15 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
       dispatch(setScrollToSectionReducer(null))
     }
   }, [scrollToSection, dispatch])
+
+  useEffect(() => {
+    if (showHowToSetup) {
+      if (project?.solution?.enableHowToSetUpSurvey) {
+        onOpenPopupHowToSetupSurvey()
+      }
+      dispatch(setHowToSetupSurveyReducer(false))
+    }
+  }, [showHowToSetup, project, dispatch])
 
   return (
     <PageRoot className={classes.root}>

@@ -43,6 +43,8 @@ export const SET_TARGET_OF_PROJECT_REDUCER = 'SET_TARGET_OF_PROJECT_REDUCER';
 
 export const SET_SCROLL_TO_SECTION_OF_PROJECT_REDUCER = 'SET_SCROLL_TO_SECTION_OF_PROJECT_REDUCER'
 
+export const SET_HOW_TO_SETUP_SURVEY_REDUCER = "SET_HOW_TO_SETUP_SURVEY_REDUCER"
+
 export const getProjectRequest = (id: number, callback?: () => void, getFull: boolean = false) => {
   return {
     type: GET_PROJECT_REQUEST,
@@ -175,6 +177,13 @@ export const setTargetReducer = (data: ProjectTarget[]) => {
 export const setScrollToSectionReducer = (data?: string) => {
   return {
     type: SET_SCROLL_TO_SECTION_OF_PROJECT_REDUCER,
+    data
+  }
+}
+
+export const setHowToSetupSurveyReducer = (data?: boolean) => {
+  return {
+    type: SET_HOW_TO_SETUP_SURVEY_REDUCER,
     data
   }
 }

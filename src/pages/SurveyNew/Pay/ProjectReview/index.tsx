@@ -26,7 +26,7 @@ import TextBtnSmall from "components/common/text/TextBtnSmall";
 import PopupConfirmQuotaAllocation from "pages/SurveyNew/components/AgreeQuotaWarning";
 import { ProjectService } from "services/project";
 import { AttachmentService } from "services/attachment";
-import { SETUP_SURVEY_SECTION } from "models/project";
+import { Project, SETUP_SURVEY_SECTION } from "models/project";
 
 interface ProjectReviewProps {
 }
@@ -103,6 +103,10 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     return ProjectHelper.isValidSampleSize(project)
   }, [project])
 
+  const isValidBasic = useMemo(() => {
+    return ProjectHelper.isValidBasic(project)
+  }, [project])
+
   const isValidPacks = useMemo(() => {
     return ProjectHelper.isValidPacks(project?.solution, project?.packs)
   }, [project])
@@ -174,6 +178,24 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const onGotoEyeTracking = () => {
     if (isValidEyeTracking) return
     dispatch(setScrollToSectionReducer(SETUP_SURVEY_SECTION.eye_tracking))
+    onRedirect(routes.project.detail.setupSurvey)
+  }
+
+  const onGotoPacks = () => {
+    if (isValidPacks) return
+    dispatch(setScrollToSectionReducer(SETUP_SURVEY_SECTION.upload_packs))
+    onRedirect(routes.project.detail.setupSurvey)
+  }
+
+  const onGotoBasicInfor = (field?: keyof Project) => {
+    if (isValidBasic) return
+    dispatch(setScrollToSectionReducer(`${SETUP_SURVEY_SECTION.basic_information}-${field || ''}`))
+    onRedirect(routes.project.detail.setupSurvey)
+  }
+
+  const onGotoBrandList = () => {
+    if (isValidAdditionalBrand) return
+    dispatch(setScrollToSectionReducer(SETUP_SURVEY_SECTION.additional_brand_list))
     onRedirect(routes.project.detail.setupSurvey)
   }
 
@@ -307,22 +329,38 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                   </Box>
                   <Box className={clsx(classes.itemSubRight, classes.itemSubRightCustom)}>
                     <ParagraphBody $colorName="--eerie-black" translation-key="project_category">
-                      {t('project_category')}: <span className={clsx({ [classes.colorDanger]: !project?.category })} translation-key="payment_billing_sub_tab_preview_none">
+                      {t('project_category')}: <span
+                        onClick={() => onGotoBasicInfor("category")}
+                        className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !project?.category })}
+                        translation-key="payment_billing_sub_tab_preview_none"
+                      >
                         {project?.category || t('payment_billing_sub_tab_preview_none')}
                       </span>
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black" translation-key="project_brand">
-                      {t('project_brand')}: <span className={clsx({ [classes.colorDanger]: !project?.brand })} translation-key="payment_billing_sub_tab_preview_none">
+                      {t('project_brand')}: <span
+                        onClick={() => onGotoBasicInfor("brand")}
+                        className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !project?.brand })}
+                        translation-key="payment_billing_sub_tab_preview_none"
+                      >
                         {project?.brand || t('payment_billing_sub_tab_preview_none')}
                       </span>
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black" translation-key="project_variant">
-                      {t('project_variant')}: <span className={clsx({ [classes.colorDanger]: !project?.variant })} translation-key="payment_billing_sub_tab_preview_none">
+                      {t('project_variant')}: <span
+                        onClick={() => onGotoBasicInfor("variant")}
+                        className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !project?.variant })}
+                        translation-key="payment_billing_sub_tab_preview_none"
+                      >
                         {project?.variant || t('payment_billing_sub_tab_preview_none')}
                       </span>
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black" translation-key="project_manufacturer">
-                      {t('project_manufacturer')}: <span className={clsx({ [classes.colorDanger]: !project?.manufacturer })} translation-key="payment_billing_sub_tab_preview_none">
+                      {t('project_manufacturer')}: <span
+                        onClick={() => onGotoBasicInfor("manufacturer")}
+                        className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !project?.manufacturer })}
+                        translation-key="payment_billing_sub_tab_preview_none"
+                      >
                         {project?.manufacturer || t('payment_billing_sub_tab_preview_none')}
                       </span>
                     </ParagraphBody>
@@ -339,9 +377,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       $colorName="--eerie-black"
                       translation-key="payment_billing_sub_tab_preview_packs"
                       className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidPacks })}
-                      onClick={() => {
-                        if (!isValidPacks) onRedirect(routes.project.detail.setupSurvey)
-                      }}
+                      onClick={onGotoPacks}
                     >
                       {project?.packs?.length || 0} {t('payment_billing_sub_tab_preview_packs')}<br />
                       {!isValidPacks && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_packs_required">{t('payment_billing_sub_tab_preview_packs_required')}</span>}
@@ -359,9 +395,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       $colorName="--eerie-black"
                       translation-key="payment_billing_sub_tab_preview_brands"
                       className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidAdditionalBrand })}
-                      onClick={() => {
-                        if (!isValidAdditionalBrand) onRedirect(routes.project.detail.setupSurvey)
-                      }}
+                      onClick={onGotoBrandList}
                     >
                       {project?.additionalBrands?.length || 0} {t('payment_billing_sub_tab_preview_brands')} <br />
                       {!isValidAdditionalBrand && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_brands_required">{t('payment_billing_sub_tab_preview_brands_required')}</span>}

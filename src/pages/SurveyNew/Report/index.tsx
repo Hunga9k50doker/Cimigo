@@ -32,9 +32,7 @@ const Report = memo(({ projectId }: Props) => {
 
   const isPaymentPaid = useMemo(() => ProjectHelper.isPaymentPaid(project), [project])
 
-  const hasReport = useMemo(() => {
-    return project && (project.reports?.length || project.dataStudio) && project.status === ProjectStatus.COMPLETED
-  }, [project])
+  const isReportReady = useMemo(() => ProjectHelper.isReportReady(project), [project])
 
   const reportReadyDate = useMemo(() => {
     return ProjectHelper.getReportReadyDate(project, i18n.language).format("DD MMMM, YYYY")
@@ -54,7 +52,7 @@ const Report = memo(({ projectId }: Props) => {
     <PageRoot>
       <LeftContent>
         <Content className={classes.root}>
-          {hasReport ? (
+          {isReportReady ? (
             <Grid className={classes.content}>
               {!!project.reports?.length && (
                 <Box display={"flex"} justifyContent="flex-end">

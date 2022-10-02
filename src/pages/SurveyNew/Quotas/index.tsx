@@ -20,7 +20,6 @@ import ControlCheckbox from "components/common/control/ControlCheckbox"
 import InputCheckbox from "components/common/inputs/InputCheckbox"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { QuotaService } from "services/quota"
-import { QuotaTable } from "models/Admin/quota"
 import { ProjectService } from "services/project"
 import { setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { Quota, QuotaTableRow } from "models/quota"
@@ -56,7 +55,6 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
 
   const { project } = useSelector((state: ReducerType) => state.project)
 
-  const [quotaTables, setQuotaTables] = useState<QuotaTable[]>([]);
   const [quotas, setQuotas] = useState<Quota[]>([])
   const [quotaEdit, setQuotaEdit] = useState<number>()
   const [popupInvalidQuota, setPopupInvalidQuota] = useState(false)
@@ -73,10 +71,6 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
 
   const onSetupTarget = () => {
     dispatch(push(routes.project.detail.target.replace(':id', `${projectId}`)))
-  }
-
-  const getQuota = (quotaTableId: number) => {
-    return quotas.find(it => it.quotaTable?.id === quotaTableId)
   }
 
   const getQuotas = async () => {
@@ -104,16 +98,6 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
     document.getElementById(QUOTAS_SECTION.CONTENT).scrollTo({ behavior: 'smooth', top: el.offsetTop - content.offsetTop })
   }
 
-  useEffect(() => {
-    const getQuotaTables = async () => {
-      QuotaService.getAll({ take: 9999 })
-        .then(res => {
-          setQuotaTables(res.data)
-        })
-    }
-    getQuotaTables()
-  }, [])
-  
   const onToggleAgreeQuota = async (agreeQuota: boolean, redirectPay?: boolean) => {
     if (!isReadyQuotas || !editable) return
     dispatch(setLoading(true))
@@ -522,18 +506,17 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
             <RightPanelContent>
               <RightPanelBody>
                 <RPStepper orientation="vertical" connector={<RPStepConnector />}>
-                  {quotaTables?.map((item) => {
-                    const quota = getQuota(item.id)
+                  {quotas?.map((item) => {
                     return (
-                      <Step key={item.id} active={!!quota} expanded>
+                      <Step key={item.quotaTable.id} active={true} expanded>
                         <RPStepLabel
-                          onClick={() => scrollToElement(`${QUOTAS_SECTION.CONTENT}-item-${item.id}`)}
+                          onClick={() => scrollToElement(`${QUOTAS_SECTION.CONTENT}-item-${item.quotaTable.id}`)}
                           StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
                         >
-                          <Heading5 className="title" $colorName="--gray-60">{item.title}</Heading5>
+                          <Heading5 className="title" $colorName="--gray-60">{item.quotaTable.title}</Heading5>
                         </RPStepLabel>
                         <RPStepContent>
-                          {quota?.edited && (
+                          {item.edited && (
                             <ParagraphSmall $colorName="--gray-60" translation-key="project_right_panel_quotas_you_have_adjusted">
                               {t("project_right_panel_quotas_you_have_adjusted")}
                             </ParagraphSmall>

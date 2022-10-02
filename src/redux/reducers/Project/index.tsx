@@ -7,14 +7,16 @@ export interface ProjectState {
   createProjectRedirect?: CreateProjectRedirect,
   project?: Project,
   cancelPayment?: boolean,
-  scrollToSection?: string
+  scrollToSection?: string,
+  showHowToSetup?: boolean,
 }
 
 const initial: ProjectState = {
   createProjectRedirect: null,
   project: null,
   cancelPayment: false,
-  scrollToSection: null
+  scrollToSection: null,
+  showHowToSetup: false
 }
 
 export const projectReducer = (state = initial, action: any) =>
@@ -78,9 +80,12 @@ export const projectReducer = (state = initial, action: any) =>
           targets: action.data
         };
         break;
-        case types.SET_SCROLL_TO_SECTION_OF_PROJECT_REDUCER:
-          draft.scrollToSection = action.data
-          break;
+      case types.SET_SCROLL_TO_SECTION_OF_PROJECT_REDUCER:
+        draft.scrollToSection = action.data
+        break;
+      case types.SET_HOW_TO_SETUP_SURVEY_REDUCER:
+        draft.showHowToSetup = action.data
+        break;
       default:
         return state;
     }

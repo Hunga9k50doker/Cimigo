@@ -59,7 +59,7 @@ const Completed = memo(({ }: Props) => {
         <Content className={classes.root}>
           <Grid className={classes.content}>
             <ImageMain className={classes.img} src={images.imgPayment} alt="" />
-            <Heading1 sx={{ mb: { xs: 3, sm: 2 } }} $colorName="--cimigo-blue" translation-key="payment_billing_completed_title" align="center">
+            <Heading1 sx={{ mb: { xs: 3, sm: 4 } }} $colorName="--cimigo-blue" translation-key="payment_billing_completed_title" align="center">
               {t('payment_billing_completed_title')}
             </Heading1>
             <ParagraphBody mb={3} $colorName="--eerie-black" translation-key="payment_billing_completed_sub_1" align="center">

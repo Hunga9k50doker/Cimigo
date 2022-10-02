@@ -81,7 +81,7 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
       <Heading4 $fontSizeMobile={"16px"} mb={1} $colorName="--eerie-black" translation-key="setup_survey_basic_infor_title">{t('setup_survey_basic_infor_title', { step: 1 })}</Heading4>
       <ParagraphBody $colorName="--gray-80" mb={{ xs: 1, sm: 2 }} translation-key="setup_survey_basic_infor_sub_title">{t('setup_survey_basic_infor_sub_title')}</ParagraphBody>
       <Grid container spacing={2} maxWidth={{ xs: "unset", sm: "684px" }}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-category`}>
           <InputTextfield
             title={t('field_project_category')}
             translation-key="field_project_category"
@@ -92,7 +92,7 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
             errorMessage={errors.category?.message}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-variant`}>
           <InputTextfield
             title={t('field_project_variant')}
             translation-key="field_project_variant"
@@ -103,7 +103,7 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
             errorMessage={errors.variant?.message}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-brand`}>
           <InputTextfield
             title={t('field_project_brand')}
             translation-key="field_project_brand"
@@ -114,7 +114,7 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
             errorMessage={errors.brand?.message}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-manufacturer`}>
           <InputTextfield
             title={t('field_project_manufacturer')}
             translation-key="field_project_manufacturer"

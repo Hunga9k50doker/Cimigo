@@ -30,6 +30,7 @@ import { routes } from "routers/routes";
 import { EStep } from "../..";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import Button, { BtnType } from "components/common/buttons/Button";
+import { setHowToSetupSurveyReducer } from "redux/reducers/Project/actionTypes";
 
 export interface CreateProjectFormData {
   name: string;
@@ -92,6 +93,7 @@ const CreateProjectStep = memo(
         manufacturer: data.manufacturer || "",
       })
         .then((res: Project) => {
+          dispatch(setHowToSetupSurveyReducer(true))
           dispatch(
             push(routes.project.detail.root.replace(":id", `${res.id}`))
           );
