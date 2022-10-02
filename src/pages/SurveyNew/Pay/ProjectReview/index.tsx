@@ -297,7 +297,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                           ))}
                         </>
                       ) : (
-                        <ParagraphSmallUnderline2>{t('payment_billing_sub_tab_preview_view_detail')}</ParagraphSmallUnderline2>
+                        <ParagraphSmallUnderline2 variant="body2" variantMapping={{ body2: "span" }}>{t('payment_billing_sub_tab_preview_view_detail')}</ParagraphSmallUnderline2>
                       )}
                     </ParagraphBody>
                   </Box>
