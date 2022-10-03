@@ -381,7 +381,20 @@ const ChangePaymentMethod = memo(
                     </ParagraphBody>
                   </div>
                 )}
-                <div className={clsx(classes.flexOrder, classes.isMobile)}>
+                <Divider />
+                <div className={classes.flexOrder}>
+                  <ParagraphBody
+                    $colorName="--eerie-black"
+                    translation-key="common_vat"
+                  >
+                    {t("common_sub_total")}
+                  </ParagraphBody>
+                  <ParagraphBody $colorName="--eerie-black">
+                    {`$`}
+                    {fCurrency2(payment?.amountUSD || 0)}
+                  </ParagraphBody>
+                </div>
+                <div className={classes.flexOrder}>
                   <ParagraphBody
                     $colorName="--eerie-black"
                     translation-key="common_vat"
@@ -394,31 +407,6 @@ const ChangePaymentMethod = memo(
                   </ParagraphBody>
                 </div>
                 <Divider />
-                <div className={clsx(classes.flexOrder, classes.notMobile)}>
-                  <ParagraphBody
-                    $colorName="--eerie-black"
-                    translation-key="common_vat"
-                  >
-                    {t("common_sub_total")}
-                  </ParagraphBody>
-                  <ParagraphBody $colorName="--eerie-black">
-                    {`$`}
-                    {fCurrency2(payment?.amountUSD || 0)}
-                  </ParagraphBody>
-                </div>
-                <div className={clsx(classes.flexOrder, classes.notMobile)}>
-                  <ParagraphBody
-                    $colorName="--eerie-black"
-                    translation-key="common_vat"
-                  >
-                    {t("common_vat", { percent: (payment?.vatRate || 0) * 100 })}
-                  </ParagraphBody>
-                  <ParagraphBody $colorName="--eerie-black">
-                    {`$`}
-                    {fCurrency2(payment?.vatUSD || 0)}
-                  </ParagraphBody>
-                </div>
-                <Divider className={classes.notMobile} />
                 <div className={classes.flexTotal}>
                   <Heading5
                     $colorName="--eerie-black"

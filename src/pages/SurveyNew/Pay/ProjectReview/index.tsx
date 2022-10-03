@@ -39,17 +39,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const { configs } = useSelector((state: ReducerType) => state.user)
   const { project, cancelPayment } = useSelector((state: ReducerType) => state.project)
 
-  const [isValid, setIsValid] = useState<boolean>(false)
   const [isShowConfirmQuotaAllocation, setIsShowConfirmQuotaAllocation] = useState<boolean>(false)
-
-  const onConfirmProject = () => {
-    if (!isValid) return
-    if (!ProjectHelper.isValidQuotas(project)) {
-      setIsShowConfirmQuotaAllocation(true)
-      return
-    }
-    gotoPayment()
-  }
 
   const gotoPayment = () => {
     dispatch(push(routes.project.detail.paymentBilling.previewAndPayment.payment.replace(':id', `${project.id}`)))
@@ -66,26 +56,6 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const gotoQuotas = () => {
     dispatch(push(routes.project.detail.quotas.replace(':id', `${project.id}`)))
   }
-
-  useEffect(() => {
-    if (project) {
-      let isSubscribed = true
-      const checkValidConfirm = () => {
-        if (!project) return
-        setIsValid(false)
-        dispatch(setLoading(true))
-        PaymentService.validConfirm(project.id)
-          .then(res => {
-            if (isSubscribed) setIsValid(res)
-          })
-          .catch((e) => dispatch(setErrorMess(e)))
-          .finally(() => dispatch(setLoading(false)))
-      }
-      checkValidConfirm()
-      return () => { isSubscribed = false }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [project])
 
   const inValidTargetMess = () => {
     const mess: string[] = []
@@ -119,8 +89,21 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     return ProjectHelper.isValidEyeTracking(project)
   }, [project])
 
+  const isValidCheckout = useMemo(() => {
+    return ProjectHelper.isValidCheckout(project)
+  }, [project])
+
+  const onConfirmProject = () => {
+    if (!isValidCheckout) return
+    if (!ProjectHelper.isValidQuotas(project)) {
+      setIsShowConfirmQuotaAllocation(true)
+      return
+    }
+    gotoPayment()
+  }
+
   const getInvoice = () => {
-    if (!project || !isValid) return
+    if (!project || !isValidCheckout) return
     dispatch(setLoading(true))
     PaymentService.getInvoiceDemo(project.id)
       .then(res => {
@@ -131,7 +114,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   }
 
   const onDownLoadContract = () => {
-    if (!configs.viewContract || !isValid) return
+    if (!configs.viewContract || !isValidCheckout) return
     dispatch(setLoading(true))
     AttachmentService.download(configs.viewContract)
       .then(res => {
@@ -205,7 +188,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
 
   return (
     <Grid classes={{ root: classes.root }}>
-      {isValid ? (
+      {isValidCheckout ? (
         <ParagraphBody className={classes.title} $colorName="--eerie-black" dangerouslySetInnerHTML={{ __html: t('payment_billing_sub_tab_preview_sub_title_success') }} translation-key="payment_billing_sub_tab_preview_sub_title_success" />
       ) : (
         <ParagraphBody className={clsx(classes.title, classes.titleDanger)} $colorName="--eerie-black" dangerouslySetInnerHTML={{ __html: t('payment_billing_sub_tab_preview_sub_title_error') }} translation-key="payment_billing_sub_tab_preview_sub_title_error" />
@@ -460,7 +443,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
         </Grid>
       </Grid>
       <ParagraphExtraSmall className={classes.textExpected} $colorName="--gray-60" translation-key="payment_billing_sub_tab_preview_expected">{t('payment_billing_sub_tab_preview_expected')}</ParagraphExtraSmall>
-      {isValid && (
+      {/* {isValidCheckout && (
         <>
           <Heading5 mt={4} $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_preview_materials">
             {t('payment_billing_sub_tab_preview_materials')}
@@ -481,10 +464,10 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
             )}
           </Box>
         </>
-      )}
+      )} */}
       <Grid className={classes.btn}>
         <Button
-          disabled={!isValid}
+          disabled={!isValidCheckout}
           btnType={BtnType.Primary}
           translation-key="payment_billing_sub_tab_preview_confirm"
           children={<TextBtnSmall>{t("payment_billing_sub_tab_preview_confirm")}</TextBtnSmall>}

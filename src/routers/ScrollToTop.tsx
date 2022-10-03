@@ -1,3 +1,4 @@
+import { PROJECT_DETAIL_SECTION } from "models/project";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -5,6 +6,7 @@ import { useLocation } from "react-router-dom";
   const { pathname } = useLocation();
 
   useEffect(() => {
+    document.getElementById(PROJECT_DETAIL_SECTION.content)?.scrollTo(0, 0)
     document.getElementById("basic-content")?.scrollTo(0, 0)
     window.scrollTo(0, 0);
   }, [pathname]);

@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 interface Props {
   hastooltip?: string | number;
   $cleanPadding?: boolean;
+  $checkBoxTop?: boolean;
 }
 
 const ControlCheckbox = styled(FormControlLabel) <Props>`
@@ -28,6 +29,12 @@ const ControlCheckbox = styled(FormControlLabel) <Props>`
     }
     .MuiCheckbox-root {
       padding: 0px;
+    }
+  `}
+  ${(props) => props.$checkBoxTop && css`
+    align-items: flex-start;
+    .MuiCheckbox-root {
+      margin: 1px 0px;
     }
   `}
 `

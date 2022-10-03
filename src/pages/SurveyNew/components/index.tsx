@@ -1,4 +1,5 @@
 import { Box, Chip, Grid, StepConnector, StepContent, StepLabel, Stepper, Tabs, Typography } from '@mui/material';
+import { PROJECT_DETAIL_SECTION } from 'models/project';
 import styled from 'styled-components';
 
 export const PageRoot = styled(Grid)`
@@ -83,6 +84,10 @@ export const Content = styled(Grid)`
     padding: 12px 16px 85px;
   }
 `;
+
+Content.defaultProps = {
+  id: PROJECT_DETAIL_SECTION.content
+}
 
 export const MobileAction = styled(Grid)`
   display: none;

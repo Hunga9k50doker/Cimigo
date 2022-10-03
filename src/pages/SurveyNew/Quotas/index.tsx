@@ -49,7 +49,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
 
   const dispatch = useDispatch()
 
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   const { configs } = useSelector((state: ReducerType) => state.user)
 
@@ -252,7 +252,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
     }
   }
 
-  
+
 
   return (
     <PageRoot>
@@ -474,6 +474,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
         </Content>
         <MobileAction>
           <ControlCheckbox
+            $checkBoxTop={true}
             $cleanPadding={true}
             control={
               <InputCheckbox
@@ -529,6 +530,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
               </RightPanelBody>
               <RightPanelAction>
                 <ControlCheckbox
+                  $checkBoxTop={true}
                   $cleanPadding={true}
                   control={
                     <InputCheckbox
@@ -562,6 +564,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
               </RightPanelBody>
               <RightPanelAction>
                 <ControlCheckbox
+                  $checkBoxTop={true}
                   $cleanPadding={true}
                   control={
                     <InputCheckbox

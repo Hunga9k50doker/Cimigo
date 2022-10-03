@@ -28,6 +28,7 @@ import Heading6 from "components/common/text/Heading6";
 import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCancelOrder";
 import FileSaver from "file-saver";
 import moment from "moment";
+import { AttachmentService } from "services/attachment";
 
 interface Props {
 
@@ -38,6 +39,8 @@ const Order = memo(({ }: Props) => {
   const { t } = useTranslation()
 
   const dispatch = useDispatch()
+
+  const { configs } = useSelector((state: ReducerType) => state.user)
 
   const { project } = useSelector((state: ReducerType) => state.project)
 
@@ -106,6 +109,17 @@ const Order = memo(({ }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
+  const onDownloadContract = () => {
+    if (!configs.viewContract) return
+    dispatch(setLoading(true))
+    AttachmentService.download(configs.viewContract)
+      .then(res => {
+        FileSaver.saveAs(res.data, `contract-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
   const render = () => {
     switch (payment?.paymentMethodId) {
       case EPaymentMethod.MAKE_AN_ORDER:
@@ -157,7 +171,7 @@ const Order = memo(({ }: Props) => {
                 </InforBoxItem>
                 <InforBoxItem item xs={6} sm={4}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_currency">{t('payment_billing_currency')}</ParagraphExtraSmall>
-                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_currency_USD">{t("payment_billing_currency_unit")}</Heading6>
+                  <Heading6 $colorName="--eerie-black" translation-key="payment_billing_currency_USD">{t("payment_billing_currency_USD")}</Heading6>
                 </InforBoxItem>
                 <InforBoxItem item xs={12} sm={8}>
                   <ParagraphExtraSmall $colorName="--cimigo-green-dark-3" translation-key="payment_billing_payment_reference">{t('payment_billing_payment_reference')}</ParagraphExtraSmall>
@@ -334,6 +348,12 @@ const Order = memo(({ }: Props) => {
                 <img className={classes.imgAddPhoto} src={images.icInvoice} />
                 <ParagraphBody $colorName="--cimigo-blue" translation-key="pay_order_download_invoice">{t("pay_order_download_invoice")}</ParagraphBody>
               </DownLoadItem>
+              {!!configs?.viewContract && (
+                <DownLoadItem onClick={onDownloadContract}>
+                  <img className={classes.imgAddPhoto} src={images.icContract} />
+                  <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_view_contract">{t("payment_billing_view_contract")}</ParagraphBody>
+                </DownLoadItem>
+              )}
             </Box>
             <ParagraphBody
               align="center"

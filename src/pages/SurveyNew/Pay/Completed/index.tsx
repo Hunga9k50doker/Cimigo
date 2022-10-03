@@ -17,6 +17,7 @@ import Heading1 from "components/common/text/Heading1";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ProjectHelper from "helpers/project";
 import Heading5 from "components/common/text/Heading5";
+import { AttachmentService } from "services/attachment";
 
 interface Props {
 
@@ -27,6 +28,8 @@ const Completed = memo(({ }: Props) => {
 
   const dispatch = useDispatch();
   
+  const { configs } = useSelector((state: ReducerType) => state.user)
+
   const { project } = useSelector((state: ReducerType) => state.project)
 
   const getInvoice = () => {
@@ -53,6 +56,17 @@ const Completed = memo(({ }: Props) => {
     return ProjectHelper.getReportReadyDate(project, i18n.language).format("DD MMMM, YYYY")
   }, [i18n.language, project])
 
+  const onDownloadContract = () => {
+    if (!configs.viewContract) return
+    dispatch(setLoading(true))
+    AttachmentService.download(configs.viewContract)
+      .then(res => {
+        FileSaver.saveAs(res.data, `contract-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+  
   return (
     <PageRoot>
       <LeftContent>
@@ -76,6 +90,12 @@ const Completed = memo(({ }: Props) => {
                 <img className={classes.imgAddPhoto} src={images.icInvoice} />
                 <ParagraphBody align="center" $colorName="--cimigo-blue" translation-key="payment_billing_completed_invoice">{t("payment_billing_completed_invoice")}</ParagraphBody>
               </DownLoadItem>
+              {!!configs?.viewContract && (
+                <DownLoadItem onClick={onDownloadContract}>
+                  <img className={classes.imgAddPhoto} src={images.icContract} />
+                  <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_view_contract">{t("payment_billing_view_contract")}</ParagraphBody>
+                </DownLoadItem>
+              )}
             </Box>
             <ParagraphBodyBlueNestedA
               $colorName="--eerie-black-00"

@@ -39,6 +39,9 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCancelOrder";
+import { AttachmentService } from "services/attachment";
+import FileSaver from 'file-saver';
+import moment from "moment";
 
 interface DataForm {
   paymentMethodId: number,
@@ -324,6 +327,17 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     setIsConfirmCancel(false)
   }
 
+  const onDownloadContract = () => {
+    if (!configs.viewContract) return
+    dispatch(setLoading(true))
+    AttachmentService.download(configs.viewContract)
+      .then(res => {
+        FileSaver.saveAs(res.data, `contract-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
   return (
     <Grid component={'form'} classes={{ root: classes.root }} onSubmit={handleSubmit(onConfirm)} noValidate autoComplete="off">
       <Divider className={classes.divider1} />
@@ -418,7 +432,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                   {t('payment_billing_sub_tab_payment_method_make_an_order_sub')}
                 </ParagraphSmall>
                 {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
-                  <Box mb={4} sx={{maxWidth: "325px"}}>
+                  <Box mb={4} sx={{ maxWidth: "325px" }}>
                     <InputTextField
                       title={t('field_contact_name')}
                       translation-key="field_contact_name"
@@ -600,6 +614,11 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                   <InfoOutlined sx={{ fontSize: 16, color: "var(--eerie-black-40)" }} />
                 </TooltipCustom>
               </Grid>
+              {!!configs?.viewContract && (
+                <Grid item xs={12}>
+                  <ParagraphSmall mt={2} $colorName="--eerie-black-65" translation-key="payment_invoice_and_contract_info_bottom_1">{t("payment_invoice_and_contract_info_bottom_1")} <span onClick={onDownloadContract} className="underline cursor-pointer" translation-key="payment_invoice_and_contract_info_bottom_2">{t("payment_invoice_and_contract_info_bottom_2")}</span></ParagraphSmall>
+                </Grid>
+              )}
             </Grid>
           </div>
         </Collapse>
@@ -633,26 +652,20 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                 <ParagraphBody $colorName="--eerie-black">{`$`}{fCurrency2(price?.eyeTrackingSampleSizeCostUSD)}</ParagraphBody>
               </div>
             )}
-            <div className={clsx(classes.flexOrder, classes.isMobile)}>
+            <Divider />
+            <div className={classes.flexOrder}>
+              <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
+                {t('common_sub_total')}
+              </ParagraphBody>
+              <ParagraphBody $colorName="--eerie-black">{`$`}{fCurrency2(price?.amountUSD || 0)}</ParagraphBody>
+            </div>
+            <div className={classes.flexOrder}>
               <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
                 {t('common_vat', { percent: (configs?.vat || 0) * 100 })}
               </ParagraphBody>
               <ParagraphBody $colorName="--eerie-black">{`$`}{fCurrency2(price?.vatUSD || 0)}</ParagraphBody>
             </div>
             <Divider />
-            <div className={clsx(classes.flexOrder, classes.notMobile)}>
-              <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
-                {t('common_sub_total')}
-              </ParagraphBody>
-              <ParagraphBody $colorName="--eerie-black">{`$`}{fCurrency2(price?.amountUSD || 0)}</ParagraphBody>
-            </div>
-            <div className={clsx(classes.flexOrder, classes.notMobile)}>
-              <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
-                {t('common_vat', { percent: (configs?.vat || 0) * 100 })}
-              </ParagraphBody>
-              <ParagraphBody $colorName="--eerie-black">{`$`}{fCurrency2(price?.vatUSD || 0)}</ParagraphBody>
-            </div>
-            <Divider className={classes.notMobile} />
             <div className={classes.flexTotal}>
               <Heading5 $colorName="--eerie-black" translation-key="common_total">{t('common_total')} (USD)</Heading5>
               <Heading2 $colorName="--cimigo-green-dark-1">{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</Heading2>
@@ -703,7 +716,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         onClose={onUpdateInfo}
         onYes={onSkipUpdateInfo}
       />
-      <PopupConfirmCancelOrder 
+      <PopupConfirmCancelOrder
         isOpen={isConfirmCancel}
         onClose={onCloseConfirmCancel}
         onConfirm={onCancelPayment}

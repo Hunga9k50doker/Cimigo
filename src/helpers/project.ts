@@ -71,7 +71,6 @@ export class ProjectHelper {
     return config
   }
   
-
   static isValidQuotas(project: Project) {
     return project?.agreeQuota
   }
@@ -142,7 +141,12 @@ export class ProjectHelper {
   }
 
   static isValidCheckout(project: Project) {
-    return ProjectHelper.isValidSetup(project) && ProjectHelper.isValidSampleSize(project) && ProjectHelper.isValidTarget(project)
+    return ProjectHelper.isValidSampleSize(project) && 
+    ProjectHelper.isValidTarget(project) && 
+    ProjectHelper.isValidPacks(project?.solution, project?.packs) && 
+    ProjectHelper.isValidAdditionalBrand(project?.solution, project?.additionalBrands) && 
+    ProjectHelper.isValidBasic(project) &&
+    ProjectHelper.isValidEyeTracking(project)
   }
 }
 

@@ -118,7 +118,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
   }, [scrollToSection, dispatch])
 
   useEffect(() => {
-    if (showHowToSetup) {
+    if (showHowToSetup && project?.solution) {
       if (project?.solution?.enableHowToSetUpSurvey) {
         onOpenPopupHowToSetupSurvey()
       }

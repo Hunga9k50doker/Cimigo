@@ -172,3 +172,7 @@ export enum ETabRightPanel {
   OUTLINE,
   COST_SUMMARY
 }
+
+export enum PROJECT_DETAIL_SECTION {
+  content = 'project-detail-content'
+}

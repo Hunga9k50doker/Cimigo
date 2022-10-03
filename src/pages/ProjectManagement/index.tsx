@@ -269,14 +269,11 @@ const ProjectManagement = memo((props: Props) => {
       FolderService.create({ name })
         .then(() => {
           getMyFolders();
+          onCloseCreateOrEditFolder();
         })
         .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => {
-          dispatch(setLoading(false))
-          onCloseCreateOrEditFolder();
-        });
+        .finally(() => dispatch(setLoading(false)));
     }
-    
   };
 
   const onCloseCreateOrEditFolder = () => {
