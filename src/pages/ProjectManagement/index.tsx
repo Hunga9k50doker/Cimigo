@@ -260,6 +260,7 @@ const ProjectManagement = memo((props: Props) => {
       FolderService.update(folderEdit.id, { name })
         .then(() => {
           getMyFolders();
+          onCloseCreateOrEditFolder();
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)));
@@ -270,9 +271,12 @@ const ProjectManagement = memo((props: Props) => {
           getMyFolders();
         })
         .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)));
+        .finally(() => {
+          dispatch(setLoading(false))
+          onCloseCreateOrEditFolder();
+        });
     }
-    onCloseCreateOrEditFolder();
+    
   };
 
   const onCloseCreateOrEditFolder = () => {
