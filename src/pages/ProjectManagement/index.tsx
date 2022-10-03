@@ -72,7 +72,7 @@ const ExpandIcon = (props) => {
 };
 
 const ArrowDropdownIcon = (props) => {
-  return <ArrowDropDownIcon {...props} sx={{ color: "var(--eerie-black-40)" }}/>;
+  return <ArrowDropDownIcon {...props} sx={{ color: "var(--eerie-black-40)", fontSize: "20px !important" }}/>;
 }
 enum SortedField {
   name = "name",
