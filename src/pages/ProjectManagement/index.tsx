@@ -63,13 +63,17 @@ import PopupConfirmDeleteFolder from "./components/PopupConfirmDeleteFolder";
 import SubTitle from "components/common/text/SubTitle";
 import BasicLayout from "layout/BasicLayout";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { Helmet } from "react-helmet";
 
 const ExpandIcon = (props) => {
-  return <ArrowDropDownIcon {...props} sx={{ color: "var(--gray-60)" }}/>;
+  return <KeyboardArrowDownIcon {...props} sx={{ color: "var(--gray-60)" }}/>;
 };
 
+const ArrowDropdownIcon = (props) => {
+  return <ArrowDropDownIcon {...props} sx={{ color: "var(--eerie-black-40)" }}/>;
+}
 enum SortedField {
   name = "name",
   createdAt = "createdAt",
@@ -490,6 +494,11 @@ const ProjectManagement = memo((props: Props) => {
                       classes: {
                         paper: classes.selectMenu,
                       },
+                      
+                      anchorOrigin: {
+                        vertical: "bottom",
+                        horizontal: "center"
+                      },
                     }}
                   >
                     <MenuItem
@@ -567,6 +576,7 @@ const ProjectManagement = memo((props: Props) => {
                       onClick={() => {
                         onChangeSort(SortedField.updatedAt);
                       }}
+                      IconComponent={ArrowDropdownIcon}
                     >
                       <Heading5
                         $colorName={"--cimigo-blue"}
