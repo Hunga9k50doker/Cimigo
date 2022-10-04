@@ -157,7 +157,7 @@ const UserProfile = memo((props: Props) => {
                 </div>
                 <div className={classes.personalInfo}>
                     <Heading3 $colorName="--eerie-black" className={classes.name}>{user?.fullName}</Heading3>
-                    <ParagraphSmall>{user?.company ? `${user?.company}, ` : ""} {user?.country?.name}</ParagraphSmall>
+                    <ParagraphSmall>{user?.company ? `${user?.company}, ` : ""}{user?.country?.name}</ParagraphSmall>
                 </div>
             </Grid>
             <Grid container columnSpacing={isMobile ? 0 : 1} rowSpacing={3} className={classes.customMargin}>
