@@ -143,7 +143,7 @@ const CreateProjectStep = memo(
               mx={0.5}
               $fontWeight={"600"}
               $colorName={"--eerie-black"}
-            >{`${planSelected?.title} : US$ ${fCurrency2(planSelected?.price)}`}</Heading5>
+            >{`${planSelected?.title} : US$ ${fCurrency2(planSelected?.price || 0 )}`}</Heading5>
             <ParagraphSmallUnderline2
               translation-key="common_change"
               className={classes.link}
