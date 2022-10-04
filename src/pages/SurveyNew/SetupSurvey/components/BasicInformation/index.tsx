@@ -13,7 +13,7 @@ import { Save as SaveIcon } from '@mui/icons-material';
 import TextBtnSmall from "components/common/text/TextBtnSmall"
 import { editableProject } from "helpers/project"
 import { useDispatch } from "react-redux"
-import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
+import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes"
 import { ProjectService } from "services/project"
 import { setProjectReducer } from "redux/reducers/Project/actionTypes"
 
@@ -51,7 +51,7 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
     if (!editable) return
     dispatch(setLoading(true))
     ProjectService.updateProjectBasicInformation(project.id, data)
-      .then(() => {
+      .then((res) => {
         dispatch(setProjectReducer({
           ...project,
           category: data.category,
@@ -59,6 +59,7 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
           variant: data.variant,
           manufacturer: data.manufacturer
         }))
+        dispatch(setSuccessMess(res.message))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
