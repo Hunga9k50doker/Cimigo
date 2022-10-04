@@ -31,6 +31,7 @@ import { EStep } from "../..";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import Button, { BtnType } from "components/common/buttons/Button";
 import { setHowToSetupSurveyReducer } from "redux/reducers/Project/actionTypes";
+import { fCurrency2 } from "utils/formatNumber";
 
 export interface CreateProjectFormData {
   name: string;
@@ -142,7 +143,7 @@ const CreateProjectStep = memo(
               mx={0.5}
               $fontWeight={"600"}
               $colorName={"--eerie-black"}
-            >{`${planSelected?.title} : US$ ${planSelected?.price}`}</Heading5>
+            >{`${planSelected?.title} : US$ ${fCurrency2(planSelected?.price || 0 )}`}</Heading5>
             <ParagraphSmallUnderline2
               translation-key="common_change"
               className={classes.link}
