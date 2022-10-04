@@ -13,7 +13,7 @@ import { Controller, useForm } from "react-hook-form";
 import images from "config/images";
 import { OptionItem } from "models/general";
 import { useTranslation } from "react-i18next";
-import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { setSuccessMess, setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { useDispatch } from "react-redux";
 import CountryService from "services/country";
 import { VALIDATION } from "config/constans";
@@ -131,10 +131,14 @@ const UserProfile = memo((props: Props) => {
         UserService.update(form)
             .then(() => {
                 dispatch(getMe())
+                dispatch(setSuccessMess(t("common_update_success")))
             })
             .catch((e) => dispatch(setErrorMess(e)))
             .finally(() => dispatch(setLoading(false)))
     }
+
+    const isShow = () => watch("company") !== ""
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={classes.form} >
             <Grid className={classes.rowInfo}>
@@ -155,7 +159,7 @@ const UserProfile = memo((props: Props) => {
                 </div>
                 <div className={classes.personalInfo}>
                     <Heading3 $colorName="--eerie-black" className={classes.name}>{user?.fullName}</Heading3>
-                    <ParagraphSmall>{user?.company}, {user?.country.name}</ParagraphSmall>
+                    <ParagraphSmall>{user?.company}{isShow() && <span>,</span>} {user?.country.name}</ParagraphSmall>
                 </div>
             </Grid>
             <Grid container columnSpacing={isMobile ? 0 : 1} rowSpacing={3} className={classes.customMargin}>
@@ -248,7 +252,7 @@ const UserProfile = memo((props: Props) => {
                     />
                 </Grid>
             </Grid>
-            <Button btnType={BtnType.Primary} type='submit' children={t("common_save_changes")} translation-key="common_save_changes" className={classes.btnSave}/>
+            <Button btnType={BtnType.Primary} type='submit' children={t("common_save_changes")} translation-key="common_save_changes" className={classes.btnSave}/> 
         </form>
     )
 })
