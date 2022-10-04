@@ -94,6 +94,8 @@
         padding: 0px;
         > a {
             > div {
+                display: flex;
+                align-items: flex-start;
                 position: relative;
                 border: none;
                 color: var(--eerie-black-65);
@@ -112,6 +114,7 @@
                 svg {
                     height: 20px;
                     width: 20px;
+                    margin-top: 3px;
                     margin-right: 13px;
                 }
                 &.borderActive {
