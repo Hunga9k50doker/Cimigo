@@ -137,8 +137,6 @@ const UserProfile = memo((props: Props) => {
             .finally(() => dispatch(setLoading(false)))
     }
 
-    const isShow = () => watch("company") !== ""
-
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={classes.form} >
             <Grid className={classes.rowInfo}>
@@ -159,7 +157,7 @@ const UserProfile = memo((props: Props) => {
                 </div>
                 <div className={classes.personalInfo}>
                     <Heading3 $colorName="--eerie-black" className={classes.name}>{user?.fullName}</Heading3>
-                    <ParagraphSmall>{user?.company}{isShow() && <span>,</span>} {user?.country.name}</ParagraphSmall>
+                    <ParagraphSmall>{user?.company ? `${user?.company},` : ""} {user?.country.name}</ParagraphSmall>
                 </div>
             </Grid>
             <Grid container columnSpacing={isMobile ? 0 : 1} rowSpacing={3} className={classes.customMargin}>
