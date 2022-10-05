@@ -23,6 +23,7 @@ interface Props {
 
 }
 
+// eslint-disable-next-line no-empty-pattern
 const Completed = memo(({ }: Props) => {
   const { t, i18n } = useTranslation()
 
@@ -87,11 +88,13 @@ const Completed = memo(({ }: Props) => {
             </ParagraphBody>
             <Box py={2} display="flex" justifyContent="center">
               <DownLoadItem onClick={getInvoice}>
+                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <img className={classes.imgAddPhoto} src={images.icInvoice} />
                 <ParagraphBody align="center" $colorName="--cimigo-blue" translation-key="payment_billing_completed_invoice">{t("payment_billing_completed_invoice")}</ParagraphBody>
               </DownLoadItem>
               {!!configs?.viewContract && (
                 <DownLoadItem onClick={onDownloadContract}>
+                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
                   <img className={classes.imgAddPhoto} src={images.icContract} />
                   <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_view_contract">{t("payment_billing_view_contract")}</ParagraphBody>
                 </DownLoadItem>

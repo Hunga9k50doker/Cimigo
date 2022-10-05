@@ -86,6 +86,7 @@ export const Survey = () => {
     const index = tabs.findIndex(it => activeRoute(it))
     if (index === -1) return 0
     return index
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.location.pathname, tabs])
 
   const onChangeTab = (_: any, newTab: number) => {

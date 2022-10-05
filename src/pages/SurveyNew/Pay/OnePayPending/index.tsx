@@ -23,6 +23,7 @@ import classes from './styles.module.scss';
 
 interface Props { }
 
+// eslint-disable-next-line no-empty-pattern
 const OnePayPending = memo(({ }: Props) => {
   const { t } = useTranslation()
 

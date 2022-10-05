@@ -3,6 +3,7 @@ import clsx from "clsx";
 import Heading6 from "components/common/text/Heading6";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import BasicTooltip from "components/common/tooltip/BasicTooltip";
+// eslint-disable-next-line no-useless-rename
 import { ProjectStatus as ProjectStatus } from "models/project";
 import { memo, useMemo } from "react"
 import { useTranslation } from "react-i18next";
@@ -28,6 +29,7 @@ export const LockIcon = memo(({ status, className, ...rest }: LockIconProps) => 
       case ProjectStatus.COMPLETED:
         return t('project_status_completed')
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   return (

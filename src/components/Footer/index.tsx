@@ -80,6 +80,7 @@ const Footer = memo((props: FooterProps) => {
                   <a href={`tel:+(84)2838227727`} className={classes.textLink} translation-key="footer_contact_us_phone">
                     {t('footer_contact_us_phone')}
                   </a>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a className={classes.textLink} translation-key="footer_contact_us_address">
                     {t('footer_contact_us_address')}
                   </a>
@@ -125,6 +126,7 @@ const Footer = memo((props: FooterProps) => {
                   <a href={`tel:+(84)2838227727`} className={classes.textLink} translation-key="footer_contact_us_phone">
                     {t('footer_contact_us_phone')}
                   </a>
+                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a className={classes.textLink} translation-key="footer_contact_us_address">
                     {t('footer_contact_us_address')}
                   </a>

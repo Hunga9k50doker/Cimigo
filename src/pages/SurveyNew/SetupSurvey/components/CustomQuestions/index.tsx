@@ -208,6 +208,7 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
         .catch(e => dispatch(setErrorMess(e)));
     }
     getCustomQuestionType()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onClosePopupOpenQuestion = () => {
