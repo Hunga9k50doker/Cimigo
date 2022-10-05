@@ -37,9 +37,6 @@ export interface CreateProjectFormData {
   name: string;
   surveyLanguage: OptionItemT<string>;
   category: string;
-  brand: string;
-  variant: string;
-  manufacturer: string;
 }
 
 interface CreateProjectStepProps {
@@ -65,9 +62,6 @@ const CreateProjectStep = memo(
           })
           .required(t("field_survey_language_vali_required")),
         category: yup.string(),
-        brand: yup.string(),
-        variant: yup.string(),
-        manufacturer: yup.string(),
       });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
@@ -89,9 +83,6 @@ const CreateProjectStep = memo(
         name: data.name,
         surveyLanguage: data.surveyLanguage.id,
         category: data.category || "",
-        brand: data.brand || "",
-        variant: data.variant || "",
-        manufacturer: data.manufacturer || "",
       })
         .then((res: Project) => {
           dispatch(setHowToSetupSurveyReducer(true))
@@ -250,50 +241,6 @@ const CreateProjectStep = memo(
                             translation-key="field_project_category"
                             inputRef={register("category")}
                             errorMessage={errors.category?.message}
-                          />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <InputTextfield
-                            className={classes.inputAccordion}
-                            name="brand"
-                            type="text"
-                            inputProps={{maxLength: "50"}}
-                            placeholder={t("field_project_brand_placeholder")}
-                            translation-key-placeholder="field_project_brand_placeholder"
-                            title={t("field_project_brand")}
-                            translation-key="field_project_brand"
-                            inputRef={register("brand")}
-                            errorMessage={errors.brand?.message}
-                          />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <InputTextfield
-                            className={classes.inputAccordion}
-                            name="variant"
-                            type="text"
-                            inputProps={{maxLength: "50"}}
-                            placeholder={t("field_project_variant_placeholder")}
-                            translation-key-placeholder="field_project_variant_placeholder"
-                            title={t("field_project_variant")}
-                            translation-key="field_project_variant"
-                            inputRef={register("variant")}
-                            errorMessage={errors.variant?.message}
-                          />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <InputTextfield
-                            className={classes.inputAccordion}
-                            name="manufacturer"
-                            type="text"
-                            inputProps={{maxLength: "50"}}
-                            placeholder={t(
-                              "field_project_manufacturer_placeholder"
-                            )}
-                            translation-key-placeholder="field_project_manufacturer_placeholder"
-                            title={t("field_project_manufacturer")}
-                            translation-key="field_project_manufacturer"
-                            inputRef={register("manufacturer")}
-                            errorMessage={errors.manufacturer?.message}
                           />
                         </Grid>
                       </Grid>

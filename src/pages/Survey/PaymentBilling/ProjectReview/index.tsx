@@ -216,9 +216,6 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 <p className={classes.text} translation-key="payment_billing_sub_tab_preview_basic_information">{t('payment_billing_sub_tab_preview_basic_information')}</p>
                 <div className={classes.infor}>
                   <div><p translation-key="project_category">{t('project_category')} <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.category })} translation-key="payment_billing_sub_tab_preview_none"> {project?.category || t('payment_billing_sub_tab_preview_none')}</span></div>
-                  <div><p translation-key="project_brand">{t('project_brand')} <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.brand })} translation-key="payment_billing_sub_tab_preview_none"> {project?.brand || t('payment_billing_sub_tab_preview_none')}</span></div>
-                  <div><p translation-key="project_variant">{t('project_variant')} <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.variant })} translation-key="payment_billing_sub_tab_preview_none"> {project?.variant || t('payment_billing_sub_tab_preview_none')}</span></div>
-                  <div><p translation-key="project_manufacturer">{t('project_manufacturer')} <a>: </a> </p><span className={clsx({ [classes.colorDanger]: !project?.manufacturer })} translation-key="payment_billing_sub_tab_preview_none"> {project?.manufacturer || t('payment_billing_sub_tab_preview_none')}</span></div>
                 </div>
               </div>
               <div>

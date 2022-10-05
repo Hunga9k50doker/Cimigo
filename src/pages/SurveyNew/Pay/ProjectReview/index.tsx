@@ -8,9 +8,9 @@ import { routes, routesOutside } from "routers/routes";
 import { ReducerType } from "redux/reducers";
 import clsx from "clsx";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
-import FileSaver from 'file-saver';
-import moment from "moment";
-import { PaymentService } from "services/payment";
+// import FileSaver from 'file-saver';
+// import moment from "moment";
+// import { PaymentService } from "services/payment";
 import { authPreviewOrPayment } from "../models";
 import { useTranslation } from "react-i18next";
 import { setCancelPayment, setProjectReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
@@ -20,23 +20,23 @@ import Heading5 from "components/common/text/Heading5";
 import { KeyboardArrowRight } from "@mui/icons-material";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
-import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import PopupConfirmQuotaAllocation from "pages/SurveyNew/components/AgreeQuotaWarning";
 import { ProjectService } from "services/project";
-import { AttachmentService } from "services/attachment";
+// import { AttachmentService } from "services/attachment";
 import { Project, SETUP_SURVEY_SECTION } from "models/project";
 
 interface ProjectReviewProps {
 }
 
+// eslint-disable-next-line
 const ProjectReview = memo(({ }: ProjectReviewProps) => {
   const { t, i18n } = useTranslation()
 
   const dispatch = useDispatch()
 
-  const { configs } = useSelector((state: ReducerType) => state.user)
+  // const { configs } = useSelector((state: ReducerType) => state.user)
   const { project, cancelPayment } = useSelector((state: ReducerType) => state.project)
 
   const [isShowConfirmQuotaAllocation, setIsShowConfirmQuotaAllocation] = useState<boolean>(false)
@@ -102,27 +102,27 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     gotoPayment()
   }
 
-  const getInvoice = () => {
-    if (!project || !isValidCheckout) return
-    dispatch(setLoading(true))
-    PaymentService.getInvoiceDemo(project.id)
-      .then(res => {
-        FileSaver.saveAs(res.data, `invoice-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
-  }
+  // const getInvoice = () => {
+  //   if (!project || !isValidCheckout) return
+  //   dispatch(setLoading(true))
+  //   PaymentService.getInvoiceDemo(project.id)
+  //     .then(res => {
+  //       FileSaver.saveAs(res.data, `invoice-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+  //     })
+  //     .catch((e) => dispatch(setErrorMess(e)))
+  //     .finally(() => dispatch(setLoading(false)))
+  // }
 
-  const onDownLoadContract = () => {
-    if (!configs.viewContract || !isValidCheckout) return
-    dispatch(setLoading(true))
-    AttachmentService.download(configs.viewContract)
-      .then(res => {
-        FileSaver.saveAs(res.data, `contract-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
-  }
+  // const onDownLoadContract = () => {
+  //   if (!configs.viewContract || !isValidCheckout) return
+  //   dispatch(setLoading(true))
+  //   AttachmentService.download(configs.viewContract)
+  //     .then(res => {
+  //       FileSaver.saveAs(res.data, `contract-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+  //     })
+  //     .catch((e) => dispatch(setErrorMess(e)))
+  //     .finally(() => dispatch(setLoading(false)))
+  // }
 
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)))
@@ -318,33 +318,6 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                         translation-key="payment_billing_sub_tab_preview_none"
                       >
                         {project?.category || t('payment_billing_sub_tab_preview_none')}
-                      </span>
-                    </ParagraphBody>
-                    <ParagraphBody $colorName="--eerie-black" translation-key="project_brand">
-                      {t('project_brand')}: <span
-                        onClick={() => onGotoBasicInfor("brand")}
-                        className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !project?.brand })}
-                        translation-key="payment_billing_sub_tab_preview_none"
-                      >
-                        {project?.brand || t('payment_billing_sub_tab_preview_none')}
-                      </span>
-                    </ParagraphBody>
-                    <ParagraphBody $colorName="--eerie-black" translation-key="project_variant">
-                      {t('project_variant')}: <span
-                        onClick={() => onGotoBasicInfor("variant")}
-                        className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !project?.variant })}
-                        translation-key="payment_billing_sub_tab_preview_none"
-                      >
-                        {project?.variant || t('payment_billing_sub_tab_preview_none')}
-                      </span>
-                    </ParagraphBody>
-                    <ParagraphBody $colorName="--eerie-black" translation-key="project_manufacturer">
-                      {t('project_manufacturer')}: <span
-                        onClick={() => onGotoBasicInfor("manufacturer")}
-                        className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !project?.manufacturer })}
-                        translation-key="payment_billing_sub_tab_preview_none"
-                      >
-                        {project?.manufacturer || t('payment_billing_sub_tab_preview_none')}
                       </span>
                     </ParagraphBody>
                   </Box>

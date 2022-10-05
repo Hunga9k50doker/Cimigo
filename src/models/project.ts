@@ -33,10 +33,7 @@ export interface Project {
   userId: number;
   solutionId: number;
   planId: number;
-  brand: string;
-  manufacturer: string;
   category: string;
-  variant: string,
   sampleSize: number;
   eyeTrackingSampleSize: number;
   status: ProjectStatus;
@@ -102,9 +99,6 @@ export interface RenameProject {
 
 export interface UpdateProjectBasicInformation {
   category?: string,
-  brand?: string,
-  variant?: string,
-  manufacturer?: string
 }
 
 export interface ProjectTarget {

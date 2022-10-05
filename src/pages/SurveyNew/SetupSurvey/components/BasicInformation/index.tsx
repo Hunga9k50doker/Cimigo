@@ -19,9 +19,6 @@ import { setProjectReducer } from "redux/reducers/Project/actionTypes"
 
 interface BasicInformationForm {
   category: string,
-  brand: string,
-  variant: string,
-  manufacturer: string
 }
 
 interface BasicInformationProps {
@@ -37,9 +34,6 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
 
   const schema = yup.object().shape({
     category: yup.string(),
-    brand: yup.string(),
-    variant: yup.string(),
-    manufacturer: yup.string()
   })
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<BasicInformationForm>({
@@ -55,9 +49,6 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
         dispatch(setProjectReducer({
           ...project,
           category: data.category,
-          brand: data.brand,
-          variant: data.variant,
-          manufacturer: data.manufacturer
         }))
         dispatch(setSuccessMess(res.message))
       })
@@ -69,9 +60,6 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
     if (project) {
       reset({
         category: project.category,
-        brand: project.brand,
-        variant: project.variant,
-        manufacturer: project.manufacturer
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,39 +79,6 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
             translation-key-placeholder="field_project_category_placeholder"
             inputRef={register('category')}
             errorMessage={errors.category?.message}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-variant`}>
-          <InputTextfield
-            title={t('field_project_variant')}
-            translation-key="field_project_variant"
-            name="variant"
-            placeholder={t('field_project_variant_placeholder')}
-            translation-key-placeholder="field_project_variant_placeholder"
-            inputRef={register('variant')}
-            errorMessage={errors.variant?.message}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-brand`}>
-          <InputTextfield
-            title={t('field_project_brand')}
-            translation-key="field_project_brand"
-            name="brand"
-            placeholder={t('field_project_brand_placeholder')}
-            translation-key-placeholder="field_project_brand_placeholder"
-            inputRef={register('brand')}
-            errorMessage={errors.brand?.message}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-manufacturer`}>
-          <InputTextfield
-            title={t('field_project_manufacturer')}
-            translation-key="field_project_manufacturer"
-            name="manufacturer"
-            placeholder={t('field_project_manufacturer_placeholder')}
-            translation-key-placeholder="field_project_manufacturer_placeholder"
-            inputRef={register('manufacturer')}
-            errorMessage={errors.manufacturer?.message}
           />
         </Grid>
       </Grid>

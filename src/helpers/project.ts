@@ -130,7 +130,7 @@ export class ProjectHelper {
   }
 
   static isValidBasic(project: Project) {
-    return !!project?.category && !!project?.brand && !!project?.variant && !!project?.manufacturer
+    return !!project?.category
   }
 
   static isValidSetup(project: Project) {

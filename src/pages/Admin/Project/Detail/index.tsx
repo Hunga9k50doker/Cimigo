@@ -41,6 +41,7 @@ interface Props {
 
 }
 
+// eslint-disable-next-line
 const Detail = memo(({ }: Props) => {
 
   const dispatch = useDispatch()
@@ -313,21 +314,6 @@ const Detail = memo(({ }: Props) => {
                         Category: <strong className={clsx({ [classes.danger]: !project?.category })}>{project?.category || "None"}</strong>
                       </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="subtitle1" component="div">
-                        Brand: <strong className={clsx({ [classes.danger]: !project?.brand })}>{project?.brand || "None"}</strong>
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="subtitle1" component="div">
-                        Variant: <strong className={clsx({ [classes.danger]: !project?.variant })}>{project?.variant || "None"}</strong>
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="subtitle1" component="div">
-                        Manufacturer: <strong className={clsx({ [classes.danger]: !project?.manufacturer })}>{project?.manufacturer || "None"}</strong>
-                      </Typography>
-                    </Grid>
                   </Grid>
                   {!!project?.packs?.length && (
                     <>
@@ -439,7 +425,7 @@ const Detail = memo(({ }: Props) => {
                       </Box>
                     </>
                   )}
-                  {project?.eyeTrackingPacks?.length && (
+                  {!!project?.eyeTrackingPacks?.length && (
                     <>
                       <Typography variant="h6" mt={4} mb={2}>
                         Eye-tracking (Competitor pack)

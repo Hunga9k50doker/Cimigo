@@ -184,9 +184,6 @@ const SetupSurvey = memo(({ id }: Props) => {
     if (project) {
       reset({
         category: project.category,
-        brand: project.brand,
-        variant: project.variant,
-        manufacturer: project.manufacturer
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1527,9 +1524,6 @@ const SetupSurvey = memo(({ id }: Props) => {
                 <StepContent classes={{ root: classes.rootConnector }}>
                   <ul>
                     {project?.category && <li translation-key="project_category">{project.category} ({t('project_category')})</li>}
-                    {project?.brand && <li translation-key="project_brand">{project.brand} ({t('project_brand')})</li>}
-                    {project?.variant && <li translation-key="project_variant">{project.variant} ({t('project_variant')})</li>}
-                    {project?.manufacturer && <li translation-key="project_manufacturer">{project.manufacturer} ({t('project_manufacturer')})</li>}
                   </ul>
                 </StepContent>
               </Step>
