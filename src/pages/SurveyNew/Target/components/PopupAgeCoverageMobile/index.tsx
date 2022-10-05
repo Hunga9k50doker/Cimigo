@@ -57,6 +57,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, project, questionsAgeGender, ques
 
   const isDisableMum = useMemo(() => {
     return isDisableSubmit(questionsMum, dataSelectedMum) || !editableProject(project)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editable, questionsMum, dataSelectedMum])
 
   const isDisable = useMemo(() => {

@@ -68,6 +68,7 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum, onNext
       }
     }
     setDataSelectedMum(_dataSelectedMun)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project])
 
   const _onToggleAnswerGenderAge = (questionId: number, answer: TargetAnswer, checked: boolean) => {
@@ -84,6 +85,7 @@ const AgeCoverageTab = memo(({ project, questionsAgeGender, questionsMum, onNext
 
   const isDisableMum = useMemo(() => {
     return isDisableSubmit(questionsMum, dataSelectedMum) || !editableProject(project)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editable, questionsMum, dataSelectedMum])
 
   const onChangeTab = (tab: ETab) => {

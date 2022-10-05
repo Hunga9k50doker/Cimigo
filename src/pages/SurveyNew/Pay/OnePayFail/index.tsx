@@ -30,6 +30,7 @@ import TextBtnSmall from "components/common/text/TextBtnSmall";
 
 interface Props {}
 
+// eslint-disable-next-line no-empty-pattern
 const OnePayFail = memo(({}: Props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();

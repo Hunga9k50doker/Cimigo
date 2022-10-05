@@ -38,6 +38,7 @@ interface SetupSurvey {
   onChangeTabRightPanel: (tab: number) => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: SetupSurvey) => {
   
   const { t } = useTranslation();

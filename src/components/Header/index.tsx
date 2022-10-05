@@ -163,6 +163,7 @@ const Header = memo((props: HeaderProps) => {
             )}
           </Menu>
         </li>
+         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={onGoHome}>
           <div className={classes.imgContainer}>
             <img src={cimigoLogo} alt="cimigo" />
@@ -180,6 +181,7 @@ const Header = memo((props: HeaderProps) => {
               <div className={classes.linkTexDetail}>
                 <img src={images.icNextMobile} alt='' />
                 {!isEdit ? (
+                  // eslint-disable-next-line jsx-a11y/anchor-is-valid
                   <a className={classes.detail} onClick={handleEditProjectName}>{detail.name}</a>
                 ) : (
                   <div className={classes.editBox}>
@@ -274,9 +276,11 @@ const Header = memo((props: HeaderProps) => {
               </li>
               :
               <li className={classes.item}>
+                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a className={classes.btnLogin}>
                   <Buttons btnType="TransparentBlue" children={t('header_login')} translation-key="header_login" padding="6px 16px" onClick={() => history.push(routes.login)} />
                 </a>
+                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a className={classes.btnLogout}>
                   <Buttons btnType="Blue" children={t('header_register')} translation-key="header_register" padding="6px 16px" onClick={() => history.push(routes.register)} />
                 </a>
