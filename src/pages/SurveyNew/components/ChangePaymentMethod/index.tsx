@@ -371,9 +371,9 @@ const ChangePaymentMethod = memo(
                   <div className={classes.flexOrder}>
                     <ParagraphBody
                       $colorName="--eerie-black"
-                      translation-key="common_eye_tracking"
+                      translation-key="payment_project_review_eye_tracking"
                     >
-                      {t("common_eye_tracking")} ({payment?.eyeTrackingSampleSize || 0})
+                      {t("payment_project_review_eye_tracking")} ({payment?.eyeTrackingSampleSize || 0})
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black">
                       {`$`}
