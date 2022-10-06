@@ -3,7 +3,6 @@ import { Box, Collapse, Divider, FormControlLabel, Grid, IconButton, Radio, Radi
 import classes from './styles.module.scss';
 import images from "config/images";
 import InputSelect from "components/common/inputs/InputSelect";
-import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
 import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import { ReducerType } from "redux/reducers";
@@ -26,7 +25,7 @@ import { useTranslation } from "react-i18next";
 import { VALIDATION } from "config/constans";
 import { ExpandMore, InfoOutlined } from "@mui/icons-material";
 import TooltipCustom from "components/Tooltip";
-import PopupConfirmInvoiceInfo from "pages/Survey/components/PopupConfirmInvoiceInfo";
+import PopupConfirmInvoiceInfo from "pages/SurveyNew/components/PopupConfirmInvoiceInfo";
 import Heading5 from "components/common/text/Heading5";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
@@ -62,6 +61,7 @@ interface DataForm {
 interface PaymentProps {
 }
 
+// eslint-disable-next-line no-empty-pattern
 const PaymentPage = memo(({ }: PaymentProps) => {
   const { t, i18n } = useTranslation()
 

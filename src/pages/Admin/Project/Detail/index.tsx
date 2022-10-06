@@ -20,7 +20,7 @@ import { AttachmentService } from "services/attachment"
 import FileSaver from 'file-saver';
 import { getUrlExtension } from "utils/image"
 import TabPanel from "components/TabPanel"
-import { getPayment } from "pages/Survey/PaymentBilling/models"
+import { getPayment } from "pages/SurveyNew/Pay/models"
 import { ReducerType } from "redux/reducers"
 import { Quota, QuotaTableRow } from "models/quota"
 import React from "react"
