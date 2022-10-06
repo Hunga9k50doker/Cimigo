@@ -27,13 +27,13 @@ import TextBtnSmall from "components/common/text/TextBtnSmall";
 import { Menu } from "components/common/memu/Menu";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
-import PopupOpenQuestion from "pages/Survey/components/PopupOpenQuestion";
-import PopupSingleChoice from "pages/Survey/components/PopupSingleChoice";
-import PopupMultipleChoices from "pages/Survey/components/PopupMultipleChoices";
-import PopupNumericScale from "pages/Survey/components/PopupNumericScale";
-import PopupSmileyRating from "pages/Survey/components/PopupSmileyRating";
-import PopupStarRating from "pages/Survey/components/PopupStarRating";
-import PopupConfirmDisableCustomQuestion from "pages/Survey/components/PopupConfirmDisableCustomQuestion";
+import PopupOpenQuestion from "pages/SurveyNew/components/PopupOpenQuestion";
+import PopupSingleChoice from "pages/SurveyNew/components/PopupSingleChoice";
+import PopupMultipleChoices from "pages/SurveyNew/components/PopupMultipleChoices";
+import PopupNumericScale from "pages/SurveyNew/components/PopupNumericScale";
+import PopupSmileyRating from "pages/SurveyNew/components/PopupSmileyRating";
+import PopupStarRating from "pages/SurveyNew/components/PopupStarRating";
+import PopupConfirmDisableCustomQuestion from "pages/SurveyNew/components/PopupConfirmDisableCustomQuestion";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 
 interface CustomQuestionsProps {
