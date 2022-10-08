@@ -72,7 +72,6 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
       <Grid container spacing={2} maxWidth={{ xs: "unset", sm: "684px" }}>
         <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-category`}>
           <InputTextfield
-            title={t('field_project_category')}
             translation-key="field_project_category"
             name="category"
             placeholder={t('field_project_category_placeholder')}

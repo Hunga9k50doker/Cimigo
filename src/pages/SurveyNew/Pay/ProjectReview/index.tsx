@@ -251,8 +251,8 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 {project?.enableEyeTracking && (
                   <Box className={classes.itemSubBox}>
                     <Box className={classes.itemSubLeft}>
-                      <ParagraphBody $colorName="--eerie-black-00" translation-key="common_eye_tracking">
-                        {t('common_eye_tracking')}
+                      <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_review_eye_tracking_sample_size">
+                        {t('payment_project_review_eye_tracking_sample_size')}
                       </ParagraphBody>
                     </Box>
                     <Box className={classes.itemSubRight}>
@@ -311,8 +311,8 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     </ParagraphBody>
                   </Box>
                   <Box className={clsx(classes.itemSubRight, classes.itemSubRightCustom)}>
-                    <ParagraphBody $colorName="--eerie-black" translation-key="project_category">
-                      {t('project_category')}: <span
+                    <ParagraphBody $colorName="--eerie-black">
+                      <span
                         onClick={() => onGotoBasicInfor("category")}
                         className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !project?.category })}
                         translation-key="payment_billing_sub_tab_preview_none"
@@ -393,8 +393,8 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 {project?.enableEyeTracking && (
                   <Box className={classes.itemSubBox}>
                     <Box className={classes.itemSubLeft}>
-                      <ParagraphBody $colorName="--eerie-black-00" translation-key="common_eye_tracking">
-                        {t('common_eye_tracking')}
+                      <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_review_eye_tracking_survey_detail">
+                        {t('payment_project_review_eye_tracking_survey_detail')}
                       </ParagraphBody>
                     </Box>
                     <Box className={classes.itemSubRight}>

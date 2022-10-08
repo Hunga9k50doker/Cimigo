@@ -646,8 +646,8 @@ const PaymentPage = memo(({ }: PaymentProps) => {
             )}
             {project?.enableEyeTracking && (
               <div className={classes.flexOrder}>
-                <ParagraphBody $colorName="--eerie-black" translation-key="common_eye_tracking">
-                  {t("common_eye_tracking")} ({project?.eyeTrackingSampleSize || 0})
+                <ParagraphBody $colorName="--eerie-black" translation-key="payment_project_order_summary_eye_tracking">
+                  {t("payment_project_order_summary_eye_tracking")} ({project?.eyeTrackingSampleSize || 0})
                 </ParagraphBody>
                 <ParagraphBody $colorName="--eerie-black">{`$`}{fCurrency2(price?.eyeTrackingSampleSizeCostUSD)}</ParagraphBody>
               </div>
