@@ -223,11 +223,9 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
               __html: t("setup_eye_tracking_option_effect_subtitle_content"),
             }}>
           </ParagraphBody>
-          {!!minEyeTrackingPack && (
-            <ParagraphBody mt={2} $colorName="--gray-80" translation-key="setup_eye_tracking_option_effect_subtitle_min_packs">
-              {t("setup_eye_tracking_option_effect_subtitle_min_packs", { minEyeTrackingPack: minEyeTrackingPack })}
-            </ParagraphBody>
-          )}
+          <ParagraphBody mt={2} $colorName="--gray-80" translation-key="setup_eye_tracking_option_effect_subtitle_min_packs">
+            {t("setup_eye_tracking_option_effect_subtitle_min_packs", { minEyeTrackingPack: minEyeTrackingPack })}
+          </ParagraphBody>
           {!!project?.eyeTrackingPacks?.length && (
             <Box mt={{ xs: 3, sm: 2 }} >
               <Grid spacing={2} container>
