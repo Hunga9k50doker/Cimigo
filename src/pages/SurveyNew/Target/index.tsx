@@ -165,7 +165,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
     dispatch(setLoading(true))
     ProjectService.updateSampleSize(projectId, sampleSize)
       .then((res) => {
-        dispatch(setProjectReducer({ ...project, sampleSize: sampleSize, eyeTrackingSampleSize: res.data.eyeTrackingSampleSize }))
+        dispatch(setProjectReducer({ ...project, sampleSize: sampleSize }))
         dispatch(setSuccessMess(res.message))
         onClearCustomSampleSize()
         onCloseConfirmChangeSampleSize()
@@ -186,13 +186,10 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
         return []
       })
     dispatch(setLoading(false))
-    if (quotas?.length || newSampleSize < project.eyeTrackingSampleSize) {
+    if (quotas?.length) {
       setConfirmChangeSampleSizeData({
         newSampleSize: newSampleSize,
-        isConfirmQuotas: !!quotas?.length,
-        isConfirmEyeTrackingSampleSize: newSampleSize < project.eyeTrackingSampleSize,
-        newEyeTrackingSampleSize: minEyeTrackingSampeSize,
-        oldEyeTrackingSampleSize: project.eyeTrackingSampleSize || 0
+        isConfirmQuotas: true,
       })
     } else {
       serviceUpdateSampleSize(newSampleSize)
@@ -236,11 +233,11 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
 
   const maxEyeTrackingSampeSize = useMemo(() => {
     return _.maxBy(eyeTrackingSampleSizeConstConfig, 'limit')?.limit || 0
-  }, [sampleSizeConstConfig])
+  }, [eyeTrackingSampleSizeConstConfig])
 
   const minEyeTrackingSampeSize = useMemo(() => {
     return _.minBy(eyeTrackingSampleSizeConstConfig, 'limit')?.limit || 0
-  }, [sampleSizeConstConfig])
+  }, [eyeTrackingSampleSizeConstConfig])
 
   const isValidEyeTrackingSampSize = (data: number) => {
     return data >= minEyeTrackingSampeSize && data <= maxEyeTrackingSampeSize
@@ -252,17 +249,15 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
   }, [maxEyeTrackingSampeSize, minEyeTrackingSampeSize])
 
   const schemaESS = useMemo(() => {
-    const _sampleSize = project?.sampleSize || 0;
-    const max = _sampleSize >= maxEyeTrackingSampeSize ? maxEyeTrackingSampeSize : _sampleSize
     return yup.object().shape({
       eyeTrackingSampleSize: yup.number()
-        .typeError("Number of respondents for eye-tracking is required.")
-        .required("Number of respondents for eye-tracking is required.")
-        .min(minEyeTrackingSampeSize, `Number of respondents for eye-tracking must be greater than or equal to ${minEyeTrackingSampeSize}.`)
-        .max(max, `Number of respondents for eye-tracking must be less than or equal to ${max} (total survey respondents).`)
+        .typeError(t("target_eye_tracking_sample_size_required"))
+        .required(t("target_eye_tracking_sample_size_required"))
+        .min(minEyeTrackingSampeSize, t("target_eye_tracking_sample_size_min", { number: minEyeTrackingSampeSize }))
+        .max(maxEyeTrackingSampeSize, t("target_eye_tracking_sample_size_max", { number: maxEyeTrackingSampeSize }))
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i18n.language, maxEyeTrackingSampeSize, minEyeTrackingSampeSize, project?.sampleSize])
+  }, [i18n.language, maxEyeTrackingSampeSize, minEyeTrackingSampeSize])
 
   const {
     handleSubmit: handleSubmitESS,
@@ -706,7 +701,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
       <RightContent>
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
-            <Tab label={"Outline"} value={ETabRightPanel.OUTLINE} />
+            <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
             <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} translation-key="project_right_panel_cost_summary">{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
           </TabRightPanel>
           <TabPanelBox value={tabRightPanel} index={ETabRightPanel.OUTLINE}>

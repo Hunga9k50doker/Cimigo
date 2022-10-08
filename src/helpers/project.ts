@@ -3,7 +3,7 @@ import { AdditionalBrand } from "models/additional_brand";
 import { Solution } from "models/Admin/solution";
 import { TargetQuestionType } from "models/Admin/target";
 import { ConfigData } from "models/config";
-import { Pack } from "models/pack";
+import { Pack, PackType } from "models/pack";
 import { EPaymentStatus } from "models/payment";
 import { Project, ProjectStatus } from "models/project";
 import moment from "moment-timezone";
@@ -101,8 +101,28 @@ export class ProjectHelper {
     return solution?.minAdditionalBrand ?? 0
   }
 
-  static minEyeTrackingPack(solution: Solution) {
-    return solution?.minEyeTrackingPack ?? 0
+  static minEyeTrackingPack(project: Project) {
+    const minEyeTrackingPack = project?.solution?.minEyeTrackingPack ?? 0
+    const competitorPack = project?.packs?.filter(it => it.packTypeId === PackType.Competitor_Pack)?.length || 0
+    return competitorPack >= minEyeTrackingPack ? 0 : minEyeTrackingPack - competitorPack
+  }
+
+  static packNeedMore(project: Project) {
+    const totalPack = project?.packs?.length || 0
+    const minPack = ProjectHelper.minPack(project?.solution)
+    return totalPack >= minPack ? 0 : minPack - totalPack
+  }
+
+  static additionalBrandNeedMore(project: Project) {
+    const totalBrand = project?.additionalBrands?.length || 0
+    const minBrand = ProjectHelper.minAdditionalBrand(project?.solution)
+    return totalBrand >= minBrand ? 0 : minBrand - totalBrand
+  }
+
+  static eyeTrackingPackNeedMore(project: Project) {
+    const totalEyeTrackingPack = project?.eyeTrackingPacks?.length || 0
+    const minEyeTrackingPack = ProjectHelper.minEyeTrackingPack(project)
+    return totalEyeTrackingPack >= minEyeTrackingPack ? 0 : minEyeTrackingPack - totalEyeTrackingPack
   }
 
   static isValidSampleSize(project: Project) {
@@ -126,7 +146,7 @@ export class ProjectHelper {
   }
 
   static isValidEyeTracking(project: Project) {
-    return ((project?.eyeTrackingPacks?.length ?? 0) >= ProjectHelper.minEyeTrackingPack(project?.solution)) || !project?.solution?.enableEyeTracking || !project?.enableEyeTracking
+    return ((project?.eyeTrackingPacks?.length ?? 0) >= ProjectHelper.minEyeTrackingPack(project)) || !project?.solution?.enableEyeTracking || !project?.enableEyeTracking
   }
 
   static isValidBasic(project: Project) {

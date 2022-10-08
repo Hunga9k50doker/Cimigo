@@ -93,6 +93,10 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
     return ProjectHelper.isValidCheckout(project)
   }, [project])
 
+  const packNeedMore = useMemo(() => ProjectHelper.packNeedMore(project), [project])
+  const additionalBrandNeedMore = useMemo(() => ProjectHelper.additionalBrandNeedMore(project), [project])
+  const eyeTrackingPackNeedMore = useMemo(() => ProjectHelper.eyeTrackingPackNeedMore(project), [project])
+
   const onConfirmProject = () => {
     if (!isValidCheckout) return
     if (!ProjectHelper.isValidQuotas(project)) {
@@ -335,8 +339,13 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidPacks })}
                       onClick={onGotoPacks}
                     >
-                      {project?.packs?.length || 0} {t('payment_billing_sub_tab_preview_packs')}<br />
-                      {!isValidPacks && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_packs_required">{t('payment_billing_sub_tab_preview_packs_required')}</span>}
+                      {isValidPacks ? (
+                        <>{project?.packs?.length || 0} {t('payment_billing_sub_tab_preview_packs')}</>
+                      ) : (
+                        <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_packs">
+                          {t('payment_billing_sub_tab_preview_more_packs', { number: packNeedMore })}
+                        </span>
+                      )}
                     </ParagraphBody>
                   </Box>
                 </Box>
@@ -353,8 +362,13 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidAdditionalBrand })}
                       onClick={onGotoBrandList}
                     >
-                      {project?.additionalBrands?.length || 0} {t('payment_billing_sub_tab_preview_brands')} <br />
-                      {!isValidAdditionalBrand && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_brands_required">{t('payment_billing_sub_tab_preview_brands_required')}</span>}
+                      {isValidAdditionalBrand ? (
+                        <>{project?.additionalBrands?.length || 0} {t('payment_billing_sub_tab_preview_brands')}</>
+                      ) : (
+                        <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_brands">
+                          {t('payment_billing_sub_tab_preview_more_brands', { number: additionalBrandNeedMore })}
+                        </span>
+                      )}
                     </ParagraphBody>
                   </Box>
                 </Box>
@@ -400,12 +414,17 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     <Box className={classes.itemSubRight}>
                       <ParagraphBody
                         $colorName="--eerie-black"
-                        translation-key="payment_billing_sub_tab_preview_eye_tracking_packs"
+                        translation-key="payment_billing_sub_tab_preview_enable"
                         className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidEyeTracking })}
                         onClick={onGotoEyeTracking}
                       >
-                        {t("payment_billing_sub_tab_preview_eye_tracking_packs", { project: project?.eyeTrackingPacks?.length })} <br />
-                        {!isValidEyeTracking && <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_eye_tracking_packs_required">{t("payment_billing_sub_tab_preview_eye_tracking_packs_required", { project: project?.solution?.minEyeTrackingPack })}</span>}
+                        {isValidEyeTracking ? (
+                          t("payment_billing_sub_tab_preview_enable")
+                        ) : (
+                          <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_competitor_packs">
+                            {t("payment_billing_sub_tab_preview_more_competitor_packs", { number: eyeTrackingPackNeedMore })}
+                          </span>
+                        )}
                       </ParagraphBody>
                     </Box>
                   </Box>

@@ -13,10 +13,10 @@ import ParagraphBody from 'components/common/text/ParagraphBody';
 
 export interface DataConfirmChangeSampleSize {
   isConfirmQuotas?: boolean,
-  isConfirmEyeTrackingSampleSize?: boolean,
+  // isConfirmEyeTrackingSampleSize?: boolean,
   newSampleSize?: number,
-  oldEyeTrackingSampleSize?: number,
-  newEyeTrackingSampleSize?: number,
+  // oldEyeTrackingSampleSize?: number,
+  // newEyeTrackingSampleSize?: number,
 }
 
 interface Props {
@@ -55,7 +55,7 @@ const PopupConfirmChangeSampleSize = ({ data, onClose, onConfirm }: Props) => {
             >
             </ParagraphBody>
           )}
-          {data?.isConfirmEyeTrackingSampleSize && (
+          {/* {data?.isConfirmEyeTrackingSampleSize && (
             <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'
             translation-key="target_popup_change_sample_size_your_adjusted_eye_tracking"
             dangerouslySetInnerHTML={{
@@ -63,7 +63,7 @@ const PopupConfirmChangeSampleSize = ({ data, onClose, onConfirm }: Props) => {
             }}
             >
             </ParagraphBody>
-          )}
+          )} */}
         </ul>
         <ParagraphBody mt={4} $colorName='--gray-80' translation-key="target_popup_change_sample_size_do_you_want_question">{t("target_popup_change_sample_size_do_you_want_question")}</ParagraphBody>
       </DialogContentConfirm>

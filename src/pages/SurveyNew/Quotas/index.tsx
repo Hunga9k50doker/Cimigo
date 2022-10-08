@@ -500,7 +500,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
       <RightContent>
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
-            <Tab label={"Outline"} value={ETabRightPanel.OUTLINE} />
+            <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
             <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} translation-key="project_right_panel_cost_summary">{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
           </TabRightPanel>
           <TabPanelBox value={tabRightPanel} index={ETabRightPanel.OUTLINE}>

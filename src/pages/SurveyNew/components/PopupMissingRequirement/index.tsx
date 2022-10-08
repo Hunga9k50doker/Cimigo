@@ -36,7 +36,7 @@ const PopupMissingRequirement = ({ isOpen, isValidBasic, isValidPacks, isValidAd
 
   const minAdditionalBrand = useMemo(() => ProjectHelper.minAdditionalBrand(project?.solution), [project?.solution])
 
-  const minEyeTrackingPack = useMemo(() => ProjectHelper.minEyeTrackingPack(project?.solution), [project?.solution])
+  const minEyeTrackingPack = useMemo(() => ProjectHelper.minEyeTrackingPack(project), [project])
 
   return (
     <Dialog
