@@ -12,7 +12,7 @@ import { PriceChip } from "pages/SurveyNew/components";
 import { memo, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { getEyeTrackingPacksRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
+import { getEyeTrackingPacksRequest, setProjectReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { ProjectService } from "services/project";
 import { fCurrency2 } from "utils/formatNumber";
@@ -29,7 +29,8 @@ import { PackService } from "services/pack";
 import { Menu } from "components/common/memu/Menu";
 import PopupPack from "pages/SurveyNew/components/PopupPack";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
-
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 interface EyeTrackingProps {
   price: TotalPrice;
   project: Project;
@@ -143,7 +144,9 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
       .catch(e => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
   }
-
+  const onGoAddPacks = () => {
+    dispatch(setScrollToSectionReducer(SETUP_SURVEY_SECTION.upload_packs))
+  }
   return (
     <Grid id={SETUP_SURVEY_SECTION.eye_tracking} mt={4}>
       <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap">
@@ -192,11 +195,21 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
             <Heading5 sx={{ verticalAlign: "middle", display: "inline-flex", ml: 1 }} $colorName="--eerie-black" translation-key="setup_eye_tracking_option_attraction">{t("setup_eye_tracking_option_attraction")}</Heading5>
           </Box>
           <ParagraphBody mt={1} $colorName="--gray-80" translation-key="setup_eye_tracking_option_attraction_subtitle">{t("setup_eye_tracking_option_attraction_subtitle")}</ParagraphBody>
+          {project?.packs?.length === 0 ? (
+            <Box mt={2}>
+                <WarningAmberIcon sx={{ color: "var(--warning-dark)", verticalAlign: "middle", display: "inline-flex" }}/>
+                <ParagraphSmall translation-key="setup_eye_tracking_note_warning_1, setup_eye_tracking_note_warning_2, setup_eye_tracking_note_warning_3" 
+                $colorName="--warning-dark" 
+                sx={{ verticalAlign: "middle", display: "inline-flex", ml: 1 }}>
+                  {t("setup_eye_tracking_note_warning_1")}&nbsp;<ParagraphSmallUnderline2 onClick={onGoAddPacks}>{t("setup_eye_tracking_note_warning_2")}</ParagraphSmallUnderline2>&nbsp;{t("setup_eye_tracking_note_warning_3")}
+                 </ParagraphSmall>
+            </Box>
+          ): ""}
           {!!project?.packs?.length && (
             <Box mt={2}>
               <Grid spacing={2} container>
                 {project?.packs?.map(item => (
-                  <Grid item className={classes.packItem} key={item.id}>
+                  <Grid item className={classes.packItem} key={item.id}>  
                     <Box className={classes.packItemBox}>
                       <Box className={classes.packItemImgBox}>
                         <img src={item.image} alt="pack" />
