@@ -66,7 +66,6 @@ const CreateProjectStep = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
-    const defaultOptionLang = langSupports.filter(option => option.key === Lang.VI)
     const {
       register,
       handleSubmit,
@@ -76,7 +75,7 @@ const CreateProjectStep = memo(
       resolver: yupResolver(schema),
       mode: "onChange", 
       defaultValues: { 
-        surveyLanguage: defaultOptionLang[0]
+        surveyLanguage: langSupports.find(option => option.key === Lang.VI)
       },
     });
     const onSubmit = (data: CreateProjectFormData) => {
