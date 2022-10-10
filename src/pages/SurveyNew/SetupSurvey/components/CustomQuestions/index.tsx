@@ -490,6 +490,16 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
       >
         {t('setup_survey_custom_question_sub_title')}
       </ParagraphBody>
+      {project?.enableCustomQuestion && (<ParagraphBody
+        sx={{marginTop: "16px"}}
+        $colorName="--gray-80"
+        translation-key="setup_survey_custom_question_note"
+        className={classes.note}
+        dangerouslySetInnerHTML={{
+          __html: t("setup_survey_custom_question_note"),
+        }}
+      >
+      </ParagraphBody>)}
       {project?.enableCustomQuestion && (
         <>
           {/* ===================start list desktop====================== */}

@@ -3,7 +3,6 @@ import images from "config/images";
 import { memo, useEffect, useMemo, useState } from "react";
 import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import classes from "./styles.module.scss";
-import clsx from "clsx";
 import { Box, Divider, Grid, Radio, RadioGroup } from "@mui/material";
 import { EPaymentMethod } from "models/general";
 import { Controller, useForm } from "react-hook-form";

@@ -127,7 +127,7 @@ const Register = () => {
         <Grid className={classes.body}>
           <Grid sx={{ marginBottom: '24px' }}>
             <Heading2 $colorName="--cimigo-blue" sx={{ marginBottom: '16px' }} translation-key="register_title">{t('register_title')}</Heading2>
-            <ParagraphExtraSmall $colorName="--eerie-black-65" translation-key="register_sub_title">{t('register_sub_title')}</ParagraphExtraSmall>
+            <ParagraphSmall $colorName="--eerie-black-65" translation-key="register_sub_title">{t('register_sub_title')}</ParagraphSmall>
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

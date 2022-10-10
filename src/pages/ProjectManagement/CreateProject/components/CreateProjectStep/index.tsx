@@ -185,6 +185,7 @@ const CreateProjectStep = memo(
                   name="surveyLanguage"
                   control={control}
                   selectProps={{
+                    value: langSupports.filter(option => option.name === "Tiếng Việt"),
                     options: langSupports.map((it) => ({
                       id: it.key,
                       name: it.name,
@@ -237,8 +238,6 @@ const CreateProjectStep = memo(
                             inputProps={{maxLength: "50"}}
                             placeholder={t("field_project_category_placeholder")}
                             translation-key-placeholder="field_project_category_placeholder"
-                            title={t("field_project_category")}
-                            translation-key="field_project_category"
                             inputRef={register("category")}
                             errorMessage={errors.category?.message}
                           />

@@ -614,9 +614,9 @@ const ProjectManagement = memo((props: Props) => {
                       className={classes.tableBody}
                     >
                       <TableCell>
-                        <Heading5 $colorName={"--eerie-black"}>
+                        <ParagraphBody $colorName={"--eerie-black"}>
                           {item.name}
-                        </Heading5>{" "}
+                        </ParagraphBody>{" "}
                       </TableCell>
                       <TableCell>
                         <ChipProjectStatus
@@ -624,14 +624,14 @@ const ProjectManagement = memo((props: Props) => {
                         ></ChipProjectStatus>
                       </TableCell>
                       <TableCell>
-                        <Heading5 $colorName={"--eerie-black"}>
+                        <ParagraphBody $colorName={"--eerie-black"}>
                           {moment(item.updatedAt).format("DD-MM-yyyy")}
-                        </Heading5>
+                        </ParagraphBody>
                       </TableCell>
                       <TableCell>
-                        <Heading5 $colorName={"--eerie-black"}>
+                        <ParagraphBody $colorName={"--eerie-black"}>
                           {item.solution?.title}
-                        </Heading5>
+                        </ParagraphBody>
                       </TableCell>
                       <TableCell align="center">
                         <IconButton
