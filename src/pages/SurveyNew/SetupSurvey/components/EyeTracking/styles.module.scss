@@ -6,13 +6,6 @@
   color: var(--gray-60) !important;
 }
 
-.noteWarning {
-  span {
-    color: var(--cimigo-blue);
-    text-decoration: underline;
-    cursor: pointer;
-  }
-}
 
 .packItem {
   @media only screen and (max-width: 767px) {
