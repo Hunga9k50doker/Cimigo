@@ -1,13 +1,12 @@
 import { memo } from "react";
-import { Box } from "@mui/material";
+import { Box, BoxProps } from "@mui/material";
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
-interface Props  {
-    className?: string;
-    children?: React.ReactNode;
+interface Props extends BoxProps  {
+
 }
 
-const Button = memo((props:Props) => {
+const NoteWarning = memo((props:Props) => {
   const { className, children, ...rest } = props;
   return (
     <Box mt={2} 
@@ -21,4 +20,4 @@ const Button = memo((props:Props) => {
     </Box>
   );
 });
-export default Button;
+export default NoteWarning;

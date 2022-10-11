@@ -196,17 +196,14 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
           </Box>
           <ParagraphBody mt={1} $colorName="--gray-80" translation-key="setup_eye_tracking_option_attraction_subtitle">{t("setup_eye_tracking_option_attraction_subtitle")}</ParagraphBody>
           {!project?.packs?.length && (
-            <NoteWarning
-            children={  
-              <>
+            <NoteWarning>
                 <ParagraphSmall translation-key="setup_eye_tracking_note_warning_1, setup_eye_tracking_note_warning_2, setup_eye_tracking_note_warning_3" 
                 $colorName="--warning-dark" 
                 >
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <span>{t("setup_eye_tracking_note_warning_1")}{" "}</span><a className="underline" onClick={onGoAddPacks}>{t("setup_eye_tracking_note_warning_2")}</a>{" "}<span>{t("setup_eye_tracking_note_warning_3")}</span>
                 </ParagraphSmall>
-              </>}
-            />
+            </NoteWarning>
           )}
           {!!project?.packs?.length && (
             <Box mt={2}>
@@ -240,12 +237,10 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
             }}>
           </ParagraphBody>
             { !!eyeTrackingPackNeedMore && (
-            <NoteWarning
-            children={
-              <>
+            <NoteWarning>
                 <ParagraphSmall translation-key="setup_eye_tracking_note_warning_min_packs" 
                 $colorName="--warning-dark" 
-                className={classes.warningMinPacks}
+                sx={{"& > span": {fontWeight: 600}}}
                 dangerouslySetInnerHTML={{
                 __html: t("setup_eye_tracking_note_warning_min_packs", {
                 number: eyeTrackingPackNeedMore,
@@ -253,9 +248,7 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
                 }}
                 >
                 </ParagraphSmall>
-              </>}
-            />
-            )}
+            </NoteWarning>)}
           {!!project?.eyeTrackingPacks?.length && (
             <Box mt={{ xs: 3, sm: 2 }} >
               <Grid spacing={2} container>

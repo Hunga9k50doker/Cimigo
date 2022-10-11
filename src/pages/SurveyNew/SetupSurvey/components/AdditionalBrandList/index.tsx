@@ -205,20 +205,16 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
         dangerouslySetInnerHTML={{ __html: t('setup_survey_add_brand_sub_title') }}
       />
       { !!additionalBrandNeedMore && (
-        <NoteWarning
-        children={
-          <>
+        <NoteWarning>
             <ParagraphSmall translation-key="setup_survey_add_brand_note_warning" 
             $colorName="--warning-dark" 
-            sx={{mb: 1}}
-            className={classes.noteWarning}
+            sx={{"& > span": {fontWeight: 600}, mb: 2}}
             dangerouslySetInnerHTML={{
             __html: t("setup_survey_add_brand_note_warning", {
             number: additionalBrandNeedMore,}),
-          }}>
+            }}>
           </ParagraphSmall>
-          </>}
-        />
+        </NoteWarning>
         )}
       {/* ===================start brand list desktop====================== */}
       <SetupTable className={classes.desktopTable}>
