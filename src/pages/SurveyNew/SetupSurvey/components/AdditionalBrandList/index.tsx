@@ -1,5 +1,5 @@
 import { AddCircle, MoreHoriz, Save as SaveIcon, Edit as EditIcon, DeleteForever as DeleteForeverIcon, MoreVert} from "@mui/icons-material"
-import { Box, Grid, IconButton, ListItemIcon, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
+import { Grid, IconButton, ListItemIcon, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import Button, { BtnType } from "components/common/buttons/Button"
 import ButtonClose from "components/common/buttons/ButtonClose"
 import InputLineTextField from "components/common/inputs/InputLineTextfield"
@@ -24,8 +24,8 @@ import { getAdditionalBrandsRequest } from "redux/reducers/Project/actionTypes"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { AdditionalBrandService } from "services/additional_brand"
 import classes from "./styles.module.scss"
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ProjectHelper from "helpers/project";
+import NoteWarning from "components/common/warnings/NoteWarning";
 
 interface AdditionalBrandListProps {
   project: Project
@@ -204,20 +204,22 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
         translation-key="setup_survey_add_brand_sub_title"
         dangerouslySetInnerHTML={{ __html: t('setup_survey_add_brand_sub_title') }}
       />
-      {additionalBrandNeedMore >= project?.additionalBrands?.length && (<Box mt={2} sx={{display: "flex"}}>
-          <WarningAmberIcon sx={{ color: "var(--warning-dark)", verticalAlign: "middle", display: "inline-flex" }}/>
-          <ParagraphSmall translation-key="setup_survey_add_brand_note_warning" 
-          $colorName="--warning-dark" 
-          sx={{ml: 1, mb: 1}}
-          className={classes.noteWarning}
-          dangerouslySetInnerHTML={{
+      { !!additionalBrandNeedMore && (
+        <NoteWarning
+        children={
+          <>
+            <ParagraphSmall translation-key="setup_survey_add_brand_note_warning" 
+            $colorName="--warning-dark" 
+            sx={{mb: 1}}
+            className={classes.noteWarning}
+            dangerouslySetInnerHTML={{
             __html: t("setup_survey_add_brand_note_warning", {
-              minBrandList: additionalBrandNeedMore,
-            }),
-          }}
-          >
+            number: additionalBrandNeedMore,}),
+          }}>
           </ParagraphSmall>
-      </Box>)}
+          </>}
+        />
+        )}
       {/* ===================start brand list desktop====================== */}
       <SetupTable className={classes.desktopTable}>
         <Table>

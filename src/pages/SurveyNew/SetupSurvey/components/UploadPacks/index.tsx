@@ -19,9 +19,9 @@ import { PackService } from "services/pack"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { getPacksRequest } from "redux/reducers/Project/actionTypes"
 import PopupPack from "pages/SurveyNew/components/PopupPack"
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import classes from "./styles.module.scss";
 import ProjectHelper from "helpers/project";
+import NoteWarning from "components/common/warnings/NoteWarning";
 
 interface UploadPacksProps {
   project: Project
@@ -117,20 +117,22 @@ const UploadPacks = memo(({ project }: UploadPacksProps) => {
       </Heading4>
       <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxPack}</ParagraphSmall>} />
       <ParagraphBody $colorName="--gray-80" mt={1} translation-key="setup_survey_packs_sub_title">{t("setup_survey_packs_sub_title")}</ParagraphBody>
-      {packNeedMore >= project?.packs?.length && (<Box mt={2} sx={{display: "flex"}}>
-        <WarningAmberIcon sx={{ color: "var(--warning-dark)", verticalAlign: "middle", display: "inline-flex" }}/>
-        <ParagraphSmall translation-key="setup_add_packs_note_warning" 
-        $colorName="--warning-dark" 
-        sx={{ml: 1}}
-        className={classes.noteWarning}
-        dangerouslySetInnerHTML={{
-          __html: t("setup_add_packs_note_warning", {
-            minPacksNeedMore: packNeedMore,
-          }),
-        }}
-        >
-        </ParagraphSmall>
-      </Box>)}
+      {packNeedMore >= project?.packs?.length && (
+        <NoteWarning
+        children={
+          <>
+            <ParagraphSmall translation-key="setup_add_packs_note_warning" 
+            $colorName="--warning-dark" 
+            className={classes.noteWarning}
+            dangerouslySetInnerHTML={{
+            __html: t("setup_add_packs_note_warning", {
+            number: packNeedMore,}),
+            }}>
+            </ParagraphSmall>
+          </>
+        }
+        />
+      )}
       {!!project?.packs?.length && (
         <Box mt={{ xs: 3, sm: 2 }} >
           <Grid spacing={2} container>
