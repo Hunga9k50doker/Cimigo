@@ -5,7 +5,11 @@
 .titleSubDisabled {
   color: var(--gray-60) !important;
 }
-
+.note {
+  span{
+    font-weight: 600;
+  }
+}
 .desktopTable {
   margin-top: 24px;
   @media only screen and (max-width: 767px) {

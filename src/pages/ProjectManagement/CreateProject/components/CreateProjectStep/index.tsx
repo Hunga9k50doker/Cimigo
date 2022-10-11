@@ -10,7 +10,7 @@ import classes from "./styles.module.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import InputSelect from "components/common/inputs/InputSelect";
-import { langSupports, OptionItemT } from "models/general";
+import { langSupports, OptionItemT, Lang } from "models/general";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Accordion from "@mui/material/Accordion";
@@ -65,6 +65,7 @@ const CreateProjectStep = memo(
       });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
+
     const {
       register,
       handleSubmit,
@@ -72,7 +73,10 @@ const CreateProjectStep = memo(
       control,
     } = useForm<CreateProjectFormData>({
       resolver: yupResolver(schema),
-      mode: "onChange",
+      mode: "onChange", 
+      defaultValues: { 
+        surveyLanguage: langSupports.find(option => option.key === Lang.VI)
+      },
     });
     const onSubmit = (data: CreateProjectFormData) => {
       if (!solutionSelected) return;
@@ -228,7 +232,7 @@ const CreateProjectStep = memo(
                           __html: t("project_create_tab_create_project_description"),
                         }}
                       ></ParagraphSmall>
-                      <Grid container rowSpacing={2}>  
+                      <Grid container rowSpacing={2} sx={{marginTop: "16px"}}>  
                         <Grid item xs={12}>
                           <InputTextfield
                             className={classes.inputAccordion}
@@ -237,8 +241,6 @@ const CreateProjectStep = memo(
                             inputProps={{maxLength: "50"}}
                             placeholder={t("field_project_category_placeholder")}
                             translation-key-placeholder="field_project_category_placeholder"
-                            title={t("field_project_category")}
-                            translation-key="field_project_category"
                             inputRef={register("category")}
                             errorMessage={errors.category?.message}
                           />
