@@ -6,7 +6,11 @@
   color: var(--gray-60) !important;
 }
 
-
+.warningMinPacks {
+  span {
+    font-weight: 600;
+  }
+}
 .packItem {
   @media only screen and (max-width: 767px) {
     width: 100%;

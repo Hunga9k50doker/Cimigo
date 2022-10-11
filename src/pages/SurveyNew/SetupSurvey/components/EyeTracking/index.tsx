@@ -30,7 +30,7 @@ import { Menu } from "components/common/memu/Menu";
 import PopupPack from "pages/SurveyNew/components/PopupPack";
 import PopupConfirmDelete from "components/PopupConfirmDelete";
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
+
 interface EyeTrackingProps {
   price: TotalPrice;
   project: Project;
@@ -51,7 +51,7 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
 
   const maxEyeTrackingPack = useMemo(() => project?.solution?.maxEyeTrackingPack || 0, [project])
 
-  const minEyeTrackingPack = useMemo(() => ProjectHelper.minEyeTrackingPack(project), [project])
+  const eyeTrackingPackNeedMore = useMemo(() => ProjectHelper.eyeTrackingPackNeedMore(project), [project])
 
   const editable = useMemo(() => editableProject(project), [project])
 
@@ -238,9 +238,20 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
               __html: t("setup_eye_tracking_option_effect_subtitle_content"),
             }}>
           </ParagraphBody>
-          <ParagraphBody mt={2} $colorName="--gray-80" translation-key="setup_eye_tracking_option_effect_subtitle_min_packs">
-            {t("setup_eye_tracking_option_effect_subtitle_min_packs", { minEyeTrackingPack: minEyeTrackingPack })}
-          </ParagraphBody>
+          { eyeTrackingPackNeedMore >= project?.eyeTrackingPacks?.length && (<Box mt={2} sx={{display: "flex"}}>
+                <WarningAmberIcon sx={{ color: "var(--warning-dark)", verticalAlign: "middle", display: "inline-flex" }}/>
+                <ParagraphSmall translation-key="setup_eye_tracking_note_warning_min_packs" 
+                $colorName="--warning-dark" 
+                sx={{ml: 1}}
+                className={classes.warningMinPacks}
+                dangerouslySetInnerHTML={{
+                  __html: t("setup_eye_tracking_note_warning_min_packs", {
+                    minEyeTrackingPack: eyeTrackingPackNeedMore,
+                  }),
+                }}
+                >
+                 </ParagraphSmall>
+          </Box>)}
           {!!project?.eyeTrackingPacks?.length && (
             <Box mt={{ xs: 3, sm: 2 }} >
               <Grid spacing={2} container>
@@ -259,8 +270,8 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
             <Button
               sx={{ mt: 3, width: { xs: "100%", sm: "300px" } }}
               btnType={BtnType.Outlined}
-              translation-key="setup_survey_packs_add"
-              children={<TextBtnSmall>{t('setup_survey_packs_add')}</TextBtnSmall>}
+              translation-key="setup_survey_packs_add_competitor_pack"
+              children={<TextBtnSmall>{t('setup_survey_packs_add_competitor_pack')}</TextBtnSmall>}
               startIcon={<AddAPhoto sx={{ fontSize: "16px !important" }} />}
               onClick={() => setAddNewPack(true)}
             />
