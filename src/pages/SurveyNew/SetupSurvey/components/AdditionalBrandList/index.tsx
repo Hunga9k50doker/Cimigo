@@ -1,4 +1,4 @@
-import { AddCircle, MoreHoriz, Save as SaveIcon, Edit as EditIcon, DeleteForever as DeleteForeverIcon, MoreVert, ClassSharp } from "@mui/icons-material"
+import { AddCircle, MoreHoriz, Save as SaveIcon, Edit as EditIcon, DeleteForever as DeleteForeverIcon, MoreVert} from "@mui/icons-material"
 import { Grid, IconButton, ListItemIcon, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import Button, { BtnType } from "components/common/buttons/Button"
 import ButtonClose from "components/common/buttons/ButtonClose"
@@ -24,6 +24,8 @@ import { getAdditionalBrandsRequest } from "redux/reducers/Project/actionTypes"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { AdditionalBrandService } from "services/additional_brand"
 import classes from "./styles.module.scss"
+import ProjectHelper from "helpers/project";
+import NoteWarning from "components/common/warnings/NoteWarning";
 
 interface AdditionalBrandListProps {
   project: Project
@@ -48,6 +50,8 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
   const editable = useMemo(() => editableProject(project), [project])
 
   const maxAdditionalBrand = useMemo(() => project?.solution?.maxAdditionalBrand || 0, [project])
+
+  const additionalBrandNeedMore = useMemo(() => ProjectHelper.additionalBrandNeedMore(project), [project])
 
   const enableAdditionalBrand = useMemo(() => {
     return maxAdditionalBrand > project?.additionalBrands?.length && editable
@@ -200,6 +204,18 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
         translation-key="setup_survey_add_brand_sub_title"
         dangerouslySetInnerHTML={{ __html: t('setup_survey_add_brand_sub_title') }}
       />
+      { !!additionalBrandNeedMore && (
+        <NoteWarning>
+            <ParagraphSmall translation-key="setup_survey_add_brand_note_warning" 
+            $colorName="--warning-dark" 
+            sx={{"& > span": {fontWeight: 600}, mb: 2}}
+            dangerouslySetInnerHTML={{
+            __html: t("setup_survey_add_brand_note_warning", {
+            number: additionalBrandNeedMore,}),
+            }}>
+          </ParagraphSmall>
+        </NoteWarning>
+        )}
       {/* ===================start brand list desktop====================== */}
       <SetupTable className={classes.desktopTable}>
         <Table>

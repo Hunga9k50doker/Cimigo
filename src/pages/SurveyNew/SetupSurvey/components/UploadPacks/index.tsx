@@ -19,6 +19,8 @@ import { PackService } from "services/pack"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { getPacksRequest } from "redux/reducers/Project/actionTypes"
 import PopupPack from "pages/SurveyNew/components/PopupPack"
+import ProjectHelper from "helpers/project";
+import NoteWarning from "components/common/warnings/NoteWarning";
 
 interface UploadPacksProps {
   project: Project
@@ -38,6 +40,8 @@ const UploadPacks = memo(({ project }: UploadPacksProps) => {
   const maxPack = useMemo(() => project?.solution?.maxPack || 0, [project])
 
   const editable = useMemo(() => editableProject(project), [project])
+
+  const packNeedMore = useMemo(() => ProjectHelper.packNeedMore(project), [project])
 
   const onDeletePack = () => {
     if (!packDelete) return
@@ -112,6 +116,18 @@ const UploadPacks = memo(({ project }: UploadPacksProps) => {
       </Heading4>
       <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxPack}</ParagraphSmall>} />
       <ParagraphBody $colorName="--gray-80" mt={1} translation-key="setup_survey_packs_sub_title">{t("setup_survey_packs_sub_title")}</ParagraphBody>
+      {!!packNeedMore && (
+        <NoteWarning>
+          <ParagraphSmall translation-key="setup_add_packs_note_warning" 
+          $colorName="--warning-dark" 
+          sx={{"& > span": {fontWeight: 600}}}
+          dangerouslySetInnerHTML={{
+          __html: t("setup_add_packs_note_warning", {
+          number: packNeedMore,}),
+          }}>
+          </ParagraphSmall>
+      </NoteWarning>
+      )}
       {!!project?.packs?.length && (
         <Box mt={{ xs: 3, sm: 2 }} >
           <Grid spacing={2} container>
