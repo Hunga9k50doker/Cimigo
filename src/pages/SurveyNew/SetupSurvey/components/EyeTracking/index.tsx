@@ -195,16 +195,18 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
             <Heading5 sx={{ verticalAlign: "middle", display: "inline-flex", ml: 1 }} $colorName="--eerie-black" translation-key="setup_eye_tracking_option_attraction">{t("setup_eye_tracking_option_attraction")}</Heading5>
           </Box>
           <ParagraphBody mt={1} $colorName="--gray-80" translation-key="setup_eye_tracking_option_attraction_subtitle">{t("setup_eye_tracking_option_attraction_subtitle")}</ParagraphBody>
-          {project?.packs?.length === 0 ? (
-            <Box mt={2}>
+          {!project?.packs?.length && (
+            <Box mt={2} sx={{display: "flex"}}>
                 <WarningAmberIcon sx={{ color: "var(--warning-dark)", verticalAlign: "middle", display: "inline-flex" }}/>
                 <ParagraphSmall translation-key="setup_eye_tracking_note_warning_1, setup_eye_tracking_note_warning_2, setup_eye_tracking_note_warning_3" 
                 $colorName="--warning-dark" 
-                sx={{ verticalAlign: "middle", display: "inline-flex", ml: 1 }}>
-                  {t("setup_eye_tracking_note_warning_1")}&nbsp;<ParagraphSmallUnderline2 onClick={onGoAddPacks}>{t("setup_eye_tracking_note_warning_2")}</ParagraphSmallUnderline2>&nbsp;{t("setup_eye_tracking_note_warning_3")}
+                sx={{ml: 1}}
+                >
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <span>{t("setup_eye_tracking_note_warning_1")}{" "}</span><a className="underline" onClick={onGoAddPacks}>{t("setup_eye_tracking_note_warning_2")}</a>{" "}<span>{t("setup_eye_tracking_note_warning_3")}</span>
                  </ParagraphSmall>
             </Box>
-          ): ""}
+          )}
           {!!project?.packs?.length && (
             <Box mt={2}>
               <Grid spacing={2} container>
