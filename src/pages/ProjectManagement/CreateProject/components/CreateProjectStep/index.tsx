@@ -10,7 +10,7 @@ import classes from "./styles.module.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import InputSelect from "components/common/inputs/InputSelect";
-import { langSupports, OptionItemT, Lang } from "models/general";
+import { OptionItemT, Lang, langOptions } from "models/general";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Accordion from "@mui/material/Accordion";
@@ -75,7 +75,7 @@ const CreateProjectStep = memo(
       resolver: yupResolver(schema),
       mode: "onChange", 
       defaultValues: { 
-        surveyLanguage: langSupports.find(option => option.key === Lang.VI)
+        surveyLanguage: langOptions.find(option => option.id === Lang.VI)
       },
     });
     const onSubmit = (data: CreateProjectFormData) => {
@@ -189,8 +189,8 @@ const CreateProjectStep = memo(
                   name="surveyLanguage"
                   control={control}
                   selectProps={{
-                    options: langSupports.map((it) => ({
-                      id: it.key,
+                    options: langOptions.map((it) => ({
+                      id: it.id,
                       name: it.name,
                       img: it.img,
                     })),
