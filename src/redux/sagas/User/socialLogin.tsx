@@ -15,8 +15,8 @@ function* request(data: any) {
     localStorage.setItem(EKey.TOKEN, userLogin.token)
     yield put(setUserLogin(userLogin.user))
     shareLocalStorage()
-    const { solutionId } = yield select((state: ReducerType) => state.project)
-    if (solutionId) {
+    const { createProjectRedirect } = yield select((state: ReducerType) => state.project)
+    if (createProjectRedirect) {
       yield put(push(routes.project.create));
     }
   } catch (e) {
