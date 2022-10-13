@@ -19,6 +19,7 @@ export interface OptionItem<T=number> {
   id: T;
   name: string;
   translation?: string;
+  img?: string;
 }
 
 export interface OptionItemT<T> {
@@ -93,6 +94,19 @@ export const langSupports: LangSupport[] = [
     key: Lang.EN,
     name: 'English',
     img: images.imgLangEn
+  }
+]
+
+export const langOptions: OptionItem<string>[] = [
+  {
+    id: Lang.VI,
+    name: 'Tiếng Việt',
+    img: images.imgLangVi,
+  },
+  {
+    id: Lang.EN,
+    name: 'English',
+    img: images.imgLangEn,
   }
 ]
 

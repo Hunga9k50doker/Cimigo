@@ -44,6 +44,9 @@
         background-color: var(--gray-5);
         box-shadow: 0 0 transparent;
     }
+    [class~="MuiAccordionSummary-content"] {
+        margin-bottom: 8px;
+    }
 }
 .inputAccordion {
     background-color: var(--white);

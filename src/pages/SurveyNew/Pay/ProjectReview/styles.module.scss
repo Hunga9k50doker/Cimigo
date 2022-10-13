@@ -93,11 +93,11 @@
         margin-top: 16px;
       }
       .itemSubLeft {
-        flex: 2;
+        flex: 3;
       }
       .itemSubRight {
         margin-left: 4px;
-        flex: 3;
+        flex: 4;
         > p {
           word-break: normal;
           overflow-wrap: anywhere;
@@ -157,6 +157,8 @@
 
 .colorDanger {
   color: var(--red-error) !important;
+  font-weight: 600;
+  font-size: 14px;
 }
 
 .pointer {
@@ -164,7 +166,8 @@
 }
 
 .smallText {
-  font-weight: 500;
+  color: var(--red-error) !important;
+  font-weight: 600;
   font-size: 14px;
   line-height: 140%;
   letter-spacing: 0.015em;
