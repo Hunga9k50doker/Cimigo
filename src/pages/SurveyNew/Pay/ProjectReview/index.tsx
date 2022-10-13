@@ -276,11 +276,11 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     <ParagraphBody $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !isValidTarget })} onClick={gotoTarget}>
                       {!isValidTarget ? (
                         <>
-                          <Box sx={{ fontWeight: 600 }} component="span" translation-key="payment_billing_sub_tab_preview_solution">
+                          <Box sx={{ fontWeight: 600, fontSize: "14px" }} component="span" translation-key="payment_billing_sub_tab_preview_solution">
                             {t('payment_billing_sub_tab_preview_missing_setup')}:
                           </Box>
                           {inValidTargetMess()?.map((mess, index) => (
-                            <Box component="span" ml={1} key={index}>{mess}</Box>
+                            <Box sx={{ fontWeight: 600, fontSize: "14px" }} component="span" ml={1} key={index}>{mess}</Box>
                           ))}
                         </>
                       ) : (
