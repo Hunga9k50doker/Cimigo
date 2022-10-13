@@ -41,6 +41,10 @@ const UploadPacks = memo(({ project }: UploadPacksProps) => {
 
   const editable = useMemo(() => editableProject(project), [project])
 
+  const enableAddPacks = useMemo(() => {
+    return maxPack > (project?.packs?.length || 0)
+  }, [maxPack, project])
+
   const packNeedMore = useMemo(() => ProjectHelper.packNeedMore(project), [project])
 
   const onDeletePack = () => {
@@ -142,15 +146,17 @@ const UploadPacks = memo(({ project }: UploadPacksProps) => {
           </Grid>
         </Box>
       )}
-      {(maxPack > project?.packs?.length && editable) && (
-        <Button
-          sx={{ mt: 3, width: { xs: "100%", sm: "300px" } }}
-          btnType={BtnType.Outlined}
-          translation-key="setup_survey_packs_add"
-          children={<TextBtnSmall>{t('setup_survey_packs_add')}</TextBtnSmall>}
-          startIcon={<AddAPhoto sx={{ fontSize: "16px !important" }} />}
-          onClick={() => setAddNewPack(true)}
-        />
+      <Button
+        sx={{ mt: 3, width: { xs: "100%", sm: "300px" } }}
+        btnType={BtnType.Outlined}
+        disabled={!enableAddPacks || !editable}
+        translation-key="setup_survey_packs_add"
+        children={<TextBtnSmall>{t('setup_survey_packs_add')}</TextBtnSmall>}
+        startIcon={<AddAPhoto sx={{ fontSize: "16px !important" }} />}
+        onClick={() => setAddNewPack(true)}
+      />
+      {!enableAddPacks && (
+        <ParagraphSmall mt={1} translation-key="setup_survey_add_pack_error_max" $colorName="--red-error">{t('setup_survey_add_pack_error_max', { number: maxPack })}</ParagraphSmall>
       )}
       <Menu
         $minWidth={"120px"}

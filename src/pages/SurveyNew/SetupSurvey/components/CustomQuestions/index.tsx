@@ -503,6 +503,7 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
       {project?.enableCustomQuestion && (
         <>
           {/* ===================start list desktop====================== */}
+          {!!project?.customQuestions?.length && (
           <SetupTable className={classes.desktopTable}>
             <Table>
               <TableHead>
@@ -581,7 +582,7 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
                 </Droppable>
               </DragDropContext>
             </Table>
-          </SetupTable>
+          </SetupTable>)}
           {/* ===================end list desktop====================== */}
           {/* ===================start list mobile====================== */}
           <Grid className={classes.mobileTable}>

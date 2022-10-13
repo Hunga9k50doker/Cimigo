@@ -20,14 +20,14 @@ const PopupConfirmDisableEyeTracking = (props: Props) => {
         classes={{ paper: classes.paper }}
       >
         <DialogTitle className={classes.header}>
-            <p translation-key="" className={classes.title}><Help />{"Turn off eye-tracking?"}</p>
+            <p translation-key="setup_survey_popup_eye_tracking_turn_off_title" className={classes.title}><Help />{t("setup_survey_popup_eye_tracking_turn_off_title")}</p>
             <IconButton onClick={onCancel}>
                 <img src={Images.icClose} alt=''/>
             </IconButton>
         </DialogTitle>
         <DialogContent className={classes.body} dividers>
-            <p translation-key="">{"You have uploaded some other competitor packs. Turn this off will clear all of your competitor packs in this section."}</p>
-            <p translation-key="">{"Do you wish to disable this option?"}</p>
+            <p translation-key="setup_survey_popup_eye_tracking_turn_off_advice">{t("setup_survey_popup_eye_tracking_turn_off_advice")}</p>
+            <p translation-key="setup_survey_popup_eye_tracking_turn_off_question">{t("setup_survey_popup_eye_tracking_turn_off_question")}</p>
         </DialogContent>
         <DialogActions className={classes.btnBox}>
             <Buttons translation-key="common_cancel" children={t("common_cancel")} btnType="Blue" padding='11px 16px' onClick={onCancel} />
