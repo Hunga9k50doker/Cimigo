@@ -337,7 +337,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       sx={{display: "grid"}}
                       $colorName="--eerie-black"
                       translation-key="payment_billing_sub_tab_preview_packs"
-                      className={classes.pointer}
+                      className={clsx({[clsx(classes.pointer)]: !isValidPacks})}
                       onClick={onGotoPacks}
                     >
                       {project?.packs?.length || 0} {t('payment_billing_sub_tab_preview_packs')}
@@ -360,7 +360,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       sx={{display: "grid"}}
                       $colorName="--eerie-black"
                       translation-key="payment_billing_sub_tab_preview_brands"
-                      className={classes.pointer}
+                      className={clsx({[clsx(classes.pointer)]: !isValidAdditionalBrand})}
                       onClick={onGotoBrandList}
                     >
                       {project?.additionalBrands?.length || 0} {t('payment_billing_sub_tab_preview_brands')}
@@ -418,7 +418,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                         sx={{display: "grid"}}
                         $colorName="--eerie-black"
                         translation-key="payment_billing_sub_tab_preview_enable"
-                        className={classes.pointer}
+                        className={clsx({ [clsx(classes.pointer)]: !isValidEyeTracking })}
                         onClick={onGotoEyeTracking}
                       >
                         {t("payment_billing_sub_tab_preview_enable")}
