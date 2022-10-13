@@ -206,7 +206,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                   {t('payment_billing_sub_tab_preview_solution')}
                 </Heading5>
               </Grid>
-              <Grid className={classes.rightItem}>
+              <Grid className={classes.rightItem} sx={{display: "flex", justifyContent: "center"}}>
                 <Box display="flex" alignItems="center">
                   <img className={classes.solutionImg} src={project?.solution.image || Images.icPack} alt="" />
                   <ParagraphBody $colorName="--eerie-black">{project?.solution?.title}</ParagraphBody>
@@ -219,7 +219,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                   {t('payment_billing_sub_tab_preview_expected_delivery')}
                 </Heading5>
               </Grid>
-              <Grid className={classes.rightItem}>
+              <Grid className={classes.rightItem} sx={{display: "flex", justifyContent: "center"}}>
                 <ParagraphBody $colorName="--eerie-black">
                   {getExpectedDelivery()} {t('payment_billing_sub_tab_preview_working_days')}
                 </ParagraphBody>
@@ -233,10 +233,10 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 <Button
                   className={classes.btnGoto}
                   endIcon={<KeyboardArrowRight />}
-                  translation-key="payment_billing_sub_tab_preview_go_to_setup"
+                  translation-key="payment_billing_sub_tab_preview_edit_setup"
                   onClick={gotoTarget}
                 >
-                  {t("payment_billing_sub_tab_preview_go_to_setup")}
+                  {t("payment_billing_sub_tab_preview_edit_setup")}
                 </Button>
               </Box>
               <Box className={classes.itemContent}>
@@ -246,7 +246,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       {t('payment_billing_sub_tab_preview_sample_size')}
                     </ParagraphBody>
                   </Box>
-                  <Box className={classes.itemSubRight}>
+                  <Box className={classes.itemSubRight} sx={{display: "flex", justifyContent: "center"}}>
                     <ParagraphBody $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !isValidSampleSize })}>
                       {project?.sampleSize || t('payment_billing_sub_tab_preview_no_sample_size')}
                     </ParagraphBody>
@@ -259,7 +259,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                         {t('payment_project_review_eye_tracking_sample_size')}
                       </ParagraphBody>
                     </Box>
-                    <Box className={classes.itemSubRight}>
+                    <Box className={classes.itemSubRight} sx={{display: "flex", justifyContent: "center"}}>
                       <ParagraphBody $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !project?.eyeTrackingSampleSize })}>
                         {project?.eyeTrackingSampleSize || t('common_none')}
                       </ParagraphBody>
@@ -272,7 +272,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       {t('payment_billing_sub_tab_preview_target_criteria')}
                     </ParagraphBody>
                   </Box>
-                  <Box className={classes.itemSubRight}>
+                  <Box className={classes.itemSubRight} sx={{display: "flex", justifyContent: "center"}}>
                     <ParagraphBody $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !isValidTarget })} onClick={gotoTarget}>
                       {!isValidTarget ? (
                         <>
@@ -301,17 +301,17 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 <Button
                   className={classes.btnGoto}
                   endIcon={<KeyboardArrowRight />}
-                  translation-key="payment_billing_sub_tab_preview_go_to_setup"
+                  translation-key="payment_billing_sub_tab_preview_edit_setup"
                   onClick={gotoSetupSurvey}
                 >
-                  {t("payment_billing_sub_tab_preview_go_to_setup")}
+                  {t("payment_billing_sub_tab_preview_edit_setup")}
                 </Button>
               </Box>
               <Box className={classes.itemContent}>
                 <Box className={classes.itemSubBox}>
                   <Box className={classes.itemSubLeft}>
-                    <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_billing_sub_tab_preview_basic_information">
-                      {t('payment_billing_sub_tab_preview_basic_information')}
+                    <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_billing_sub_tab_preview_product_category">
+                      {t('payment_billing_sub_tab_preview_product_category')}
                     </ParagraphBody>
                   </Box>
                   <Box className={clsx(classes.itemSubRight, classes.itemSubRightCustom)}>
@@ -319,9 +319,9 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       <span
                         onClick={() => onGotoBasicInfor("category")}
                         className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !project?.category })}
-                        translation-key="payment_billing_sub_tab_preview_none"
+                        translation-key="payment_billing_sub_tab_preview_undefined"
                       >
-                        {project?.category || t('payment_billing_sub_tab_preview_none')}
+                        {project?.category || t('payment_billing_sub_tab_preview_undefined')}
                       </span>
                     </ParagraphBody>
                   </Box>
@@ -333,20 +333,19 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     </ParagraphBody>
                   </Box>
                   <Box className={classes.itemSubRight}>
+                    {!!project?.packs?.length && (
                     <ParagraphBody
                       $colorName="--eerie-black"
                       translation-key="payment_billing_sub_tab_preview_packs"
-                      className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidPacks })}
                       onClick={onGotoPacks}
                     >
-                      {isValidPacks ? (
-                        <>{project?.packs?.length || 0} {t('payment_billing_sub_tab_preview_packs')}</>
-                      ) : (
-                        <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_packs">
+                      {project?.packs?.length || 0} {t('payment_billing_sub_tab_preview_packs')}
+                    </ParagraphBody>)}
+                    {!isValidPacks && (
+                        <span className={clsx(classes.pointer, classes.smallText)} translation-key="payment_billing_sub_tab_preview_more_packs">
                           {t('payment_billing_sub_tab_preview_more_packs', { number: packNeedMore })}
                         </span>
-                      )}
-                    </ParagraphBody>
+                    )}
                   </Box>
                 </Box>
                 <Box className={classes.itemSubBox}>
@@ -356,38 +355,39 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     </ParagraphBody>
                   </Box>
                   <Box className={classes.itemSubRight}>
+                    {!!project?.additionalBrands?.length && (
                     <ParagraphBody
                       $colorName="--eerie-black"
                       translation-key="payment_billing_sub_tab_preview_brands"
-                      className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidAdditionalBrand })}
                       onClick={onGotoBrandList}
                     >
-                      {isValidAdditionalBrand ? (
-                        <>{project?.additionalBrands?.length || 0} {t('payment_billing_sub_tab_preview_brands')}</>
-                      ) : (
+                      {project?.additionalBrands?.length || 0} {t('payment_billing_sub_tab_preview_brands')}
+                    </ParagraphBody>)}
+                    {!isValidAdditionalBrand && (
                         <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_brands">
                           {t('payment_billing_sub_tab_preview_more_brands', { number: additionalBrandNeedMore })}
                         </span>
-                      )}
-                    </ParagraphBody>
+                    )}
                   </Box>
                 </Box>
+                {!!(project?.projectAttributes?.length + project?.userAttributes?.length) && (
                 <Box className={classes.itemSubBox}>
                   <Box className={classes.itemSubLeft}>
-                    <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_billing_sub_tab_preview_additional_attribute">
-                      {t('payment_billing_sub_tab_preview_additional_attribute')}
-                    </ParagraphBody>
+                  <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_billing_sub_tab_preview_additional_attribute">
+                    {t('payment_billing_sub_tab_preview_additional_attribute')}
+                  </ParagraphBody>
                   </Box>
                   <Box className={classes.itemSubRight}>
                     <ParagraphBody
-                      $colorName="--eerie-black"
-                      translation-key="payment_billing_sub_tab_preview_attributes"
+                    $colorName="--eerie-black"
+                    translation-key="payment_billing_sub_tab_preview_attributes"
                     >
                       {(project?.projectAttributes?.length || 0) + (project?.userAttributes?.length || 0)} {t('payment_billing_sub_tab_preview_attributes')}
                     </ParagraphBody>
                   </Box>
                 </Box>
-                {project?.enableCustomQuestion && (
+                )}
+                {!!project?.customQuestions?.length && (
                   <Box className={classes.itemSubBox}>
                     <Box className={classes.itemSubLeft}>
                       <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_billing_sub_tab_preview_custom_question">
@@ -415,17 +415,15 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       <ParagraphBody
                         $colorName="--eerie-black"
                         translation-key="payment_billing_sub_tab_preview_enable"
-                        className={clsx({ [clsx(classes.colorDanger, classes.pointer)]: !isValidEyeTracking })}
                         onClick={onGotoEyeTracking}
                       >
-                        {isValidEyeTracking ? (
-                          t("payment_billing_sub_tab_preview_enable")
-                        ) : (
-                          <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_competitor_packs">
-                            {t("payment_billing_sub_tab_preview_more_competitor_packs", { number: eyeTrackingPackNeedMore })}
-                          </span>
-                        )}
+                        {t("payment_billing_sub_tab_preview_enable")}
                       </ParagraphBody>
+                      {!isValidEyeTracking && (
+                        <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_competitor_packs">
+                          {t("payment_billing_sub_tab_preview_more_competitor_packs", { number: eyeTrackingPackNeedMore })}
+                        </span>
+                      )}
                     </Box>
                   </Box>
                 )}

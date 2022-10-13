@@ -189,11 +189,7 @@ const CreateProjectStep = memo(
                   name="surveyLanguage"
                   control={control}
                   selectProps={{
-                    options: langOptions.map((it) => ({
-                      id: it.id,
-                      name: it.name,
-                      img: it.img,
-                    })),
+                    options: langOptions,
                     placeholder: t("field_survey_language_placeholder"),
                   }}
                   errorMessage={
@@ -232,7 +228,7 @@ const CreateProjectStep = memo(
                           __html: t("project_create_tab_create_project_description"),
                         }}
                       ></ParagraphSmall>
-                      <Grid container rowSpacing={2} sx={{marginTop: "16px"}}>  
+                      <Grid container rowSpacing={2} sx={{marginTop: "0"}}>  
                         <Grid item xs={12}>
                           <InputTextfield
                             className={classes.inputAccordion}
