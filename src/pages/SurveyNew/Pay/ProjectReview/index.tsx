@@ -334,13 +334,13 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                   </Box>
                   <Box className={classes.itemSubRight}>
                     <ParagraphBody
-                      sx={{display: "grid"}}
                       $colorName="--eerie-black"
                       translation-key="payment_billing_sub_tab_preview_packs"
-                      className={clsx({[clsx(classes.pointer)]: !isValidPacks})}
+                      className={clsx({[classes.pointer]: !isValidPacks})}
                       onClick={onGotoPacks}
                     >
                       {project?.packs?.length || 0} {t('payment_billing_sub_tab_preview_packs')}
+                      <br/>
                       {!isValidPacks && (
                         <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_packs">
                           {t('payment_billing_sub_tab_preview_more_packs', { number: packNeedMore })}
@@ -357,13 +357,13 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                   </Box>
                   <Box className={classes.itemSubRight}>
                     <ParagraphBody
-                      sx={{display: "grid"}}
                       $colorName="--eerie-black"
                       translation-key="payment_billing_sub_tab_preview_brands"
-                      className={clsx({[clsx(classes.pointer)]: !isValidAdditionalBrand})}
+                      className={clsx({[classes.pointer]: !isValidAdditionalBrand})}
                       onClick={onGotoBrandList}
                     >
                       {project?.additionalBrands?.length || 0} {t('payment_billing_sub_tab_preview_brands')}
+                      <br/>
                       {!isValidAdditionalBrand && (
                         <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_brands">
                           {t('payment_billing_sub_tab_preview_more_brands', { number: additionalBrandNeedMore })}
@@ -415,13 +415,13 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     </Box>
                     <Box className={classes.itemSubRight}>
                       <ParagraphBody
-                        sx={{display: "grid"}}
                         $colorName="--eerie-black"
                         translation-key="payment_billing_sub_tab_preview_enable"
-                        className={clsx({ [clsx(classes.pointer)]: !isValidEyeTracking })}
+                        className={clsx({ [classes.pointer]: !isValidEyeTracking })}
                         onClick={onGotoEyeTracking}
                       >
                         {t("payment_billing_sub_tab_preview_enable")}
+                        <br/>
                         {!isValidEyeTracking && (
                         <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_competitor_packs">
                           {t("payment_billing_sub_tab_preview_more_competitor_packs", { number: eyeTrackingPackNeedMore })}
