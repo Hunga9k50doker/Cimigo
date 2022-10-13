@@ -47,6 +47,11 @@ const defaultTheme = createTheme({
           }
         }
       }
+    },
+    MuiTooltip: {
+      defaultProps: {
+        enterTouchDelay: 0
+      }
     }
   }
 });

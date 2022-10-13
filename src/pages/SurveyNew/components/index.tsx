@@ -32,6 +32,7 @@ export const PageTitle = styled(Grid)`
   justify-content: space-between;
   border-bottom: 1px solid var(--gray-10);
   @media only screen and (max-width: 767px) {
+    display: none;
     height: auto;
     flex-direction: column;
     align-items: stretch;

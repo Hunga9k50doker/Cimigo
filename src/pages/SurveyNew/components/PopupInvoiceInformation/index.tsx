@@ -254,8 +254,8 @@ const PopupInvoiceInformation = memo((props: Props) => {
               translation-key="payment_billing_sub_tab_payment_save_for_later"
               label={<>{t('payment_billing_sub_tab_payment_save_for_later')}</>}
             />
-            <TooltipCustom popperClass={classes.popperClass} placement="right" title={t('payment_billing_sub_tab_payment_save_for_later_tip')} translation-key="payment_billing_sub_tab_payment_save_for_later_tip">
-              <InfoOutlined sx={{ fontSize: 16, color: "var(--eerie-black-40)" }} />
+            <TooltipCustom popperClass={classes.popperClass} title={t('payment_billing_sub_tab_payment_save_for_later_tip')} translation-key="payment_billing_sub_tab_payment_save_for_later_tip">
+              <InfoOutlined sx={{ ml: 0.5, fontSize: 16, color: "var(--eerie-black-40)" }} />
             </TooltipCustom>
           </Grid>
         </DialogContent>
