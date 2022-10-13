@@ -31,7 +31,7 @@ const PopupConfirmDisableEyeTracking = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.btnBox}>
             <Buttons translation-key="common_cancel" children={t("common_cancel")} btnType="Blue" padding='11px 16px' onClick={onCancel} />
-            <Buttons translation-key="" children={"Yes, turn it off"} btnType="Blue" padding='11px 16px' onClick={onYes}/>
+            <Buttons translation-key="setup_survey_popup_eye_tracking_turn_off_yes" children={t("setup_survey_popup_eye_tracking_turn_off_yes")} btnType="Blue" padding='11px 16px' onClick={onYes}/>
         </DialogActions>
       </Dialog>
     )

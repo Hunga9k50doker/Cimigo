@@ -279,9 +279,9 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                           <Box sx={{ fontWeight: 600, fontSize: "14px" }} component="span" translation-key="payment_billing_sub_tab_preview_solution">
                             {t('payment_billing_sub_tab_preview_missing_setup')}:
                           </Box>
-                          {inValidTargetMess()?.map((mess, index) => (
-                            <Box sx={{ fontWeight: 600, fontSize: "14px" }} component="span" ml={1} key={index}>{mess}</Box>
-                          ))}
+                          <Box sx={{ fontWeight: 600, fontSize: "14px", textTransform: "lowercase" }} component="span" ml={1}>
+                            {inValidTargetMess()?.join(', ')}
+                          </Box>
                         </>
                       ) : (
                         <ParagraphSmallUnderline2 variant="body2" variantMapping={{ body2: "span" }}>{t('payment_billing_sub_tab_preview_view_detail')}</ParagraphSmallUnderline2>
