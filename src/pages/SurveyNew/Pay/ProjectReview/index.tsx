@@ -333,19 +333,20 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     </ParagraphBody>
                   </Box>
                   <Box className={classes.itemSubRight}>
-                    {!!project?.packs?.length && (
                     <ParagraphBody
+                      sx={{display: "grid"}}
                       $colorName="--eerie-black"
                       translation-key="payment_billing_sub_tab_preview_packs"
+                      className={classes.pointer}
                       onClick={onGotoPacks}
                     >
                       {project?.packs?.length || 0} {t('payment_billing_sub_tab_preview_packs')}
-                    </ParagraphBody>)}
-                    {!isValidPacks && (
-                        <span className={clsx(classes.pointer, classes.smallText)} translation-key="payment_billing_sub_tab_preview_more_packs">
+                      {!isValidPacks && (
+                        <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_packs">
                           {t('payment_billing_sub_tab_preview_more_packs', { number: packNeedMore })}
                         </span>
-                    )}
+                      )}
+                    </ParagraphBody>
                   </Box>
                 </Box>
                 <Box className={classes.itemSubBox}>
@@ -355,22 +356,23 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     </ParagraphBody>
                   </Box>
                   <Box className={classes.itemSubRight}>
-                    {!!project?.additionalBrands?.length && (
                     <ParagraphBody
+                      sx={{display: "grid"}}
                       $colorName="--eerie-black"
                       translation-key="payment_billing_sub_tab_preview_brands"
+                      className={classes.pointer}
                       onClick={onGotoBrandList}
                     >
                       {project?.additionalBrands?.length || 0} {t('payment_billing_sub_tab_preview_brands')}
-                    </ParagraphBody>)}
-                    {!isValidAdditionalBrand && (
+                      {!isValidAdditionalBrand && (
                         <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_brands">
                           {t('payment_billing_sub_tab_preview_more_brands', { number: additionalBrandNeedMore })}
                         </span>
-                    )}
+                      )}
+                    </ParagraphBody>
                   </Box>
                 </Box>
-                {!!(project?.projectAttributes?.length + project?.userAttributes?.length) && (
+                {(!!project?.projectAttributes?.length || !!project?.userAttributes?.length) && (
                 <Box className={classes.itemSubBox}>
                   <Box className={classes.itemSubLeft}>
                   <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_billing_sub_tab_preview_additional_attribute">
@@ -413,17 +415,19 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                     </Box>
                     <Box className={classes.itemSubRight}>
                       <ParagraphBody
+                        sx={{display: "grid"}}
                         $colorName="--eerie-black"
                         translation-key="payment_billing_sub_tab_preview_enable"
+                        className={classes.pointer}
                         onClick={onGotoEyeTracking}
                       >
                         {t("payment_billing_sub_tab_preview_enable")}
-                      </ParagraphBody>
-                      {!isValidEyeTracking && (
+                        {!isValidEyeTracking && (
                         <span className={classes.smallText} translation-key="payment_billing_sub_tab_preview_more_competitor_packs">
                           {t("payment_billing_sub_tab_preview_more_competitor_packs", { number: eyeTrackingPackNeedMore })}
                         </span>
-                      )}
+                        )}
+                      </ParagraphBody>
                     </Box>
                   </Box>
                 )}
