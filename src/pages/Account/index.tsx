@@ -11,11 +11,12 @@ import ChangePassword from './ChangePassword';
 import PaymentInfo from './PaymentInfo';
 import { useTranslation } from 'react-i18next';
 import BasicLayout from 'layout/BasicLayout';
-
+import { Helmet } from 'react-helmet';
 interface Props {
 
 }
 
+// eslint-disable-next-line no-empty-pattern
 const AccountPage = memo(({}: Props) => {
   const { t, i18n } = useTranslation();
   const { logout } = UseAuth();
@@ -89,6 +90,9 @@ const AccountPage = memo(({}: Props) => {
       className={classes.root}
       HeaderProps={{ project: true }}
     >
+      <Helmet>
+        <title translation-key="common_name_page, auth_page_my_account">{t("common_name_page", {page: t("auth_page_my_account")})}</title>
+      </Helmet>
       <Grid className={classes.main}>
         <div className={classes.menuList}>
           {links}

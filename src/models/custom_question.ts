@@ -229,6 +229,6 @@ export enum FaceType {
 }
 
 export const emojiFaces: OptionItem[] = [
-  { id: FaceType.FIVE, name: "5 faces" },
-  { id: FaceType.THREE, name: "3 faces" },
+  { id: FaceType.FIVE, name: "5 faces", translation: "setup_survey_popup_smiley_rating_five_faces"},
+  { id: FaceType.THREE, name: "3 faces", translation: "setup_survey_popup_smiley_rating_three_faces"},
 ]

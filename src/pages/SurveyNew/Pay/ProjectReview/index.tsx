@@ -246,7 +246,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       {t('payment_billing_sub_tab_preview_sample_size')}
                     </ParagraphBody>
                   </Box>
-                  <Box className={classes.itemSubRight} sx={{display: "flex", justifyContent: "center"}}>
+                  <Box className={classes.itemSubRight}>
                     <ParagraphBody $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !isValidSampleSize })}>
                       {project?.sampleSize || t('payment_billing_sub_tab_preview_no_sample_size')}
                     </ParagraphBody>
@@ -259,7 +259,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                         {t('payment_project_review_eye_tracking_sample_size')}
                       </ParagraphBody>
                     </Box>
-                    <Box className={classes.itemSubRight} sx={{display: "flex", justifyContent: "center"}}>
+                    <Box className={classes.itemSubRight}>
                       <ParagraphBody $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !project?.eyeTrackingSampleSize })}>
                         {project?.eyeTrackingSampleSize || t('common_none')}
                       </ParagraphBody>
@@ -272,16 +272,16 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                       {t('payment_billing_sub_tab_preview_target_criteria')}
                     </ParagraphBody>
                   </Box>
-                  <Box className={classes.itemSubRight} sx={{display: "flex", justifyContent: "center"}}>
+                  <Box className={classes.itemSubRight}>
                     <ParagraphBody $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !isValidTarget })} onClick={gotoTarget}>
                       {!isValidTarget ? (
                         <>
-                          <Box sx={{ fontWeight: 600 }} component="span" translation-key="payment_billing_sub_tab_preview_solution">
+                          <Box sx={{ fontWeight: 600, fontSize: "14px" }} component="span" translation-key="payment_billing_sub_tab_preview_solution">
                             {t('payment_billing_sub_tab_preview_missing_setup')}:
                           </Box>
-                          {inValidTargetMess()?.map((mess, index) => (
-                            <Box component="span" ml={1} key={index}>{mess}</Box>
-                          ))}
+                          <Box sx={{ fontWeight: 600, fontSize: "14px", textTransform: "lowercase" }} component="span" ml={1}>
+                            {inValidTargetMess()?.join(', ')}
+                          </Box>
                         </>
                       ) : (
                         <ParagraphSmallUnderline2 variant="body2" variantMapping={{ body2: "span" }}>{t('payment_billing_sub_tab_preview_view_detail')}</ParagraphSmallUnderline2>

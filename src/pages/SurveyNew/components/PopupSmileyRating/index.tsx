@@ -307,6 +307,7 @@ const PopupSmileyRating = (props: Props) => {
                 <Heading5 translation-key="setup_survey_popup_smiley_rating_scale">{t("setup_survey_popup_smiley_rating_scale")}</Heading5>
                 <InputSelect
                   className={classes.selectBox}
+                  bindLabel="translation"
                   selectProps={{
                     options: emojiFaces,
                     value: smileyScale,
