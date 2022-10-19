@@ -1,0 +1,28 @@
+.root {
+    display: flex;
+    justify-content: center;
+    padding-top: 57px;
+    padding-bottom: 188px;
+}
+.main {
+    max-width: 1002px;
+}
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    gap: 537px;
+    margin-bottom: 20px;
+}
+.tableHeader {
+    [class ~= MuiTableCell-root] {
+        background: var(--eerie-black-5) !important;
+    }
+}
+.titleTable {
+    display: flex;
+    p {
+        color: var(--gray-90) !important;
+    }
+}

@@ -21,6 +21,7 @@ import InvalidResetPassword from 'pages/Authentication/InvalidResetPassword';
 import CallbackForgotPassword from 'pages/Callback/User/ForgotPassword';
 import HomePage from 'pages/Home';
 import AccountPage from 'pages/Account';
+import PaymentHistory from 'pages/PaymentHistory';
 import OnePayCallback from 'pages/Callback/Project/OnePay';
 import OnePayAgainLinkCallback from 'pages/Callback/Project/OnePayAgainLink';
 
@@ -44,6 +45,7 @@ const Routers = () => {
         <PrivateRoute exact path={routes.callback.project.onePayAgainLink} component={OnePayAgainLinkCallback}/>
         <PrivateRoute exact path={routes.callback.project.invoice} component={CallbackInvoice}/>
         <PrivateRoute path={routes.account.root} component={AccountPage}/>
+        <PrivateRoute path={routes.paymentHistory} component={PaymentHistory}/>
         <PrivateRoute exact path={routes.project.management} component={ProjectManagement}/>
         <PrivateRoute exact path={routes.project.create} component={CreateProject}/>
         <PrivateRoute path={routes.project.detail.root} component={Survey}/>

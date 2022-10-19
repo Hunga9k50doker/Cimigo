@@ -50,6 +50,7 @@ export const routes = {
     changePassword: '/account/change-password',
     paymentInfo: '/account/payment-info',
   },
+  paymentHistory: '/payment-history',
   admin: {
     root: '/admin',
     solution: {
