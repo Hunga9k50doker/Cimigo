@@ -43,6 +43,7 @@ const EditAnswerSuggestion = memo((props: Props) => {
     dispatch(setLoading(true))
     const form: UpdateAnswerSuggestionParams = {
       name: data.name,
+      order: data.order,
       questionId: Number(questionId),
       answerIds: data.answerIds?.map(it => it.id) || [],
       groupIds: data.groupIds?.map(it => it.id) || [],
