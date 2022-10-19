@@ -12,17 +12,26 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
-    gap: 537px;
+    gap: 571px;
     margin-bottom: 20px;
 }
 .tableHeader {
     [class ~= MuiTableCell-root] {
         background: var(--eerie-black-5) !important;
     }
-}
-.titleTable {
-    display: flex;
-    p {
-        color: var(--gray-90) !important;
+    .tableLabel {
+    [class ~= MuiTypography-root] {
+            color: var(--gray-90) !important;
+        }
     }
+}
+
+.nameProject {
+    word-break: break-word;
+    color: var(--cimigo-blue) !important;
+}
+
+.cellText {
+    word-break: break-word;
+    color: var(--eerie-black) !important;
 }

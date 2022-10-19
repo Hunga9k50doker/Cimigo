@@ -1,5 +1,5 @@
 import classes from './styles.module.scss';
-import { Box, Grid, Table, TableHead, TableRow, TableCell, TableBody, TableSortLabel, TablePagination } from "@mui/material";
+import { Box, Grid, Table, TableHead, TableRow, TableCell, TableBody, TableSortLabel, TablePagination, IconButton } from "@mui/material";
 import { SetupTable } from "components/common/table/SetupTable"
 import useDebounce from "hooks/useDebounce";
 import { useState, useEffect, memo, useMemo } from 'react';
@@ -179,9 +179,9 @@ const PaymentHistory = memo(({}: Props) => {
                                             onChangeSort(SortedField.name);
                                         }}
                                         IconComponent={ArrowDropdownIcon}
+                                        className={classes.tableLabel}
                                         >
-                                        <Heading5
-                                            sx={{color: "var(--gray-90) !important"}}
+                                        <Heading5                                           
                                             translation-key=""
                                         >
                                            Project name
@@ -196,16 +196,16 @@ const PaymentHistory = memo(({}: Props) => {
                                             onChangeSort(SortedField.invoiceNo);
                                         }}
                                         IconComponent={ArrowDropdownIcon}
+                                        className={classes.tableLabel}
                                         >
                                         <Heading5
-                                            sx={{color: "var(--gray-90) !important"}}
                                             translation-key=""
                                         >
                                            Invoice no
                                         </Heading5>
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell sx={{padding: "18px 25px !important"}}>
                                     <TableSortLabel
                                         active={sort?.sortedField === SortedField.invoiceDate}
                                         direction={sort?.isDescending ? "desc" : "asc"}
@@ -213,9 +213,9 @@ const PaymentHistory = memo(({}: Props) => {
                                             onChangeSort(SortedField.invoiceDate);
                                         }}
                                         IconComponent={ArrowDropdownIcon}
+                                        className={classes.tableLabel}
                                         >
                                         <Heading5
-                                            sx={{color: "var(--gray-90) !important"}}
                                             translation-key=""
                                         >
                                             Date
@@ -230,21 +230,21 @@ const PaymentHistory = memo(({}: Props) => {
                                                 onChangeSort(SortedField.amount);
                                             }}
                                             IconComponent={ArrowDropdownIcon}
+                                            className={classes.tableLabel}
                                             >
                                             <Heading5
-                                                sx={{color: "var(--gray-90) !important"}}
                                                 translation-key=""
                                             >
                                                 Amount
                                             </Heading5>
                                     </TableSortLabel>
                                     </TableCell>
-                                <TableCell sx={{textAlign: 'center'}}>
+                                <TableCell sx={{textAlign: 'center'}} className={classes.tableLabel}>
                                     <Heading5 translation-key="payment_history_table_status">
                                         Status
                                     </Heading5>
                                 </TableCell>
-                                <TableCell sx={{textAlign: 'center'}}>
+                                <TableCell sx={{textAlign: 'center'}} className={classes.tableLabel}>
                                     <Heading5 translation-key="payment_history_table_download_invoice">
                                         Download invoice
                                     </Heading5>
@@ -256,22 +256,22 @@ const PaymentHistory = memo(({}: Props) => {
                                 data?.data?.map((item) => (
                                 <TableRow key={item.id}>
                                     <TableCell>
-                                        <ParagraphBodyUnderline sx={{color: "var(--cimigo-blue) !important"}}>
+                                        <ParagraphBodyUnderline className={classes.nameProject}>
                                             {item.name}
                                         </ParagraphBodyUnderline>
                                     </TableCell>
                                     <TableCell>
-                                        <ParagraphBody sx={{color: "var(--eerie-black) !important"}}>
+                                        <ParagraphBody className={classes.cellText}>
                                             {!!item.payments?.length && item.payments[0].orderId}
                                         </ParagraphBody>
                                     </TableCell>
                                     <TableCell>
-                                        <ParagraphBody sx={{color: "var(--eerie-black) !important"}}>
-                                        {!!item.payments?.length && moment(item.payments[0].invoiceDate).format("DD-MM-yyyy")}
+                                        <ParagraphBody className={classes.cellText}>
+                                        20-12-2022
                                         </ParagraphBody>
                                     </TableCell>
                                     <TableCell>
-                                        <ParagraphBody sx={{color: "var(--eerie-black) !important"}}>
+                                        <ParagraphBody className={classes.cellText}>
                                         {!!item.payments?.length && (
                                             <>{'$'}{fCurrency2(item.payments[0].totalAmountUSD || 0)}</>
                                         )}  
@@ -280,10 +280,10 @@ const PaymentHistory = memo(({}: Props) => {
                                     <TableCell sx={{textAlign: "center"}}>
                                         <CheckCircleIcon sx={{color: "var(--cimigo-green)"}}/>    
                                     </TableCell>
-                                    <TableCell>
-                                        <Grid sx={{width: "24px", margin: "auto", cursor: "pointer"}} onClick={getInvoice}>
-                                            <DownloadIcon sx={{fontSize: "28px", color: "var(--cimigo-blue)"}}/>  
-                                        </Grid>
+                                    <TableCell  sx={{textAlign: "center"}}>
+                                        <IconButton onClick={getInvoice}>
+                                            <DownloadIcon sx={{fontSize: "28px", color: "var(--cimigo-blue)"}}/> 
+                                        </IconButton>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -297,7 +297,7 @@ const PaymentHistory = memo(({}: Props) => {
                                   </Box>
                                 </TableCell>
                               </TableRow>
-                            )}
+                            )} 
                         </TableBody>
                     </Table>
                     <TablePagination
