@@ -24,15 +24,14 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import DownloadIcon from '@mui/icons-material/Download';
 import clsx from "clsx";
+import { push } from 'connected-react-router';
+import { routes } from 'routers/routes';
 
   const ArrowDropdownIcon = (props) => {
     return <ArrowDropDownIcon {...props} sx={{ color: "var(--eerie-black-40)", fontSize: "20px !important" }}/>;
   }
 enum SortedField {
     name = "name",
-    orderId = "orderId",
-    completedDate = "completedDate",
-    amount = "amount",
   }
   
 interface Props {
@@ -44,10 +43,7 @@ const PaymentHistory = memo(({}: Props) => {
   const { t, i18n } = useTranslation();
 
   const dispatch = useDispatch();
-  const [sort, setSort] = useState<SortItem>({
-        sortedField: SortedField.completedDate,
-        isDescending: true,
-  });
+  const [sort, setSort] = useState<SortItem>();
   const [data, setData] = useState<DataPagination<Project>>();
   const [keyword, setKeyword] = useState<string>("");
   const { project } = useSelector((state: ReducerType) => state.project)
@@ -143,6 +139,10 @@ const PaymentHistory = memo(({}: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
+  const onClickProjectName = (id: number) => {
+    dispatch(push(routes.project.detail.root.replace(":id", `${id}`)));
+  };
+  
   useEffect(() => {
     if (inValidPage()) {
       handleChangePage(null, data.meta.page - 2)
@@ -189,56 +189,20 @@ const PaymentHistory = memo(({}: Props) => {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={{textAlign: 'center'}}>
-                                    <TableSortLabel
-                                        active={sort?.sortedField === SortedField.orderId}
-                                        direction={sort?.isDescending ? "desc" : "asc"}
-                                        onClick={() => {
-                                            onChangeSort(SortedField.orderId);
-                                        }}
-                                        IconComponent={ArrowDropdownIcon}
-                                        className={classes.tableLabel}
-                                        >
-                                        <Heading5
-                                            translation-key=""
-                                        >
-                                           Invoice no
-                                        </Heading5>
-                                    </TableSortLabel>
+                                  <Heading5 translation-key="">
+                                      Invoice no
+                                  </Heading5>
                                 </TableCell>
                                 <TableCell sx={{textAlign: "center"}}>
-                                    <TableSortLabel
-                                        active={sort?.sortedField === SortedField.completedDate}
-                                        direction={sort?.isDescending ? "desc" : "asc"}
-                                        onClick={() => {
-                                            onChangeSort(SortedField.completedDate);
-                                        }}
-                                        IconComponent={ArrowDropdownIcon}
-                                        className={classes.tableLabel}                      
-                                        >
-                                        <Heading5
-                                            translation-key=""
-                                        >
+                                  <Heading5 translation-key="">
                                             Date
-                                        </Heading5>
-                                    </TableSortLabel>
+                                  </Heading5>
                                 </TableCell>
                                 <TableCell sx={{textAlign: 'center'}}>
-                                    <TableSortLabel
-                                            active={sort?.sortedField === SortedField.amount}
-                                            direction={sort?.isDescending ? "desc" : "asc"}
-                                            onClick={() => {
-                                                onChangeSort(SortedField.amount);
-                                            }}
-                                            IconComponent={ArrowDropdownIcon}
-                                            className={classes.tableLabel}
-                                            >
-                                            <Heading5
-                                                translation-key=""
-                                            >
-                                                Amount
-                                            </Heading5>
-                                    </TableSortLabel>
-                                    </TableCell>
+                                    <Heading5 translation-key="">
+                                        Amount
+                                    </Heading5>
+                                  </TableCell>
                                 <TableCell sx={{textAlign: 'center'}} className={classes.tableLabel}>
                                     <Heading5 translation-key="payment_history_table_status">
                                         Status
@@ -256,7 +220,7 @@ const PaymentHistory = memo(({}: Props) => {
                                 data?.data?.map((item) => ( 
                                 <TableRow key={item.id}>
                                     <TableCell>
-                                        <ParagraphBodyUnderline className={classes.nameProject}>
+                                        <ParagraphBodyUnderline className={classes.nameProject} onClick={() => onClickProjectName(item.id)}>
                                             {item.name}
                                         </ParagraphBodyUnderline>
                                     </TableCell>

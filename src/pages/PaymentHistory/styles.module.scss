@@ -19,10 +19,8 @@
     [class ~= MuiTableCell-root] {
         background: var(--eerie-black-5) !important;
     }
-    .tableLabel {
     [class ~= MuiTypography-root] {
             color: var(--gray-90) !important;
-        }
     }
 }
 
