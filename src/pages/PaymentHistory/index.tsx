@@ -33,7 +33,6 @@ import { routes } from 'routers/routes';
 enum SortedField {
     name = "name",
   }
-  
 interface Props {
 
 }
