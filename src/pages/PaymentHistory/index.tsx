@@ -24,6 +24,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import DownloadIcon from '@mui/icons-material/Download';
 import { fCurrency2 } from 'utils/formatNumber';
+import clsx from "clsx";
 
   const ArrowDropdownIcon = (props) => {
     return <ArrowDropDownIcon {...props} sx={{ color: "var(--eerie-black-40)", fontSize: "20px !important" }}/>;
@@ -188,7 +189,7 @@ const PaymentHistory = memo(({}: Props) => {
                                         </Heading5>
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell sx={{textAlign: 'center'}}>
                                     <TableSortLabel
                                         active={sort?.sortedField === SortedField.invoiceNo}
                                         direction={sort?.isDescending ? "desc" : "asc"}
@@ -205,7 +206,7 @@ const PaymentHistory = memo(({}: Props) => {
                                         </Heading5>
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell sx={{padding: "18px 25px !important"}}>
+                                <TableCell sx={{textAlign: "center"}}>
                                     <TableSortLabel
                                         active={sort?.sortedField === SortedField.invoiceDate}
                                         direction={sort?.isDescending ? "desc" : "asc"}
@@ -213,7 +214,7 @@ const PaymentHistory = memo(({}: Props) => {
                                             onChangeSort(SortedField.invoiceDate);
                                         }}
                                         IconComponent={ArrowDropdownIcon}
-                                        className={classes.tableLabel}
+                                        className={classes.tableLabel}                      
                                         >
                                         <Heading5
                                             translation-key=""
@@ -222,7 +223,7 @@ const PaymentHistory = memo(({}: Props) => {
                                         </Heading5>
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell sx={{textAlign: 'center'}}>
                                     <TableSortLabel
                                             active={sort?.sortedField === SortedField.amount}
                                             direction={sort?.isDescending ? "desc" : "asc"}
@@ -252,16 +253,16 @@ const PaymentHistory = memo(({}: Props) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data?.data?.length ? (
-                                data?.data?.map((item) => (
+                             {data?.data?.length ? (
+                                data?.data?.map((item) => ( 
                                 <TableRow key={item.id}>
                                     <TableCell>
                                         <ParagraphBodyUnderline className={classes.nameProject}>
                                             {item.name}
                                         </ParagraphBodyUnderline>
                                     </TableCell>
-                                    <TableCell>
-                                        <ParagraphBody className={classes.cellText}>
+                                    <TableCell sx={{textAlign: 'center'}}>
+                                        <ParagraphBody className={clsx(classes.cellText, classes.alignText)}>
                                             {!!item.payments?.length && item.payments[0].orderId}
                                         </ParagraphBody>
                                     </TableCell>
@@ -270,8 +271,8 @@ const PaymentHistory = memo(({}: Props) => {
                                         20-12-2022
                                         </ParagraphBody>
                                     </TableCell>
-                                    <TableCell>
-                                        <ParagraphBody className={classes.cellText}>
+                                    <TableCell sx={{textAlign: 'center'}}>
+                                        <ParagraphBody className={clsx(classes.cellText, classes.alignText)}>
                                         {!!item.payments?.length && (
                                             <>{'$'}{fCurrency2(item.payments[0].totalAmountUSD || 0)}</>
                                         )}  
