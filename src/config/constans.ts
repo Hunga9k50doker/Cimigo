@@ -46,6 +46,7 @@ export const API = {
     UPDATE_ENABLE_EYE_TRACKING: "/v1.0/project/:id/update-enable-eye-tracking",
     SEND_EMAIL_HOW_TO_SETUP_SURVEY: "/v1.0/project/:id/send-email-how-to-setup-survey",
     UPDATE_AGREE_QUOTA: '/v1.0/project/:id/update-agree-quota',
+    INVOICES: '/v1.0/project/payment-history',
     QUOTA: {
       DEFAULT: '/v1.0/project/:id/quota',
     }

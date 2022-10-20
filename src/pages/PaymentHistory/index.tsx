@@ -5,7 +5,7 @@ import useDebounce from "hooks/useDebounce";
 import { useState, useEffect, memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SearchNotFound from "components/SearchNotFound";
-import { GetMyProjects, Project} from "models/project";
+import { GetMyInvoices, Project} from "models/project";
 import { ProjectService } from "services/project";
 import { useDispatch, useSelector } from "react-redux";
 import {DataPagination, SortItem} from "models/general";
@@ -23,7 +23,6 @@ import InputSearch from "components/InputSearch";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import DownloadIcon from '@mui/icons-material/Download';
-import { fCurrency2 } from 'utils/formatNumber';
 import clsx from "clsx";
 
   const ArrowDropdownIcon = (props) => {
@@ -31,9 +30,9 @@ import clsx from "clsx";
   }
 enum SortedField {
     name = "name",
-    invoiceNo = "invoiceNo",
+    orderId = "orderId",
+    completedDate = "completedDate",
     amount = "amount",
-    invoiceDate = "invoiceDate",
   }
   
 interface Props {
@@ -46,7 +45,7 @@ const PaymentHistory = memo(({}: Props) => {
 
   const dispatch = useDispatch();
   const [sort, setSort] = useState<SortItem>({
-        sortedField: SortedField.invoiceDate,
+        sortedField: SortedField.completedDate,
         isDescending: true,
   });
   const [data, setData] = useState<DataPagination<Project>>();
@@ -70,7 +69,7 @@ const PaymentHistory = memo(({}: Props) => {
     take?: number;
     page?: number;
   }) => {
-    const params: GetMyProjects = {
+    const params: GetMyInvoices = {
       take: value?.take || data?.meta?.take || 99999,
       page: value?.page || data?.meta?.page || 1,
       keyword: keyword || undefined,
@@ -85,7 +84,7 @@ const PaymentHistory = memo(({}: Props) => {
       params.isDescending = value?.sort?.isDescending;
     }
     dispatch(setLoading(true));
-    await ProjectService.getMyProjects(params)
+    await ProjectService.getMyInvoices(params)
       .then((res) => {
         setData({ data: res.data, meta: res.meta });
       })
@@ -191,10 +190,10 @@ const PaymentHistory = memo(({}: Props) => {
                                 </TableCell>
                                 <TableCell sx={{textAlign: 'center'}}>
                                     <TableSortLabel
-                                        active={sort?.sortedField === SortedField.invoiceNo}
+                                        active={sort?.sortedField === SortedField.orderId}
                                         direction={sort?.isDescending ? "desc" : "asc"}
                                         onClick={() => {
-                                            onChangeSort(SortedField.invoiceNo);
+                                            onChangeSort(SortedField.orderId);
                                         }}
                                         IconComponent={ArrowDropdownIcon}
                                         className={classes.tableLabel}
@@ -208,10 +207,10 @@ const PaymentHistory = memo(({}: Props) => {
                                 </TableCell>
                                 <TableCell sx={{textAlign: "center"}}>
                                     <TableSortLabel
-                                        active={sort?.sortedField === SortedField.invoiceDate}
+                                        active={sort?.sortedField === SortedField.completedDate}
                                         direction={sort?.isDescending ? "desc" : "asc"}
                                         onClick={() => {
-                                            onChangeSort(SortedField.invoiceDate);
+                                            onChangeSort(SortedField.completedDate);
                                         }}
                                         IconComponent={ArrowDropdownIcon}
                                         className={classes.tableLabel}                      
@@ -263,19 +262,17 @@ const PaymentHistory = memo(({}: Props) => {
                                     </TableCell>
                                     <TableCell sx={{textAlign: 'center'}}>
                                         <ParagraphBody className={clsx(classes.cellText, classes.alignText)}>
-                                            {!!item.payments?.length && item.payments[0].orderId}
+                                            {item?.payments[0]?.orderId}
                                         </ParagraphBody>
                                     </TableCell>
                                     <TableCell>
                                         <ParagraphBody className={classes.cellText}>
-                                        20-12-2022
+                                       {item?.payments?.[0]?.completedDate}
                                         </ParagraphBody>
                                     </TableCell>
                                     <TableCell sx={{textAlign: 'center'}}>
                                         <ParagraphBody className={clsx(classes.cellText, classes.alignText)}>
-                                        {!!item.payments?.length && (
-                                            <>{'$'}{fCurrency2(item.payments[0].totalAmountUSD || 0)}</>
-                                        )}  
+                                        {item?.payments?.[0]?.amount}  
                                         </ParagraphBody>
                                     </TableCell>
                                     <TableCell sx={{textAlign: "center"}}>
