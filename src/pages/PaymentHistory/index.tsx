@@ -40,7 +40,7 @@ interface Props {
 
 // eslint-disable-next-line no-empty-pattern
 const PaymentHistory = memo(({}: Props) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
   const [sort, setSort] = useState<SortItem>();
