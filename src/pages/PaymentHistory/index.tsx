@@ -58,7 +58,7 @@ const PaymentHistory = memo(({}: Props) => {
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
   }
-
+  
   const fetchData = async (value?: {
     sort?: SortItem;
     keyword?: string;
