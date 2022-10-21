@@ -89,16 +89,6 @@ export interface GetMyProjects {
   page?: number;
 }
 
-
-export interface GetMyInvoices {
-  sortedField?: string;
-  isDescending?: boolean;
-  keyword?: string;
-  take?: number;
-  page?: number;
-}
-
-
 export interface MoveProject {
   folderId: number,
 }

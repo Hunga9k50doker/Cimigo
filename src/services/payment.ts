@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { ChangePaymentMethodParams, CheckoutParams, TryAgain, UpdateConfirmPayment, UpdateInvoiceInfo } from 'models/payment';
+import { ChangePaymentMethodParams, CheckoutParams, TryAgain, UpdateConfirmPayment, UpdateInvoiceInfo, GetMyInvoices } from 'models/payment';
 import api from 'services/configApi';
 
 export class PaymentService {
@@ -95,6 +95,16 @@ export class PaymentService {
     })
       .catch(async (e) => {
         return Promise.reject(JSON.parse(await e?.response?.data?.text() || '{}'));
+      })
+  }
+
+  static async getInvoiceHistory(data: GetMyInvoices): Promise<any> {
+    return await api.get(API.PAYMENT.INVOICES_HISTORY, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
       })
   }
 

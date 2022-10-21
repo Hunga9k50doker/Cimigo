@@ -5,8 +5,7 @@ import useDebounce from "hooks/useDebounce";
 import { useState, useEffect, memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SearchNotFound from "components/SearchNotFound";
-import { GetMyInvoices, Project} from "models/project";
-import { ProjectService } from "services/project";
+import {GetMyInvoices, Payment} from "models/payment";
 import { useDispatch, useSelector } from "react-redux";
 import {DataPagination, SortItem} from "models/general";
 import { PaymentService } from "services/payment";
@@ -32,8 +31,10 @@ import { routes } from 'routers/routes';
   }
 enum SortedField {
     name = "name",
-  }
-  
+    orderId = "orderId",
+    completedDate = "completedDate",
+    amountUSD = "amountUSD",
+}
 interface Props {
 
 }
@@ -44,7 +45,7 @@ const PaymentHistory = memo(({}: Props) => {
 
   const dispatch = useDispatch();
   const [sort, setSort] = useState<SortItem>();
-  const [data, setData] = useState<DataPagination<Project>>();
+  const [data, setData] = useState<DataPagination<Payment>>();
   const [keyword, setKeyword] = useState<string>("");
   const { project } = useSelector((state: ReducerType) => state.project)
 
@@ -80,7 +81,7 @@ const PaymentHistory = memo(({}: Props) => {
       params.isDescending = value?.sort?.isDescending;
     }
     dispatch(setLoading(true));
-    await ProjectService.getMyInvoices(params)
+    await PaymentService.getInvoiceHistory(params)
       .then((res) => {
         setData({ data: res.data, meta: res.meta });
       })
@@ -189,19 +190,55 @@ const PaymentHistory = memo(({}: Props) => {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={{textAlign: 'center'}}>
-                                  <Heading5 translation-key="">
-                                      Invoice no
-                                  </Heading5>
+                                    <TableSortLabel
+                                        active={sort?.sortedField === SortedField.orderId}
+                                        direction={sort?.isDescending ? "desc" : "asc"}
+                                        onClick={() => {
+                                            onChangeSort(SortedField.orderId);
+                                        }}
+                                        IconComponent={ArrowDropdownIcon}
+                                        className={classes.tableLabel}
+                                        >
+                                        <Heading5                                           
+                                            translation-key=""
+                                        >
+                                           Invoice no
+                                        </Heading5>
+                                    </TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={{textAlign: "center"}}>
-                                  <Heading5 translation-key="">
-                                            Date
-                                  </Heading5>
+                                    <TableSortLabel
+                                        active={sort?.sortedField === SortedField.completedDate}
+                                        direction={sort?.isDescending ? "desc" : "asc"}
+                                        onClick={() => {
+                                            onChangeSort(SortedField.completedDate);
+                                        }}
+                                        IconComponent={ArrowDropdownIcon}
+                                        className={classes.tableLabel}
+                                        >
+                                        <Heading5                                           
+                                            translation-key=""
+                                        >
+                                           Date
+                                        </Heading5>
+                                    </TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={{textAlign: 'center'}}>
-                                    <Heading5 translation-key="">
-                                        Amount
-                                    </Heading5>
+                                    <TableSortLabel
+                                        active={sort?.sortedField === SortedField.amountUSD}
+                                        direction={sort?.isDescending ? "desc" : "asc"}
+                                        onClick={() => {
+                                            onChangeSort(SortedField.amountUSD);
+                                        }}
+                                        IconComponent={ArrowDropdownIcon}
+                                        className={classes.tableLabel}
+                                        >
+                                        <Heading5                                           
+                                            translation-key=""
+                                        >
+                                           Amount
+                                        </Heading5>
+                                    </TableSortLabel>
                                   </TableCell>
                                 <TableCell sx={{textAlign: 'center'}} className={classes.tableLabel}>
                                     <Heading5 translation-key="payment_history_table_status">
@@ -221,22 +258,22 @@ const PaymentHistory = memo(({}: Props) => {
                                 <TableRow key={item.id}>
                                     <TableCell>
                                         <ParagraphBodyUnderline className={classes.nameProject} onClick={() => onClickProjectName(item.id)}>
-                                            {item.name}
+                                            {item.project?.name}
                                         </ParagraphBodyUnderline>
                                     </TableCell>
                                     <TableCell sx={{textAlign: 'center'}}>
                                         <ParagraphBody className={clsx(classes.cellText, classes.alignText)}>
-                                            {item?.payments[0]?.orderId}
+                                            {item.orderId}
                                         </ParagraphBody>
                                     </TableCell>
                                     <TableCell>
                                         <ParagraphBody className={classes.cellText}>
-                                       {item?.payments?.[0]?.completedDate}
+                                            {item.completedDate}
                                         </ParagraphBody>
                                     </TableCell>
                                     <TableCell sx={{textAlign: 'center'}}>
                                         <ParagraphBody className={clsx(classes.cellText, classes.alignText)}>
-                                        {item?.payments?.[0]?.amount}  
+                                            {item.amountUSD}  
                                         </ParagraphBody>
                                     </TableCell>
                                     <TableCell sx={{textAlign: "center"}}>

@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { CreateProjectData, GetMyProjects, GetMyInvoices, MoveProject, RenameProject, ResetQuota, UpdateProjectBasicInformation, UpdateQuota, UpdateTarget, UpdateEnableCustomQuestion, UpdateEnableEyeTracking } from 'models/project';
+import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, ResetQuota, UpdateProjectBasicInformation, UpdateQuota, UpdateTarget, UpdateEnableCustomQuestion, UpdateEnableEyeTracking } from 'models/project';
 import api from 'services/configApi';
 
 export class ProjectService {
@@ -25,16 +25,6 @@ export class ProjectService {
 
   static async getMyProjects(data: GetMyProjects): Promise<any> {
     return await api.get(API.PROJECT.DEFAULT, { params: data })
-      .then((res) => {
-        return Promise.resolve(res.data)
-      })
-      .catch((e) => {
-        return Promise.reject(e?.response?.data);
-      })
-  }
-
-  static async getMyInvoices(data: GetMyInvoices): Promise<any> {
-    return await api.get(API.PROJECT.INVOICES, { params: data })
       .then((res) => {
         return Promise.resolve(res.data)
       })

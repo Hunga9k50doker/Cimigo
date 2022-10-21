@@ -46,7 +46,6 @@ export const API = {
     UPDATE_ENABLE_EYE_TRACKING: "/v1.0/project/:id/update-enable-eye-tracking",
     SEND_EMAIL_HOW_TO_SETUP_SURVEY: "/v1.0/project/:id/send-email-how-to-setup-survey",
     UPDATE_AGREE_QUOTA: '/v1.0/project/:id/update-agree-quota',
-    INVOICES: '/v1.0/project/payment-history',
     QUOTA: {
       DEFAULT: '/v1.0/project/:id/quota',
     }
@@ -89,6 +88,7 @@ export const API = {
     CHECKOUT: '/v1.0/payment/checkout',
     CONFIRM: '/v1.0/payment/confirm-payment',
     INVOICE: '/v1.0/payment/invoice',
+    INVOICES_HISTORY: '/v1.0/payment/history',
     INVOICE_DEMO: '/v1.0/payment/invoice-demo',
     VALID_CONFIRM: '/v1.0/payment/valid-confirm',
     ONEPAY_CALLBACK: '/v1.0/payment/onepay/callback',
