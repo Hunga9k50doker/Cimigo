@@ -50,16 +50,17 @@ const PaymentHistory = memo(({}: Props) => {
 
   const { project } = useSelector((state: ReducerType) => state.project)
 
-  const getInvoice = () => {
-    if (!project) return
+  const getInvoice = (id: number) => {;
     dispatch(setLoading(true))
-    PaymentService.getInvoice(project.id)
+    PaymentService.getInvoice(id)
       .then(res => {
         FileSaver.saveAs(res.data, `invoice-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
   }
+
+  
   
   const fetchData = async (value?: {
     sort?: SortItem;
@@ -148,6 +149,9 @@ const PaymentHistory = memo(({}: Props) => {
   useEffect(() => {
     if (inValidPage()) {
       handleChangePage(null, data.meta.page - 2)
+    }
+    if(!data){
+      fetchData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
@@ -281,7 +285,7 @@ const PaymentHistory = memo(({}: Props) => {
                                         <CheckCircleIcon sx={{color: "var(--cimigo-green)"}}/>    
                                     </TableCell>
                                     <TableCell  sx={{textAlign: "center"}}>
-                                        <IconButton onClick={getInvoice}>
+                                        <IconButton onClick={() => getInvoice(item.project?.id)}>
                                             <DownloadIcon sx={{fontSize: "28px", color: "var(--cimigo-blue)"}}/> 
                                         </IconButton>
                                     </TableCell>
