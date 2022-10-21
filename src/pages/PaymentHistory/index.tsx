@@ -6,10 +6,9 @@ import { useState, useEffect, memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SearchNotFound from "components/SearchNotFound";
 import {GetMyInvoices, Payment} from "models/payment";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {DataPagination, SortItem} from "models/general";
 import { PaymentService } from "services/payment";
-import { ReducerType } from "redux/reducers";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import FileSaver from 'file-saver';
 import moment from "moment";
@@ -48,8 +47,6 @@ const PaymentHistory = memo(({}: Props) => {
   const [data, setData] = useState<DataPagination<Payment>>();
   const [keyword, setKeyword] = useState<string>("");
 
-  const { project } = useSelector((state: ReducerType) => state.project)
-
   const getInvoice = (id: number) => {;
     dispatch(setLoading(true))
     PaymentService.getInvoice(id)
@@ -60,8 +57,6 @@ const PaymentHistory = memo(({}: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  
-  
   const fetchData = async (value?: {
     sort?: SortItem;
     keyword?: string;
