@@ -47,6 +47,7 @@ const PaymentHistory = memo(({}: Props) => {
   const [sort, setSort] = useState<SortItem>();
   const [data, setData] = useState<DataPagination<Payment>>();
   const [keyword, setKeyword] = useState<string>("");
+
   const { project } = useSelector((state: ReducerType) => state.project)
 
   const getInvoice = () => {
@@ -257,7 +258,7 @@ const PaymentHistory = memo(({}: Props) => {
                                 data?.data?.map((item) => ( 
                                 <TableRow key={item.id}>
                                     <TableCell>
-                                        <ParagraphBodyUnderline className={classes.nameProject} onClick={() => onClickProjectName(item.id)}>
+                                        <ParagraphBodyUnderline className={classes.nameProject} onClick={() => onClickProjectName(item.project?.id)}>
                                             {item.project?.name}
                                         </ParagraphBodyUnderline>
                                     </TableCell>
@@ -268,12 +269,12 @@ const PaymentHistory = memo(({}: Props) => {
                                     </TableCell>
                                     <TableCell>
                                         <ParagraphBody className={classes.cellText}>
-                                            {item.completedDate}
+                                            {moment(item.completedDate).format("DD-MM-yyyy")}
                                         </ParagraphBody>
                                     </TableCell>
                                     <TableCell sx={{textAlign: 'center'}}>
                                         <ParagraphBody className={clsx(classes.cellText, classes.alignText)}>
-                                            {item.amountUSD}  
+                                            ${item.amountUSD}  
                                         </ParagraphBody>
                                     </TableCell>
                                     <TableCell sx={{textAlign: "center"}}>
