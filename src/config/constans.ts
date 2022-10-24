@@ -88,6 +88,7 @@ export const API = {
     CHECKOUT: '/v1.0/payment/checkout',
     CONFIRM: '/v1.0/payment/confirm-payment',
     INVOICE: '/v1.0/payment/invoice',
+    PAYMENT_HISTORY: '/v1.0/payment/history',
     INVOICE_DEMO: '/v1.0/payment/invoice-demo',
     VALID_CONFIRM: '/v1.0/payment/valid-confirm',
     ONEPAY_CALLBACK: '/v1.0/payment/onepay/callback',

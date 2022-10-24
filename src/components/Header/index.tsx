@@ -267,6 +267,10 @@ const Header = memo((props: HeaderProps) => {
                   <MenuItem className={classes.itemAciton} onClick={() => history.push(routes.account.root)}>
                     <img src={images.icProfile} alt="" />
                     <p translation-key="auth_my_account">{t('auth_my_account')}</p>
+                  </MenuItem>
+                  <MenuItem className={classes.itemAciton} onClick={() => history.push(routes.paymentHistory)}>
+                    <img src={images.icPaymentHistory} alt="" />
+                    <p translation-key="auth_log_out">Payment history</p>
                   </MenuItem> 
                   <MenuItem className={classes.itemAciton} onClick={logout}>
                     <img src={images.icLogout} alt="" />

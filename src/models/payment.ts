@@ -121,6 +121,14 @@ export interface UpdateInvoiceInfo {
   taxCode: string,
 }
 
+export interface GetMyPaymentHistory {
+  sortedField?: string;
+  isDescending?: boolean;
+  keyword?: string;
+  take?: number;
+  page?: number;
+}
+
 export const paymentStatuses: OptionItem[] = [
   { id: EPaymentStatus.NOT_PAID, name: 'Not paid' },
   { id: EPaymentStatus.PAID, name: 'Paid' },
