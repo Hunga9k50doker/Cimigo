@@ -65,7 +65,7 @@ const PaymentHistory = memo(({}: Props) => {
     page?: number;
   }) => {
     const params: GetMyPaymentHistory = {
-      take: value?.take || data?.meta?.take || 99999,
+      take: value?.take || data?.meta?.take || 10,
       page: value?.page || data?.meta?.page || 1,
       keyword: keyword || undefined,
       sortedField: sort?.sortedField,
