@@ -5,7 +5,7 @@ import useDebounce from "hooks/useDebounce";
 import { useState, useEffect, memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SearchNotFound from "components/SearchNotFound";
-import {GetMyInvoices, Payment} from "models/payment";
+import {GetMyPaymentHistory, Payment} from "models/payment";
 import { useDispatch } from "react-redux";
 import {DataPagination, SortItem} from "models/general";
 import { PaymentService } from "services/payment";
@@ -64,7 +64,7 @@ const PaymentHistory = memo(({}: Props) => {
     take?: number;
     page?: number;
   }) => {
-    const params: GetMyInvoices = {
+    const params: GetMyPaymentHistory = {
       take: value?.take || data?.meta?.take || 99999,
       page: value?.page || data?.meta?.page || 1,
       keyword: keyword || undefined,
@@ -79,7 +79,7 @@ const PaymentHistory = memo(({}: Props) => {
       params.isDescending = value?.sort?.isDescending;
     }
     dispatch(setLoading(true));
-    await PaymentService.getInvoiceHistory(params)
+    await PaymentService.getPaymentHistory(params)
       .then((res) => {
         setData({ data: res.data, meta: res.meta });
       })

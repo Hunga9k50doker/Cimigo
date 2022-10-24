@@ -121,7 +121,7 @@ export interface UpdateInvoiceInfo {
   taxCode: string,
 }
 
-export interface GetMyInvoices {
+export interface GetMyPaymentHistory {
   sortedField?: string;
   isDescending?: boolean;
   keyword?: string;
