@@ -16,6 +16,7 @@ import BasicLayout from "layout/BasicLayout";
 import Heading2 from "components/common/text/Heading2";
 import Heading5 from "components/common/text/Heading5";
 import ParagraphBodyUnderline from "components/common/text/ParagraphBodyUnderline";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import InputSearch from "components/InputSearch";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -159,7 +160,7 @@ const PaymentHistory = memo(({}: Props) => {
             <Grid className={classes.main}>
             <Grid className={classes.headerContainer}>
                 <Heading2 translation-key="payment_history_title">Payment history</Heading2>
-                <Grid sx={{flex: 1}}>
+                <Grid className={classes.inputContainer}>
                     <InputSearch
                     translation-key-placeholder="payment_history_placeholder_search_invoice"
                     placeholder="Search invoice"
@@ -168,8 +169,8 @@ const PaymentHistory = memo(({}: Props) => {
                     />
                 </Grid>
             </Grid>
-                <SetupTable>
-                    <Table>
+                <SetupTable className={classes.setupTable}>
+                    <Table className={classes.table}>
                         <TableHead className={classes.tableHeader}>
                             <TableRow>
                                 <TableCell>
@@ -299,6 +300,28 @@ const PaymentHistory = memo(({}: Props) => {
                             )} 
                         </TableBody>
                     </Table>
+                     {/* ================== Mobile ==================== */}
+                    {data?.data.length ? (
+                      data?.data?.map((item) => (
+                      <Grid className={classes.containerMobile}>
+                      <Grid
+                      sx={{ cursor: "pointer" }}
+                      classes={{ root: classes.listItemProject }}
+                      >
+                        <div>
+                            <ParagraphSmall $colorName="--cimigo-blue" className="underline" onClick={() => onClickProjectName(item.project?.id)}>{item.project?.name}</ParagraphSmall>
+                            <Grid sx={{margin: '4px 0'}}>
+                              <ParagraphSmall $colorName="---gray-60" className={classes.priceInvoice}><span>${item.amountUSD}</span> -  {item.orderId}</ParagraphSmall> 
+                            </Grid>
+                        </div>
+                        <IconButton className={classes.iconButton} onClick={() => getInvoice(item.project?.id)}>
+                          <DownloadIcon />
+                        </IconButton>
+                      </Grid>
+                    </Grid> ))
+                    ) : ( 
+                      <SearchNotFound messs={t("project_mgmt_project_not_found")} />
+                    )}                    
                     <TablePagination
                     component="div"
                     count={data?.meta?.itemCount || 0}

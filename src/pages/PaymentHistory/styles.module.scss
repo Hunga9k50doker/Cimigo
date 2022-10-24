@@ -3,9 +3,16 @@
     justify-content: center;
     padding-top: 57px;
     padding-bottom: 188px;
+    @media only screen and (max-width: 767px) {
+        padding: 24px;
+    }
 }
+
 .main {
     max-width: 1002px;
+    @media only screen and (max-width: 767px) {
+        width: 100%;
+    }
 }
 .headerContainer {
     display: flex;
@@ -14,7 +21,37 @@
     flex-direction: row;
     gap: 571px;
     margin-bottom: 20px;
+    @media only screen and (max-width: 767px) {
+        flex-direction: column;
+        gap: 0;
+        align-items: flex-start;
+        margin-bottom: 24px;
+        p {
+            font-size: 18px !important;
+            margin-bottom: 16px;
+        }
+    }
 }
+.inputContainer {
+    flex: 1;
+    @media only screen and (max-width: 767px) {
+        width: 100%;
+        flex: 0;
+        [class ~= MuiFormControl-root] {
+            width: 100%;
+        }
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .setupTable {
+        border: none !important;
+      }
+    .table {
+        display: none;
+    }
+}
+
 .tableHeader {
     [class ~= MuiTableCell-root] {
         background: var(--eerie-black-5) !important;
@@ -36,4 +73,43 @@
 
 .alignText {
     margin-right: 24px;
+}
+
+//=================Mobile==============================
+
+.containerMobile {
+    display: none;
+    @media only screen and (max-width: 767px) {
+      display: block;
+    }
+}
+
+.listItemProject {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--eerie-black-20);
+}
+
+.titleMobile {
+    margin-bottom: 16px;
+    @media only screen and (max-width: 767px) {
+        font-size: 18px !important;
+        color: #000000 !important;
+      }
+}
+
+.priceInvoice {
+    span {
+        font-weight: 600;
+        color: var(--gray-80);
+    }
+}
+
+.iconButton {
+    background-color: var(--eerie-black-5);
+    svg {
+        color: var(--eerie-black-65);
+    }
 }
