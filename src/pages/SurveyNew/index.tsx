@@ -24,6 +24,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import SubTitle from "components/common/text/SubTitle";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import SetupSurvey from "./SetupSurvey";
+import AdtractionTest from "./AdtractionTest";
 import Target from "./Target";
 import Quotas from "./Quotas";
 import Pay from "./Pay";
@@ -235,8 +236,8 @@ export const Survey = () => {
         <Switch>
           <Route
             exact
-            path={routes.project.detail.setupSurvey}
-            render={(routeProps) => <SetupSurvey
+            path={routes.project.detail.adtractionTest}
+            render={(routeProps) => <AdtractionTest
               {...routeProps}
               projectId={Number(id)}
               isHaveChangePrice={isHaveChangePrice}

@@ -1,6 +1,6 @@
 import { useState, memo, useMemo, useEffect } from "react";
 import classes from './styles.module.scss';
-import { Tab, Badge, Step, Chip } from "@mui/material";
+import { Tab, Badge, Step, Chip, Box } from "@mui/material";
 import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleRight, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
 import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
@@ -14,22 +14,29 @@ import Heading5 from "components/common/text/Heading5";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import CostSummary from "../components/CostSummary";
-import BasicInformation from "./components/BasicInformation";
+import BasicInformation from "../SetupSurvey/components/BasicInformation";
 import ProjectHelper, { editableProject } from "helpers/project";
 import { PriceService } from "helpers/price";
 import { ETabRightPanel, SETUP_SURVEY_SECTION } from "models/project";
-import UploadPacks from "./components/UploadPacks";
-import AdditionalBrandList from "./components/AdditionalBrandList";
-import AdditionalAttributes from "./components/AdditionalAttributes";
-import CustomQuestions from "./components/CustomQuestions";
+import UploadPacks from "../SetupSurvey/components/UploadPacks";
+import AdditionalBrandList from "../SetupSurvey/components/AdditionalBrandList";
+import AdditionalAttributes from "../SetupSurvey/components/AdditionalAttributes";
+import AddVideos from "./components/AddVideos";
+import CustomQuestions from "../SetupSurvey/components/CustomQuestions";
+import EmotionMeasurement from "./components/EmotionMeasurement";
 import { fCurrency2 } from "utils/formatNumber";
-import EyeTracking from "./components/EyeTracking";
+import EyeTracking from "../SetupSurvey/components/EyeTracking";
 import { useTranslation } from "react-i18next";
 import PopupMissingRequirement from "pages/SurveyNew/components/PopupMissingRequirement";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import PopupHowToSetupSurvey from "pages/SurveyNew/components/PopupHowToSetupSurvey";
 import { setHowToSetupSurveyReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
+import images from "config/images";
+import SentimentSatisfiedRoundedIcon from '@mui/icons-material/SentimentSatisfiedRounded';
+import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
+import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
+import clsx from "clsx";
 
 interface SetupSurvey {
   projectId: number;
@@ -39,7 +46,7 @@ interface SetupSurvey {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: SetupSurvey) => {
+const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: SetupSurvey) => {
   
   const { t } = useTranslation();
 
@@ -54,6 +61,8 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
   const [openMissingRequirement, setOpenMissingRequirement] = useState(false);
 
   const [onOpenHowToSetupSurvey, setOnOpenHowToSetupSurvey] = useState(false);
+
+  const [toggleOutlineMobile, setToggleOutlineMobile] = useState(false);
 
   const isValidBasic = useMemo(() => {
     return ProjectHelper.isValidBasic(project)
@@ -110,6 +119,10 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
       onOpenMissingRequirement()
     }
   }
+ 
+  const onToggleOutlineMobile = () => {
+    setToggleOutlineMobile(!toggleOutlineMobile);
+  }
 
   useEffect(() => {
     if (scrollToSection) {
@@ -130,12 +143,12 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
   return (
     <PageRoot className={classes.root}>
       <LeftContent>
-        <PageTitle>
+        <PageTitle className={classes.pageTitle}>
           <PageTitleLeft>
             <PageTitleText translation-key="setup_survey_title_left_panel"
             dangerouslySetInnerHTML={{ __html: t('setup_survey_title_left_panel', {title: project?.solution?.title})}}
             ></PageTitleText>
-            {!editable && <LockIcon status={project?.status} />}
+            {!editable && <LockIcon status={project?.status} className={classes.lockIcon}/>}
           </PageTitleLeft>
           {project?.solution?.enableHowToSetUpSurvey && (
             <PageTitleRight>
@@ -146,33 +159,19 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
           )}  
         </PageTitle>
         <Content id={SETUP_SURVEY_SECTION.content_survey_setup}>
-          <BasicInformation
+            <AddVideos
             project={project}
-          />
-          <UploadPacks
-            project={project}
-          />
-          <AdditionalBrandList
-            project={project}
-          />
-          <AdditionalAttributes
-            project={project}
-          />
-          {project?.solution?.enableCustomQuestion && (
+            />
             <CustomQuestions
               project={project}
-              step={5}
+              step={2}
             />
-          )}
-          {project?.solution?.enableEyeTracking && (
-            <EyeTracking
-              price={price}
-              project={project}
-              step={project?.solution?.enableCustomQuestion ? 6 : 5}
+            <EmotionMeasurement
+            project={project}
+            step={3}
             />
-          )}
         </Content>
-        <MobileAction>
+        <MobileAction className={classes.mobileAction}>
           <Button
             fullWidth
             btnType={BtnType.Raised}
@@ -181,73 +180,39 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
             padding="13px 8px !important"
             onClick={onNextSetupTarget}
           />
+          <Box className={classes.mobileViewOutline} onClick={onToggleOutlineMobile}>
+            <ParagraphSmall $colorName="--cimigo-blue">View outline</ParagraphSmall>
+            <ArrowCircleUpRoundedIcon/>
+          </Box>
         </MobileAction>
       </LeftContent>
-      <RightContent>
+      <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.showOutline}>
+      <Box className={clsx(classes.closeOutline, classes.mobileViewOutline)} onClick={onToggleOutlineMobile}>
+              <ParagraphSmall $colorName="--cimigo-blue">Close outline</ParagraphSmall>
+              <ArrowCircleDownRoundedIcon/>
+            </Box>
         <RightPanel>
-          <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
+          <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)} className={classes.tabRightPanel}>
             <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
             <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} 
             translation-key="project_right_panel_cost_summary"
             >{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
           </TabRightPanel>
           <TabPanelBox value={tabRightPanel} index={ETabRightPanel.OUTLINE}>
-            <RightPanelContent>
-              <RightPanelBody>
+            <RightPanelContent> 
+              <RightPanelBody className={classes.rightPanelContent}>
                 <RPStepper orientation="vertical" connector={<RPStepConnector />}>
                   <Step active={isValidBasic} expanded>
                     <RPStepLabel
-                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.basic_information)}
-                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
+                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.add_video)}
+                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><img src={images.icAddVideoNotActive} alt=""/></RPStepIconBox>}
                     >
                       <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 1})}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_basic_info">{t("project_right_panel_step_basic_info")}</Heading5>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="">Add videos (2)</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_basic_info_subtitle">
-                        {t("project_right_panel_step_basic_info_subtitle")}
-                      </ParagraphSmall>
-                    </RPStepContent>
-                  </Step>
-                  <Step active={isValidPacks} expanded>
-                    <RPStepLabel
-                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.upload_packs)}
-                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><BurstModeIcon /></RPStepIconBox>}
-                    >
-                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 2})}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_upload_packs">{t("project_right_panel_step_upload_packs", {packLength: project?.packs?.length || 0})}</Heading5>
-                    </RPStepLabel>
-                    <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_upload_packs_subtitle"> 
-                      {t("project_right_panel_step_upload_packs_subtitle")}
-                      </ParagraphSmall>
-                    </RPStepContent>
-                  </Step>
-                  <Step active={isValidAdditionalBrand} expanded>
-                    <RPStepLabel
-                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.additional_brand_list)}
-                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><FactCheckIcon /></RPStepIconBox>}
-                    >
-                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 3})}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_add_brands_list">{t("project_right_panel_step_add_brands_list", {brandsLength: project?.additionalBrands?.length || 0})}</Heading5>
-                    </RPStepLabel>
-                    <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_add_brands_list_subtitle">
-                      {t("project_right_panel_step_add_brands_list_subtitle")}
-                      </ParagraphSmall>
-                    </RPStepContent>
-                  </Step>
-                  <Step active={!!project?.projectAttributes?.length || !!project?.userAttributes?.length} expanded>
-                    <RPStepLabel
-                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.additional_attributes)}
-                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><PlaylistAddIcon /></RPStepIconBox>}
-                    >
-                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: 4})}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_add_attributes">{t("project_right_panel_step_add_attributes")}</Heading5>
-                    </RPStepLabel>
-                    <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_add_attributes_subtitle">
-                        {t("project_right_panel_step_add_attributes_subtitle")}
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="">
+                        Ads videos you want to test.
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
@@ -256,7 +221,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
                       <RPStepLabel
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.custom_questions)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><FormatAlignLeftIcon /></RPStepIconBox>}>
-                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: 5})}</ParagraphExtraSmall>
+                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: 2})}</ParagraphExtraSmall>
                         <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_custom_question">{t("project_right_panel_step_custom_question", {customQuestionLength: project?.customQuestions?.length || 0})}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
@@ -271,10 +236,10 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
                   {project?.solution?.enableEyeTracking && (
                     <Step active={isValidEyeTracking && project?.enableEyeTracking} expanded>
                       <RPStepLabel
-                        onClick={() => scrollToElement(SETUP_SURVEY_SECTION.eye_tracking)}
-                        StepIconComponent={({ active }) => <RPStepIconBox $active={active}><RemoveRedEyeIcon /></RPStepIconBox>}>
-                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: project?.solution?.enableCustomQuestion ? 6 : 5})}</ParagraphExtraSmall>
-                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_eye_tracking">{t("project_right_panel_step_eye_tracking")}</Heading5>
+                        onClick={() => scrollToElement(SETUP_SURVEY_SECTION.emotion_measurement)}
+                        StepIconComponent={({ active }) => <RPStepIconBox $active={active}><SentimentSatisfiedRoundedIcon /></RPStepIconBox>}>
+                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: project?.solution?.enableCustomQuestion ? 3 : 2})}</ParagraphExtraSmall>
+                        <Heading5 className="title" $colorName="--gray-60" translation-key="">Emotion measurement</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
@@ -287,7 +252,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
                   )}
                 </RPStepper>
               </RightPanelBody>
-              <RightPanelAction>
+              <RightPanelAction className={classes.rightPanelAction}>
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
@@ -307,7 +272,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
                   price={price}
                 />
               </RightPanelBody>
-              <RightPanelAction>
+              <RightPanelAction className={classes.rightPanelAction}>
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
@@ -343,4 +308,4 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
   )
 })
 
-export default SetupSurvey
+export default AdtractionTest
