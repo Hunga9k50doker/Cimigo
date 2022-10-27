@@ -1,40 +1,14 @@
-import { Box, Chip, Grid, IconButton, ListItemIcon, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Box,  Grid, } from "@mui/material";
 import Heading4 from "components/common/text/Heading4";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import { PriceService } from "helpers/price";
-import { editableProject } from "helpers/project";
 import { Project, SETUP_SURVEY_SECTION } from "models/project";
 import { MaxChip, PriceChip } from "pages/SurveyNew/components";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo} from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
-import { getCustomQuestionsRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
-import { setLoading, setErrorMess } from "redux/reducers/Status/actionTypes";
-import { ProjectService } from "services/project";
 import classes from "./styles.module.scss"
 import clsx from "clsx"
-import { fCurrency2 } from "utils/formatNumber";
 import Switch from "components/common/inputs/Switch";
-import { SetupTable } from "components/common/table/SetupTable";
-import SubTitle from "components/common/text/SubTitle";
-import { DragIndicator, KeyboardArrowDown, MoreHoriz, Edit as EditIcon, DeleteForever as DeleteForeverIcon, MoreVert } from "@mui/icons-material";
-import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType, icCustomQuestions, UpdateOrderQuestionParams } from "models/custom_question";
-import { CustomQuestionService } from "services/custom_question";
-import Button, { BtnType } from "components/common/buttons/Button";
-import TextBtnSmall from "components/common/text/TextBtnSmall";
-import { Menu } from "components/common/memu/Menu";
-import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
-import PopupConfirmDelete from "components/PopupConfirmDelete";
-import PopupOpenQuestion from "pages/SurveyNew/components/PopupOpenQuestion";
-import PopupSingleChoice from "pages/SurveyNew/components/PopupSingleChoice";
-import PopupMultipleChoices from "pages/SurveyNew/components/PopupMultipleChoices";
-import PopupNumericScale from "pages/SurveyNew/components/PopupNumericScale";
-import PopupSmileyRating from "pages/SurveyNew/components/PopupSmileyRating";
-import PopupStarRating from "pages/SurveyNew/components/PopupStarRating";
-import PopupConfirmDisableCustomQuestion from "pages/SurveyNew/components/PopupConfirmDisableCustomQuestion";
-import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 
 interface EmotionMeasurementProps {
   project: Project;
