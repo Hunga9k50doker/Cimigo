@@ -145,6 +145,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
             <ParagraphSmall $colorName="--cimigo-blue">View outline</ParagraphSmall>
             <ArrowCircleUpRoundedIcon/>
           </Box>
+          <div className={toggleOutlineMobile ? classes.modalMobile : ""}></div>
         </MobileAction>
       </LeftContent>
       <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.closeOutlineMobile}>
