@@ -13,10 +13,8 @@
 @media only screen and (max-width: 1024px) {
     .mobileAction {
         position: relative;
-        z-index: 100;
     }
     .mobileViewOutline {
-        z-index: 100;
         display: block;
         position: absolute;
         top: -34px;
@@ -33,7 +31,6 @@
         }
     }
     .rightContent {
-        z-index: 100;
         display: block !important;
         position: absolute;
         left: 0px;
