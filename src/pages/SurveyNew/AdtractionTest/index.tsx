@@ -27,9 +27,7 @@ import { routes } from "routers/routes";
 import PopupHowToSetupSurvey from "pages/SurveyNew/components/PopupHowToSetupSurvey";
 import { setHowToSetupSurveyReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import images from "config/images";
-import SentimentSatisfiedRoundedIcon from '@mui/icons-material/SentimentSatisfiedRounded';
-import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
-import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
+import {SentimentSatisfiedRounded, ArrowCircleUpRounded, ArrowCircleDownRounded} from '@mui/icons-material';
 import {AddVideoIcon} from "components/Svg";
 
 
@@ -143,7 +141,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
           />
           <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
             <ParagraphSmall $colorName="--cimigo-blue">View outline</ParagraphSmall>
-            <ArrowCircleUpRoundedIcon/>
+            <ArrowCircleUpRounded/>
           </Box>
           <div className={toggleOutlineMobile ? classes.modalMobile : ""}></div>
         </MobileAction>
@@ -151,7 +149,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
       <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.closeOutlineMobile}>
           <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
               <ParagraphSmall $colorName="--cimigo-blue">Close outline</ParagraphSmall>
-              <ArrowCircleDownRoundedIcon/>
+              <ArrowCircleDownRounded/>
           </Box>
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
@@ -199,7 +197,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
                     <Step expanded>
                       <RPStepLabel
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.emotion_measurement)}
-                        StepIconComponent={({ active }) => <RPStepIconBox $active={active}><SentimentSatisfiedRoundedIcon /></RPStepIconBox>}>
+                        StepIconComponent={({ active }) => <RPStepIconBox $active={active}><SentimentSatisfiedRounded /></RPStepIconBox>}>
                         <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: project?.solution?.enableCustomQuestion ? 3 : 2})}</ParagraphExtraSmall>
                         <Heading5 className="title" $colorName="--gray-60" translation-key="">Emotion measurement</Heading5>
                       </RPStepLabel>
