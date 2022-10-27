@@ -30,6 +30,7 @@ import images from "config/images";
 import SentimentSatisfiedRoundedIcon from '@mui/icons-material/SentimentSatisfiedRounded';
 import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
 import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
+import {AddVideoIcon} from "components/Svg";
 
 
 interface AdtractionTestProps {
@@ -165,7 +166,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
                   <Step expanded>
                     <RPStepLabel
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.add_video)}
-                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><img src={images.icAddVideoNotActive} alt=""/></RPStepIconBox>}
+                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><AddVideoIcon active/></RPStepIconBox>}
                     >
                       <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 1})}</ParagraphExtraSmall>
                       <Heading5 className="title" $colorName="--gray-60" translation-key="">Add videos (2)</Heading5>
