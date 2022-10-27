@@ -186,13 +186,13 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, onCh
           </Box>
         </MobileAction>
       </LeftContent>
-      <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.showOutline}>
-      <Box className={clsx(classes.closeOutline, classes.mobileViewOutline)} onClick={onToggleOutlineMobile}>
+      <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.closeOutlineMobile}>
+          <Box className={clsx(classes.closeOutline, classes.mobileViewOutline)} onClick={onToggleOutlineMobile}>
               <ParagraphSmall $colorName="--cimigo-blue">Close outline</ParagraphSmall>
               <ArrowCircleDownRoundedIcon/>
-            </Box>
+          </Box>
         <RightPanel>
-          <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)} className={classes.tabRightPanel}>
+          <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
             <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} 
             translation-key="project_right_panel_cost_summary"
@@ -200,7 +200,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, onCh
           </TabRightPanel>
           <TabPanelBox value={tabRightPanel} index={ETabRightPanel.OUTLINE}>
             <RightPanelContent> 
-              <RightPanelBody className={classes.rightPanelContent}>
+              <RightPanelBody>
                 <RPStepper orientation="vertical" connector={<RPStepConnector />}>
                   <Step active={isValidBasic} expanded>
                     <RPStepLabel

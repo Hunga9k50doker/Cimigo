@@ -33,15 +33,15 @@
         display: block;
         position: absolute;
         left: 0px;
-        bottom: 112px;
+        bottom: 110px;
         width: 100%;
         transition: bottom 0.5s ease-out 0s;
         .rightPanelAction {
             display: none;
         }
     }
-    .showOutline {
-        bottom: -112px;
+    .closeOutlineMobile {
+        bottom: -110px;
         transition: bottom 0.5s ease-out 0s;
     }
   }
