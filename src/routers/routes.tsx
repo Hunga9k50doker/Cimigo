@@ -26,7 +26,6 @@ export const routes = {
     detail: {
       root: '/project/:id',
       setupSurvey: '/project/:id/setup-survey',
-      adtractionTest: '/project/:id/adtraction-test',
       target: '/project/:id/target',
       quotas: '/project/:id/quotas',
       paymentBilling: {

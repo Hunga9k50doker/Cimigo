@@ -8,6 +8,7 @@ export function useChangePrice() {
 
   const [oldPrice, setOldPrice] = useState<number>();
   const [isHaveChangePrice, setIsHaveChangePrice] = useState(false);
+  const [toggleOutlineMobile, setToggleOutlineMobile] = useState(false);
   const [tabRightPanel, setTabRightPanel] = useState(ETabRightPanel.OUTLINE);
 
   const { configs } = useSelector((state: ReducerType) => state.user)
@@ -35,6 +36,8 @@ export function useChangePrice() {
   return {
     tabRightPanel,
     setTabRightPanel,
+    toggleOutlineMobile,
+    setToggleOutlineMobile,
     isHaveChangePrice,
     setIsHaveChangePrice
   }

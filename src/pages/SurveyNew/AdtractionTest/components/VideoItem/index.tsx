@@ -1,17 +1,13 @@
 import { MoreVert } from "@mui/icons-material";
 import { Box, Grid, IconButton } from "@mui/material"
-import ChipPackType from "components/common/status/ChipPackType";
-import Heading5 from "components/common/text/Heading5";
-import Heading6 from "components/common/text/Heading6";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import { Pack } from "models/pack"
-import { memo, useState } from "react"
-import { useTranslation } from "react-i18next";
+import { memo} from "react"
 import images from "config/images";
 import classes from './styles.module.scss';
 import ShowMoreText from "react-show-more-text";
+import Heading5 from "components/common/text/Heading5";
 
 interface VideoItemProps {
   item: Pack;
@@ -20,14 +16,6 @@ interface VideoItemProps {
 }
 
 const VideoItem = memo(({ item, editable, onAction }: VideoItemProps) => {
-
-  const { t } = useTranslation()
-  const [showMore, setShowMore] = useState(false);
-
-  const executeOnClick = () => {
-    setShowMore(!showMore);
-  }
-
   return (
     <Grid item className={classes.root}>
       <Box className={classes.box}>

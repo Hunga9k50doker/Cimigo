@@ -42,7 +42,7 @@ export const Survey = () => {
   const { project } = useSelector((state: ReducerType) => state.project)
   const [isEditName, setIsEditName] = useState(false);
   const [projectName, setProjectName] = useState<string>('');
-  const { isHaveChangePrice, setIsHaveChangePrice, tabRightPanel, setTabRightPanel } = useChangePrice()
+  const { isHaveChangePrice, setIsHaveChangePrice, tabRightPanel, setTabRightPanel, toggleOutlineMobile, setToggleOutlineMobile } = useChangePrice()
 
   const tabs: string[] = useMemo(() => {
     return [
@@ -131,6 +131,10 @@ export const Survey = () => {
   const onChangeTabRightPanel = (tab: number) => {
     if (tab === ETabRightPanel.COST_SUMMARY) setIsHaveChangePrice(false)
     setTabRightPanel(tab)
+  }
+
+  const onToggleViewOutlineMobile = () => {
+    setToggleOutlineMobile(!toggleOutlineMobile);
   }
 
   const tabActiveTitle = (tabActive) => {
@@ -236,12 +240,14 @@ export const Survey = () => {
         <Switch>
           <Route
             exact
-            path={routes.project.detail.adtractionTest}
+            path={routes.project.detail.setupSurvey}
             render={(routeProps) => <AdtractionTest
               {...routeProps}
               projectId={Number(id)}
               isHaveChangePrice={isHaveChangePrice}
               tabRightPanel={tabRightPanel}
+              toggleOutlineMobile={toggleOutlineMobile}
+              onToggleViewOutlineMobile={onToggleViewOutlineMobile}
               onChangeTabRightPanel={onChangeTabRightPanel}
             />}
           />

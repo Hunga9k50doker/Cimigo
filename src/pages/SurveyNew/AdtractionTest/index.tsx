@@ -14,20 +14,14 @@ import Heading5 from "components/common/text/Heading5";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import CostSummary from "../components/CostSummary";
-import BasicInformation from "../SetupSurvey/components/BasicInformation";
-import ProjectHelper, { editableProject } from "helpers/project";
+import { editableProject } from "helpers/project";
 import { PriceService } from "helpers/price";
 import { ETabRightPanel, SETUP_SURVEY_SECTION } from "models/project";
-import UploadPacks from "../SetupSurvey/components/UploadPacks";
-import AdditionalBrandList from "../SetupSurvey/components/AdditionalBrandList";
-import AdditionalAttributes from "../SetupSurvey/components/AdditionalAttributes";
 import AddVideos from "./components/AddVideos";
 import CustomQuestions from "../SetupSurvey/components/CustomQuestions";
 import EmotionMeasurement from "./components/EmotionMeasurement";
 import { fCurrency2 } from "utils/formatNumber";
-import EyeTracking from "../SetupSurvey/components/EyeTracking";
 import { useTranslation } from "react-i18next";
-import PopupMissingRequirement from "pages/SurveyNew/components/PopupMissingRequirement";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import PopupHowToSetupSurvey from "pages/SurveyNew/components/PopupHowToSetupSurvey";
@@ -36,17 +30,19 @@ import images from "config/images";
 import SentimentSatisfiedRoundedIcon from '@mui/icons-material/SentimentSatisfiedRounded';
 import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
 import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
-import clsx from "clsx";
 
-interface SetupSurvey {
+
+interface AdtractionTestProps {
   projectId: number;
   isHaveChangePrice: boolean;
   tabRightPanel: ETabRightPanel;
+  toggleOutlineMobile: boolean;
+  onToggleViewOutlineMobile: () => void;
   onChangeTabRightPanel: (tab: number) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: SetupSurvey) => {
+const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlineMobile, onToggleViewOutlineMobile, onChangeTabRightPanel }: AdtractionTestProps) => {
   
   const { t } = useTranslation();
 
@@ -57,32 +53,9 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, onCh
   const { configs } = useSelector((state: ReducerType) => state.user)
 
   const editable = useMemo(() => editableProject(project), [project])
-  
-  const [openMissingRequirement, setOpenMissingRequirement] = useState(false);
-
+ 
   const [onOpenHowToSetupSurvey, setOnOpenHowToSetupSurvey] = useState(false);
 
-  const [toggleOutlineMobile, setToggleOutlineMobile] = useState(false);
-
-  const isValidBasic = useMemo(() => {
-    return ProjectHelper.isValidBasic(project)
-  }, [project])
-
-  const isValidPacks = useMemo(() => {
-    return ProjectHelper.isValidPacks(project?.solution, project?.packs)
-  }, [project])
-
-  const isValidAdditionalBrand = useMemo(() => {
-    return ProjectHelper.isValidAdditionalBrand(project?.solution, project?.additionalBrands)
-  }, [project])
-
-  const isValidEyeTracking = useMemo(() => {
-    return ProjectHelper.isValidEyeTracking(project)
-  }, [project])
-
-  const isValidSetup = useMemo(() => {
-    return ProjectHelper.isValidSetup(project)
-  }, [project])
 
   const price = useMemo(() => {
     if (!project || !configs) return null
@@ -104,24 +77,11 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, onCh
     setOnOpenHowToSetupSurvey(false);
   }
 
-  const onCloseMissingRequirement = () => {
-    setOpenMissingRequirement(false)
-  }
-
-  const onOpenMissingRequirement = () => {
-    setOpenMissingRequirement(true)
-  }
 
   const onNextSetupTarget = () => {
-    if (!editable || isValidSetup) {
+    if (!editable) {
       dispatch(push(routes.project.detail.target.replace(":id", `${projectId}`)))
-    } else {
-      onOpenMissingRequirement()
-    }
-  }
- 
-  const onToggleOutlineMobile = () => {
-    setToggleOutlineMobile(!toggleOutlineMobile);
+    } 
   }
 
   useEffect(() => {
@@ -180,14 +140,14 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, onCh
             padding="13px 8px !important"
             onClick={onNextSetupTarget}
           />
-          <Box className={classes.mobileViewOutline} onClick={onToggleOutlineMobile}>
+          <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
             <ParagraphSmall $colorName="--cimigo-blue">View outline</ParagraphSmall>
             <ArrowCircleUpRoundedIcon/>
           </Box>
         </MobileAction>
       </LeftContent>
       <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.closeOutlineMobile}>
-          <Box className={clsx(classes.closeOutline, classes.mobileViewOutline)} onClick={onToggleOutlineMobile}>
+          <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
               <ParagraphSmall $colorName="--cimigo-blue">Close outline</ParagraphSmall>
               <ArrowCircleDownRoundedIcon/>
           </Box>
@@ -202,7 +162,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, onCh
             <RightPanelContent> 
               <RightPanelBody>
                 <RPStepper orientation="vertical" connector={<RPStepConnector />}>
-                  <Step active={isValidBasic} expanded>
+                  <Step expanded>
                     <RPStepLabel
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.add_video)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><img src={images.icAddVideoNotActive} alt=""/></RPStepIconBox>}
@@ -234,7 +194,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, onCh
                     </Step>
                   )}
                   {project?.solution?.enableEyeTracking && (
-                    <Step active={isValidEyeTracking && project?.enableEyeTracking} expanded>
+                    <Step expanded>
                       <RPStepLabel
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.emotion_measurement)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><SentimentSatisfiedRoundedIcon /></RPStepIconBox>}>
@@ -243,7 +203,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, onCh
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
-                          sx={{ height: 24, backgroundColor: isValidEyeTracking && project?.enableEyeTracking ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
+                          sx={{ height: 24, backgroundColor: project?.enableEyeTracking ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
                           label={<ParagraphExtraSmall $colorName="--ghost-white">${fCurrency2(price?.eyeTrackingSampleSizeCostUSD)}</ParagraphExtraSmall>}
                           color="secondary"
                         />
@@ -286,23 +246,10 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, onCh
           </TabPanelBox>
         </RightPanel>
       </RightContent>
-
       <PopupHowToSetupSurvey
         isOpen={onOpenHowToSetupSurvey}
         project={project}
         onClose={onClosePopupHowToSetupSurvey}
-      />
-      <PopupMissingRequirement
-        isOpen={openMissingRequirement}
-        isValidBasic={isValidBasic}
-        isValidPacks={isValidPacks}
-        isValidAdditionalBrand={isValidAdditionalBrand}
-        isValidEyeTracking={isValidEyeTracking}
-        onClose={onCloseMissingRequirement}
-        onScrollSection={(e) => {
-          onCloseMissingRequirement()
-          scrollToElement(e)
-        }}
       />
     </PageRoot>
   )
