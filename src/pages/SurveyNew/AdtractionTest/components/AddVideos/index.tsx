@@ -30,7 +30,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import classes from "./styles.module.scss";
 import images from "config/images";
 import VideoItem from "../VideoItem";
-
+import PopupAddVideoFromDevice from "pages/SurveyNew/components/PopupAddvideoFromDevice";
 interface AddVideosProps {
   project: Project
 }
@@ -45,7 +45,7 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
   const [packEdit, setPackEdit] = useState<Pack>();
   const [packDelete, setPackDelete] = useState<Pack>();
   const [anchorElPack, setAnchorElPack] = useState<null | HTMLElement>(null);
-  const [anchorElMenuQuestions, setAnchorElMenuQuestions] = useState<null | HTMLElement>(null);
+  const [anchorElMenuAddVideo, setAnchorElMenuAddVideo] = useState<null | HTMLElement>(null);
 
   const maxPack = useMemo(() => project?.solution?.maxPack || 0, [project])
 
@@ -118,12 +118,12 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
     onCloseAddOrEditPack()
   }
 
-  const handleClickMenuQuestions = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorElMenuQuestions(event.currentTarget)
+  const handleClickMenuAddVideo= (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElMenuAddVideo(event.currentTarget)
   }
 
-  const handleCloseMenuQuestions = () => {
-    setAnchorElMenuQuestions(null);
+  const handleCloseMenuAddVideo = () => {
+    setAnchorElMenuAddVideo(null);
   }
   return (
     <Grid id={SETUP_SURVEY_SECTION.add_video}>
@@ -179,7 +179,7 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
           </Box>
           <Button
             sx={{ mt: 3, width: { xs: "100%", sm: "auto" } }}
-            onClick={handleClickMenuQuestions}
+            onClick={handleClickMenuAddVideo}
             // disabled={!editable || project?.customQuestions?.length >= maxCustomQuestion}
             btnType={BtnType.Outlined}
             translation-key=""
@@ -192,9 +192,9 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       )} */}
       <Menu
         $minWidth={"unset"}
-        anchorEl={anchorElMenuQuestions}
-        open={Boolean(anchorElMenuQuestions)}
-        onClose={handleCloseMenuQuestions}
+        anchorEl={anchorElMenuAddVideo}
+        open={Boolean(anchorElMenuAddVideo)}
+        onClose={handleCloseMenuAddVideo}
       >
           <MenuItem className={classes.menuItem}>
             <BackupOutlinedIcon sx={{color: 'var(--cimigo-blue-light-1)'}}/>
