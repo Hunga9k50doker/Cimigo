@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import LockIcon from "../components/LockIcon";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
-import { Help as HelpIcon, ArrowForward, Check as CheckIcon, BurstMode as BurstModeIcon, FactCheck as FactCheckIcon, PlaylistAdd as PlaylistAddIcon, FormatAlignLeft as FormatAlignLeftIcon, RemoveRedEye as RemoveRedEyeIcon } from '@mui/icons-material';
+import { Help as HelpIcon, ArrowForward,  FormatAlignLeft as FormatAlignLeftIcon, SentimentSatisfiedRounded, ArrowCircleUpRounded, ArrowCircleDownRounded } from '@mui/icons-material';
 import TabPanelBox from "components/TabPanelBox";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
@@ -26,8 +26,6 @@ import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import PopupHowToSetupSurvey from "pages/SurveyNew/components/PopupHowToSetupSurvey";
 import { setHowToSetupSurveyReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
-import images from "config/images";
-import {SentimentSatisfiedRounded, ArrowCircleUpRounded, ArrowCircleDownRounded} from '@mui/icons-material';
 import {AddVideoIcon} from "components/Svg";
 
 
