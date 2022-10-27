@@ -13,11 +13,11 @@ import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { editableProject } from "helpers/project"
 import PopupConfirmDelete from "components/PopupConfirmDelete"
-import { Pack } from "models/pack"
+import { Video } from "models/video"
 import { Menu } from "components/common/memu/Menu";
-import { PackService } from "services/pack"
+import { VideoService } from "services/video"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
-import { getPacksRequest } from "redux/reducers/Project/actionTypes"
+import { getPacksRequest, getVideosRequest } from "redux/reducers/Project/actionTypes"
 import PopupPack from "pages/SurveyNew/components/PopupPack"
 import ProjectHelper from "helpers/project";
 import NoteWarning from "components/common/warnings/NoteWarning";
@@ -37,81 +37,82 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
 
-  const [addNewPack, setAddNewPack] = useState<boolean>(false);
-  const [packAction, setPackAction] = useState<Pack>();
-  const [packEdit, setPackEdit] = useState<Pack>();
-  const [packDelete, setPackDelete] = useState<Pack>();
-  const [anchorElPack, setAnchorElPack] = useState<null | HTMLElement>(null);
+  const [addNewVideo, setAddNewVideo] = useState<boolean>(false);
+  const [videoAction, setVideoAction] = useState<Video>();
+  const [videoEdit, setVideoEdit] = useState<Video>();
+  const [videoDelete, setVideoDelete] = useState<Video>();
+  const [anchorElVideo, setAnchorElVideo] = useState<null | HTMLElement>(null);
   const [anchorElMenuAddVideo, setAnchorElMenuAddVideo] = useState<null | HTMLElement>(null);
 
-  const maxPack = useMemo(() => project?.solution?.maxPack || 0, [project])
+  const maxVideo = useMemo(() => project?.solution?.maxPack || 0, [project])
 
   const editable = useMemo(() => editableProject(project), [project])
 
-  const enableAddPacks = useMemo(() => {
-    return maxPack > (project?.packs?.length || 0)
-  }, [maxPack, project])
+  const enableAddVideos = useMemo(() => {
+    return maxVideo > (project?.packs?.length || 0)
+  }, [maxVideo, project])
 
-  const packNeedMore = useMemo(() => ProjectHelper.packNeedMore(project), [project])
+  const videoNeedMore = useMemo(() => ProjectHelper.packNeedMore(project), [project])
 
-  const onDeletePack = () => {
-    if (!packDelete) return
+  const onDeleteVideo = () => {
+    if (!videoDelete) return
     dispatch(setLoading(true))
-    PackService.delete(packDelete.id)
+    VideoService.delete(videoDelete.id)
       .then(() => {
-        dispatch(getPacksRequest(project.id))
-        setPackDelete(null)
+        dispatch(getVideosRequest(project.id))
+        setVideoDelete(null)
       })
       .catch(e => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const onAction = () => {
-
+  const onAction = (currentTarget: any, item: Video) => {
+    setAnchorElVideo(currentTarget)
+    setVideoAction(item)
   }
 
   const onCloseMenu = () => {
-    setAnchorElPack(null)
-    setPackAction(null)
+    setAnchorElVideo(null)
+    setVideoAction(null)
   }
 
   const handleEdit = () => {
-    if (!packAction) return
-    setPackEdit(packAction)
+    if (!videoAction) return
+    setVideoEdit(videoAction)
     onCloseMenu()
   }
 
   const handleDelete = () => {
-    if (!packAction) return
-    setPackDelete(packAction)
+    if (!videoAction) return
+    setVideoDelete(videoAction)
     onCloseMenu()
   }
 
-  const onCloseAddOrEditPack = () => {
-    setAddNewPack(false)
-    setPackEdit(null)
+  const onCloseAddOrEditVideo = () => {
+    setAddNewVideo(false)
+    setVideoEdit(null)
   }
 
-  const onAddOrEditPack = (data: FormData) => {
+  const onAddOrEditVideo = (data: FormData) => {
     data.append('projectId', `${project.id}`)
-    if (packEdit) {
+    if (videoEdit) {
       dispatch(setLoading(true))
-      PackService.update(packEdit.id, data)
+      VideoService.update(videoEdit.id, data)
         .then(() => {
-          dispatch(getPacksRequest(project.id))
+          dispatch(getVideosRequest(project.id))
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)))
     } else {
       dispatch(setLoading(true))
-      PackService.create(data)
+      VideoService.create(data)
         .then(() => {
-          dispatch(getPacksRequest(project.id))
+          dispatch(getVideosRequest(project.id))
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)))
     }
-    onCloseAddOrEditPack()
+    onCloseAddOrEditVideo()
   }
 
   const handleClickMenuAddVideo= (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -127,41 +128,27 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       <Heading4
         $fontSizeMobile={"16px"}
         $colorName="--eerie-black"
-        translation-key="setup_survey_summary_pack"
+        translation-key=""
         sx={{ display: "inline-block", verticalAlign: "middle" }}
       >
         STEP 1: Add videos that want you to test
       </Heading4>
-      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxPack}</ParagraphSmall>} />
+      <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxVideo}</ParagraphSmall>} />
       <ParagraphBody $colorName="--gray-80" mt={1} translation-key="">
       Please upload your advertising videos that you want to include in this test. Your advertising videos  are compared to a benchmark of over 500 advertisements, to find out specific strengths and weaknesses.
       </ParagraphBody>
-      {/* {!!packNeedMore && (
+      {!!videoNeedMore && (
         <NoteWarning>
           <ParagraphSmall translation-key="setup_add_packs_note_warning" 
           $colorName="--warning-dark" 
           sx={{"& > span": {fontWeight: 600}}}
           dangerouslySetInnerHTML={{
           __html: t("setup_add_packs_note_warning", {
-          number: packNeedMore,}),
+          number: videoNeedMore,}),
           }}>
           </ParagraphSmall>
       </NoteWarning>
-      )} */}
-      {/* {!!project?.packs?.length && (
-        <Box mt={{ xs: 3, sm: 2 }} >
-          <Grid spacing={2} container>
-            {project?.packs?.map((item, index) => (
-              <PackItem
-                key={index}
-                item={item}
-                editable={editable}
-                onAction={onAction}
-              />
-            ))}
-          </Grid>
-        </Box>
-        )} */}
+      )}
           <Box mt={{ xs: 3, sm: 3 }} >
             <Grid spacing={2} container>
               {project?.packs?.map((item, index) => (
@@ -184,9 +171,6 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
             children={<TextBtnSmall>Add videos</TextBtnSmall>}
             endIcon={<ArrowDropDownIcon sx={{ fontSize: "16px !important" }} />}
           />
-          {/* {(editable && questions.length >= maxCustomQuestion) && <ParagraphSmall mt={1} $colorName="--red-error" translation-key="setup_survey_custom_question_error_max">{t("setup_survey_custom_question_error_max", { max: maxCustomQuestion })}</ParagraphSmall>} */}
-        {/* </>
-      )} */}
       <Menu
         $minWidth={"unset"}
         anchorEl={anchorElMenuAddVideo}
@@ -207,8 +191,8 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       )} */}
       <Menu
         $minWidth={"120px"}
-        anchorEl={anchorElPack}
-        open={Boolean(anchorElPack)}
+        anchorEl={anchorElVideo}
+        open={Boolean(anchorElVideo)}
         onClose={onCloseMenu}
         anchorOrigin={{
           vertical: 'bottom',
@@ -232,18 +216,18 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
           <ParagraphBody translation-key="common_delete">{t('common_delete')}</ParagraphBody>
         </MenuItem>
       </Menu>
-      <PopupPack
-        isOpen={addNewPack}
-        itemEdit={packEdit}
-        onCancel={onCloseAddOrEditPack}
-        onSubmit={onAddOrEditPack}
-      />
+      {/* <PopupPack
+        isOpen={addNewVideo}
+        itemEdit={videoEdit}
+        onCancel={onCloseAddOrEditVideo}
+        onSubmit={onAddOrEditVideo}
+      /> */}
       <PopupConfirmDelete
-        isOpen={!!packDelete}
+        isOpen={!!videoDelete}
         title={t('setup_survey_pack_confirm_delete_title')}
         description={t('setup_survey_pack_confirm_delete_sub_title')}
-        onCancel={() => setPackDelete(null)}
-        onDelete={onDeletePack}
+        onCancel={() => setVideoDelete(null)}
+        onDelete={onDeleteVideo}
       />
     </Grid>
   )

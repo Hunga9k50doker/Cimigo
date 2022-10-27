@@ -62,7 +62,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
   const scrollToElement = (id: string) => {
     const el = document.getElementById(id)
     if (!el) return
-    const content = document.getElementById(SETUP_SURVEY_SECTION.basic_information)
+    const content = document.getElementById(SETUP_SURVEY_SECTION.add_video)
     document.getElementById(SETUP_SURVEY_SECTION.content_survey_setup).scrollTo({ behavior: 'smooth', top: el.offsetTop - content.offsetTop })
   }
 
@@ -124,6 +124,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
               step={2}
             />
             <EmotionMeasurement
+            price={price}
             project={project}
             step={3}
             />
