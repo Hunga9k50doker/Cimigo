@@ -7,7 +7,7 @@ import { Project, SETUP_SURVEY_SECTION } from "models/project"
 import { MaxChip } from "pages/SurveyNew/components"
 import { memo, useMemo, useState } from "react"
 // import PackItem from "../../SetupSurvey/components/PackItem"
-import { AddAPhoto, Edit as EditIcon, DeleteForever as DeleteForeverIcon } from '@mui/icons-material';
+import { Edit as EditIcon, DeleteForever as DeleteForeverIcon } from '@mui/icons-material';
 import TextBtnSmall from "components/common/text/TextBtnSmall"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
@@ -22,15 +22,12 @@ import PopupPack from "pages/SurveyNew/components/PopupPack"
 import ProjectHelper from "helpers/project";
 import NoteWarning from "components/common/warnings/NoteWarning";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
-import { t } from "i18next"
-import { icCustomQuestions } from "models/custom_question"
 import BackupOutlinedIcon from '@mui/icons-material/BackupOutlined';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import classes from "./styles.module.scss";
-import images from "config/images";
 import VideoItem from "../VideoItem";
-import PopupAddVideoFromDevice from "pages/SurveyNew/components/PopupAddvideoFromDevice";
+import {IconAddVideoMenu} from "components/svg";
 interface AddVideosProps {
   project: Project
 }
@@ -69,9 +66,8 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const onAction = (currentTarget: any, item: Pack) => {
-    setAnchorElPack(currentTarget)
-    setPackAction(item)
+  const onAction = () => {
+
   }
 
   const onCloseMenu = () => {
@@ -125,6 +121,7 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
   const handleCloseMenuAddVideo = () => {
     setAnchorElMenuAddVideo(null);
   }
+
   return (
     <Grid id={SETUP_SURVEY_SECTION.add_video}>
       <Heading4
@@ -183,7 +180,7 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
             // disabled={!editable || project?.customQuestions?.length >= maxCustomQuestion}
             btnType={BtnType.Outlined}
             translation-key=""
-            startIcon={<img src={images.icAddVideo} alt="icon add video"/>}
+            startIcon={<IconAddVideoMenu/>}
             children={<TextBtnSmall>Add videos</TextBtnSmall>}
             endIcon={<ArrowDropDownIcon sx={{ fontSize: "16px !important" }} />}
           />

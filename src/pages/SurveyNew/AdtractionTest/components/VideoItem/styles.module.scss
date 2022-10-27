@@ -58,6 +58,7 @@
         background-color: var(--cimigo-green-light-4);
         gap: 8px;
         border-radius: 4px;
+        align-items: center;
     }
 }
 .textItem {
@@ -66,7 +67,7 @@
     margin-bottom: 8px;
     width: 100%;
     align-items: flex-start;
-    img{
+    svg{
         margin-top: 4px;
     }
 

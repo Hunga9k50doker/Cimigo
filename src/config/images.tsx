@@ -87,12 +87,7 @@ import imgTargetTabHI from 'assets/img/target-tab-hi.svg';
 import imgNoResultNotPay from 'assets/img/no-result-not-pay.svg';
 import imgNoResultPaid from 'assets/img/no-result-paid.svg';
 import icPaymentHistory from "assets/img/icon/ic-payment-history.svg";
-import icAddVideo from "assets/img/icon/ic-add-video.svg";
-import icScenes from "assets/img/icon/ic-scenes.svg";
-import icBranding from "assets/img/icon/ic-branding.svg";
-import icProduct from "assets/img/icon/ic-product.svg";
-import icMessage from "assets/img/icon/ic-message.svg";
-import icAddVideoNotActive from "assets/img/icon/ic-add-video-not-active.svg"
+
 const images = {
   // ===================== Images =========================
   imgNoResultNotPay,
@@ -184,12 +179,6 @@ const images = {
   imgSad,
   imgPain,
   icPaymentHistory,
-  icAddVideo, 
-  icScenes, 
-  icBranding, 
-  icProduct, 
-  icMessage, 
-  icAddVideoNotActive,
 }
 
 export default images
