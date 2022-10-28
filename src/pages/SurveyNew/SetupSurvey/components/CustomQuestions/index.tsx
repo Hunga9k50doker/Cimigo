@@ -38,9 +38,10 @@ import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautif
 
 interface CustomQuestionsProps {
   project: Project;
+  step: number;
 }
 
-export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
+export const CustomQuestions = memo(({ project, step }: CustomQuestionsProps) => {
 
   const { t } = useTranslation()
   const dispatch = useDispatch()
@@ -466,7 +467,7 @@ export const CustomQuestions = memo(({ project }: CustomQuestionsProps) => {
             sx={{ display: "inline-block", verticalAlign: "middle" }}
             className={clsx({ [classes.titleDisabled]: !project?.enableCustomQuestion })}
           >
-            {t('setup_survey_custom_question_title', { step: 5 })}
+            {t('setup_survey_custom_question_title', { step: step })}
           </Heading4>
           <MaxChip
             sx={{ ml: 1 }}

@@ -43,7 +43,9 @@ export const SET_TARGET_OF_PROJECT_REDUCER = 'SET_TARGET_OF_PROJECT_REDUCER';
 
 export const SET_SCROLL_TO_SECTION_OF_PROJECT_REDUCER = 'SET_SCROLL_TO_SECTION_OF_PROJECT_REDUCER'
 
-export const SET_HOW_TO_SETUP_SURVEY_REDUCER = "SET_HOW_TO_SETUP_SURVEY_REDUCER"
+export const SET_HOW_TO_SETUP_SURVEY_REDUCER = "SET_HOW_TO_SETUP_SURVEY_REDUCER"; 
+
+export const GET_VIDEOS_OF_PROJECT_REQUEST = 'GET_VIDEOS_OF_PROJECT_REQUEST';
 
 export const getProjectRequest = (id: number, callback?: () => void, getFull: boolean = false) => {
   return {
@@ -185,5 +187,12 @@ export const setHowToSetupSurveyReducer = (data?: boolean) => {
   return {
     type: SET_HOW_TO_SETUP_SURVEY_REDUCER,
     data
+  }
+}
+
+export const getVideosRequest = (projectId: number) => {
+  return {
+    type: GET_VIDEOS_OF_PROJECT_REQUEST,
+    projectId
   }
 }
