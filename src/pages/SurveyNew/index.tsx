@@ -42,7 +42,7 @@ export const Survey = () => {
   const { project } = useSelector((state: ReducerType) => state.project)
   const [isEditName, setIsEditName] = useState(false);
   const [projectName, setProjectName] = useState<string>('');
-  const { isHaveChangePrice, setIsHaveChangePrice, tabRightPanel, setTabRightPanel, toggleOutlineMobile, setToggleOutlineMobile } = useChangePrice()
+  const { isHaveChangePrice, setIsHaveChangePrice, tabRightPanel, setTabRightPanel, toggleOutlineMobile, onToggleViewOutlineMobile } = useChangePrice()
 
   const tabs: string[] = useMemo(() => {
     return [
@@ -131,10 +131,6 @@ export const Survey = () => {
   const onChangeTabRightPanel = (tab: number) => {
     if (tab === ETabRightPanel.COST_SUMMARY) setIsHaveChangePrice(false)
     setTabRightPanel(tab)
-  }
-
-  const onToggleViewOutlineMobile = () => {
-    setToggleOutlineMobile(!toggleOutlineMobile);
   }
 
   const tabActiveTitle = (tabActive) => {

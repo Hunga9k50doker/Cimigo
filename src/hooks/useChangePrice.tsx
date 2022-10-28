@@ -14,6 +14,10 @@ export function useChangePrice() {
   const { configs } = useSelector((state: ReducerType) => state.user)
   const { project } = useSelector((state: ReducerType) => state.project)
 
+  const onToggleViewOutlineMobile = () => {
+    setToggleOutlineMobile(!toggleOutlineMobile);
+  }
+
   const price = useMemo(() => {
     if (!project || !configs) return null
     return PriceService.getTotal(project, configs)
@@ -37,7 +41,7 @@ export function useChangePrice() {
     tabRightPanel,
     setTabRightPanel,
     toggleOutlineMobile,
-    setToggleOutlineMobile,
+    onToggleViewOutlineMobile,
     isHaveChangePrice,
     setIsHaveChangePrice
   }
