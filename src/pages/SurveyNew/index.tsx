@@ -24,6 +24,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import SubTitle from "components/common/text/SubTitle";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import SetupSurvey from "./SetupSurvey";
+import AdtractionTest from "./AdtractionTest";
 import Target from "./Target";
 import Quotas from "./Quotas";
 import Pay from "./Pay";
@@ -41,7 +42,7 @@ export const Survey = () => {
   const { project } = useSelector((state: ReducerType) => state.project)
   const [isEditName, setIsEditName] = useState(false);
   const [projectName, setProjectName] = useState<string>('');
-  const { isHaveChangePrice, setIsHaveChangePrice, tabRightPanel, setTabRightPanel } = useChangePrice()
+  const { isHaveChangePrice, setIsHaveChangePrice, tabRightPanel, setTabRightPanel, toggleOutlineMobile, onToggleViewOutlineMobile } = useChangePrice()
 
   const tabs: string[] = useMemo(() => {
     return [
@@ -236,11 +237,13 @@ export const Survey = () => {
           <Route
             exact
             path={routes.project.detail.setupSurvey}
-            render={(routeProps) => <SetupSurvey
+            render={(routeProps) => <AdtractionTest
               {...routeProps}
               projectId={Number(id)}
               isHaveChangePrice={isHaveChangePrice}
               tabRightPanel={tabRightPanel}
+              toggleOutlineMobile={toggleOutlineMobile}
+              onToggleViewOutlineMobile={onToggleViewOutlineMobile}
               onChangeTabRightPanel={onChangeTabRightPanel}
             />}
           />

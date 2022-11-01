@@ -1,0 +1,61 @@
+
+@media only screen and (max-width: 767px) {
+    .pageTitle{
+        display: block !important; 
+        [class ~= MuiBox-root] {
+            display: none;
+        }
+    } 
+  }
+.mobileViewOutline {
+    display: none
+}
+@media only screen and (max-width: 1024px) {
+    .mobileAction {
+        position: relative;
+    }
+
+    .mobileViewOutline {
+        display: block;
+        position: absolute;
+        top: -33px;
+        right: 8px;
+        display: flex;
+        align-items: center;
+        background-color: var(--cimigo-blue-light-4);
+        padding: 4px 16px;
+        border-radius: 2px 0px 0px 0px;
+        z-index: 10;
+        cursor: pointer;
+        svg {
+            color: var(--cimigo-blue);
+            margin-left: 6px;
+        }
+    }
+    .rightContent {
+        display: block !important;
+        position: absolute;
+        left: 0px;
+        bottom: 109px;
+        width: 100% !important;
+        transition: bottom 0.5s ease-out 0s;
+        z-index: 11;
+        .rightPanelAction {
+            display: none;
+        }
+    }
+    .closeOutlineMobile {
+        bottom: -109px;
+        transition: bottom 0.5s ease-out 0s;
+    }
+    .modalMobile {
+        position: fixed;
+        background: rgba(28, 28, 28, 0.2);
+        top: 0px;
+        right: 0px;
+        left:0px;
+        bottom: 108px;
+    }
+  }
+
+

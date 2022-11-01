@@ -148,7 +148,9 @@ export enum SETUP_SURVEY_SECTION {
   additional_attributes = 'additional-attributes',
   content_survey_setup = 'content-survey-setup',
   custom_questions = 'custom_questions',
-  eye_tracking = 'eye-tracking'
+  eye_tracking = 'eye-tracking',
+  add_video = 'add-video',
+  emotion_measurement = 'emotion-measurement',
 }
 
 export enum TARGET_SECTION {

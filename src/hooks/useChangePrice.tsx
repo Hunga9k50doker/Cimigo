@@ -8,10 +8,15 @@ export function useChangePrice() {
 
   const [oldPrice, setOldPrice] = useState<number>();
   const [isHaveChangePrice, setIsHaveChangePrice] = useState(false);
+  const [toggleOutlineMobile, setToggleOutlineMobile] = useState(false);
   const [tabRightPanel, setTabRightPanel] = useState(ETabRightPanel.OUTLINE);
 
   const { configs } = useSelector((state: ReducerType) => state.user)
   const { project } = useSelector((state: ReducerType) => state.project)
+
+  const onToggleViewOutlineMobile = () => {
+    setToggleOutlineMobile(!toggleOutlineMobile);
+  }
 
   const price = useMemo(() => {
     if (!project || !configs) return null
@@ -35,6 +40,8 @@ export function useChangePrice() {
   return {
     tabRightPanel,
     setTabRightPanel,
+    toggleOutlineMobile,
+    onToggleViewOutlineMobile,
     isHaveChangePrice,
     setIsHaveChangePrice
   }
