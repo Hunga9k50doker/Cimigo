@@ -196,7 +196,7 @@ const PopupHowToSetupSurvey = memo((props: Props) => {
             </Grid>
           </Grid>
           <Grid className={classes.contentContainer}>
-            <ParagraphBody dangerouslySetInnerHTML={{ __html: project?.solution?.howToSetUpSurveyContent || '' }}></ParagraphBody>
+            <ParagraphBody $colorName='--gray-90' variant='body2' variantMapping={{ body2: "div" }} dangerouslySetInnerHTML={{ __html: project?.solution?.howToSetUpSurveyContent || '' }}></ParagraphBody>
           </Grid>
         </Grid>
       </DialogContent>
