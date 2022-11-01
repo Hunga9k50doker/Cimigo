@@ -160,6 +160,7 @@ export interface GetAnswerSuggestionsParams {
 
 export interface CreateAnswerSuggestionParams {
   name: string;
+  order: number;
   questionId: number;
   answerIds: number[];
   groupIds: number[];
@@ -167,6 +168,7 @@ export interface CreateAnswerSuggestionParams {
 
 export interface UpdateAnswerSuggestionParams {
   name?: string;
+  order?: number;
   questionId?: number;
   language?: string;
   answerIds?: number[];
@@ -176,6 +178,7 @@ export interface UpdateAnswerSuggestionParams {
 export interface TargetAnswerSuggestion {
   id: number;
   name: string;
+  order: number;
   questionId: number;
   answerIds: number[];
   groupIds: number[];
