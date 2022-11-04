@@ -28,6 +28,9 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import classes from "./styles.module.scss";
 import VideoItem from "../VideoItem";
 import {IconAddVideoMenu} from "components/svg";
+import PopupAddVideo from "pages/SurveyNew/components/PopupAddVideo";
+import {EAddVideoType} from "models/adtraction_test";
+
 interface AddVideosProps {
   project: Project
 }
@@ -43,6 +46,7 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
   const [videoDelete, setVideoDelete] = useState<Video>();
   const [anchorElVideo, setAnchorElVideo] = useState<null | HTMLElement>(null);
   const [anchorElMenuAddVideo, setAnchorElMenuAddVideo] = useState<null | HTMLElement>(null);
+  const [typeAddVideo, setTypeAddVideo] = useState(null);
 
   const maxVideo = useMemo(() => project?.solution?.maxPack || 0, [project])
 
@@ -53,6 +57,22 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
   }, [maxVideo, project])
 
   const videoNeedMore = useMemo(() => ProjectHelper.packNeedMore(project), [project])
+
+  const onOpenPopupAddVideo = (type: EAddVideoType) => {
+    switch (type) {
+      case EAddVideoType.From_Device:
+        setAddNewVideo(true);
+        setTypeAddVideo(EAddVideoType.From_Device);
+        break;
+      case EAddVideoType.From_Youtube:
+        setAddNewVideo(true);
+        setTypeAddVideo(EAddVideoType.From_Youtube);
+        break;
+      default:
+        break;
+    }
+    handleCloseMenuAddVideo();
+  }
 
   const onDeleteVideo = () => {
     if (!videoDelete) return
@@ -177,11 +197,11 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
         open={Boolean(anchorElMenuAddVideo)}
         onClose={handleCloseMenuAddVideo}
       >
-          <MenuItem className={classes.menuItem}>
+          <MenuItem className={classes.menuItem} onClick={() => onOpenPopupAddVideo(EAddVideoType.From_Device)}>
             <BackupOutlinedIcon sx={{color: 'var(--cimigo-blue-light-1)'}}/>
             <ParagraphExtraSmall className={classes.menuItemText}>From your device</ParagraphExtraSmall>
           </MenuItem>
-          <MenuItem className={classes.menuItem}>
+          <MenuItem className={classes.menuItem} onClick={() => onOpenPopupAddVideo(EAddVideoType.From_Youtube)}>
             <YouTubeIcon sx={{color: '#DD352E'}}/>
             <ParagraphExtraSmall className={classes.menuItemText}>From Youtube</ParagraphExtraSmall>
           </MenuItem>
@@ -222,6 +242,13 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
         onCancel={onCloseAddOrEditVideo}
         onSubmit={onAddOrEditVideo}
       /> */}
+      <PopupAddVideo
+      isOpen={addNewVideo}
+      itemEdit={videoEdit}
+      onClose={onCloseAddOrEditVideo}
+      type={typeAddVideo}
+      onSubmit={onAddOrEditVideo}
+      />
       <PopupConfirmDelete
         isOpen={!!videoDelete}
         title={t('setup_survey_pack_confirm_delete_title')}
@@ -229,6 +256,7 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
         onCancel={() => setVideoDelete(null)}
         onDelete={onDeleteVideo}
       />
+
     </Grid>
   )
 })

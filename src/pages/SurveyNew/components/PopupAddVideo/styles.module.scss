@@ -1,0 +1,66 @@
+.paper {
+  width: 790px;
+  max-width: 790px;
+  border-radius: 8px;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    max-width: 100%;
+    margin: 0px 8px !important;
+    overflow: hidden;
+  }
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.rootStepper {
+  padding-bottom: 24px;
+}
+
+.rootConnector {
+  margin: 0px 40px !important;
+  @media only screen and (max-width: 767px) {
+    margin: 0px 20px!important;
+  }
+}
+.activeConnector {
+  span {
+    border-color: var(--cimigo-green-dark);
+  }
+}
+.rootStepIconActive {
+    color: var(--cimigo-green-dark-2) !important;
+}
+
+.rootStepLabel {
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--eerie-black-40);
+    [class~=MuiStepLabel-iconContainer] {
+      margin-right: 0 !important;
+    }
+    @media only screen and (max-width: 767px) {
+      font-size: 14px;
+    }
+  }
+  .rootStepLabelCompleted {
+    color: var(--cimigo-green-dark-2) !important;
+    font-weight: 600 !important;
+    font-size: 16px;
+    @media only screen and (max-width: 767px) {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+  .rootStepLabelActive {
+    color: var(--cimigo-green-dark-2) !important;
+    font-weight: 600 !important;
+    font-size: 16px;
+    @media only screen and (max-width: 767px) {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+
