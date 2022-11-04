@@ -12,7 +12,7 @@ import ButtonCLose from "components/common/buttons/ButtonClose"
 import {DialogTitle} from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import SmartDisplayOutlinedIcon from '@mui/icons-material/SmartDisplayOutlined';
-import {IconInformation, IconScenesStep} from "components/ssvg";
+import {IconInformation, IconScenesStep} from "components/svg";
 import UploadVideoFromDevice from "./components/UploadVideoFromDevice";
 import UploadVideoFromYoutube from "./components/UploadVideoFromYoutube";
 import { Video } from "models/video";
