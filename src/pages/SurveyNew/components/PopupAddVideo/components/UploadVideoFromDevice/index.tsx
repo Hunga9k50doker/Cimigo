@@ -27,6 +27,7 @@ const FILE_FORMAT = ["video/mp4", "video/avi", "video/webm", "video/x-ms-wmv", "
 const VIDEO_DURATION = 120 //seconds;
 interface VideoFormData {
   video: File;
+  duration: any;
 }
 interface Props {
   onSubmit: (data: FormData) => void;
@@ -47,9 +48,10 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep}: Props) => {
 
   const schema = yup.object().shape({
     video: yup.mixed().required("Video is required"),
+    duration: yup.number().required("Duration is required"),
   })
 
-  const { handleSubmit } = useForm<VideoFormData>({
+  const { handleSubmit, setValue } = useForm<VideoFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
@@ -75,13 +77,28 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep}: Props) => {
     })
   }
 
+  const getDuration = (file: File) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file);
+      reader.onload = function (e) {
+        const video = document.createElement("video");
+        video.src = e.target.result as string;
+        video.ondurationchange = function() {
+          const duration = video.duration
+          resolve(duration)
+        };
+      }
+    })
+  }
+  
   const handleDrop = useCallback(
     async (acceptedFiles) => {
       let file = acceptedFiles[0];
       const checkSize = file.size < VIDEO_SIZE;
       const checkType = FILE_FORMAT.includes(file.type);
       const checkDuration = await isValidDuration(file)
-
+      const duration = await getDuration(file)
       if (!checkSize) {
         setIsError('size-invalid');
         return
@@ -97,6 +114,7 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep}: Props) => {
       setIsError('');
       setIsLoading(true);
       setFileReview(file)
+      setValue("duration", duration);
       setIsLoading(false);
       onChangeStep();
     },
@@ -114,6 +132,7 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep}: Props) => {
 
   const _onSubmit = (data: VideoFormData) => {
     const form = new FormData()
+    form.append("duration", data.duration)
     if (data.video && typeof data.video === 'object') form.append('video', data.video)
     onSubmit(form)
   }
