@@ -7,7 +7,7 @@ import { memo} from "react"
 import classes from './styles.module.scss';
 import ShowMoreText from "react-show-more-text";
 import Heading5 from "components/common/text/Heading5";
-import {IconBranding, IconMessage, IconProduct, IconScenes} from "components/svg";
+import {IconBranding, IconMessage, IconProduct, IconScenes} from "components/ssvg";
 
 interface VideoItemProps {
   item: Video;

@@ -27,7 +27,7 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import classes from "./styles.module.scss";
 import VideoItem from "../VideoItem";
-import {IconAddVideoMenu} from "components/svg";
+import {IconAddVideoMenu} from "components/ssvg";
 import PopupAddVideo from "pages/SurveyNew/components/PopupAddVideo";
 import {EAddVideoType} from "models/adtraction_test";
 
