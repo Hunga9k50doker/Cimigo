@@ -197,7 +197,7 @@ const PopupHowToSetupSurvey = memo((props: Props) => {
             </Grid>
           </Grid>
           <Grid className={classes.contentContainer}>
-            <ParagraphBody $colorName="--eerie-black" className={clsx("ql-editor", classes.contentText)} dangerouslySetInnerHTML={{ __html: project?.solution?.howToSetUpSurveyContent || '' }}></ParagraphBody>
+            <ParagraphBody $colorName="--eerie-black" variant='body2' variantMapping={{ body2: "div" }} className={clsx("ql-editor", classes.contentText)} dangerouslySetInnerHTML={{ __html: project?.solution?.howToSetUpSurveyContent || '' }}></ParagraphBody>
           </Grid>
         </Grid>
       </DialogContent>

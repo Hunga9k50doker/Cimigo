@@ -20,6 +20,7 @@ const CreateAnswerSuggestion = memo((props: Props) => {
     dispatch(setLoading(true))
     TargetAnswerSuggestionService.create({
       name: value.name,
+      order: value.order,
       questionId: Number(questionId),
       answerIds: value.answerIds?.map(it => it.id) || [],
       groupIds: value.groupIds?.map(it => it.id) || [],
