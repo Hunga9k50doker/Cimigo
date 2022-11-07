@@ -27,6 +27,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import ParagraphBody from 'components/common/text/ParagraphBody';
 import { AttachmentService } from 'services/attachment';
 import { ProjectService } from 'services/project';
+import clsx from 'clsx';
 interface EmailForm {
   name: string,
   email: string,
@@ -196,7 +197,7 @@ const PopupHowToSetupSurvey = memo((props: Props) => {
             </Grid>
           </Grid>
           <Grid className={classes.contentContainer}>
-            <ParagraphBody dangerouslySetInnerHTML={{ __html: project?.solution?.howToSetUpSurveyContent || '' }}></ParagraphBody>
+            <ParagraphBody $colorName="--eerie-black" className={clsx("ql-editor", classes.contentText)} dangerouslySetInnerHTML={{ __html: project?.solution?.howToSetUpSurveyContent || '' }}></ParagraphBody>
           </Grid>
         </Grid>
       </DialogContent>
