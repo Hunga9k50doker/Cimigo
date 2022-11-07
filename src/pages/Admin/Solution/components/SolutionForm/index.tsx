@@ -22,6 +22,7 @@ import AdminSolutionService from "services/admin/solution";
 import UploadFile from "components/UploadFile";
 import { FileUpload } from "models/attachment";
 import { ESOLUTION_TYPE, solutionTypes } from "models";
+import InputTextareaAutosize from "components/InputTextareaAutosize";
 
 const modules = {
   toolbar: [
@@ -689,19 +690,14 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                         />
                       </Grid>
                       <Grid item xs={12} sm={12}>
-                        <TextTitle invalid={errors.content?.message}>Content</TextTitle>
-                        <Controller
+                        <InputTextareaAutosize
+                          title="Content"
                           name="howToSetUpSurveyContent"
-                          control={control}
-                          render={({ field }) => <ReactQuill
-                            modules={modules}
-                            className={clsx(classes.editor, { [classes.editorError]: !!errors.howToSetUpSurveyContent?.message })}
-                            value={field.value || ''}
-                            onBlur={() => field.onBlur()}
-                            onChange={(value) => field.onChange(value)}
-                          />}
+                          maxRows={100}
+                          minRows={10}
+                          inputRef={register('howToSetUpSurveyContent')}
+                          errorMessage={errors.howToSetUpSurveyContent?.message}
                         />
-                        {errors.content?.message && <ErrorMessage>{errors.howToSetUpSurveyContent?.message}</ErrorMessage>}
                       </Grid>
                       <Grid item xs={12} sm={12}>
                         <TextTitle>PDF</TextTitle>
