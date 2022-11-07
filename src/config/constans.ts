@@ -98,6 +98,7 @@ export const API = {
     CHANGE_PAYMENT_METHOD: '/v1.0/payment/:id/change-payment-method',
   },
   ATTACHMENT: {
+    DEFAULT: '/v1.0/attachment/',
     DOWNLOAD: '/v1.0/attachment/:id/download',
     DOWNLOAD_BASE64: '/v1.0/attachment/:id/download-base64',
     DOWNLOAD_BY_URL: '/v1.0/attachment/download',

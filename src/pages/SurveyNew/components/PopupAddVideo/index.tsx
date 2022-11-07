@@ -20,6 +20,11 @@ import * as yup from 'yup';
 import {EAddVideoType} from  "models/adtraction_test";
 import { RPStepLabel, RPStepIconBox} from "pages/SurveyNew/components";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
+import { AttachmentService } from "services/attachment";
+import { setLoading, setErrorMess } from "redux/reducers/Status/actionTypes";
+import { getVideosRequest } from "redux/reducers/Project/actionTypes";
+import { useDispatch } from "react-redux";
+import { Project } from "models/project";
 
 
 export enum EStep {
@@ -35,14 +40,17 @@ interface Props {
   itemEdit?: Video;
   onSubmit: (data: FormData) => void;
   type?: number;
+  project: Project;
 }
 
 
 
 const PopupAddVideo = (props: Props) => {
 
-  const { onClose, isOpen, type, itemEdit, onSubmit} = props;
+  const { onClose, isOpen, type, itemEdit, onSubmit, project} = props;
 
+  const dispatch = useDispatch()
+  
   const { t, i18n } = useTranslation();
 
   const steps = useMemo(() => {
@@ -66,19 +74,33 @@ const PopupAddVideo = (props: Props) => {
       case EAddVideoType.From_Device:
         return  <UploadVideoFromDevice
           onChangeStep={handleNextStep}
-          onSubmit={_onSubmit}
+          onSubmit={onAddOrEditVideoFromDevice}
+          project={project}
+          // onSubmit={_onSubmit}
         />
       case EAddVideoType.From_Youtube:
         return <UploadVideoFromYoutube
           onChangeStep={handleNextStep}
+          // onSubmit={onAddOrEditVideoFromDevice}
           onSubmit={_onSubmit}
         />
     }
   }
+  const _onSubmit = () => {
+   
+  }
 
-  const _onSubmit = (data: FormData) => {
-    onSubmit(data)
+  const onAddOrEditVideoFromDevice = (data: Video) => {
+    // dispatch(setLoading(true));
+    // AttachmentService.create(data)
+    //   .then(() => {
+    //     dispatch(getVideosRequest(project.id))
+    //   })
+    //   .catch(e => dispatch(setErrorMess(e)))
+    //   .finally(() => dispatch(setLoading(false)))
+    console.log(data);
   } 
+  console.log(onAddOrEditVideoFromDevice);
 
   const _onClose = () => {
     onClose()

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import {
+  duration,
   Grid,
 } from "@mui/material";
 import { useForm} from "react-hook-form";
@@ -20,25 +21,35 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import ErrorTwoToneIcon from '@mui/icons-material/ErrorTwoTone';
 import Heading5 from "components/common/text/Heading5";
 import { LinearProgressWithLabel } from "../LinearProgressWithLabel";
+import { FileUpload } from "models/attachment";
+import { v4 as uuidv4 } from 'uuid';
+import { Video } from "models/video";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { AttachmentService } from "services/attachment";
+import { getVideosRequest } from "redux/reducers/Project/actionTypes";
+import { useDispatch } from "react-redux";
+import { Project } from "models/project";
 
 
 const VIDEO_SIZE= 15 * 10000000;// bytes
 const FILE_FORMAT = ["video/mp4", "video/avi", "video/webm", "video/x-ms-wmv", "video/x-flv", "video/mpeg", "video/quicktime", "video/x-m4v"];
 const VIDEO_DURATION = 120 //seconds;
 interface VideoFormData {
-  video: File;
+  video: FileUpload;
   duration: any;
 }
 interface Props {
-  onSubmit: (data: FormData) => void;
+  onSubmit: (data: Video) => void;
   onChangeStep?: () => void;
+  project: Project;
 }
 
 
 
 // eslint-disable-next-line no-empty-pattern
-const UploadVideoFromDevice= ({onSubmit, onChangeStep}: Props) => {
+const UploadVideoFromDevice= ({onSubmit, onChangeStep, project}: Props) => {
   const { t, i18n } = useTranslation();
+  const dispatch = useDispatch()
 
   const [progress, setProgress] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +66,18 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep}: Props) => {
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
+
+  const convertFile = (file: File): FileUpload => {
+    return {
+      id: uuidv4(),
+      fileName: file.name,
+      fileSize: file.size,
+      mimeType: file.type,
+      file: file,
+      isNew: true
+    }
+  }
+
 
   const isValidDuration = async (file: File) => {
     return new Promise((resolve) => {
@@ -94,11 +117,11 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep}: Props) => {
   
   const handleDrop = useCallback(
     async (acceptedFiles) => {
-      let file = acceptedFiles[0];
-      const checkSize = file.size < VIDEO_SIZE;
-      const checkType = FILE_FORMAT.includes(file.type);
-      const checkDuration = await isValidDuration(file)
-      const duration = await getDuration(file)
+      let file = convertFile(acceptedFiles[0]);
+      const checkSize = file.file.size < VIDEO_SIZE;
+      const checkType = FILE_FORMAT.includes(file.file.type);
+      const checkDuration = await isValidDuration(file.file)
+      const duration = Number(await getDuration(file.file))
       if (!checkSize) {
         setIsError('size-invalid');
         return
@@ -113,10 +136,29 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep}: Props) => {
       }
       setIsError('');
       setIsLoading(true);
-      setFileReview(file)
+      setFileReview(file.file)
+      setValue("video", file);
       setValue("duration", duration);
+      const data: Video = {
+            id: file.id,
+            duration: duration,
+        }
+      onSubmit(data);
+      const config = {
+        onUploadProgress: function (progress) {
+          const percentCompleted = Math.round((progress.loaded / progress.total) * 100);
+          setProgress(percentCompleted);
+        }
+      }
+      dispatch(setLoading(true));
+      AttachmentService.create(data, config)
+        .then(() => {
+          dispatch(getVideosRequest(project.id))
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
       setIsLoading(false);
-      onChangeStep();
+      // onChangeStep();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [isMountedRef]
@@ -130,25 +172,9 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep}: Props) => {
     multiple: false,
   });
 
-  const _onSubmit = (data: VideoFormData) => {
-    const form = new FormData()
-    form.append("duration", data.duration)
-    if (data.video && typeof data.video === 'object') form.append('video', data.video)
-    onSubmit(form)
-  }
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10 ));
-    }, 800);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
   return (
     <>
-    <form onSubmit={handleSubmit(_onSubmit)}>
+    <form>
         <ParagraphSmall $colorName="--eerie-black">Upload your video ads that you want test.</ParagraphSmall>
         <Grid
           className={classes.videoUp}
@@ -213,9 +239,11 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep}: Props) => {
                 <div className={classes.textInfo}>
                   <ParagraphSmall $colorName="--eerie-black" translation-key="">Maximum video duration is <span>2 minutes</span>.</ParagraphSmall>
                 </div>
+                <Button btnType={BtnType.Primary} type="submit">Submit</Button>
           </Grid>
-        </form>
-      </>
+         
+      </form>
+    </>
   );
 };
 

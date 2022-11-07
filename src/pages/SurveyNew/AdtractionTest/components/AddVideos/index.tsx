@@ -75,15 +75,15 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
   }
 
   const onDeleteVideo = () => {
-    if (!videoDelete) return
-    dispatch(setLoading(true))
-    VideoService.delete(videoDelete.id)
-      .then(() => {
-        dispatch(getVideosRequest(project.id))
-        setVideoDelete(null)
-      })
-      .catch(e => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
+    // if (!videoDelete) return
+    // dispatch(setLoading(true))
+    // VideoService.delete(videoDelete.id)
+    //   .then(() => {
+    //     dispatch(getVideosRequest(project.id))
+    //     setVideoDelete(null)
+    //   })
+    //   .catch(e => dispatch(setErrorMess(e)))
+    //   .finally(() => dispatch(setLoading(false)))
   }
 
   const onAction = (currentTarget: any, item: Video) => {
@@ -114,25 +114,25 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
   }
 
   const onAddOrEditVideo = (data: FormData) => {
-    data.append('projectId', `${project.id}`)
-    if (videoEdit) {
-      dispatch(setLoading(true))
-      VideoService.update(videoEdit.id, data)
-        .then(() => {
-          dispatch(getVideosRequest(project.id))
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
-    } else {
-      dispatch(setLoading(true))
-      VideoService.create(data)
-        .then(() => {
-          dispatch(getVideosRequest(project.id))
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
-    }
-    onCloseAddOrEditVideo()
+    // data.append('projectId', `${project.id}`)
+    // if (videoEdit) {
+    //   dispatch(setLoading(true))
+    //   VideoService.update(videoEdit.id, data)
+    //     .then(() => {
+    //       dispatch(getVideosRequest(project.id))
+    //     })
+    //     .catch((e) => dispatch(setErrorMess(e)))
+    //     .finally(() => dispatch(setLoading(false)))
+    // } else {
+    //   dispatch(setLoading(true))
+    //   VideoService.create(data)
+    //     .then(() => {
+    //       dispatch(getVideosRequest(project.id))
+    //     })
+    //     .catch((e) => dispatch(setErrorMess(e)))
+    //     .finally(() => dispatch(setLoading(false)))
+    // }
+    // onCloseAddOrEditVideo()
   }
 
   const handleClickMenuAddVideo= (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -171,14 +171,14 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       )}
           <Box mt={{ xs: 3, sm: 3 }} >
             <Grid spacing={2} container>
-              {project?.packs?.map((item, index) => (
+              {/* {project?.packs?.map((item, index) => (
                 <VideoItem
                   key={index}
                   item={item}
                   editable={editable}
                   onAction={onAction}
                 />
-              ))}
+              ))} */}
             </Grid>
           </Box>
           <Button
@@ -248,6 +248,7 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       onClose={onCloseAddOrEditVideo}
       type={typeAddVideo}
       onSubmit={onAddOrEditVideo}
+      project={project}
       />
       <PopupConfirmDelete
         isOpen={!!videoDelete}

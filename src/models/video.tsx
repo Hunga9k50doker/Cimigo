@@ -1,3 +1,11 @@
+import { Attachment } from "./attachment";
+
 export interface Video {
-    id:number;
+    id: string | number;
+    duration: number;
+}
+
+export interface VideoYoutube {
+    attachment: Attachment;
+    duration: number;
 }
