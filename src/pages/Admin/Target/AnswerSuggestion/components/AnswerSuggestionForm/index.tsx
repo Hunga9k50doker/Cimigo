@@ -17,6 +17,7 @@ import { TargetAnswerGroupService } from "services/admin/target_answer_group";
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required.'),
+  order: yup.number().typeError('Order is required.').required('Order is required.'),
   answerIds: yup.array(yup.object().shape({
     id: yup.number(),
     name: yup.string()
@@ -29,6 +30,7 @@ const schema = yup.object().shape({
 
 export interface AnswerSuggestionFormData {
   name: string;
+  order: number;
   answerIds: OptionItem[];
   groupIds: OptionItem[];
 }
@@ -42,8 +44,6 @@ interface Props {
 }
 
 const AnswerSuggestionForm = memo(({ title, questionId, itemEdit, langEdit, onSubmit }: Props) => {
-
-
 
   const [answers, setAnswers] = useState<OptionItem[]>([]);
   const [groups, setGroups] = useState<OptionItem[]>([]);
@@ -65,6 +65,7 @@ const AnswerSuggestionForm = memo(({ title, questionId, itemEdit, langEdit, onSu
     if (itemEdit) {
       reset({
         name: itemEdit.name,
+        order: itemEdit.order,
         answerIds: itemEdit.answers?.map(it => ({ id: it.id, name: it.name })),
         groupIds: itemEdit.groups?.map(it => ({ id: it.id, name: it.name }))
       })
@@ -150,6 +151,16 @@ const AnswerSuggestionForm = memo(({ title, questionId, itemEdit, langEdit, onSu
                         placeholder: "Select group",
                         isDisabled: !!langEdit
                       }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Inputs
+                      title="Order"
+                      name="order"
+                      type="number"
+                      disabled={!!langEdit}
+                      inputRef={register('order')}
+                      errorMessage={errors.order?.message}
                     />
                   </Grid>
                 </Grid>

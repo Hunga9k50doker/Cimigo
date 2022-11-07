@@ -173,6 +173,11 @@ export const API = {
     PAYMENT: {
       DEFAULT: '/v1.0/admin/payment',
     },
+  },
+  GOOGLE_APIS: {
+    VIDEO_YOUTUBE: {
+      DEFAULT: '/v1.0/googleapis/videos-youtube'
+    }
   }
 }
 

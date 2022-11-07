@@ -18,6 +18,7 @@ import { TargetAnswerSuggestionService } from "services/admin/target_answer_sugg
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
+  { name: 'order', label: 'Order', sortable: false },
   { name: 'id', label: 'Id', sortable: false },
   { name: 'name', label: 'Name', sortable: false },
   { name: 'languages', label: 'Languages', sortable: false },
@@ -190,6 +191,9 @@ const AnswerSuggestionList = memo(({ }: Props) => {
                           key={index}
                         >
                           <TableCell component="th">
+                            {item.order}
+                          </TableCell>
+                          <TableCell component="th">
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
@@ -216,7 +220,7 @@ const AnswerSuggestionList = memo(({ }: Props) => {
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={4}>
+                      <TableCell align="center" colSpan={tableHeaders.length}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>

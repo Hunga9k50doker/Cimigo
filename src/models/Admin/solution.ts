@@ -1,4 +1,5 @@
 import { Attachment } from "models/attachment";
+import { ESOLUTION_TYPE } from "models/solution";
 import { EyeTrackingSampleSize } from "./eye_tracking_sample_size";
 import { SampleSize } from "./sample_size";
 
@@ -40,6 +41,7 @@ export interface Solution {
   categoryHomeId: number;
   parentLanguage: number,
   language: string;
+  typeId: ESOLUTION_TYPE;
   minPack: number;
   maxPack: number;
   minAdditionalBrand: number;
