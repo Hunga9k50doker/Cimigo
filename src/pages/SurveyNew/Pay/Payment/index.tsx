@@ -4,9 +4,8 @@ import classes from './styles.module.scss';
 import images from "config/images";
 import InputSelect from "components/common/inputs/InputSelect";
 import { useDispatch, useSelector } from "react-redux";
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import { ReducerType } from "redux/reducers";
-import { PriceService } from "helpers/price";
+import { usePrice } from "helpers/price";
 import { EPaymentMethod, OptionItem } from "models/general";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import CountryService from "services/country";
@@ -203,10 +202,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentInfo, user])
 
-  const price = useMemo(() => {
-    if (!project || !configs) return null
-    return PriceService.getTotal(project, configs)
-  }, [project, configs])
+  const { price } = usePrice()
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -634,14 +630,14 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               <ParagraphBody $colorName="--eerie-black" translation-key="common_sample_size">
                 {t('common_sample_size')} {`(${project?.sampleSize || 0})`}
               </ParagraphBody>
-              <ParagraphBody $colorName="--eerie-black">{`$`}{fCurrency2(price?.sampleSizeCostUSD || 0)}</ParagraphBody>
+              <ParagraphBody $colorName="--eerie-black">{price?.sampleSizeCost?.show}</ParagraphBody>
             </div>
             {project?.customQuestions?.length > 0 && (
               <div className={classes.flexOrder}>
                 <ParagraphBody $colorName="--eerie-black" translation-key="common_custom_question">
                   {t("common_custom_question")} {`(${(project?.customQuestions?.length) || 0})`}
                 </ParagraphBody>
-                <ParagraphBody $colorName="--eerie-black">{`$`}{fCurrency2(price?.customQuestionCostUSD)}</ParagraphBody>
+                <ParagraphBody $colorName="--eerie-black">{price?.customQuestionCost?.show}</ParagraphBody>
               </div>
             )}
             {project?.enableEyeTracking && (
@@ -649,7 +645,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
                 <ParagraphBody $colorName="--eerie-black" translation-key="payment_project_order_summary_eye_tracking">
                   {t("payment_project_order_summary_eye_tracking")} ({project?.eyeTrackingSampleSize || 0})
                 </ParagraphBody>
-                <ParagraphBody $colorName="--eerie-black">{`$`}{fCurrency2(price?.eyeTrackingSampleSizeCostUSD)}</ParagraphBody>
+                <ParagraphBody $colorName="--eerie-black">{price?.eyeTrackingSampleSizeCost?.show}</ParagraphBody>
               </div>
             )}
             <Divider />
@@ -657,20 +653,20 @@ const PaymentPage = memo(({ }: PaymentProps) => {
               <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
                 {t('common_sub_total')}
               </ParagraphBody>
-              <ParagraphBody $colorName="--eerie-black">{`$`}{fCurrency2(price?.amountUSD || 0)}</ParagraphBody>
+              <ParagraphBody $colorName="--eerie-black">{price?.amountCost?.show}</ParagraphBody>
             </div>
             <div className={classes.flexOrder}>
               <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
                 {t('common_vat', { percent: (configs?.vat || 0) * 100 })}
               </ParagraphBody>
-              <ParagraphBody $colorName="--eerie-black">{`$`}{fCurrency2(price?.vatUSD || 0)}</ParagraphBody>
+              <ParagraphBody $colorName="--eerie-black">{price?.vatCost?.show}</ParagraphBody>
             </div>
             <Divider />
             <div className={classes.flexTotal}>
-              <Heading5 $colorName="--eerie-black" translation-key="common_total">{t('common_total')} (USD)</Heading5>
-              <Heading2 $colorName="--cimigo-green-dark-1">{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</Heading2>
+              <Heading5 $colorName="--eerie-black" translation-key="common_total">{t('common_total')}</Heading5>
+              <Heading2 $colorName="--cimigo-green-dark-1">{price?.totalAmountCost?.show}</Heading2>
             </div>
-            <Heading6 $colorName="--cimigo-blue-dark-1" sx={{ textAlign: "right" }}>({fCurrency2VND(price?.totalAmount || 0)} VND)</Heading6>
+            <Heading6 $colorName="--cimigo-blue-dark-1" sx={{ textAlign: "right" }}>({price?.totalAmountCost?.equivalent})</Heading6>
             <div className={classes.chargedBy}>
               <ParagraphExtraSmall mr={1} $colorName="--gray-40" translation-key="payment_billing_sub_tab_payment_note">{t("payment_billing_sub_tab_payment_note")}</ParagraphExtraSmall>
               <TooltipCustom popperClass={classes.popperClass} translation-key="payment_billing_sub_tab_payment_note_tooltip" title={t("payment_billing_sub_tab_payment_note_tooltip")}>
@@ -696,9 +692,9 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       </Grid>
       <Grid className={classes.flexTotalMobile}>
         <Grid>
-          <Heading5 mb={1} $colorName="--eerie-black" translation-key="common_total">{t('common_total')} (USD)</Heading5>
-          <Heading2 $colorName="--cimigo-green-dark-1">{`$`}{fCurrency2(price?.totalAmountUSD || 0)}</Heading2>
-          <ParagraphExtraSmall $colorName="--cimigo-blue-dark-2" $fontWeight={800}>({fCurrency2VND(price?.totalAmount || 0)} VND)</ParagraphExtraSmall>
+          <Heading5 mb={1} $colorName="--eerie-black" translation-key="common_total">{t('common_total')}</Heading5>
+          <Heading2 $colorName="--cimigo-green-dark-1">{price?.totalAmountCost?.show}</Heading2>
+          <ParagraphExtraSmall $colorName="--cimigo-blue-dark-2" $fontWeight={800}>({price?.totalAmountCost?.equivalent})</ParagraphExtraSmall>
         </Grid>
         <Button
           type="submit"

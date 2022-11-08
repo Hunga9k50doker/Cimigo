@@ -41,6 +41,14 @@
   font-size: 14px;
   padding: 13px 16px;
   border-width: 1px !important;
+  border-color: var(--gray-40);
+  border-radius: 5px;
+  &:focus {
+    border-color: var(--gray-40);
+  }
+  &:focus-visible {
+    outline: none;
+  }
 }
 .inputInvalid {
   &::placeholder {
@@ -51,6 +59,13 @@
   padding: 13px 16px;
   border-color: #af1c10 !important;
   border-width: 1px !important;
+  border-radius: 5px;
+  &:focus {
+    border-color: #af1c10 !important;
+  }
+  &:focus-visible {
+    outline: none;
+  }
 }
 .optional {
   color: #7c9911;

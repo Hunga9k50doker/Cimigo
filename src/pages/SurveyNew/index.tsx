@@ -33,6 +33,7 @@ import Report from "./Report";
 import { ETabRightPanel } from "models/project";
 import { useChangePrice } from "hooks/useChangePrice";
 import { Helmet } from "react-helmet";
+import { ESOLUTION_TYPE } from "models";
 
 export const Survey = () => {
 
@@ -87,7 +88,7 @@ export const Survey = () => {
     const index = tabs.findIndex(it => activeRoute(it))
     if (index === -1) return 0
     return index
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.location.pathname, tabs])
 
   const onChangeTab = (_: any, newTab: number) => {
@@ -237,15 +238,32 @@ export const Survey = () => {
           <Route
             exact
             path={routes.project.detail.setupSurvey}
-            render={(routeProps) => <AdtractionTest
-              {...routeProps}
-              projectId={Number(id)}
-              isHaveChangePrice={isHaveChangePrice}
-              tabRightPanel={tabRightPanel}
-              toggleOutlineMobile={toggleOutlineMobile}
-              onToggleViewOutlineMobile={onToggleViewOutlineMobile}
-              onChangeTabRightPanel={onChangeTabRightPanel}
-            />}
+            render={(routeProps) => {
+              switch (project?.solution?.typeId) {
+                case ESOLUTION_TYPE.ADTRACTION:
+                  return (
+                    <AdtractionTest
+                      {...routeProps}
+                      projectId={Number(id)}
+                      isHaveChangePrice={isHaveChangePrice}
+                      tabRightPanel={tabRightPanel}
+                      toggleOutlineMobile={toggleOutlineMobile}
+                      onToggleViewOutlineMobile={onToggleViewOutlineMobile}
+                      onChangeTabRightPanel={onChangeTabRightPanel}
+                    />
+                  )
+                case ESOLUTION_TYPE.PACK:
+                  return (
+                    <SetupSurvey
+                      {...routeProps}
+                      projectId={Number(id)}
+                      isHaveChangePrice={isHaveChangePrice}
+                      tabRightPanel={tabRightPanel}
+                      onChangeTabRightPanel={onChangeTabRightPanel}
+                    />
+                  )
+              }
+            }}
           />
           <Route
             exact

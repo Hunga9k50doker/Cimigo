@@ -2,20 +2,18 @@ import { Box, Chip, Grid, IconButton, ListItemIcon, MenuItem, Table, TableBody, 
 import Heading4 from "components/common/text/Heading4";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import { PriceService } from "helpers/price";
+import { usePrice } from "helpers/price";
 import { editableProject } from "helpers/project";
 import { Project, SETUP_SURVEY_SECTION } from "models/project";
 import { MaxChip, PriceChip } from "pages/SurveyNew/components";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
+import { useDispatch } from "react-redux";
 import { getCustomQuestionsRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { setLoading, setErrorMess } from "redux/reducers/Status/actionTypes";
 import { ProjectService } from "services/project";
 import classes from "./styles.module.scss"
 import clsx from "clsx"
-import { fCurrency2 } from "utils/formatNumber";
 import Switch from "components/common/inputs/Switch";
 import { SetupTable } from "components/common/table/SetupTable";
 import SubTitle from "components/common/text/SubTitle";
@@ -70,15 +68,11 @@ export const CustomQuestions = memo(({ project, step }: CustomQuestionsProps) =>
   const [questionAction, setQuestionAction] = useState<CustomQuestion>();
 
 
-  const { configs } = useSelector((state: ReducerType) => state.user)
-
   const editable = useMemo(() => editableProject(project), [project])
 
   const maxCustomQuestion = useMemo(() => project?.solution?.maxCustomQuestion || 0, [project])
 
-  const totalCustomQuestionPrice = useMemo(() => {
-    return PriceService.getCustomQuestionCost(project, configs) || 0;
-  }, [project, configs])
+  const { price: { customQuestionCost }, getCustomQuestionItemCost } = usePrice()
 
   const findQuestionType = (type: ECustomQuestionType) => {
     return customQuestionType?.find(item => item.id === type);
@@ -390,7 +384,7 @@ export const CustomQuestions = memo(({ project, step }: CustomQuestionsProps) =>
   }
 
   const getPrice = (customQuestion: CustomQuestion) => {
-    return PriceService.getCustomQuestionItemCost(customQuestion, configs)
+    return getCustomQuestionItemCost(customQuestion)
   }
 
   const reorder = (items: CustomQuestion[], startIndex: number, endIndex: number) => {
@@ -478,7 +472,7 @@ export const CustomQuestions = memo(({ project, step }: CustomQuestionsProps) =>
           <PriceChip
             className={clsx({ 'disabled': !project?.enableCustomQuestion })}
             label={<ParagraphSmall translation-key={project?.enableCustomQuestion ? "setup_survey_amount_question" : "setup_survey_custom_question_cost_description"}>
-              {project?.enableCustomQuestion ? `$${fCurrency2(totalCustomQuestionPrice)} ( ${project?.customQuestions?.length || 0} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}
+              {project?.enableCustomQuestion ? `${customQuestionCost.show} ( ${project?.customQuestions?.length || 0} ${t("setup_survey_amount_question")} )` : t("setup_survey_custom_question_cost_description")}
             </ParagraphSmall>}
           />
         </Box>
@@ -557,7 +551,7 @@ export const CustomQuestions = memo(({ project, step }: CustomQuestionsProps) =>
                                 </Box>
                               </TableCell>
                               <TableCell align="center" width="200">
-                                <Chip className={classes.price} label={<ParagraphSmall $colorName="--cimigo-green-dark-2">US$ {fCurrency2(getPrice(item)?.priceUSD || 0)}</ParagraphSmall>} />
+                                <Chip className={classes.price} label={<ParagraphSmall $colorName="--cimigo-green-dark-2">{getPrice(item)?.show}</ParagraphSmall>} />
                               </TableCell>
                               <TableCell align="center" width="150">
                                 {editable && (
@@ -627,7 +621,7 @@ export const CustomQuestions = memo(({ project, step }: CustomQuestionsProps) =>
                               )}
                             </Box>
                             <Box my={1} ml={2} mr={1}>
-                              <Chip className={classes.priceMobile} label={<ParagraphExtraSmall $colorName="--cimigo-green-dark-2">US$ {fCurrency2(getPrice(item)?.priceUSD || 0)}</ParagraphExtraSmall>} />
+                              <Chip className={classes.priceMobile} label={<ParagraphExtraSmall $colorName="--cimigo-green-dark-2">{getPrice(item)?.show}</ParagraphExtraSmall>} />
                             </Box>
                           </Box>
                         )}

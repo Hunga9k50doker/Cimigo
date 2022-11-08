@@ -14,7 +14,7 @@ import TabPanelBox from "components/TabPanelBox"
 import Heading5 from "components/common/text/Heading5"
 import ParagraphSmall from "components/common/text/ParagraphSmall"
 import { editableProject } from "helpers/project"
-import { PriceService } from "helpers/price"
+import { usePrice } from "helpers/price"
 import CostSummary from "../components/CostSummary"
 import ControlCheckbox from "components/common/control/ControlCheckbox"
 import InputCheckbox from "components/common/inputs/InputCheckbox"
@@ -51,8 +51,6 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
 
   const { t } = useTranslation()
 
-  const { configs } = useSelector((state: ReducerType) => state.user)
-
   const { project } = useSelector((state: ReducerType) => state.project)
 
   const [quotas, setQuotas] = useState<Quota[]>([])
@@ -64,10 +62,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
 
   const editable = useMemo(() => editableProject(project), [project])
 
-  const price = useMemo(() => {
-    if (!project || !configs) return null
-    return PriceService.getTotal(project, configs)
-  }, [project, configs])
+  const { price } = usePrice()
 
   const onSetupTarget = () => {
     dispatch(push(routes.project.detail.target.replace(':id', `${projectId}`)))
@@ -468,6 +463,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
               <img src={images.icSad} alt="" />
               <p translation-key="quotas_no_target_title">{t('quotas_no_target_title')}</p>
               <span translation-key="quotas_no_target_sub_title">{t('quotas_no_target_sub_title')}</span>
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a onClick={onSetupTarget} translation-key="quotas_no_target_btn">{t('quotas_no_target_btn')}</a>
             </Grid>
           )}
