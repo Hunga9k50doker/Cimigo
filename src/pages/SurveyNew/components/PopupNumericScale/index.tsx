@@ -31,14 +31,11 @@ import TextBtnSmall from "components/common/text/TextBtnSmall"
 import InputTextfield from "components/common/inputs/InputTextfield"
 import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
 import { Project } from "models/project";
-import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
-import {DialogTitle} from "components/common/dialogs/DialogTitle";
+import { DialogTitle } from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import { DialogActions } from "components/common/dialogs/DialogActions";
 import ErrorMessage from "components/common/text/ErrorMessage";
-import { PriceService } from "helpers/price";
-import { useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
+import { usePrice } from "helpers/price";
 
 
 export interface NumericScaleForm {
@@ -63,8 +60,6 @@ interface Props {
 const PopupNumericScale = (props: Props) => {
 
   const { t, i18n } = useTranslation();
-
-  const { configs } = useSelector((state: ReducerType) => state.user)
 
   const { isOpen, project, questionEdit, questionType, onClose, onSubmit } = props;
 
@@ -111,11 +106,12 @@ const PopupNumericScale = (props: Props) => {
 
   const isShowMultiAttributes = useMemo(() => !!fieldsAttributes?.length, [fieldsAttributes])
 
+  const { getCustomQuestionNumericScaleCost, getCostCurrency } = usePrice()
+
   const price = useMemo(() => {
     if (!questionType) return
-    return PriceService.getCustomQuestionNumericScaleCost(questionType, fieldsAttributes.length, configs)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionType, fieldsAttributes])
+    return getCustomQuestionNumericScaleCost(questionType, fieldsAttributes.length, project)
+  }, [questionType, fieldsAttributes, getCustomQuestionNumericScaleCost, project])
 
   const onAddAttribute = () => {
     if (fieldsAttributes?.length >= questionType.maxAttribute) return
@@ -186,14 +182,14 @@ const PopupNumericScale = (props: Props) => {
         })),
       })
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps 
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [questionEdit])
 
   useEffect(() => {
     if (!isOpen && !questionEdit) {
       clearForm()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, questionEdit])
 
   return (
@@ -205,17 +201,17 @@ const PopupNumericScale = (props: Props) => {
     >
       <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle>
-            <Heading3 translation-key="setup_survey_popup_add_numeric_scale_title">
-              {t("setup_survey_popup_add_numeric_scale_title")}
-            </Heading3>
-            <ButtonCLose
-              onClick={() => _onClose()}>
-            </ButtonCLose>
+          <Heading3 translation-key="setup_survey_popup_add_numeric_scale_title">
+            {t("setup_survey_popup_add_numeric_scale_title")}
+          </Heading3>
+          <ButtonCLose
+            onClick={() => _onClose()}>
+          </ButtonCLose>
         </DialogTitle>
         <DialogContent dividers>
           <Grid className={classes.classForm}>
             <ParagraphBody $colorName="--eerie-black" translation-key="setup_survey_popup_advice_subtitle" className={classes.titleAdvice} >
-            {t("setup_survey_popup_advice_subtitle", {firstPrice:fCurrency2(questionType?.price || 0), secondPrice:fCurrency2(questionType?.priceAttribute || 0)})}
+              {t("setup_survey_popup_advice_subtitle", { firstPrice: getCostCurrency(questionType?.price || 0), secondPrice: getCostCurrency(questionType?.priceAttribute || 0) })}
             </ParagraphBody>
             <Heading5
               translation-key="setup_survey_popup_question_title"
@@ -246,8 +242,8 @@ const PopupNumericScale = (props: Props) => {
             <Grid className={classes.scaleRangeContainer}>
               <Heading5 translation-key="setup_survey_popup_numeric_scale_range">{t("setup_survey_popup_numeric_scale_range")}</Heading5>
               <div className={classes.contentScaleRange}>
-                <ParagraphBody $colorName="--eerie-black-65" 
-                translation-key="setup_survey_popup_numeric_scale_from">{t("setup_survey_popup_numeric_scale_from")}</ParagraphBody>
+                <ParagraphBody $colorName="--eerie-black-65"
+                  translation-key="setup_survey_popup_numeric_scale_from">{t("setup_survey_popup_numeric_scale_from")}</ParagraphBody>
                 <InputLineTextfield
                   root={classes.inputScaleRange}
                   fullWidth
@@ -259,8 +255,8 @@ const PopupNumericScale = (props: Props) => {
                   inputRef={register("scaleRangeFrom")}
                   isShowError={!!errors.scaleRangeFrom?.message}
                 />
-                <ParagraphBody $colorName="--eerie-black-65" 
-                translation-key="setup_survey_popup_numeric_scale_to">{t("setup_survey_popup_numeric_scale_to")}</ParagraphBody>
+                <ParagraphBody $colorName="--eerie-black-65"
+                  translation-key="setup_survey_popup_numeric_scale_to">{t("setup_survey_popup_numeric_scale_to")}</ParagraphBody>
                 <InputLineTextfield
                   root={classes.inputScaleRange}
                   fullWidth
@@ -288,7 +284,7 @@ const PopupNumericScale = (props: Props) => {
                 />
               </div>
               <ParagraphBody $colorName={isShowMultiAttributes ? "--gray-80" : "--gray-60"} translation-key="setup_survey_popup_multiple_attributes_subtitle">
-               {t("setup_survey_popup_multiple_attributes_subtitle")}
+                {t("setup_survey_popup_multiple_attributes_subtitle")}
               </ParagraphBody>
               {!!fieldsAttributes?.length && (
                 <Grid sx={{ position: "relative", marginTop: "24px" }}>
@@ -313,10 +309,10 @@ const PopupNumericScale = (props: Props) => {
                                   {...provided.dragHandleProps}
                                 >
                                   <div className={classes.rowInputAttribute}>
-                                  <DragIndicatorIcon className={classes.iconDotsDrag}/>
-                                    <ParagraphBody $colorName="--gray-80" 
-                                    translation-key="setup_survey_popup_attribute_serial"
-                                    className={classes.attributeTitle}>{t("setup_survey_popup_attribute_serial")} {index + 1}</ParagraphBody>
+                                    <DragIndicatorIcon className={classes.iconDotsDrag} />
+                                    <ParagraphBody $colorName="--gray-80"
+                                      translation-key="setup_survey_popup_attribute_serial"
+                                      className={classes.attributeTitle}>{t("setup_survey_popup_attribute_serial")} {index + 1}</ParagraphBody>
                                     <Grid
                                       container
                                       rowSpacing={1}
@@ -392,8 +388,7 @@ const PopupNumericScale = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <Heading5 $colorName="--cimigo-green-dark" translation-key="setup_survey_popup_currency_unit">  
-            {t("setup_survey_popup_currency_unit", {priceUS:fCurrency2(price?.priceUSD || 0), priceVND:fCurrency2VND(price?.priceVND || 0)})}</Heading5>
+            <Heading5 $colorName="--cimigo-green-dark">{price?.show} ({price?.equivalent})</Heading5>
             <ParagraphExtraSmall $colorName="--gray-90" translation-key="setup_survey_popup_tax_exclusive">{t("setup_survey_popup_tax_exclusive")}</ParagraphExtraSmall>
           </Grid>
           <Button

@@ -3,6 +3,7 @@ import { AdditionalBrand } from "models/additional_brand";
 import { Solution } from "models/Admin/solution";
 import { TargetQuestionType } from "models/Admin/target";
 import { ConfigData } from "models/config";
+import { CustomQuestionType } from "models/custom_question";
 import { Pack, PackType } from "models/pack";
 import { EPaymentStatus } from "models/payment";
 import { Project, ProjectStatus } from "models/project";
@@ -61,6 +62,15 @@ export class ProjectHelper {
       return payment.projectData
     }
     return project
+  }
+
+  static getCustomQuestionPriceConfig(project: Project, customQuestionType: CustomQuestionType) {
+    const _project = ProjectHelper.getProject(project)
+    const customQuestion = _project?.customQuestions?.find(t => t.typeId === customQuestionType.id)
+    return {
+      price: customQuestion?.type?.price ?? customQuestionType?.price,
+      priceAttribute: customQuestion?.type?.priceAttribute ?? customQuestionType?.priceAttribute
+    }
   }
 
   static getConfig(project: Project, config: ConfigData) {

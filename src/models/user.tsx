@@ -36,6 +36,7 @@ export const adminTypes: OptionItem[] = [
 
 export interface User {
     id: number,
+    currency: string,
     avatar: string,
     firstName: string,
     lastName: string,

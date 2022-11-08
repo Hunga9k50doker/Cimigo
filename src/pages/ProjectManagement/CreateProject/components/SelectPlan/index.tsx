@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { UserGetPlans } from "models/plan";
 import { PlanService } from "services/plan";
-import { DataPagination, currencyTypes, OptionItem } from "models/general";
+import { DataPagination, currencyTypes, OptionItem, ECurrency, currencySymbol } from "models/general";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -33,7 +33,7 @@ const SelectPlan = memo(
   ({ solution, onChangePlanSelected }: SelectPlanProps) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const [selectPrice, setSelectPrice] = React.useState<OptionItem>(
+    const [selectPrice, setSelectPrice] = React.useState<OptionItem<string>>(
       currencyTypes[0]
     );
     const [plan, setPlan] = useState<DataPagination<Plan>>();
@@ -42,7 +42,7 @@ const SelectPlan = memo(
       mode: "onChange",
     });
 
-    
+
     useEffect(() => {
       const getPlans = async () => {
         dispatch(setLoading(true));
@@ -61,19 +61,16 @@ const SelectPlan = memo(
           .finally(() => dispatch(setLoading(false)));
       };
       getPlans();
-    }, [solution]);
+    }, [solution, dispatch]);
 
     const formatMoney = useCallback(
       (plan: Plan) => {
-        let price;
         switch (selectPrice.id) {
-          case 2:
-            price = plan.priceVND + "đ";
-            break;
-          default:
-            price = "$" + plan.priceUSD;
+          case ECurrency.VND:
+            return `${currencySymbol[selectPrice.id].first}${plan.priceVND}${currencySymbol[selectPrice.id].last}`
+          case ECurrency.USD:
+            return `${currencySymbol[selectPrice.id].first}${plan.priceUSD}${currencySymbol[selectPrice.id].last}`
         }
-        return price;
       },
       [selectPrice]
     );
@@ -81,7 +78,7 @@ const SelectPlan = memo(
     const onClick = (plan: Plan) => {
       onChangePlanSelected(plan);
     };
-    const onChangeOptionSelectPrice = (item: OptionItem) => {
+    const onChangeOptionSelectPrice = (item: OptionItem<string>) => {
       setSelectPrice(item);
     };
     return (
@@ -205,8 +202,8 @@ const SelectPlan = memo(
                           <Grid className={classes.contentPlan}>
                             <DoneIcon className={classes.iconContentPlan} />
                             <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"} variant="body2"
-                          variantMapping={{ body2: "span" }} translation-key="project_create_tab_plan_interviews">
-                              <span className={classes.sampleSize}>{plan.sampleSize +' '}</span> {t("project_create_tab_plan_interviews")}
+                              variantMapping={{ body2: "span" }} translation-key="project_create_tab_plan_interviews">
+                              <span className={classes.sampleSize}>{plan.sampleSize + ' '}</span> {t("project_create_tab_plan_interviews")}
                             </ParagraphBody>
                           </Grid>
                           {plan?.content.map((item, index) => {

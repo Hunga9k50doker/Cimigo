@@ -4,11 +4,8 @@ import { CustomQuestion, ECustomQuestionType } from "models/custom_question";
 import Images from "config/images";
 import classes from "./styles.module.scss";
 import { Button, Collapse, Grid } from "@mui/material";
-import { fCurrency2 } from "utils/formatNumber";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
-import { PriceService } from "helpers/price";
+import { usePrice } from "helpers/price";
 
 interface CustomQuestionListMobileProps {
   questions: CustomQuestion[];
@@ -28,11 +25,11 @@ const CustomQuestionListMobile = memo(
     const { t } = useTranslation();
     const [expandId, setExpandId] = useState<number>();
 
-    const { configs } = useSelector((state: ReducerType) => state.user)
+    const { getCustomQuestionItemCost } = usePrice()
 
-  const getPrice = (customQuestion: CustomQuestion) => {
-    return PriceService.getCustomQuestionItemCost(customQuestion, configs)
-  }
+    const getPrice = (customQuestion: CustomQuestion) => {
+      return getCustomQuestionItemCost(customQuestion)
+    }
 
     const handleClickQuestion = (id: number) => {
       setExpandId(id === expandId ? null : id);
@@ -97,15 +94,15 @@ const CustomQuestionListMobile = memo(
                         item.typeId === 1
                           ? Images.icOpenQuestion
                           : item.typeId === 2
-                          ? Images.icSingleChoice
-                          : Images.icMultipleChoices
+                            ? Images.icSingleChoice
+                            : Images.icMultipleChoices
                       }
                       alt=""
                     />
                     <p>{item.title}</p>
                   </div>
                   <div className={classes.price}>
-                    <span>${fCurrency2(getPrice(item)?.priceUSD || 0)}</span>
+                    <span>{getPrice(item)?.show}</span>
                   </div>
                   {editableProject && (
                     <div className={classes.buttons}>

@@ -10,7 +10,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import TabPanelBox from "components/TabPanelBox";
 import { push } from "connected-react-router";
-import { PriceService } from "helpers/price";
+import { PriceService, usePrice } from "helpers/price";
 import ProjectHelper, { editableProject } from "helpers/project";
 import _ from "lodash";
 import { ETabRightPanel, TARGET_SECTION } from "models/project";
@@ -19,7 +19,6 @@ import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
-import { fCurrency2 } from "utils/formatNumber";
 import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
 import CostSummary from "../components/CostSummary";
 import LockIcon from "../components/LockIcon";
@@ -70,7 +69,6 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down(1024));
 
-  const { configs } = useSelector((state: ReducerType) => state.user)
   const { project } = useSelector((state: ReducerType) => state.project)
 
   const [showCustomSampleSize, setShowCustomSampleSize] = useState(false);
@@ -86,6 +84,10 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
 
   const editable = useMemo(() => editableProject(project), [project])
 
+  const { price } = usePrice()
+
+  const { sampleSizeCost, eyeTrackingSampleSizeCost } = price
+  
   const listTabs: TabItem[] = useMemo(() => {
     return [
       {
@@ -128,6 +130,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
   const listSampleSize = useMemo(() => {
     let listSampleSizeTemp = _listSampleSize.filter(it => isValidSampSize(it.value))
     return listSampleSizeTemp.sort((a, b) => a.value - b.value)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minSampeSize, maxSampeSize])
 
 
@@ -246,6 +249,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
   const listEyeTrackingSampleSize = useMemo(() => {
     let ListEyeTrackingSampleSizeTemp = _listEyeTrackingSampleSize.filter(it => isValidEyeTrackingSampSize(it.value))
     return ListEyeTrackingSampleSizeTemp.sort((a, b) => a.value - b.value)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [maxEyeTrackingSampeSize, minEyeTrackingSampeSize])
 
   const schemaESS = useMemo(() => {
@@ -312,15 +316,6 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
   const isValidTarget = useMemo(() => {
     return ProjectHelper.isValidTarget(project)
   }, [project])
-
-  // const isValidTargetTab = useMemo(() => {
-  //   return ProjectHelper.isValidTargetTab(project)
-  // }, [project])
-
-  const price = useMemo(() => {
-    if (!project || !configs) return null
-    return PriceService.getTotal(project, configs)
-  }, [project, configs])
 
   const scrollToElement = (id: string) => {
     const el = document.getElementById(id)
@@ -719,7 +714,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
                     <RPStepContent>
                       <Chip
                         sx={{ height: 24, backgroundColor: project?.sampleSize ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
-                        label={<ParagraphExtraSmall $colorName="--ghost-white">${fCurrency2(price?.sampleSizeCostUSD || 0)}</ParagraphExtraSmall>}
+                        label={<ParagraphExtraSmall $colorName="--ghost-white">{sampleSizeCost.show}</ParagraphExtraSmall>}
                         color="secondary"
                       />
                     </RPStepContent>
@@ -736,7 +731,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
                       <RPStepContent>
                         <Chip
                           sx={{ height: 24, backgroundColor: project?.eyeTrackingSampleSize ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
-                          label={<ParagraphExtraSmall $colorName="--ghost-white">${fCurrency2(price?.eyeTrackingSampleSizeCostUSD || 0)}</ParagraphExtraSmall>}
+                          label={<ParagraphExtraSmall $colorName="--ghost-white">{eyeTrackingSampleSizeCost.show}</ParagraphExtraSmall>}
                           color="secondary"
                         />
                       </RPStepContent>

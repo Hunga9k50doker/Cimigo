@@ -16,13 +16,12 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import CostSummary from "../components/CostSummary";
 import BasicInformation from "./components/BasicInformation";
 import ProjectHelper, { editableProject } from "helpers/project";
-import { PriceService } from "helpers/price";
+import { usePrice } from "helpers/price";
 import { ETabRightPanel, SETUP_SURVEY_SECTION } from "models/project";
 import UploadPacks from "./components/UploadPacks";
 import AdditionalBrandList from "./components/AdditionalBrandList";
 import AdditionalAttributes from "./components/AdditionalAttributes";
 import CustomQuestions from "./components/CustomQuestions";
-import { fCurrency2 } from "utils/formatNumber";
 import EyeTracking from "./components/EyeTracking";
 import { useTranslation } from "react-i18next";
 import PopupMissingRequirement from "pages/SurveyNew/components/PopupMissingRequirement";
@@ -47,7 +46,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
 
   const { project, scrollToSection, showHowToSetup } = useSelector((state: ReducerType) => state.project)
 
-  const { configs } = useSelector((state: ReducerType) => state.user)
+  const { price } = usePrice()
 
   const editable = useMemo(() => editableProject(project), [project])
   
@@ -74,11 +73,6 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
   const isValidSetup = useMemo(() => {
     return ProjectHelper.isValidSetup(project)
   }, [project])
-
-  const price = useMemo(() => {
-    if (!project || !configs) return null
-    return PriceService.getTotal(project, configs)
-  }, [project, configs])
 
   const scrollToElement = (id: string) => {
     const el = document.getElementById(id)
@@ -262,7 +256,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
                       <RPStepContent>
                         <Chip
                           sx={{ height: 24, backgroundColor: project?.enableCustomQuestion ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
-                          label={<ParagraphExtraSmall $colorName="--ghost-white">${fCurrency2(price?.customQuestionCostUSD)}</ParagraphExtraSmall>}
+                          label={<ParagraphExtraSmall $colorName="--ghost-white">{price?.customQuestionCost?.show}</ParagraphExtraSmall>}
                           color="secondary"
                         />
                       </RPStepContent>
@@ -279,7 +273,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
                       <RPStepContent>
                         <Chip
                           sx={{ height: 24, backgroundColor: isValidEyeTracking && project?.enableEyeTracking ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
-                          label={<ParagraphExtraSmall $colorName="--ghost-white">${fCurrency2(price?.eyeTrackingSampleSizeCostUSD)}</ParagraphExtraSmall>}
+                          label={<ParagraphExtraSmall $colorName="--ghost-white">{price?.eyeTrackingSampleSizeCost?.show}</ParagraphExtraSmall>}
                           color="secondary"
                         />
                       </RPStepContent>
