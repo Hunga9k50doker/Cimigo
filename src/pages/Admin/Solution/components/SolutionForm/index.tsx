@@ -106,7 +106,7 @@ const schema = yup.object().shape({
   //ADTRACTION
   minVideo: yup.number()
     .when('typeId', {
-      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.ADTRACTION,
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.VIDEO_CHOICE,
       then: yup.number()
         .typeError('Min Video is required.')
         .min(0)
@@ -116,7 +116,7 @@ const schema = yup.object().shape({
     }),
   maxVideo: yup.number()
     .when('typeId', {
-      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.ADTRACTION,
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.VIDEO_CHOICE,
       then: yup.number()
         .typeError('Max Video is required.')
         .positive('Max Video must be a positive number')
@@ -253,7 +253,7 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     formData.append('typeId', `${data.typeId.id}`)
     formData.append('enableEyeTracking', `${data.enableEyeTracking}`)
     switch (data.typeId.id) {
-      case ESOLUTION_TYPE.ADTRACTION:
+      case ESOLUTION_TYPE.VIDEO_CHOICE:
         formData.append('minVideo', `${data.minVideo}`)
         formData.append('maxVideo', `${data.maxVideo}`)
         break;
@@ -537,7 +537,7 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                       </Grid>
                     </>
                   )}
-                  {type?.id === ESOLUTION_TYPE.ADTRACTION && (
+                  {type?.id === ESOLUTION_TYPE.VIDEO_CHOICE && (
                     <>
                       <Grid item xs={12} sm={6}>
                         <Inputs

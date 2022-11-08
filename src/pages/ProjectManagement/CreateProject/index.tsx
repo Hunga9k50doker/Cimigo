@@ -29,7 +29,8 @@ import SubTitle from "components/common/text/SubTitle";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { PlanService } from "services/plan";
 import BasicLayout from "layout/BasicLayout";
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
+import { usePrice } from "helpers/price";
 export enum EStep {
   SELECT_SOLUTION,
   SELECT_PLAN,
@@ -51,6 +52,8 @@ const CreateProject = () => {
   const { createProjectRedirect } = useSelector(
     (state: ReducerType) => state.project
   );
+
+  const { getCostCurrency } = usePrice()
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -96,7 +99,11 @@ const CreateProject = () => {
       }
       case EStep.SELECT_PLAN: {
         return planSelected
-          && `${planSelected?.title} : US$ ${planSelected?.price}`;
+          && (
+            <>
+              {`${planSelected?.title}: `}<span className="nowrap">{getCostCurrency(planSelected?.price)?.show}</span>
+            </>
+          );
       }
     }
     return null;
@@ -129,7 +136,7 @@ const CreateProject = () => {
   }, [activeStep]);
 
   return (
-    <BasicLayout 
+    <BasicLayout
       className={classes.root}
       HeaderProps={{ project: true }}
     >

@@ -168,9 +168,15 @@
   display: flex;
   justify-content: space-between;
   padding: 4px 0px;
-  p {
+  > * {
     @media only screen and (max-width: 767px) {
       font-size: 14px;
+    }
+    &:last-child {
+      white-space: nowrap;
+    }
+    &:not(:first-child) {
+      margin-left: 8px;
     }
   }
 }

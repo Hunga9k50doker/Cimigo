@@ -3,7 +3,6 @@ import { memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import { authPaymentFail, getPayment } from "../models";
 import classes from "./styles.module.scss";
 import { Grid } from "@mui/material";
@@ -27,6 +26,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCancelOrder";
 import clsx from "clsx";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
+import { usePrice } from "helpers/price";
 
 interface Props {}
 
@@ -43,6 +43,8 @@ const OnePayFail = memo(({}: Props) => {
 
   const payment = useMemo(() => getPayment(project?.payments), [project]);
 
+  const { getCostCurrency } = usePrice()
+  
   useEffect(() => {
     authPaymentFail(project, onRedirect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -155,16 +157,14 @@ const OnePayFail = memo(({}: Props) => {
                 $colorName="--cimigo-green-dark-1"
                 translation-key="payment_billing_total_amount"
               >
-                {t("payment_billing_total_amount")}: {`$`}
-                {fCurrency2(payment?.totalAmountUSD || 0)}{" "}
+                {t("payment_billing_total_amount")}: {getCostCurrency(payment?.totalAmount, payment?.currency)?.show}{" "}
               </Heading2>
               <Heading4
                 mb={3}
                 $colorName="--cimigo-blue-dark-1"
                 translation-key="payment_billing_equivalent_to"
               >
-                ({t("payment_billing_equivalent_to")}{" "}
-                {fCurrency2VND(payment?.totalAmount || 0)} VND)
+                ({t("payment_billing_equivalent_to")}{" "}{getCostCurrency(payment?.totalAmount, payment?.currency)?.equivalent})
               </Heading4>
               <Button
                 className={classes.button}

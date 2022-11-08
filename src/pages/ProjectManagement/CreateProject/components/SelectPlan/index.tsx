@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import React, { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import classes from "./styles.module.scss";
 import { Plan } from "models/Admin/plan";
 import Heading1 from "components/common/text/Heading1";
@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { UserGetPlans } from "models/plan";
 import { PlanService } from "services/plan";
-import { DataPagination, currencyTypes, OptionItem, ECurrency, currencySymbol } from "models/general";
+import { DataPagination, ECurrency, currencySymbol } from "models/general";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -15,16 +15,14 @@ import Heading3 from "components/common/text/Heading3";
 import DoneIcon from "@mui/icons-material/Done";
 import CardActions from "@mui/material/CardActions";
 import Button, { BtnType } from "components/common/buttons/Button";
-import { FormControl } from "@mui/material";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import { Solution } from "models/Admin/solution";
-import { useForm } from "react-hook-form";
-import InputSelect from "components/common/inputs/InputSelect";
-import { CreateProjectFormData } from "../CreateProjectStep";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
+import useAuth from "hooks/useAuth";
+
 interface SelectPlanProps {
   solution?: Solution;
   onChangePlanSelected?: (plan: Plan) => void;
@@ -33,15 +31,10 @@ const SelectPlan = memo(
   ({ solution, onChangePlanSelected }: SelectPlanProps) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const [selectPrice, setSelectPrice] = React.useState<OptionItem<string>>(
-      currencyTypes[0]
-    );
+
+    const { user } = useAuth()
+
     const [plan, setPlan] = useState<DataPagination<Plan>>();
-
-    const { control } = useForm<CreateProjectFormData>({
-      mode: "onChange",
-    });
-
 
     useEffect(() => {
       const getPlans = async () => {
@@ -65,22 +58,20 @@ const SelectPlan = memo(
 
     const formatMoney = useCallback(
       (plan: Plan) => {
-        switch (selectPrice.id) {
+        switch (user?.currency) {
           case ECurrency.VND:
-            return `${currencySymbol[selectPrice.id].first}${plan.priceVND}${currencySymbol[selectPrice.id].last}`
+            return `${currencySymbol[ECurrency.VND].first}${plan.priceVND}${currencySymbol[ECurrency.VND].last}`
           case ECurrency.USD:
-            return `${currencySymbol[selectPrice.id].first}${plan.priceUSD}${currencySymbol[selectPrice.id].last}`
+            return `${currencySymbol[ECurrency.USD].first}${plan.priceUSD}${currencySymbol[ECurrency.USD].last}`
         }
       },
-      [selectPrice]
+      [user?.currency]
     );
 
     const onClick = (plan: Plan) => {
       onChangePlanSelected(plan);
     };
-    const onChangeOptionSelectPrice = (item: OptionItem<string>) => {
-      setSelectPrice(item);
-    };
+
     return (
       <>
         <Grid justifyContent="center" className={classes.titleSelectPlan}>
@@ -101,20 +92,7 @@ const SelectPlan = memo(
             ></ParagraphBody>
           </Grid>
         </Grid>
-        <div className={classes.selectTypePrice}>
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputSelect
-              className={classes.customSelect}
-              name="priceSelect"
-              control={control}
-              selectProps={{
-                options: currencyTypes,
-                value: selectPrice,
-                onChange: (val: any) => onChangeOptionSelectPrice(val),
-              }}
-            />
-          </FormControl>
-        </div>
+        <div className={classes.selectTypePrice}></div>
         <div>
           <Grid
             container

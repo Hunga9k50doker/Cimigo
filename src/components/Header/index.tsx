@@ -13,13 +13,14 @@ import { useDispatch } from "react-redux";
 import { push } from "connected-react-router";
 import { useTranslation } from "react-i18next";
 import { KeyboardArrowDown } from "@mui/icons-material";
-import { langSupports } from "models/general";
+import { currencyTypes, langSupports } from "models/general";
 import { Project } from "models/project";
 import Inputs from "components/Inputs";
 import { ProjectService } from "services/project";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import UserService from "services/user";
+import { setUserLogin } from "redux/reducers/User/actionTypes";
 
 export interface HeaderProps {
   project?: boolean;
@@ -37,6 +38,7 @@ const Header = memo((props: HeaderProps) => {
   const [isOpen, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [anchorElLang, setAnchorElLang] = useState<null | HTMLElement>(null);
+  const [anchorElCurrency, setAnchorElCurrency] = useState<null | HTMLElement>(null);
   const openProfile = Boolean(anchorEl);
   const [isEdit, setIsEdit] = useState(false);
   const [projectName, setProjectName] = useState<string>('');
@@ -92,6 +94,17 @@ const Header = memo((props: HeaderProps) => {
     i18n.changeLanguage(lang, () => {
       window.location.reload()
     })
+  }
+
+  const changeCurrency = async (currency: string) => {
+    setAnchorElCurrency(null)
+    if (!isLoggedIn) return
+    dispatch(setLoading(true))
+    await UserService.changeCurrency(currency)
+      .then(() => {
+        dispatch(setUserLogin({...user, currency}))
+      })
+      .finally(() => dispatch(setLoading(false)))
   }
 
   const handleEditProjectName = () => {
@@ -163,7 +176,7 @@ const Header = memo((props: HeaderProps) => {
             )}
           </Menu>
         </li>
-         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a onClick={onGoHome}>
           <div className={classes.imgContainer}>
             <img src={cimigoLogo} alt="cimigo" />
@@ -221,19 +234,21 @@ const Header = memo((props: HeaderProps) => {
                 ))}
               </div>
             )}
-            <li className={clsx(classes.item, {[classes.clearMargin]: !isLoggedIn})}>
+            <li className={clsx(classes.item, classes.clearMargin)}>
               <Buttons
                 className={classes.btnChangeLang}
-                children={langSupports?.find(it => it.key === i18n.language).name}
                 padding="7px 10px"
                 onClick={(e) => setAnchorElLang(e.currentTarget)} endIcon={<KeyboardArrowDown />}
-              />
-              <Buttons
+              >
+                <span className={classes.desktop}>{langSupports?.find(it => it.key === i18n.language).name}</span>
+                <span className={classes.mobile}>{langSupports?.find(it => it.key === i18n.language).key}</span>
+              </Buttons>
+              {/* <Buttons
                 className={classes.btnChangeLang2}
                 children={langSupports?.find(it => it.key === i18n.language).key}
                 padding="7px 10px"
                 onClick={(e) => setAnchorElLang(e.currentTarget)} endIcon={<KeyboardArrowDown />}
-              />
+              /> */}
               <Menu
                 anchorEl={anchorElLang}
                 open={Boolean(anchorElLang)}
@@ -248,43 +263,67 @@ const Header = memo((props: HeaderProps) => {
               </Menu>
             </li>
             {isLoggedIn ?
-              <li className={classes.item}>
-                {/* <IconButton className={classes.itemBtn}>
+              <>
+                <li className={clsx(classes.item, classes.clearMargin)}>
+                  <Buttons
+                    className={classes.btnChangeLang}
+                    padding="7px 10px"
+                    onClick={(e) => setAnchorElCurrency(e.currentTarget)} endIcon={<KeyboardArrowDown />}
+                  >
+                    <span className={classes.desktop}>{currencyTypes?.find(it => it.id === user.currency).name}</span>
+                    <span className={classes.mobile}>{currencyTypes?.find(it => it.id === user.currency).subName}</span>
+                  </Buttons>
+                  <Menu
+                    anchorEl={anchorElCurrency}
+                    open={Boolean(anchorElCurrency)}
+                    onClose={() => setAnchorElCurrency(null)}
+                    classes={{ paper: clsx(classes.menuProfile, classes.menuLang) }}
+                  >
+                    {currencyTypes.map(it => (
+                      <MenuItem key={it.id} onClick={() => changeCurrency(it.id)} className={clsx(classes.itemAciton, { [classes.active]: it.id === user.currency })}>
+                        <p className={classes.itName}>{it.name}</p>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </li>
+                <li className={classes.item}>
+                  {/* <IconButton className={classes.itemBtn}>
                   <img src={images.icHelp} alt="" className={classes.icHelp} />
                 </IconButton> */}
-                <IconButton onClick={handleClick} className={classes.itemBtn}>
-                  <img src={user?.avatar || images.icProfile} alt="" className={clsx(classes.avatar, { [classes.avatarEmpty]: !user?.avatar })} referrerPolicy="no-referrer" />
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={openProfile}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    sx: { padding: 0 }
-                  }}
-                  classes={{ paper: classes.menuProfile }}
-                >
-                  <MenuItem className={classes.itemAciton} onClick={() => history.push(routes.account.root)}>
-                    <img src={images.icProfile} alt="" />
-                    <p translation-key="auth_my_account">{t('auth_my_account')}</p>
-                  </MenuItem>
-                  <MenuItem className={classes.itemAciton} onClick={() => history.push(routes.paymentHistory)}>
-                    <img src={images.icPaymentHistory} alt="" />
-                    <p translation-key="auth_log_out">Payment history</p>
-                  </MenuItem> 
-                  <MenuItem className={classes.itemAciton} onClick={logout}>
-                    <img src={images.icLogout} alt="" />
-                    <p translation-key="auth_log_out">{t('auth_log_out')}</p>
-                  </MenuItem>
-                </Menu>
-              </li>
+                  <IconButton onClick={handleClick} className={classes.itemBtn}>
+                    <img src={user?.avatar || images.icProfile} alt="" className={clsx(classes.avatar, { [classes.avatarEmpty]: !user?.avatar })} referrerPolicy="no-referrer" />
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={openProfile}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      sx: { padding: 0 }
+                    }}
+                    classes={{ paper: classes.menuProfile }}
+                  >
+                    <MenuItem className={classes.itemAciton} onClick={() => history.push(routes.account.root)}>
+                      <img src={images.icProfile} alt="" />
+                      <p translation-key="auth_my_account">{t('auth_my_account')}</p>
+                    </MenuItem>
+                    <MenuItem className={classes.itemAciton} onClick={() => history.push(routes.paymentHistory)}>
+                      <img src={images.icPaymentHistory} alt="" />
+                      <p translation-key="auth_log_out">Payment history</p>
+                    </MenuItem>
+                    <MenuItem className={classes.itemAciton} onClick={logout}>
+                      <img src={images.icLogout} alt="" />
+                      <p translation-key="auth_log_out">{t('auth_log_out')}</p>
+                    </MenuItem>
+                  </Menu>
+                </li>
+              </>
               :
               <li className={classes.item}>
-                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a className={classes.btnLogin}>
                   <Buttons btnType="TransparentBlue" children={t('header_login')} translation-key="header_login" padding="6px 16px" onClick={() => history.push(routes.login)} />
                 </a>
-                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a className={classes.btnLogout}>
                   <Buttons btnType="Blue" children={t('header_register')} translation-key="header_register" padding="6px 16px" onClick={() => history.push(routes.register)} />
                 </a>

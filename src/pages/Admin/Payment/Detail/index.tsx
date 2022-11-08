@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
 import { AdminPaymentService } from "services/admin/payment";
-import { fCurrency2 } from "utils/formatNumber";
+import { fCurrencyVND, fCurrency } from "utils/formatNumber";
 import FileSaver from "file-saver";
 import ExcelJS from "exceljs";
 import classes from "./styles.module.scss";
@@ -31,6 +31,7 @@ const tableHeaders: TableHeaderLabel[] = [
 
 interface Props { }
 
+// eslint-disable-next-line no-empty-pattern
 const Detail = memo(({ }: Props) => {
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
@@ -143,27 +144,27 @@ const Detail = memo(({ }: Props) => {
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>ID:</span> {payment.id ?? ""}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Status:</span> <PaymentStatus status={payment.status} /></Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Payment Method:</span> {getPaymentMethod(payment) || ""}</Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>USD To VND Rate:</span> <span className={classes.valueBox}>{fCurrency2(payment.usdToVNDRate || 0)} VND</span></Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Sample Size Cost - VND:</span> <span className={classes.valueBox}>{fCurrency2(payment.sampleSizeCost || 0)} VND</span></Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Sample Size Cost - USD:</span> <span className={classes.valueBox}>${fCurrency2(payment.sampleSizeCostUSD || 0)}</span></Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>USD To VND Rate:</span> <span className={classes.valueBox}>{fCurrencyVND(payment.usdToVNDRate || 0)}</span></Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Sample Size Cost - VND:</span> <span className={classes.valueBox}>{fCurrencyVND(payment.sampleSizeCost || 0)}</span></Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Sample Size Cost - USD:</span> <span className={classes.valueBox}>{fCurrency(payment.sampleSizeCostUSD || 0)}</span></Typography></Grid>
                         {!!payment?.customQuestions?.length && (
                           <>
-                            <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Custom Question Cost - VND:</span> <span className={classes.valueBox}>{fCurrency2(payment.customQuestionCost || 0)} VND</span></Typography></Grid>
-                            <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Custom Question Cost - USD:</span> <span className={classes.valueBox}>${fCurrency2(payment.customQuestionCostUSD || 0)}</span></Typography></Grid>
+                            <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Custom Question Cost - VND:</span> <span className={classes.valueBox}>{fCurrencyVND(payment.customQuestionCost || 0)}</span></Typography></Grid>
+                            <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Custom Question Cost - USD:</span> <span className={classes.valueBox}>{fCurrency(payment.customQuestionCostUSD || 0)}</span></Typography></Grid>
                           </>
                         )}
                         {!!payment?.eyeTrackingSampleSize && (
                           <>
-                            <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Eye Tracking Cost - VND:</span> <span className={classes.valueBox}>{fCurrency2(payment.eyeTrackingSampleSizeCost || 0)} VND</span></Typography></Grid>
-                            <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Eye Tracking Cost - USD:</span> <span className={classes.valueBox}>${fCurrency2(payment.eyeTrackingSampleSizeCostUSD || 0)}</span></Typography></Grid>
+                            <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Eye Tracking Cost - VND:</span> <span className={classes.valueBox}>{fCurrencyVND(payment.eyeTrackingSampleSizeCost || 0)}</span></Typography></Grid>
+                            <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Eye Tracking Cost - USD:</span> <span className={classes.valueBox}>{fCurrency(payment.eyeTrackingSampleSizeCostUSD || 0)}</span></Typography></Grid>
                           </>
                         )}
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Subtotal - VND:</span> <span className={classes.valueBox}>{fCurrency2((payment.amount))} VND</span></Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Subtotal - USD:</span> <span className={classes.valueBox}>${fCurrency2((payment.amountUSD))}</span></Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>VAT - VND:</span> <span className={classes.valueBox}>{fCurrency2(payment.vat || 0)} VND</span></Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>VAT - USD:</span> <span className={classes.valueBox}>${fCurrency2(payment.vatUSD || 0)}</span></Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Total Amount - VND:</span> <span className={classes.valueBox}>{fCurrency2(payment.totalAmount || 0)} VND</span></Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Total Amount - USD:</span> <span className={classes.valueBox}>${fCurrency2(payment.totalAmountUSD || 0)}</span></Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Subtotal - VND:</span> <span className={classes.valueBox}>{fCurrencyVND((payment.amount))}</span></Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Subtotal - USD:</span> <span className={classes.valueBox}>{fCurrency((payment.amountUSD))}</span></Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>VAT - VND:</span> <span className={classes.valueBox}>{fCurrencyVND(payment.vat || 0)}</span></Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>VAT - USD:</span> <span className={classes.valueBox}>{fCurrency(payment.vatUSD || 0)}</span></Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Total Amount - VND:</span> <span className={classes.valueBox}>{fCurrencyVND(payment.totalAmount || 0)}</span></Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Total Amount - USD:</span> <span className={classes.valueBox}>{fCurrency(payment.totalAmountUSD || 0)}</span></Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>VAT Rate:</span> {payment.vatRate * 100 || 0}%</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Created Time:</span> {payment.createdAt && moment(payment.createdAt).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Completed Time:</span> {payment.completedDate && moment(payment.completedDate).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
@@ -223,7 +224,7 @@ const Detail = memo(({ }: Props) => {
                               <TableCell>{item.userPaymentId ?? ""}</TableCell>
                               <TableCell>{item.vpc_MerchTxnRef || ""}</TableCell>
                               <TableCell>{item.vpc_OrderInfo || ""}</TableCell>
-                              <TableCell>{fCurrency2(parseInt(item.amount || "0"))} VND</TableCell>
+                              <TableCell>{fCurrencyVND(Number(item.amount || "0"))}</TableCell>
                               <TableCell>{item.vpc_TicketNo || ""}</TableCell>
                               <TableCell><PaymentStatus status={item.status} /></TableCell>
                               <TableCell sx={{ maxWidth: "300px", wordWrap: "break-word" }}>{JSON.stringify(item.rawCallback || "")}</TableCell>
