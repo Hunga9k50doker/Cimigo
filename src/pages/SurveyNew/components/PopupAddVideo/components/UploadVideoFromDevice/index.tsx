@@ -14,7 +14,7 @@ import { fData } from 'utils/formatNumber';
 import ErrorMessage from "components/common/text/ErrorMessage";
 import Heading4 from "components/common/text/Heading4";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import { IconPlayMini } from "components/svgs";
+import { IconPlayMini } from "components/svg";
 import { useDropzone } from "react-dropzone";
 import useIsMountedRef from "hooks/useIsMountedRef";
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
