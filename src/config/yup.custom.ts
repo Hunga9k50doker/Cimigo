@@ -23,6 +23,9 @@ yup.addMethod<yup.StringSchema>(yup.string, 'businessEmail', function(msg) {
   })
 })
 
+yup.addMethod<yup.NumberSchema>(yup.number, 'empty', function () {
+  return this.transform((val, originalVal) => originalVal === '' ? null : val)
+})
 
 declare module 'yup' {
   interface StringSchema<
@@ -31,6 +34,13 @@ declare module 'yup' {
     TOut extends TType = TType,
   > extends yup.BaseSchema<TType, TContext, TOut> {
     businessEmail(msg?: Message<{}>): StringSchema<TType, TContext>;
+  }
+  interface NumberSchema<
+    TType extends Maybe<number> = number | undefined,
+    TContext extends AnyObject = AnyObject,
+    TOut extends TType = TType
+  > extends yup.BaseSchema<TType, TContext, TOut> {
+    empty(): NumberSchema<TType, TContext>;
   }
 }
 

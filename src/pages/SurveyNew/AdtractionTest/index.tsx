@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import LockIcon from "../components/LockIcon";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
-import { Help as HelpIcon, ArrowForward,  FormatAlignLeft as FormatAlignLeftIcon, SentimentSatisfiedRounded, ArrowCircleUpRounded, ArrowCircleDownRounded } from '@mui/icons-material';
+import { Help as HelpIcon, ArrowForward, FormatAlignLeft as FormatAlignLeftIcon, SentimentSatisfiedRounded, ArrowCircleUpRounded, ArrowCircleDownRounded } from '@mui/icons-material';
 import TabPanelBox from "components/TabPanelBox";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
@@ -15,12 +15,11 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import CostSummary from "../components/CostSummary";
 import { editableProject } from "helpers/project";
-import { PriceService } from "helpers/price";
+import { usePrice } from "helpers/price";
 import { ETabRightPanel, SETUP_SURVEY_SECTION } from "models/project";
 import AddVideos from "./components/AddVideos";
 import CustomQuestions from "../SetupSurvey/components/CustomQuestions";
 import EmotionMeasurement from "./components/EmotionMeasurement";
-import { fCurrency2 } from "utils/formatNumber";
 import { useTranslation } from "react-i18next";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
@@ -40,24 +39,18 @@ interface AdtractionTestProps {
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlineMobile, onToggleViewOutlineMobile, onChangeTabRightPanel }: AdtractionTestProps) => {
-  
+
   const { t } = useTranslation();
 
   const dispatch = useDispatch()
 
   const { project, scrollToSection, showHowToSetup } = useSelector((state: ReducerType) => state.project)
 
-  const { configs } = useSelector((state: ReducerType) => state.user)
-
   const editable = useMemo(() => editableProject(project), [project])
- 
+
   const [onOpenHowToSetupSurvey, setOnOpenHowToSetupSurvey] = useState(false);
 
-
-  const price = useMemo(() => {
-    if (!project || !configs) return null
-    return PriceService.getTotal(project, configs)
-  }, [project, configs])
+  const { price } = usePrice()
 
   const scrollToElement = (id: string) => {
     const el = document.getElementById(id)
@@ -78,7 +71,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
   const onNextSetupTarget = () => {
     if (!editable) {
       dispatch(push(routes.project.detail.target.replace(":id", `${projectId}`)))
-    } 
+    }
   }
 
   useEffect(() => {
@@ -103,9 +96,9 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
         <PageTitle className={classes.pageTitle}>
           <PageTitleLeft>
             <PageTitleText translation-key="setup_survey_title_left_panel"
-            dangerouslySetInnerHTML={{ __html: t('setup_survey_title_left_panel', {title: project?.solution?.title})}}
+              dangerouslySetInnerHTML={{ __html: t('setup_survey_title_left_panel', { title: project?.solution?.title }) }}
             ></PageTitleText>
-            {!editable && <LockIcon status={project?.status} className={classes.lockIcon}/>}
+            {!editable && <LockIcon status={project?.status} className={classes.lockIcon} />}
           </PageTitleLeft>
           {project?.solution?.enableHowToSetUpSurvey && (
             <PageTitleRight>
@@ -113,21 +106,21 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
               <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupSurvey}
               >{project?.solution?.howToSetUpSurveyPageTitle}</ParagraphSmallUnderline2>
             </PageTitleRight>
-          )}  
+          )}
         </PageTitle>
         <Content id={SETUP_SURVEY_SECTION.content_survey_setup}>
-            <AddVideos
+          <AddVideos
             project={project}
-            />
-            <CustomQuestions
-              project={project}
-              step={2}
-            />
-            <EmotionMeasurement
+          />
+          <CustomQuestions
+            project={project}
+            step={2}
+          />
+          <EmotionMeasurement
             price={price}
             project={project}
             step={3}
-            />
+          />
         </Content>
         <MobileAction className={classes.mobileAction}>
           <Button
@@ -140,33 +133,33 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
           />
           <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
             <ParagraphSmall $colorName="--cimigo-blue">View outline</ParagraphSmall>
-            <ArrowCircleUpRounded/>
+            <ArrowCircleUpRounded />
           </Box>
           <div className={toggleOutlineMobile ? classes.modalMobile : ""}></div>
         </MobileAction>
       </LeftContent>
       <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.closeOutlineMobile}>
-          <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
-              <ParagraphSmall $colorName="--cimigo-blue">Close outline</ParagraphSmall>
-              <ArrowCircleDownRounded/>
-          </Box>
+        <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
+          <ParagraphSmall $colorName="--cimigo-blue">Close outline</ParagraphSmall>
+          <ArrowCircleDownRounded />
+        </Box>
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
-            <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} 
-            translation-key="project_right_panel_cost_summary"
+            <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice}
+              translation-key="project_right_panel_cost_summary"
             >{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
           </TabRightPanel>
           <TabPanelBox value={tabRightPanel} index={ETabRightPanel.OUTLINE}>
-            <RightPanelContent> 
+            <RightPanelContent>
               <RightPanelBody>
                 <RPStepper orientation="vertical" connector={<RPStepConnector />}>
                   <Step expanded>
                     <RPStepLabel
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.add_video)}
-                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><AddVideoIcon active/></RPStepIconBox>}
+                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><AddVideoIcon active /></RPStepIconBox>}
                     >
-                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 1})}</ParagraphExtraSmall>
+                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", { number: 1 })}</ParagraphExtraSmall>
                       <Heading5 className="title" $colorName="--gray-60" translation-key="">Add videos (2)</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
@@ -180,13 +173,13 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
                       <RPStepLabel
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.custom_questions)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><FormatAlignLeftIcon /></RPStepIconBox>}>
-                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: 2})}</ParagraphExtraSmall>
-                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_custom_question">{t("project_right_panel_step_custom_question", {customQuestionLength: project?.customQuestions?.length || 0})}</Heading5>
+                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", { number: 2 })}</ParagraphExtraSmall>
+                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_custom_question">{t("project_right_panel_step_custom_question", { customQuestionLength: project?.customQuestions?.length || 0 })}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
                           sx={{ height: 24, backgroundColor: project?.enableCustomQuestion ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
-                          label={<ParagraphExtraSmall $colorName="--ghost-white">${fCurrency2(price?.customQuestionCostUSD)}</ParagraphExtraSmall>}
+                          label={<ParagraphExtraSmall $colorName="--ghost-white">{price?.customQuestionCost?.show}</ParagraphExtraSmall>}
                           color="secondary"
                         />
                       </RPStepContent>
@@ -197,13 +190,13 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
                       <RPStepLabel
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.emotion_measurement)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><SentimentSatisfiedRounded /></RPStepIconBox>}>
-                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", {number: project?.solution?.enableCustomQuestion ? 3 : 2})}</ParagraphExtraSmall>
+                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", { number: project?.solution?.enableCustomQuestion ? 3 : 2 })}</ParagraphExtraSmall>
                         <Heading5 className="title" $colorName="--gray-60" translation-key="">Emotion measurement</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
                           sx={{ height: 24, backgroundColor: project?.enableEyeTracking ? "var(--cimigo-green-dark-1)" : "var(--gray-40)", "& .MuiChip-label": { px: 2 } }}
-                          label={<ParagraphExtraSmall $colorName="--ghost-white">${fCurrency2(price?.eyeTrackingSampleSizeCostUSD)}</ParagraphExtraSmall>}
+                          label={<ParagraphExtraSmall $colorName="--ghost-white">{price?.eyeTrackingSampleSizeCost?.show}</ParagraphExtraSmall>}
                           color="secondary"
                         />
                       </RPStepContent>

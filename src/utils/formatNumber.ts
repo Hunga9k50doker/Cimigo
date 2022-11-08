@@ -7,12 +7,12 @@ export function fCurrency(number: number | string) {
   return numeral(number).format(Number.isInteger(number) ? '$0,0' : '$0,0.00');
 }
 
-export function fCurrency2(number: number | string) {
-  return numeral(number).format(Number.isInteger(number) ? '0,0' : '0,0.00');
+export function fCurrency2(number?: number | string) {
+  return numeral(number || 0).format(Number.isInteger(number || 0) ? '0,0' : '0,0.00');
 }
 
-export function fCurrency2VND(number: number | string) {
-  return numeral(number).format('0,0');
+export function fCurrency2VND(number?: number | string) {
+  return numeral(number || 0).format('0,0');
 }
 
 export function fPercent(number: number) {

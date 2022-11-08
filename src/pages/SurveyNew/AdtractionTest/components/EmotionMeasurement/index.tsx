@@ -4,17 +4,15 @@ import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { Project, SETUP_SURVEY_SECTION } from "models/project";
 import { MaxChip, PriceChip } from "pages/SurveyNew/components";
-import { memo, useState} from "react";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import classes from "./styles.module.scss"
 import clsx from "clsx"
 import Switch from "components/common/inputs/Switch";
-import { fCurrency2 } from "utils/formatNumber";
 import { TotalPrice } from "helpers/price";
 import { useDispatch } from "react-redux";
-import ProjectHelper, { editableProject } from "helpers/project";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
-import { getEyeTrackingPacksRequest, setProjectReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
+import { setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { ProjectService } from "services/project";
 
 
@@ -28,19 +26,19 @@ export const EmotionMeasurement = memo(({ price, project, step }: EmotionMeasure
     const { t } = useTranslation();
     const dispatch = useDispatch()
 
-    const [openConfirmDisableEyeTracking, setOpenConfirmDisableEyeTracking] = useState(false);
+    // const [openConfirmDisableEyeTracking, setOpenConfirmDisableEyeTracking] = useState(false);
 
     const onOpenPopupConfirmDisableEyeTracking = () => {
-      setOpenConfirmDisableEyeTracking(true);
+      // setOpenConfirmDisableEyeTracking(true);
     }
-    const onClosePopupConfirmDisableEyeTracking = () => {
-      setOpenConfirmDisableEyeTracking(false);
-    }
+    // const onClosePopupConfirmDisableEyeTracking = () => {
+    //   setOpenConfirmDisableEyeTracking(false);
+    // }
 
-    const onConfirmedDisableEyeTracking = () => {
-      onToggleEyeTracking(true)
-      onClosePopupConfirmDisableEyeTracking()
-    }
+    // const onConfirmedDisableEyeTracking = () => {
+    //   onToggleEyeTracking(true)
+    //   onClosePopupConfirmDisableEyeTracking()
+    // }
 
     const onToggleEyeTracking = (confirmed: boolean = false) => {
       const enableEyeTracking = !project?.enableEyeTracking;
@@ -84,7 +82,7 @@ export const EmotionMeasurement = memo(({ price, project, step }: EmotionMeasure
           <PriceChip
             className={clsx({ 'disabled': !project?.enableEyeTracking })}
             label={<ParagraphSmall translation-key="common_samples, setup_survey_custom_question_cost_description">
-              {project?.enableEyeTracking ? `$${fCurrency2(price?.eyeTrackingSampleSizeCostUSD)} ( ${project?.eyeTrackingSampleSize || 0} ${t("common_samples")})` : `${t("setup_survey_custom_question_cost_description")}`}
+              {project?.enableEyeTracking ? `${price?.eyeTrackingSampleSizeCost?.show} ( ${project?.eyeTrackingSampleSize || 0} ${t("common_samples")})` : `${t("setup_survey_custom_question_cost_description")}`}
             </ParagraphSmall>}
           />
         </Box>

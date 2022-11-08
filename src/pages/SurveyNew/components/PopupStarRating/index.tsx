@@ -33,23 +33,20 @@ import InputTextfield from "components/common/inputs/InputTextfield"
 import InputCounter from "components/common/inputs/InputCounter"
 import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
 import { Project } from "models/project";
-import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
-import {DialogTitle} from "components/common/dialogs/DialogTitle";
+import { DialogTitle } from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import { DialogActions } from "components/common/dialogs/DialogActions";
-import { PriceService } from "helpers/price";
-import { useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
+import { usePrice } from "helpers/price";
 
 const minStars = 3;
 const maxStars = 10;
 export interface StarRatingForm {
-    title: string;
-    numberOfStars: number;
-    customQuestionAttributes?: {
-      id?: number;
-      attribute?: string;
-    }[],
+  title: string;
+  numberOfStars: number;
+  customQuestionAttributes?: {
+    id?: number;
+    attribute?: string;
+  }[],
 }
 
 interface Props {
@@ -64,30 +61,28 @@ interface Props {
 const PopupStarRating = (props: Props) => {
   const { t, i18n } = useTranslation();
 
-  const { configs } = useSelector((state: ReducerType) => state.user)
-
   const { onClose, project, questionEdit, questionType, isOpen, onSubmit } = props;
-  
+
   const [focusEleIdx, setFocusEleIdx] = useState(-1);
-  
+
   const schema = useMemo(() => {
     return yup.object().shape({
-          title: yup.string().required("Question is required"),
-          numberOfStars: yup.number()
-          .min(minStars, `Number of stars must be between ${minStars} and ${maxStars}`)
-          .max(maxStars, `Number of stars must be between ${minStars} and ${maxStars}`)
-          .required("Number of stars is required"),
-          customQuestionAttributes: yup
-            .array(
-              yup.object({
-                id: yup.number().transform(value => (isNaN(value) ? undefined : value)).notRequired(),
-                attribute: yup.string().required("Attribute is required"),
-              })
-            )
-            .required(),
-        })
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      },[i18n.language]);
+      title: yup.string().required("Question is required"),
+      numberOfStars: yup.number()
+        .min(minStars, `Number of stars must be between ${minStars} and ${maxStars}`)
+        .max(maxStars, `Number of stars must be between ${minStars} and ${maxStars}`)
+        .required("Number of stars is required"),
+      customQuestionAttributes: yup
+        .array(
+          yup.object({
+            id: yup.number().transform(value => (isNaN(value) ? undefined : value)).notRequired(),
+            attribute: yup.string().required("Attribute is required"),
+          })
+        )
+        .required(),
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language]);
 
   const {
     register,
@@ -108,19 +103,20 @@ const PopupStarRating = (props: Props) => {
     name: "customQuestionAttributes"
   });
 
+  const { getCustomQuestionStarRatingCost, getCostCurrency } = usePrice()
+
   const isShowMultiAttributes = useMemo(() => !!fieldsAttributes?.length, [fieldsAttributes])
 
   const price = useMemo(() => {
     if (!questionType) return
-    return PriceService.getCustomQuestionStarRatingCost(questionType, fieldsAttributes.length, configs)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionType, fieldsAttributes])
+    return getCustomQuestionStarRatingCost(questionType, fieldsAttributes.length, project)
+  }, [questionType, fieldsAttributes, getCustomQuestionStarRatingCost, project])
 
   const onAddAttribute = () => {
     if (fieldsAttributes?.length >= questionType.maxAttribute) return
 
     appendAttribute({
-        attribute: ''
+      attribute: ''
     })
     setFocusEleIdx(fieldsAttributes?.length ?? 0)
   };
@@ -179,14 +175,14 @@ const PopupStarRating = (props: Props) => {
         })),
       })
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionEdit])
 
   useEffect(() => {
     if (!isOpen && !questionEdit) {
       clearForm()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps 
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [isOpen, questionEdit])
 
   return (
@@ -208,7 +204,7 @@ const PopupStarRating = (props: Props) => {
         <DialogContent dividers>
           <Grid className={classes.classForm}>
             <ParagraphBody $colorName="--eerie-black" translation-key="setup_survey_popup_advice_subtitle" className={classes.titleAdvice} >
-              {t("setup_survey_popup_advice_subtitle", {firstPrice:fCurrency2(questionType?.price || 0), secondPrice:fCurrency2(questionType?.priceAttribute || 0)})}
+              {t("setup_survey_popup_advice_subtitle", { firstPrice: getCostCurrency(questionType?.price || 0), secondPrice: getCostCurrency(questionType?.priceAttribute || 0) })}
             </ParagraphBody>
             <Heading5
               translation-key="setup_survey_popup_question_title"
@@ -238,28 +234,28 @@ const PopupStarRating = (props: Props) => {
             />
             <Grid className={classes.numberStarContainer}>
               <Controller
-              name="numberOfStars"
-              control={control}
-              render={({field}) => 
-              <>
-                  <Grid className={classes.numberStarControl}>
-                    <Heading5 translation-key="setup_survey_popup_star_rating_number_of_star">{t("setup_survey_popup_star_rating_number_of_star")}</Heading5>                   
-                    <InputCounter
-                      max = {maxStars}
-                      min = {minStars}
-                      onChange = {field.onChange}
-                      value = {field.value}
-                    />                                       
-                  </Grid>
-                  <Grid className={classes.rowStar}>
-                      {[...Array(field.value)].map((star,index) => {
-                          return (
-                          <StarIcon className={classes.iconStar} key={index}/>)  
+                name="numberOfStars"
+                control={control}
+                render={({ field }) =>
+                  <>
+                    <Grid className={classes.numberStarControl}>
+                      <Heading5 translation-key="setup_survey_popup_star_rating_number_of_star">{t("setup_survey_popup_star_rating_number_of_star")}</Heading5>
+                      <InputCounter
+                        max={maxStars}
+                        min={minStars}
+                        onChange={field.onChange}
+                        value={field.value}
+                      />
+                    </Grid>
+                    <Grid className={classes.rowStar}>
+                      {[...Array(field.value)].map((star, index) => {
+                        return (
+                          <StarIcon className={classes.iconStar} key={index} />)
                       })}
-                  </Grid>
-              </>
-              }
-              />    
+                    </Grid>
+                  </>
+                }
+              />
             </Grid>
             <Grid>
               <div className={classes.multiAttributeControl}>
@@ -298,30 +294,30 @@ const PopupStarRating = (props: Props) => {
                                   {...provided.dragHandleProps}
                                 >
                                   <div className={classes.rowInputAttribute}>
-                                    <DragIndicatorIcon className={classes.iconDotsDrag}/>                               
+                                    <DragIndicatorIcon className={classes.iconDotsDrag} />
                                     <Grid className={classes.inputContainer}>
-                                        <InputLineTextfield
-                                          className={classes.inputAttribute}
-                                          type="text"
-                                          translation-key-placeholder="setup_survey_popup_attribute_label_placeholder"
-                                          placeholder={t("setup_survey_popup_attribute_label_placeholder")}
-                                          autoComplete="off"
-                                          inputProps={{tabIndex:index + 2}}
-                                          autoFocus={index === focusEleIdx}
-                                          onFocus={() => setFocusEleIdx(-1)}
-                                          inputRef={register(`customQuestionAttributes.${index}.attribute`)}
-                                          errorMessage={errors.customQuestionAttributes?.[index]?.attribute?.message}
-                                        />
+                                      <InputLineTextfield
+                                        className={classes.inputAttribute}
+                                        type="text"
+                                        translation-key-placeholder="setup_survey_popup_attribute_label_placeholder"
+                                        placeholder={t("setup_survey_popup_attribute_label_placeholder")}
+                                        autoComplete="off"
+                                        inputProps={{ tabIndex: index + 2 }}
+                                        autoFocus={index === focusEleIdx}
+                                        onFocus={() => setFocusEleIdx(-1)}
+                                        inputRef={register(`customQuestionAttributes.${index}.attribute`)}
+                                        errorMessage={errors.customQuestionAttributes?.[index]?.attribute?.message}
+                                      />
                                     </Grid>
                                   </div>
                                   {fieldsAttributes?.length > 1 && (
                                     <CloseIcon
-                                    type="button"
-                                    className={classes.closeInputAttribute}
-                                    onClick={onDeleteAttribute(index)}
+                                      type="button"
+                                      className={classes.closeInputAttribute}
+                                      onClick={onDeleteAttribute(index)}
                                     >
-                                  </CloseIcon>
-                                  ) }
+                                    </CloseIcon>
+                                  )}
                                 </div>
                               )}
                             </Draggable>
@@ -333,12 +329,12 @@ const PopupStarRating = (props: Props) => {
                   </DragDropContext>
                   {fieldsAttributes?.length < questionType.maxAttribute && (
                     <Grid className={classes.addList}>
-                        <div onClick={onAddAttribute} className={classes.addOptions}>
-                        <PlaylistAddIcon className={classes.IconListAdd}/>
+                      <div onClick={onAddAttribute} className={classes.addOptions}>
+                        <PlaylistAddIcon className={classes.IconListAdd} />
                         <ParagraphBody $colorName="--eerie-black-65" translation-key="setup_survey_popup_add_answer_title">
-                            {t("setup_survey_popup_add_answer_title")}
+                          {t("setup_survey_popup_add_answer_title")}
                         </ParagraphBody>
-                        </div>
+                      </div>
                     </Grid>
                   )}
                 </Grid>
@@ -348,8 +344,9 @@ const PopupStarRating = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <Heading5 $colorName="--cimigo-green-dark" translation-key="setup_survey_popup_currency_unit"> 
-            {t("setup_survey_popup_currency_unit", {priceUS:fCurrency2(price?.priceUSD || 0), priceVND:fCurrency2VND(price?.priceVND || 0)})}</Heading5>
+            <Heading5 $colorName="--cimigo-green-dark">
+              {price?.show} ({price?.equivalent})
+            </Heading5>
             <ParagraphExtraSmall $colorName="--gray-90" translation-key="setup_survey_popup_tax_exclusive">{t("setup_survey_popup_tax_exclusive")}</ParagraphExtraSmall>
           </Grid>
           <Button

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
-import { useForm,useFieldArray } from "react-hook-form";
-import {Grid, Dialog, InputAdornment,Tooltip,} from "@mui/material";
+import { useForm, useFieldArray } from "react-hook-form";
+import { Grid, Dialog, InputAdornment, Tooltip, } from "@mui/material";
 import {
   CreateOrEditCustomQuestionInput,
   CustomQuestion,
@@ -14,8 +14,7 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import { Project } from "models/project";
-import { PriceService } from "helpers/price";
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
+import { usePrice } from "helpers/price";
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import CloseIcon from '@mui/icons-material/Close';
@@ -35,8 +34,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import InputLineTextfield from "components/common/inputs/InputLineTextfield";
-import { useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
 import { useTranslation } from "react-i18next";
 interface SingleChoiceForm {
   title: string;
@@ -58,8 +55,6 @@ const PopupSingleChoice = (props: Props) => {
   const { isOpen, questionEdit, questionType, project, onClose, onSubmit } = props;
 
   const { t, i18n } = useTranslation();
-
-  const { configs } = useSelector((state: ReducerType) => state.user)
 
   const [focusEleIdx, setFocusEleIdx] = useState(-1);
 
@@ -96,11 +91,12 @@ const PopupSingleChoice = (props: Props) => {
     name: "answers"
   });
 
+  const { getCustomQuestionSingleChoiceCost } = usePrice()
+
   const price = useMemo(() => {
     if (!questionType) return
-    return PriceService.getCustomQuestionSingleChoiceCost(questionType, configs)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionType])
+    return getCustomQuestionSingleChoiceCost(questionType, project)
+  }, [questionType, getCustomQuestionSingleChoiceCost, project])
 
   useEffect(() => {
     initAnswer();
@@ -199,7 +195,7 @@ const PopupSingleChoice = (props: Props) => {
           <Grid className={classes.classForm}>
             <Heading5 translation-key="setup_survey_popup_question_title">
               {t("setup_survey_popup_question_title")}
-              </Heading5>
+            </Heading5>
             <InputTextfield
               className={classes.inputQuestion}
               translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
@@ -221,86 +217,86 @@ const PopupSingleChoice = (props: Props) => {
               inputRef={register("title")}
               errorMessage={errors.title?.message}
             />
-              <Grid sx={{ position: "relative", marginTop: "32px" }}>
-                <DragDropContext onDragEnd={onDragEnd}>
-                  <Droppable droppableId="droppable-list-single-choice-answer">
-                    {(provided) => (
-                      <div ref={provided.innerRef} {...provided.droppableProps}>
-                        {fieldsAnswers?.map((field, index) => (
-                          <Draggable
-                            draggableId={field.id}
-                            index={index}
-                            key={field.id}
-                          >
-                            {(provided) => (
-                              <div
-                                className={classes.rowInputAnswer}
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              >
-                                <DragIndicatorIcon className={classes.iconDotsDrag}/>
-                                <Grid sx={{ display: "flex", width: "100%" }}>
-                                  <input
-                                    type="radio"
-                                    name="radio_answer"
-                                    disabled={true}
-                                    className={classes.choiceAnswer}
-                                  />
-                                  <InputLineTextfield
-                                    root={classes.inputAnswer}
-                                    type="text"
-                                    placeholder={t("setup_survey_popup_enter_answer_placeholder")}
-                                    translation-key-placeholder="setup_survey_popup_enter_answer_placeholder"
-                                    autoComplete="off"
-                                    autoFocus={index === focusEleIdx}
-                                    onFocus={() => setFocusEleIdx(-1)}
-                                    inputProps={{ tabIndex: index + 2 }}
-                                    inputRef={register(`answers.${index}.title`)}
-                                    isShowError={!!errors.answers?.[index]?.title?.message}
-                                  />
-                                    {fieldsAnswers?.length >
-                                      questionType?.minAnswer && (
-                                      <CloseIcon
-                                        className={classes.closeInputAnswer}
-                                        onClick={onDeleteAnswer(index)}
-                                      />
-                                    )}                              
-                                </Grid>
-                                {!!errors.answers?.[index]?.title?.message && <ErrorMessage className={classes.errAns}>{errors.answers[index]?.title?.message}</ErrorMessage>}
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
-              </Grid>
-              {fieldsAnswers?.length < questionType?.maxAnswer && (
-                <Grid className={classes.addList}>
+            <Grid sx={{ position: "relative", marginTop: "32px" }}>
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable-list-single-choice-answer">
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                      {fieldsAnswers?.map((field, index) => (
+                        <Draggable
+                          draggableId={field.id}
+                          index={index}
+                          key={field.id}
+                        >
+                          {(provided) => (
+                            <div
+                              className={classes.rowInputAnswer}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <DragIndicatorIcon className={classes.iconDotsDrag} />
+                              <Grid sx={{ display: "flex", width: "100%" }}>
+                                <input
+                                  type="radio"
+                                  name="radio_answer"
+                                  disabled={true}
+                                  className={classes.choiceAnswer}
+                                />
+                                <InputLineTextfield
+                                  root={classes.inputAnswer}
+                                  type="text"
+                                  placeholder={t("setup_survey_popup_enter_answer_placeholder")}
+                                  translation-key-placeholder="setup_survey_popup_enter_answer_placeholder"
+                                  autoComplete="off"
+                                  autoFocus={index === focusEleIdx}
+                                  onFocus={() => setFocusEleIdx(-1)}
+                                  inputProps={{ tabIndex: index + 2 }}
+                                  inputRef={register(`answers.${index}.title`)}
+                                  isShowError={!!errors.answers?.[index]?.title?.message}
+                                />
+                                {fieldsAnswers?.length >
+                                  questionType?.minAnswer && (
+                                    <CloseIcon
+                                      className={classes.closeInputAnswer}
+                                      onClick={onDeleteAnswer(index)}
+                                    />
+                                  )}
+                              </Grid>
+                              {!!errors.answers?.[index]?.title?.message && <ErrorMessage className={classes.errAns}>{errors.answers[index]?.title?.message}</ErrorMessage>}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </Grid>
+            {fieldsAnswers?.length < questionType?.maxAnswer && (
+              <Grid className={classes.addList}>
                 <div onClick={onAddAnswer} className={classes.addOptions}>
-                  <PlaylistAddIcon className={classes.IconListAdd}/>
+                  <PlaylistAddIcon className={classes.IconListAdd} />
                   <ParagraphBody $colorName="--eerie-black-65" translation-key="setup_survey_popup_add_answer_title">
                     {t("setup_survey_popup_add_answer_title")}
                   </ParagraphBody>
                 </div>
-                </Grid>
-              )}
+              </Grid>
+            )}
           </Grid>
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <Heading5 $colorName={"--cimigo-green-dark"}> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)}) VND</Heading5>
+            <Heading5 $colorName={"--cimigo-green-dark"}>{price?.show} ({price?.equivalent})</Heading5>
             <ParagraphExtraSmall $colorName={"--gray-90"}>Tax exclusive</ParagraphExtraSmall>
           </Grid>
           <Button
-              btnType={BtnType.Raised}
-              type="submit"
-              translation-key="setup_survey_popup_save_question_title"
-              children={<TextBtnSmall>{t("setup_survey_popup_save_question_title")}</TextBtnSmall>}
-              className={classes.btnSave}
+            btnType={BtnType.Raised}
+            type="submit"
+            translation-key="setup_survey_popup_save_question_title"
+            children={<TextBtnSmall>{t("setup_survey_popup_save_question_title")}</TextBtnSmall>}
+            className={classes.btnSave}
           />
         </DialogActions>
       </form>

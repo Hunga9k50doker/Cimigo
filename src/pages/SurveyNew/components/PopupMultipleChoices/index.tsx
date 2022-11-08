@@ -32,14 +32,11 @@ import ButtonCLose from "components/common/buttons/ButtonClose";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import { DialogActions } from "components/common/dialogs/DialogActions";
 import Heading5 from "components/common/text/Heading5";
-import { PriceService } from "helpers/price";
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
+import { usePrice } from "helpers/price";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
-import { useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
 import ErrorMessage from "components/common/text/ErrorMessage";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import ParagraphBody from "components/common/text/ParagraphBody"
@@ -69,8 +66,6 @@ const PopupMultipleChoices = (props: Props) => {
   const { isOpen, questionEdit, questionType, project, onClose, onSubmit } = props;
 
   const { t, i18n } = useTranslation();
-
-  const { configs } = useSelector((state: ReducerType) => state.user)
 
   const [focusEleIdx, setFocusEleIdx] = useState(-1);
 
@@ -108,11 +103,12 @@ const PopupMultipleChoices = (props: Props) => {
     name: "answers"
   });
 
+  const { getCustomQuestionMultipleChoicesCost } = usePrice()
+
   const price = useMemo(() => {
     if (!questionType) return
-    return PriceService.getCustomQuestionMultipleChoicesCost(questionType, configs)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionType])
+    return getCustomQuestionMultipleChoicesCost(questionType, project)
+  }, [questionType, getCustomQuestionMultipleChoicesCost, project])
 
   useEffect(() => {
     initAnswer();
@@ -327,7 +323,7 @@ const PopupMultipleChoices = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <Heading5 $colorName={"--cimigo-green-dark"}> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)} VND)</Heading5>
+            <Heading5 $colorName={"--cimigo-green-dark"}>{price?.show} ({price?.equivalent})</Heading5>
             <ParagraphExtraSmall $colorName={"--gray-90"}>Tax exclusive</ParagraphExtraSmall>
           </Grid>
           <Button

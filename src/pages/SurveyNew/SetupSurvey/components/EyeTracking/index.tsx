@@ -15,7 +15,6 @@ import { useDispatch } from "react-redux";
 import { getEyeTrackingPacksRequest, setProjectReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { ProjectService } from "services/project";
-import { fCurrency2 } from "utils/formatNumber";
 import classes from "./styles.module.scss"
 import { AddAPhoto, Circle, Help as HelpIcon, Edit as EditIcon, DeleteForever as DeleteForeverIcon } from '@mui/icons-material';
 import BasicTooltip from "components/common/tooltip/BasicTooltip";
@@ -175,7 +174,7 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
           <PriceChip
             className={clsx({ 'disabled': !project?.enableEyeTracking })}
             label={<ParagraphSmall translation-key="common_samples, setup_survey_custom_question_cost_description">
-              {project?.enableEyeTracking ? `$${fCurrency2(price?.eyeTrackingSampleSizeCostUSD)} ( ${project?.eyeTrackingSampleSize || 0} ${t("common_samples")})` : `${t("setup_survey_custom_question_cost_description")}`}
+              {project?.enableEyeTracking ? `${price?.eyeTrackingSampleSizeCost?.show} ( ${project?.eyeTrackingSampleSize || 0} ${t("common_samples")})` : `${t("setup_survey_custom_question_cost_description")}`}
             </ParagraphSmall>}
           />
         </Box>
