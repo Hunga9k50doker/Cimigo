@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Grid,
   Dialog,
@@ -24,15 +24,12 @@ import ButtonCLose from "components/common/buttons/ButtonClose";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import { DialogActions } from "components/common/dialogs/DialogActions";
 import Heading5 from "components/common/text/Heading5";
-import { PriceService } from "helpers/price";
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
+import { usePrice } from "helpers/price";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
-import { useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
-
 import InputTextfield from "components/common/inputs/InputTextfield";
+
 interface OpenQuestionForm {
   title: string;
 }
@@ -51,8 +48,6 @@ const PopupOpenQuestion = (props: Props) => {
 
   const { isOpen, questionEdit, questionType, project, onClose, onSubmit } = props;
 
-  const { configs } = useSelector((state: ReducerType) => state.user)
-
   const schema = useMemo(() => {
     return yup.object().shape({
       title: yup.string().required("Question title is required"),
@@ -70,11 +65,12 @@ const PopupOpenQuestion = (props: Props) => {
     mode: "onChange",
   });
 
+  const { getCustomQuestionOpenQuestionCost } = usePrice()
+
   const price = useMemo(() => {
     if (!questionType) return
-    return PriceService.getCustomQuestionOpenQuestionCost(questionType, configs)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionType])
+    return getCustomQuestionOpenQuestionCost(questionType, project)
+  }, [questionType, project, getCustomQuestionOpenQuestionCost])
 
   useEffect(() => {
     if (questionEdit) {
@@ -130,36 +126,36 @@ const PopupOpenQuestion = (props: Props) => {
         </DialogTitle>
         <DialogContent dividers>
           <Grid className={classes.classForm}>
-              <Heading5 translation-key="setup_survey_popup_question_title">
-                {t("setup_survey_popup_question_title")}
-              </Heading5>
-              <InputTextfield
-                className={classes.inputQuestion}
-                translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
-                placeholder={t("setup_survey_popup_enter_question_placeholder")}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <Tooltip
-                      translation-key="setup_survey_popup_question_tooltip_icon"
-                      title={t("setup_survey_popup_question_tooltip_icon")}
-                    >
-                      <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
-                    </Tooltip>
-                  </InputAdornment>
-                }
-                type="text"
-                autoComplete="off"
-                autoFocus
-                inputProps={{ tabIndex: 1 }}
-                inputRef={register("title")}
-                errorMessage={errors.title?.message}
-              />
+            <Heading5 translation-key="setup_survey_popup_question_title">
+              {t("setup_survey_popup_question_title")}
+            </Heading5>
+            <InputTextfield
+              className={classes.inputQuestion}
+              translation-key-placeholder="setup_survey_popup_enter_question_placeholder"
+              placeholder={t("setup_survey_popup_enter_question_placeholder")}
+              startAdornment={
+                <InputAdornment position="start">
+                  <Tooltip
+                    translation-key="setup_survey_popup_question_tooltip_icon"
+                    title={t("setup_survey_popup_question_tooltip_icon")}
+                  >
+                    <div className={classes.iconLanguage}>{project?.surveyLanguage}</div>
+                  </Tooltip>
+                </InputAdornment>
+              }
+              type="text"
+              autoComplete="off"
+              autoFocus
+              inputProps={{ tabIndex: 1 }}
+              inputRef={register("title")}
+              errorMessage={errors.title?.message}
+            />
           </Grid>
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <Heading5 $colorName={"--cimigo-green-dark"}> US$ {fCurrency2(price?.priceUSD || 0)} ({fCurrency2VND(price?.priceVND || 0)} VND)</Heading5>
-              <ParagraphExtraSmall $colorName={"--gray-90"}>Tax exclusive</ParagraphExtraSmall>
+            <Heading5 $colorName={"--cimigo-green-dark"}>{price?.show} ({price?.equivalent})</Heading5>
+            <ParagraphExtraSmall $colorName={"--gray-90"}>Tax exclusive</ParagraphExtraSmall>
           </Grid>
           <Button
             btnType={BtnType.Raised}
@@ -169,7 +165,7 @@ const PopupOpenQuestion = (props: Props) => {
             className={classes.btnSave}
           />
         </DialogActions>
-        </form>
+      </form>
     </Dialog>
   );
 };

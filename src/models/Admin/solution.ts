@@ -44,6 +44,8 @@ export interface Solution {
   typeId: ESOLUTION_TYPE;
   minPack: number;
   maxPack: number;
+  minVideo: number;
+  maxVideo: number;
   minAdditionalBrand: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;

@@ -27,8 +27,7 @@ import ParagraphBody from "components/common/text/ParagraphBody"
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import { Project } from "models/project";
 import { arrayEmojis, emojiFaces, FaceType } from "models/custom_question";
-import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
-import { PriceService } from "helpers/price";
+import { usePrice } from "helpers/price";
 import { CreateOrEditCustomQuestionInput, CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
 import Button, { BtnType } from "components/common/buttons/Button";
 import InputTextfield from "components/common/inputs/InputTextfield";
@@ -38,8 +37,6 @@ import ButtonCLose from "components/common/buttons/ButtonClose";
 import Emoji from "components/common/images/Emojis";
 import classes from "./styles.module.scss";
 import Toggle from "components/Toggle";
-import { useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
 import { OptionItem } from "models/general";
 import { useTranslation } from "react-i18next";
 
@@ -69,8 +66,6 @@ interface Props {
 const PopupSmileyRating = (props: Props) => {
 
   const { t, i18n } = useTranslation();
-
-  const { configs } = useSelector((state: ReducerType) => state.user)
 
   const { onClose, project, questionEdit, questionType, isOpen, onSubmit } = props;
 
@@ -149,11 +144,12 @@ const PopupSmileyRating = (props: Props) => {
 
   const isShowMultiAttributes = useMemo(() => !!fieldsAttributes?.length, [fieldsAttributes])
 
+  const { getCustomQuestionSmileyRatingCost, getCostCurrency } = usePrice()
+
   const price = useMemo(() => {
     if (!questionType) return
-    return PriceService.getCustomQuestionSmileyRatingCost(questionType, fieldsAttributes.length, configs)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionType, fieldsAttributes])
+    return getCustomQuestionSmileyRatingCost(questionType, fieldsAttributes.length, project)
+  }, [questionType, fieldsAttributes, getCustomQuestionSmileyRatingCost, project])
 
   const onAddAttribute = () => {
     if (fieldsAttributes?.length >= questionType.maxAttribute) return
@@ -202,7 +198,7 @@ const PopupSmileyRating = (props: Props) => {
         attribute: it.attribute
       }))
     }
-   onSubmit(data);
+    onSubmit(data);
   };
 
   const onDeleteAttribute = (index: number) => () => {
@@ -274,7 +270,7 @@ const PopupSmileyRating = (props: Props) => {
         <DialogContent dividers>
           <Grid className={classes.classForm}>
             <ParagraphBody $colorName="--eerie-black" translation-key="setup_survey_popup_advice_subtitle" className={classes.titleAdvice} >
-            {t("setup_survey_popup_advice_subtitle", {firstPrice:fCurrency2(questionType?.price || 0), secondPrice:fCurrency2(questionType?.priceAttribute || 0)})}
+              {t("setup_survey_popup_advice_subtitle", { firstPrice: getCostCurrency(questionType?.price || 0), secondPrice: getCostCurrency(questionType?.priceAttribute || 0) })}
             </ParagraphBody>
             <Heading5
               translation-key="setup_survey_popup_question_title"
@@ -375,8 +371,8 @@ const PopupSmileyRating = (props: Props) => {
                   onChange={onToggleMultipleAttributes}
                 />
               </div>
-              <ParagraphBody 
-              $colorName={isShowMultiAttributes ? "--gray-80" : "--gray-60"} translation-key="setup_survey_popup_multiple_attributes_subtitle">
+              <ParagraphBody
+                $colorName={isShowMultiAttributes ? "--gray-80" : "--gray-60"} translation-key="setup_survey_popup_multiple_attributes_subtitle">
                 {t("setup_survey_popup_multiple_attributes_subtitle")}
               </ParagraphBody>
               {!!fieldsAttributes?.length && (
@@ -452,8 +448,7 @@ const PopupSmileyRating = (props: Props) => {
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Grid className={classes.costContainer}>
-            <Heading5 $colorName="--cimigo-green-dark"  translation-key="setup_survey_popup_currency_unit"> 
-            {t("setup_survey_popup_currency_unit", {priceUS:fCurrency2(price?.priceUSD || 0), priceVND:fCurrency2VND(price?.priceVND || 0)})}</Heading5>
+            <Heading5 $colorName="--cimigo-green-dark">{price?.show} ({price?.equivalent})</Heading5>
             <ParagraphExtraSmall $colorName="--gray-90" translation-key="setup_survey_popup_tax_exclusive">{t("setup_survey_popup_tax_exclusive")}</ParagraphExtraSmall>
           </Grid>
           <Button

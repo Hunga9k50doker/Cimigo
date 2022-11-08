@@ -8,7 +8,7 @@ import { memo, useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { routes } from "routers/routes";
-import * as yup from 'yup';
+import yup from 'config/yup.custom';
 import ReactQuill from 'react-quill';
 import { OptionItem } from "models/general";
 import classes from './styles.module.scss';
@@ -21,6 +21,8 @@ import { setErrorMess } from "redux/reducers/Status/actionTypes";
 import AdminSolutionService from "services/admin/solution";
 import UploadFile from "components/UploadFile";
 import { FileUpload } from "models/attachment";
+import { ESOLUTION_TYPE, solutionTypes } from "models";
+import InputTextareaAutosize from "components/InputTextareaAutosize";
 
 const modules = {
   toolbar: [
@@ -29,7 +31,8 @@ const modules = {
     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
     [{ 'indent': '-1' }, { 'indent': '+1' }],
     ['link', 'image'],
-    ['clean']
+    ['clean'],
+    [{ 'color': [] }, { 'background': [] }],
   ],
 }
 
@@ -46,65 +49,120 @@ const schema = yup.object().shape({
     id: yup.number(),
     name: yup.string()
   }).nullable(),
+  typeId: yup.object().shape({
+    id: yup.number().required('Type is required.'),
+    name: yup.string().required()
+  }).required(),
+
+  //PACK
   minPack: yup.number()
-    .typeError('Min Pack is required.')
-    .min(0)
-    .integer('Min Pack must be a integer number')
-    .required('Min Pack is required.'),
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.PACK,
+      then: yup.number()
+        .typeError('Min Pack is required.')
+        .min(0)
+        .integer('Min Pack must be a integer number')
+        .required('Min Pack is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
   maxPack: yup.number()
-    .typeError('Max Pack is required.')
-    .positive('Max Pack must be a positive number')
-    .required('Max Pack is required.'),
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.PACK,
+      then: yup.number()
+        .typeError('Max Pack is required.')
+        .positive('Max Pack must be a positive number')
+        .required('Max Pack is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
   minAdditionalBrand: yup.number()
-    .typeError('Min Additional Brand is required.')
-    .min(0)
-    .integer('Min Additional Brand must be a integer number')
-    .required('Min Additional Brand is required.'),
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.PACK,
+      then: yup.number()
+        .typeError('Min Additional Brand is required.')
+        .min(0)
+        .integer('Min Additional Brand must be a integer number')
+        .required('Min Additional Brand is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
   maxAdditionalBrand: yup.number()
-    .typeError('Max Additional Brand is required.')
-    .positive('Max Additional Brand must be a positive number')
-    .required('Max Additional Brand is required.'),
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.PACK,
+      then: yup.number()
+        .typeError('Max Additional Brand is required.')
+        .positive('Max Additional Brand must be a positive number')
+        .required('Max Additional Brand is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
   maxAdditionalAttribute: yup.number()
-    .typeError('Max Additional Attribute is required.')
-    .positive('Max Additional Attribute must be a positive number')
-    .required('Max Additional Attribute is required.'),
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.PACK,
+      then: yup.number()
+        .typeError('Max Additional Attribute is required.')
+        .positive('Max Additional Attribute must be a positive number')
+        .required('Max Additional Attribute is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+
+  //ADTRACTION
+  minVideo: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.ADTRACTION,
+      then: yup.number()
+        .typeError('Min Video is required.')
+        .min(0)
+        .integer('Min Video must be a integer number')
+        .required('Min Video is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+  maxVideo: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.ADTRACTION,
+      then: yup.number()
+        .typeError('Max Video is required.')
+        .positive('Max Video must be a positive number')
+        .required('Max Video is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+
   enableCustomQuestion: yup.boolean().required('Enable Custom Question is required.'),
-  maxCustomQuestion: yup.mixed()
+  maxCustomQuestion: yup.number()
     .when('enableCustomQuestion', {
       is: (val: number) => !!val,
       then: yup.number()
         .typeError('Max Custom Question is required.')
         .positive('Max Custom Question must be a positive number')
         .required('Max Custom Question is required.'),
-      otherwise: yup.mixed().notRequired().nullable()
+      otherwise: yup.number().empty().notRequired().nullable()
     }),
+
   enableEyeTracking: yup.boolean().required(),
-  minEyeTrackingPack: yup.mixed()
-    .when('enableEyeTracking', {
-      is: (val: number) => !!val,
+  minEyeTrackingPack: yup.number()
+    .when(['enableEyeTracking', 'typeId'], {
+      is: (enableEyeTracking: boolean, typeId: OptionItem) => !!enableEyeTracking && typeId?.id === ESOLUTION_TYPE.PACK,
       then: yup.number()
         .typeError('Min Pack Of Eye Tracking is required.')
         .min(0)
         .integer('Min Pack Of Eye Tracking must be a integer number')
         .required('Min Pack Of Eye Tracking is required.'),
-      otherwise: yup.mixed().notRequired().nullable()
+      otherwise: yup.number().empty().notRequired().nullable()
     }),
-  maxEyeTrackingPack: yup.mixed()
-    .when('enableEyeTracking', {
-      is: (val: number) => !!val,
+  maxEyeTrackingPack: yup.number()
+    .when(['enableEyeTracking', 'typeId'], {
+      is: (enableEyeTracking: boolean, typeId: OptionItem) => !!enableEyeTracking && typeId?.id === ESOLUTION_TYPE.PACK,
       then: yup.number()
         .typeError('Max Pack Of Eye Tracking is required.')
         .positive('Max Pack Of Eye Tracking must be a positive number')
         .required('Max Pack Of Eye Tracking is required.'),
-      otherwise: yup.mixed().notRequired().nullable()
+      otherwise: yup.number().empty().notRequired().nullable()
     }),
   eyeTrackingHelp: yup.string()
-    .when('enableEyeTracking', {
-      is: (val: number) => !!val,
+    .when(['enableEyeTracking', 'typeId'], {
+      is: (enableEyeTracking: boolean, typeId: OptionItem) => !!enableEyeTracking && typeId?.id === ESOLUTION_TYPE.PACK,
       then: yup.string()
         .required('Help Of Eye Tracking is required.'),
       otherwise: yup.string().notRequired().nullable()
     }),
+
   enableHowToSetUpSurvey: yup.boolean().required(),
   howToSetUpSurveyPageTitle: yup.string()
     .when('enableHowToSetUpSurvey', {
@@ -139,8 +197,11 @@ export interface SolutionFormData {
   content: string,
   categoryId: OptionItem,
   categoryHomeId: OptionItem,
+  typeId: OptionItem,
   minPack: number;
   maxPack: number;
+  minVideo: number;
+  maxVideo: number;
   minAdditionalBrand: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;
@@ -189,20 +250,29 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     formData.append('description', data.description)
     formData.append('content', data.content)
     formData.append('categoryId', `${data.categoryId.id}`)
-    formData.append('minPack', `${data.minPack}`)
-    formData.append('maxPack', `${data.maxPack}`)
-    formData.append('minAdditionalBrand', `${data.minAdditionalBrand}`)
-    formData.append('maxAdditionalBrand', `${data.maxAdditionalBrand}`)
-    formData.append('maxAdditionalAttribute', `${data.maxAdditionalAttribute}`)
+    formData.append('typeId', `${data.typeId.id}`)
+    formData.append('enableEyeTracking', `${data.enableEyeTracking}`)
+    switch (data.typeId.id) {
+      case ESOLUTION_TYPE.ADTRACTION:
+        formData.append('minVideo', `${data.minVideo}`)
+        formData.append('maxVideo', `${data.maxVideo}`)
+        break;
+      case ESOLUTION_TYPE.PACK:
+        formData.append('minPack', `${data.minPack}`)
+        formData.append('maxPack', `${data.maxPack}`)
+        formData.append('minAdditionalBrand', `${data.minAdditionalBrand}`)
+        formData.append('maxAdditionalBrand', `${data.maxAdditionalBrand}`)
+        formData.append('maxAdditionalAttribute', `${data.maxAdditionalAttribute}`)
+        if (data.enableEyeTracking) {
+          formData.append('minEyeTrackingPack', `${data.minEyeTrackingPack}`)
+          formData.append('maxEyeTrackingPack', `${data.maxEyeTrackingPack}`)
+          formData.append('eyeTrackingHelp', `${data.eyeTrackingHelp}`)
+        }
+        break;
+    }
     formData.append('enableCustomQuestion', `${data.enableCustomQuestion}`)
     if (data.enableCustomQuestion) {
       formData.append('maxCustomQuestion', `${data.maxCustomQuestion}`)
-    }
-    formData.append('enableEyeTracking', `${data.enableEyeTracking}`)
-    if (data.enableEyeTracking) {
-      formData.append('minEyeTrackingPack', `${data.minEyeTrackingPack}`)
-      formData.append('maxEyeTrackingPack', `${data.maxEyeTrackingPack}`)
-      formData.append('eyeTrackingHelp', `${data.eyeTrackingHelp}`)
     }
     formData.append('enableHowToSetUpSurvey', `${data.enableHowToSetUpSurvey}`)
     formData.append('howToSetUpSurveyPageTitle', data.howToSetUpSurveyPageTitle || '')
@@ -223,6 +293,7 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         title: itemEdit.title,
         description: itemEdit.description,
         content: itemEdit.content,
+        typeId: solutionTypes.find(t => t.id === itemEdit.typeId),
         categoryId: itemEdit.category ? { id: itemEdit.category.id, name: itemEdit.category.name } : null,
         categoryHomeId: itemEdit.categoryHome ? { id: itemEdit.categoryHome.id, name: itemEdit.categoryHome.name } : null,
         minPack: itemEdit.minPack,
@@ -230,6 +301,8 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         minAdditionalBrand: itemEdit.minAdditionalBrand,
         maxAdditionalBrand: itemEdit.maxAdditionalBrand,
         maxAdditionalAttribute: itemEdit.maxAdditionalAttribute,
+        minVideo: itemEdit.minVideo,
+        maxVideo: itemEdit.maxVideo,
         enableCustomQuestion: itemEdit.enableCustomQuestion,
         maxCustomQuestion: itemEdit.maxCustomQuestion,
         enableEyeTracking: itemEdit.enableEyeTracking,
@@ -270,6 +343,7 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     dispatch(push(routes.admin.solution.eyeTrackingSampleSize.root.replace(":solutionId", `${itemEdit.id}`)))
   }
 
+  const type = watch('typeId')
 
   return (
     <div>
@@ -396,55 +470,97 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Inputs
-                      title="Min Pack"
-                      name="minPack"
-                      type="number"
-                      disabled={!!langEdit}
-                      inputRef={register('minPack')}
-                      errorMessage={errors.minPack?.message}
+                    <InputSelect
+                      fullWidth
+                      title="Type"
+                      name="typeId"
+                      control={control}
+                      selectProps={{
+                        options: solutionTypes,
+                        placeholder: "Select type",
+                        isDisabled: !!langEdit
+                      }}
+                      errorMessage={(errors.typeId as any)?.id?.message}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Inputs
-                      title="Max Pack"
-                      name="maxPack"
-                      type="number"
-                      disabled={!!langEdit}
-                      inputRef={register('maxPack')}
-                      errorMessage={errors.maxPack?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Inputs
-                      title="Min Additional Brand"
-                      name="minAdditionalBrand"
-                      type="number"
-                      disabled={!!langEdit}
-                      inputRef={register('minAdditionalBrand')}
-                      errorMessage={errors.minAdditionalBrand?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Inputs
-                      title="Max Additional Brand"
-                      name="maxAdditionalBrand"
-                      type="number"
-                      disabled={!!langEdit}
-                      inputRef={register('maxAdditionalBrand')}
-                      errorMessage={errors.maxAdditionalBrand?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Inputs
-                      title="Max Additional Attribute"
-                      name="maxAdditionalAttribute"
-                      type="number"
-                      disabled={!!langEdit}
-                      inputRef={register('maxAdditionalAttribute')}
-                      errorMessage={errors.maxAdditionalAttribute?.message}
-                    />
-                  </Grid>
+                  {type?.id === ESOLUTION_TYPE.PACK && (
+                    <>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Min Pack"
+                          name="minPack"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('minPack')}
+                          errorMessage={errors.minPack?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Max Pack"
+                          name="maxPack"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('maxPack')}
+                          errorMessage={errors.maxPack?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Min Additional Brand"
+                          name="minAdditionalBrand"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('minAdditionalBrand')}
+                          errorMessage={errors.minAdditionalBrand?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Max Additional Brand"
+                          name="maxAdditionalBrand"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('maxAdditionalBrand')}
+                          errorMessage={errors.maxAdditionalBrand?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Max Additional Attribute"
+                          name="maxAdditionalAttribute"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('maxAdditionalAttribute')}
+                          errorMessage={errors.maxAdditionalAttribute?.message}
+                        />
+                      </Grid>
+                    </>
+                  )}
+                  {type?.id === ESOLUTION_TYPE.ADTRACTION && (
+                    <>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Min Video"
+                          name="minVideo"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('minVideo')}
+                          errorMessage={errors.minVideo?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Max Video"
+                          name="maxVideo"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('maxVideo')}
+                          errorMessage={errors.maxVideo?.message}
+                        />
+                      </Grid>
+                    </>
+                  )}
                   <Grid item xs={12}>
                     <Divider />
                   </Grid>
@@ -497,7 +613,7 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                       label="Enable Eye Tracking"
                     />
                   </Grid>
-                  {watch("enableEyeTracking") && (
+                  {watch("enableEyeTracking") && type?.id === ESOLUTION_TYPE.PACK && (
                     <>
                       <Grid item xs={12} sm={6}>
                         <Inputs
@@ -574,19 +690,14 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                         />
                       </Grid>
                       <Grid item xs={12} sm={12}>
-                        <TextTitle invalid={errors.content?.message}>Content</TextTitle>
-                        <Controller
+                        <InputTextareaAutosize
+                          title="Content"
                           name="howToSetUpSurveyContent"
-                          control={control}
-                          render={({ field }) => <ReactQuill
-                            modules={modules}
-                            className={clsx(classes.editor, { [classes.editorError]: !!errors.howToSetUpSurveyContent?.message })}
-                            value={field.value || ''}
-                            onBlur={() => field.onBlur()}
-                            onChange={(value) => field.onChange(value)}
-                          />}
+                          maxRows={100}
+                          minRows={10}
+                          inputRef={register('howToSetUpSurveyContent')}
+                          errorMessage={errors.howToSetUpSurveyContent?.message}
                         />
-                        {errors.content?.message && <ErrorMessage>{errors.howToSetUpSurveyContent?.message}</ErrorMessage>}
                       </Grid>
                       <Grid item xs={12} sm={12}>
                         <TextTitle>PDF</TextTitle>

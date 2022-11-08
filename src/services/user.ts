@@ -174,6 +174,18 @@ export class UserService {
         return Promise.reject(e?.response?.data);
       })
   }
+
+  static async changeCurrency(currency: string) {
+    return await api.put(API.AUTH.CHANGE_CURRENCY, {
+      currency
+    })
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
 }
 
 export default UserService

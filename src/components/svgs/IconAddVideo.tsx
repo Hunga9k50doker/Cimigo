@@ -8,7 +8,7 @@ const AddVideo = ({...props}) => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             >
-            <g clip-path="url(#clip0_378_14009)">
+            <g clipPath="url(#clip0_378_14009)">
             <path
                 d="M1.99996 3.99984H14V7.33317H15.3333V3.99984C15.3333 3.2665 14.7333 2.6665 14 2.6665H1.99996C1.26663 2.6665 0.666626 3.2665 0.666626 3.99984V11.9998C0.666626 12.7332 1.26663 13.3332 1.99996 13.3332H7.99996V11.9998H1.99996V3.99984Z"
                 fill={props.active ? "var(--cimigo-green-dark-2)" : "var(--gray-60)"}
