@@ -21,7 +21,7 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import ErrorTwoToneIcon from '@mui/icons-material/ErrorTwoTone';
 import Heading5 from "components/common/text/Heading5";
 import { LinearProgressWithLabel } from "../LinearProgressWithLabel";
-import { FileUpload } from "models/attachment";
+import { Attachment, AttachmentObjectTypeId, FileUpload } from "models/attachment";
 import { v4 as uuidv4 } from 'uuid';
 import { Video } from "models/video";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
@@ -151,7 +151,7 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep, project}: Props) => {
         }
       }
       dispatch(setLoading(true));
-      AttachmentService.create(data, config)
+      AttachmentService.create(data)
         .then(() => {
           dispatch(getVideosRequest(project.id))
         })

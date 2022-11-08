@@ -12,6 +12,7 @@ export interface Attachment {
 
 export enum AttachmentObjectTypeId {
   PROJECT_REPORT = 1,
+  VIDEO = 5,
 }
 
 export interface FileUpload {
