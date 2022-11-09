@@ -11,6 +11,7 @@
         margin-top: 8px;
     }
     @media only screen and (max-width: 767px) {
+        max-width: 100%;
         padding-right: 0;
         .subInformation {
             margin-top: 0;
@@ -80,11 +81,15 @@
     }
 }
 .boxVideo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     @media only screen and (max-width: 767px) {
         display: none;
     }
     .iframeVideo {
         border-radius: 4px;
+        // margin-right: 24px;
     }
 }
 

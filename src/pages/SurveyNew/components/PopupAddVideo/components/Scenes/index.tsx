@@ -98,16 +98,11 @@ const Scenes = ({}: Props) => {
 
   }
 
-  useEffect(() => {
-    onAddScenes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return (
     <>
     <Grid component="form" onSubmit={handleSubmit(_onSubmit)}>
        <Grid className={classes.root}>
-            <Grid className={classes.containerInformation}>
+            <Grid className={classes.containerInformation} xs={7}>
                 <Box sx={{mb:3}}>
                     <Heading4 $colorName="--eerie-black">Define scenes</Heading4>
                     <ParagraphSmall $colorName="--gray-80" className={classes.subInformation}>If you already have some key scenes, let us know.</ParagraphSmall>
@@ -185,13 +180,12 @@ const Scenes = ({}: Props) => {
                                       </Grid>
                                       </Grid>
                                   </Grid>
-                                  {fieldsScenes?.length > 1 && (
                                   <CloseIcon
                                   onClick={onDeleteScenes(index)}
                                   type="button"
                                   className={classes.closeInputAttribute}
                                   >
-                                  </CloseIcon>)}
+                                  </CloseIcon>
                                 </div>  
                                 </div>
                               )}
@@ -212,27 +206,33 @@ const Scenes = ({}: Props) => {
                     </Grid>
                 </Grid>   
             </Grid>
-            <Grid sx={{paddingLeft: "75px"}} className={classes.boxVideo}>
-              <iframe width="300" height="168.75" className={classes.iframeVideo}
-              src="https://www.youtube.com/embed/wlBr9QCucZs" 
-              title="YouTube video player" frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowFullScreen>
-              </iframe> 
-              <Grid sx={{mt: 2}}>
+            <Grid className={classes.boxVideo} xs={5}>
+              <div>
+                <iframe width="300" height="168.75" className={classes.iframeVideo}
+                src="https://www.youtube.com/embed/wlBr9QCucZs" 
+                title="YouTube video player" frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen>
+                </iframe> 
+              </div>
+              <Grid sx={{mt: 2, maxWidth: "300px"}}>
                   <Heading6 $colorName="--eerie-black">Tet holiday adtraction 2021 - Tet holiday</Heading6>
                   <Grid sx={{mt: 2}}>
                   <Box className={classes.textItem}>
                       <IconBranding/>
-                      <ParagraphSmall $colorName="--eerie-black">Mirinda soda ice cream</ParagraphSmall>
+                      <Grid sx={{flex: 1}}>  
+                          <ParagraphSmall $colorName="--eerie-black" className={classes.textMessage}>Mirinda soda ice cream Mirinda soda ice creamMirinda soda ice creamMirinda soda ice creamMirinda soda ice creamMirinda soda ice cream</ParagraphSmall>
+                      </Grid>
                   </Box>
                   <Box className={classes.textItem}>
                       <IconProduct/>
-                      <ParagraphSmall $colorName="--eerie-black">Mirinda soda ice cream</ParagraphSmall>
+                      <Grid sx={{flex: 1}}>  
+                          <ParagraphSmall $colorName="--eerie-black" className={classes.textMessage}>Mirinda soda ice cream Mirinda soda ice creamMirinda soda ice creamMirinda soda ice creamMirinda soda ice creamMirinda soda ice cream</ParagraphSmall>
+                      </Grid>
                   </Box>
                   <Box className={classes.textItem}>
                       <IconMessage/>
-                      <Grid sx={{flex: 1, textAlign:"justify", maxWidth: "300px"}}>  
+                      <Grid sx={{flex: 1}}>  
                       <ParagraphSmall $colorName="--eerie-black" className={classes.textMessage}>
                           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
                           consectetur venenatis blandit. Praesent vehicula, libero non pretium

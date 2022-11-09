@@ -62,7 +62,7 @@ const PopupAddVideo = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
-  const [activeStep, setActiveStep] = useState<EStep>(EStep.INFORMATION);
+  const [activeStep, setActiveStep] = useState<EStep>(EStep.SCENES);
 
   const handleNextStep = () => {
     setActiveStep(EStep.INFORMATION);
