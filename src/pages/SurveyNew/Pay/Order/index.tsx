@@ -7,7 +7,6 @@ import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import { EPaymentMethod } from "models/general";
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import { PaymentService } from "services/payment";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest, setCancelPayment } from "redux/reducers/Project/actionTypes";
@@ -29,11 +28,13 @@ import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCanc
 import FileSaver from "file-saver";
 import moment from "moment";
 import { AttachmentService } from "services/attachment";
+import { usePrice } from "helpers/price";
 
 interface Props {
 
 }
 
+// eslint-disable-next-line no-empty-pattern
 const Order = memo(({ }: Props) => {
 
   const { t } = useTranslation()
@@ -47,6 +48,8 @@ const Order = memo(({ }: Props) => {
   const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false);
 
   const payment = useMemo(() => getPayment(project?.payments), [project])
+
+  const { getCostCurrency } = usePrice()
 
   const [isOpenPopupInvoice, setIsOpenPopupInvoice] = useState(false);
   const confirmedPayment = () => {
@@ -149,7 +152,7 @@ const Order = memo(({ }: Props) => {
               className={classes.greenSpan}
               $colorName="--eerie-black"
               translation-key="payment_billing_order_bank_transfer_sub_3"
-              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_3', { total: fCurrency2(payment?.totalAmountUSD || 0) }) }}
+              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_3', { total: getCostCurrency(payment?.totalAmount, payment?.currency)?.USDShow }) }}
             />
             <InforBox>
               <Grid container>
@@ -184,7 +187,7 @@ const Order = memo(({ }: Props) => {
               className={classes.greenSpan}
               $colorName="--eerie-black"
               translation-key="payment_billing_order_bank_transfer_sub_4"
-              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_4', { total: fCurrency2VND(payment?.totalAmount || 0) }) }}
+              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_4', { total: getCostCurrency(payment?.totalAmount, payment?.currency)?.VNDShow }) }}
             />
             <InforBox>
               <Grid container>
@@ -223,10 +226,10 @@ const Order = memo(({ }: Props) => {
         return (
           <>
             <Heading2 $fontSizeMobile={"16px"} $lineHeightMobile="24px" className={classes.price} $colorName="--cimigo-green-dark-1" translation-key="payment_billing_total_amount">
-              {t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}
+              {t('payment_billing_total_amount')}: {getCostCurrency(payment?.totalAmount, payment?.currency)?.show}
             </Heading2>
             <Heading4 $fontSizeMobile={"12px"} $lineHeightMobile="16px" className={classes.priceSub} $colorName="--cimigo-blue-dark-1">
-              ({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)
+              ({t('payment_billing_equivalent_to')} {getCostCurrency(payment?.totalAmount, payment?.currency)?.equivalent})
             </Heading4>
             <ParagraphBody className={classes.titleSub} $colorName="--eerie-black-00" translation-key="payment_billing_order_bank_transfer_sub_1">
               {t('payment_billing_order_bank_transfer_sub_1')}
@@ -246,7 +249,7 @@ const Order = memo(({ }: Props) => {
               className={classes.greenSpan}
               $colorName="--eerie-black"
               translation-key="payment_billing_order_bank_transfer_sub_3"
-              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_3', { total: fCurrency2(payment?.totalAmountUSD || 0) }) }}
+              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_3', { total: getCostCurrency(payment?.totalAmount, payment?.currency)?.USDShow }) }}
             />
             <InforBox>
               <Grid container>
@@ -281,7 +284,7 @@ const Order = memo(({ }: Props) => {
               className={classes.greenSpan}
               $colorName="--eerie-black"
               translation-key="payment_billing_order_bank_transfer_sub_4"
-              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_4', { total: fCurrency2VND(payment?.totalAmount || 0) }) }}
+              dangerouslySetInnerHTML={{ __html: t('payment_billing_order_bank_transfer_sub_4', { total: getCostCurrency(payment?.totalAmount, payment?.currency)?.VNDShow }) }}
             />
             <InforBox>
               <Grid container>
@@ -345,12 +348,12 @@ const Order = memo(({ }: Props) => {
             {render()}
             <Box py={3} display="flex" justifyContent="center" alignItems="center">
               <DownLoadItem onClick={getInvoice}>
-                <img className={classes.imgAddPhoto} src={images.icInvoice} />
+                <img className={classes.imgAddPhoto} src={images.icInvoice} alt=''/>
                 <ParagraphBody $colorName="--cimigo-blue" translation-key="pay_order_download_invoice">{t("pay_order_download_invoice")}</ParagraphBody>
               </DownLoadItem>
               {!!configs?.viewContract && (
                 <DownLoadItem onClick={onDownloadContract}>
-                  <img className={classes.imgAddPhoto} src={images.icContract} />
+                  <img className={classes.imgAddPhoto} src={images.icContract} alt=''/>
                   <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_view_contract">{t("payment_billing_view_contract")}</ParagraphBody>
                 </DownLoadItem>
               )}

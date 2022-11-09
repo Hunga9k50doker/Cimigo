@@ -363,25 +363,28 @@
 
 .btnChangeLang {
   border: none;
-  // margin-right: 10px;
   font-weight: 500;
   font-size: 14px;
   line-height: 24px;
   color: rgba(28, 28, 28, 0.9);
   white-space: nowrap;
-}
-
-.btnChangeLang2 {
-  display: none;
-  border: none;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 24px;
-  color: rgba(28, 28, 28, 0.9);
-  text-transform: uppercase !important;
-
-  span {
-    margin-left: 0px !important;
+  .desktop {
+    display: inline-block;
+  }
+  .mobile {
+    display: none;
+  }
+  @media only screen and (max-width: 1024px) {
+    .desktop {
+      display: none;
+    }
+    .mobile {
+      display: inline-block;
+      text-transform: uppercase !important;
+    }
+    [class~="MuiButton-endIcon"] {
+      margin-left: 0px !important;
+    }
   }
 }
 
@@ -434,15 +437,6 @@
 }
 
 @media only screen and (max-width: 1024px) {
-  .btnChangeLang2 {
-    display: flex;
-    font-weight: 500 !important;
-  }
-
-  .btnChangeLang {
-    display: none;
-  }
-
   .btnLogin {
     white-space: nowrap;
   }
@@ -469,7 +463,6 @@
 
   .btnLogin,
   .btnLogout,
-  .btnChangeLang2,
   .itKey {
     display: none;
   }
@@ -491,15 +484,6 @@
   .imgContainer img {
     margin-left: 13px;
     min-width: 119px;
-  }
-
-  .btnChangeLang2 {
-    display: flex;
-    font-weight: 500 !important;
-  }
-
-  .btnChangeLang {
-    display: none;
   }
 }
 .buttonOfToggle:last-child {

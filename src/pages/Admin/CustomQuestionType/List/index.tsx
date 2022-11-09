@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
 import { AdminCustomQuestionTypeService } from "services/admin/custom_question_type";
-import { fCurrency2 } from "utils/formatNumber";
+import { fCurrencyVND } from "utils/formatNumber";
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
@@ -185,12 +185,10 @@ const List = memo(({ keyword, setKeyword, data, setData }: Props) => {
                             <Link onClick={() => onRedirectEdit(item)}>{item.title}</Link>
                           </TableCell>
                           <TableCell>
-                            {'$'}{fCurrency2(item.price)}
+                            {fCurrencyVND(item.price)}
                           </TableCell>
                           <TableCell>
-                            {item.priceAttribute && (
-                              <>{'$'}{fCurrency2(item.priceAttribute)}</>
-                            )}
+                            {fCurrencyVND(item.priceAttribute)}
                           </TableCell>
                           <TableCell>
                             {item.minAnswer}

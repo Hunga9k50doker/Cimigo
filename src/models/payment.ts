@@ -1,7 +1,7 @@
 import { ConfigData } from "./config";
 import { Country } from "./country";
 import { CustomQuestion } from "./custom_question";
-import { OptionItem } from "./general";
+import { ECurrency, OptionItem } from "./general";
 import { OnePay } from "./onepays";
 import { Project } from "./project";
 import { User } from "./user";
@@ -73,6 +73,7 @@ export interface Payment {
   eyeTrackingSampleSizeCostUSD: number;
   projectData: Project;
   config: ConfigData;
+  currency: ECurrency;
 }
 
 export interface TryAgain {

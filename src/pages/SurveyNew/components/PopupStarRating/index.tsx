@@ -204,7 +204,7 @@ const PopupStarRating = (props: Props) => {
         <DialogContent dividers>
           <Grid className={classes.classForm}>
             <ParagraphBody $colorName="--eerie-black" translation-key="setup_survey_popup_advice_subtitle" className={classes.titleAdvice} >
-              {t("setup_survey_popup_advice_subtitle", { firstPrice: getCostCurrency(questionType?.price || 0), secondPrice: getCostCurrency(questionType?.priceAttribute || 0) })}
+              {t("setup_survey_popup_advice_subtitle", { firstPrice: getCostCurrency(questionType?.price || 0)?.show, secondPrice: getCostCurrency(questionType?.priceAttribute || 0)?.show })}
             </ParagraphBody>
             <Heading5
               translation-key="setup_survey_popup_question_title"

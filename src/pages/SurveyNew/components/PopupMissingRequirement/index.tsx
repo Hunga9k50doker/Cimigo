@@ -32,9 +32,9 @@ const PopupMissingRequirement = ({ isOpen, isValidBasic, isValidPacks, isValidAd
 
   const { project } = useSelector((state: ReducerType) => state.project)
 
-  const minPack = useMemo(() => ProjectHelper.minPack(project?.solution), [project?.solution])
+  const minPack = useMemo(() => ProjectHelper.minPack(project), [project])
 
-  const minAdditionalBrand = useMemo(() => ProjectHelper.minAdditionalBrand(project?.solution), [project?.solution])
+  const minAdditionalBrand = useMemo(() => ProjectHelper.minAdditionalBrand(project), [project])
 
   const minEyeTrackingPack = useMemo(() => ProjectHelper.minEyeTrackingPack(project), [project])
 

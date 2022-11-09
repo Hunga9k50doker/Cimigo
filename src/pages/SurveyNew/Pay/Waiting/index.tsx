@@ -7,7 +7,6 @@ import { ReducerType } from "redux/reducers";
 import { PaymentService } from "services/payment";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
-import { fCurrency2VND, fCurrency2 } from "utils/formatNumber";
 import { authWaiting, getPayment } from "../models";
 import { push } from "connected-react-router";
 import { useTranslation } from "react-i18next";
@@ -20,6 +19,7 @@ import Heading1 from "components/common/text/Heading1";
 import Heading2 from "components/common/text/Heading2";
 import Heading4 from "components/common/text/Heading4";
 import ParagraphBodyUnderline from "components/common/text/ParagraphBodyUnderline";
+import { usePrice } from "helpers/price";
 
 interface Props {
 
@@ -32,6 +32,8 @@ const Waiting = memo(({ }: Props) => {
   const dispatch = useDispatch()
 
   const { project } = useSelector((state: ReducerType) => state.project)
+
+  const { getCostCurrency } = usePrice()
 
   const unConfirmedPayment = () => {
     dispatch(setLoading(true))
@@ -87,10 +89,10 @@ const Waiting = memo(({ }: Props) => {
               {t('payment_billing_waiting_title')}
             </Heading1>
             <Heading2 mb={1} $fontSizeMobile={"16px"} $lineHeightMobile="24px" $colorName="--cimigo-green-dark-1" translation-key="payment_billing_total_amount" align="center">
-              {t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}
+              {t('payment_billing_total_amount')}: {getCostCurrency(payment?.totalAmount, payment?.currency)?.show}
             </Heading2>
             <Heading4 mb={3} $fontSizeMobile={"12px"} $lineHeightMobile="16px" $colorName="--cimigo-blue-dark-1" translation-key="payment_billing_equivalent_to" align="center">
-              ({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)
+              ({t('payment_billing_equivalent_to')} {getCostCurrency(payment?.totalAmount, payment?.currency)?.equivalent})
             </Heading4>
             <ParagraphBody sx={{ mb: { xs: 2, sm: 3 } }} $colorName="--eerie-black-00" translation-key="payment_billing_waiting_sub_1" align="center">
               {t('payment_billing_waiting_sub_1')}

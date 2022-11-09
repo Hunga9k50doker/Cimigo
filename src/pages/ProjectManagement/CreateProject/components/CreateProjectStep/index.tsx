@@ -31,7 +31,8 @@ import { EStep } from "../..";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import Button, { BtnType } from "components/common/buttons/Button";
 import { setHowToSetupSurveyReducer } from "redux/reducers/Project/actionTypes";
-import { fCurrency2 } from "utils/formatNumber";
+import { usePrice } from "helpers/price";
+import { ESOLUTION_TYPE } from "models";
 
 export interface CreateProjectFormData {
   name: string;
@@ -51,8 +52,13 @@ const CreateProjectStep = memo(
     planSelected,
     onClickHandleBack,
   }: CreateProjectStepProps) => {
+
     const { t, i18n } = useTranslation();
+
     const dispatch = useDispatch();
+
+    const { getCostCurrency } = usePrice()
+
     const schema = useMemo(() => {
       return yup.object().shape({
         name: yup.string().required(t("field_project_name_vali_required")),
@@ -73,8 +79,8 @@ const CreateProjectStep = memo(
       control,
     } = useForm<CreateProjectFormData>({
       resolver: yupResolver(schema),
-      mode: "onChange", 
-      defaultValues: { 
+      mode: "onChange",
+      defaultValues: {
         surveyLanguage: langOptions.find(option => option.id === Lang.VI)
       },
     });
@@ -138,7 +144,7 @@ const CreateProjectStep = memo(
               mx={0.5}
               $fontWeight={"600"}
               $colorName={"--eerie-black"}
-            >{`${planSelected?.title} : US$ ${fCurrency2(planSelected?.price || 0 )}`}</Heading5>
+            >{`${planSelected?.title} (${getCostCurrency(planSelected?.price || 0)?.show})`}</Heading5>
             <ParagraphSmallUnderline2
               translation-key="common_change"
               className={classes.link}
@@ -198,54 +204,56 @@ const CreateProjectStep = memo(
                   }
                 />
               </Grid>
-              <Grid className={classes.accordion}>
-                <Accordion className={classes.accordionContent}>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                  >
-                    <Grid>
-                      <Heading5
-                        $colorName={"--cimigo-blue"}
-                        translation-key="project_create_tab_create_project_infor"
-                      >
-                        {t("project_create_tab_create_project_infor")}
-                      </Heading5>
-                      <ParagraphExtraSmall
-                        $colorName={"--gray-60"}
-                        translation-key="common_optional_upper"
-                      >
-                        {t("common_optional_upper")}
-                      </ParagraphExtraSmall>
-                    </Grid>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{paddingBottom: '24px'}}>
-                    <Grid>
-                      <ParagraphSmall
-                        $colorName={"--gray-80"}
-                        translation-key="project_create_tab_create_project_description"
-                        dangerouslySetInnerHTML={{
-                          __html: t("project_create_tab_create_project_description"),
-                        }}
-                      ></ParagraphSmall>
-                      <Grid container rowSpacing={2} sx={{marginTop: "0"}}>  
-                        <Grid item xs={12}>
-                          <InputTextfield
-                            className={classes.inputAccordion}
-                            name="category"
-                            type="text"
-                            inputProps={{maxLength: "50"}}
-                            placeholder={t("field_project_category_placeholder")}
-                            translation-key-placeholder="field_project_category_placeholder"
-                            inputRef={register("category")}
-                            errorMessage={errors.category?.message}
-                          />
+              {solutionSelected?.typeId === ESOLUTION_TYPE.PACK && (
+                <Grid className={classes.accordion}>
+                  <Accordion className={classes.accordionContent}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                    >
+                      <Grid>
+                        <Heading5
+                          $colorName={"--cimigo-blue"}
+                          translation-key="project_create_tab_create_project_infor"
+                        >
+                          {t("project_create_tab_create_project_infor")}
+                        </Heading5>
+                        <ParagraphExtraSmall
+                          $colorName={"--gray-60"}
+                          translation-key="common_optional_upper"
+                        >
+                          {t("common_optional_upper")}
+                        </ParagraphExtraSmall>
+                      </Grid>
+                    </AccordionSummary>
+                    <AccordionDetails sx={{ paddingBottom: '24px' }}>
+                      <Grid>
+                        <ParagraphSmall
+                          $colorName={"--gray-80"}
+                          translation-key="project_create_tab_create_project_description"
+                          dangerouslySetInnerHTML={{
+                            __html: t("project_create_tab_create_project_description"),
+                          }}
+                        ></ParagraphSmall>
+                        <Grid container rowSpacing={2} sx={{ marginTop: "0" }}>
+                          <Grid item xs={12}>
+                            <InputTextfield
+                              className={classes.inputAccordion}
+                              name="category"
+                              type="text"
+                              inputProps={{ maxLength: "50" }}
+                              placeholder={t("field_project_category_placeholder")}
+                              translation-key-placeholder="field_project_category_placeholder"
+                              inputRef={register("category")}
+                              errorMessage={errors.category?.message}
+                            />
+                          </Grid>
                         </Grid>
                       </Grid>
-                    </Grid>
-                  </AccordionDetails>
-                </Accordion>
-              </Grid>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+              )}
               <Grid className={classes.buttonSubmit}>
                 <Button
                   fullWidth
