@@ -21,7 +21,7 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { routes } from "routers/routes";
 import { AdminProjectService } from "services/admin/project";
 import AdminSolutionService from "services/admin/solution";
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
+import { fCurrency, fCurrencyVND } from "utils/formatNumber";
 import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
@@ -307,8 +307,8 @@ const List = memo(({ sort, setSort, keyword, setKeyword, data, setData, filterDa
                           <TableCell>
                             {!!item.payments?.length && (
                               <>
-                                <p className="cimigo-blue">{'$'}{fCurrency2(item.payments[0].totalAmountUSD || 0)}</p>
-                                <p className="cimigo-blue">(Equivalent to {fCurrency2VND(item.payments[0].totalAmount || 0)} VND)</p>
+                                <p className="cimigo-blue">{fCurrency(item.payments[0].totalAmountUSD || 0)}</p>
+                                <p className="cimigo-blue">(Equivalent to {fCurrencyVND(item.payments[0].totalAmount || 0)})</p>
                               </>
                             )}
                           </TableCell>

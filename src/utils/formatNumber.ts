@@ -1,14 +1,19 @@
 import { replace } from 'lodash';
+import { currencySymbol, ECurrency } from 'models/general';
 import numeral from 'numeral';
 
 // ----------------------------------------------------------------------
 
 export function fCurrency(number: number | string) {
-  return numeral(number).format(Number.isInteger(number) ? '$0,0' : '$0,0.00');
+  return `${currencySymbol[ECurrency.USD].first}${numeral(number || 0).format(Number.isInteger(number || 0) ? '0,0' : '0,0.00')}${currencySymbol[ECurrency.USD].last}`
 }
 
 export function fCurrency2(number?: number | string) {
   return numeral(number || 0).format(Number.isInteger(number || 0) ? '0,0' : '0,0.00');
+}
+
+export function fCurrencyVND(number?: number | string) {
+  return `${currencySymbol[ECurrency.VND].first}${numeral(number || 0).format('0,0')}${currencySymbol[ECurrency.VND].last}`
 }
 
 export function fCurrency2VND(number?: number | string) {

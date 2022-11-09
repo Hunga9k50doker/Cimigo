@@ -4,7 +4,7 @@ import { Project } from "models/project";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
-import { fCurrency2, fCurrency2VND, round } from "utils/formatNumber";
+import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import ProjectHelper from "./project";
 
 export class PriceService {
@@ -18,7 +18,8 @@ export class PriceService {
     const sampleSize = _project?.sampleSize || 0
     const sampleSizeConstConfig = PriceService.getSampleSizeConstConfig(project)
     const unitPrice = sampleSizeConstConfig.find((it, index) => it.limit > sampleSize || (it.limit === sampleSize && index === (sampleSizeConstConfig.length - 1)))?.price || 0
-    return round(sampleSize * unitPrice)
+    const priceVND = Math.round(sampleSize * unitPrice)
+    return priceVND
   }
 
   static getEyeTrackingSampleSizeConstConfig = (project: Project) => {
@@ -32,53 +33,49 @@ export class PriceService {
     const sampleSize = _project?.eyeTrackingSampleSize || 0
     const eyeTrackingSampleSizeConstConfig = PriceService.getEyeTrackingSampleSizeConstConfig(project)
     const unitPrice = eyeTrackingSampleSizeConstConfig.find((it, index) => it.limit > sampleSize || (it.limit === sampleSize && index === (eyeTrackingSampleSizeConstConfig.length - 1)))?.price || 0
-    return round(sampleSize * unitPrice)
-  }
-
-  static convertUSDToVND = (value: number, usdToVND: number) => {
-    return Math.round(value * usdToVND)
+    const priceVND = Math.round(sampleSize * unitPrice)
+    return priceVND
   }
 
   static getCustomQuestionOpenQuestionCost = (customQuestionType: CustomQuestionType, project: Project) => {
     const config = ProjectHelper.getCustomQuestionPriceConfig(project, customQuestionType)
-    const priceUSD = round(config?.price || 0)
-    return priceUSD
+    const priceVND = Math.round(config?.price || 0)
+    return priceVND
   }
 
   static getCustomQuestionSingleChoiceCost = (customQuestionType: CustomQuestionType, project: Project) => {
     const config = ProjectHelper.getCustomQuestionPriceConfig(project, customQuestionType)
-    const priceUSD = round(config?.price || 0)
-    return priceUSD
+    const priceVND = Math.round(config?.price || 0)
+    return priceVND
   }
 
   static getCustomQuestionMultipleChoicesCost = (customQuestionType: CustomQuestionType, project: Project) => {
     const config = ProjectHelper.getCustomQuestionPriceConfig(project, customQuestionType)
-    const priceUSD = round(config?.price || 0)
-    return priceUSD
+    const priceVND = Math.round(config?.price || 0)
+    return priceVND
   }
 
 
   static getCustomQuestionNumericScaleCost = (customQuestionType: CustomQuestionType, numberOfAttributes: number, project: Project) => {
     const config = ProjectHelper.getCustomQuestionPriceConfig(project, customQuestionType)
     const _numberOfAttributes = numberOfAttributes > 1 ? numberOfAttributes - 1 : 0;
-    const priceUSD = round((config?.price || 0) + (_numberOfAttributes * (config?.priceAttribute || 0)))
-    return priceUSD
+    const priceVND = Math.round((config?.price || 0) + (_numberOfAttributes * (config?.priceAttribute || 0)))
+    return priceVND
   }
 
   static getCustomQuestionSmileyRatingCost = (customQuestionType: CustomQuestionType, numberOfAttributes: number, project: Project) => {
     const config = ProjectHelper.getCustomQuestionPriceConfig(project, customQuestionType)
     const _numberOfAttributes = numberOfAttributes > 1 ? numberOfAttributes - 1 : 0;
-    const priceUSD = round((config?.price || 0) + (_numberOfAttributes * (config?.priceAttribute || 0)))
-    return priceUSD
+    const priceVND = Math.round((config?.price || 0) + (_numberOfAttributes * (config?.priceAttribute || 0)))
+    return priceVND
   }
 
   static getCustomQuestionStarRatingCost = (customQuestionType: CustomQuestionType, numberOfAttributes: number, project: Project) => {
     const config = ProjectHelper.getCustomQuestionPriceConfig(project, customQuestionType)
     const _numberOfAttributes = numberOfAttributes > 1 ? numberOfAttributes - 1 : 0;
-    const priceUSD = round((config?.price || 0) + (_numberOfAttributes * (config?.priceAttribute || 0)))
-    return priceUSD
+    const priceVND = Math.round((config?.price || 0) + (_numberOfAttributes * (config?.priceAttribute || 0)))
+    return priceVND
   }
-
 
   static getCustomQuestionItemCost = (customQuestion: CustomQuestion, project: Project) => {
     switch (customQuestion.typeId) {
@@ -111,10 +108,10 @@ interface ICurrencyConvert {
   equivalent: string;
 }
 
-const getCurrencyConvert = (costUSD: number, currency: string, usdToVND: number): ICurrencyConvert => {
+const getCurrencyConvert = (costVND: number, currency: string, usdToVND: number): ICurrencyConvert => {
   let show = '', equivalent = ''
-  let USD = costUSD
-  let VND = Math.round(costUSD * usdToVND)
+  let VND = costVND
+  let USD = Math.round(costVND / usdToVND)
   let USDShow = `${currencySymbol[ECurrency.USD].first}${fCurrency2(USD)}${currencySymbol[ECurrency.USD].last}`
   let VNDShow = `${currencySymbol[ECurrency.VND].first}${fCurrency2VND(VND)}${currencySymbol[ECurrency.VND].last}`
   switch (currency) {
@@ -158,72 +155,72 @@ export function usePrice() {
   }, [configs, configsNew])
 
   const sampleSizeCost = useMemo(() => {
-    const costUSD = PriceService.getSampleSizeCost(project)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
+    const costVND = PriceService.getSampleSizeCost(project)
+    return getCurrencyConvert(costVND, currency, usdToVND)
   }, [currency, project, usdToVND])
 
   const eyeTrackingSampleSizeCost = useMemo(() => {
-    const costUSD = PriceService.getEyeTrackingSampleSizeCost(project)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
+    const costVND = PriceService.getEyeTrackingSampleSizeCost(project)
+    return getCurrencyConvert(costVND, currency, usdToVND)
   }, [currency, project, usdToVND])
 
   const customQuestionCost = useMemo(() => {
-    const costUSD = PriceService.getCustomQuestionCost(project)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
+    const costVND = PriceService.getCustomQuestionCost(project)
+    return getCurrencyConvert(costVND, currency, usdToVND)
   }, [project, currency, usdToVND])
 
   const amountCost = useMemo(() => {
-    const costUSD = (sampleSizeCost?.USD ?? 0) + (customQuestionCost?.USD ?? 0) + (eyeTrackingSampleSizeCost?.USD ?? 0)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
-  }, [sampleSizeCost?.USD, customQuestionCost?.USD, eyeTrackingSampleSizeCost?.USD, currency, usdToVND])
+    const costVND = (sampleSizeCost?.VND ?? 0) + (customQuestionCost?.VND ?? 0) + (eyeTrackingSampleSizeCost?.VND ?? 0)
+    return getCurrencyConvert(costVND, currency, usdToVND)
+  }, [sampleSizeCost?.VND, customQuestionCost?.VND, eyeTrackingSampleSizeCost?.VND, currency, usdToVND])
 
   const vatCost = useMemo(() => {
-    const costUSD = round((amountCost?.USD ?? 0) * vatConfig)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
-  }, [amountCost?.USD, vatConfig, currency, usdToVND])
+    const costVND = (amountCost?.VND ?? 0) * vatConfig
+    return getCurrencyConvert(costVND, currency, usdToVND)
+  }, [amountCost?.VND, vatConfig, currency, usdToVND])
 
   const totalAmountCost = useMemo(() => {
-    const costUSD = round((amountCost?.USD ?? 0) + (vatCost?.USD ?? 0));
-    return getCurrencyConvert(costUSD, currency, usdToVND)
-  }, [amountCost?.USD, vatCost?.USD, currency, usdToVND])
+    const costVND = (amountCost?.VND ?? 0) + (vatCost?.VND ?? 0)
+    return getCurrencyConvert(costVND, currency, usdToVND)
+  }, [amountCost?.VND, vatCost?.VND, currency, usdToVND])
 
   const getCustomQuestionOpenQuestionCost = (customQuestionType: CustomQuestionType, project: Project) => {
-    const costUSD = PriceService.getCustomQuestionOpenQuestionCost(customQuestionType, project)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
+    const costVND = PriceService.getCustomQuestionOpenQuestionCost(customQuestionType, project)
+    return getCurrencyConvert(costVND, currency, usdToVND)
   }
 
   const getCustomQuestionSingleChoiceCost = (customQuestionType: CustomQuestionType, project: Project) => {
-    const costUSD = PriceService.getCustomQuestionSingleChoiceCost(customQuestionType, project)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
+    const costVND = PriceService.getCustomQuestionSingleChoiceCost(customQuestionType, project)
+    return getCurrencyConvert(costVND, currency, usdToVND)
   }
 
   const getCustomQuestionMultipleChoicesCost = (customQuestionType: CustomQuestionType, project: Project) => {
-    const costUSD = PriceService.getCustomQuestionMultipleChoicesCost(customQuestionType, project)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
+    const costVND = PriceService.getCustomQuestionMultipleChoicesCost(customQuestionType, project)
+    return getCurrencyConvert(costVND, currency, usdToVND)
   }
 
   const getCustomQuestionNumericScaleCost = (customQuestionType: CustomQuestionType, numberOfAttributes: number, project: Project) => {
-    const costUSD = PriceService.getCustomQuestionNumericScaleCost(customQuestionType, numberOfAttributes, project)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
+    const costVND = PriceService.getCustomQuestionNumericScaleCost(customQuestionType, numberOfAttributes, project)
+    return getCurrencyConvert(costVND, currency, usdToVND)
   }
 
   const getCustomQuestionSmileyRatingCost = (customQuestionType: CustomQuestionType, numberOfAttributes: number, project: Project) => {
-    const costUSD = PriceService.getCustomQuestionSmileyRatingCost(customQuestionType, numberOfAttributes, project)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
+    const costVND = PriceService.getCustomQuestionSmileyRatingCost(customQuestionType, numberOfAttributes, project)
+    return getCurrencyConvert(costVND, currency, usdToVND)
   }
 
   const getCustomQuestionStarRatingCost = (customQuestionType: CustomQuestionType, numberOfAttributes: number, project: Project) => {
-    const costUSD = PriceService.getCustomQuestionStarRatingCost(customQuestionType, numberOfAttributes, project)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
+    const costVND = PriceService.getCustomQuestionStarRatingCost(customQuestionType, numberOfAttributes, project)
+    return getCurrencyConvert(costVND, currency, usdToVND)
   }
 
   const getCustomQuestionItemCost = (customQuestion: CustomQuestion) => {
-    const costUSD = PriceService.getCustomQuestionItemCost(customQuestion, project)
-    return getCurrencyConvert(costUSD, currency, usdToVND)
+    const costVND = PriceService.getCustomQuestionItemCost(customQuestion, project)
+    return getCurrencyConvert(costVND, currency, usdToVND)
   }
 
-  const getCostCurrency = (costUSD: number) => {
-    return getCurrencyConvert(costUSD, currency, usdToVND)
+  const getCostCurrency = (costVND: number, _currency?: string) => {
+    return getCurrencyConvert(costVND, _currency || currency, usdToVND)
   }
 
   const price: TotalPrice = {
