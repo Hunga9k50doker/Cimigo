@@ -176,3 +176,8 @@ export const currencyTypes: OptionItem<string>[] = [
   { id: ECurrency.USD, name: "$ USD" },
   { id: ECurrency.VND, name: "đ VND" },
 ]
+
+export enum EVIDEO_MARKETING_STAGE {
+  POST_LAUNCH = 1,
+  PRE_LAUNCH = 2
+}

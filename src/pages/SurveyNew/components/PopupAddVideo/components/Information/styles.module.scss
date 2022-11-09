@@ -1,0 +1,80 @@
+.root {
+    display: flex;
+    margin-top: 8px;
+    @media only screen and (max-width: 767px) {
+        display: block;
+    }
+}
+
+.containerInformation {
+    padding-right: 16px;
+    @media only screen and (max-width: 767px) {
+        padding-right: 0;
+    }
+}
+
+.boxMarketingStage {
+    display: flex;
+    align-items: center;
+}
+.radioGroup {
+    display: flex;
+    flex-direction: row;
+    gap: 82px;
+    @media only screen and (max-width: 767px) {
+        display: block;
+        gap: 0;
+        .boxRadio:first-child {
+            margin-bottom: 16px
+        }
+    }
+    .boxRadio {
+        display: flex;
+    }
+    .checkRadio {
+        color: var(--cimigo-green) !important;
+      }
+    .rootRadio {
+        color: #a5a5a5;
+        padding: 0px;
+        margin-right: 16px; 
+    }
+}
+.containerInput {
+    margin-top: -8px;
+}
+.boxInputName {
+    display: flex;
+    margin-top: 8px;
+}
+.boxKeyMessage {
+    display: flex;  
+    align-items: center;
+}
+.boxInputTextArea {
+    .inputTextArea {
+        padding-bottom: 40px;
+    }
+    p {
+        margin-left: auto;
+    }
+}
+
+
+.iframeVideo {
+    border-radius: 4px;
+    @media only screen and (max-width: 767px) {
+        display: none;
+    }
+}
+
+.boxAction {
+    padding-top: 48px;
+    display: flex;
+    justify-content: flex-end;
+    @media only screen and (max-width: 767px) {
+        .btnNext {
+            width: 100%;
+        }
+    }
+}
