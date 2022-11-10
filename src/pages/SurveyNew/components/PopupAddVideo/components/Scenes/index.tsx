@@ -215,7 +215,7 @@ const Scenes = ({}: Props) => {
                 allowFullScreen>
                 </iframe> 
               </div>
-              <Grid sx={{mt: 2, maxWidth: "300px"}}>
+              <Grid className={classes.boxInformationVideo}>
                   <Heading6 $colorName="--eerie-black">Tet holiday adtraction 2021 - Tet holiday</Heading6>
                   <Grid sx={{mt: 2}}>
                   <Box className={classes.textItem}>
