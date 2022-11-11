@@ -1,0 +1,145 @@
+.root {
+    display: flex;
+    margin-top: 8px;
+    @media only screen and (max-width: 767px) {
+        display: block;
+    }
+}
+
+.containerInformation {
+    .subInformation {
+        margin-top: 8px;
+    }
+    @media only screen and (max-width: 767px) {
+        max-width: 100%;
+        padding-right: 0;
+        .subInformation {
+            margin-top: 0;
+        }
+    }
+}
+.draggableBox {
+    @media only screen and (max-width: 767px) {
+        margin-bottom: 24px;
+    }
+}
+.rowScenesControl {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    .boxTime {
+        display: flex;
+        @media only screen and (max-width: 767px) {
+            max-width: 100%;
+            justify-content: space-between;
+        } 
+    }
+    @media only screen and (max-width: 767px) {
+        margin-top: 12px;
+    }
+}
+.containerInputScenes {
+    @media only screen and (max-width: 767px) {
+        flex-direction: column;
+    } 
+}
+.boxSubTitle {
+    @media only screen and (max-width: 767px) {
+        display: none;
+    } 
+}
+
+.closeInputAttribute {
+    position: absolute;
+    top: 0;
+    right: -45px;
+    color: var(--eerie-black-65);
+    cursor: pointer;
+    @media only screen and (max-width: 767px) {
+        top: -40px;
+        right: -4px;
+    } 
+}
+
+.textContent {
+    @media only screen and (max-width: 767px) {
+        max-width: 100%;
+    } 
+}
+.textNumberScenes {
+    display: none;
+    @media only screen and (max-width: 767px) {
+        display: block;
+    } 
+}
+.textTo {
+    display: none;
+    @media only screen and (max-width: 767px) {
+        display: block;
+        padding-left: 24px;
+    }
+}
+.boxVideo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    @media only screen and (max-width: 767px) {
+        display: none;
+    }
+    .iframeVideo {
+        border-radius: 4px;
+        // margin-right: 24px;
+    }
+}
+
+.addList {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    .addOptions {
+        display: flex;
+        cursor: pointer;
+    }
+    .IconListAdd {
+        color: var(--eerie-black-65);
+        margin-right: 16px;
+    }
+}
+
+.textItem {
+    display: flex !important;
+    gap: 8px;
+    margin-bottom: 8px;
+    width: 100%;
+    align-items: flex-start;
+    svg{
+        margin-top: 4px;
+    }
+    .textMessage {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+}
+.boxInformationVideo {
+    max-width: 300px;
+    margin-top: 16px;
+}
+.boxAction {
+    padding-top: 48px;
+    display: flex;
+    justify-content: flex-end;
+    .btnSave {
+        margin-left: 16px;
+    }
+    @media only screen and (max-width: 767px) {
+        flex-direction: column-reverse;
+        .btnSave {
+            margin-left: 0;
+            margin-bottom: 16px;
+            width: 100%;
+        }
+    }
+}

@@ -1,7 +1,19 @@
 import { API } from "config/constans";
 import api from "./configApi";
+import { Attachment } from "models/attachment";
 
 export class AttachmentService {
+  static async create(data: Attachment): Promise<any> {
+    return await api.post(API.ATTACHMENT.DEFAULT,{
+      params: data
+    })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
   static async download(id: number) {
     return await api.get(API.ATTACHMENT.DOWNLOAD.replace(":id", `${id}`), {
       responseType: 'blob'
