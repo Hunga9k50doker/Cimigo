@@ -65,11 +65,27 @@ const Detail = memo(({ }: Props) => {
         dispatch(setLoading(true))
         Promise.all([
           AdminProjectService.getProject(Number(id)),
-          AdminProjectService.getQuotas(Number(id))
+          AdminProjectService.getQuotas(Number(id)),
+          AdminProjectService.getPacks(Number(id)),
+          AdminProjectService.eyeTrackingPacks(Number(id)),
+          AdminProjectService.additionalBrands(Number(id)),
+          AdminProjectService.projectAttributes(Number(id)),
+          AdminProjectService.userAttributes(Number(id)),
+          AdminProjectService.getCustomQuestions(Number(id)),
+          AdminProjectService.getTargets(Number(id)),
         ])
-          .then((res) => {
-            setProject(res[0])
-            setQuotas(res[1])
+          .then(([project, quotas, packs, eyeTrackingPacks, additionalBrands, projectAttributes, userAttributes, customQuestions, targets]) => {
+            setProject({
+              ...project,
+              packs,
+              eyeTrackingPacks,
+              additionalBrands,
+              projectAttributes,
+              userAttributes,
+              customQuestions,
+              targets
+            })
+            setQuotas(quotas)
           })
           .catch((e) => dispatch(setErrorMess(e)))
           .finally(() => dispatch(setLoading(false)))
