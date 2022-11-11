@@ -28,6 +28,7 @@ import { useTranslation } from "react-i18next"
 import PaymentStatus from "components/PaymentStatus"
 import { CustomQuestion, ECustomQuestionType } from "models/custom_question"
 import Emoji from "components/common/images/Emojis";
+import ProjectHelper from "helpers/project"
 
 
 enum ETab {
@@ -46,7 +47,7 @@ const Detail = memo(({ }: Props) => {
 
   const dispatch = useDispatch()
 
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const { id } = useParams<{ id: string }>();
 
@@ -268,6 +269,12 @@ const Detail = memo(({ }: Props) => {
     }
   }
 
+  const isPaymentPaid = useMemo(() => ProjectHelper.isPaymentPaid(project), [project])
+
+  const reportReadyDate = useMemo(() => {
+    return ProjectHelper.getReportReadyDate(project, i18n.language).format("DD MMMM, YYYY")
+  }, [i18n.language, project])
+
   return (
     <div>
       <Box display="flex" justifyContent="space-between" alignContent="center" mb={4}>
@@ -304,7 +311,11 @@ const Detail = memo(({ }: Props) => {
                 <Box>
                   <div className={classes.title}>Name: {project?.name}</div>
                   <Typography mt={2} ml={4} variant="h6" sx={{ fontWeight: 500 }}>ID: <span className={classes.valueBox}>{project?.id}</span></Typography>
+                  {isPaymentPaid && (
+                    <Typography ml={4} variant="h6" sx={{ fontWeight: 500 }}>Report ready date: <span className={classes.valueBox}>{reportReadyDate}</span></Typography>
+                  )}
                   <Typography mb={4} ml={4} variant="h6" sx={{ fontWeight: 500 }}>Survey language: <span className={classes.valueBox}>{langSupports.find(it => it.key === project?.surveyLanguage)?.name}</span></Typography>
+                  
                 </Box>
                 {project && <LabelStatus typeStatus={project.status} />}
               </Box>
