@@ -3,7 +3,7 @@ import {
   Grid,
   Box,
   RadioGroup, Radio,
-  useMediaQuery, useTheme
+  useMediaQuery, useTheme, FormControlLabel
 } from "@mui/material";
 import { useForm, Controller} from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -72,13 +72,17 @@ const Information = ({}: Props) => {
   });
 
   const _onSubmit = (data: InformationForm) => {
-
+    console.log(data);
   }
 
   const handleChangeCharacter = (e) => {
-    
     setCharacter(e.target.value.length);
   };
+
+  const handleChangeLaunch = (e) => {
+    const  value  = e.target.value;
+    setValue("launchId", value);
+  }
 
   return (
     <>
@@ -124,40 +128,34 @@ const Information = ({}: Props) => {
                         value={field.value}
                         ref={field.ref}
                         onBlur={field.onBlur}
+                        onChange={handleChangeLaunch}
                         classes={{ root: classes.radioGroup }}
                         >
-                            <Box className={classes.boxRadio}>
-                                <Radio
-                                checked={field.value === EVIDEO_MARKETING_STAGE.POST_LAUNCH}
-                                onChange={() =>
-                                  setValue(
-                                    "launchId",
-                                    EVIDEO_MARKETING_STAGE.POST_LAUNCH
-                                  )
-                                }
-                                classes={{
-                                root: classes.rootRadio,
-                                checked: classes.checkRadio,
-                                }}
-                                />
-                                <ParagraphSmall $colorName="--eerie-black">Post-launch</ParagraphSmall>
-                            </Box>
-                            <Box className={classes.boxRadio}> 
-                                <Radio
-                                checked={field.value === EVIDEO_MARKETING_STAGE.PRE_LAUNCH}
-                                onChange={() =>
-                                  setValue(
-                                    "launchId",
-                                    EVIDEO_MARKETING_STAGE.PRE_LAUNCH
-                                  )
-                                }                                
-                                classes={{
-                                root: classes.rootRadio,
-                                checked: classes.checkRadio,
-                                }}
-                                />
-                                <ParagraphSmall $colorName="--eerie-black">Pre-launch</ParagraphSmall>
-                            </Box>
+                            <FormControlLabel
+                            className={classes.boxRadio} 
+                            control={
+                              <Radio
+                              value={EVIDEO_MARKETING_STAGE.POST_LAUNCH}
+                              classes={{
+                              root: classes.rootRadio,
+                              checked: classes.checkRadio,
+                              }}
+                              />
+                            }
+                            label={<ParagraphSmall $colorName="--eerie-black">Post-launch</ParagraphSmall>}              
+                            />
+                            <FormControlLabel 
+                            control={
+                              <Radio
+                              value={EVIDEO_MARKETING_STAGE.PRE_LAUNCH}
+                              classes={{
+                              root: classes.rootRadio,
+                              checked: classes.checkRadio,
+                              }}
+                              />
+                            }
+                            label={<ParagraphSmall $colorName="--eerie-black">Pre-launch</ParagraphSmall>}              
+                            />
                         </RadioGroup>
                       )}
                       />

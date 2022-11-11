@@ -22,14 +22,11 @@
     flex-direction: row;
     gap: 82px;
     @media only screen and (max-width: 767px) {
-        display: block;
+        flex-direction: column;
         gap: 0;
-        .boxRadio:first-child {
+        .boxRadio {
             margin-bottom: 16px
         }
-    }
-    .boxRadio {
-        display: flex;
     }
     .checkRadio {
         color: var(--cimigo-green) !important;
@@ -39,6 +36,10 @@
         padding: 0px;
         margin-right: 16px; 
     }
+    [class~=MuiFormControlLabel-root] {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+      }
 }
 .containerInput {
     margin-top: -8px;
