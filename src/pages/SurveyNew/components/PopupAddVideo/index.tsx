@@ -12,7 +12,7 @@ import ButtonCLose from "components/common/buttons/ButtonClose"
 import {DialogTitle} from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import SmartDisplayOutlinedIcon from '@mui/icons-material/SmartDisplayOutlined';
-import {IconInformation, IconScenesStep} from "components/svgs";
+import {IconInformation, IconScenesStep} from "components/svg";
 import UploadVideoFromDevice from "./components/UploadVideoFromDevice";
 import UploadVideoFromYoutube from "./components/UploadVideoFromYoutube";
 import { Video } from "models/video";
@@ -25,8 +25,8 @@ import { setLoading, setErrorMess } from "redux/reducers/Status/actionTypes";
 import { getVideosRequest } from "redux/reducers/Project/actionTypes";
 import { useDispatch } from "react-redux";
 import { Project } from "models/project";
-
-
+import Information from "./components/Information";
+import Scenes from "./components/Scenes";
 export enum EStep {
   UPLOAD_VIDEO,
   INFORMATION,
@@ -62,7 +62,7 @@ const PopupAddVideo = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
-  const [activeStep, setActiveStep] = useState<EStep>(EStep.UPLOAD_VIDEO);
+  const [activeStep, setActiveStep] = useState<EStep>(EStep.SCENES);
 
   const handleNextStep = () => {
     setActiveStep(EStep.INFORMATION);
@@ -163,9 +163,9 @@ const PopupAddVideo = (props: Props) => {
             );
           })}
           </Stepper>
-          {activeStep === EStep.UPLOAD_VIDEO && 
-          <>{getUploadType()}</>
-          }
+          {activeStep === EStep.UPLOAD_VIDEO && <>{getUploadType()}</>}
+          {activeStep === EStep.INFORMATION && <Information/>}
+          {activeStep === EStep.SCENES && <Scenes/>}
         </DialogContent>
     </Dialog>
   );

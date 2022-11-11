@@ -165,6 +165,13 @@ export const API = {
     PROJECT: {
       DEFAULT: '/v1.0/admin/project',
       QUOTA: '/v1.0/admin/project/:id/quota',
+      PACK: '/v1.0/admin/project/:id/packs',
+      EYE_TRACKING_PACK: '/v1.0/admin/project/:id/eye-tracking-packs',
+      ADDITIONAL_BRAND: '/v1.0/admin/project/:id/additional-brands',
+      PROJECT_ATTRIBUTE: '/v1.0/admin/project/:id/project-attributes',
+      USER_ATTRIBUTE: '/v1.0/admin/project/:id/user-attributes',
+      CUSTOM_QUESTION: '/v1.0/admin/project/:id/custom-questions',
+      TARGET: '/v1.0/admin/project/:id/targets',
     },
     USER: {
       DEFAULT: '/v1.0/admin/user',

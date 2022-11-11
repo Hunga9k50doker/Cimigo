@@ -14,19 +14,16 @@ import { fData } from 'utils/formatNumber';
 import ErrorMessage from "components/common/text/ErrorMessage";
 import Heading4 from "components/common/text/Heading4";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import { IconPlayMini } from "components/svgs";
+import { IconPlayMini } from "components/svg";
 import { useDropzone } from "react-dropzone";
 import useIsMountedRef from "hooks/useIsMountedRef";
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import ErrorTwoToneIcon from '@mui/icons-material/ErrorTwoTone';
 import Heading5 from "components/common/text/Heading5";
 import { LinearProgressWithLabel } from "../LinearProgressWithLabel";
-import { Attachment, AttachmentObjectTypeId, FileUpload } from "models/attachment";
+import { FileUpload } from "models/attachment";
 import { v4 as uuidv4 } from 'uuid';
 import { Video } from "models/video";
-import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
-import { AttachmentService } from "services/attachment";
-import { getVideosRequest } from "redux/reducers/Project/actionTypes";
 import { useDispatch } from "react-redux";
 import { Project } from "models/project";
 
@@ -144,20 +141,6 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep, project}: Props) => {
             duration: duration,
         }
       onSubmit(data);
-      const config = {
-        onUploadProgress: function (progress) {
-          const percentCompleted = Math.round((progress.loaded / progress.total) * 100);
-          setProgress(percentCompleted);
-        }
-      }
-      dispatch(setLoading(true));
-      AttachmentService.create(data)
-        .then(() => {
-          dispatch(getVideosRequest(project.id))
-        })
-        .catch(e => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
-      setIsLoading(false);
       // onChangeStep();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -239,7 +222,6 @@ const UploadVideoFromDevice= ({onSubmit, onChangeStep, project}: Props) => {
                 <div className={classes.textInfo}>
                   <ParagraphSmall $colorName="--eerie-black" translation-key="">Maximum video duration is <span>2 minutes</span>.</ParagraphSmall>
                 </div>
-                <Button btnType={BtnType.Primary} type="submit">Submit</Button>
           </Grid>
          
       </form>

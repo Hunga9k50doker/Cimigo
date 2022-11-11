@@ -1,6 +1,5 @@
 import { API } from 'config/constans';
 import { CreateAdditionalBrand, GetAdditionalBrandList, UpdateAdditionalBrand } from 'models/additional_brand';
-import { GetPacks } from 'models/pack';
 import api from 'services/configApi';
 
 export class AdditionalBrandService {

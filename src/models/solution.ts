@@ -15,10 +15,10 @@ export interface UserGetSolutionCategories {
 
 export enum ESOLUTION_TYPE {
   PACK = 1,
-  ADTRACTION = 2,
+  VIDEO_CHOICE = 2,
 }
 
 export const solutionTypes: OptionItem[] = [
   { id: ESOLUTION_TYPE.PACK, name: 'Pack test' },
-  { id: ESOLUTION_TYPE.ADTRACTION, name: 'Adtraction test' }
+  { id: ESOLUTION_TYPE.VIDEO_CHOICE, name: 'Video choice' }
 ]

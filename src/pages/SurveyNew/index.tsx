@@ -240,7 +240,7 @@ export const Survey = () => {
             path={routes.project.detail.setupSurvey}
             render={(routeProps) => {
               switch (project?.solution?.typeId) {
-                case ESOLUTION_TYPE.ADTRACTION:
+                case ESOLUTION_TYPE.VIDEO_CHOICE:
                   return (
                     <AdtractionTest
                       {...routeProps}

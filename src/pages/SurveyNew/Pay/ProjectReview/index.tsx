@@ -78,11 +78,11 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
   }, [project])
 
   const isValidPacks = useMemo(() => {
-    return ProjectHelper.isValidPacks(project?.solution, project?.packs)
+    return ProjectHelper.isValidPacks(project)
   }, [project])
 
   const isValidAdditionalBrand = useMemo(() => {
-    return ProjectHelper.isValidAdditionalBrand(project?.solution, project?.additionalBrands)
+    return ProjectHelper.isValidAdditionalBrand(project)
   }, [project])
 
   const isValidEyeTracking = useMemo(() => {

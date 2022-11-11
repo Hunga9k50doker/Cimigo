@@ -16,10 +16,10 @@ import { getProjectRequest, setCancelPayment } from 'redux/reducers/Project/acti
 import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
 import { routes } from 'routers/routes';
 import { PaymentService } from 'services/payment';
-import { fCurrency2, fCurrency2VND } from 'utils/formatNumber';
 import { ImageMain } from '../components';
 import { authPaymentFail, getPayment } from '../models';
 import classes from './styles.module.scss';
+import { usePrice } from 'helpers/price';
 
 interface Props { }
 
@@ -32,6 +32,8 @@ const OnePayPending = memo(({ }: Props) => {
   const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false)
 
   const payment = useMemo(() => getPayment(project?.payments), [project])
+
+  const { getCostCurrency } = usePrice()
 
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)))
@@ -77,10 +79,10 @@ const OnePayPending = memo(({ }: Props) => {
               {t('payment_billing_pending_sub')}
             </ParagraphBody>
             <Heading2 mb={1} $fontSizeMobile={"16px"} $lineHeightMobile="24px" $colorName="--cimigo-green-dark-1" translation-key="payment_billing_total_amount" align="center">
-              {t('payment_billing_total_amount')}: {`$`}{fCurrency2(payment?.totalAmountUSD || 0)}
+              {t('payment_billing_total_amount')}: {getCostCurrency(payment?.totalAmount, payment?.currency)?.show}
             </Heading2>
             <Heading4 mb={{ xs: 3, sm: 4 }} $fontSizeMobile={"12px"} $lineHeightMobile="16px" $colorName="--cimigo-blue-dark-1" translation-key="payment_billing_equivalent_to" align="center">
-              ({t('payment_billing_equivalent_to')} {fCurrency2VND(payment?.totalAmount || 0)} VND)
+              ({t('payment_billing_equivalent_to')} {getCostCurrency(payment?.totalAmount, payment?.currency)?.equivalent})
             </Heading4>
             <ParagraphBodyUnderline onClick={onShowConfirmCancel} translation-key="common_cancel_payment" align="center">
               {t("common_cancel_payment")}

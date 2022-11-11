@@ -10,7 +10,7 @@ import { Box, Button, Card, CardContent, Divider, Grid, Paper, Tab, Table, Table
 import { ArrowBackOutlined, EditOutlined } from "@mui/icons-material"
 import classes from './styles.module.scss'
 import clsx from "clsx"
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber"
+import { fCurrency, fCurrencyVND } from "utils/formatNumber"
 import { usePrice } from "helpers/price"
 import { TargetQuestionType } from "models/Admin/target"
 import LabelStatus from "components/LableStatus"
@@ -65,11 +65,27 @@ const Detail = memo(({ }: Props) => {
         dispatch(setLoading(true))
         Promise.all([
           AdminProjectService.getProject(Number(id)),
-          AdminProjectService.getQuotas(Number(id))
+          AdminProjectService.getQuotas(Number(id)),
+          AdminProjectService.getPacks(Number(id)),
+          AdminProjectService.eyeTrackingPacks(Number(id)),
+          AdminProjectService.additionalBrands(Number(id)),
+          AdminProjectService.projectAttributes(Number(id)),
+          AdminProjectService.userAttributes(Number(id)),
+          AdminProjectService.getCustomQuestions(Number(id)),
+          AdminProjectService.getTargets(Number(id)),
         ])
-          .then((res) => {
-            setProject(res[0])
-            setQuotas(res[1])
+          .then(([project, quotas, packs, eyeTrackingPacks, additionalBrands, projectAttributes, userAttributes, customQuestions, targets]) => {
+            setProject({
+              ...project,
+              packs,
+              eyeTrackingPacks,
+              additionalBrands,
+              projectAttributes,
+              userAttributes,
+              customQuestions,
+              targets
+            })
+            setQuotas(quotas)
           })
           .catch((e) => dispatch(setErrorMess(e)))
           .finally(() => dispatch(setLoading(false)))
@@ -574,60 +590,60 @@ const Detail = memo(({ }: Props) => {
                   {!!payment ? (
                     <>
                       <Box mb={6}>
-                        <p className={classes.textGreen}>Total amount: {'$'}{fCurrency2(payment?.totalAmountUSD || 0)}</p>
-                        <p className={classes.textBlue}>(Equivalent to {fCurrency2VND(payment?.totalAmount || 0)} VND)</p>
+                        <p className={classes.textGreen}>Total amount: {fCurrency(payment?.totalAmountUSD || 0)}</p>
+                        <p className={classes.textBlue}>(Equivalent to {fCurrencyVND(payment?.totalAmount || 0)})</p>
                       </Box>
                       <Box maxWidth="600px" margin="auto">
                         <Grid container spacing={2}>
-                          <Grid item xs={12} sm={6}>
+                          <Grid item xs={12}>
                             <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Sample size ({payment?.sampleSize || 0}):</span> <strong>{`$`}{fCurrency2(payment?.sampleSizeCostUSD || 0)}</strong>
+                              <span>Sample size ({payment?.sampleSize || 0}):</span> <strong>{fCurrency(payment?.sampleSizeCostUSD || 0)}</strong>
                             </Typography>
                           </Grid>
                           {!!payment?.customQuestions?.length && (
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                               <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                                <span>Custom questions ({payment?.customQuestions?.length}):</span> <strong>{`$`}{fCurrency2(payment?.customQuestionCostUSD || 0)}</strong>
+                                <span>Custom questions ({payment?.customQuestions?.length}):</span> <strong>{fCurrency(payment?.customQuestionCostUSD || 0)}</strong>
                               </Typography>
                             </Grid>
                           )}
                           {!!payment?.eyeTrackingSampleSize && (
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                               <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                                <span>Eye-tracking ({payment?.eyeTrackingSampleSize || 0}):</span> <strong>{`$`}{fCurrency2(payment?.eyeTrackingSampleSizeCostUSD || 0)}</strong>
+                                <span>Eye-tracking ({payment?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(payment?.eyeTrackingSampleSizeCostUSD || 0)}</strong>
                               </Typography>
                             </Grid>
                           )}
                           <Grid item xs={12}><Divider /></Grid>
                           <Grid item xs={12}>
                             <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Subtotal:</span> <strong>{`$`}{fCurrency2(payment?.amountUSD || 0)}</strong>
+                              <span>Subtotal:</span> <strong>{fCurrency(payment?.amountUSD || 0)}</strong>
                             </Typography>
                           </Grid>
                           <Grid item xs={12}>
                             <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Tax (VAT {(payment?.vatRate || 0) * 100}%):</span> <strong>{`$`}{fCurrency2(payment?.vatUSD || 0)}</strong>
+                              <span>Tax (VAT {(payment?.vatRate || 0) * 100}%):</span> <strong>{fCurrency(payment?.vatUSD || 0)}</strong>
                             </Typography>
                           </Grid>
                           <Grid item xs={12}><Divider /></Grid>
-                          <Grid item xs={12} sm={6}>
+                          <Grid item xs={12}>
                             <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
                               <span>Payment reference:</span> <strong>{payment?.orderId}</strong>
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6}>
+                          <Grid item xs={12}>
                             <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
                               <span>Payment method:</span> <strong>{paymentMethods.find(it => it.id === payment?.paymentMethodId)?.name}</strong>
                             </Typography>
                           </Grid>
                           {payment?.paymentMethodId === EPaymentMethod.BANK_TRANSFER && (
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                               <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
                                 <span>Confirm payment:</span> <strong>{payment?.userConfirm ? "Yes" : 'No'}</strong>
                               </Typography>
                             </Grid>
                           )}
-                          <Grid item xs={12} sm={6}>
+                          <Grid item xs={12}>
                             <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
                               <span>Payment status:</span> <Box ml={0.5}><PaymentStatus status={payment?.status} /></Box>
                             </Typography>
@@ -638,39 +654,39 @@ const Detail = memo(({ }: Props) => {
                   ) : (
                     <>
                       <Box mb={6}>
-                        <p className={classes.textGreen}>Total amount: {'$'}{fCurrency2(price?.totalAmountCost?.USD || 0)}</p>
-                        <p className={classes.textBlue}>(Equivalent to {fCurrency2VND(price?.totalAmountCost?.VND || 0)} VND)</p>
+                        <p className={classes.textGreen}>Total amount: {fCurrency(price?.totalAmountCost?.USD || 0)}</p>
+                        <p className={classes.textBlue}>(Equivalent to {fCurrencyVND(price?.totalAmountCost?.VND || 0)})</p>
                       </Box>
                       <Box maxWidth="600px" margin="auto">
                         <Grid container spacing={2}>
                           <Grid item xs={12}>
                             <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Sample size ({project?.sampleSize || 0}):</span> <strong>{`$`}{fCurrency2(price?.sampleSizeCost?.USD || 0)}</strong>
+                              <span>Sample size ({project?.sampleSize || 0}):</span> <strong>{fCurrency(price?.sampleSizeCost?.USD || 0)}</strong>
                             </Typography>
                           </Grid>
                           {!!project?.customQuestions?.length && (
                             <Grid item xs={12}>
                               <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                                <span>Custom questions ({project?.customQuestions?.length}):</span> <strong>{`$`}{fCurrency2(price?.customQuestionCost?.USD || 0)}</strong>
+                                <span>Custom questions ({project?.customQuestions?.length}):</span> <strong>{fCurrency(price?.customQuestionCost?.USD || 0)}</strong>
                               </Typography>
                             </Grid>
                           )}
                           {!!project?.eyeTrackingSampleSize && (
                             <Grid item xs={12}>
                               <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                                <span>Eye-tracking ({project?.eyeTrackingSampleSize || 0}):</span> <strong>{`$`}{fCurrency2(price?.eyeTrackingSampleSizeCost?.USD || 0)}</strong>
+                                <span>Eye-tracking ({project?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(price?.eyeTrackingSampleSizeCost?.USD || 0)}</strong>
                               </Typography>
                             </Grid>
                           )}
                           <Grid item xs={12}><Divider /></Grid>
                           <Grid item xs={12}>
                             <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Subtotal:</span> <strong>{`$`}{fCurrency2(price?.amountCost?.USD || 0)}</strong>
+                              <span>Subtotal:</span> <strong>{fCurrency(price?.amountCost?.USD || 0)}</strong>
                             </Typography>
                           </Grid>
                           <Grid item xs={12}>
                             <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Tax (VAT {(configs?.vat || 0) * 100}%):</span> <strong>{`$`}{fCurrency2(price?.vatCost?.USD || 0)}</strong>
+                              <span>Tax (VAT {(configs?.vat || 0) * 100}%):</span> <strong>{fCurrency(price?.vatCost?.USD || 0)}</strong>
                             </Typography>
                           </Grid>
                         </Grid>

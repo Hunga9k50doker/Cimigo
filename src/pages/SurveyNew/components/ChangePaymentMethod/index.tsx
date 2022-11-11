@@ -1,7 +1,6 @@
 import * as yup from "yup";
 import images from "config/images";
 import { memo, useEffect, useMemo, useState } from "react";
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
 import classes from "./styles.module.scss";
 import { Box, Divider, Grid, Radio, RadioGroup } from "@mui/material";
 import { EPaymentMethod } from "models/general";
@@ -28,6 +27,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCancelOrder";
+import { usePrice } from "helpers/price";
 
 interface Props {
   project: Project;
@@ -41,6 +41,8 @@ interface Props {
 const ChangePaymentMethod = memo(
   ({ project, user, configs, payment, onConfirm, onCancelPayment }: Props) => {
     const { t, i18n } = useTranslation();
+
+    const { getCostCurrency } = usePrice()
 
     const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false);
 
@@ -290,38 +292,38 @@ const ChangePaymentMethod = memo(
                       </ParagraphSmall>
                       {Number(watch("paymentMethodId")) ===
                         EPaymentMethod.MAKE_AN_ORDER && (
-                        <Box mb={4} sx={{maxWidth: "325px"}}>
-                          <InputTextfield
-                            title={t("field_contact_name")}
-                            translation-key="field_contact_name"
-                            name="contactName"
-                            placeholder={t("field_contact_name_placeholder")}
-                            translation-key-placeholder="field_contact_name_placeholder"
-                            inputRef={register("contactName")}
-                            errorMessage={errors.contactName?.message}
-                            rootProps={{ sx: { mb: 1 } }}
-                          />
-                          <InputTextfield
-                            title={t("field_contact_email")}
-                            translation-key="field_contact_email"
-                            name="contactEmail"
-                            placeholder={t("field_contact_email_placeholder")}
-                            translation-key-placeholder="field_contact_email_placeholder"
-                            inputRef={register("contactEmail")}
-                            errorMessage={errors.contactEmail?.message}
-                            rootProps={{ sx: { mb: 1 } }}
-                          />
-                          <InputTextfield
-                            title={t("field_contact_phone")}
-                            translation-key="field_contact_phone"
-                            name="contactPhone"
-                            placeholder={t("field_contact_phone_placeholder")}
-                            translation-key-placeholder="field_contact_phone_placeholder"
-                            inputRef={register("contactPhone")}
-                            errorMessage={errors.contactPhone?.message}
-                          />
-                        </Box>
-                      )}
+                          <Box mb={4} sx={{ maxWidth: "325px" }}>
+                            <InputTextfield
+                              title={t("field_contact_name")}
+                              translation-key="field_contact_name"
+                              name="contactName"
+                              placeholder={t("field_contact_name_placeholder")}
+                              translation-key-placeholder="field_contact_name_placeholder"
+                              inputRef={register("contactName")}
+                              errorMessage={errors.contactName?.message}
+                              rootProps={{ sx: { mb: 1 } }}
+                            />
+                            <InputTextfield
+                              title={t("field_contact_email")}
+                              translation-key="field_contact_email"
+                              name="contactEmail"
+                              placeholder={t("field_contact_email_placeholder")}
+                              translation-key-placeholder="field_contact_email_placeholder"
+                              inputRef={register("contactEmail")}
+                              errorMessage={errors.contactEmail?.message}
+                              rootProps={{ sx: { mb: 1 } }}
+                            />
+                            <InputTextfield
+                              title={t("field_contact_phone")}
+                              translation-key="field_contact_phone"
+                              name="contactPhone"
+                              placeholder={t("field_contact_phone_placeholder")}
+                              translation-key-placeholder="field_contact_phone_placeholder"
+                              inputRef={register("contactPhone")}
+                              errorMessage={errors.contactPhone?.message}
+                            />
+                          </Box>
+                        )}
                     </Grid>
                   </Box>
                 </RadioGroup>
@@ -347,8 +349,7 @@ const ChangePaymentMethod = memo(
                     {t("common_sample_size")} {`(${payment?.sampleSize || 0})`}
                   </ParagraphBody>
                   <ParagraphBody $colorName="--eerie-black">
-                    {`$`}
-                    {fCurrency2(payment?.sampleSizeCostUSD || 0)}
+                    {getCostCurrency(payment?.sampleSizeCost, payment?.currency)?.show}
                   </ParagraphBody>
                 </div>
                 {payment?.customQuestions?.length > 0 && (
@@ -361,8 +362,7 @@ const ChangePaymentMethod = memo(
                       {`(${project?.customQuestions?.length || 0})`}
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black">
-                      {`$`}
-                      {fCurrency2(payment?.customQuestionCostUSD)}
+                      {getCostCurrency(payment?.customQuestionCost, payment?.currency)?.show}
                     </ParagraphBody>
                   </div>
                 )}
@@ -375,8 +375,7 @@ const ChangePaymentMethod = memo(
                       {t("payment_project_order_summary_eye_tracking")} ({payment?.eyeTrackingSampleSize || 0})
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black">
-                      {`$`}
-                      {fCurrency2(payment?.eyeTrackingSampleSizeCostUSD)}
+                      {getCostCurrency(payment?.eyeTrackingSampleSizeCost, payment?.currency)?.show}
                     </ParagraphBody>
                   </div>
                 )}
@@ -389,8 +388,7 @@ const ChangePaymentMethod = memo(
                     {t("common_sub_total")}
                   </ParagraphBody>
                   <ParagraphBody $colorName="--eerie-black">
-                    {`$`}
-                    {fCurrency2(payment?.amountUSD || 0)}
+                    {getCostCurrency(payment?.amount, payment?.currency)?.show}
                   </ParagraphBody>
                 </div>
                 <div className={classes.flexOrder}>
@@ -401,8 +399,7 @@ const ChangePaymentMethod = memo(
                     {t("common_vat", { percent: (payment?.vatRate || 0) * 100 })}
                   </ParagraphBody>
                   <ParagraphBody $colorName="--eerie-black">
-                    {`$`}
-                    {fCurrency2(payment?.vatUSD || 0)}
+                    {getCostCurrency(payment?.vat, payment?.currency)?.show}
                   </ParagraphBody>
                 </div>
                 <Divider />
@@ -411,18 +408,17 @@ const ChangePaymentMethod = memo(
                     $colorName="--eerie-black"
                     translation-key="common_total"
                   >
-                    {t("common_total")} (USD)
+                    {t("common_total")}
                   </Heading5>
                   <Heading2 $colorName="--cimigo-green-dark-1">
-                    {`$`}
-                    {fCurrency2(payment?.totalAmountUSD || 0)}
+                    {getCostCurrency(payment?.totalAmount, payment?.currency)?.show}
                   </Heading2>
                 </div>
                 <Heading6
                   $colorName="--cimigo-blue-dark-1"
                   sx={{ textAlign: "right" }}
                 >
-                  ({fCurrency2VND(payment?.totalAmount || 0)} VND)
+                  ({getCostCurrency(payment?.totalAmount, payment?.currency)?.equivalent})
                 </Heading6>
                 <div className={classes.chargedBy}>
                   <ParagraphExtraSmall
@@ -472,17 +468,16 @@ const ChangePaymentMethod = memo(
                 $colorName="--eerie-black"
                 translation-key="common_total"
               >
-                {t("common_total")} (USD)
+                {t("common_total")}
               </Heading5>
               <Heading2 $colorName="--cimigo-green-dark-1">
-                {`$`}
-                {fCurrency2(payment?.totalAmountUSD || 0)}
+                {getCostCurrency(payment?.totalAmount, payment?.currency)?.show}
               </Heading2>
               <ParagraphExtraSmall
                 $colorName="--cimigo-blue-dark-2"
                 $fontWeight={800}
               >
-                ({fCurrency2VND(payment?.totalAmount || 0)} VND)
+                ({getCostCurrency(payment?.totalAmount, payment?.currency)?.equivalent})
               </ParagraphExtraSmall>
             </Grid>
             <Button

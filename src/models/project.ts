@@ -11,6 +11,7 @@ import { UserAttribute } from './user_attribute';
 import { User } from './user';
 import { CustomQuestion } from './custom_question';
 import { Plan } from './Admin/plan';
+import { Video } from './video';
 export interface CreateProjectData {
   solutionId: number;
   planId: number;
@@ -56,6 +57,7 @@ export interface Project {
   payments: Payment[];
   reports?: Attachment[];
   packs?: Pack[];
+  videos?: Video[];
   eyeTrackingPacks?: Pack[];
   additionalBrands?: AdditionalBrand[];
   projectAttributes?: ProjectAttribute[];

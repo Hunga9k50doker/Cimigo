@@ -169,6 +169,17 @@
   display: flex;
   justify-content: space-between;
   padding: 2px 0px;
+  > * {
+    @media only screen and (max-width: 767px) {
+      font-size: 14px;
+    }
+    &:last-child {
+      white-space: nowrap;
+    }
+    &:not(:first-child) {
+      margin-left: 8px;
+    }
+  }
 }
 .flexTotal {
   display: flex;

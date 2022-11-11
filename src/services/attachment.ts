@@ -1,9 +1,9 @@
 import { API } from "config/constans";
 import api from "./configApi";
-import { Video } from "models/video";
+import { Attachment } from "models/attachment";
 
 export class AttachmentService {
-  static async create(data: Video): Promise<any> {
+  static async create(data: Attachment): Promise<any> {
     return await api.post(API.ATTACHMENT.DEFAULT,{
       params: data
     })
