@@ -1,8 +1,8 @@
-import { useMemo} from "react";
+import { useMemo } from "react";
 import {
   Grid,
 } from "@mui/material";
-import { useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import classes from "./styles.module.scss";
 import * as yup from "yup";
@@ -12,29 +12,34 @@ import Heading4 from "components/common/text/Heading4";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Heading5 from "components/common/text/Heading5";
 import InputTextfield from "components/common/inputs/InputTextfield";
+import GoogleApisService from "services/googoleapis";
+import { VIDEO_YOUTUBE_STEP } from "models/video";
+import moment from "moment";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { useDispatch } from "react-redux";
 
 export interface VideoYoutubeFormData {
   linkVideo: string;
 }
 
 interface Props {
-  onChangeStep?: () => void;
-  onSubmit: (data: FormData) => void;
+  onSubmit: (data: VIDEO_YOUTUBE_STEP) => void;
 }
 
+const UploadVideoFromYoutube = ({ onSubmit }: Props) => {
+  const { i18n } = useTranslation();
 
-// eslint-disable-next-line no-empty-pattern
-const PopupStarRating = ({onChangeStep, onSubmit}: Props) => {
-  const { t, i18n } = useTranslation();
-  
+  const dispatch = useDispatch()
+
   const schema = useMemo(() => {
     return yup.object().shape({
       linkVideo: yup.string().required("Video is required"),
-        })
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      },[i18n.language]);
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language]);
 
   const {
+    reset,
     register,
     formState: { errors },
     handleSubmit,
@@ -43,54 +48,81 @@ const PopupStarRating = ({onChangeStep, onSubmit}: Props) => {
     mode: "onChange",
   });
 
+  const onClearData = () => {
+    reset({
+      linkVideo: ''
+    })
+  }
+
   const _onSubmit = (data: VideoYoutubeFormData) => {
-    const form = new FormData()
-    if (data.linkVideo) form.append('linkVideo', data.linkVideo)
-    onSubmit(form)
+    dispatch(setLoading(true))
+    GoogleApisService.getVideosYoutube({
+      urls: [data.linkVideo],
+      part: ['contentDetails', 'status']
+    })
+    .then(({data}) => {
+      const id = data.items[0].id
+      const _duration = data.items[0].contentDetails.duration
+      const duration = moment.duration(_duration).asSeconds()
+      const privacyStatus = data.items[0].status.privacyStatus
+      const embeddable = data.items[0].status.embeddable
+      
+      if (privacyStatus !== "public" || !embeddable) {
+        dispatch(setErrorMess('The video from YouTube must be available in the public mode.'))
+        return
+      }
+      onSubmit({
+        id: id,
+        duration: duration
+      })
+      onClearData()
+    })
+    .catch(e => dispatch(setErrorMess(e)))
+    .finally(() => dispatch(setLoading(false)))
   }
 
   return (
     <>
-    <Grid component="form" onSubmit={handleSubmit(_onSubmit)}>
+      <Grid component="form" onSubmit={handleSubmit(_onSubmit)}>
         <ParagraphSmall $colorName="--eerie-black">If your video ads have been made public on YouTube, this is the preferred method. The advantage of this method is that you can upload large files with no size restrictions.</ParagraphSmall>
         <Grid
           className={classes.videoUp}
         >
-            <Grid className={classes.boxUploading}> 
-                <Grid className={classes.boxUploadingTitle}>
-                  <Heading4 $colorName="--gray-90" className={classes.titleUploadFile}>Select video from Youtube</Heading4>
-                  <ParagraphSmall $colorName="--gray-60">Enter your Youtube video link in the following box and press Load video button</ParagraphSmall>   
-                </Grid>
-                <Grid className={classes.boxUploadingFile}>
-                  <Grid className={classes.boxInput}>
-                    <InputTextfield
-                    fullWidth
-                    placeholder="e.g: https://youtu.be/PwO8ttltUqA"
-                    inputRef={register("linkVideo")}
-                    autoFocus
-                    autoComplete="off"
-                    type="text"
-                    errorMessage={errors.linkVideo?.message}
-                    />
-                  </Grid> 
-                    <Button btnType={BtnType.Primary} className={classes.btnUpload} type="submit">Load video</Button> 
-                </Grid>
+          <Grid className={classes.boxUploading}>
+            <Grid className={classes.boxUploadingTitle}>
+              <Heading4 $colorName="--gray-90" className={classes.titleUploadFile}>Select video from Youtube</Heading4>
+              <ParagraphSmall $colorName="--gray-60">Enter your Youtube video link in the following box and press Load video button</ParagraphSmall>
             </Grid>
+            <Grid className={classes.boxUploadingFile}>
+              <Grid className={classes.boxInput}>
+                <InputTextfield
+                  fullWidth
+                  placeholder="e.g: https://youtu.be/PwO8ttltUqA"
+                  inputRef={register("linkVideo")}
+                  autoFocus
+                  autoComplete="off"
+                  type="text"
+                  errorMessage={errors.linkVideo?.message}
+                />
+              </Grid>
+              <Button btnType={BtnType.Primary} className={classes.btnUpload} type="submit">Load video</Button>
             </Grid>
-          <Grid sx={{mt: 2}}>
-              <Heading5 className={classes.textTitleFooter} translation-key="">Youtube video requirements:</Heading5>
-                <div className={classes.textInfo}>
-                  <ParagraphSmall $colorName="--eerie-black" translation-key="">
-                    The video from YouTube must be available in the <span>public mode.</span>.
-                  </ParagraphSmall>
-                </div>
-                <div className={classes.textInfo}>
-                  <ParagraphSmall $colorName="--eerie-black" translation-key="">Maximum video duration is <span>2 minutes</span>.</ParagraphSmall>
-                </div>
           </Grid>
         </Grid>
-      </>
+        <Grid sx={{ mt: 2 }}>
+          <Heading5 className={classes.textTitleFooter} translation-key="">Youtube video requirements:</Heading5>
+          <div className={classes.textInfo}>
+            <ParagraphSmall $colorName="--eerie-black" translation-key="">
+              The video from YouTube must be available in the <span>public mode.</span>.
+            </ParagraphSmall>
+          </div>
+          <div className={classes.textInfo}>
+            <ParagraphSmall $colorName="--eerie-black" translation-key="">Maximum video duration is <span>2 minutes</span>.</ParagraphSmall>
+          </div>
+        </Grid>
+      </Grid>
+    </>
   );
 };
 
-export default PopupStarRating;
+export default UploadVideoFromYoutube;

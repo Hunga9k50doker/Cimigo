@@ -27,7 +27,7 @@ export const setSuccessMess = (mess: string) => {
 export const setErrorMess = (e: any) => {
   return {
     type: SET_ERROR_REDUCER,
-    error: e?.detail || e?.message || e?.error || "Unknown error"
+    error: e?.detail || e?.message || e?.error || e || "Unknown error"
   }
 }
 

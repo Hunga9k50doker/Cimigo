@@ -1,4 +1,4 @@
-import { useState, useMemo} from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Dialog,
   Step,
@@ -9,24 +9,22 @@ import classes from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import Heading3 from "components/common/text/Heading3"
 import ButtonCLose from "components/common/buttons/ButtonClose"
-import {DialogTitle} from "components/common/dialogs/DialogTitle";
+import { DialogTitle } from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import SmartDisplayOutlinedIcon from '@mui/icons-material/SmartDisplayOutlined';
-import {IconInformation, IconScenesStep} from "components/svg";
+import { IconInformation, IconScenesStep } from "components/icons";
 import UploadVideoFromDevice from "./components/UploadVideoFromDevice";
 import UploadVideoFromYoutube from "./components/UploadVideoFromYoutube";
-import { Video } from "models/video";
-import * as yup from 'yup';
-import {EAddVideoType} from  "models/adtraction_test";
-import { RPStepLabel, RPStepIconBox} from "pages/SurveyNew/components";
+import { EVIDEO_TYPE, INFORMATION_STEP, SCENES_STEP, Video, VIDEO_UPLOAD_STEP, VIDEO_YOUTUBE_STEP } from "models/video";
+import { RPStepLabel, RPStepIconBox } from "pages/SurveyNew/components";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
-import { AttachmentService } from "services/attachment";
-import { setLoading, setErrorMess } from "redux/reducers/Status/actionTypes";
-import { getVideosRequest } from "redux/reducers/Project/actionTypes";
+import { setLoading, setErrorMess, setSuccessMess } from "redux/reducers/Status/actionTypes";
 import { useDispatch } from "react-redux";
 import { Project } from "models/project";
-import Information from "./components/Information";
+import Information, { InformationForm } from "./components/Information";
 import Scenes from "./components/Scenes";
+import { VideoService } from "services/video";
+
 export enum EStep {
   UPLOAD_VIDEO,
   INFORMATION,
@@ -38,74 +36,166 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   itemEdit?: Video;
-  onSubmit: (data: FormData) => void;
-  type?: number;
+  onSuccess: () => void;
+  type?: EVIDEO_TYPE;
   project: Project;
 }
 
-
-
 const PopupAddVideo = (props: Props) => {
 
-  const { onClose, isOpen, type, itemEdit, onSubmit, project} = props;
+  const { onClose, isOpen, type: _type, itemEdit, onSuccess, project } = props;
 
   const dispatch = useDispatch()
-  
+
   const { t, i18n } = useTranslation();
 
   const steps = useMemo(() => {
     return [
-      { id: EStep.UPLOAD_VIDEO, name: "Upload video", icon: <SmartDisplayOutlinedIcon/> },
-      { id: EStep.INFORMATION, name: "Information", icon: <IconInformation/> },
-      { id: EStep.SCENES, name: "Scenes", icon: <IconScenesStep/>, optional: "optional" },
+      { id: EStep.UPLOAD_VIDEO, name: "Upload video", icon: <SmartDisplayOutlinedIcon /> },
+      { id: EStep.INFORMATION, name: "Information", icon: <IconInformation /> },
+      { id: EStep.SCENES, name: "Scenes", icon: <IconScenesStep />, optional: "optional" },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
-  const [activeStep, setActiveStep] = useState<EStep>(EStep.SCENES);
+  const [activeStep, setActiveStep] = useState<EStep>(EStep.UPLOAD_VIDEO);
+  const [videoFromDevice, setVideoFromDevice] = useState<VIDEO_UPLOAD_STEP>();
+  const [videoFromYoutube, setVideoFromYoutube] = useState<VIDEO_YOUTUBE_STEP>();
+  const [informationData, setInformationData] = useState<INFORMATION_STEP>();
+  const [scenes, setScenes] = useState<SCENES_STEP>();
 
-  const handleNextStep = () => {
-    setActiveStep(EStep.INFORMATION);
-   
+  const type = useMemo(() => {
+    return itemEdit ? itemEdit.typeId : _type
+  }, [_type, itemEdit])
+
+  useEffect(() => {
+    if (itemEdit) {
+      switch (itemEdit.typeId) {
+        case EVIDEO_TYPE.UPLOAD:
+          setVideoFromDevice({
+            duration: itemEdit.duration,
+            attachment: itemEdit.uploadVideo
+          })
+          break;
+        case EVIDEO_TYPE.YOUTUBE:
+          setVideoFromYoutube({
+            duration: itemEdit.duration,
+            id: itemEdit.youtubeVideoId
+          })
+          break;
+      }
+      setInformationData({
+        name: itemEdit.name,
+        brand: itemEdit.brand,
+        product: itemEdit.product,
+        keyMessage: itemEdit.keyMessage,
+        marketingStageId: itemEdit.marketingStageId,
+      })
+      setScenes({
+        scenes: itemEdit.videoScenes.map(scene => ({
+          id: scene.id,
+          name: scene.name,
+          startTime: scene.startTime,
+          endTime: scene.endTime,
+        })),
+      })
+      setActiveStep(EStep.INFORMATION);
+    }
+  }, [itemEdit])
+
+  const onChangeStep = (step: EStep) => {
+    if (activeStep === step) return
+    setActiveStep(step);
   };
 
   const getUploadType = () => {
     switch (type) {
-      case EAddVideoType.From_Device:
-        return  <UploadVideoFromDevice
-          onChangeStep={handleNextStep}
-          onSubmit={onAddOrEditVideoFromDevice}
-          project={project}
-          // onSubmit={_onSubmit}
-        />
-      case EAddVideoType.From_Youtube:
-        return <UploadVideoFromYoutube
-          onChangeStep={handleNextStep}
-          // onSubmit={onAddOrEditVideoFromDevice}
-          onSubmit={_onSubmit}
-        />
+      case EVIDEO_TYPE.UPLOAD:
+        return (
+          <UploadVideoFromDevice
+            onSubmit={onUploadVideoFromDevice}
+          />
+        )
+      case EVIDEO_TYPE.YOUTUBE:
+        return (
+          <UploadVideoFromYoutube
+            onSubmit={onUploadVideoFromYoutube}
+          />
+        )
     }
   }
-  const _onSubmit = () => {
-   
+  const onUploadVideoFromYoutube = (data: VIDEO_YOUTUBE_STEP) => {
+    setVideoFromYoutube(data)
+    onChangeStep(EStep.INFORMATION)
   }
 
-  const onAddOrEditVideoFromDevice = (data: Video) => {
-    // dispatch(setLoading(true));
-    // AttachmentService.create(data)
-    //   .then(() => {
-    //     dispatch(getVideosRequest(project.id))
-    //   })
-    //   .catch(e => dispatch(setErrorMess(e)))
-    //   .finally(() => dispatch(setLoading(false)))
-    console.log(data);
-  } 
-  console.log(onAddOrEditVideoFromDevice);
+  const onUploadVideoFromDevice = (data: VIDEO_UPLOAD_STEP) => {
+    setVideoFromDevice(data)
+    onChangeStep(EStep.INFORMATION)
+  }
+
+  const onSubmitInformation = (data: InformationForm) => {
+    setInformationData(data)
+    onChangeStep(EStep.SCENES)
+  }
+
+  const onSubmitScenes = (data: SCENES_STEP) => {
+    dispatch(setLoading(true))
+    if (itemEdit) {
+      VideoService.update(itemEdit.id, {
+        name: informationData.name,
+        marketingStageId: informationData.marketingStageId,
+        brand: informationData.brand,
+        product: informationData.product,
+        keyMessage: informationData.keyMessage,
+        videoScenes: data.scenes.map(item => ({
+          id: item.id,
+          name: item.name,
+          startTime: item.startTime,
+          endTime: item.endTime,
+        }))
+      })
+        .then((res) => {
+          onSuccess()
+          _onClose()
+          dispatch(setSuccessMess(res.message))
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      VideoService.create({
+        name: informationData.name,
+        marketingStageId: informationData.marketingStageId,
+        brand: informationData.brand,
+        product: informationData.product,
+        keyMessage: informationData.keyMessage,
+        typeId: type,
+        uploadVideoId: videoFromDevice?.attachment?.id,
+        youtubeVideoId: videoFromYoutube?.id,
+        duration: videoFromDevice?.duration || videoFromYoutube?.duration,
+        projectId: project.id,
+        videoScenes: data.scenes.map(item => ({
+          name: item.name,
+          startTime: item.startTime,
+          endTime: item.endTime,
+        }))
+      })
+        .then((res) => {
+          onSuccess()
+          _onClose()
+          dispatch(setSuccessMess(res.message))
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
 
   const _onClose = () => {
+    onChangeStep(EStep.UPLOAD_VIDEO)
+    setVideoFromDevice(null)
+    setVideoFromYoutube(null)
     onClose()
   }
-
 
   return (
     <Dialog
@@ -114,39 +204,34 @@ const PopupAddVideo = (props: Props) => {
       onClose={() => _onClose()}
       classes={{ paper: classes.paper }}
     >
-        <DialogTitle>
-          <Heading3 translation-key="">
-            Upload video from device
-          </Heading3>
-          <ButtonCLose
-            onClick={() => _onClose()}>
-          </ButtonCLose>
-        </DialogTitle>
-        <DialogContent dividers>
-            <Stepper
-              alternativeLabel
-              activeStep={activeStep}
-              classes={{ root: classes.rootStepper }}
-              connector={
-                <StepConnector
-                  classes={{
-                    root: classes.rootConnector,
-                    active: classes.activeConnector,
-                  }}
-                />
-              }
-            >
+      <DialogTitle>
+        <Heading3 translation-key="">
+          Upload video from device
+        </Heading3>
+        <ButtonCLose
+          onClick={() => _onClose()}>
+        </ButtonCLose>
+      </DialogTitle>
+      <DialogContent dividers>
+        <Stepper
+          alternativeLabel
+          activeStep={activeStep}
+          classes={{ root: classes.rootStepper }}
+          connector={
+            <StepConnector
+              classes={{
+                root: classes.rootConnector,
+                active: classes.activeConnector,
+              }}
+            />
+          }
+        >
           {steps.map((item, index) => {
             return (
-              <Step key={index}>     
+              <Step key={index}>
                 <RPStepLabel
                   icon={item.icon}
-                  StepIconComponent={({ completed, active }) =>             
-                    <>
-                      {completed? <RPStepIconBox $active={completed} >{item.icon}</RPStepIconBox>
-                      : <RPStepIconBox $active={active}>{item.icon}</RPStepIconBox>}       
-                    </>               
-                  }
+                  StepIconComponent={({ completed, active }) => <RPStepIconBox $active={completed || active}>{item.icon}</RPStepIconBox>}
                   classes={{
                     root: classes.rootStepLabel,
                     completed: classes.rootStepLabelCompleted,
@@ -154,19 +239,37 @@ const PopupAddVideo = (props: Props) => {
                     label: classes.rootStepLabel,
                   }}
                 >
-                  {item.name}{" "}                    
+                  {item.name}{" "}
                   <ParagraphExtraSmall $colorName={"--gray-60"}>
-                      {item.optional}
-                  </ParagraphExtraSmall>  
+                    {item.optional}
+                  </ParagraphExtraSmall>
                 </RPStepLabel>
               </Step>
             );
           })}
-          </Stepper>
-          {activeStep === EStep.UPLOAD_VIDEO && <>{getUploadType()}</>}
-          {activeStep === EStep.INFORMATION && <Information/>}
-          {activeStep === EStep.SCENES && <Scenes/>}
-        </DialogContent>
+        </Stepper>
+        {activeStep === EStep.UPLOAD_VIDEO && getUploadType()}
+        {activeStep === EStep.INFORMATION && (
+          <Information
+            type={type}
+            videoFromDevice={videoFromDevice}
+            videoFromYoutube={videoFromYoutube}
+            data={informationData}
+            onSubmit={onSubmitInformation}
+          />
+        )}
+        {activeStep === EStep.SCENES && (
+          <Scenes
+            type={type}
+            videoFromDevice={videoFromDevice}
+            videoFromYoutube={videoFromYoutube}
+            information={informationData}
+            data={scenes}
+            onSubmit={onSubmitScenes}
+            onBack={() => onChangeStep(EStep.INFORMATION)}
+          />
+        )}
+      </DialogContent>
     </Dialog>
   );
 };

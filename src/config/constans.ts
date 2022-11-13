@@ -187,6 +187,9 @@ export const API = {
     VIDEO_YOUTUBE: {
       DEFAULT: '/v1.0/googleapis/videos-youtube'
     }
+  },
+  VIDEO: {
+    DEFAULT: '/v1.0/video'
   }
 }
 

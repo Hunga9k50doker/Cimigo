@@ -3,12 +3,18 @@ import api from "./configApi";
 import { Attachment } from "models/attachment";
 
 export class AttachmentService {
-  static async create(data: Attachment): Promise<any> {
-    return await api.post(API.ATTACHMENT.DEFAULT,{
-      params: data
+  static async create(data: FormData, onUploadProgress?: (percent: number) => void): Promise<Attachment> {
+    return await api.post(API.ATTACHMENT.DEFAULT, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      onUploadProgress: (progress) => {
+        const percent = Math.round((progress.loaded / progress.total) * 100)
+        onUploadProgress && onUploadProgress(percent)
+      }
     })
       .then((res) => {
-        return Promise.resolve(res.data);
+        return Promise.resolve(res.data.data);
       })
       .catch((e) => {
         return Promise.reject(e?.response?.data);

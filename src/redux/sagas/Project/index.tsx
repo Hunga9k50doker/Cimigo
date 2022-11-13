@@ -7,6 +7,7 @@ import getProject from './getProject';
 import getProjectAttributes from './getProjectAttributes';
 import getTarget from './getTarget';
 import getUserAttributes from './getUserAttributes';
+import getVideos from './getVideos';
 
 export const projectSagas = function* root() {
   yield all([
@@ -17,6 +18,7 @@ export const projectSagas = function* root() {
     getUserAttributes(),
     getCustomQuestions(),
     getEyeTrackingPacks(),
-    getTarget()
+    getTarget(),
+    getVideos()
   ]);
 };

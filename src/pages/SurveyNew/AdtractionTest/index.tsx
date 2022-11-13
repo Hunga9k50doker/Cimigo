@@ -25,7 +25,7 @@ import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import PopupHowToSetupSurvey from "pages/SurveyNew/components/PopupHowToSetupSurvey";
 import { setHowToSetupSurveyReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
-import {AddVideoIcon} from "components/svg";
+import {AddVideoIcon} from "components/icons";
 
 
 interface AdtractionTestProps {

@@ -80,6 +80,12 @@ export const projectReducer = (state = initial, action: any) =>
           targets: action.data
         };
         break;
+      case types.SET_VIDEOS_OF_PROJECT_REDUCER:
+        draft.project = {
+          ...draft.project,
+          videos: action.data
+        };
+        break;
       case types.SET_SCROLL_TO_SECTION_OF_PROJECT_REDUCER:
         draft.scrollToSection = action.data
         break;
