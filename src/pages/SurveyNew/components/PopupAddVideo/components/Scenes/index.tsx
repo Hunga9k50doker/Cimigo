@@ -127,21 +127,21 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
     <>
       <Grid component="form" onSubmit={handleSubmit(_onSubmit)}>
         <Grid className={classes.root} container>
-          <Grid className={classes.containerInformation} item xs={7}>
+          <Grid className={classes.containerInformation} item xs={8}>
             <Box sx={{ mb: 3 }}>
               <Heading4 $colorName="--eerie-black">Define scenes</Heading4>
               <ParagraphSmall $colorName="--gray-80" className={classes.subInformation}>If you already have some key scenes, let us know.</ParagraphSmall>
             </Box>
             <Grid>
-              <Grid container spacing={3} className={classes.boxSubTitle}>
-                <Grid item xs={6}>
+              <Grid container className={classes.boxSubTitle}>
+                <Grid item xs={4}>
                   <SubTitle>Scene name</SubTitle>
                 </Grid>
-                <Grid item xs>
-                  <SubTitle sx={{ ml: 1 }}>Start time</SubTitle>
+                <Grid item xs={3} className={classes.boxTitleStart}>
+                  <SubTitle>Start time</SubTitle>
                 </Grid>
-                <Grid item xs>
-                  <SubTitle sx={{ ml: 1 }}>End time</SubTitle>
+                <Grid item xs={3} className={classes.boxTitleEnd}>
+                  <SubTitle>End time</SubTitle>
                 </Grid>
               </Grid>
 
@@ -240,7 +240,7 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
               </Grid>
             </Grid>
           </Grid>
-          <Grid className={classes.boxVideo} item xs={5}>
+          <Grid className={classes.boxVideo} item xs={4}>
             <div>
               {(type === EVIDEO_TYPE.UPLOAD && !!videoFromDevice) && (
                 <video

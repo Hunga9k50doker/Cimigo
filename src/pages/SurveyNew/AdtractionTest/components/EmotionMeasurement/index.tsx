@@ -3,7 +3,7 @@ import Heading4 from "components/common/text/Heading4";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { Project, SETUP_SURVEY_SECTION } from "models/project";
-import { MaxChip, PriceChip } from "pages/SurveyNew/components";
+import { PriceChip } from "pages/SurveyNew/components";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import classes from "./styles.module.scss"
@@ -32,7 +32,7 @@ export const EmotionMeasurement = memo(({ price, project, step }: EmotionMeasure
       ProjectService.updateEnableEyeTracking(project.id, { enableEyeTracking: enableEyeTracking })
         .then((res) => {
           const eyeTrackingSampleSize = (res.data as Project).eyeTrackingSampleSize
-          dispatch(setProjectReducer({ ...project, enableEyeTracking: enableEyeTracking, eyeTrackingSampleSize, eyeTrackingPacks: [] }));
+          dispatch(setProjectReducer({ ...project, enableEyeTracking: enableEyeTracking, eyeTrackingSampleSize}));
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)))
