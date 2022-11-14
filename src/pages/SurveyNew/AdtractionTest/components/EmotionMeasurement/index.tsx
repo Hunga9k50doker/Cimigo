@@ -26,26 +26,8 @@ export const EmotionMeasurement = memo(({ price, project, step }: EmotionMeasure
     const { t } = useTranslation();
     const dispatch = useDispatch()
 
-    // const [openConfirmDisableEyeTracking, setOpenConfirmDisableEyeTracking] = useState(false);
-
-    const onOpenPopupConfirmDisableEyeTracking = () => {
-      // setOpenConfirmDisableEyeTracking(true);
-    }
-    // const onClosePopupConfirmDisableEyeTracking = () => {
-    //   setOpenConfirmDisableEyeTracking(false);
-    // }
-
-    // const onConfirmedDisableEyeTracking = () => {
-    //   onToggleEyeTracking(true)
-    //   onClosePopupConfirmDisableEyeTracking()
-    // }
-
-    const onToggleEyeTracking = (confirmed: boolean = false) => {
+    const onToggleEyeTracking = () => {
       const enableEyeTracking = !project?.enableEyeTracking;
-      if (!enableEyeTracking && !confirmed && !!project?.eyeTrackingPacks?.length) {
-        onOpenPopupConfirmDisableEyeTracking()
-        return
-      }
       dispatch(setLoading(true))
       ProjectService.updateEnableEyeTracking(project.id, { enableEyeTracking: enableEyeTracking })
         .then((res) => {
@@ -71,12 +53,8 @@ export const EmotionMeasurement = memo(({ price, project, step }: EmotionMeasure
             sx={{ display: "inline-block", verticalAlign: "middle" }}
             className={clsx({ [classes.titleDisabled]: !project?.enableEyeTracking })}
           >
-             {t("setup_survey_eye_tracking_title", { step: step })}
+             STEP {step}: Emotion measurement
           </Heading4>
-          <MaxChip
-            sx={{ ml: 1 }}
-            label={<ParagraphSmall className={clsx({ [classes.titleSubDisabled]: !project?.enableEyeTracking })} $colorName="--eerie-black">max 2</ParagraphSmall>}
-          />
         </Box>
         <Box>
           <PriceChip
