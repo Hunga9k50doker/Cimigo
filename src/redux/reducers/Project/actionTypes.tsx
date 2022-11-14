@@ -4,6 +4,7 @@ import { Pack } from "models/pack";
 import { CreateProjectRedirect, Project, ProjectTarget } from "models/project";
 import { ProjectAttribute } from "models/project_attribute";
 import { UserAttribute } from "models/user_attribute";
+import { Video } from "models/video";
 
 export const GET_PROJECT_REQUEST = 'GET_PROJECT_REQUEST';
 
@@ -46,6 +47,7 @@ export const SET_SCROLL_TO_SECTION_OF_PROJECT_REDUCER = 'SET_SCROLL_TO_SECTION_O
 export const SET_HOW_TO_SETUP_SURVEY_REDUCER = "SET_HOW_TO_SETUP_SURVEY_REDUCER"; 
 
 export const GET_VIDEOS_OF_PROJECT_REQUEST = 'GET_VIDEOS_OF_PROJECT_REQUEST';
+export const SET_VIDEOS_OF_PROJECT_REDUCER = 'SET_VIDEOS_OF_PROJECT_REDUCER';
 
 export const getProjectRequest = (id: number, callback?: () => void, getFull: boolean = false) => {
   return {
@@ -194,5 +196,12 @@ export const getVideosRequest = (projectId: number) => {
   return {
     type: GET_VIDEOS_OF_PROJECT_REQUEST,
     projectId
+  }
+}
+
+export const setVideosReducer = (data: Video[]) => {
+  return {
+    type: SET_VIDEOS_OF_PROJECT_REDUCER,
+    data
   }
 }

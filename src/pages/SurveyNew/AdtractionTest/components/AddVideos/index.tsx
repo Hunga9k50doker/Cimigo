@@ -6,19 +6,17 @@ import ParagraphSmall from "components/common/text/ParagraphSmall"
 import { Project, SETUP_SURVEY_SECTION } from "models/project"
 import { MaxChip } from "pages/SurveyNew/components"
 import { memo, useMemo, useState } from "react"
-// import PackItem from "../../SetupSurvey/components/PackItem"
 import { Edit as EditIcon, DeleteForever as DeleteForeverIcon } from '@mui/icons-material';
 import TextBtnSmall from "components/common/text/TextBtnSmall"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { editableProject } from "helpers/project"
 import PopupConfirmDelete from "components/PopupConfirmDelete"
-import { Video } from "models/video"
+import { EVIDEO_TYPE, Video } from "models/video"
 import { Menu } from "components/common/memu/Menu";
 import { VideoService } from "services/video"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
-import { getPacksRequest, getVideosRequest } from "redux/reducers/Project/actionTypes"
-import PopupPack from "pages/SurveyNew/components/PopupPack"
+import { getVideosRequest } from "redux/reducers/Project/actionTypes"
 import ProjectHelper from "helpers/project";
 import NoteWarning from "components/common/warnings/NoteWarning";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
@@ -27,9 +25,8 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import classes from "./styles.module.scss";
 import VideoItem from "../VideoItem";
-import {IconAddVideoMenu} from "components/svg";
+import { IconAddVideoMenu } from "components/icons";
 import PopupAddVideo from "pages/SurveyNew/components/PopupAddVideo";
-import {EAddVideoType} from "models/adtraction_test";
 
 interface AddVideosProps {
   project: Project
@@ -48,25 +45,25 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
   const [anchorElMenuAddVideo, setAnchorElMenuAddVideo] = useState<null | HTMLElement>(null);
   const [typeAddVideo, setTypeAddVideo] = useState(null);
 
-  const maxVideo = useMemo(() => project?.solution?.maxPack || 0, [project])
+  const maxVideo = useMemo(() => project?.solution?.maxVideo || 0, [project])
 
   const editable = useMemo(() => editableProject(project), [project])
 
   const enableAddVideos = useMemo(() => {
-    return maxVideo > (project?.packs?.length || 0)
+    return maxVideo > (project?.videos?.length || 0)
   }, [maxVideo, project])
 
-  const videoNeedMore = useMemo(() => ProjectHelper.packNeedMore(project), [project])
+  const videoNeedMore = useMemo(() => ProjectHelper.videoNeedMore(project), [project])
 
-  const onOpenPopupAddVideo = (type: EAddVideoType) => {
+  const onOpenPopupAddVideo = (type: EVIDEO_TYPE) => {
     switch (type) {
-      case EAddVideoType.From_Device:
+      case EVIDEO_TYPE.UPLOAD:
         setAddNewVideo(true);
-        setTypeAddVideo(EAddVideoType.From_Device);
+        setTypeAddVideo(EVIDEO_TYPE.UPLOAD);
         break;
-      case EAddVideoType.From_Youtube:
+      case EVIDEO_TYPE.YOUTUBE:
         setAddNewVideo(true);
-        setTypeAddVideo(EAddVideoType.From_Youtube);
+        setTypeAddVideo(EVIDEO_TYPE.YOUTUBE);
         break;
       default:
         break;
@@ -75,15 +72,15 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
   }
 
   const onDeleteVideo = () => {
-    // if (!videoDelete) return
-    // dispatch(setLoading(true))
-    // VideoService.delete(videoDelete.id)
-    //   .then(() => {
-    //     dispatch(getVideosRequest(project.id))
-    //     setVideoDelete(null)
-    //   })
-    //   .catch(e => dispatch(setErrorMess(e)))
-    //   .finally(() => dispatch(setLoading(false)))
+    if (!videoDelete) return
+    dispatch(setLoading(true))
+    VideoService.delete(videoDelete.id)
+      .then(() => {
+        dispatch(getVideosRequest(project.id))
+        setVideoDelete(null)
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
   const onAction = (currentTarget: any, item: Video) => {
@@ -113,29 +110,11 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
     setVideoEdit(null)
   }
 
-  const onAddOrEditVideo = (data: FormData) => {
-    // data.append('projectId', `${project.id}`)
-    // if (videoEdit) {
-    //   dispatch(setLoading(true))
-    //   VideoService.update(videoEdit.id, data)
-    //     .then(() => {
-    //       dispatch(getVideosRequest(project.id))
-    //     })
-    //     .catch((e) => dispatch(setErrorMess(e)))
-    //     .finally(() => dispatch(setLoading(false)))
-    // } else {
-    //   dispatch(setLoading(true))
-    //   VideoService.create(data)
-    //     .then(() => {
-    //       dispatch(getVideosRequest(project.id))
-    //     })
-    //     .catch((e) => dispatch(setErrorMess(e)))
-    //     .finally(() => dispatch(setLoading(false)))
-    // }
-    // onCloseAddOrEditVideo()
+  const onReload = () => {
+    dispatch(getVideosRequest(project.id))
   }
 
-  const handleClickMenuAddVideo= (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickMenuAddVideo = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorElMenuAddVideo(event.currentTarget)
   }
 
@@ -155,60 +134,58 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       </Heading4>
       <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxVideo}</ParagraphSmall>} />
       <ParagraphBody $colorName="--gray-80" mt={1} translation-key="">
-      Please upload your advertising videos that you want to include in this test. Your advertising videos  are compared to a benchmark of over 500 advertisements, to find out specific strengths and weaknesses.
+        Please upload your advertising videos that you want to include in this test. Your advertising videos  are compared to a benchmark of over 500 advertisements, to find out specific strengths and weaknesses.
       </ParagraphBody>
       {!!videoNeedMore && (
         <NoteWarning>
-          <ParagraphSmall translation-key="setup_add_packs_note_warning" 
-          $colorName="--warning-dark" 
-          sx={{"& > span": {fontWeight: 600}}}
-          dangerouslySetInnerHTML={{
-          __html: t("setup_add_packs_note_warning", {
-          number: videoNeedMore,}),
-          }}>
+          <ParagraphSmall translation-key=""
+            $colorName="--warning-dark"
+            sx={{ "& > span": { fontWeight: 600 } }}
+          >
+            You need to upload at least <span>{videoNeedMore} more videos</span>.
           </ParagraphSmall>
-      </NoteWarning>
+        </NoteWarning>
       )}
-          <Box mt={{ xs: 3, sm: 3 }} >
-            <Grid spacing={2} container>
-              {/* {project?.packs?.map((item, index) => (
-                <VideoItem
-                  key={index}
-                  item={item}
-                  editable={editable}
-                  onAction={onAction}
-                />
-              ))} */}
-            </Grid>
-          </Box>
-          <Button
-            sx={{ mt: 3, width: { xs: "100%", sm: "auto" } }}
-            onClick={handleClickMenuAddVideo}
-            // disabled={!editable || project?.customQuestions?.length >= maxCustomQuestion}
-            btnType={BtnType.Outlined}
-            translation-key=""
-            startIcon={<IconAddVideoMenu/>}
-            children={<TextBtnSmall>Add videos</TextBtnSmall>}
-            endIcon={<ArrowDropDownIcon sx={{ fontSize: "16px !important" }} />}
-          />
+      <Box mt={{ xs: 3, sm: 3 }} >
+        <Grid spacing={2} container>
+          {project?.videos?.map((item, index) => (
+            <VideoItem
+              key={index}
+              item={item}
+              editable={editable}
+              onAction={onAction}
+            />
+          ))}
+        </Grid>
+      </Box>
+      <Button
+        sx={{ mt: 3, width: { xs: "100%", sm: "auto" } }}
+        onClick={handleClickMenuAddVideo}
+        disabled={!editable || project?.videos?.length >= maxVideo}
+        btnType={BtnType.Outlined}
+        translation-key=""
+        startIcon={<IconAddVideoMenu />}
+        children={<TextBtnSmall>Add videos</TextBtnSmall>}
+        endIcon={<ArrowDropDownIcon sx={{ fontSize: "16px !important" }} />}
+      />
       <Menu
         $minWidth={"unset"}
         anchorEl={anchorElMenuAddVideo}
         open={Boolean(anchorElMenuAddVideo)}
         onClose={handleCloseMenuAddVideo}
       >
-          <MenuItem className={classes.menuItem} onClick={() => onOpenPopupAddVideo(EAddVideoType.From_Device)}>
-            <BackupOutlinedIcon sx={{color: 'var(--cimigo-blue-light-1)'}}/>
-            <ParagraphExtraSmall className={classes.menuItemText}>From your device</ParagraphExtraSmall>
-          </MenuItem>
-          <MenuItem className={classes.menuItem} onClick={() => onOpenPopupAddVideo(EAddVideoType.From_Youtube)}>
-            <YouTubeIcon sx={{color: '#DD352E'}}/>
-            <ParagraphExtraSmall className={classes.menuItemText}>From Youtube</ParagraphExtraSmall>
-          </MenuItem>
+        <MenuItem className={classes.menuItem} onClick={() => onOpenPopupAddVideo(EVIDEO_TYPE.UPLOAD)}>
+          <BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />
+          <ParagraphExtraSmall className={classes.menuItemText}>From your device</ParagraphExtraSmall>
+        </MenuItem>
+        <MenuItem className={classes.menuItem} onClick={() => onOpenPopupAddVideo(EVIDEO_TYPE.YOUTUBE)}>
+          <YouTubeIcon sx={{ color: '#DD352E' }} />
+          <ParagraphExtraSmall className={classes.menuItemText}>From Youtube</ParagraphExtraSmall>
+        </MenuItem>
       </Menu>
-      {/* {!enableAddPacks && (
-        <ParagraphSmall mt={1} translation-key="setup_survey_add_pack_error_max" $colorName="--red-error">{t('setup_survey_add_pack_error_max', { number: maxPack })}</ParagraphSmall>
-      )} */}
+      {!enableAddVideos && (
+        <ParagraphSmall mt={1} translation-key="" $colorName="--red-error">You can only add a maximum of {maxVideo} videos.</ParagraphSmall>
+      )}
       <Menu
         $minWidth={"120px"}
         anchorEl={anchorElVideo}
@@ -236,28 +213,23 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
           <ParagraphBody translation-key="common_delete">{t('common_delete')}</ParagraphBody>
         </MenuItem>
       </Menu>
-      {/* <PopupPack
-        isOpen={addNewVideo}
-        itemEdit={videoEdit}
-        onCancel={onCloseAddOrEditVideo}
-        onSubmit={onAddOrEditVideo}
-      /> */}
-      <PopupAddVideo
-      isOpen={addNewVideo}
-      itemEdit={videoEdit}
-      onClose={onCloseAddOrEditVideo}
-      type={typeAddVideo}
-      onSubmit={onAddOrEditVideo}
-      project={project}
-      />
+      {(addNewVideo || !!videoEdit) && (
+        <PopupAddVideo
+          isOpen
+          itemEdit={videoEdit}
+          project={project}
+          type={typeAddVideo}
+          onSuccess={onReload}
+          onClose={onCloseAddOrEditVideo}
+        />
+      )}
       <PopupConfirmDelete
         isOpen={!!videoDelete}
-        title={t('setup_survey_pack_confirm_delete_title')}
-        description={t('setup_survey_pack_confirm_delete_sub_title')}
+        title={'Delete this video?'}
+        description={'Are you sure you want to delete this video?'}
         onCancel={() => setVideoDelete(null)}
         onDelete={onDeleteVideo}
       />
-
     </Grid>
   )
 })
