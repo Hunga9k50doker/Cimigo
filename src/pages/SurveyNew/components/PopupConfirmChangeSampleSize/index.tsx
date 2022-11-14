@@ -10,13 +10,16 @@ import Button, { BtnType } from 'components/common/buttons/Button';
 import TextBtnSmall from 'components/common/text/TextBtnSmall';
 import { Help } from '@mui/icons-material';
 import ParagraphBody from 'components/common/text/ParagraphBody';
+import { useSelector } from 'react-redux';
+import { ReducerType } from 'redux/reducers';
+import { ESOLUTION_TYPE } from 'models';
 
 export interface DataConfirmChangeSampleSize {
   isConfirmQuotas?: boolean,
-  // isConfirmEyeTrackingSampleSize?: boolean,
+  isConfirmEyeTrackingSampleSize?: boolean,
   newSampleSize?: number,
-  // oldEyeTrackingSampleSize?: number,
-  // newEyeTrackingSampleSize?: number,
+  oldEyeTrackingSampleSize?: number,
+  newEyeTrackingSampleSize?: number,
 }
 
 interface Props {
@@ -28,6 +31,35 @@ interface Props {
 const PopupConfirmChangeSampleSize = ({ data, onClose, onConfirm }: Props) => {
 
   const { t } = useTranslation()
+
+  const { project } = useSelector((state: ReducerType) => state.project)
+
+
+  const renderConfirmEyeTracking = () => {
+    switch (project?.solution?.typeId) {
+      case ESOLUTION_TYPE.PACK:
+        return (
+          <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'
+            translation-key="target_popup_change_sample_size_your_adjusted_eye_tracking"
+            dangerouslySetInnerHTML={{
+              __html: t("target_popup_change_sample_size_your_adjusted_eye_tracking", { oldEyeTrackingSampleSize: data?.oldEyeTrackingSampleSize, newEyeTrackingSampleSize: data?.newEyeTrackingSampleSize }),
+            }}
+          >
+          </ParagraphBody>
+        )
+      case ESOLUTION_TYPE.VIDEO_CHOICE:
+        return (
+          <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'
+            translation-key=""
+            // dangerouslySetInnerHTML={{
+            //   __html: t("", { oldEyeTrackingSampleSize: data?.oldEyeTrackingSampleSize, newEyeTrackingSampleSize: data?.newEyeTrackingSampleSize }),
+            // }}
+          >
+            Your adjusted emotion measurement sample size: <span>reset from {data?.oldEyeTrackingSampleSize} to {data?.newEyeTrackingSampleSize} as a bare minimum.</span>
+          </ParagraphBody>
+        )
+    }
+  }
 
   return (
     <Dialog
@@ -48,22 +80,14 @@ const PopupConfirmChangeSampleSize = ({ data, onClose, onConfirm }: Props) => {
         <ul className={classes.list}>
           {data?.isConfirmQuotas && (
             <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'
-            translation-key="target_popup_change_sample_size_your_adjusted_quota"
-            dangerouslySetInnerHTML={{
-              __html: t("target_popup_change_sample_size_your_adjusted_quota"),
-            }}
+              translation-key="target_popup_change_sample_size_your_adjusted_quota"
+              dangerouslySetInnerHTML={{
+                __html: t("target_popup_change_sample_size_your_adjusted_quota"),
+              }}
             >
             </ParagraphBody>
           )}
-          {/* {data?.isConfirmEyeTrackingSampleSize && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'
-            translation-key="target_popup_change_sample_size_your_adjusted_eye_tracking"
-            dangerouslySetInnerHTML={{
-              __html: t("target_popup_change_sample_size_your_adjusted_eye_tracking",{oldEyeTrackingSampleSize: data?.oldEyeTrackingSampleSize, newEyeTrackingSampleSize: data?.newEyeTrackingSampleSize}),
-            }}
-            >
-            </ParagraphBody>
-          )} */}
+          {data?.isConfirmEyeTrackingSampleSize && renderConfirmEyeTracking()}
         </ul>
         <ParagraphBody mt={4} $colorName='--gray-80' translation-key="target_popup_change_sample_size_do_you_want_question">{t("target_popup_change_sample_size_do_you_want_question")}</ParagraphBody>
       </DialogContentConfirm>

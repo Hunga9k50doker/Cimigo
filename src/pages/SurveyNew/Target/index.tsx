@@ -1,7 +1,6 @@
-import { ArrowForward, Check as CheckIcon, Edit, KeyboardArrowRight, Save } from "@mui/icons-material";
+import { ArrowForward, Check as CheckIcon, KeyboardArrowRight } from "@mui/icons-material";
 import { Tab, Badge, Step, Grid, Chip, Box, useTheme, useMediaQuery } from "@mui/material";
 import Button, { BtnType } from "components/common/buttons/Button";
-import ChipCustom from "components/common/chip/ChipCustom";
 import Heading4 from "components/common/text/Heading4";
 import Heading5 from "components/common/text/Heading5";
 import ParagraphBody from "components/common/text/ParagraphBody";
@@ -10,7 +9,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import TabPanelBox from "components/TabPanelBox";
 import { push } from "connected-react-router";
-import { PriceService, usePrice } from "helpers/price";
+import { usePrice } from "helpers/price";
 import ProjectHelper, { editableProject } from "helpers/project";
 import _ from "lodash";
 import { ETabRightPanel, TARGET_SECTION } from "models/project";
@@ -22,17 +21,8 @@ import { routes } from "routers/routes";
 import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
 import CostSummary from "../components/CostSummary";
 import LockIcon from "../components/LockIcon";
-import { CustomEyeTrackingSampleSizeForm, CustomSampleSizeForm, ETab, TabItem, _listEyeTrackingSampleSize, _listSampleSize } from "./models";
+import { ETab, TabItem } from "./models";
 import classes from './styles.module.scss';
-import * as yup from 'yup';
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import { ProjectService } from "services/project";
-import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
-import { setProjectReducer } from "redux/reducers/Project/actionTypes";
-import InputTextfield from "components/common/inputs/InputTextfield";
-import TextBtnSmall from "components/common/text/TextBtnSmall";
-import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "../components/PopupConfirmChangeSampleSize";
 import images from "config/images";
 import { TargetQuestion, TargetQuestionType } from "models/Admin/target";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
@@ -45,6 +35,8 @@ import AgeCoverageTab from "./AgeCoverageTab";
 import PopupLocationMobile from "./components/PopupLocationMobile";
 import PopupHouseholdIncomeMobile from "./components/PopupHouseholdIncomeMobile";
 import PopupAgeCoverageMobile from "./components/PopupAgeCoverageMobile";
+import ChooseSampleSize from "./ChooseSampleSize";
+import ChooseEyeTrackingSampleSize from "./ChooseEyeTrackingSampleSize";
 
 enum ErrorKeyAdd {
   SAMPLE_SIZE = "SAMPLE_SIZE",
@@ -71,10 +63,6 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
 
   const { project } = useSelector((state: ReducerType) => state.project)
 
-  const [showCustomSampleSize, setShowCustomSampleSize] = useState(false);
-  const [confirmChangeSampleSizeData, setConfirmChangeSampleSizeData] = useState<DataConfirmChangeSampleSize>();
-  const [showCustomEyeTrackingSampleSize, setShowCustomEyeTrackingSampleSize] = useState(false);
-
   const [activeTab, setActiveTab] = useState<ETab>();
   const [errorsTarget, setErrorsTarget] = useState<ErrorsTarget>({});
   const [questionsLocation, setQuestionsLocation] = useState<TargetQuestion[]>([])
@@ -87,7 +75,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
   const { price } = usePrice()
 
   const { sampleSizeCost, eyeTrackingSampleSizeCost } = price
-  
+
   const listTabs: TabItem[] = useMemo(() => {
     return [
       {
@@ -108,210 +96,6 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
     ]
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
-
-  // ========start sample size=======
-
-  const sampleSizeConstConfig = useMemo(() => {
-    return PriceService.getSampleSizeConstConfig(project)
-  }, [project])
-
-  const maxSampeSize = useMemo(() => {
-    return _.maxBy(sampleSizeConstConfig, 'limit')?.limit || 0
-  }, [sampleSizeConstConfig])
-
-  const minSampeSize = useMemo(() => {
-    return _.minBy(sampleSizeConstConfig, 'limit')?.limit || 0
-  }, [sampleSizeConstConfig])
-
-  const isValidSampSize = (data: number) => {
-    return data >= minSampeSize && data <= maxSampeSize
-  }
-
-  const listSampleSize = useMemo(() => {
-    let listSampleSizeTemp = _listSampleSize.filter(it => isValidSampSize(it.value))
-    return listSampleSizeTemp.sort((a, b) => a.value - b.value)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [minSampeSize, maxSampeSize])
-
-
-  const schemaSS = useMemo(() => {
-    return yup.object().shape({
-      sampleSize: yup.number()
-        .typeError(t('target_sample_size_required'))
-        .required(t('target_sample_size_required'))
-        .min(minSampeSize, t('target_sample_size_min', { number: minSampeSize }))
-        .max(maxSampeSize, t('target_sample_size_max', { number: maxSampeSize }))
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i18n.language, minSampeSize, maxSampeSize])
-
-  const {
-    handleSubmit: handleSubmitSS,
-    formState: { errors: errorsSS, isValid: isValidSS },
-    reset: resetSS,
-    register: registerSS,
-  } = useForm<CustomSampleSizeForm>({
-    resolver: yupResolver(schemaSS),
-    mode: 'onChange'
-  });
-
-  const isCustomSampleSize = useMemo(() => {
-    return project?.sampleSize && !listSampleSize.find(it => it.value === project.sampleSize)
-  }, [project, listSampleSize])
-
-  const onClearCustomSampleSize = () => {
-    setShowCustomSampleSize(false)
-    resetSS({ sampleSize: undefined })
-  }
-
-  const serviceUpdateSampleSize = (sampleSize: number) => {
-    dispatch(setLoading(true))
-    ProjectService.updateSampleSize(projectId, sampleSize)
-      .then((res) => {
-        dispatch(setProjectReducer({ ...project, sampleSize: sampleSize }))
-        dispatch(setSuccessMess(res.message))
-        onClearCustomSampleSize()
-        onCloseConfirmChangeSampleSize()
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
-  }
-
-  const updateSampleSize = async (newSampleSize: number) => {
-    if (!isValidSampSize(newSampleSize) || newSampleSize === project?.sampleSize || !editable) {
-      onClearCustomSampleSize()
-      return
-    }
-    dispatch(setLoading(true))
-    const quotas = await ProjectService.getQuota(projectId)
-      .catch(e => {
-        dispatch(setErrorMess(e))
-        return []
-      })
-    dispatch(setLoading(false))
-    if (quotas?.length) {
-      setConfirmChangeSampleSizeData({
-        newSampleSize: newSampleSize,
-        isConfirmQuotas: true,
-      })
-    } else {
-      serviceUpdateSampleSize(newSampleSize)
-    }
-  }
-
-  const onCloseConfirmChangeSampleSize = () => {
-    setConfirmChangeSampleSizeData(undefined)
-  }
-
-  const onConfirmedChangeSamleSize = () => {
-    if (!confirmChangeSampleSizeData || !editable) return
-    ProjectService.resetQuota(projectId)
-      .then((res) => {
-        dispatch(setProjectReducer({ ...project, agreeQuota: res.data.agreeQuota }))
-        serviceUpdateSampleSize(confirmChangeSampleSizeData.newSampleSize)
-      })
-      .catch(e => dispatch(setErrorMess(e)))
-      .finally(() => onCloseConfirmChangeSampleSize())
-  }
-
-  const _onSubmitSS = (data: CustomSampleSizeForm) => {
-    updateSampleSize(data.sampleSize)
-  }
-
-  const onCustomSampleSize = () => {
-    if (!editable) return
-    setShowCustomSampleSize(true)
-    if (isCustomSampleSize) {
-      resetSS({ sampleSize: project?.sampleSize || 0 })
-    }
-    onClearCustomEyeTrackingSampleSize()
-  }
-
-  // ========end sample size=======
-  // ========start eye tracking sample size=======
-
-  const eyeTrackingSampleSizeConstConfig = useMemo(() => {
-    return PriceService.getEyeTrackingSampleSizeConstConfig(project)
-  }, [project])
-
-  const maxEyeTrackingSampeSize = useMemo(() => {
-    return _.maxBy(eyeTrackingSampleSizeConstConfig, 'limit')?.limit || 0
-  }, [eyeTrackingSampleSizeConstConfig])
-
-  const minEyeTrackingSampeSize = useMemo(() => {
-    return _.minBy(eyeTrackingSampleSizeConstConfig, 'limit')?.limit || 0
-  }, [eyeTrackingSampleSizeConstConfig])
-
-  const isValidEyeTrackingSampSize = (data: number) => {
-    return data >= minEyeTrackingSampeSize && data <= maxEyeTrackingSampeSize
-  }
-
-  const listEyeTrackingSampleSize = useMemo(() => {
-    let ListEyeTrackingSampleSizeTemp = _listEyeTrackingSampleSize.filter(it => isValidEyeTrackingSampSize(it.value))
-    return ListEyeTrackingSampleSizeTemp.sort((a, b) => a.value - b.value)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maxEyeTrackingSampeSize, minEyeTrackingSampeSize])
-
-  const schemaESS = useMemo(() => {
-    return yup.object().shape({
-      eyeTrackingSampleSize: yup.number()
-        .typeError(t("target_eye_tracking_sample_size_required"))
-        .required(t("target_eye_tracking_sample_size_required"))
-        .min(minEyeTrackingSampeSize, t("target_eye_tracking_sample_size_min", { number: minEyeTrackingSampeSize }))
-        .max(maxEyeTrackingSampeSize, t("target_eye_tracking_sample_size_max", { number: maxEyeTrackingSampeSize }))
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i18n.language, maxEyeTrackingSampeSize, minEyeTrackingSampeSize])
-
-  const {
-    handleSubmit: handleSubmitESS,
-    formState: { errors: errorsESS, isValid: isValidESS },
-    reset: resetESS,
-    register: registerESS,
-  } = useForm<CustomEyeTrackingSampleSizeForm>({
-    resolver: yupResolver(schemaESS),
-    mode: 'onChange'
-  });
-
-  const isCustomEyeTrackingSampleSize = useMemo(() => {
-    return project?.eyeTrackingSampleSize && !listEyeTrackingSampleSize.find(it => it.value === project.eyeTrackingSampleSize)
-  }, [project, listEyeTrackingSampleSize])
-
-  const onClearCustomEyeTrackingSampleSize = () => {
-    setShowCustomEyeTrackingSampleSize(false)
-    resetESS({ eyeTrackingSampleSize: undefined })
-  }
-
-  const updateEyeTrackingSampleSize = (data: number) => {
-    if (!isValidEyeTrackingSampSize(data) || data === project?.eyeTrackingSampleSize || !editable) {
-      onClearCustomEyeTrackingSampleSize()
-      return
-    }
-    dispatch(setLoading(true))
-    ProjectService.updateEyeTrackingSampleSize(projectId, data)
-      .then((res) => {
-        dispatch(setProjectReducer({ ...project, eyeTrackingSampleSize: data }))
-        dispatch(setSuccessMess(res.message))
-        onClearCustomEyeTrackingSampleSize()
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
-  }
-
-  const _onSubmitESS = (data: CustomEyeTrackingSampleSizeForm) => {
-    updateEyeTrackingSampleSize(data.eyeTrackingSampleSize)
-  }
-
-  const onCustomEyeTrackingSampleSize = () => {
-    if (!editable) return
-    setShowCustomEyeTrackingSampleSize(true)
-    if (isCustomEyeTrackingSampleSize) {
-      resetESS({ eyeTrackingSampleSize: project?.eyeTrackingSampleSize || 0 })
-    }
-    onClearCustomSampleSize()
-  }
-
-  // ========end eye tracking sample size=======
 
   const isValidTarget = useMemo(() => {
     return ProjectHelper.isValidTarget(project)
@@ -461,162 +245,15 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
           </PageTitleLeft>
         </PageTitle>
         <Content id={TARGET_SECTION.CONTENT}>
-          <Grid id={TARGET_SECTION.SAMPLE_SIZE}>
-            <Heading4
-              $fontSizeMobile={"16px"}
-              $colorName="--eerie-black"
-              translation-key="target_how_many_respondents_target_title"
-            >
-              {t('target_how_many_respondents_target_title', {step: 1})}
-            </Heading4>
-            <ParagraphBody $colorName="--gray-80" mt={1} translation-key="target_how_many_respondents_target_sub_title">
-              {t('target_how_many_respondents_target_sub_title')}
-            </ParagraphBody>
-            <Grid mt={2}>
-              <Grid className={classes.customSizeBox}>
-                {listSampleSize?.map((item, index) => (
-                  <Badge key={index} color="secondary" invisible={!item.popular} variant="dot" classes={{ dot: classes.badge }}>
-                    <ChipCustom
-                      clickable
-                      disabled={!editable}
-                      label={item.value}
-                      selected={item.value === project?.sampleSize}
-                      variant={item.value === project?.sampleSize ? "outlined" : "filled"}
-                      onClick={() => updateSampleSize(item.value)}
-                    />
-                  </Badge>
-                ))}
-                {showCustomSampleSize ? (
-                  <Grid className={classes.customSizeInputBox} component="form" onSubmit={handleSubmitSS(_onSubmitSS)} autoComplete="off" noValidate>
-                    <InputTextfield
-                      fullWidth
-                      autoFocus
-                      type="number"
-                      placeholder={t('target_sample_size_placeholder')}
-                      translation-key-placeholder="target_sample_size_placeholder"
-                      inputRef={registerSS('sampleSize')}
-                    />
-                    {isValidSS ? (
-                      <Button
-                        type="submit"
-                        btnType={BtnType.Outlined}
-                        className={classes.btnSize}
-                        children={<TextBtnSmall translation-key="common_save">{t("common_save")}</TextBtnSmall>}
-                        startIcon={<Save />}
-                      />
-                    ) : (
-                      <Button
-                        btnType={BtnType.Outlined}
-                        className={classes.btnSize}
-                        onClick={onClearCustomSampleSize}
-                        children={<TextBtnSmall translation-key="common_cancel">{t('common_cancel')}</TextBtnSmall>}
-                      />
-                    )}
-                  </Grid>
-                ) : (
-                  isCustomSampleSize ? (
-                    <ChipCustom
-                      selected
-                      disabled={!editable}
-                      label={project?.sampleSize || "0"}
-                      variant="outlined"
-                      deleteIcon={<Edit />}
-                      onDelete={onCustomSampleSize}
-                    />
-                  ) : (
-                    <ChipCustom
-                      clickable
-                      variant="filled"
-                      disabled={!editable}
-                      label={t('target_sample_size_custom')}
-                      translation-key="target_sample_size_custom"
-                      onClick={onCustomSampleSize}
-                    />
-                  )
-                )}
-              </Grid>
-              {(errorsSS.sampleSize && showCustomSampleSize) && <ParagraphSmall mt={1} $colorName="--red-error">{errorsSS.sampleSize?.message}</ParagraphSmall>}
-              <Grid className={classes.popularSampleSize} translation-key="target_sample_size_popular"><span className={classes.iconPopular}></span>{t('target_sample_size_popular')}</Grid>
-            </Grid>
-          </Grid>
+          <ChooseSampleSize
+            editable={editable}
+            projectId={projectId}
+          />
           {project?.enableEyeTracking && (
-            <Grid mt={4} id={TARGET_SECTION.EYE_TRACKING_SAMPLE_SIZE}>
-              <Heading4
-                $fontSizeMobile={"16px"}
-                $colorName="--eerie-black"
-                translation-key="target_how_many_respondents_eye_tracking_title"
-              >
-                {t('target_how_many_respondents_eye_tracking_title', {step: 2})}
-              </Heading4>
-              <ParagraphBody $colorName="--gray-80" mt={1} translation-key="target_how_many_respondents_eye_tracking_sub_title">
-              {t('target_how_many_respondents_eye_tracking_sub_title', {minEyeTrackingSampeSize: minEyeTrackingSampeSize})}
-              </ParagraphBody>
-              <Grid mt={2}>
-                <Grid className={classes.customSizeBox}>
-                  {listEyeTrackingSampleSize?.map((item, index) => (
-                    <Badge key={index} color="secondary" invisible={!item.popular} variant="dot" classes={{ dot: classes.badge }}>
-                      <ChipCustom
-                        clickable
-                        disabled={!editable}
-                        label={item.value}
-                        selected={item.value === project?.eyeTrackingSampleSize}
-                        variant={item.value === project?.eyeTrackingSampleSize ? "outlined" : "filled"}
-                        onClick={() => updateEyeTrackingSampleSize(item.value)}
-                      />
-                    </Badge>
-                  ))}
-                  {showCustomEyeTrackingSampleSize ? (
-                    <Grid className={classes.customSizeInputBox} component="form" onSubmit={handleSubmitESS(_onSubmitESS)} autoComplete="off" noValidate>
-                      <InputTextfield
-                        fullWidth
-                        autoFocus
-                        type="number"
-                        placeholder={t('target_sample_size_placeholder')}
-                        translation-key-placeholder="target_sample_size_placeholder"
-                        inputRef={registerESS("eyeTrackingSampleSize")}
-                      />
-                      {isValidESS ? (
-                        <Button
-                          type="submit"
-                          btnType={BtnType.Outlined}
-                          className={classes.btnSize}
-                          children={<TextBtnSmall translation-key="common_save">{t("common_save")}</TextBtnSmall>}
-                          startIcon={<Save />}
-                        />
-                      ) : (
-                        <Button
-                          btnType={BtnType.Outlined}
-                          className={classes.btnSize}
-                          onClick={onClearCustomEyeTrackingSampleSize}
-                          children={<TextBtnSmall translation-key="common_cancel">{t('common_cancel')}</TextBtnSmall>}
-                        />
-                      )}
-                    </Grid>
-                  ) : (
-                    isCustomEyeTrackingSampleSize ? (
-                      <ChipCustom
-                        selected
-                        disabled={!editable}
-                        label={project?.eyeTrackingSampleSize || "0"}
-                        variant="outlined"
-                        deleteIcon={<Edit />}
-                        onDelete={onCustomEyeTrackingSampleSize}
-                      />
-                    ) : (
-                      <ChipCustom
-                        clickable
-                        variant="filled"
-                        disabled={!editable}
-                        label={t('target_sample_size_custom')}
-                        translation-key="target_sample_size_custom"
-                        onClick={onCustomEyeTrackingSampleSize}
-                      />
-                    )
-                  )}
-                </Grid>
-                {(errorsESS.eyeTrackingSampleSize && showCustomEyeTrackingSampleSize) && <ParagraphSmall mt={1} $colorName="--red-error">{errorsESS.eyeTrackingSampleSize?.message}</ParagraphSmall>}
-              </Grid>
-            </Grid>
+            <ChooseEyeTrackingSampleSize
+              editable={editable}
+              projectId={projectId}
+            />
           )}
           <Grid mt={4} id={TARGET_SECTION.SELECT_TARGET}>
             <Heading4
@@ -624,7 +261,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
               $colorName="--eerie-black"
               translation-key="target_who_do_you_want_target_title"
             >
-              {t("target_who_do_you_want_target_title", {project: project?.enableEyeTracking ? 3 : 2})}
+              {t("target_who_do_you_want_target_title", { project: project?.enableEyeTracking ? 3 : 2 })}
             </Heading4>
             <ParagraphBody $colorName="--gray-80" mt={1} translation-key="target_who_do_you_want_target_sub_title">
               {t("target_who_do_you_want_target_sub_title")}
@@ -708,8 +345,8 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
                       onClick={() => scrollToElement(TARGET_SECTION.SAMPLE_SIZE)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
                     >
-                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 1})}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_total_survey_samples">{t("project_right_panel_step_total_survey_samples", {project: project?.sampleSize || 0})}</Heading5>
+                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", { number: 1 })}</ParagraphExtraSmall>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_total_survey_samples">{t("project_right_panel_step_total_survey_samples", { project: project?.sampleSize || 0 })}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
                       <Chip
@@ -725,8 +362,8 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
                         onClick={() => scrollToElement(TARGET_SECTION.EYE_TRACKING_SAMPLE_SIZE)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
                       >
-                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: 2})}</ParagraphExtraSmall>
-                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_eye_tracking_samples">{t("project_right_panel_step_eye_tracking_samples", {project: project?.eyeTrackingSampleSize || 0})}</Heading5>
+                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", { number: 2 })}</ParagraphExtraSmall>
+                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_eye_tracking_samples">{t("project_right_panel_step_eye_tracking_samples", { project: project?.eyeTrackingSampleSize || 0 })}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
@@ -742,7 +379,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
                       onClick={() => scrollToElement(TARGET_SECTION.SELECT_TARGET)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
                     >
-                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", {number: project?.enableEyeTracking ? 3 : 2})}</ParagraphExtraSmall>
+                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", { number: project?.enableEyeTracking ? 3 : 2 })}</ParagraphExtraSmall>
                       <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_target_criteria_title">{t("project_right_panel_step_target_criteria_title")}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
@@ -808,11 +445,6 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
           onCancel={() => onChangeTab()}
         />
       </>)}
-      <PopupConfirmChangeSampleSize
-        data={confirmChangeSampleSizeData}
-        onClose={onCloseConfirmChangeSampleSize}
-        onConfirm={onConfirmedChangeSamleSize}
-      />
     </PageRoot>
   )
 })
