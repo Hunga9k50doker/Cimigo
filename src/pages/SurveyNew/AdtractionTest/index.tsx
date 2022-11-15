@@ -159,11 +159,11 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><AddVideoIcon active /></RPStepIconBox>}
                     >
                       <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", { number: 1 })}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="">Add videos (2)</Heading5>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_add_video">{t("project_right_panel_step_add_video",  {number: project?.videos?.length || 0})}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black" translation-key="">
-                        Ads videos you want to test.
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_add_video_sub_title">
+                        {t("project_right_panel_step_add_video_sub_title")}
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
@@ -190,7 +190,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.emotion_measurement)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><SentimentSatisfiedRounded /></RPStepIconBox>}>
                         <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", { number: project?.solution?.enableCustomQuestion ? 3 : 2 })}</ParagraphExtraSmall>
-                        <Heading5 className="title" $colorName="--gray-60" translation-key="">Emotion measurement</Heading5>
+                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_emotion">{t("project_right_panel_step_emotion")}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip

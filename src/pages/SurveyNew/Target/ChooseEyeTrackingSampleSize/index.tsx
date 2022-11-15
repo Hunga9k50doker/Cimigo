@@ -77,10 +77,10 @@ export const ChooseEyeTrackingSampleSize = memo(({ projectId, editable }: Props)
         const max = _sampleSize >= maxEyeTrackingSampeSize ? maxEyeTrackingSampeSize : _sampleSize
         return yup.object().shape({
           eyeTrackingSampleSize: yup.number()
-            .typeError('Number of respondents for emotion measurement is required.')
-            .required('Number of respondents for emotion measurement is required.')
-            .min(minEyeTrackingSampeSize, `Number of respondents for emotion measurement must be greater than or equal to ${minEyeTrackingSampeSize}.`)
-            .max(max, `Number of respondents for emotion measurement must be less than or equal to ${max} (total survey respondents).`)
+            .typeError(t("target_eye_tracking_number_respondents_required"))
+            .required(t("target_eye_tracking_number_respondents_required"))
+            .min(minEyeTrackingSampeSize, t("target_eye_tracking_number_respondents_greater", {number: minEyeTrackingSampeSize}))
+            .max(max, t("target_eye_tracking_number_respondents_max", {number: max}))
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -156,12 +156,14 @@ export const ChooseEyeTrackingSampleSize = memo(({ projectId, editable }: Props)
             <Heading4
               $fontSizeMobile={"16px"}
               $colorName="--eerie-black"
-              translation-key=""
+              translation-key="target_how_many_respondents_emotion_measurement"
             >
-              STEP 2: Additionally, how many respondents do you want to target for emotion measurement?
+              {t('target_how_many_respondents_emotion_measurement', { step: 2 })}
+
+              
             </Heading4>
-            <ParagraphBody $colorName="--gray-80" mt={1} translation-key="">
-              Please select an additional number of participants for the emotion measurement section only. To ensure quality, a minimum of {minEyeTrackingSampeSize} samples are required.
+            <ParagraphBody $colorName="--gray-80" mt={1} translation-key="target_how_many_respondents_emotion_measurement_sub_title">
+            {t('target_how_many_respondents_emotion_measurement_sub_title', { number: minEyeTrackingSampeSize })}
             </ParagraphBody>
           </>
         )

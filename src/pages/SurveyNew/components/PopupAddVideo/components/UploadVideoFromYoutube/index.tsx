@@ -27,7 +27,7 @@ interface Props {
 }
 
 const UploadVideoFromYoutube = ({ onSubmit }: Props) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const dispatch = useDispatch()
 
@@ -84,20 +84,21 @@ const UploadVideoFromYoutube = ({ onSubmit }: Props) => {
   return (
     <>
       <Grid component="form" onSubmit={handleSubmit(_onSubmit)}>
-        <ParagraphSmall $colorName="--eerie-black">If your video ads have been made public on YouTube, this is the preferred method. The advantage of this method is that you can upload large files with no size restrictions.</ParagraphSmall>
+        <ParagraphSmall $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_upload_youtube_title">{t("setup_adtraction_test_popup_video_upload_youtube_title")}</ParagraphSmall>
         <Grid
           className={classes.videoUp}
         >
           <Grid className={classes.boxUploading}>
             <Grid className={classes.boxUploadingTitle}>
-              <Heading4 $colorName="--gray-90" className={classes.titleUploadFile}>Select video from Youtube</Heading4>
-              <ParagraphSmall $colorName="--gray-60">Enter your Youtube video link in the following box and press Load video button</ParagraphSmall>
+              <Heading4 $colorName="--gray-90" className={classes.titleUploadFile} translation-key="setup_adtraction_test_popup_video_upload_youtube_select_video">{t("setup_adtraction_test_popup_video_upload_youtube_select_video")}</Heading4>
+              <ParagraphSmall $colorName="--gray-60" translation-key="setup_adtraction_test_popup_video_upload_youtube_enter_link">{t("setup_adtraction_test_popup_video_upload_youtube_enter_link")}</ParagraphSmall>
             </Grid>
             <Grid className={classes.boxUploadingFile}>
               <Grid className={classes.boxInput}>
                 <InputTextfield
                   fullWidth
-                  placeholder="e.g: https://youtu.be/PwO8ttltUqA"
+                  translation-key-placeholder="setup_adtraction_test_popup_video_upload_youtube_placeholder"
+                  placeholder={t("setup_adtraction_test_popup_video_upload_youtube_placeholder")}
                   inputRef={register("linkVideo")}
                   autoFocus
                   autoComplete="off"
@@ -105,19 +106,22 @@ const UploadVideoFromYoutube = ({ onSubmit }: Props) => {
                   errorMessage={errors.linkVideo?.message}
                 />
               </Grid>
-              <Button btnType={BtnType.Primary} className={classes.btnUpload} type="submit">Load video</Button>
+              <Button btnType={BtnType.Primary} className={classes.btnUpload} type="submit"  translation-key="setup_adtraction_test_popup_video_upload_youtube_btn_load">{t("setup_adtraction_test_popup_video_upload_youtube_btn_load")}</Button>
             </Grid>
           </Grid>
         </Grid>
         <Grid sx={{ mt: 2 }}>
-          <Heading5 className={classes.textTitleFooter} translation-key="">Youtube video requirements:</Heading5>
+          <Heading5 className={classes.textTitleFooter} translation-key="setup_adtraction_test_popup_video_upload_youtube_requirements">{t("setup_adtraction_test_popup_video_upload_youtube_requirements")}</Heading5>
           <div className={classes.textInfo}>
-            <ParagraphSmall $colorName="--eerie-black" translation-key="">
-              The video from YouTube must be available in the <span>public mode.</span>.
+            <ParagraphSmall $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_upload_youtube_requirements_public"
+            dangerouslySetInnerHTML={{ __html: t("setup_adtraction_test_popup_video_upload_youtube_requirements_public")}}
+            >
             </ParagraphSmall>
           </div>
           <div className={classes.textInfo}>
-            <ParagraphSmall $colorName="--eerie-black" translation-key="">Maximum video duration is <span>2 minutes</span>.</ParagraphSmall>
+            <ParagraphSmall $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_upload_youtube_requirements_duration"
+            dangerouslySetInnerHTML={{ __html: t("setup_adtraction_test_popup_video_upload_youtube_requirements_duration")}}   
+            ></ParagraphSmall>
           </div>
         </Grid>
       </Grid>

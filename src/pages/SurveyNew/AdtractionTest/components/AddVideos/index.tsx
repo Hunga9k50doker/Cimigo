@@ -127,22 +127,25 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       <Heading4
         $fontSizeMobile={"16px"}
         $colorName="--eerie-black"
-        translation-key=""
+        translation-key="setup_survey_adtraction_test_add_video_title"
         sx={{ display: "inline-block", verticalAlign: "middle" }}
       >
-        STEP 1: Add videos that want you to test
+        {t("setup_survey_adtraction_test_add_video_title", {number: 1})}
       </Heading4>
       <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxVideo}</ParagraphSmall>} />
-      <ParagraphBody $colorName="--gray-80" mt={1} translation-key="">
-        Please upload your advertising videos that you want to include in this test. Your advertising videos  are compared to a benchmark of over 500 advertisements, to find out specific strengths and weaknesses.
+      <ParagraphBody $colorName="--gray-80" mt={1} translation-key="setup_survey_adtraction_test_add_video_sub_title">
+        {t("setup_survey_adtraction_test_add_video_sub_title")}
       </ParagraphBody>
       {!!videoNeedMore && (
         <NoteWarning>
-          <ParagraphSmall translation-key=""
+          <ParagraphSmall translation-key="setup_add_videos_note_warning"
             $colorName="--warning-dark"
             sx={{ "& > span": { fontWeight: 600 } }}
+            dangerouslySetInnerHTML={{
+              __html: t("setup_add_videos_note_warning", {
+              number: videoNeedMore,}),
+              }}
           >
-            You need to upload at least <span>{videoNeedMore} more videos</span>.
           </ParagraphSmall>
         </NoteWarning>
       )}
@@ -165,7 +168,7 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
         btnType={BtnType.Outlined}
         translation-key=""
         startIcon={<IconAddVideoMenu />}
-        children={<TextBtnSmall>Add videos</TextBtnSmall>}
+        children={<TextBtnSmall translation-key="setup_adtraction_test_btn_add_video">{t("setup_adtraction_test_btn_add_video")}</TextBtnSmall>}
         endIcon={<ArrowDropDownIcon sx={{ fontSize: "16px !important" }} />}
       />
       <Menu
@@ -176,15 +179,15 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       >
         <MenuItem className={classes.menuItem} onClick={() => onOpenPopupAddVideo(EVIDEO_TYPE.UPLOAD)}>
           <BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />
-          <ParagraphExtraSmall className={classes.menuItemText}>From your device</ParagraphExtraSmall>
+          <ParagraphExtraSmall className={classes.menuItemText} translation-key="setup_adtraction_test_add_video_from_device">{t("setup_adtraction_test_add_video_from_device")}</ParagraphExtraSmall>
         </MenuItem>
         <MenuItem className={classes.menuItem} onClick={() => onOpenPopupAddVideo(EVIDEO_TYPE.YOUTUBE)}>
           <YouTubeIcon sx={{ color: '#DD352E' }} />
-          <ParagraphExtraSmall className={classes.menuItemText}>From Youtube</ParagraphExtraSmall>
+          <ParagraphExtraSmall className={classes.menuItemText}  translation-key="setup_adtraction_test_add_video_from_youtube">{t("setup_adtraction_test_add_video_from_youtube")}</ParagraphExtraSmall>
         </MenuItem>
       </Menu>
       {!enableAddVideos && (
-        <ParagraphSmall mt={1} translation-key="" $colorName="--red-error">You can only add a maximum of {maxVideo} videos.</ParagraphSmall>
+        <ParagraphSmall mt={1} translation-key="setup_survey_add_video_error_max" $colorName="--red-error">{t("setup_survey_add_video_error_max", {number: maxVideo})}</ParagraphSmall>
       )}
       <Menu
         $minWidth={"120px"}
@@ -225,8 +228,8 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       )}
       <PopupConfirmDelete
         isOpen={!!videoDelete}
-        title={'Delete this video?'}
-        description={'Are you sure you want to delete this video?'}
+        title={t("setup_add_video_confirm_delete")}
+        description={t("setup_add_video_confirm_delete_sub")}
         onCancel={() => setVideoDelete(null)}
         onDelete={onDeleteVideo}
       />

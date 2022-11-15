@@ -53,10 +53,10 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
 
   const schema = useMemo(() => {
     return yup.object().shape({
-      name: yup.string().required("Video name is required"),
-      brand: yup.string().required("Brand name is required"),
-      product: yup.string().required("Product name is required"),
-      keyMessage: yup.string().required("Key name is required"),
+      name: yup.string().required(t("setup_adtraction_test_popup_video_information_video_name_validate")),
+      brand: yup.string().required(t("setup_adtraction_test_popup_video_information_brand_name_validate")),
+      product: yup.string().required(t("setup_adtraction_test_popup_video_information_product_name_validate")),
+      keyMessage: yup.string().required(t("setup_adtraction_test_popup_video_information_key_message_validate")),
       marketingStageId: yup.number(),
     })
   }, [i18n.language]);
@@ -103,14 +103,15 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
         <Grid className={classes.root}>
           <Grid className={classes.containerInformation}>
             <Box sx={{ mb: 3 }}>
-              <Heading4 $colorName="--eerie-black">Video information</Heading4>
-              <ParagraphSmall $colorName="--gray-80">Please enter some information about your video.</ParagraphSmall>
+              <Heading4 $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_information_title">{t("setup_adtraction_test_popup_video_information_title")}</Heading4>
+              <ParagraphSmall $colorName="--gray-80" translation-key="setup_adtraction_test_popup_video_information_sub_title">{t("setup_adtraction_test_popup_video_information_sub_title")}</ParagraphSmall>
             </Box>
             <Box sx={{ mb: 3 }}>
-              <Heading5 $colorName="--eerie-black">Video name</Heading5>
-              <ParagraphSmall $colorName="--gray-80" sx={{ mb: 1 }}>This name will be used to distinguish videos in the results.</ParagraphSmall>
+              <Heading5 $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_information_video_name">{t("setup_adtraction_test_popup_video_information_video_name")}</Heading5>
+              <ParagraphSmall $colorName="--gray-80" sx={{ mb: 1 }} translation-key="setup_adtraction_test_popup_video_information_video_name_sub">{t("setup_adtraction_test_popup_video_information_video_name_sub")}</ParagraphSmall>
               <InputTextfield
-                placeholder="Enter video name"
+                translation-key-placeholder="setup_adtraction_test_popup_video_information_video_name_placeholder"
+                placeholder={t("setup_adtraction_test_popup_video_information_video_name_placeholder")}
                 type="text"
                 autoFocus
                 autoComplete="off"
@@ -120,17 +121,17 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
             </Box>
             <Box>
               <Box className={classes.boxMarketingStage}>
-                <Heading5 $colorName="--eerie-black">Marketing stage</Heading5>
+                <Heading5 $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_information_marketing_stage">{t("setup_adtraction_test_popup_video_information_marketing_stage")}</Heading5>
                 <BasicTooltip arrow title={
                   <div>
-                    <Heading6>What is the key message?</Heading6>
-                    <ParagraphExtraSmall>A key message is the main point of information you want your audience to hear, understand, and remember throughout your video ads.</ParagraphExtraSmall>
+                    <Heading6 translation-key="setup_adtraction_test_popup_video_information_question_key_message">{t("setup_adtraction_test_popup_video_information_question_key_message")}</Heading6>
+                    <ParagraphExtraSmall translation-key="setup_adtraction_test_popup_video_information_question_key_message_sub">{t("setup_adtraction_test_popup_video_information_question_key_message_sub")}</ParagraphExtraSmall>
                   </div>
                 }>
                   <HelpOutlineIcon sx={{ ml: 1, fontSize: "16px", color: "var(--gray-40)" }}></HelpOutlineIcon>
                 </BasicTooltip>
               </Box>
-              <ParagraphSmall $colorName="--gray-80">Is this video available on the market (post-launch) or in the testing stage (pre-launch)?</ParagraphSmall>
+              <ParagraphSmall $colorName="--gray-80" translation-key="setup_adtraction_test_popup_video_information_question_launch">{t("setup_adtraction_test_popup_video_information_question_launch")}</ParagraphSmall>
               <Box sx={{ mt: 1 }}>
                 <Controller
                   name="marketingStageId"
@@ -155,7 +156,7 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
                             }}
                           />
                         }
-                        label={<ParagraphSmall $colorName="--eerie-black">Post-launch</ParagraphSmall>}
+                        label={<ParagraphSmall $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_information_post_launch">{t("setup_adtraction_test_popup_video_information_post_launch")}</ParagraphSmall>}
                       />
                       <FormControlLabel
                         control={
@@ -167,20 +168,22 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
                             }}
                           />
                         }
-                        label={<ParagraphSmall $colorName="--eerie-black">Pre-launch</ParagraphSmall>}
+                        label={<ParagraphSmall $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_information_pre_launch">{t("setup_adtraction_test_popup_video_information_pre_launch")}</ParagraphSmall>}
                       />
                     </RadioGroup>
                   )}
                 />
               </Box>
               <Box sx={{ mt: 3 }}>
-                <Heading5 $colorName="--eerie-black">Brand-related information:</Heading5>
-                <ParagraphSmall $colorName="--eerie-black">Please enter the information below about your product mentioned in the video.</ParagraphSmall>
+                <Heading5 $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_information_brand_related">{t("setup_adtraction_test_popup_video_information_brand_related")}</Heading5>
+                <ParagraphSmall $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_information_brand_related_sub">{t("setup_adtraction_test_popup_video_information_brand_related_sub")}</ParagraphSmall>
                 <Grid container columnSpacing={{ xs: 0, sm: 2 }} rowSpacing={2} className={classes.containerInput}>
                   <Grid item xs={12} sm={6}>
                     <InputTextfield
-                      title="Brand name"
-                      placeholder="e.g. Pepsi"
+                      translation-key="setup_adtraction_test_popup_video_information_brand_name"
+                      translation-key-placeholder="setup_adtraction_test_popup_video_information_brand_name_placeholder"
+                      title={t("setup_adtraction_test_popup_video_information_brand_name")}
+                      placeholder={t("setup_adtraction_test_popup_video_information_brand_name_placeholder")}
                       type="text"
                       autoFocus
                       autoComplete="off"
@@ -190,8 +193,10 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <InputTextfield
-                      title="Product name"
-                      placeholder="e.g. Pepsi Zero Sugar"
+                      translation-key="setup_adtraction_test_popup_video_information_product_name"
+                      translation-key-placeholder="setup_adtraction_test_popup_video_information_product_name_placeholder"                    
+                      title={t("setup_adtraction_test_popup_video_information_product_name")}
+                      placeholder={t("setup_adtraction_test_popup_video_information_product_name_placeholder")}
                       type="text"
                       autoFocus
                       autoComplete="off"
@@ -201,11 +206,11 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
                   </Grid>
                   <Grid item xs={12}>
                     <Box className={classes.boxKeyMessage}>
-                      <ParagraphSmall $colorName="--eerie-black">Key message of your video</ParagraphSmall>
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_information_key_message">{t("setup_adtraction_test_popup_video_information_key_message")}</ParagraphSmall>
                       <BasicTooltip arrow title={
                         <div>
-                          <Heading6>What is the key message?</Heading6>
-                          <ParagraphExtraSmall>A key message is the main point of information you want your audience to hear, understand, and remember throughout your video ads.</ParagraphExtraSmall>
+                          <Heading6 translation-key="setup_adtraction_test_popup_video_information_question_key_message">{t("setup_adtraction_test_popup_video_information_question_key_message")}</Heading6>
+                          <ParagraphExtraSmall translation-key="setup_adtraction_test_popup_video_information_question_key_message_sub">{t("setup_adtraction_test_popup_video_information_question_key_message_sub")}</ParagraphExtraSmall>
                         </div>
                       }>
                         <HelpOutlineIcon sx={{ ml: 1, fontSize: "16px", color: "var(--gray-40)" }}></HelpOutlineIcon>
@@ -213,7 +218,8 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
                     </Box>
                     <Grid className={classes.boxInputTextArea}>
                       <InputTextfield
-                        placeholder="Enter key message"
+                        translation-key-placeholder="setup_adtraction_test_popup_video_information_key_message_text"  
+                        placeholder={t("setup_adtraction_test_popup_video_information_key_message_text")}
                         className={classes.inputTextArea}
                         infor={`${keyMessage?.length}/${CHARACTER_LIMIT}`}
                         inputRef={register("keyMessage")}
@@ -255,8 +261,8 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
           </Grid>
         </Grid>
         <Grid className={classes.boxAction}>
-          <Button btnType={BtnType.Primary} type="submit" className={classes.btnNext}>
-            Next
+          <Button btnType={BtnType.Primary} type="submit" className={classes.btnNext} translation-key="common_next">
+            {t("common_next")}
           </Button>
         </Grid>
       </Grid>

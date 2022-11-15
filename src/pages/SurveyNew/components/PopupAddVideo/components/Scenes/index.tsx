@@ -55,9 +55,9 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
       scenes: yup
         .array(yup.object({
           id: yup.number().empty().notRequired(),
-          name: yup.string().required("Scenes name is required"),
-          startTime: yup.date().typeError("Start time is required").required("Start time is required"),
-          endTime: yup.date().typeError("End time is required").required("End time is required"),
+          name: yup.string().required(t("setup_adtraction_test_popup_video_scenes_validate")),
+          startTime: yup.date().typeError(t("setup_adtraction_test_popup_video_start_time_validate")).required(t("setup_adtraction_test_popup_video_start_time_validate")),
+          endTime: yup.date().typeError(t("setup_adtraction_test_popup_video_end_time_validate")).required(t("setup_adtraction_test_popup_video_end_time_validate")),
         }))
         .required(),
     })
@@ -129,19 +129,19 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
         <Grid className={classes.root} container>
           <Grid className={classes.containerInformation} item xs={8}>
             <Box sx={{ mb: 3 }}>
-              <Heading4 $colorName="--eerie-black">Define scenes</Heading4>
-              <ParagraphSmall $colorName="--gray-80" className={classes.subInformation}>If you already have some key scenes, let us know.</ParagraphSmall>
+              <Heading4 $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_title">{t("setup_adtraction_test_popup_video_title")}</Heading4>
+              <ParagraphSmall $colorName="--gray-80" className={classes.subInformation} translation-key="setup_adtraction_test_popup_video__sub_title">{t("setup_adtraction_test_popup_video__sub_title")}</ParagraphSmall>
             </Box>
             <Grid>
               <Grid container className={classes.boxSubTitle}>
                 <Grid item xs={4}>
-                  <SubTitle>Scene name</SubTitle>
+                  <SubTitle translation-key="setup_adtraction_test_popup_video_sub_scene_name">{t("setup_adtraction_test_popup_video_sub_scene_name")}</SubTitle>
                 </Grid>
                 <Grid item xs={3} className={classes.boxTitleStart}>
-                  <SubTitle>Start time</SubTitle>
+                  <SubTitle translation-key="setup_adtraction_test_popup_video_sub_star_time">{t("setup_adtraction_test_popup_video_sub_star_time")}</SubTitle>
                 </Grid>
                 <Grid item xs={3} className={classes.boxTitleEnd}>
-                  <SubTitle>End time</SubTitle>
+                  <SubTitle translation-key="setup_adtraction_test_popup_video_sub_end_time">{t("setup_adtraction_test_popup_video_sub_end_time")}</SubTitle>
                 </Grid>
               </Grid>
 
@@ -175,7 +175,8 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                                   >
                                     <Grid item xs={6} className={classes.textContent}>
                                       <InputLineTextfield
-                                        placeholder="e.g. Mở bật nắp chai"
+                                        translation-key-placeholder="setup_adtraction_test_popup_video_scene_name_placeholder"
+                                        placeholder={t("setup_adtraction_test_popup_video_scene_name_placeholder")}
                                         inputProps={{ tabIndex: 1 }}
                                         inputRef={register(`scenes.${index}.name`)}
                                         errorMessage={errors.scenes?.[index]?.name?.message}
@@ -195,7 +196,7 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                                           )}
                                         />
                                       </Grid>
-                                      <ParagraphSmall $colorName="--eerie-black" className={classes.textTo}>to</ParagraphSmall>
+                                      <ParagraphSmall $colorName="--eerie-black" className={classes.textTo} translation-key="setup_adtraction_test_popup_video_to">{t("setup_adtraction_test_popup_video_to")}</ParagraphSmall>
                                       <Grid sx={{ paddingLeft: "24px" }}>
                                       <Controller
                                           name={`scenes.${index}.endTime`}
@@ -213,7 +214,7 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                                   </Grid>
                                   <div className={classes.closeInputAttribute}>
                                     <Grid className={classes.textNumberScenes}>
-                                        <SubTitle $colorName="--gray-80">Scene {index + 1} </SubTitle>
+                                        <SubTitle $colorName="--gray-80" translation-key="setup_adtraction_test_popup_video_scene_number">{t("setup_adtraction_test_popup_video_scene_number", {number: index+1})}</SubTitle>
                                     </Grid>
                                     <CloseIcon
                                       onClick={onDeleteScenes(index)}
@@ -235,8 +236,8 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
               <Grid className={classes.addList}>
                 <div className={classes.addOptions} onClick={onAddScenes}>
                   <PlaylistAddIcon className={classes.IconListAdd} />
-                  <ParagraphBody $colorName="--eerie-black-65" translation-key="">
-                    Click to add scene
+                  <ParagraphBody $colorName="--eerie-black-65" translation-key="setup_adtraction_test_popup_video_click_add_scene">
+                    {t("setup_adtraction_test_popup_video_click_add_scene")}
                   </ParagraphBody>
                 </div>
               </Grid>
@@ -299,15 +300,17 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
           <Button
             btnType={BtnType.Secondary}
             onClick={onBack}
+            translation-key="common_back"
           >
-            Back
+            {t("common_back")}
           </Button>
           <Button
             btnType={BtnType.Primary}
             type="submit"
             className={classes.btnSave}
+            translation-key="common_save"
           >
-            Save
+            {t("common_save")}
           </Button>
         </Grid>
       </Grid>
