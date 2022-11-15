@@ -6,7 +6,6 @@ import {
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import classes from "./styles.module.scss";
-import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 import Button, { BtnType } from "components/common/buttons/Button"
 import Heading4 from "components/common/text/Heading4";
@@ -22,6 +21,7 @@ import { IconBranding, IconMessage, IconProduct } from "components/icons";
 import { EVIDEO_TYPE, VIDEO_UPLOAD_STEP, VIDEO_YOUTUBE_STEP, INFORMATION_STEP, SCENES_STEP } from "models/video";
 import moment from "moment";
 import TimePicker from "components/common/inputs/TimePicker";
+import yup from "config/yup.custom";
 
 const MAX_SCENES = 20;
 
@@ -50,18 +50,40 @@ interface Props {
 
 const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, onBack, onSubmit }: Props) => {
   const { t, i18n } = useTranslation();
+
+  const duration = useMemo(() => {
+    switch (type) {
+      case EVIDEO_TYPE.UPLOAD:
+        return videoFromDevice?.duration ?? 0
+      case EVIDEO_TYPE.YOUTUBE:
+        return videoFromYoutube?.duration ?? 0
+    }
+  }, [type, videoFromDevice, videoFromYoutube])
+
   const schema = useMemo(() => {
+    const min = moment().startOf("day").toDate()
+    const max = moment().startOf("day").add(duration, "seconds").toDate()
     return yup.object().shape({
       scenes: yup
         .array(yup.object({
           id: yup.number().empty().notRequired(),
           name: yup.string().required("Scenes name is required"),
-          startTime: yup.date().typeError("Start time is required").required("Start time is required"),
-          endTime: yup.date().typeError("End time is required").required("End time is required"),
+          startTime: yup.date()
+            .typeError("Start time is required")
+            .startTime()
+            .min(min, `Start time must be greater than or equal to ${moment(min).format('mm:ss')}`)
+            .max(max, `Start time must be less than or equal ${moment(max).format('mm:ss')}`)
+            .required("Start time is required"),
+          endTime: yup.date()
+            .typeError("End time is required")
+            .endTime()
+            .min(min, `End time must be greater than or equal to ${moment(min).format('mm:ss')}`)
+            .max(max, `End time must be less than or equal ${moment(max).format('mm:ss')}`)
+            .required("End time is required"),
         }))
         .required(),
     })
-  }, [i18n.language]);
+  }, [i18n.language, duration]);
 
   const {
     control,
@@ -96,7 +118,6 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
 
   useEffect(() => {
     if (data) {
-      console.log(data, "====data====");
       reset({
         scenes: data.scenes.map(item => ({
           id: item.id,
@@ -197,7 +218,7 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                                       </Grid>
                                       <ParagraphSmall $colorName="--eerie-black" className={classes.textTo}>to</ParagraphSmall>
                                       <Grid sx={{ paddingLeft: "24px" }}>
-                                      <Controller
+                                        <Controller
                                           name={`scenes.${index}.endTime`}
                                           control={control}
                                           render={({ field }) => (
@@ -213,12 +234,12 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                                   </Grid>
                                   <div className={classes.closeInputAttribute}>
                                     <Grid className={classes.textNumberScenes}>
-                                        <SubTitle $colorName="--gray-80">Scene {index + 1} </SubTitle>
+                                      <SubTitle $colorName="--gray-80">Scene {index + 1} </SubTitle>
                                     </Grid>
                                     <CloseIcon
                                       onClick={onDeleteScenes(index)}
                                       type="button"
-                                      sx={{color: "var(--eerie-black-65)"}}
+                                      sx={{ color: "var(--eerie-black-65)" }}
                                     >
                                     </CloseIcon>
                                   </div>
