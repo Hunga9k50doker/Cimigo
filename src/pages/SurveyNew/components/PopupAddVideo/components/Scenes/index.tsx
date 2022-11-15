@@ -166,9 +166,6 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                               >
-                                <Grid className={classes.textNumberScenes}>
-                                  <SubTitle $colorName="--gray-80">Scene {index + 1} </SubTitle>
-                                </Grid>
                                 <div className={classes.rowScenesControl}>
                                   <Grid
                                     container
@@ -214,12 +211,17 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                                       </Grid>
                                     </Grid>
                                   </Grid>
-                                  <CloseIcon
-                                    onClick={onDeleteScenes(index)}
-                                    type="button"
-                                    className={classes.closeInputAttribute}
-                                  >
-                                  </CloseIcon>
+                                  <div className={classes.closeInputAttribute}>
+                                    <Grid className={classes.textNumberScenes}>
+                                        <SubTitle $colorName="--gray-80">Scene {index + 1} </SubTitle>
+                                    </Grid>
+                                    <CloseIcon
+                                      onClick={onDeleteScenes(index)}
+                                      type="button"
+                                      sx={{color: "var(--eerie-black-65)"}}
+                                    >
+                                    </CloseIcon>
+                                  </div>
                                 </div>
                               </div>
                             )}
