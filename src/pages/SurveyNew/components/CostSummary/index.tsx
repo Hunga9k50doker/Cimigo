@@ -8,7 +8,7 @@ import { memo } from "react"
 import { useSelector } from "react-redux"
 import { ReducerType } from "redux/reducers"
 import { useTranslation } from "react-i18next"
-import { eyeTrackingTranslationKey } from "models"
+import { ESOLUTION_TYPE } from "models/solution";
 
 interface CostSummaryProps {
   price: TotalPrice,
@@ -38,7 +38,12 @@ const CostSummary = memo(({ project, price }: CostSummaryProps) => {
       )}
       {project.enableEyeTracking && (
         <Box display="flex" alignItems="center" justifyContent="space-between" mt={0.5}>
-          <ParagraphSmall $colorName="--eerie-black" translation-key={eyeTrackingTranslationKey[project?.solution?.typeId]}>{t(eyeTrackingTranslationKey[project?.solution?.typeId])} ({project?.eyeTrackingSampleSize || 0})</ParagraphSmall>
+          {project?.solution?.typeId === ESOLUTION_TYPE.PACK && 
+          <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_cost_summary_eye_tracking">{t("project_right_panel_cost_summary_eye_tracking")} ({project?.eyeTrackingSampleSize || 0})</ParagraphSmall>
+          }
+          {project?.solution?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && 
+          <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_cost_summary_eye_tracking_video">{t("project_right_panel_cost_summary_eye_tracking_video")} ({project?.eyeTrackingSampleSize || 0})</ParagraphSmall>
+          }
           <ParagraphSmall $colorName="--eerie-black">{price?.eyeTrackingSampleSizeCost?.show}</ParagraphSmall>
         </Box>
       )}

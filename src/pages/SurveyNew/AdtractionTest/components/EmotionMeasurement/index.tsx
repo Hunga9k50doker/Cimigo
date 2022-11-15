@@ -49,11 +49,11 @@ export const EmotionMeasurement = memo(({ price, project, step }: EmotionMeasure
           <Heading4
             $fontSizeMobile={"16px"}
             $colorName="--eerie-black"
-            translation-key="setup_adtraction_test_add_video_emotion_measurement"
+            translation-key="setup_video_choice_add_video_emotion_measurement"
             sx={{ display: "inline-block", verticalAlign: "middle" }}
             className={clsx({ [classes.titleDisabled]: !project?.enableEyeTracking })}
           >
-             {t("setup_adtraction_test_add_video_emotion_measurement", {number: step})}
+             {t("setup_video_choice_add_video_emotion_measurement", {number: step})}
           </Heading4>
         </Box>
         <Box>
@@ -68,10 +68,10 @@ export const EmotionMeasurement = memo(({ price, project, step }: EmotionMeasure
       <ParagraphBody
         $colorName="--gray-80"
         mt={1}
-        translation-key="setup_adtraction_test_add_video_emotion_measurement_sub_title"
+        translation-key="setup_video_choice_add_video_emotion_measurement_sub_title"
         className={clsx({ [classes.titleSubDisabled]: !project?.enableEyeTracking })}
       >
-        {t("setup_adtraction_test_add_video_emotion_measurement_sub_title")}
+        {t("setup_video_choice_add_video_emotion_measurement_sub_title")}
       </ParagraphBody>
     </Grid >
   )

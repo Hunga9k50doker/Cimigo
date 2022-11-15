@@ -51,9 +51,9 @@ const PopupAddVideo = (props: Props) => {
 
   const steps = useMemo(() => {
     return [
-      { id: EStep.UPLOAD_VIDEO, name: t("setup_adtraction_test_popup_add_video_upload_video"), icon: <SmartDisplayOutlinedIcon /> },
-      { id: EStep.INFORMATION, name: t("setup_adtraction_test_popup_add_video_information"), icon: <IconInformation /> },
-      { id: EStep.SCENES, name: t("setup_adtraction_test_popup_add_video_scenes"), icon: <IconScenesStep />, optional:t("setup_adtraction_test_popup_add_video_scenes_optional") },
+      { id: EStep.UPLOAD_VIDEO, name: t("setup_video_choice_popup_add_video_upload_video"), icon: <SmartDisplayOutlinedIcon /> },
+      { id: EStep.INFORMATION, name: t("setup_video_choice_popup_add_video_information"), icon: <IconInformation /> },
+      { id: EStep.SCENES, name: t("setup_video_choice_popup_add_video_scenes"), icon: <IconScenesStep />, optional:t("setup_video_choice_popup_add_video_scenes_optional") },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
@@ -205,8 +205,8 @@ const PopupAddVideo = (props: Props) => {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle>
-        <Heading3 translation-key="setup_adtraction_test_popup_add_video">
-          {t("setup_adtraction_test_popup_add_video")}
+        <Heading3 translation-key="setup_video_choice_popup_add_video">
+          {t("setup_video_choice_popup_add_video")}
         </Heading3>
         <ButtonCLose
           onClick={() => _onClose()}>

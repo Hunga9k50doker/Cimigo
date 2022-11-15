@@ -127,14 +127,14 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       <Heading4
         $fontSizeMobile={"16px"}
         $colorName="--eerie-black"
-        translation-key="setup_survey_adtraction_test_add_video_title"
+        translation-key="setup_survey_video_choice_add_video_title"
         sx={{ display: "inline-block", verticalAlign: "middle" }}
       >
-        {t("setup_survey_adtraction_test_add_video_title", {number: 1})}
+        {t("setup_survey_video_choice_add_video_title", {number: 1})}
       </Heading4>
       <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxVideo}</ParagraphSmall>} />
-      <ParagraphBody $colorName="--gray-80" mt={1} translation-key="setup_survey_adtraction_test_add_video_sub_title">
-        {t("setup_survey_adtraction_test_add_video_sub_title")}
+      <ParagraphBody $colorName="--gray-80" mt={1} translation-key="setup_survey_video_choice_add_video_sub_title">
+        {t("setup_survey_video_choice_add_video_sub_title")}
       </ParagraphBody>
       {!!videoNeedMore && (
         <NoteWarning>
@@ -168,7 +168,7 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
         btnType={BtnType.Outlined}
         translation-key=""
         startIcon={<IconAddVideoMenu />}
-        children={<TextBtnSmall translation-key="setup_adtraction_test_btn_add_video">{t("setup_adtraction_test_btn_add_video")}</TextBtnSmall>}
+        children={<TextBtnSmall translation-key="setup_video_choice_btn_add_video">{t("setup_video_choice_btn_add_video")}</TextBtnSmall>}
         endIcon={<ArrowDropDownIcon sx={{ fontSize: "16px !important" }} />}
       />
       <Menu
@@ -179,11 +179,11 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
       >
         <MenuItem className={classes.menuItem} onClick={() => onOpenPopupAddVideo(EVIDEO_TYPE.UPLOAD)}>
           <BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />
-          <ParagraphExtraSmall className={classes.menuItemText} translation-key="setup_adtraction_test_add_video_from_device">{t("setup_adtraction_test_add_video_from_device")}</ParagraphExtraSmall>
+          <ParagraphExtraSmall className={classes.menuItemText} translation-key="setup_video_choice_add_video_from_device">{t("setup_video_choice_add_video_from_device")}</ParagraphExtraSmall>
         </MenuItem>
         <MenuItem className={classes.menuItem} onClick={() => onOpenPopupAddVideo(EVIDEO_TYPE.YOUTUBE)}>
           <YouTubeIcon sx={{ color: '#DD352E' }} />
-          <ParagraphExtraSmall className={classes.menuItemText}  translation-key="setup_adtraction_test_add_video_from_youtube">{t("setup_adtraction_test_add_video_from_youtube")}</ParagraphExtraSmall>
+          <ParagraphExtraSmall className={classes.menuItemText}  translation-key="setup_video_choice_add_video_from_youtube">{t("setup_video_choice_add_video_from_youtube")}</ParagraphExtraSmall>
         </MenuItem>
       </Menu>
       {!enableAddVideos && (

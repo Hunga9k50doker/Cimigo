@@ -84,21 +84,21 @@ const UploadVideoFromYoutube = ({ onSubmit }: Props) => {
   return (
     <>
       <Grid component="form" onSubmit={handleSubmit(_onSubmit)}>
-        <ParagraphSmall $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_upload_youtube_title">{t("setup_adtraction_test_popup_video_upload_youtube_title")}</ParagraphSmall>
+        <ParagraphSmall $colorName="--eerie-black" translation-key="setup_video_choice_popup_video_upload_youtube_title">{t("setup_video_choice_popup_video_upload_youtube_title")}</ParagraphSmall>
         <Grid
           className={classes.videoUp}
         >
           <Grid className={classes.boxUploading}>
             <Grid className={classes.boxUploadingTitle}>
-              <Heading4 $colorName="--gray-90" className={classes.titleUploadFile} translation-key="setup_adtraction_test_popup_video_upload_youtube_select_video">{t("setup_adtraction_test_popup_video_upload_youtube_select_video")}</Heading4>
-              <ParagraphSmall $colorName="--gray-60" translation-key="setup_adtraction_test_popup_video_upload_youtube_enter_link">{t("setup_adtraction_test_popup_video_upload_youtube_enter_link")}</ParagraphSmall>
+              <Heading4 $colorName="--gray-90" className={classes.titleUploadFile} translation-key="setup_video_choice_popup_video_upload_youtube_select_video">{t("setup_video_choice_popup_video_upload_youtube_select_video")}</Heading4>
+              <ParagraphSmall $colorName="--gray-60" translation-key="setup_video_choice_popup_video_upload_youtube_enter_link">{t("setup_video_choice_popup_video_upload_youtube_enter_link")}</ParagraphSmall>
             </Grid>
             <Grid className={classes.boxUploadingFile}>
               <Grid className={classes.boxInput}>
                 <InputTextfield
                   fullWidth
-                  translation-key-placeholder="setup_adtraction_test_popup_video_upload_youtube_placeholder"
-                  placeholder={t("setup_adtraction_test_popup_video_upload_youtube_placeholder")}
+                  translation-key-placeholder="setup_video_choice_popup_video_upload_youtube_placeholder"
+                  placeholder={t("setup_video_choice_popup_video_upload_youtube_placeholder")}
                   inputRef={register("linkVideo")}
                   autoFocus
                   autoComplete="off"
@@ -106,21 +106,21 @@ const UploadVideoFromYoutube = ({ onSubmit }: Props) => {
                   errorMessage={errors.linkVideo?.message}
                 />
               </Grid>
-              <Button btnType={BtnType.Primary} className={classes.btnUpload} type="submit"  translation-key="setup_adtraction_test_popup_video_upload_youtube_btn_load">{t("setup_adtraction_test_popup_video_upload_youtube_btn_load")}</Button>
+              <Button btnType={BtnType.Primary} className={classes.btnUpload} type="submit"  translation-key="setup_video_choice_popup_video_upload_youtube_btn_load">{t("setup_video_choice_popup_video_upload_youtube_btn_load")}</Button>
             </Grid>
           </Grid>
         </Grid>
         <Grid sx={{ mt: 2 }}>
-          <Heading5 className={classes.textTitleFooter} translation-key="setup_adtraction_test_popup_video_upload_youtube_requirements">{t("setup_adtraction_test_popup_video_upload_youtube_requirements")}</Heading5>
+          <Heading5 className={classes.textTitleFooter} translation-key="setup_video_choice_popup_video_upload_youtube_requirements">{t("setup_video_choice_popup_video_upload_youtube_requirements")}</Heading5>
           <div className={classes.textInfo}>
-            <ParagraphSmall $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_upload_youtube_requirements_public"
-            dangerouslySetInnerHTML={{ __html: t("setup_adtraction_test_popup_video_upload_youtube_requirements_public")}}
+            <ParagraphSmall $colorName="--eerie-black" translation-key="setup_video_choice_popup_video_upload_youtube_requirements_public"
+            dangerouslySetInnerHTML={{ __html: t("setup_video_choice_popup_video_upload_youtube_requirements_public")}}
             >
             </ParagraphSmall>
           </div>
           <div className={classes.textInfo}>
-            <ParagraphSmall $colorName="--eerie-black" translation-key="setup_adtraction_test_popup_video_upload_youtube_requirements_duration"
-            dangerouslySetInnerHTML={{ __html: t("setup_adtraction_test_popup_video_upload_youtube_requirements_duration")}}   
+            <ParagraphSmall $colorName="--eerie-black" translation-key="setup_video_choice_popup_video_upload_youtube_requirements_duration"
+            dangerouslySetInnerHTML={{ __html: t("setup_video_choice_popup_video_upload_youtube_requirements_duration")}}   
             ></ParagraphSmall>
           </div>
         </Grid>

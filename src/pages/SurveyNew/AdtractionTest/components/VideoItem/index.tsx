@@ -76,8 +76,8 @@ const VideoItem = memo(({ item, editable, onAction }: VideoItemProps) => {
               <Grid sx={{flex: 1}}>
                 <ShowMoreText
                   lines={2}
-                  more={t("setup_adtraction_test_video_item_show_more")}
-                  less={t("setup_adtraction_test_video_item_show_less")}
+                  more={t("setup_video_choice_video_item_show_more")}
+                  less={t("setup_video_choice_video_item_show_less")}
                   anchorClass={classes.textControl}
                   expanded={false}
                   width={480}
