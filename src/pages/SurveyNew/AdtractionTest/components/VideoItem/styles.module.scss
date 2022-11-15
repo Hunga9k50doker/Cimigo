@@ -71,13 +71,17 @@
     svg{
         margin-top: 4px;
     }
-
+    .textMessage {
+      flex: 1;
+      word-break: break-word;
+    }
 }
 
 .wrapperText {
   font-weight: 400;
   font-size: 14px;
   line-height: 24px;
+  word-break: break-word;
   br {
     display: none;
   }

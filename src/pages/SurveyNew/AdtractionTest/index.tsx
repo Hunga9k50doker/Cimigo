@@ -27,7 +27,6 @@ import PopupHowToSetupSurvey from "pages/SurveyNew/components/PopupHowToSetupSur
 import { setHowToSetupSurveyReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import {AddVideoIcon} from "components/icons";
 
-
 interface AdtractionTestProps {
   projectId: number;
   isHaveChangePrice: boolean;

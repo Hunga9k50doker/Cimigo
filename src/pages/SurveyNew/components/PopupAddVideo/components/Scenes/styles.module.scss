@@ -37,6 +37,7 @@
     }
     @media only screen and (max-width: 767px) {
         margin-top: 12px;
+        flex-direction: column-reverse;
     }
 }
 .containerInputScenes {
@@ -45,20 +46,26 @@
     } 
 }
 .boxSubTitle {
+    .boxTitleStart{
+        padding-left: 65px;
+    }
+    .boxTitleEnd {
+        padding-left: 45px;
+    }
     @media only screen and (max-width: 767px) {
         display: none;
     } 
 }
 
 .closeInputAttribute {
-    position: absolute;
-    top: 0;
-    right: -45px;
-    color: var(--eerie-black-65);
     cursor: pointer;
+    padding: 0 40px 9px 40px; 
     @media only screen and (max-width: 767px) {
-        top: -40px;
-        right: -4px;
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding: 0;
+        padding-bottom: 12px;
     } 
 }
 
@@ -83,7 +90,6 @@
 .boxVideo {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
     @media only screen and (max-width: 767px) {
         display: none;
     }
@@ -119,6 +125,7 @@
     .textMessage {
         display: -webkit-box;
         overflow: hidden;
+        word-break: break-word;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
     }

@@ -63,15 +63,15 @@ const VideoItem = memo(({ item, editable, onAction }: VideoItemProps) => {
           <Grid sx={{ mt: 2 }}>
             <Box className={classes.textItem}>
               <IconBranding />
-              <ParagraphSmall $colorName="--eerie-black">{item.brand}</ParagraphSmall>
+              <ParagraphSmall $colorName="--eerie-black" className={classes.textMessage}>{item.brand}</ParagraphSmall>
             </Box>
             <Box className={classes.textItem}>
               <IconProduct />
-              <ParagraphSmall $colorName="--eerie-black">{item.product}</ParagraphSmall>
+              <ParagraphSmall $colorName="--eerie-black" className={classes.textMessage}>{item.product}</ParagraphSmall>
             </Box>
             <Box className={classes.textItem}>
               <IconMessage />
-              <Grid sx={{ flex: 1 }}>
+              <Grid sx={{flex: 1}}>
                 <ShowMoreText
                   lines={2}
                   more="Show more"
