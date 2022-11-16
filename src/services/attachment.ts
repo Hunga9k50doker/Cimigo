@@ -29,10 +29,20 @@ export class AttachmentService {
       })
   }
 
+  static async getDetail(id: number): Promise<Attachment> {
+    return await api.get(`${API.ATTACHMENT.DEFAULT}/${id}`)
+      .then((res) => {
+        return Promise.resolve(res.data.data);
+      })
+      .catch(async (e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
   static async downloadBase64(id: number) {
     return await api.get(API.ATTACHMENT.DOWNLOAD_BASE64.replace(":id", `${id}`))
       .catch(async (e) => {
-        return Promise.reject(JSON.parse(await e?.response?.data?.text() || '{}'));
+        return Promise.reject(e?.response?.data);
       })
   }
 
