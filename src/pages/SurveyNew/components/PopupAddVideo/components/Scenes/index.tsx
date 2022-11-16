@@ -6,7 +6,6 @@ import {
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import classes from "./styles.module.scss";
-import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 import Button, { BtnType } from "components/common/buttons/Button"
 import Heading4 from "components/common/text/Heading4";
@@ -22,6 +21,7 @@ import { IconBranding, IconMessage, IconProduct } from "components/icons";
 import { EVIDEO_TYPE, VIDEO_UPLOAD_STEP, VIDEO_YOUTUBE_STEP, INFORMATION_STEP, SCENES_STEP } from "models/video";
 import moment from "moment";
 import TimePicker from "components/common/inputs/TimePicker";
+import yup from "config/yup.custom";
 
 const MAX_SCENES = 20;
 
@@ -50,18 +50,41 @@ interface Props {
 
 const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, onBack, onSubmit }: Props) => {
   const { t, i18n } = useTranslation();
+
+  const duration = useMemo(() => {
+    switch (type) {
+      case EVIDEO_TYPE.UPLOAD:
+        return videoFromDevice?.duration ?? 0
+      case EVIDEO_TYPE.YOUTUBE:
+        return videoFromYoutube?.duration ?? 0
+    }
+  }, [type, videoFromDevice, videoFromYoutube])
+
   const schema = useMemo(() => {
+    const min = moment().startOf("day").toDate()
+    const max = moment().startOf("day").add(duration, "seconds").toDate()
     return yup.object().shape({
       scenes: yup
         .array(yup.object({
           id: yup.number().empty().notRequired(),
           name: yup.string().required(t("setup_video_choice_popup_video_scenes_validate")),
-          startTime: yup.date().typeError(t("setup_video_choice_popup_video_start_time_validate")).required(t("setup_video_choice_popup_video_start_time_validate")),
-          endTime: yup.date().typeError(t("setup_video_choice_popup_video_end_time_validate")).required(t("setup_video_choice_popup_video_end_time_validate")),
+          startTime: yup.date()
+            .typeError(t("setup_video_choice_popup_video_start_time_validate"))
+            .startTime({moreThan: ( )=> t("setup_video_choice_popup_video_start_time_more_than"), between: () => t("setup_video_choice_popup_video_start_time_between")})
+            .min(min, t("setup_video_choice_popup_video_start_time_validate_min", {number: moment(min).format('mm:ss')}))
+            .max(max, t("setup_video_choice_popup_video_start_time_validate_max", {number: moment(max).format('mm:ss')}))
+            .required(t("setup_video_choice_popup_video_start_time_validate")),
+          endTime: yup.date()
+            .typeError(t("setup_video_choice_popup_video_end_time_validate"))
+            .endTime({moreThan: () => t("setup_video_choice_popup_video_end_time_more_than"), between: () => t("setup_video_choice_popup_video_end_time_between")})
+            .min(min, t("setup_video_choice_popup_video_end_time_validate_min", {number: moment(min).format('mm:ss')}))
+            .max(max, t("setup_video_choice_popup_video_end_time_validate_max", {number: moment(max).format('mm:ss')}))
+            .required(t("setup_video_choice_popup_video_end_time_validate")),
+
         }))
         .required(),
     })
-  }, [i18n.language]);
+  }, [i18n.language, duration]);
 
   const {
     control,
@@ -96,7 +119,6 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
 
   useEffect(() => {
     if (data) {
-      console.log(data, "====data====");
       reset({
         scenes: data.scenes.map(item => ({
           id: item.id,
@@ -198,7 +220,7 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                                       </Grid>
                                       <ParagraphSmall $colorName="--eerie-black" className={classes.textTo} translation-key="setup_video_choice_popup_video_to">{t("setup_video_choice_popup_video_to")}</ParagraphSmall>
                                       <Grid sx={{ paddingLeft: "24px" }}>
-                                      <Controller
+                                        <Controller
                                           name={`scenes.${index}.endTime`}
                                           control={control}
                                           render={({ field }) => (
@@ -219,7 +241,7 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                                     <CloseIcon
                                       onClick={onDeleteScenes(index)}
                                       type="button"
-                                      sx={{color: "var(--eerie-black-65)"}}
+                                      sx={{ color: "var(--eerie-black-65)" }}
                                     >
                                     </CloseIcon>
                                   </div>
