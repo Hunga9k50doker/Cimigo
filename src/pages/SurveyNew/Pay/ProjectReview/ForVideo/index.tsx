@@ -59,16 +59,16 @@ const ForVideo = memo(({ }: ForVideoProps) => {
     return (
         <Grid className={clsx(classes.rowItem, classes.rowItemBox)}>
         <Box className={classes.itemHead}>
-          <Heading5 $colorName="--eerie-black" translation-key="payment_billing_sub_tab_preview_survey_detail">
-            {t('payment_billing_sub_tab_preview_survey_detail')}
+          <Heading5 $colorName="--eerie-black" translation-key="payment_billing_sub_tab_preview_survey_detail_video">
+            {t('payment_billing_sub_tab_preview_survey_detail_video')}
           </Heading5>
           <Button
             className={classes.btnGoto}
             endIcon={<KeyboardArrowRight />}
-            translation-key="payment_billing_sub_tab_preview_edit_setup"
+            translation-key="payment_billing_sub_tab_preview_edit_setup_video"
             onClick={gotoSetupSurvey}
           >
-            {t("payment_billing_sub_tab_preview_edit_setup")}
+            {t("payment_billing_sub_tab_preview_edit_setup_video")}
           </Button>
         </Box>
         <Box className={classes.itemContent}>
