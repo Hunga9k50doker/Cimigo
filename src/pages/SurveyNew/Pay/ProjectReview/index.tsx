@@ -217,9 +217,16 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 {project?.enableEyeTracking && (
                   <Box className={classes.itemSubBox}>
                     <Box className={classes.itemSubLeft}>
-                      <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_review_eye_tracking_sample_size">
+                      {project?.solution?.typeId === ESOLUTION_TYPE.PACK && (
+                        <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_review_eye_tracking_sample_size">
                         {t('payment_project_review_eye_tracking_sample_size')}
-                      </ParagraphBody>
+                        </ParagraphBody>
+                      )}
+                      {project?.solution?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
+                          <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_review_eye_tracking_video_choice">
+                          {t('payment_project_review_eye_tracking_video_choice')}
+                          </ParagraphBody>
+                      )}
                     </Box>
                     <Box className={classes.itemSubRight}>
                       <ParagraphBody $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !project?.eyeTrackingSampleSize })}>
