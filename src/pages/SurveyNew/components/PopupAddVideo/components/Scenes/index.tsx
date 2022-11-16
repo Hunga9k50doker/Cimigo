@@ -70,7 +70,14 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
           name: yup.string().required("Scenes name is required"),
           startTime: yup.date()
             .typeError("Start time is required")
-            .startTime()
+            .startTime({
+              lessThan: function (params: any) {
+                return `End time must be less than ${params.lessThan}`
+              },
+              between: function (params: any) {
+                return `Start time must be less than ${params.lessThan} or greater than ${params.greaterThan}`
+              }
+            })
             .min(min, `Start time must be greater than or equal to ${moment(min).format('mm:ss')}`)
             .max(max, `Start time must be less than or equal ${moment(max).format('mm:ss')}`)
             .required("Start time is required"),

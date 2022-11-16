@@ -28,7 +28,7 @@ yup.addMethod<yup.NumberSchema>(yup.number, 'empty', function () {
   return this.transform((val, originalVal) => originalVal === '' ? null : val)
 })
 
-yup.addMethod<yup.DateSchema>(yup.date, 'startTime', function (msg?: { moreThan?: Message<{}>, between?: Message<{}>}) {
+yup.addMethod<yup.DateSchema>(yup.date, 'startTime', function (msg?: { lessThan?: Message<{}>, between?: Message<{}>}) {
   return this.test('isValidStartTime', msg, function (value) {
     const { path, createError } = this;
     const options: any = this.options
@@ -45,10 +45,10 @@ yup.addMethod<yup.DateSchema>(yup.date, 'startTime', function (msg?: { moreThan?
       return createError({
         path,
         params: {
-          min: startTime.format('mm:ss'),
+          lessThan: startTime.format('mm:ss'),
         },
-        message: msg?.moreThan ?? function(params) {
-          return `End time must be less than ${params.min}`
+        message: msg?.lessThan ?? function(params) {
+          return `End time must be less than ${params.lessThan}`
         }
       })
     }
@@ -85,10 +85,10 @@ yup.addMethod<yup.DateSchema>(yup.date, 'endTime', function (msg?: { moreThan?: 
       return createError({
         path,
         params: {
-          min: startTime.format('mm:ss'),
+          moreThan: startTime.format('mm:ss'),
         },
         message: msg?.moreThan ?? function(params) {
-          return `End time must be greater than ${params.min}`
+          return `End time must be greater than ${params.moreThan}`
         }
       })
     }
@@ -126,7 +126,7 @@ declare module 'yup' {
   }
   interface DateSchema<TType extends Maybe<Date>, TContext extends AnyObject = AnyObject, TOut extends TType = TType> extends yup.BaseSchema<TType, TContext, TOut> {
     endTime(msg?: { moreThan?: Message<{}>, between?: Message<{}>}): DateSchema<TType, TContext>;
-    startTime(msg?: { moreThan?: Message<{}>, between?: Message<{}>}): DateSchema<TType, TContext>;
+    startTime(msg?: { lessThan?: Message<{}>, between?: Message<{}>}): DateSchema<TType, TContext>;
   }
 }
 
