@@ -65,7 +65,7 @@ const ForVideo = memo(({ }: ForVideoProps) => {
     onRedirect(routes.project.detail.setupSurvey)
   }
 
-  const onGotoEyeTracking = () => {
+  const onGotoEmotionMeasurement = () => {
     if (isValidEyeTracking) return
     dispatch(setScrollToSectionReducer(SETUP_SURVEY_SECTION.eye_tracking))
     onRedirect(routes.project.detail.setupSurvey)
@@ -139,7 +139,7 @@ const ForVideo = memo(({ }: ForVideoProps) => {
                   $colorName="--eerie-black"
                   translation-key="payment_billing_sub_tab_preview_enable_video"
                   className={clsx({ [classes.pointer]: !isValidEyeTracking })}
-                  onClick={onGotoEyeTracking}
+                  onClick={onGotoEmotionMeasurement}
                 >
                   {t("payment_billing_sub_tab_preview_enable_video")}
                 </ParagraphBody>
