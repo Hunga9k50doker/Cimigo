@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo } from "react";
+import { memo, useMemo } from "react";
 import { Grid, Box } from "@mui/material"
 import classes from '../styles.module.scss';
 import { useDispatch, useSelector } from "react-redux";
@@ -7,14 +7,13 @@ import { routes } from "routers/routes";
 import { ReducerType } from "redux/reducers";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
-import { setCancelPayment, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
+import {setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import ProjectHelper from "helpers/project";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Heading5 from "components/common/text/Heading5";
 import { KeyboardArrowRight } from "@mui/icons-material";
 import Button from "components/common/buttons/Button";
 import {SETUP_SURVEY_SECTION } from "models/project";
-import { authPreviewOrPayment } from "../../models";
 
 interface ForVideoProps {
 }
@@ -25,8 +24,7 @@ const ForVideo = memo(({ }: ForVideoProps) => {
 
   const dispatch = useDispatch()
 
-  // const { configs } = useSelector((state: ReducerType) => state.user)
-  const { project, cancelPayment } = useSelector((state: ReducerType) => state.project)
+  const { project } = useSelector((state: ReducerType) => state.project)
 
   const gotoSetupSurvey = () => {
     dispatch(push(routes.project.detail.setupSurvey.replace(':id', `${project.id}`)))
@@ -45,19 +43,6 @@ const ForVideo = memo(({ }: ForVideoProps) => {
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)))
   }
-
-  useEffect(() => {
-    authPreviewOrPayment(project, onRedirect)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [project])
-
-
-  useEffect(() => {
-    return () => {
-      if (cancelPayment) dispatch(setCancelPayment(false))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const onGotoVideos = () => {
     if (isValidVideos) return

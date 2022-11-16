@@ -70,13 +70,17 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
           name: yup.string().required(t("setup_video_choice_popup_video_scenes_validate")),
           startTime: yup.date()
             .typeError(t("setup_video_choice_popup_video_start_time_validate"))
-            .startTime({moreThan: ( )=> t("setup_video_choice_popup_video_start_time_more_than"), between: () => t("setup_video_choice_popup_video_start_time_between")})
+            .startTime({moreThan: (params)=> {if (params.value) return t("setup_video_choice_popup_video_start_time_more_than", {min: params.value})
+          else return t("setup_video_choice_popup_video_start_time_more_than", {less: params.value})}
+            ,between: (params) => {if(params.value) return t("setup_video_choice_popup_video_start_time_between", {min: params.value})
+          else return t("setup_video_choice_popup_video_start_time_more_than", {less: params.value})}})
             .min(min, t("setup_video_choice_popup_video_start_time_validate_min", {number: moment(min).format('mm:ss')}))
             .max(max, t("setup_video_choice_popup_video_start_time_validate_max", {number: moment(max).format('mm:ss')}))
             .required(t("setup_video_choice_popup_video_start_time_validate")),
           endTime: yup.date()
             .typeError(t("setup_video_choice_popup_video_end_time_validate"))
-            .endTime({moreThan: () => t("setup_video_choice_popup_video_end_time_more_than"), between: () => t("setup_video_choice_popup_video_end_time_between")})
+            .endTime({moreThan: (params) => {if(params.value) return t("setup_video_choice_popup_video_end_time_more_than" , {min: params.value})}
+            , between: (params) => {if(params.value) return t("setup_video_choice_popup_video_end_time_between", {min: params.value})}})
             .min(min, t("setup_video_choice_popup_video_end_time_validate_min", {number: moment(min).format('mm:ss')}))
             .max(max, t("setup_video_choice_popup_video_end_time_validate_max", {number: moment(max).format('mm:ss')}))
             .required(t("setup_video_choice_popup_video_end_time_validate")),
