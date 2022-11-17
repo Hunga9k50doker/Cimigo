@@ -157,7 +157,23 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
         return <ForPack/>
       case ESOLUTION_TYPE.VIDEO_CHOICE:
           return <ForVideo/>
+    }
   }
+  const renderETTranslateKey = () => {
+    switch (project?.solution?.typeId) {
+      case ESOLUTION_TYPE.PACK:
+        return (
+          <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_review_eye_tracking_sample_size">
+          {t('payment_project_review_eye_tracking_sample_size')}
+          </ParagraphBody>
+        )
+      case ESOLUTION_TYPE.VIDEO_CHOICE:
+        return (
+          <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_review_eye_tracking_video_choice">
+          {t('payment_project_review_eye_tracking_video_choice')}
+          </ParagraphBody>
+        )
+    }
   }
   return (
     <Grid classes={{ root: classes.root }}>
@@ -224,16 +240,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
                 {project?.enableEyeTracking && (
                   <Box className={classes.itemSubBox}>
                     <Box className={classes.itemSubLeft}>
-                      {project?.solution?.typeId === ESOLUTION_TYPE.PACK && (
-                        <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_review_eye_tracking_sample_size">
-                        {t('payment_project_review_eye_tracking_sample_size')}
-                        </ParagraphBody>
-                      )}
-                      {project?.solution?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
-                          <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_review_eye_tracking_video_choice">
-                          {t('payment_project_review_eye_tracking_video_choice')}
-                          </ParagraphBody>
-                      )}
+                      {renderETTranslateKey()}
                     </Box>
                     <Box className={classes.itemSubRight}>
                       <ParagraphBody $colorName="--eerie-black" className={clsx({ [classes.colorDanger]: !project?.eyeTrackingSampleSize })}>

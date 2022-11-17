@@ -21,6 +21,19 @@ const CostSummary = memo(({ project, price }: CostSummaryProps) => {
 
   const { configs } = useSelector((state: ReducerType) => state.user)
 
+  const renderETTranslateKey = () => {
+    switch (project?.solution?.typeId) {
+      case ESOLUTION_TYPE.PACK:
+        return (
+          <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_cost_summary_eye_tracking">{t("project_right_panel_cost_summary_eye_tracking")} ({project?.eyeTrackingSampleSize || 0})</ParagraphSmall>
+        )
+      case ESOLUTION_TYPE.VIDEO_CHOICE:
+        return (
+          <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_cost_summary_eye_tracking_video">{t("project_right_panel_cost_summary_eye_tracking_video")} ({project?.eyeTrackingSampleSize || 0})</ParagraphSmall>  
+        )
+    }
+  }
+
   return (
     <>
       <ParagraphExtraSmall $colorName="--eerie-black" mb={2}>
@@ -38,12 +51,7 @@ const CostSummary = memo(({ project, price }: CostSummaryProps) => {
       )}
       {project.enableEyeTracking && (
         <Box display="flex" alignItems="center" justifyContent="space-between" mt={0.5}>
-          {project?.solution?.typeId === ESOLUTION_TYPE.PACK && 
-          <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_cost_summary_eye_tracking">{t("project_right_panel_cost_summary_eye_tracking")} ({project?.eyeTrackingSampleSize || 0})</ParagraphSmall>
-          }
-          {project?.solution?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && 
-          <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_cost_summary_eye_tracking_video">{t("project_right_panel_cost_summary_eye_tracking_video")} ({project?.eyeTrackingSampleSize || 0})</ParagraphSmall>
-          }
+          {renderETTranslateKey()} 
           <ParagraphSmall $colorName="--eerie-black">{price?.eyeTrackingSampleSizeCost?.show}</ParagraphSmall>
         </Box>
       )}
