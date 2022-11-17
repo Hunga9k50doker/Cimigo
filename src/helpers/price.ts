@@ -134,9 +134,14 @@ const getCurrencyConvert = (costVND: number, currency: string, usdToVND: number)
   }
 }
 
-export function usePrice() {
+export function usePrice(_project?: Project) {
   const { user, configs: configsNew } = useSelector((state: ReducerType) => state.user)
-  const { project } = useSelector((state: ReducerType) => state.project)
+  
+  const { project: projectDetail } = useSelector((state: ReducerType) => state.project)
+
+  const project = useMemo(() => {
+    return _project ?? projectDetail
+  }, [_project, projectDetail])
 
   const currency = useMemo(() => {
     return user.currency || ECurrency.VND

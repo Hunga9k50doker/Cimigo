@@ -178,7 +178,7 @@ export class ProjectHelper {
       case ESOLUTION_TYPE.PACK:
         return ((project?.eyeTrackingPacks?.length ?? 0) >= ProjectHelper.minEyeTrackingPack(project)) || !_project?.solution?.enableEyeTracking || !project?.enableEyeTracking
       case ESOLUTION_TYPE.VIDEO_CHOICE:
-        return !_project?.solution?.enableEyeTracking || !project?.enableEyeTracking
+        return true
     }
   }
 
@@ -194,7 +194,7 @@ export class ProjectHelper {
           ProjectHelper.isValidAdditionalBrand(project) &&
           ProjectHelper.isValidEyeTracking(project)
       case ESOLUTION_TYPE.VIDEO_CHOICE:
-        return ProjectHelper.isValidVideos(project) && ProjectHelper.isValidEyeTracking(project)
+        return ProjectHelper.isValidVideos(project)
     }
   }
 
@@ -206,12 +206,13 @@ export class ProjectHelper {
           ProjectHelper.isValidPacks(project) &&
           ProjectHelper.isValidAdditionalBrand(project) &&
           ProjectHelper.isValidBasic(project) &&
-          ProjectHelper.isValidEyeTracking(project)
+          ProjectHelper.isValidEyeTracking(project) &&
+          ProjectHelper.isValidEyeTrackingSampleSize(project)
       case ESOLUTION_TYPE.VIDEO_CHOICE:
         return ProjectHelper.isValidSampleSize(project) &&
           ProjectHelper.isValidTarget(project) &&
           ProjectHelper.isValidVideos(project) &&
-          ProjectHelper.isValidEyeTracking(project)
+          ProjectHelper.isValidEyeTrackingSampleSize(project)
     }
   }
 }

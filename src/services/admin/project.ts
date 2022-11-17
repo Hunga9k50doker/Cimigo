@@ -7,6 +7,7 @@ import { Project, ProjectTarget } from 'models/project';
 import { ProjectAttribute } from 'models/project_attribute';
 import { Quota } from 'models/quota';
 import { UserAttribute } from 'models/user_attribute';
+import { Video } from 'models/video';
 import api from 'services/configApi';
 
 export class AdminProjectService {
@@ -66,6 +67,16 @@ export class AdminProjectService {
 
   static async getPacks(id: number): Promise<Pack[]> {
     return await api.get(`${API.ADMIN.PROJECT.PACK.replace(':id', `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async getVideos(id: number): Promise<Video[]> {
+    return await api.get(`${API.ADMIN.PROJECT.VIDEO.replace(':id', `${id}`)}`)
       .then((res) => {
         return Promise.resolve(res.data.data)
       })

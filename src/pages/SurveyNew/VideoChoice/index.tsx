@@ -1,6 +1,6 @@
 import { useState, memo, useMemo, useEffect } from "react";
 import classes from './styles.module.scss';
-import { Tab, Badge, Step, Chip, Box } from "@mui/material";
+import { Tab, Badge, Step, Chip } from "@mui/material";
 import { Content, LeftContent, MobileAction, MobileOutline, ModalMobile, PageRoot, PageTitle, PageTitleLeft, PageTitleRight, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
 import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";

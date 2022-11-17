@@ -166,6 +166,7 @@ export const API = {
       DEFAULT: '/v1.0/admin/project',
       QUOTA: '/v1.0/admin/project/:id/quota',
       PACK: '/v1.0/admin/project/:id/packs',
+      VIDEO: '/v1.0/admin/project/:id/videos',
       EYE_TRACKING_PACK: '/v1.0/admin/project/:id/eye-tracking-packs',
       ADDITIONAL_BRAND: '/v1.0/admin/project/:id/additional-brands',
       PROJECT_ATTRIBUTE: '/v1.0/admin/project/:id/project-attributes',

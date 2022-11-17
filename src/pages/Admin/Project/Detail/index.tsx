@@ -9,16 +9,11 @@ import { AdminProjectService } from "services/admin/project"
 import { Box, Button, Card, CardContent, Divider, Grid, Paper, Tab, Table, TableBody, TableCell, TableHead, TableRow, Tabs, Tooltip, Typography } from "@mui/material"
 import { ArrowBackOutlined, EditOutlined } from "@mui/icons-material"
 import classes from './styles.module.scss'
-import clsx from "clsx"
 import { fCurrency, fCurrencyVND } from "utils/formatNumber"
 import { usePrice } from "helpers/price"
 import { TargetQuestionType } from "models/Admin/target"
 import LabelStatus from "components/LableStatus"
 import { EPaymentMethod, langSupports, paymentMethods } from "models/general"
-import { Pack } from "models/pack"
-import { AttachmentService } from "services/attachment"
-import FileSaver from 'file-saver';
-import { getUrlExtension } from "utils/image"
 import TabPanel from "components/TabPanel"
 import { getPayment } from "pages/SurveyNew/Pay/models"
 import { ReducerType } from "redux/reducers"
@@ -26,9 +21,10 @@ import { Quota, QuotaTableRow } from "models/quota"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import PaymentStatus from "components/PaymentStatus"
-import { CustomQuestion, ECustomQuestionType } from "models/custom_question"
-import Emoji from "components/common/images/Emojis";
 import ProjectHelper from "helpers/project"
+import { ESOLUTION_TYPE } from "models"
+import DetailSurveySetupForPack from "../components/DetailSurveySetupForPack"
+import DetailSurveySetupForVideoChoice from "../components/DetailSurveySetupForVideoChoice"
 
 
 enum ETab {
@@ -64,55 +60,73 @@ const Detail = memo(({ }: Props) => {
     if (id && !isNaN(Number(id))) {
       const getProject = async () => {
         dispatch(setLoading(true))
-        Promise.all([
-          AdminProjectService.getProject(Number(id)),
-          AdminProjectService.getQuotas(Number(id)),
-          AdminProjectService.getPacks(Number(id)),
-          AdminProjectService.eyeTrackingPacks(Number(id)),
-          AdminProjectService.additionalBrands(Number(id)),
-          AdminProjectService.projectAttributes(Number(id)),
-          AdminProjectService.userAttributes(Number(id)),
-          AdminProjectService.getCustomQuestions(Number(id)),
-          AdminProjectService.getTargets(Number(id)),
-        ])
-          .then(([project, quotas, packs, eyeTrackingPacks, additionalBrands, projectAttributes, userAttributes, customQuestions, targets]) => {
-            setProject({
-              ...project,
-              packs,
-              eyeTrackingPacks,
-              additionalBrands,
-              projectAttributes,
-              userAttributes,
-              customQuestions,
-              targets
-            })
-            setQuotas(quotas)
+        AdminProjectService.getProject(Number(id))
+          .then(res => {
+            switch (res.solution?.typeId) {
+              case ESOLUTION_TYPE.PACK:
+                Promise.all([
+                  AdminProjectService.getQuotas(Number(id)),
+                  AdminProjectService.getPacks(Number(id)),
+                  AdminProjectService.eyeTrackingPacks(Number(id)),
+                  AdminProjectService.additionalBrands(Number(id)),
+                  AdminProjectService.projectAttributes(Number(id)),
+                  AdminProjectService.userAttributes(Number(id)),
+                  AdminProjectService.getCustomQuestions(Number(id)),
+                  AdminProjectService.getTargets(Number(id)),
+                ])
+                  .then(([quotas, packs, eyeTrackingPacks, additionalBrands, projectAttributes, userAttributes, customQuestions, targets]) => {
+                    setProject({
+                      ...res,
+                      packs,
+                      eyeTrackingPacks,
+                      additionalBrands,
+                      projectAttributes,
+                      userAttributes,
+                      customQuestions,
+                      targets
+                    })
+                    setQuotas(quotas)
+                  })
+                  .catch((e) => dispatch(setErrorMess(e)))
+                  .finally(() => dispatch(setLoading(false)))
+                break;
+              case ESOLUTION_TYPE.VIDEO_CHOICE:
+                Promise.all([
+                  AdminProjectService.getQuotas(Number(id)),
+                  AdminProjectService.getVideos(Number(id)),
+                  AdminProjectService.getCustomQuestions(Number(id)),
+                  AdminProjectService.getTargets(Number(id)),
+                ])
+                  .then(([quotas, videos, customQuestions, targets]) => {
+                    setProject({
+                      ...res,
+                      videos,
+                      customQuestions,
+                      targets
+                    })
+                    setQuotas(quotas)
+                  })
+                  .catch((e) => dispatch(setErrorMess(e)))
+                  .finally(() => dispatch(setLoading(false)))
+                break;
+            }
           })
-          .catch((e) => dispatch(setErrorMess(e)))
-          .finally(() => dispatch(setLoading(false)))
+          .catch((e) => {
+            dispatch(setErrorMess(e))
+            dispatch(setLoading(false))
+          })
       }
       getProject()
     }
   }, [id, dispatch])
 
-  const { price } = usePrice()
+  const { price } = usePrice(project)
 
   const getTargets = (typeIds: number[]) => {
     return project?.targets?.filter(it => typeIds.includes(it.targetQuestion?.typeId))
   }
 
   const payment = useMemo(() => getPayment(project?.payments), [project])
-
-  const onDownloadPackImage = (pack: Pack) => {
-    dispatch(setLoading(true))
-    AttachmentService.downloadByUrl(pack.image)
-      .then((res) => {
-        const ext = getUrlExtension(pack.image)
-        FileSaver.saveAs(res.data, `${pack.name}.${ext}`)
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
-  }
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue)
@@ -132,148 +146,20 @@ const Detail = memo(({ }: Props) => {
     dispatch(push(routes.admin.project.edit.replace(':id', `${project.id}`)));
   }
 
-  const getContentCustomQuestion = (item: CustomQuestion) => {
-    switch (item.typeId) {
-      case ECustomQuestionType.Open_Question:
-        return null;
-      case ECustomQuestionType.Single_Choice:
-      case ECustomQuestionType.Multiple_Choices:
-        return (
-          <>
-            {!!item.answers?.length && (
-              <>
-                <Typography variant="subtitle1" component="div">
-                  Answers:
-                </Typography>
-                {item.answers.map((answer) => (
-                  <Typography key={answer.id} display="flex" alignItems="center" marginLeft={4} variant="subtitle1" component="div">
-                    Title: {" "}
-                    {answer.title}
-                    {answer.exclusive && <span className={classes.exclusiveBox}>exclusive</span>}
-                  </Typography>
-                ))}
-              </>
-            )}
-          </>
-        );
-      case ECustomQuestionType.Numeric_Scale:
-        return (
-          <>
-            <Box display="flex">
-              <Typography variant="subtitle1" component="div">
-                From: <span style={{ fontWeight: 500 }}>{item.scaleRangeFrom}</span>
-              </Typography>
-              <Typography ml={3} variant="subtitle1" component="div">
-                To: <span style={{ fontWeight: 500 }}>{item.scaleRangeTo}</span>
-              </Typography>
-            </Box>
-            {item.customQuestionAttributes?.length && (
-              <>
-                <Typography variant="subtitle1" component="div">
-                  Multiple attributes:
-                </Typography>
-                <Box ml={2} mt={1}>
-                  <Table className={classes.table}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Left label</TableCell>
-                        <TableCell>Right label</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {item.customQuestionAttributes?.map(item => (
-                        <TableRow key={item.id}>
-                          <TableCell>{item.leftLabel}</TableCell>
-                          <TableCell>{item.rightLabel}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Box>
-              </>
-            )}
-          </>
-        )
-      case ECustomQuestionType.Smiley_Rating:
-        return (
-          <>
-            <Typography variant="subtitle1" component="div">
-              Smiley scale: <span style={{ fontWeight: 500 }}>{item.customQuestionEmojis?.length || 0} faces</span>
-            </Typography>
-            <Box display="flex" flexWrap="wrap" alignItems="flex-start" justifyContent="flex-start">
-              {item.customQuestionEmojis?.map(customQuestionEmoji => (
-                <Box key={customQuestionEmoji.id} flex={1} ml={2} mt={2} display="flex" flexDirection="column" alignItems="center" justifyContent="center" minWidth="150px">
-                  <Emoji emojiId={customQuestionEmoji.emojiId} />
-                  <Typography variant="subtitle1" align="center" mt={0.5}>
-                    {customQuestionEmoji.label}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-            {item.customQuestionAttributes?.length && (
-              <>
-                <Typography variant="subtitle1" component="div">
-                  Multiple attributes:
-                </Typography>
-                <Box ml={2} mt={1}>
-                  <Table className={classes.table}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Attribute</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {item.customQuestionAttributes?.map(item => (
-                        <TableRow key={item.id}>
-                          <TableCell>{item.attribute}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Box>
-              </>
-            )}
-          </>
-        )
-      case ECustomQuestionType.Star_Rating:
-        return (
-          <>
-            <Typography variant="subtitle1" component="div">
-              Number of stars: <span style={{ fontWeight: 500 }}>{item.numberOfStars || 0}</span>
-            </Typography>
-            {item.customQuestionAttributes?.length && (
-              <>
-                <Typography variant="subtitle1" component="div">
-                  Multiple attributes:
-                </Typography>
-                <Box ml={2} mt={1}>
-                  <Table className={classes.table}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Attribute</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {item.customQuestionAttributes?.map(item => (
-                        <TableRow key={item.id}>
-                          <TableCell>{item.attribute}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Box>
-              </>
-            )}
-          </>
-        )
-    }
-  }
-
   const isPaymentPaid = useMemo(() => ProjectHelper.isPaymentPaid(project), [project])
 
   const reportReadyDate = useMemo(() => {
     return ProjectHelper.getReportReadyDate(project, i18n.language).format("DD MMMM, YYYY")
   }, [i18n.language, project])
+
+  const renderSurveySetup = () => {
+    switch (project?.solution?.typeId) {
+      case ESOLUTION_TYPE.PACK:
+        return <DetailSurveySetupForPack project={project} />
+      case ESOLUTION_TYPE.VIDEO_CHOICE:
+        return <DetailSurveySetupForVideoChoice project={project} />
+    }
+  }
 
   return (
     <div>
@@ -315,7 +201,7 @@ const Detail = memo(({ }: Props) => {
                     <Typography ml={4} variant="h6" sx={{ fontWeight: 500 }}>Report ready date: <span className={classes.valueBox}>{reportReadyDate}</span></Typography>
                   )}
                   <Typography mb={4} ml={4} variant="h6" sx={{ fontWeight: 500 }}>Survey language: <span className={classes.valueBox}>{langSupports.find(it => it.key === project?.surveyLanguage)?.name}</span></Typography>
-                  
+
                 </Box>
                 {project && <LabelStatus typeStatus={project.status} />}
               </Box>
@@ -328,151 +214,7 @@ const Detail = memo(({ }: Props) => {
                 </Tabs>
               </Box>
               <TabPanel value={activeTab} index={ETab.SETUP_SURVEY}>
-                <Box>
-                  <Typography variant="h6" component="div" mb={2}>
-                    Basic information
-                  </Typography>
-                  <Grid container spacing={2} ml={0}>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="subtitle1" component="div">
-                        Category: <strong className={clsx({ [classes.danger]: !project?.category })}>{project?.category || "None"}</strong>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  {!!project?.packs?.length && (
-                    <>
-                      <Typography variant="h6" mt={4} mb={2}>
-                        Packs
-                      </Typography>
-                      <Box className={classes.packBox}>
-                        {project?.packs?.map(item => (
-                          <Paper key={item.id} className={classes.packItem}>
-                            <Tooltip title={'Download'}>
-                              <img src={item.image} alt="" onClick={() => onDownloadPackImage(item)} />
-                            </Tooltip>
-                            <div className={classes.infor}>
-                              <div className={classes.inforItem}>Pack Name: <strong>{item.name}</strong></div>
-                              <div className={classes.inforItem}>Pack type: <strong>{item.packType?.name}</strong></div>
-                              <div className={classes.inforItem}>Brand: <strong>{item.brand}</strong></div>
-                              <div className={classes.inforItem}>Variant: <strong>{item.variant}</strong></div>
-                              <div className={classes.inforItem}>Manufacturer: <strong>{item.manufacturer}</strong></div>
-                            </div>
-                          </Paper>
-                        ))}
-                      </Box>
-                    </>
-                  )}
-                  {(!!project?.packs?.length || !!project?.additionalBrands?.length) && (
-                    <>
-                      <Typography variant="h6" mt={4} mb={2}>
-                        Additional brand list
-                      </Typography>
-                      <Box ml={2}>
-                        <Table className={classes.table}>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Brand</TableCell>
-                              <TableCell>Variant</TableCell>
-                              <TableCell>Manufacturer</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {project?.packs?.map(item => (
-                              <TableRow key={item.id}>
-                                <TableCell>{item.brand}</TableCell>
-                                <TableCell>{item.variant}</TableCell>
-                                <TableCell>{item.manufacturer}</TableCell>
-                              </TableRow>
-                            ))}
-                            {project?.additionalBrands?.map(item => (
-                              <TableRow key={item.id}>
-                                <TableCell>{item.brand}</TableCell>
-                                <TableCell>{item.variant}</TableCell>
-                                <TableCell>{item.manufacturer}</TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </Box>
-                    </>
-                  )}
-                  {(!!project?.projectAttributes?.length || !!project?.userAttributes?.length) && (
-                    <>
-                      <Typography variant="h6" component="div" sx={{ marginBottom: 2, marginTop: 4 }}>
-                        Additional attributes
-                      </Typography>
-                      <Box ml={2}>
-                        <Table className={classes.table}>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>Start</TableCell>
-                              <TableCell>End</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {project?.projectAttributes?.map(item => (
-                              <TableRow key={item.id}>
-                                <TableCell>{item.attribute?.start}</TableCell>
-                                <TableCell>{item.attribute?.end}</TableCell>
-                              </TableRow>
-                            ))}
-                            {project?.userAttributes?.map(item => (
-                              <TableRow key={item.id}>
-                                <TableCell>{item.start}</TableCell>
-                                <TableCell>{item.end}</TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </Box>
-                    </>
-                  )}
-                  {!!project?.customQuestions?.length && (
-                    <>
-                      <Typography variant="h6" component="div" sx={{ marginBottom: 2, marginTop: 4 }}>
-                        Custom questions
-                      </Typography>
-                      <Box ml={2}>
-                        {project.customQuestions.map((question) => (
-                          <Paper sx={{ mt: 2, p: 2 }} key={question.id}>
-                            <Typography variant="subtitle1" component="div">
-                              Question title: <span style={{ fontWeight: 500 }}>{question.title}</span>
-                            </Typography>
-                            <Box marginLeft={4}>
-                              <Typography variant="subtitle1" component="div">
-                                Type: <span style={{ fontWeight: 500 }}>{question.type.title}</span>
-                              </Typography>
-                              {getContentCustomQuestion(question)}
-                            </Box>
-                          </Paper>
-                        ))}
-                      </Box>
-                    </>
-                  )}
-                  {!!project?.eyeTrackingPacks?.length && (
-                    <>
-                      <Typography variant="h6" mt={4} mb={2}>
-                        Eye-tracking (Competitor pack)
-                      </Typography>
-                      <Box className={classes.packBox}>
-                        {project?.eyeTrackingPacks?.map(item => (
-                          <Paper key={item.id} className={classes.packItem}>
-                            <Tooltip title={'Download'}>
-                              <img src={item.image} alt="" onClick={() => onDownloadPackImage(item)} />
-                            </Tooltip>
-                            <div className={classes.infor}>
-                              <div className={classes.inforItem}>Pack Name: <strong>{item.name}</strong></div>
-                              <div className={classes.inforItem}>Pack type: <strong>{item.packType?.name}</strong></div>
-                              <div className={classes.inforItem}>Brand: <strong>{item.brand}</strong></div>
-                              <div className={classes.inforItem}>Variant: <strong>{item.variant}</strong></div>
-                              <div className={classes.inforItem}>Manufacturer: <strong>{item.manufacturer}</strong></div>
-                            </div>
-                          </Paper>
-                        ))}
-                      </Box>
-                    </>
-                  )}
-                </Box>
+                {renderSurveySetup()}
               </TabPanel>
               <TabPanel value={activeTab} index={ETab.TARGET}>
                 <Box>
@@ -621,7 +363,16 @@ const Detail = memo(({ }: Props) => {
                           {!!payment?.eyeTrackingSampleSize && (
                             <Grid item xs={12}>
                               <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                                <span>Eye-tracking ({payment?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(payment?.eyeTrackingSampleSizeCostUSD || 0)}</strong>
+                                {project?.solution?.typeId === ESOLUTION_TYPE.PACK && (
+                                  <>
+                                    <span>Eye-tracking ({payment?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(payment?.eyeTrackingSampleSizeCostUSD || 0)}</strong>
+                                  </>
+                                )}
+                                {project?.solution?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
+                                  <>
+                                    <span>Emotion measurement ({payment?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(payment?.eyeTrackingSampleSizeCostUSD || 0)}</strong>
+                                  </>
+                                )}
                               </Typography>
                             </Grid>
                           )}
@@ -685,7 +436,16 @@ const Detail = memo(({ }: Props) => {
                           {!!project?.eyeTrackingSampleSize && (
                             <Grid item xs={12}>
                               <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                                <span>Eye-tracking ({project?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(price?.eyeTrackingSampleSizeCost?.USD || 0)}</strong>
+                              {project?.solution?.typeId === ESOLUTION_TYPE.PACK && (
+                                  <>
+                                    <span>Eye-tracking ({project?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(price?.eyeTrackingSampleSizeCost?.USD || 0)}</strong>
+                                  </>
+                                )}
+                                {project?.solution?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
+                                  <>
+                                    <span>Emotion measurement ({project?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(price?.eyeTrackingSampleSizeCost?.USD || 0)}</strong>
+                                  </>
+                                )}
                               </Typography>
                             </Grid>
                           )}

@@ -21,21 +21,6 @@
   flex-direction: column;
   position: relative;
   padding: 16px;
-  .iconAction {
-    z-index: 1;
-    position: absolute;
-    right: 16px;
-    top: 16px;
-    padding: 6px;
-    background: var(--eerie-black-40);
-    svg {
-      color: #ffffff;
-      font-size: 20px;
-    }
-    &:hover {
-      background: var(--eerie-black-40);
-    }
-  }
   .video {
     height: 248px;
     object-fit: cover;
@@ -80,7 +65,7 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 24px;
-  word-break: break-word;
+  ≈
   br {
     display: none;
   }
@@ -88,5 +73,19 @@
     color: var(--cimigo-blue);
     text-decoration: underline;
     cursor: pointer;
+  }
+}
+.sceneItem {
+  &:not(:first-child) {
+    margin-top: 8px;
+  }
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid var(--gray-10);
+  .sceneItemText {
+    word-break: break-word;
+    > span {
+      font-weight: 500;
+    }
   }
 }
