@@ -326,12 +326,19 @@ const PaymentPage = memo(({ }: PaymentProps) => {
   const onDownloadContract = () => {
     if (!configs.viewContract) return
     dispatch(setLoading(true))
-    AttachmentService.download(configs.viewContract)
-      .then(res => {
-        FileSaver.saveAs(res.data, `contract-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+    AttachmentService.getDetail(configs.viewContract)
+      .then(attachment => {
+        AttachmentService.download(configs.viewContract)
+        .then(res => {
+          FileSaver.saveAs(res.data, attachment.fileName)
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
       })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
+      .catch((e) => {
+        dispatch(setLoading(false))
+        dispatch(setErrorMess(e))
+      })
   }
 
   return (

@@ -28,7 +28,7 @@ const Completed = memo(({ }: Props) => {
   const { t, i18n } = useTranslation()
 
   const dispatch = useDispatch();
-  
+
   const { configs } = useSelector((state: ReducerType) => state.user)
 
   const { project } = useSelector((state: ReducerType) => state.project)
@@ -60,14 +60,21 @@ const Completed = memo(({ }: Props) => {
   const onDownloadContract = () => {
     if (!configs.viewContract) return
     dispatch(setLoading(true))
-    AttachmentService.download(configs.viewContract)
-      .then(res => {
-        FileSaver.saveAs(res.data, `contract-${moment().format('MM-DD-YYYY-hh-mm-ss')}.pdf`)
+    AttachmentService.getDetail(configs.viewContract)
+      .then(attachment => {
+        AttachmentService.download(configs.viewContract)
+        .then(res => {
+          FileSaver.saveAs(res.data, attachment.fileName)
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
       })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
+      .catch((e) => {
+        dispatch(setLoading(false))
+        dispatch(setErrorMess(e))
+      })
   }
-  
+
   return (
     <PageRoot>
       <LeftContent>
@@ -88,13 +95,13 @@ const Completed = memo(({ }: Props) => {
             </ParagraphBody>
             <Box py={2} display="flex" justifyContent="center">
               <DownLoadItem onClick={getInvoice}>
-                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <img className={classes.imgAddPhoto} src={images.icInvoice} />
                 <ParagraphBody align="center" $colorName="--cimigo-blue" translation-key="payment_billing_completed_invoice">{t("payment_billing_completed_invoice")}</ParagraphBody>
               </DownLoadItem>
               {!!configs?.viewContract && (
                 <DownLoadItem onClick={onDownloadContract}>
-                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                  {/* eslint-disable-next-line jsx-a11y/alt-text */}
                   <img className={classes.imgAddPhoto} src={images.icContract} />
                   <ParagraphBody $colorName="--cimigo-blue" translation-key="payment_billing_view_contract">{t("payment_billing_view_contract")}</ParagraphBody>
                 </DownLoadItem>
