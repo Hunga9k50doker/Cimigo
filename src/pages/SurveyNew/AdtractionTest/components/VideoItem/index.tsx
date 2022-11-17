@@ -8,6 +8,7 @@ import classes from './styles.module.scss';
 import ShowMoreText from "react-show-more-text";
 import Heading5 from "components/common/text/Heading5";
 import { IconBranding, IconMessage, IconProduct, IconScenes } from "components/icons";
+import { useTranslation } from "react-i18next";
 
 interface VideoItemProps {
   item: Video;
@@ -16,6 +17,7 @@ interface VideoItemProps {
 }
 
 const VideoItem = memo(({ item, editable, onAction }: VideoItemProps) => {
+  const { t } = useTranslation()
   return (
     <Grid item className={classes.root}>
       <Box className={classes.box}>
@@ -74,8 +76,8 @@ const VideoItem = memo(({ item, editable, onAction }: VideoItemProps) => {
               <Grid sx={{flex: 1}}>
                 <ShowMoreText
                   lines={2}
-                  more="Show more"
-                  less="Show less"
+                  more={t("setup_video_choice_video_item_show_more")}
+                  less={t("setup_video_choice_video_item_show_less")}
                   anchorClass={classes.textControl}
                   expanded={false}
                   width={480}

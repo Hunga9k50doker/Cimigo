@@ -1,4 +1,5 @@
 import { OptionItem } from "./general";
+import { useTranslation } from "react-i18next";
 
 export interface UserGetSolutions {
   take?: number;

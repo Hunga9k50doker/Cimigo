@@ -50,12 +50,11 @@ const PopupConfirmChangeSampleSize = ({ data, onClose, onConfirm }: Props) => {
       case ESOLUTION_TYPE.VIDEO_CHOICE:
         return (
           <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'
-            translation-key=""
-            // dangerouslySetInnerHTML={{
-            //   __html: t("", { oldEyeTrackingSampleSize: data?.oldEyeTrackingSampleSize, newEyeTrackingSampleSize: data?.newEyeTrackingSampleSize }),
-            // }}
+            translation-key="target_popup_change_sample_size_your_adjusted_eye_tracking_video"
+            dangerouslySetInnerHTML={{
+              __html: t("target_popup_change_sample_size_your_adjusted_eye_tracking_video", { old: data?.oldEyeTrackingSampleSize, new: data?.newEyeTrackingSampleSize }),
+            }}
           >
-            Your adjusted emotion measurement sample size: <span>reset from {data?.oldEyeTrackingSampleSize} to {data?.newEyeTrackingSampleSize} as a bare minimum.</span>
           </ParagraphBody>
         )
     }

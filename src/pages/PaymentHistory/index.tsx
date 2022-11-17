@@ -159,11 +159,11 @@ const PaymentHistory = memo(({}: Props) => {
         <Grid className={classes.root}>
             <Grid className={classes.main}>
             <Grid className={classes.headerContainer}>
-                <Heading2 translation-key="payment_history_title">Payment history</Heading2>
+                <Heading2 translation-key="payment_history_title">{t("payment_history_title")}</Heading2>
                 <Grid className={classes.inputContainer}>
                     <InputSearch
                     translation-key-placeholder="payment_history_placeholder_search_invoice"
-                    placeholder="Search invoice"
+                    placeholder={t("payment_history_placeholder_search_invoice")}
                     value={keyword || ""}
                     onChange={onSearch}
                     />
@@ -184,9 +184,9 @@ const PaymentHistory = memo(({}: Props) => {
                                         className={classes.tableLabel}
                                         >
                                         <Heading5                                           
-                                            translation-key=""
+                                            translation-key="payment_history_project_name"
                                         >
-                                           Project name
+                                           {t("payment_history_project_name")}
                                         </Heading5>
                                     </TableSortLabel>
                                 </TableCell>
@@ -201,9 +201,9 @@ const PaymentHistory = memo(({}: Props) => {
                                         className={classes.tableLabel}
                                         >
                                         <Heading5                                           
-                                            translation-key=""
+                                            translation-key="payment_history_invoice_no"
                                         >
-                                           Invoice no
+                                          {t("payment_history_invoice_no")}
                                         </Heading5>
                                     </TableSortLabel>
                                 </TableCell>
@@ -218,9 +218,9 @@ const PaymentHistory = memo(({}: Props) => {
                                         className={classes.tableLabel}
                                         >
                                         <Heading5                                           
-                                            translation-key=""
+                                            translation-key="payment_history_date"
                                         >
-                                           Date
+                                          {t("payment_history_date")}                                        
                                         </Heading5>
                                     </TableSortLabel>
                                 </TableCell>
@@ -235,20 +235,20 @@ const PaymentHistory = memo(({}: Props) => {
                                         className={classes.tableLabel}
                                         >
                                         <Heading5                                           
-                                            translation-key=""
+                                            translation-key="payment_history_amount"
                                         >
-                                           Amount
+                                           {t("payment_history_amount")} 
                                         </Heading5>
                                     </TableSortLabel>
                                   </TableCell>
                                 <TableCell sx={{textAlign: 'center'}} className={classes.tableLabel}>
                                     <Heading5 translation-key="payment_history_table_status">
-                                        Status
+                                    {t("payment_history_table_status")} 
                                     </Heading5>
                                 </TableCell>
                                 <TableCell sx={{textAlign: 'center'}} className={classes.tableLabel}>
                                     <Heading5 translation-key="payment_history_table_download_invoice">
-                                        Download invoice
+                                    {t("payment_history_table_download_invoice")} 
                                     </Heading5>
                                 </TableCell>
                             </TableRow>

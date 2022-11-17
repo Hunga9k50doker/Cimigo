@@ -108,7 +108,7 @@ const UploadVideoFromDevice = ({ onSubmit }: Props) => {
   return (
     <>
       <form>
-        <ParagraphSmall $colorName="--eerie-black">Upload your video ads that you want test.</ParagraphSmall>
+        <ParagraphSmall $colorName="--eerie-black" translation-key="setup_video_choice_popup_video_upload_device_title">{t("setup_video_choice_popup_video_upload_device_title")}</ParagraphSmall>
         <Grid
           className={classes.videoUp}
           {...getRootProps()}
@@ -117,8 +117,8 @@ const UploadVideoFromDevice = ({ onSubmit }: Props) => {
           {isLoading && (
             <Grid className={classes.boxUploading}>
               <Grid className={classes.boxUploadingTitle}>
-                <Heading4 $colorName="--gray-90">Uploading your video</Heading4>
-                <ParagraphSmall $colorName="--gray-60">We are uploading your video file, please wait...</ParagraphSmall>
+                <Heading4 $colorName="--gray-90" translation-key="setup_video_choice_popup_video_upload_device_title_uploading">{t("setup_video_choice_popup_video_upload_device_title_uploading")}</Heading4>
+                <ParagraphSmall $colorName="--gray-60" translation-key="setup_video_choice_popup_video_upload_device_title_uploading_sub">{t("setup_video_choice_popup_video_upload_device_title_uploading_sub")}</ParagraphSmall>
               </Grid>
               <Grid className={classes.boxUploadingFile}>
                 <IconPlayMini />
@@ -135,42 +135,48 @@ const UploadVideoFromDevice = ({ onSubmit }: Props) => {
           {!fileReview &&
             <Grid className={classes.contentUpload}>
               <CloudUploadOutlinedIcon />
-              <ParagraphSmall $colorName="--gray-90" sx={{ mt: 2 }}>Drag & drop video file to upload</ParagraphSmall>
-              <ParagraphSmall $colorName="--gray-60">Your video file will be kept securely and used only in your survey.</ParagraphSmall>
+              <ParagraphSmall $colorName="--gray-90" sx={{ mt: 2 }} translation-key="setup_video_choice_popup_video_upload_device_drag_drop">{t("setup_video_choice_popup_video_upload_device_drag_drop")}</ParagraphSmall>
+              <ParagraphSmall $colorName="--gray-60" translation-key="setup_video_choice_popup_video_upload_device_drag_drop_sub">{t("setup_video_choice_popup_video_upload_device_drag_drop_sub")}</ParagraphSmall>
               {isError === 'size-invalid' &&
                 <Grid className={classes.boxError}>
                   <ErrorTwoToneIcon />
-                  <ErrorMessage>{`File is larger than ${fData(VIDEO_SIZE)}`}</ErrorMessage>
+                  <ErrorMessage translation-key="setup_video_choice_popup_video_upload_device_file_validate">{t("setup_video_choice_popup_video_upload_device_file_validate", {number: fData(VIDEO_SIZE)})}</ErrorMessage>
                 </Grid>
               }
               {isError === 'type-invalid' &&
                 <Grid className={classes.boxError}>
                   <ErrorTwoToneIcon />
-                  <ErrorMessage>Invalid file format</ErrorMessage>
+                  <ErrorMessage translation-key="setup_video_choice_popup_video_upload_device_file_validate_format">{t("setup_video_choice_popup_video_upload_device_file_validate_format")}</ErrorMessage>
                 </Grid>
               }
               {isError === 'duration-invalid' &&
                 <Grid className={classes.boxError}>
                   <ErrorTwoToneIcon />
-                  <ErrorMessage>Maximum video duration is 2 minutes</ErrorMessage>
+                  <ErrorMessage translation-key="setup_video_choice_popup_video_upload_device_file_validate_duration">{t("setup_video_choice_popup_video_upload_device_file_validate_duration")}</ErrorMessage>
                 </Grid>
               }
-              <Button btnType={BtnType.Primary} sx={{ mt: 2 }}>Select your video file...</Button>
+              <Button btnType={BtnType.Primary} sx={{ mt: 2 }} translation-key="setup_video_choice_popup_video_upload_device_select_file">{t("setup_video_choice_popup_video_upload_device_select_file")}</Button>
             </Grid>
           }
         </Grid>
         <Grid sx={{ mt: 2 }}>
-          <Heading5 className={classes.textTitleFooter} translation-key="">Video upload instructions:</Heading5>
+          <Heading5 className={classes.textTitleFooter} translation-key="setup_video_choice_popup_video_upload_device_instruction">{t("setup_video_choice_popup_video_upload_device_instruction")}</Heading5>
           <div className={classes.textInfo}>
-            <ParagraphSmall $colorName="--eerie-black" translation-key="">
-              The recommended video format is the <span>.MP4 file type</span>.
+            <ParagraphSmall $colorName="--eerie-black" translation-key="setup_video_choice_popup_video_upload_device_instruction_sub_format"
+            dangerouslySetInnerHTML={{ __html: t("setup_video_choice_popup_video_upload_device_instruction_sub_format")}}
+            >
             </ParagraphSmall>
           </div>
           <div className={classes.textInfo}>
-            <ParagraphSmall $colorName="--eerie-black" translation-key="">The file size must be <span>less than 150MB</span>.</ParagraphSmall>
+            <ParagraphSmall $colorName="--eerie-black" translation-key="setup_video_choice_popup_video_upload_device_instruction_sub_size"
+            dangerouslySetInnerHTML={{ __html: t("setup_video_choice_popup_video_upload_device_instruction_sub_size")}}
+            ></ParagraphSmall>
           </div>
           <div className={classes.textInfo}>
-            <ParagraphSmall $colorName="--eerie-black" translation-key="">Maximum video duration is <span>2 minutes</span>.</ParagraphSmall>
+            <ParagraphSmall $colorName="--eerie-black" translation-key="setup_video_choice_popup_video_upload_device_instruction_sub_duration"
+            dangerouslySetInnerHTML={{ __html: t("setup_video_choice_popup_video_upload_device_instruction_sub_duration")}}
+            >
+            </ParagraphSmall>
           </div>
         </Grid>
 
