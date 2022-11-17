@@ -342,7 +342,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       })
   }
   
-  const renderETTranslateKey = () => {
+  const renderEmotion = () => {
     switch (project?.solution?.typeId) {
       case ESOLUTION_TYPE.PACK:
         return (
@@ -353,7 +353,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
       case ESOLUTION_TYPE.VIDEO_CHOICE:
         return (
           <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_order_summary_eye_tracking_video_choice">
-          {t('payment_project_order_summary_eye_tracking_video_choice')}
+          {t('payment_project_order_summary_eye_tracking_video_choice')} ({project?.eyeTrackingSampleSize || 0})
           </ParagraphBody>
         )
     }
@@ -666,7 +666,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
             )}
             {project?.enableEyeTracking && (
               <div className={classes.flexOrder}>
-                {renderETTranslateKey()}
+                {renderEmotion()}
                 <ParagraphBody $colorName="--eerie-black">{price?.eyeTrackingSampleSizeCost?.show}</ParagraphBody>
               </div>
             )}

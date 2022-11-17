@@ -1,7 +1,7 @@
 import { useState, memo, useMemo, useEffect } from "react";
 import classes from './styles.module.scss';
 import { Tab, Badge, Step, Chip, Box } from "@mui/material";
-import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleRight, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
+import { Content, LeftContent, MobileAction, MobileOutline, ModalMobile, PageRoot, PageTitle, PageTitleLeft, PageTitleRight, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
 import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import LockIcon from "../components/LockIcon";
@@ -121,7 +121,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
             step={3}
           />
         </Content>
-        <MobileAction className={classes.mobileAction}>
+        <MobileAction>
           <Button
             fullWidth
             btnType={BtnType.Raised}
@@ -130,18 +130,18 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
             padding="13px 8px !important"
             onClick={onNextSetupTarget}
           />
-          <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
-            <ParagraphSmall $colorName="--cimigo-blue">View outline</ParagraphSmall>
+          <MobileOutline onClick={onToggleViewOutlineMobile}>
+            <ParagraphSmall $colorName="--cimigo-blue" translation-key="common_btn_view_outline">{t("common_btn_view_outline")}</ParagraphSmall>
             <ArrowCircleUpRounded />
-          </Box>
-          <div className={toggleOutlineMobile ? classes.modalMobile : ""}></div>
+          </MobileOutline>
+          <ModalMobile $toggleOutlineMobile={toggleOutlineMobile}></ModalMobile>
         </MobileAction>
       </LeftContent>
-      <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.closeOutlineMobile}>
-        <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
-          <ParagraphSmall $colorName="--cimigo-blue">Close outline</ParagraphSmall>
+      <RightContent $toggleOutlineMobile={toggleOutlineMobile}>
+        <MobileOutline onClick={onToggleViewOutlineMobile}>
+          <ParagraphSmall $colorName="--cimigo-blue" translation-key="common_btn_close_outline">{t("common_btn_close_outline")}</ParagraphSmall>
           <ArrowCircleDownRounded />
-        </Box>
+        </MobileOutline>
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
@@ -203,7 +203,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
                   )}
                 </RPStepper>
               </RightPanelBody>
-              <RightPanelAction className={classes.rightPanelAction}>
+              <RightPanelAction>
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
@@ -223,7 +223,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
                   price={price}
                 />
               </RightPanelBody>
-              <RightPanelAction className={classes.rightPanelAction}>
+              <RightPanelAction>
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}

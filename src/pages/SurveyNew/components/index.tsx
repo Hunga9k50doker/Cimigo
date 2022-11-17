@@ -1,6 +1,6 @@
 import { Box, Chip, Grid, StepConnector, StepContent, StepLabel, Stepper, Tabs, Typography } from '@mui/material';
 import { PROJECT_DETAIL_SECTION } from 'models/project';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const PageRoot = styled(Grid)`
   flex: 1;
@@ -16,11 +16,27 @@ export const LeftContent = styled(Grid)`
   min-width: 0;
   min-height: 0;
 `
-
-export const RightContent = styled(Grid)`
+interface RightContentProps {
+  $toggleOutlineMobile?: boolean;
+  $quotasOutline?: boolean;
+}
+export const RightContent = styled(Grid)<RightContentProps>`
   width: 342px;
   @media only screen and (max-width: 1024px) {
-    display: none;
+    ${props => props.$toggleOutlineMobile && css`
+      display: block !important;
+      position: absolute !important;
+      left: 0px;
+      bottom: 109px;
+      width: 100% !important;
+      z-index: 11;
+  `}
+  ${props => !props.$toggleOutlineMobile && css`
+      display: none;
+  `}
+  ${props => props.$quotasOutline && css`
+      bottom: 147px;
+  `}
   }
 `
 
@@ -96,6 +112,7 @@ export const MobileAction = styled(Grid)`
   box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
   @media only screen and (max-width: 1024px) {
     display: block;
+    position: relative;
   }
 `;
 
@@ -149,6 +166,9 @@ export const RightPanelBody = styled(Box)`
 
 export const RightPanelAction = styled(Box)`
   padding: 12px 24px 24px;
+  @media only screen and (max-width: 1024px) {
+    display: none;
+  }
 `;
 
 export const RPStepper = styled(Stepper)`
@@ -250,3 +270,49 @@ export const PriceChip = styled(Chip)`
     }
   }
 `;
+
+export const MobileOutline = styled(Box)`
+  display: none;
+  @media only screen and (max-width: 1024px){
+    display: block;
+    position: absolute;
+    top: -33px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    background-color: var(--cimigo-blue-light-4);
+    padding: 4px 16px;
+    border-radius: 2px 0px 0px 0px;
+    z-index: 10;
+    cursor: pointer;
+    svg {
+        color: var(--cimigo-blue);
+        margin-left: 6px;
+    }
+  }
+`;
+interface ModalProps {
+  $toggleOutlineMobile?: boolean;
+  $quotasOutline?: boolean;
+}
+export const ModalMobile = styled.div<ModalProps>`
+  display: none;
+  @media only screen and (max-width: 1024px) {
+    ${props => props.$toggleOutlineMobile && css`
+    display: block;
+    position: fixed;
+    background: rgba(28, 28, 28, 0.2);
+    top: 0px;
+    right: 0px;
+    left:0px;
+    bottom: 108px;
+  `}
+  ${props => !props.$toggleOutlineMobile && css`
+      display: none;
+  `}
+  ${props => props.$quotasOutline && css`
+      bottom: 147px;
+  `}
+  }
+`
+

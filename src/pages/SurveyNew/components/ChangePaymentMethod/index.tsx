@@ -119,7 +119,7 @@ const ChangePaymentMethod = memo(
       setIsConfirmCancel(false);
     };
     
-    const renderETTranslateKey = () => {
+    const renderEmotion = () => {
       switch (project?.solution?.typeId) {
         case ESOLUTION_TYPE.PACK:
           return (
@@ -130,7 +130,7 @@ const ChangePaymentMethod = memo(
         case ESOLUTION_TYPE.VIDEO_CHOICE:
           return (
             <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_order_summary_eye_tracking_video_choice">
-            {t('payment_project_order_summary_eye_tracking_video_choice')}
+            {t('payment_project_order_summary_eye_tracking_video_choice')} ({project?.eyeTrackingSampleSize || 0})
             </ParagraphBody>
           )
       }
@@ -386,7 +386,7 @@ const ChangePaymentMethod = memo(
                 )}
                 {!!project?.enableEyeTracking && (
                   <div className={classes.flexOrder}>
-                      {renderETTranslateKey()}
+                      {renderEmotion()}
                     <ParagraphBody $colorName="--eerie-black">
                       {getCostCurrency(payment?.eyeTrackingSampleSizeCost, payment?.currency)?.show}
                     </ParagraphBody>

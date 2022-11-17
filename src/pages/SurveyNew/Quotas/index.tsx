@@ -3,7 +3,7 @@ import { memo, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { ReducerType } from "redux/reducers"
-import { RightPanelAction, Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components"
+import { RightPanelAction, Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel, MobileOutline, ModalMobile } from "../components"
 import LockIcon from "../components/LockIcon"
 import classes from "./styles.module.scss"
 import Button, { BtnType } from "components/common/buttons/Button";
@@ -254,7 +254,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
   return (
     <PageRoot>
       <LeftContent>
-        <PageTitle className={classes.pageTitle}>
+        <PageTitle>
           <PageTitleLeft>
             <PageTitleText translation-key="quotas_title_left_panel">{t("quotas_title_left_panel")}</PageTitleText>
             {!editable && <LockIcon status={project?.status} />}
@@ -470,7 +470,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
             </Grid>
           )}
         </Content>
-        <MobileAction  className={classes.mobileAction}>
+        <MobileAction>
           <ControlCheckbox
             $checkBoxTop={true}
             $cleanPadding={true}
@@ -493,18 +493,18 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
             padding="13px 8px !important"
             onClick={onNextPay}
           />
-          <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
-              <ParagraphSmall $colorName="--cimigo-blue">View outline</ParagraphSmall>
+          <MobileOutline onClick={onToggleViewOutlineMobile}>
+              <ParagraphSmall $colorName="--cimigo-blue" translation-key="common_btn_view_outline">{t("common_btn_view_outline")}</ParagraphSmall>
             <ArrowCircleUpRounded />
-          </Box>
-          <div className={toggleOutlineMobile ? classes.modalMobile : ""}></div>
+          </MobileOutline>
+          <ModalMobile $toggleOutlineMobile={toggleOutlineMobile} $quotasOutline></ModalMobile>
         </MobileAction>
       </LeftContent>
-      <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.closeOutlineMobile}>
-        <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
-          <ParagraphSmall $colorName="--cimigo-blue">Close outline</ParagraphSmall>
+      <RightContent $toggleOutlineMobile={toggleOutlineMobile} $quotasOutline>
+        <MobileOutline onClick={onToggleViewOutlineMobile}>
+          <ParagraphSmall $colorName="--cimigo-blue"translation-key="common_btn_close_outline">{t("common_btn_close_outline")}</ParagraphSmall>
           <ArrowCircleDownRounded />
-        </Box>
+        </MobileOutline>
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
@@ -535,7 +535,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
                   })}
                 </RPStepper>
               </RightPanelBody>
-              <RightPanelAction className={classes.rightPanelAction}>
+              <RightPanelAction>
                 <ControlCheckbox
                   $checkBoxTop={true}
                   $cleanPadding={true}
@@ -569,7 +569,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
                   price={price}
                 />
               </RightPanelBody>
-              <RightPanelAction className={classes.rightPanelAction}>
+              <RightPanelAction>
                 <ControlCheckbox
                   $checkBoxTop={true}
                   $cleanPadding={true}

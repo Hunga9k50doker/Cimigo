@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
-import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
+import { Content, LeftContent, MobileAction, MobileOutline, ModalMobile, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
 import CostSummary from "../components/CostSummary";
 import LockIcon from "../components/LockIcon";
 import { ETab, TabItem } from "./models";
@@ -240,7 +240,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
   return (
     <PageRoot className={classes.root}>
       <LeftContent>
-        <PageTitle className={classes.pageTitle}>
+        <PageTitle>
           <PageTitleLeft>
             <PageTitleText translation-key="target_title_left_panel">{t('target_title_left_panel')}</PageTitleText>
             {!editable && <LockIcon status={project?.status} />}
@@ -321,7 +321,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
             </Grid>
           </Grid>
         </Content>
-        <MobileAction className={classes.mobileAction}>
+        <MobileAction>
           <Button
             fullWidth
             btnType={BtnType.Raised}
@@ -330,19 +330,19 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
             padding="13px 8px !important"
             onClick={onNextQuotas}
           />
-          <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
-            <ParagraphSmall $colorName="--cimigo-blue">View outline</ParagraphSmall>
+          <MobileOutline onClick={onToggleViewOutlineMobile}>
+            <ParagraphSmall $colorName="--cimigo-blue"translation-key="common_btn_view_outline">{t("common_btn_view_outline")}</ParagraphSmall>
             <ArrowCircleUpRounded/>
-          </Box>
-          <div className={toggleOutlineMobile ? classes.modalMobile : ""}></div>
+          </MobileOutline>
+          <ModalMobile $toggleOutlineMobile={toggleOutlineMobile}></ModalMobile>
         </MobileAction>
       </LeftContent>
-      <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.closeOutlineMobile}>
+      <RightContent $toggleOutlineMobile={toggleOutlineMobile}>
         <RightPanel>
-          <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
-            <ParagraphSmall $colorName="--cimigo-blue">Close outline</ParagraphSmall>
+          <MobileOutline onClick={onToggleViewOutlineMobile}>
+            <ParagraphSmall $colorName="--cimigo-blue" translation-key="common_btn_close_outline">{t("common_btn_close_outline")}</ParagraphSmall>
             <ArrowCircleDownRounded />
-          </Box>
+          </MobileOutline>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
             <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} translation-key="project_right_panel_cost_summary">{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
@@ -401,7 +401,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
                   </Step>
                 </RPStepper>
               </RightPanelBody>
-              <RightPanelAction className={classes.rightPanelAction}>
+              <RightPanelAction>
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
@@ -421,7 +421,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
                   price={price}
                 />
               </RightPanelBody>
-              <RightPanelAction className={classes.rightPanelAction}>
+              <RightPanelAction>
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
