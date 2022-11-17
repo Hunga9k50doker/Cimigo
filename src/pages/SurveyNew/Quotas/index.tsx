@@ -3,12 +3,12 @@ import { memo, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { ReducerType } from "redux/reducers"
-import { RightPanelAction, Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components"
+import { RightPanelAction, Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel, MobileOutline, ModalMobile } from "../components"
 import LockIcon from "../components/LockIcon"
 import classes from "./styles.module.scss"
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
-import { ArrowForward, Check as CheckIcon, Done, InfoOutlined, Restore, WarningAmber } from "@mui/icons-material"
+import { ArrowCircleDownRounded, ArrowCircleUpRounded, ArrowForward, Check as CheckIcon, Done, InfoOutlined, Restore, WarningAmber } from "@mui/icons-material"
 import { Badge, Box, Grid, IconButton, Step, Tab, Table, TableBody, TableCell, TableHead, TableRow, useMediaQuery, useTheme } from "@mui/material"
 import TabPanelBox from "components/TabPanelBox"
 import Heading5 from "components/common/text/Heading5"
@@ -40,10 +40,12 @@ interface QuotasProps {
   projectId: number;
   isHaveChangePrice: boolean;
   tabRightPanel: ETabRightPanel;
+  toggleOutlineMobile: boolean;
+  onToggleViewOutlineMobile: () => void;
   onChangeTabRightPanel: (tab: number) => void;
 }
 
-const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: QuotasProps) => {
+const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlineMobile, onToggleViewOutlineMobile, onChangeTabRightPanel }: QuotasProps) => {
 
   const theme = useTheme();
 
@@ -491,9 +493,18 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
             padding="13px 8px !important"
             onClick={onNextPay}
           />
+          <MobileOutline onClick={onToggleViewOutlineMobile}>
+              <ParagraphSmall $colorName="--cimigo-blue" translation-key="common_btn_view_outline">{t("common_btn_view_outline")}</ParagraphSmall>
+            <ArrowCircleUpRounded />
+          </MobileOutline>
+          <ModalMobile $toggleOutlineMobile={toggleOutlineMobile} $quotasOutline></ModalMobile>
         </MobileAction>
       </LeftContent>
-      <RightContent>
+      <RightContent $toggleOutlineMobile={toggleOutlineMobile} $quotasOutline>
+        <MobileOutline onClick={onToggleViewOutlineMobile}>
+          <ParagraphSmall $colorName="--cimigo-blue"translation-key="common_btn_close_outline">{t("common_btn_close_outline")}</ParagraphSmall>
+          <ArrowCircleDownRounded />
+        </MobileOutline>
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />

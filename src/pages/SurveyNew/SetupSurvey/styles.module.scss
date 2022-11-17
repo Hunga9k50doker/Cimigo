@@ -1,3 +1,12 @@
-.root {
-  
-}
+
+@media only screen and (max-width: 767px) {
+    .pageTitle{
+        display: block !important; 
+        [class ~= MuiBox-root] {
+            display: none;
+        }
+    } 
+    .boxOutline {
+     max-height: 350px;   
+    }
+  }

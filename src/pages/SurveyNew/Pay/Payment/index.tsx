@@ -40,6 +40,7 @@ import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCanc
 import { AttachmentService } from "services/attachment";
 import FileSaver from 'file-saver';
 import moment from "moment";
+import { ESOLUTION_TYPE } from "models/solution";
 
 interface DataForm {
   paymentMethodId: number,
@@ -340,7 +341,23 @@ const PaymentPage = memo(({ }: PaymentProps) => {
         dispatch(setErrorMess(e))
       })
   }
-
+  
+  const renderEmotion = () => {
+    switch (project?.solution?.typeId) {
+      case ESOLUTION_TYPE.PACK:
+        return (
+          <ParagraphBody $colorName="--eerie-black" translation-key="payment_project_order_summary_eye_tracking">
+            {t("payment_project_order_summary_eye_tracking")} ({project?.eyeTrackingSampleSize || 0})
+          </ParagraphBody>
+        )
+      case ESOLUTION_TYPE.VIDEO_CHOICE:
+        return (
+          <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_order_summary_eye_tracking_video_choice">
+          {t('payment_project_order_summary_eye_tracking_video_choice')} ({project?.eyeTrackingSampleSize || 0})
+          </ParagraphBody>
+        )
+    }
+  }
   return (
     <Grid component={'form'} classes={{ root: classes.root }} onSubmit={handleSubmit(onConfirm)} noValidate autoComplete="off">
       <Divider className={classes.divider1} />
@@ -649,9 +666,7 @@ const PaymentPage = memo(({ }: PaymentProps) => {
             )}
             {project?.enableEyeTracking && (
               <div className={classes.flexOrder}>
-                <ParagraphBody $colorName="--eerie-black" translation-key="payment_project_order_summary_eye_tracking">
-                  {t("payment_project_order_summary_eye_tracking")} ({project?.eyeTrackingSampleSize || 0})
-                </ParagraphBody>
+                {renderEmotion()}
                 <ParagraphBody $colorName="--eerie-black">{price?.eyeTrackingSampleSizeCost?.show}</ParagraphBody>
               </div>
             )}

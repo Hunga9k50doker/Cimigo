@@ -1,4 +1,4 @@
-import { ArrowForward, Check as CheckIcon, KeyboardArrowRight } from "@mui/icons-material";
+import { ArrowCircleDownRounded, ArrowCircleUpRounded, ArrowForward, Check as CheckIcon, KeyboardArrowRight } from "@mui/icons-material";
 import { Tab, Badge, Step, Grid, Chip, Box, useTheme, useMediaQuery } from "@mui/material";
 import Button, { BtnType } from "components/common/buttons/Button";
 import Heading4 from "components/common/text/Heading4";
@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
-import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
+import { Content, LeftContent, MobileAction, MobileOutline, ModalMobile, PageRoot, PageTitle, PageTitleLeft, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
 import CostSummary from "../components/CostSummary";
 import LockIcon from "../components/LockIcon";
 import { ETab, TabItem } from "./models";
@@ -51,10 +51,12 @@ interface TargetProps {
   projectId: number,
   isHaveChangePrice: boolean;
   tabRightPanel: ETabRightPanel;
+  toggleOutlineMobile: boolean;
   onChangeTabRightPanel: (tab: number) => void;
+  onToggleViewOutlineMobile: () => void;
 }
 
-const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: TargetProps) => {
+const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlineMobile, onChangeTabRightPanel, onToggleViewOutlineMobile}: TargetProps) => {
 
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation()
@@ -328,10 +330,19 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
             padding="13px 8px !important"
             onClick={onNextQuotas}
           />
+          <MobileOutline onClick={onToggleViewOutlineMobile}>
+            <ParagraphSmall $colorName="--cimigo-blue"translation-key="common_btn_view_outline">{t("common_btn_view_outline")}</ParagraphSmall>
+            <ArrowCircleUpRounded/>
+          </MobileOutline>
+          <ModalMobile $toggleOutlineMobile={toggleOutlineMobile}></ModalMobile>
         </MobileAction>
       </LeftContent>
-      <RightContent>
+      <RightContent $toggleOutlineMobile={toggleOutlineMobile}>
         <RightPanel>
+          <MobileOutline onClick={onToggleViewOutlineMobile}>
+            <ParagraphSmall $colorName="--cimigo-blue" translation-key="common_btn_close_outline">{t("common_btn_close_outline")}</ParagraphSmall>
+            <ArrowCircleDownRounded />
+          </MobileOutline>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
             <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} translation-key="project_right_panel_cost_summary">{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />

@@ -28,6 +28,7 @@ import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCancelOrder";
 import { usePrice } from "helpers/price";
+import { ESOLUTION_TYPE } from "models/solution";
 
 interface Props {
   project: Project;
@@ -117,6 +118,23 @@ const ChangePaymentMethod = memo(
     const onCloseConfirmCancel = () => {
       setIsConfirmCancel(false);
     };
+    
+    const renderEmotion = () => {
+      switch (project?.solution?.typeId) {
+        case ESOLUTION_TYPE.PACK:
+          return (
+            <ParagraphBody $colorName="--eerie-black" translation-key="payment_project_order_summary_eye_tracking">
+              {t("payment_project_order_summary_eye_tracking")} ({project?.eyeTrackingSampleSize || 0})
+            </ParagraphBody>
+          )
+        case ESOLUTION_TYPE.VIDEO_CHOICE:
+          return (
+            <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_order_summary_eye_tracking_video_choice">
+            {t('payment_project_order_summary_eye_tracking_video_choice')} ({project?.eyeTrackingSampleSize || 0})
+            </ParagraphBody>
+          )
+      }
+    }
     return (
       <Grid>
         <Heading1
@@ -368,12 +386,7 @@ const ChangePaymentMethod = memo(
                 )}
                 {!!project?.enableEyeTracking && (
                   <div className={classes.flexOrder}>
-                    <ParagraphBody
-                      $colorName="--eerie-black"
-                      translation-key="payment_project_order_summary_eye_tracking"
-                    >
-                      {t("payment_project_order_summary_eye_tracking")} ({payment?.eyeTrackingSampleSize || 0})
-                    </ParagraphBody>
+                      {renderEmotion()}
                     <ParagraphBody $colorName="--eerie-black">
                       {getCostCurrency(payment?.eyeTrackingSampleSizeCost, payment?.currency)?.show}
                     </ParagraphBody>

@@ -259,6 +259,8 @@ export const Survey = () => {
                       projectId={Number(id)}
                       isHaveChangePrice={isHaveChangePrice}
                       tabRightPanel={tabRightPanel}
+                      toggleOutlineMobile={toggleOutlineMobile}
+                      onToggleViewOutlineMobile={onToggleViewOutlineMobile}
                       onChangeTabRightPanel={onChangeTabRightPanel}
                     />
                   )
@@ -273,6 +275,8 @@ export const Survey = () => {
               projectId={Number(id)}
               isHaveChangePrice={isHaveChangePrice}
               tabRightPanel={tabRightPanel}
+              toggleOutlineMobile={toggleOutlineMobile}
+              onToggleViewOutlineMobile={onToggleViewOutlineMobile}
               onChangeTabRightPanel={onChangeTabRightPanel}
             />}
           />
@@ -284,6 +288,8 @@ export const Survey = () => {
               projectId={Number(id)}
               isHaveChangePrice={isHaveChangePrice}
               tabRightPanel={tabRightPanel}
+              toggleOutlineMobile={toggleOutlineMobile}
+              onToggleViewOutlineMobile={onToggleViewOutlineMobile}
               onChangeTabRightPanel={onChangeTabRightPanel}
             />}
           />

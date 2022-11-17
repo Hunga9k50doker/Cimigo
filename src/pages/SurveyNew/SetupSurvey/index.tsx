@@ -1,12 +1,12 @@
 import { useState, memo, useMemo, useEffect } from "react";
 import classes from './styles.module.scss';
-import { Tab, Badge, Step, Chip } from "@mui/material";
-import { Content, LeftContent, MobileAction, PageRoot, PageTitle, PageTitleLeft, PageTitleRight, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
+import { Tab, Badge, Step, Chip, Box } from "@mui/material";
+import { Content, LeftContent, MobileAction, MobileOutline, ModalMobile, PageRoot, PageTitle, PageTitleLeft, PageTitleRight, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
 import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import LockIcon from "../components/LockIcon";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
-import { Help as HelpIcon, ArrowForward, Check as CheckIcon, BurstMode as BurstModeIcon, FactCheck as FactCheckIcon, PlaylistAdd as PlaylistAddIcon, FormatAlignLeft as FormatAlignLeftIcon, RemoveRedEye as RemoveRedEyeIcon } from '@mui/icons-material';
+import { Help as HelpIcon, ArrowForward, Check as CheckIcon, BurstMode as BurstModeIcon, FactCheck as FactCheckIcon, PlaylistAdd as PlaylistAddIcon, FormatAlignLeft as FormatAlignLeftIcon, RemoveRedEye as RemoveRedEyeIcon, ArrowCircleUpRounded, ArrowCircleDownRounded } from '@mui/icons-material';
 import TabPanelBox from "components/TabPanelBox";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
@@ -34,11 +34,13 @@ interface SetupSurvey {
   projectId: number;
   isHaveChangePrice: boolean;
   tabRightPanel: ETabRightPanel;
+  toggleOutlineMobile: boolean;
+  onToggleViewOutlineMobile: () => void;
   onChangeTabRightPanel: (tab: number) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: SetupSurvey) => {
+const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlineMobile, onToggleViewOutlineMobile, onChangeTabRightPanel }: SetupSurvey) => {
   
   const { t } = useTranslation();
 
@@ -124,7 +126,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
   return (
     <PageRoot className={classes.root}>
       <LeftContent>
-        <PageTitle>
+        <PageTitle className={classes.pageTitle}>
           <PageTitleLeft>
             <PageTitleText translation-key="setup_survey_title_left_panel"
             dangerouslySetInnerHTML={{ __html: t('setup_survey_title_left_panel', {title: project?.solution?.title})}}
@@ -175,9 +177,18 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
             padding="13px 8px !important"
             onClick={onNextSetupTarget}
           />
+          <MobileOutline onClick={onToggleViewOutlineMobile}>
+            <ParagraphSmall $colorName="--cimigo-blue" translation-key="common_btn_view_outline">{t("common_btn_view_outline")}</ParagraphSmall>
+            <ArrowCircleUpRounded/>
+          </MobileOutline>
+          <ModalMobile $toggleOutlineMobile={toggleOutlineMobile}></ModalMobile>
         </MobileAction>
       </LeftContent>
-      <RightContent>
+      <RightContent $toggleOutlineMobile={toggleOutlineMobile}>
+        <MobileOutline onClick={onToggleViewOutlineMobile}>
+          <ParagraphSmall $colorName="--cimigo-blue" translation-key="common_btn_close_outline">{t("common_btn_close_outline")}</ParagraphSmall>
+          <ArrowCircleDownRounded />
+        </MobileOutline>
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
@@ -186,7 +197,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
             >{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
           </TabRightPanel>
           <TabPanelBox value={tabRightPanel} index={ETabRightPanel.OUTLINE}>
-            <RightPanelContent>
+            <RightPanelContent className={classes.boxOutline}> 
               <RightPanelBody>
                 <RPStepper orientation="vertical" connector={<RPStepConnector />}>
                   <Step active={isValidBasic} expanded>
@@ -301,7 +312,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChang
                   price={price}
                 />
               </RightPanelBody>
-              <RightPanelAction>
+              <RightPanelAction> 
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
