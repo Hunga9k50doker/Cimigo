@@ -24,7 +24,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import SubTitle from "components/common/text/SubTitle";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import SetupSurvey from "./SetupSurvey";
-import AdtractionTest from "./AdtractionTest";
+import VideoChoice from "./VideoChoice";
 import Target from "./Target";
 import Quotas from "./Quotas";
 import Pay from "./Pay";
@@ -242,7 +242,7 @@ export const Survey = () => {
               switch (project?.solution?.typeId) {
                 case ESOLUTION_TYPE.VIDEO_CHOICE:
                   return (
-                    <AdtractionTest
+                    <VideoChoice
                       {...routeProps}
                       projectId={Number(id)}
                       isHaveChangePrice={isHaveChangePrice}
