@@ -8,7 +8,7 @@ import LockIcon from "../components/LockIcon"
 import classes from "./styles.module.scss"
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
-import { ArrowForward, Check as CheckIcon, Done, InfoOutlined, Restore, WarningAmber } from "@mui/icons-material"
+import { ArrowCircleDownRounded, ArrowCircleUpRounded, ArrowForward, Check as CheckIcon, Done, InfoOutlined, Restore, WarningAmber } from "@mui/icons-material"
 import { Badge, Box, Grid, IconButton, Step, Tab, Table, TableBody, TableCell, TableHead, TableRow, useMediaQuery, useTheme } from "@mui/material"
 import TabPanelBox from "components/TabPanelBox"
 import Heading5 from "components/common/text/Heading5"
@@ -40,10 +40,12 @@ interface QuotasProps {
   projectId: number;
   isHaveChangePrice: boolean;
   tabRightPanel: ETabRightPanel;
+  toggleOutlineMobile: boolean;
+  onToggleViewOutlineMobile: () => void;
   onChangeTabRightPanel: (tab: number) => void;
 }
 
-const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: QuotasProps) => {
+const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlineMobile, onToggleViewOutlineMobile, onChangeTabRightPanel }: QuotasProps) => {
 
   const theme = useTheme();
 
@@ -252,7 +254,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
   return (
     <PageRoot>
       <LeftContent>
-        <PageTitle>
+        <PageTitle className={classes.pageTitle}>
           <PageTitleLeft>
             <PageTitleText translation-key="quotas_title_left_panel">{t("quotas_title_left_panel")}</PageTitleText>
             {!editable && <LockIcon status={project?.status} />}
@@ -468,7 +470,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
             </Grid>
           )}
         </Content>
-        <MobileAction>
+        <MobileAction  className={classes.mobileAction}>
           <ControlCheckbox
             $checkBoxTop={true}
             $cleanPadding={true}
@@ -491,9 +493,18 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
             padding="13px 8px !important"
             onClick={onNextPay}
           />
+          <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
+              <ParagraphSmall $colorName="--cimigo-blue">View outline</ParagraphSmall>
+            <ArrowCircleUpRounded />
+          </Box>
+          <div className={toggleOutlineMobile ? classes.modalMobile : ""}></div>
         </MobileAction>
       </LeftContent>
-      <RightContent>
+      <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.closeOutlineMobile}>
+        <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
+          <ParagraphSmall $colorName="--cimigo-blue">Close outline</ParagraphSmall>
+          <ArrowCircleDownRounded />
+        </Box>
         <RightPanel>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
@@ -524,7 +535,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
                   })}
                 </RPStepper>
               </RightPanelBody>
-              <RightPanelAction>
+              <RightPanelAction className={classes.rightPanelAction}>
                 <ControlCheckbox
                   $checkBoxTop={true}
                   $cleanPadding={true}
@@ -558,7 +569,7 @@ const Quotas = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
                   price={price}
                 />
               </RightPanelBody>
-              <RightPanelAction>
+              <RightPanelAction className={classes.rightPanelAction}>
                 <ControlCheckbox
                   $checkBoxTop={true}
                   $cleanPadding={true}

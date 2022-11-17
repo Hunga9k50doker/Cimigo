@@ -1,4 +1,4 @@
-import { ArrowForward, Check as CheckIcon, KeyboardArrowRight } from "@mui/icons-material";
+import { ArrowCircleDownRounded, ArrowCircleUpRounded, ArrowForward, Check as CheckIcon, KeyboardArrowRight } from "@mui/icons-material";
 import { Tab, Badge, Step, Grid, Chip, Box, useTheme, useMediaQuery } from "@mui/material";
 import Button, { BtnType } from "components/common/buttons/Button";
 import Heading4 from "components/common/text/Heading4";
@@ -51,10 +51,12 @@ interface TargetProps {
   projectId: number,
   isHaveChangePrice: boolean;
   tabRightPanel: ETabRightPanel;
+  toggleOutlineMobile: boolean;
   onChangeTabRightPanel: (tab: number) => void;
+  onToggleViewOutlineMobile: () => void;
 }
 
-const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabRightPanel }: TargetProps) => {
+const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlineMobile, onChangeTabRightPanel, onToggleViewOutlineMobile}: TargetProps) => {
 
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation()
@@ -238,7 +240,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
   return (
     <PageRoot className={classes.root}>
       <LeftContent>
-        <PageTitle>
+        <PageTitle className={classes.pageTitle}>
           <PageTitleLeft>
             <PageTitleText translation-key="target_title_left_panel">{t('target_title_left_panel')}</PageTitleText>
             {!editable && <LockIcon status={project?.status} />}
@@ -319,7 +321,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
             </Grid>
           </Grid>
         </Content>
-        <MobileAction>
+        <MobileAction className={classes.mobileAction}>
           <Button
             fullWidth
             btnType={BtnType.Raised}
@@ -328,10 +330,19 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
             padding="13px 8px !important"
             onClick={onNextQuotas}
           />
+          <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
+            <ParagraphSmall $colorName="--cimigo-blue">View outline</ParagraphSmall>
+            <ArrowCircleUpRounded/>
+          </Box>
+          <div className={toggleOutlineMobile ? classes.modalMobile : ""}></div>
         </MobileAction>
       </LeftContent>
-      <RightContent>
+      <RightContent className={toggleOutlineMobile ? classes.rightContent : classes.closeOutlineMobile}>
         <RightPanel>
+          <Box className={classes.mobileViewOutline} onClick={onToggleViewOutlineMobile}>
+            <ParagraphSmall $colorName="--cimigo-blue">Close outline</ParagraphSmall>
+            <ArrowCircleDownRounded />
+          </Box>
           <TabRightPanel value={tabRightPanel} onChange={(_, value) => onChangeTabRightPanel(value)}>
             <Tab translation-key="project_right_panel_outline" label={t("project_right_panel_outline")} value={ETabRightPanel.OUTLINE} />
             <Tab label={<Badge color="secondary" variant="dot" invisible={!isHaveChangePrice} translation-key="project_right_panel_cost_summary">{t("project_right_panel_cost_summary")}</Badge>} value={ETabRightPanel.COST_SUMMARY} />
@@ -390,7 +401,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
                   </Step>
                 </RPStepper>
               </RightPanelBody>
-              <RightPanelAction>
+              <RightPanelAction className={classes.rightPanelAction}>
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
@@ -410,7 +421,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, onChangeTabR
                   price={price}
                 />
               </RightPanelBody>
-              <RightPanelAction>
+              <RightPanelAction className={classes.rightPanelAction}>
                 <Button
                   fullWidth
                   btnType={BtnType.Raised}
