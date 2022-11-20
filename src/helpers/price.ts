@@ -1,10 +1,10 @@
 import { CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
-import { currencySymbol, ECurrency } from "models/general";
+import { ECurrency } from "models/general";
 import { Project } from "models/project";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
-import { fCurrency2, fCurrency2VND } from "utils/formatNumber";
+import { fCurrency, fCurrencyVND } from "utils/formatNumber";
 import ProjectHelper from "./project";
 
 export class PriceService {
@@ -112,8 +112,8 @@ const getCurrencyConvert = (costVND: number, currency: string, usdToVND: number)
   let show = '', equivalent = ''
   let VND = costVND
   let USD = Math.round(costVND / usdToVND)
-  let USDShow = `${currencySymbol[ECurrency.USD].first}${fCurrency2(USD)}${currencySymbol[ECurrency.USD].last}`
-  let VNDShow = `${currencySymbol[ECurrency.VND].first}${fCurrency2VND(VND)}${currencySymbol[ECurrency.VND].last}`
+  let USDShow = fCurrency(USD)
+  let VNDShow = fCurrencyVND(VND)
   switch (currency) {
     case ECurrency.USD:
       show = USDShow
@@ -224,8 +224,8 @@ export function usePrice(_project?: Project) {
     return getCurrencyConvert(costVND, currency, usdToVND)
   }
 
-  const getCostCurrency = (costVND: number, _currency?: string) => {
-    return getCurrencyConvert(costVND, _currency || currency, usdToVND)
+  const getCostCurrency = (costVND: number, _currency?: string, _usdToVND?: number) => {
+    return getCurrencyConvert(costVND, _currency || currency, _usdToVND || usdToVND)
   }
 
   const price: TotalPrice = {

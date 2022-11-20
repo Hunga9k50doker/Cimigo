@@ -25,6 +25,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import clsx from "clsx";
 import { push } from 'connected-react-router';
 import { routes } from 'routers/routes';
+import { usePrice } from 'helpers/price';
 
   const ArrowDropdownIcon = (props) => {
     return <ArrowDropDownIcon {...props} sx={{ color: "var(--eerie-black-40)", fontSize: "20px !important" }}/>;
@@ -152,6 +153,8 @@ const PaymentHistory = memo(({}: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
+  const { getCostCurrency } = usePrice()
+
   return (
     <BasicLayout 
     HeaderProps={{ project: true }}
@@ -274,7 +277,7 @@ const PaymentHistory = memo(({}: Props) => {
                                     </TableCell>
                                     <TableCell sx={{textAlign: 'center'}}>
                                         <ParagraphBody className={clsx(classes.cellText, classes.alignText)}>
-                                            ${item.amountUSD}  
+                                            {getCostCurrency(item.amount, null, item.usdToVNDRate)?.show}
                                         </ParagraphBody>
                                     </TableCell>
                                     <TableCell sx={{textAlign: "center"}}>
@@ -311,7 +314,7 @@ const PaymentHistory = memo(({}: Props) => {
                         <div>
                             <ParagraphSmall $colorName="--cimigo-blue" className="underline" onClick={() => onClickProjectName(item.project?.id)}>{item.project?.name}</ParagraphSmall>
                             <Grid sx={{margin: '4px 0'}}>
-                              <ParagraphSmall $colorName="---gray-60" className={classes.priceInvoice}><span>${item.amountUSD}</span> -  {item.orderId}</ParagraphSmall> 
+                              <ParagraphSmall $colorName="---gray-60" className={classes.priceInvoice}><span>{getCostCurrency(item.amount, null, item.usdToVNDRate)?.show}</span> -  {item.orderId}</ParagraphSmall> 
                             </Grid>
                         </div>
                         <IconButton className={classes.iconButton} onClick={() => getInvoice(item.project?.id)}>
