@@ -79,6 +79,7 @@ const VideoItem = memo(({ item, editable, onAction }: VideoItemProps) => {
                   more={t("setup_video_choice_video_item_show_more")}
                   less={t("setup_video_choice_video_item_show_less")}
                   anchorClass={classes.textControl}
+                  truncatedEndingComponent={"..."}
                   expanded={false}
                   width={480}
                   className={classes.wrapperText}
