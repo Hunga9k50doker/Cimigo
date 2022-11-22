@@ -220,7 +220,8 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
                       <InputTextfield
                         translation-key-placeholder="setup_video_choice_popup_video_information_key_message_text"  
                         placeholder={t("setup_video_choice_popup_video_information_key_message_text")}
-                        className={classes.inputTextArea}
+                        multiline
+                        rows={3}
                         infor={`${keyMessage?.length}/${CHARACTER_LIMIT}`}
                         inputRef={register("keyMessage")}
                         inputProps={{

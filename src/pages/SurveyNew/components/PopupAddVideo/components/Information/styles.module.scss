@@ -1,6 +1,8 @@
 .root {
     display: flex;
     margin-top: 8px;
+    overflow-y: auto;
+    height: 350px;
     @media only screen and (max-width: 767px) {
         display: block;
     }
@@ -53,9 +55,6 @@
     align-items: center;
 }
 .boxInputTextArea {
-    .inputTextArea {
-        padding-bottom: 40px;
-    }
     p {
         margin-left: auto;
     }
