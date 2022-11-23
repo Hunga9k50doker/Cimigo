@@ -197,6 +197,23 @@ const PopupAddVideo = (props: Props) => {
     onClose()
   }
 
+  const renderTitle = () => {
+    switch (type) {
+      case EVIDEO_TYPE.UPLOAD:
+        return (
+          <Heading3 translation-key="setup_video_choice_popup_add_video">
+          {t("setup_video_choice_popup_add_video")}
+          </Heading3>
+        )
+      case EVIDEO_TYPE.YOUTUBE:
+        return (
+          <Heading3 translation-key="setup_video_choice_popup_add_video_youtube">
+          {t("setup_video_choice_popup_add_video_youtube")}
+          </Heading3>
+        )
+    }
+  }
+
   return (
     <Dialog
       scroll="paper"
@@ -205,9 +222,7 @@ const PopupAddVideo = (props: Props) => {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle>
-        <Heading3 translation-key="setup_video_choice_popup_add_video">
-          {t("setup_video_choice_popup_add_video")}
-        </Heading3>
+        {renderTitle()}
         <ButtonCLose
           onClick={() => _onClose()}>
         </ButtonCLose>

@@ -14,7 +14,7 @@ import Heading5 from "components/common/text/Heading5";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import CostSummary from "../components/CostSummary";
-import { editableProject } from "helpers/project";
+import ProjectHelper, { editableProject } from "helpers/project";
 import { usePrice } from "helpers/price";
 import { ETabRightPanel, SETUP_SURVEY_SECTION } from "models/project";
 import AddVideos from "./components/AddVideos";
@@ -46,6 +46,10 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
   const { project, scrollToSection, showHowToSetup } = useSelector((state: ReducerType) => state.project)
 
   const editable = useMemo(() => editableProject(project), [project])
+  
+  const isValidSetup = useMemo(() => {
+    return ProjectHelper.isValidSetup(project)
+  }, [project])
 
   const [onOpenHowToSetupSurvey, setOnOpenHowToSetupSurvey] = useState(false);
 
@@ -68,7 +72,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
 
 
   const onNextSetupTarget = () => {
-    if (!editable) {
+    if (!editable || isValidSetup) {
       dispatch(push(routes.project.detail.target.replace(":id", `${projectId}`)))
     }
   }
