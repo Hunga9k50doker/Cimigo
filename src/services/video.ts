@@ -1,6 +1,6 @@
 import { API } from 'config/constans';
 import { DataPagination } from 'models/general';
-import { CREATE_VIDEO, GET_VIDEOS, UPDATE_VIDEO, Video } from 'models/video';
+import { CHECK_YOUTUBE_LINK, CREATE_VIDEO, GET_VIDEOS, UPDATE_VIDEO, Video } from 'models/video';
 import api from 'services/configApi';
 
 export class VideoService {
@@ -39,6 +39,18 @@ export class VideoService {
         return await api.delete(`${API.VIDEO.DEFAULT}/${id}`)
             .then((res) => {
                 return Promise.resolve(res.data)
+            })
+            .catch((e) => {
+                return Promise.reject(e?.response?.data);
+            })
+    }
+
+    static async checkYoutubeLink(data: CHECK_YOUTUBE_LINK): Promise<boolean> {
+        return await api.get(API.VIDEO.CHECK_YOUTUBE_LINK, {
+            params: data
+        })
+            .then((res) => {
+                return Promise.resolve(res.data.data)
             })
             .catch((e) => {
                 return Promise.reject(e?.response?.data);

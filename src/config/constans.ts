@@ -190,7 +190,8 @@ export const API = {
     }
   },
   VIDEO: {
-    DEFAULT: '/v1.0/video'
+    DEFAULT: '/v1.0/video',
+    CHECK_YOUTUBE_LINK: '/v1.0/video/check-youtube-link'
   }
 }
 

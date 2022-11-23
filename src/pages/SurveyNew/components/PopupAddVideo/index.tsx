@@ -119,6 +119,7 @@ const PopupAddVideo = (props: Props) => {
       case EVIDEO_TYPE.YOUTUBE:
         return (
           <UploadVideoFromYoutube
+            projectId={project.id}
             onSubmit={onUploadVideoFromYoutube}
           />
         )

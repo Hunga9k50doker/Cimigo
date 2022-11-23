@@ -103,3 +103,8 @@ export interface GET_VIDEOS {
     page?: number;
     projectId?: number;
 }
+
+export interface CHECK_YOUTUBE_LINK {
+    projectId: number;
+    youtubeVideoId: string;
+}
