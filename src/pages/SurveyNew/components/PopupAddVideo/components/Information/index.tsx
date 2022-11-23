@@ -185,7 +185,6 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
                       title={t("setup_video_choice_popup_video_information_brand_name")}
                       placeholder={t("setup_video_choice_popup_video_information_brand_name_placeholder")}
                       type="text"
-                      autoFocus
                       autoComplete="off"
                       inputRef={register("brand")}
                       errorMessage={errors.brand?.message}
@@ -198,7 +197,6 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
                       title={t("setup_video_choice_popup_video_information_product_name")}
                       placeholder={t("setup_video_choice_popup_video_information_product_name_placeholder")}
                       type="text"
-                      autoFocus
                       autoComplete="off"
                       inputRef={register("product")}
                       errorMessage={errors.product?.message}
