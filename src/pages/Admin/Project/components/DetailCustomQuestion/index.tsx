@@ -47,7 +47,7 @@ const DetailCustomQuestion = memo(({ project }: Props) => {
                 To: <span style={{ fontWeight: 500 }}>{item.scaleRangeTo}</span>
               </Typography>
             </Box>
-            {item.customQuestionAttributes?.length && (
+            {!!item.customQuestionAttributes?.length && (
               <>
                 <Typography variant="subtitle1" component="div">
                   Multiple attributes:
@@ -90,7 +90,7 @@ const DetailCustomQuestion = memo(({ project }: Props) => {
                 </Box>
               ))}
             </Box>
-            {item.customQuestionAttributes?.length && (
+            {!!item.customQuestionAttributes?.length && (
               <>
                 <Typography variant="subtitle1" component="div">
                   Multiple attributes:
@@ -121,7 +121,7 @@ const DetailCustomQuestion = memo(({ project }: Props) => {
             <Typography variant="subtitle1" component="div">
               Number of stars: <span style={{ fontWeight: 500 }}>{item.numberOfStars || 0}</span>
             </Typography>
-            {item.customQuestionAttributes?.length && (
+            {!!item.customQuestionAttributes?.length && (
               <>
                 <Typography variant="subtitle1" component="div">
                   Multiple attributes:
