@@ -45,7 +45,10 @@ const PaymentHistory = memo(({}: Props) => {
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const [sort, setSort] = useState<SortItem>();
+  const [sort, setSort] = useState<SortItem>({
+    sortedField: SortedField.orderId,
+    isDescending: true,
+  });
   const [data, setData] = useState<DataPagination<Payment>>();
   const [keyword, setKeyword] = useState<string>("");
 
@@ -304,6 +307,7 @@ const PaymentHistory = memo(({}: Props) => {
                         </TableBody>
                     </Table>
                      {/* ================== Mobile ==================== */}
+                    <div className={classes.tableMobile}>
                     {data?.data.length ? (
                       data?.data?.map((item) => (
                       <Grid className={classes.containerMobile}>
@@ -324,8 +328,10 @@ const PaymentHistory = memo(({}: Props) => {
                     </Grid> ))
                     ) : ( 
                       <SearchNotFound messs={t("project_mgmt_project_not_found")} />
-                    )}                    
+                    )}    
+                    </div>                
                     <TablePagination
+                    labelRowsPerPage={t("common_row_per_page")}
                     component="div"
                     count={data?.meta?.itemCount || 0}
                     rowsPerPage={data?.meta?.take || 10}

@@ -113,3 +113,10 @@
         color: var(--eerie-black-65);
     }
 }
+
+.tableMobile {
+    display:none;
+    @media only screen and (max-width: 767px) {
+        display: block;
+      }
+}
