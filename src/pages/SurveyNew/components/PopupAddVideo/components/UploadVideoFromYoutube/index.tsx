@@ -97,8 +97,6 @@ const UploadVideoFromYoutube = ({ projectId, onSubmit }: Props) => {
             dispatch(setErrorMess(e))
             return false
           })
-          .finally(() => dispatch(setLoading(false)))
-        console.log(checkYoutubeLink, "===checkYoutubeLink==");
         if (checkYoutubeLink) {
           onSubmit({
             id: id,
@@ -111,10 +109,8 @@ const UploadVideoFromYoutube = ({ projectId, onSubmit }: Props) => {
           })
         }
       })
-      .catch(e => {
-        dispatch(setErrorMess(e))
-        dispatch(setLoading(false))
-      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
   return (
