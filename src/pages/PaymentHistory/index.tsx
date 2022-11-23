@@ -332,6 +332,9 @@ const PaymentHistory = memo(({}: Props) => {
                     </div>                
                     <TablePagination
                     labelRowsPerPage={t("common_row_per_page")}
+                    labelDisplayedRows={ function defaultLabelDisplayedRows({ from, to, count }) {
+                      return t("common_row_of_page", {from: from, to: to, count: count});
+                    }}
                     component="div"
                     count={data?.meta?.itemCount || 0}
                     rowsPerPage={data?.meta?.take || 10}
