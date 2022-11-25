@@ -1,4 +1,6 @@
 import images from "config/images";
+import ReactDOMServer from 'react-dom/server'
+
 export interface TableHeaderLabel {
   name: string;
   label: string;
@@ -169,7 +171,7 @@ export const currencySymbol = {
   },
   [ECurrency.VND]: {
     first: '',
-    last: ' ₫'
+    last: ReactDOMServer.renderToString(<>&nbsp;₫</>)
   },
 }
 
