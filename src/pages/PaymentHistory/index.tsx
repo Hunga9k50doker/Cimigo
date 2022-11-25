@@ -275,12 +275,12 @@ const PaymentHistory = memo(({ }: Props) => {
                         </ParagraphBody>
                       </TableCell>
                       <TableCell>
-                        <ParagraphBody className={classes.cellText} noWrap>
+                        <ParagraphBody className={classes.cellText}>
                           {moment(item.completedDate).format("DD-MM-yyyy")}
                         </ParagraphBody>
                       </TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>
-                        <ParagraphBody className={clsx(classes.cellText, classes.alignText)} noWrap>
+                        <ParagraphBody className={clsx(classes.cellText, classes.alignText)}>
                           {getCostCurrency(item.amount, null, item.usdToVNDRate)?.show}
                         </ParagraphBody>
                       </TableCell>

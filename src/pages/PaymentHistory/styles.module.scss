@@ -67,7 +67,7 @@
 }
 
 .cellText {
-    word-break: break-word;
+    white-space: nowrap;
     color: var(--eerie-black) !important;
 }
 
