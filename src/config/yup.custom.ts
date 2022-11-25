@@ -41,11 +41,11 @@ yup.addMethod<yup.DateSchema>(yup.date, 'startTime', function (msg?: { lessThan?
     const startTime = moment(value)
     const endTime = moment(this.parent.endTime)
     
-    if (startTime.isValid() && startTime.isSame(endTime)) {
+    if (startTime.isValid() && startTime.isSameOrAfter(endTime)) {
       return createError({
         path,
         params: {
-          lessThan: startTime.format('mm:ss'),
+          lessThan: endTime.format('mm:ss'),
         },
         message: msg?.lessThan ?? function(params) {
           return `End time must be less than ${params.lessThan}`
@@ -81,7 +81,7 @@ yup.addMethod<yup.DateSchema>(yup.date, 'endTime', function (msg?: { moreThan?: 
     )
     const startTime = moment(this.parent.startTime)
     const endTime = moment(value)
-    if (startTime.isValid() && startTime.isSame(endTime)) {
+    if (startTime.isValid() && startTime.isSameOrAfter(endTime)) {
       return createError({
         path,
         params: {

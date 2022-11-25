@@ -314,7 +314,7 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
         <ParagraphExtraSmall className={classes.textEnd} mt={1} $colorName="--eerie-black-65">
           <span translation-key="payment_billing_sub_tab_preview_confirm_des_1">
             {t('payment_billing_sub_tab_preview_confirm_des_1')}</span>{" "}
-          <a className="underline" href={routesOutside(i18n.language)?.rapidsurveyTermsOfService} translation-key="payment_billing_sub_tab_preview_confirm_des_2">{t('payment_billing_sub_tab_preview_confirm_des_2')}</a>{" "}
+          <a className="underline" target="_blank" rel="noopener noreferrer" href={routesOutside(i18n.language)?.rapidsurveyTermsOfService} translation-key="payment_billing_sub_tab_preview_confirm_des_2">{t('payment_billing_sub_tab_preview_confirm_des_2')}</a>{" "}
           <span translation-key="payment_billing_sub_tab_preview_confirm_des_3">{t('payment_billing_sub_tab_preview_confirm_des_3')}</span>
         </ParagraphExtraSmall>
       </Grid>
