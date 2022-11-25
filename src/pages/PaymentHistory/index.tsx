@@ -32,7 +32,7 @@ const ArrowDropdownIcon = (props) => {
 }
 enum SortedField {
   name = "name",
-  orderId = "orderId",
+  orderId = "id",
   completedDate = "completedDate",
   amountUSD = "amountUSD",
 }
@@ -275,12 +275,12 @@ const PaymentHistory = memo(({ }: Props) => {
                         </ParagraphBody>
                       </TableCell>
                       <TableCell>
-                        <ParagraphBody className={classes.cellText}>
+                        <ParagraphBody className={classes.cellText} noWrap>
                           {moment(item.completedDate).format("DD-MM-yyyy")}
                         </ParagraphBody>
                       </TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>
-                        <ParagraphBody className={clsx(classes.cellText, classes.alignText)}>
+                        <ParagraphBody className={clsx(classes.cellText, classes.alignText)} noWrap>
                           {getCostCurrency(item.amount, null, item.usdToVNDRate)?.show}
                         </ParagraphBody>
                       </TableCell>
