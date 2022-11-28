@@ -70,8 +70,8 @@ export const EmotionMeasurement = memo(({ price, project, step }: EmotionMeasure
         mt={1}
         translation-key="setup_video_choice_add_video_emotion_measurement_sub_title"
         className={clsx({ [classes.titleSubDisabled]: !project?.enableEyeTracking })}
+        dangerouslySetInnerHTML={{ __html: t("setup_video_choice_add_video_emotion_measurement_sub_title")}}
       >
-        {t("setup_video_choice_add_video_emotion_measurement_sub_title")}
       </ParagraphBody>
     </Grid >
   )
