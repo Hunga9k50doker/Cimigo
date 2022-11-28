@@ -189,7 +189,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
                     </Step>
                   )}
                   {project?.solution?.enableEyeTracking && (
-                    <Step expanded>
+                    <Step expanded active={project?.enableEyeTracking}>
                       <RPStepLabel
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.emotion_measurement)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><SentimentSatisfiedRounded /></RPStepIconBox>}>

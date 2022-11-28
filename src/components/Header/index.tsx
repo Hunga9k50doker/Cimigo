@@ -138,6 +138,13 @@ const Header = memo((props: HeaderProps) => {
       .finally(() => dispatch(setLoading(true)))
   }
 
+  const handleKeyPress = (e) => {
+    var code = e.keyCode || e.which;
+    if (code === 13) {
+      onChangeProjectName();
+    }
+  };
+
   return (
     <header className={classes.root} id="header">
       <div className={classes.container}>
@@ -199,14 +206,17 @@ const Header = memo((props: HeaderProps) => {
                 ) : (
                   <div className={classes.editBox}>
                     <Inputs
+                      id="inputProject"
                       name=""
                       size="small"
                       value={projectName}
                       onChange={(e) => setProjectName(e.target.value)}
                       placeholder={t('field_project_name_placeholder')}
                       translation-key-placeholder="field_project_name_placeholder"
+                      onKeyPress={handleKeyPress}
                     />
                     <Buttons
+                      id="btnProject"
                       nowrap
                       btnType="Blue"
                       translation-key="common_save"
@@ -308,7 +318,7 @@ const Header = memo((props: HeaderProps) => {
                     </MenuItem>
                     <MenuItem className={classes.itemAciton} onClick={() => history.push(routes.paymentHistory)}>
                       <img src={images.icPaymentHistory} alt="" />
-                      <p translation-key="auth_log_out">Payment history</p>
+                      <p translation-key="auth_payment_history">{t("auth_payment_history")}</p>
                     </MenuItem>
                     <MenuItem className={classes.itemAciton} onClick={logout}>
                       <img src={images.icLogout} alt="" />

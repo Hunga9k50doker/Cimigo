@@ -227,7 +227,8 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                                             <TimePicker
                                               value={field.value as any}
                                               onChange={field.onChange}
-                                              errorMessage={errors.scenes?.[index]?.startTime?.message}
+                                              tabIndex={1}
+                                              errorMessage={errors.scenes?.[index]?.startTime?.message}                                    
                                             />
                                           )}
                                         />
@@ -241,6 +242,7 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                                             <TimePicker
                                               value={field.value as any}
                                               onChange={field.onChange}
+                                              tabIndex={1}
                                               errorMessage={errors.scenes?.[index]?.endTime?.message}
                                             />
                                           )}

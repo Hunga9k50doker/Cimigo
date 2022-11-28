@@ -9,6 +9,9 @@
     overflow: hidden;
   }
 }
+.content {
+  padding: 0!important;
+}
 .form {
   display: flex;
   flex-direction: column;
@@ -18,7 +21,14 @@
 .rootStepper {
   padding-bottom: 24px;
 }
-
+.rootStepperShadow {
+  position:sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 10;
+  padding-top: 24px;
+  box-shadow: 0px 3px 8px rgba(28, 28, 28, 0.12);
+}
 .rootConnector {
   margin: 0px 40px !important;
   @media only screen and (max-width: 767px) {
@@ -38,6 +48,7 @@
     font-weight: 400;
     font-size: 16px;
     color: var(--eerie-black-40);
+    margin-top: 8px!important;
     [class~=MuiStepLabel-iconContainer] {
       margin-right: 0 !important;
     }

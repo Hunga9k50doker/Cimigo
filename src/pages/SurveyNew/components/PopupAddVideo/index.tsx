@@ -228,11 +228,12 @@ const PopupAddVideo = (props: Props) => {
           onClick={() => _onClose()}>
         </ButtonCLose>
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent dividers className={activeStep === EStep.INFORMATION ? classes.content : ""}>
         <Stepper
           alternativeLabel
           activeStep={activeStep}
           classes={{ root: classes.rootStepper }}
+          className={activeStep === EStep.INFORMATION ? classes.rootStepperShadow : ""}
           connector={
             <StepConnector
               classes={{

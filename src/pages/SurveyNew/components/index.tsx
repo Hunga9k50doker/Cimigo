@@ -27,7 +27,7 @@ export const RightContent = styled(Grid)<RightContentProps>`
       display: block !important;
       position: absolute !important;
       left: 0px;
-      bottom: 108px;
+      bottom: 106px;
       width: 100% !important;
       z-index: 11;
   `}
@@ -35,7 +35,7 @@ export const RightContent = styled(Grid)<RightContentProps>`
       display: none;
   `}
   ${props => props.$quotasOutline && css`
-      bottom: 146px;
+      bottom: 145px;
   `}
   }
 `
@@ -276,7 +276,7 @@ export const MobileOutline = styled(Box)`
   @media only screen and (max-width: 1024px){
     display: block;
     position: absolute;
-    top: -32px;
+    top: -31px;
     right: 8px;
     display: flex;
     align-items: center;
@@ -305,13 +305,13 @@ export const ModalMobile = styled.div<ModalProps>`
     top: 0px;
     right: 0px;
     left:0px;
-    bottom: 108px;
+    bottom: 106px;
   `}
   ${props => !props.$toggleOutlineMobile && css`
       display: none;
   `}
   ${props => props.$quotasOutline && css`
-      bottom: 146px;
+      bottom: 145px;
   `}
   }
 `
