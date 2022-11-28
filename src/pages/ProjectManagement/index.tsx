@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import classes from "./styles.module.scss";
 import {
   Box,
@@ -17,6 +17,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   TableSortLabel,
 } from "@mui/material";
@@ -68,16 +69,23 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { Helmet } from "react-helmet";
 
 const ExpandIcon = (props) => {
-  return <KeyboardArrowDownIcon {...props} sx={{ color: "var(--gray-60)" }}/>;
+  return <KeyboardArrowDownIcon {...props} sx={{ color: "var(--gray-60)" }} />;
 };
 
 const ArrowDropdownIcon = (props) => {
-  return <ArrowDropDownIcon {...props} sx={{ color: "var(--eerie-black-40)", fontSize: "20px !important" }}/>;
+  return <ArrowDropDownIcon {...props} sx={{ color: "var(--eerie-black-40)", fontSize: "20px !important" }} />;
 }
 enum SortedField {
   name = "name",
   createdAt = "createdAt",
   updatedAt = "updatedAt",
+}
+
+const paramsDefault: GetMyProjects = {
+  take: 10,
+  page: 1,
+  sortedField: SortedField.updatedAt,
+  isDescending: true,
 }
 
 interface Props { }
@@ -91,12 +99,7 @@ const ProjectManagement = memo((props: Props) => {
   const { verifiedSuccess } = useSelector((state: ReducerType) => state.user);
 
   const [keyword, setKeyword] = useState<string>("");
-  const [sort, setSort] = useState<SortItem>({
-    sortedField: SortedField.updatedAt,
-    isDescending: true,
-  });
-  const [folderId, setFolderId] = useState<Folder>();
-  const [statusId, setStatusId] = useState<OptionItem>();
+  const [params, setParams] = useState<GetMyProjects>({ ...paramsDefault })
   const [data, setData] = useState<DataPagination<Project>>();
 
   const [itemAction, setItemAction] = useState<Project>(null);
@@ -110,36 +113,7 @@ const ProjectManagement = memo((props: Props) => {
   const [folderDelete, setFolderDelete] = useState<Folder>(null);
   const [createFolder, setCreateFolder] = useState(false);
 
-  const fetchData = async (value?: {
-    sort?: SortItem;
-    folderId?: Folder;
-    statusId?: OptionItem;
-    keyword?: string;
-    take?: number;
-    page?: number;
-  }) => {
-    const params: GetMyProjects = {
-      take: value?.take || data?.meta?.take || 99999,
-      page: value?.page || data?.meta?.page || 1,
-      keyword: keyword || undefined,
-      sortedField: sort?.sortedField,
-      isDescending: sort?.isDescending,
-      folderIds: folderId ? [folderId.id] : undefined,
-      statusIds: statusId ? [statusId.id] : undefined,
-    };
-    if (value?.keyword !== undefined) {
-      params.keyword = value.keyword || undefined;
-    }
-    if (value?.sort !== undefined) {
-      params.sortedField = value?.sort?.sortedField;
-      params.isDescending = value?.sort?.isDescending;
-    }
-    if (value?.folderId !== undefined) {
-      params.folderIds = value?.folderId ? [value.folderId.id] : undefined;
-    }
-    if (value?.statusId !== undefined) {
-      params.statusIds = value?.statusId ? [value.statusId.id] : undefined;
-    }
+  const fetchData = async () => {
     dispatch(setLoading(true));
     await ProjectService.getMyProjects(params)
       .then((res) => {
@@ -147,10 +121,17 @@ const ProjectManagement = memo((props: Props) => {
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
-  };
+  }
+
+  useEffect(() => {
+    fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params])
 
   const _onSearch = useDebounce(
-    (keyword: string) => fetchData({ keyword, page: 1 }),
+    (keyword: string) => {
+      setParams({ ...params, keyword, page: 1 })
+    },
     500
   );
 
@@ -160,46 +141,36 @@ const ProjectManagement = memo((props: Props) => {
   };
 
   const onChangeStatus = (value: number) => {
-    const item = projectStatus.find((it) => it.id === value) || null;
-    if (statusId?.id === item?.id) return;
-    setStatusId(item);
-    fetchData({ statusId: item });
+    if (params?.statusIds?.includes(value)) return;
+    setParams({ ...params, statusIds: value ? [value] : null })
   };
   const onChangeFolderMobile = (folderId: number) => {
     const folder = folders.find((it: Folder) => it.id === folderId);
-    setFolderId(folder || null);
-    fetchData({ folderId: folder || null });
+    setParams({ ...params, folderIds: folder ? [folder.id] : null })
   };
 
   const onChangeFolder = (item?: Folder) => {
-    if (folderId?.id === item?.id) return;
-    setFolderId(item || null);
-    fetchData({ folderId: item || null });
+    if (params?.folderIds?.includes(item?.id)) return;
+    setParams({ ...params, folderIds: item ? [item.id] : null })
   };
 
   const onChangeSort = (name: SortedField) => {
-    let sortItem: SortItem;
-    if (sort?.sortedField === name) {
-      sortItem = {
-        ...sort,
-        isDescending: !sort.isDescending,
-      };
+    const _params = { ...params }
+    if (_params?.sortedField === name) {
+      _params.isDescending = !_params.isDescending
     } else {
-      sortItem = {
-        sortedField: name,
-        isDescending: true,
-      };
+      _params.sortedField = name
+      _params.isDescending = true
     }
-    setSort(sortItem);
-    fetchData({ sort: sortItem });
+    setParams(_params)
   };
 
   const getMyFolders = async () => {
     await FolderService.getFolders({ take: 9999 })
       .then((res) => {
         setFolders(res.data);
-        if (folderId) {
-          const item = res.data.find((it: Folder) => it.id === folderId.id);
+        if (params?.folderIds?.length) {
+          const item = res.data.find((it: Folder) => params.folderIds.includes(it.id));
           if (!item) onChangeFolder();
         }
       })
@@ -346,6 +317,38 @@ const ProjectManagement = memo((props: Props) => {
   const onClearVerifiedSuccess = () => {
     dispatch(setVerifiedSuccess(false));
   };
+
+  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => {
+    setParams({ ...params, page: newPage + 1 })
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setParams({
+      ...params,
+      take: Number(event.target.value),
+      page: 1
+    })
+  };
+
+  const inValidPage = () => {
+    if (!data) return false
+    return data.meta.page > 1 && Math.ceil(data.meta.itemCount / data.meta.take) < data.meta.page
+  }
+
+  const pageIndex = useMemo(() => {
+    if (!data) return 0
+    if (inValidPage()) return data.meta.page - 2
+    return data.meta.page - 1
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
+
+  useEffect(() => {
+    if (inValidPage()) {
+      handleChangePage(null, data.meta.page - 2)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
+
   return (
     <BasicLayout className={classes.root}>
       <Helmet>
@@ -383,7 +386,7 @@ const ProjectManagement = memo((props: Props) => {
             <ListItem
               classes={{
                 root: clsx(classes.rootList, {
-                  [classes.folderListItemSelected]: !folderId,
+                  [classes.folderListItemSelected]: !params?.folderIds?.length,
                 }),
               }}
               disablePadding
@@ -394,7 +397,7 @@ const ProjectManagement = memo((props: Props) => {
                   <ParagraphBody
                     className={classes.itemAll}
                     $colorName={
-                      folderId?.id ? "--eerie-black" : "--ghost-white"
+                      params?.folderIds?.length ? "--eerie-black" : "--ghost-white"
                     }
                     translation-key="project_mgmt_all_projects"
                   >
@@ -408,7 +411,7 @@ const ProjectManagement = memo((props: Props) => {
                 key={index}
                 classes={{
                   root: clsx(classes.rootList, {
-                    [classes.folderListItemSelected]: folderId?.id === item.id,
+                    [classes.folderListItemSelected]: params?.folderIds?.includes(item.id),
                   }),
                 }}
                 onClick={() => onChangeFolder(item)}
@@ -484,7 +487,7 @@ const ProjectManagement = memo((props: Props) => {
                   <Select
                     sx={{ minWidth: "147px", minHeight: "40px" }}
                     variant="outlined"
-                    value={statusId?.id || 0}
+                    value={params?.statusIds?.[0] || 0}
                     onChange={(e) => onChangeStatus(e.target.value as number)}
                     classes={{
                       select: classes.selectType,
@@ -495,7 +498,7 @@ const ProjectManagement = memo((props: Props) => {
                       classes: {
                         paper: classes.selectMenu,
                       },
-                      
+
                       anchorOrigin: {
                         vertical: "bottom",
                         horizontal: "center"
@@ -548,8 +551,8 @@ const ProjectManagement = memo((props: Props) => {
                 <TableRow>
                   <TableCell>
                     <TableSortLabel
-                      active={sort?.sortedField === SortedField.name}
-                      direction={sort?.isDescending ? "desc" : "asc"}
+                      active={params?.sortedField === SortedField.name}
+                      direction={params?.isDescending ? "desc" : "asc"}
                       onClick={() => {
                         onChangeSort(SortedField.name);
                       }}
@@ -572,8 +575,8 @@ const ProjectManagement = memo((props: Props) => {
                   </TableCell>
                   <TableCell>
                     <TableSortLabel
-                      active={sort?.sortedField === SortedField.updatedAt}
-                      direction={sort?.isDescending ? "desc" : "asc"}
+                      active={params?.sortedField === SortedField.updatedAt}
+                      direction={params?.isDescending ? "desc" : "asc"}
                       onClick={() => {
                         onChangeSort(SortedField.updatedAt);
                       }}
@@ -658,6 +661,18 @@ const ProjectManagement = memo((props: Props) => {
                 )}
               </TableBody>
             </Table>
+            <TablePagination
+              labelRowsPerPage={t("common_row_per_page")}
+              labelDisplayedRows={function defaultLabelDisplayedRows({ from, to, count }) {
+                return t("common_row_of_page", { from: from, to: to, count: count });
+              }}
+              component="div"
+              count={data?.meta?.itemCount || 0}
+              rowsPerPage={data?.meta?.take || 10}
+              page={pageIndex}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </TableContainer>
           <Menu
             anchorEl={actionAnchor}
@@ -751,7 +766,7 @@ const ProjectManagement = memo((props: Props) => {
             <Select
               sx={{ minHeight: "40px" }}
               variant="outlined"
-              value={folderId?.id || 0}
+              value={params?.folderIds?.[0] || 0}
               onChange={(e) => onChangeFolderMobile(e.target.value as number)}
               classes={{ select: classes.selectType, icon: classes.icSelect }}
               IconComponent={ExpandIcon}
@@ -834,6 +849,18 @@ const ProjectManagement = memo((props: Props) => {
             <SearchNotFound messs={t("project_mgmt_project_not_found")} />
           )}
         </Grid>
+        <TablePagination
+          labelRowsPerPage={t("common_row_per_page")}
+          labelDisplayedRows={function defaultLabelDisplayedRows({ from, to, count }) {
+            return t("common_row_of_page", { from: from, to: to, count: count });
+          }}
+          component="div"
+          count={data?.meta?.itemCount || 0}
+          rowsPerPage={data?.meta?.take || 10}
+          page={pageIndex}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Grid>
       <PopupConfirmDeleteProject
         project={itemDelete}

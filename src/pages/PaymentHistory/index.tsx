@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import SearchNotFound from "components/SearchNotFound";
 import { GetMyPaymentHistory, Payment } from "models/payment";
 import { useDispatch } from "react-redux";
-import { DataPagination, SortItem } from "models/general";
+import { DataPagination } from "models/general";
 import { PaymentService } from "services/payment";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import FileSaver from 'file-saver';
@@ -36,6 +36,13 @@ enum SortedField {
   completedDate = "completedDate",
   amountUSD = "amountUSD",
 }
+
+const paramsDefault: GetMyPaymentHistory = {
+  take: 10,
+  page: 1,
+  sortedField: SortedField.orderId,
+  isDescending: true,
+}
 interface Props {
 
 }
@@ -45,15 +52,11 @@ const PaymentHistory = memo(({ }: Props) => {
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const [sort, setSort] = useState<SortItem>({
-    sortedField: SortedField.orderId,
-    isDescending: true,
-  });
+  const [params, setParams] = useState<GetMyPaymentHistory>({ ...paramsDefault })
   const [data, setData] = useState<DataPagination<Payment>>();
   const [keyword, setKeyword] = useState<string>("");
 
   const getInvoice = (id: number) => {
-    ;
     dispatch(setLoading(true))
     PaymentService.getInvoice(id)
       .then(res => {
@@ -63,26 +66,7 @@ const PaymentHistory = memo(({ }: Props) => {
       .finally(() => dispatch(setLoading(false)))
   }
 
-  const fetchData = async (value?: {
-    sort?: SortItem;
-    keyword?: string;
-    take?: number;
-    page?: number;
-  }) => {
-    const params: GetMyPaymentHistory = {
-      take: value?.take || data?.meta?.take || 10,
-      page: value?.page || data?.meta?.page || 1,
-      keyword: keyword || undefined,
-      sortedField: sort?.sortedField,
-      isDescending: sort?.isDescending,
-    };
-    if (value?.keyword !== undefined) {
-      params.keyword = value.keyword || undefined;
-    }
-    if (value?.sort !== undefined) {
-      params.sortedField = value?.sort?.sortedField;
-      params.isDescending = value?.sort?.isDescending;
-    }
+  const fetchData = async () => {
     dispatch(setLoading(true));
     await PaymentService.getPaymentHistory(params)
       .then((res) => {
@@ -90,27 +74,32 @@ const PaymentHistory = memo(({ }: Props) => {
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
-  };
+  }
+
+  useEffect(() => {
+    fetchData()
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params])
 
   const onChangeSort = (name: SortedField) => {
-    let sortItem: SortItem;
-    if (sort?.sortedField === name) {
-      sortItem = {
-        ...sort,
-        isDescending: !sort.isDescending,
-      };
+    const _params = { ...params }
+    if (_params?.sortedField === name) {
+      _params.isDescending = !_params.isDescending
     } else {
-      sortItem = {
-        sortedField: name,
-        isDescending: true,
-      };
+      _params.sortedField = name
+      _params.isDescending = true
     }
-    setSort(sortItem);
-    fetchData({ sort: sortItem });
+    setParams(_params)
   };
 
   const _onSearch = useDebounce(
-    (keyword: string) => fetchData({ keyword, page: 1 }),
+    (keyword: string) => {
+      setParams({
+        ...params,
+        keyword,
+        page: 1
+      })
+    },
     500
   );
 
@@ -124,13 +113,12 @@ const PaymentHistory = memo(({ }: Props) => {
     return data.meta.page > 1 && Math.ceil(data.meta.itemCount / data.meta.take) < data.meta.page
   }
   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => {
-    fetchData({
-      page: newPage + 1
-    })
+    setParams({ ...params, page: newPage + 1 })
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    fetchData({
+    setParams({
+      ...params,
       take: Number(event.target.value),
       page: 1
     })
@@ -150,9 +138,6 @@ const PaymentHistory = memo(({ }: Props) => {
   useEffect(() => {
     if (inValidPage()) {
       handleChangePage(null, data.meta.page - 2)
-    }
-    if (!data) {
-      fetchData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
@@ -182,8 +167,8 @@ const PaymentHistory = memo(({ }: Props) => {
                 <TableRow>
                   <TableCell>
                     <TableSortLabel
-                      active={sort?.sortedField === SortedField.name}
-                      direction={sort?.isDescending ? "desc" : "asc"}
+                      active={params?.sortedField === SortedField.name}
+                      direction={params?.isDescending ? "desc" : "asc"}
                       onClick={() => {
                         onChangeSort(SortedField.name);
                       }}
@@ -199,8 +184,8 @@ const PaymentHistory = memo(({ }: Props) => {
                   </TableCell>
                   <TableCell sx={{ textAlign: 'center' }}>
                     <TableSortLabel
-                      active={sort?.sortedField === SortedField.orderId}
-                      direction={sort?.isDescending ? "desc" : "asc"}
+                      active={params?.sortedField === SortedField.orderId}
+                      direction={params?.isDescending ? "desc" : "asc"}
                       onClick={() => {
                         onChangeSort(SortedField.orderId);
                       }}
@@ -216,8 +201,8 @@ const PaymentHistory = memo(({ }: Props) => {
                   </TableCell>
                   <TableCell sx={{ textAlign: "center" }}>
                     <TableSortLabel
-                      active={sort?.sortedField === SortedField.completedDate}
-                      direction={sort?.isDescending ? "desc" : "asc"}
+                      active={params?.sortedField === SortedField.completedDate}
+                      direction={params?.isDescending ? "desc" : "asc"}
                       onClick={() => {
                         onChangeSort(SortedField.completedDate);
                       }}
@@ -233,8 +218,8 @@ const PaymentHistory = memo(({ }: Props) => {
                   </TableCell>
                   <TableCell sx={{ textAlign: 'center' }}>
                     <TableSortLabel
-                      active={sort?.sortedField === SortedField.amountUSD}
-                      direction={sort?.isDescending ? "desc" : "asc"}
+                      active={params?.sortedField === SortedField.amountUSD}
+                      direction={params?.isDescending ? "desc" : "asc"}
                       onClick={() => {
                         onChangeSort(SortedField.amountUSD);
                       }}
