@@ -22,6 +22,7 @@ interface Props extends Partial<TimePickerProps<moment.Moment, moment.Moment>> {
   optional?: boolean,
   infor?: string,
   isShowError?: boolean,
+  tabIndex?: number,
 }
 
 
@@ -38,6 +39,7 @@ const TimePicker = memo(({
   titleRequired,
   isShowError,
   value,
+  tabIndex,
   onChange,
   ...rest
 }: Props) => {
@@ -70,6 +72,8 @@ const TimePicker = memo(({
               margin={params.margin as any}
               onKeyDown={params.onKeyDown as any}
               onKeyUp={params.onKeyUp as any}
+              placeholder="mm:ss"
+              inputProps={{ tabIndex: tabIndex }}
             />
           )}
           {...rest}

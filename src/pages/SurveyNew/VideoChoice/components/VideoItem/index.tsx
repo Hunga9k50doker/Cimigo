@@ -9,6 +9,8 @@ import ShowMoreText from "react-show-more-text";
 import Heading5 from "components/common/text/Heading5";
 import { IconBranding, IconMessage, IconProduct, IconScenes } from "components/icons";
 import { useTranslation } from "react-i18next";
+import BasicTooltip from "components/common/tooltip/BasicTooltip";
+
 
 interface VideoItemProps {
   item: Video;
@@ -58,28 +60,36 @@ const VideoItem = memo(({ item, editable, onAction }: VideoItemProps) => {
           <Grid className={classes.footerTitle}>
             <Heading5 mb={1}>{item.name}</Heading5>
             <Box className={classes.chipDuration}>
-              <IconScenes />
+            <BasicTooltip title={t("setup_video_choice_tooltip_scenes")} translation-key="setup_video_choice_tooltip_scenes">
+              <div><IconScenes/></div>
+            </BasicTooltip>
               <ParagraphBody $colorName="--cimigo-green-dark-2">{item.videoScenes?.length || 0}</ParagraphBody>
             </Box>
           </Grid>
           <Grid sx={{ mt: 2 }}>
             <Box className={classes.textItem}>
-              <IconBranding />
+              <BasicTooltip arrow title={t("setup_video_choice_tooltip_brand_name")} translation-key="setup_video_choice_tooltip_brand_name">
+                <div><IconBranding/></div>
+              </BasicTooltip>
               <ParagraphSmall $colorName="--eerie-black" className={classes.textMessage}>{item.brand}</ParagraphSmall>
             </Box>
             <Box className={classes.textItem}>
-              <IconProduct />
+              <BasicTooltip arrow title={t("setup_video_choice_tooltip_product_name")} translation-key="setup_video_choice_tooltip_product_name">
+                <div><IconProduct/></div>             
+              </BasicTooltip>
               <ParagraphSmall $colorName="--eerie-black" className={classes.textMessage}>{item.product}</ParagraphSmall>
             </Box>
             <Box className={classes.textItem}>
-              <IconMessage />
+              <BasicTooltip arrow title={t("setup_video_choice_tooltip_key_message")} translation-key="setup_video_choice_tooltip_key_message">
+                <div><IconMessage/></div>
+              </BasicTooltip>
               <Grid sx={{flex: 1}}>
                 <ShowMoreText
                   lines={2}
                   more={t("setup_video_choice_video_item_show_more")}
                   less={t("setup_video_choice_video_item_show_less")}
                   anchorClass={classes.textControl}
-                  truncatedEndingComponent={"..."}
+                  truncatedEndingComponent={"... "}
                   expanded={false}
                   width={480}
                   className={classes.wrapperText}

@@ -229,7 +229,13 @@ const Detail = memo(({ }: Props) => {
                               </Typography>
                               {getTargets([TargetQuestionType.Location])?.map(it => (
                                 <Typography key={it.id} variant="subtitle1" ml={2}>
-                                  <strong>{it.targetQuestion?.name}: </strong>{it.answers?.map(it => it.name).join(', ')}
+                                  <strong>{it.targetQuestion?.name}: </strong>
+                                  <br></br>
+                                  {it.answers?.map(it =>
+                                  <>
+                                    <span>{it.name}</span>
+                                    <br></br>
+                                  </>)}
                                 </Typography>
                               ))}
                             </Paper>
@@ -243,7 +249,13 @@ const Detail = memo(({ }: Props) => {
                               </Typography>
                               {getTargets([TargetQuestionType.Household_Income])?.map(it => (
                                 <Typography key={it.id} variant="subtitle1" ml={2}>
-                                  <strong>{it.targetQuestion?.name}: </strong>{it.answers?.map(it => it.name).join(', ')}
+                                  <strong>{it.targetQuestion?.name}: </strong>
+                                  <br></br>
+                                  {it.answers?.map(it =>
+                                  <>
+                                    <span>{it.name}</span>
+                                    <br></br>
+                                  </>)}                                
                                 </Typography>
                               ))}
                             </Paper>
@@ -257,7 +269,13 @@ const Detail = memo(({ }: Props) => {
                               </Typography>
                               {getTargets([TargetQuestionType.Gender_And_Age_Quotas, TargetQuestionType.Mums_Only])?.map(it => (
                                 <Typography key={it.id} variant="subtitle1" ml={2}>
-                                  <strong>{it.targetQuestion?.name}: </strong>{it.answers?.map(it => it.name).join(', ')}
+                                  <strong>{it.targetQuestion?.name}: </strong>
+                                  <br></br>
+                                  {it.answers?.map(it => 
+                                   <>
+                                    <span>{it.name}</span>
+                                    <br></br>
+                                  </>)} 
                                 </Typography>
                               ))}
                             </Paper>

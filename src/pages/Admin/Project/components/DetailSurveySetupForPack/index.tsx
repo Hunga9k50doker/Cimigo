@@ -111,6 +111,7 @@ const DetailSurveySetupForPack = memo(({ project }: Props) => {
                 <TableRow>
                   <TableCell>Start</TableCell>
                   <TableCell>End</TableCell>
+                  <TableCell>Type</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -118,12 +119,14 @@ const DetailSurveySetupForPack = memo(({ project }: Props) => {
                   <TableRow key={item.id}>
                     <TableCell>{item.attribute?.start}</TableCell>
                     <TableCell>{item.attribute?.end}</TableCell>
+                    <TableCell>Manatory attribute</TableCell>
                   </TableRow>
                 ))}
                 {project?.userAttributes?.map(item => (
                   <TableRow key={item.id}>
                     <TableCell>{item.start}</TableCell>
                     <TableCell>{item.end}</TableCell>
+                    <TableCell>User attribute</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

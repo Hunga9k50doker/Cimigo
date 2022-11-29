@@ -24,6 +24,7 @@ import { Project } from "models/project";
 import Information, { InformationForm } from "./components/Information";
 import Scenes from "./components/Scenes";
 import { VideoService } from "services/video";
+import clsx from "clsx";
 
 export enum EStep {
   UPLOAD_VIDEO,
@@ -228,11 +229,12 @@ const PopupAddVideo = (props: Props) => {
           onClick={() => _onClose()}>
         </ButtonCLose>
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent dividers
+      className={clsx({[classes.content]: activeStep === EStep.INFORMATION})}>
         <Stepper
           alternativeLabel
           activeStep={activeStep}
-          classes={{ root: classes.rootStepper }}
+          className={clsx({[classes.rootStepperShadow]: activeStep === EStep.INFORMATION})}
           connector={
             <StepConnector
               classes={{
@@ -249,7 +251,7 @@ const PopupAddVideo = (props: Props) => {
                   icon={item.icon}
                   StepIconComponent={({ completed, active }) => <RPStepIconBox $active={completed || active}>{item.icon}</RPStepIconBox>}
                   classes={{
-                    root: classes.rootStepLabel,
+                    root: classes.rootStep,
                     completed: classes.rootStepLabelCompleted,
                     active: classes.rootStepLabelActive,
                     label: classes.rootStepLabel,

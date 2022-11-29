@@ -1,8 +1,6 @@
 .root {
     display: flex;
-    margin-top: 8px;
-    overflow-y: auto;
-    height: 350px;
+    padding: 16px 24px 24px 24px;
     @media only screen and (max-width: 767px) {
         display: block;
     }
@@ -69,15 +67,22 @@
 }
 
 .boxAction {
-    padding-top: 48px;
+    position:sticky;
+    bottom: 0;
+    padding-top: 24px;
     display: flex;
     justify-content: flex-end;
+    border-top: 1px solid #D2D2D2;
+    padding-right: 16px;
+    padding-bottom: 24px;
+    background-color: #fff;
     .btnNext {
         padding: 8px 38px;
     }
     @media only screen and (max-width: 767px) {
+        padding-left: 24px;
         .btnNext {
-            width: 100%;
+            width: 100%;          
         }
     }
 }
