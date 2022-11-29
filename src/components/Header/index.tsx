@@ -139,7 +139,7 @@ const Header = memo((props: HeaderProps) => {
   }
 
   const handleKeyPress = (e) => {
-    var code = e.keyCode || e.which;
+    var code = e.which;
     if (code === 13) {
       onChangeProjectName();
     }
@@ -206,7 +206,6 @@ const Header = memo((props: HeaderProps) => {
                 ) : (
                   <div className={classes.editBox}>
                     <Inputs
-                      id="inputProject"
                       name=""
                       size="small"
                       value={projectName}

@@ -21,12 +21,14 @@
 .rootStepper {
   padding-bottom: 24px;
 }
+
 .rootStepperShadow {
   position:sticky;
   top: 0;
   background-color: #fff;
   z-index: 10;
   padding-top: 24px;
+  padding-bottom: 16px;
   box-shadow: 0px 3px 8px rgba(28, 28, 28, 0.12);
 }
 .rootConnector {
@@ -43,15 +45,17 @@
 .rootStepIconActive {
     color: var(--cimigo-green-dark-2) !important;
 }
+.rootStep {
+  [class~=MuiStepLabel-iconContainer] {
+    margin-right: 0 !important;
+  }
+}
 
 .rootStepLabel {
     font-weight: 400;
     font-size: 16px;
     color: var(--eerie-black-40);
-    margin-top: 8px!important;
-    [class~=MuiStepLabel-iconContainer] {
-      margin-right: 0 !important;
-    }
+    margin-top: 8px !important;
     @media only screen and (max-width: 767px) {
       font-size: 14px;
     }
@@ -60,6 +64,7 @@
     color: var(--cimigo-green-dark-2) !important;
     font-weight: 600 !important;
     font-size: 16px;
+    margin-top: 8px !important;
     @media only screen and (max-width: 767px) {
       font-size: 14px;
       font-weight: 500;
@@ -69,6 +74,7 @@
     color: var(--cimigo-green-dark-2) !important;
     font-weight: 600 !important;
     font-size: 16px;
+    margin-top: 8px !important;
     @media only screen and (max-width: 767px) {
       font-size: 14px;
       font-weight: 500;

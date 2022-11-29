@@ -232,8 +232,7 @@ const PopupAddVideo = (props: Props) => {
         <Stepper
           alternativeLabel
           activeStep={activeStep}
-          classes={{ root: classes.rootStepper }}
-          className={activeStep === EStep.INFORMATION ? classes.rootStepperShadow : ""}
+          classes={{ root: activeStep === EStep.INFORMATION ? classes.rootStepperShadow : classes.rootStepper }}
           connector={
             <StepConnector
               classes={{
@@ -250,7 +249,7 @@ const PopupAddVideo = (props: Props) => {
                   icon={item.icon}
                   StepIconComponent={({ completed, active }) => <RPStepIconBox $active={completed || active}>{item.icon}</RPStepIconBox>}
                   classes={{
-                    root: classes.rootStepLabel,
+                    root: classes.rootStep,
                     completed: classes.rootStepLabelCompleted,
                     active: classes.rootStepLabelActive,
                     label: classes.rootStepLabel,
