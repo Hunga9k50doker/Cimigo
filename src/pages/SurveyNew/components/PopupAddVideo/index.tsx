@@ -232,7 +232,7 @@ const PopupAddVideo = (props: Props) => {
         <Stepper
           alternativeLabel
           activeStep={activeStep}
-          classes={{ root: activeStep === EStep.INFORMATION ? classes.rootStepperShadow : classes.rootStepper }}
+          className={activeStep === EStep.INFORMATION ? classes.rootStepperShadow : classes.rootStepper}
           connector={
             <StepConnector
               classes={{
