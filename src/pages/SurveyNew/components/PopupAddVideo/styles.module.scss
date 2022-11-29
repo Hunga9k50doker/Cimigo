@@ -2,6 +2,9 @@
   width: 960px;
   max-width: 960px;
   border-radius: 8px;
+  [class~=MuiStepLabel-iconContainer ] {
+    margin-right: 0!important;
+  }
   @media only screen and (max-width: 767px) {
     width: 100%;
     max-width: 100%;
@@ -44,11 +47,6 @@
 }
 .rootStepIconActive {
     color: var(--cimigo-green-dark-2) !important;
-}
-.rootStep {
-  [class~=MuiStepLabel-iconContainer] {
-    margin-right: 0 !important;
-  }
 }
 
 .rootStepLabel {
