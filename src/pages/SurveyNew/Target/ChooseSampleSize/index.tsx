@@ -181,6 +181,13 @@ export const ChooseSampleSize = memo(({ projectId, editable }: Props) => {
     }
   }
 
+  const onEscPress = (e) => {
+    var code = e.which;
+    if (code === 27) {  
+      onClearCustomSampleSize(); 
+    }
+  }
+
   return (
     <Grid id={TARGET_SECTION.SAMPLE_SIZE}>
       <Heading4
@@ -216,6 +223,7 @@ export const ChooseSampleSize = memo(({ projectId, editable }: Props) => {
                 placeholder={t('target_sample_size_placeholder')}
                 translation-key-placeholder="target_sample_size_placeholder"
                 inputRef={registerSS('sampleSize')}
+                onKeyDown={onEscPress}
               />
               {isValidSS ? (
                 <Button
@@ -242,7 +250,7 @@ export const ChooseSampleSize = memo(({ projectId, editable }: Props) => {
                 label={project?.sampleSize || "0"}
                 variant="outlined"
                 deleteIcon={<Edit />}
-                onDelete={onCustomSampleSize}
+                onDelete={onCustomSampleSize}             
               />
             ) : (
               <ChipCustom

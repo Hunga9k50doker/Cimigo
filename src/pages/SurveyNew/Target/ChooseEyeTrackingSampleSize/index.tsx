@@ -133,6 +133,13 @@ export const ChooseEyeTrackingSampleSize = memo(({ projectId, editable }: Props)
     }
   }
 
+  const onEscPress = (e) => {
+    var code = e.which;
+    if (code === 27) {  
+      onClearCustomEyeTrackingSampleSize(); 
+    }
+  }
+
   const renderHeader = () => {
     switch (project?.solution?.typeId) {
       case ESOLUTION_TYPE.PACK:
@@ -196,6 +203,7 @@ export const ChooseEyeTrackingSampleSize = memo(({ projectId, editable }: Props)
                 placeholder={t('target_sample_size_placeholder')}
                 translation-key-placeholder="target_sample_size_placeholder"
                 inputRef={registerESS("eyeTrackingSampleSize")}
+                onKeyDown={onEscPress}
               />
               {isValidESS ? (
                 <Button
