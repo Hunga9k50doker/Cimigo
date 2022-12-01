@@ -59,31 +59,33 @@ const VideoItem = memo(({ item, editable, onAction }: VideoItemProps) => {
         <Grid className={classes.footer}>
           <Grid className={classes.footerTitle}>
             <Heading5 mb={1}>{item.name}</Heading5>
-            <Box className={classes.chipDuration}>
-            <BasicTooltip title={t("setup_video_choice_tooltip_scenes")} translation-key="setup_video_choice_tooltip_scenes">
-              <div><IconScenes/></div>
-            </BasicTooltip>
-              <ParagraphBody $colorName="--cimigo-green-dark-2">{item.videoScenes?.length || 0}</ParagraphBody>
-            </Box>
+            {!!item.videoScenes?.length && (
+              <Box className={classes.chipDuration}>
+                <BasicTooltip title={t("setup_video_choice_tooltip_scenes")} translation-key="setup_video_choice_tooltip_scenes">
+                  <div><IconScenes /></div>
+                </BasicTooltip>
+                <ParagraphBody $colorName="--cimigo-green-dark-2">{item.videoScenes?.length || 0}</ParagraphBody>
+              </Box>
+            )}
           </Grid>
           <Grid sx={{ mt: 2 }}>
             <Box className={classes.textItem}>
               <BasicTooltip arrow title={t("setup_video_choice_tooltip_brand_name")} translation-key="setup_video_choice_tooltip_brand_name">
-                <div><IconBranding/></div>
+                <div><IconBranding /></div>
               </BasicTooltip>
               <ParagraphSmall $colorName="--eerie-black" className={classes.textMessage}>{item.brand}</ParagraphSmall>
             </Box>
             <Box className={classes.textItem}>
               <BasicTooltip arrow title={t("setup_video_choice_tooltip_product_name")} translation-key="setup_video_choice_tooltip_product_name">
-                <div><IconProduct/></div>             
+                <div><IconProduct /></div>
               </BasicTooltip>
               <ParagraphSmall $colorName="--eerie-black" className={classes.textMessage}>{item.product}</ParagraphSmall>
             </Box>
             <Box className={classes.textItem}>
               <BasicTooltip arrow title={t("setup_video_choice_tooltip_key_message")} translation-key="setup_video_choice_tooltip_key_message">
-                <div><IconMessage/></div>
+                <div><IconMessage /></div>
               </BasicTooltip>
-              <Grid sx={{flex: 1}}>
+              <Grid sx={{ flex: 1 }}>
                 <ShowMoreText
                   lines={2}
                   more={t("setup_video_choice_video_item_show_more")}

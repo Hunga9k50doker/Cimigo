@@ -69,11 +69,11 @@ const TimePicker = memo(({
               classes={{ root: clsx(classes.inputTextfield, { [classes.inputInvalid]: !!errorMessage }) }}
               onWheel={e => (e.target instanceof HTMLElement && (e.target as any).type === 'number') && e.target.blur()}
               {...params}
+              inputProps={{ ...(params.inputProps || {}), tabIndex: tabIndex }}
               margin={params.margin as any}
               onKeyDown={params.onKeyDown as any}
               onKeyUp={params.onKeyUp as any}
               placeholder="mm:ss"
-              inputProps={{ tabIndex: tabIndex }}
             />
           )}
           {...rest}

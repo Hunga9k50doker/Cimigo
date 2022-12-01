@@ -167,7 +167,7 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
         disabled={!editable || project?.videos?.length >= maxVideo}
         btnType={BtnType.Outlined}
         translation-key=""
-        startIcon={<IconAddVideoMenu sx={{color: !enableAddVideos ? 'var(--eerie-black-40)' : "#1F61A9"}}/>}
+        startIcon={<IconAddVideoMenu sx={{color: !editable || project?.videos?.length >= maxVideo ? 'var(--eerie-black-40)' : "#1F61A9"}}/>}
         children={<TextBtnSmall translation-key="setup_video_choice_btn_add_video">{t("setup_video_choice_btn_add_video")}</TextBtnSmall>}
         endIcon={<ArrowDropDownIcon sx={{ fontSize: "16px !important" }} />}
       />
