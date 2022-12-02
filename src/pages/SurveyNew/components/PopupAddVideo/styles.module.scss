@@ -5,6 +5,9 @@
   [class~=MuiStepLabel-iconContainer ] {
     margin-right: 0!important;
   }
+  [class~=MuiStepLabel-root] {
+    cursor: default !important;
+  }
   @media only screen and (max-width: 767px) {
     width: 100%;
     max-width: 100%;
@@ -78,4 +81,3 @@
       font-weight: 500;
     }
   }
-

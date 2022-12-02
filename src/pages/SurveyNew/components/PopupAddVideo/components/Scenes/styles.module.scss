@@ -1,6 +1,7 @@
 .root {
     display: flex;
     margin-top: 16px;
+    padding: 0 24px 24px 24px;
     @media only screen and (max-width: 767px) {
         display: block;
     }
@@ -140,14 +141,21 @@
     margin-top: 16px;
 }
 .boxAction {
-    padding-top: 48px;
+    position:sticky;
+    bottom: 0;
+    padding-top: 24px;
     display: flex;
     justify-content: flex-end;
+    border-top: 1px solid #D2D2D2;
+    padding-right: 16px;
+    padding-bottom: 24px;
+    background-color: #fff;
     .btnSave {
         margin-left: 16px;
     }
     @media only screen and (max-width: 767px) {
         flex-direction: column-reverse;
+        padding-left: 16px;
         .btnSave {
             margin-left: 0;
             margin-bottom: 16px;

@@ -16,7 +16,6 @@ import InputLineTextfield from "components/common/inputs/InputLineTextfield";
 import Heading6 from "components/common/text/Heading6";
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import CloseIcon from '@mui/icons-material/Close';
-import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import { IconBranding, IconMessage, IconProduct } from "components/icons";
 import { EVIDEO_TYPE, VIDEO_UPLOAD_STEP, VIDEO_YOUTUBE_STEP, INFORMATION_STEP, SCENES_STEP } from "models/video";
 import moment from "moment";
@@ -112,7 +111,7 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
     defaultValues: defaultValues
   });
 
-  const { fields: fieldsScenes, append: appendScenes, remove: removeScenes, move: moveScenes } = useFieldArray({
+  const { fields: fieldsScenes, append: appendScenes, remove: removeScenes } = useFieldArray({
     control,
     name: "scenes"
   });
@@ -124,11 +123,6 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
       startTime: null,
       endTime: null,
     })
-  };
-
-  const onDragEnd = ({ destination, source }: DropResult) => {
-    if (!destination) return
-    moveScenes(source.index, destination.index)
   };
 
   useEffect(() => {
@@ -181,96 +175,70 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                 </Grid>
               </Grid>
 
-              {!!fieldsScenes?.length && (
-                <DragDropContext onDragEnd={onDragEnd}>
-                  <Droppable droppableId="droppable-list-multiple-attributes">
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                      >
-                        {fieldsScenes?.map((field, index) => (
-                          <Draggable
-                            draggableId={field.id}
-                            index={index}
-                            key={field.id}
-                          >
-                            {(provided) => (
-                              <div
-                                className={classes.draggableBox}
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              >
-                                <div className={classes.rowScenesControl}>
-                                  <Grid
-                                    container
-                                    rowSpacing={1}
-                                    columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                                    className={classes.containerInputScenes}
-                                  >
-                                    <Grid item xs={6} className={classes.textContent}>
-                                      <InputLineTextfield
-                                        translation-key-placeholder="setup_video_choice_popup_video_scene_name_placeholder"
-                                        placeholder={t("setup_video_choice_popup_video_scene_name_placeholder")}
-                                        inputProps={{ tabIndex: 1 }}
-                                        inputRef={register(`scenes.${index}.name`)}
-                                        errorMessage={errors.scenes?.[index]?.name?.message}
-                                      />
-                                    </Grid>
-                                    <Grid item xs={6} className={classes.boxTime}>
-                                      <Grid>
-                                        <Controller
-                                          name={`scenes.${index}.startTime`}
-                                          control={control}
-                                          render={({ field }) => (
-                                            <TimePicker
-                                              value={field.value as any}
-                                              onChange={field.onChange}
-                                              tabIndex={1}
-                                              errorMessage={errors.scenes?.[index]?.startTime?.message}                                    
-                                            />
-                                          )}
-                                        />
-                                      </Grid>
-                                      <ParagraphSmall $colorName="--eerie-black" className={classes.textTo} translation-key="setup_video_choice_popup_video_to">{t("setup_video_choice_popup_video_to")}</ParagraphSmall>
-                                      <Grid sx={{ paddingLeft: "24px" }}>
-                                        <Controller
-                                          name={`scenes.${index}.endTime`}
-                                          control={control}
-                                          render={({ field }) => (
-                                            <TimePicker
-                                              value={field.value as any}
-                                              onChange={field.onChange}
-                                              tabIndex={1}
-                                              errorMessage={errors.scenes?.[index]?.endTime?.message}
-                                            />
-                                          )}
-                                        />
-                                      </Grid>
-                                    </Grid>
-                                  </Grid>
-                                  <div className={classes.closeInputAttribute}>
-                                    <Grid className={classes.textNumberScenes}>
-                                        <SubTitle $colorName="--gray-80" translation-key="setup_video_choice_popup_video_scene_number">{t("setup_video_choice_popup_video_scene_number", {number: index+1})}</SubTitle>
-                                    </Grid>
-                                    <CloseIcon
-                                      onClick={onDeleteScenes(index)}
-                                      type="button"
-                                      sx={{ color: "var(--eerie-black-65)" }}
-                                    >
-                                    </CloseIcon>
-                                  </div>
-                                </div>
-                              </div>
+              {!!fieldsScenes?.length && 
+                fieldsScenes?.map((field, index) => (
+                  <div className={classes.rowScenesControl}>
+                    <Grid
+                    container
+                    rowSpacing={1}
+                    columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                    className={classes.containerInputScenes}
+                    >
+                      <Grid item xs={6} className={classes.textContent}>
+                        <InputLineTextfield
+                        translation-key-placeholder="setup_video_choice_popup_video_scene_name_placeholder"
+                        placeholder={t("setup_video_choice_popup_video_scene_name_placeholder")}
+                        inputProps={{ tabIndex: 1 }}
+                        inputRef={register(`scenes.${index}.name`)}
+                        errorMessage={errors.scenes?.[index]?.name?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={6} className={classes.boxTime}>
+                        <Grid>
+                            <Controller
+                            name={`scenes.${index}.startTime`}
+                            control={control}
+                            render={({ field }) => (
+                              <TimePicker
+                              value={field.value as any}
+                              onChange={field.onChange}
+                              tabIndex={1}
+                              errorMessage={errors.scenes?.[index]?.startTime?.message}                                    
+                              />
                             )}
-                          </Draggable>
-                        ))}
+                            />
+                          </Grid>
+                          <ParagraphSmall $colorName="--eerie-black" className={classes.textTo} translation-key="setup_video_choice_popup_video_to">{t("setup_video_choice_popup_video_to")}</ParagraphSmall>
+                          <Grid sx={{ paddingLeft: "24px" }}>
+                            <Controller
+                            name={`scenes.${index}.endTime`}
+                            control={control}
+                            render={({ field }) => (
+                              <TimePicker
+                              value={field.value as any}
+                              onChange={field.onChange}
+                              tabIndex={1}
+                              errorMessage={errors.scenes?.[index]?.endTime?.message}
+                              />
+                            )}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                      <div className={classes.closeInputAttribute}>
+                        <Grid className={classes.textNumberScenes}>
+                          <SubTitle $colorName="--gray-80" translation-key="setup_video_choice_popup_video_scene_number">{t("setup_video_choice_popup_video_scene_number", {number: index+1})}</SubTitle>
+                        </Grid>
+                        <CloseIcon
+                        onClick={onDeleteScenes(index)}
+                        type="button"
+                        sx={{ color: "var(--eerie-black-65)" }}
+                        >
+                        </CloseIcon>
                       </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
-              )}
+                  </div>
+                ))
+              }
               <Grid className={classes.addList}>
                 <div className={classes.addOptions} onClick={onAddScenes}>
                   <PlaylistAddIcon className={classes.IconListAdd} />
