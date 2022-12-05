@@ -230,11 +230,11 @@ const PopupAddVideo = (props: Props) => {
         </ButtonCLose>
       </DialogTitle>
       <DialogContent dividers
-      className={clsx({[classes.content]: activeStep === EStep.INFORMATION})}>
+      className={clsx({[classes.content]: activeStep === EStep.INFORMATION || activeStep === EStep.SCENES})}>
         <Stepper
           alternativeLabel
           activeStep={activeStep}
-          className={clsx({[classes.rootStepperShadow]: activeStep === EStep.INFORMATION})}
+          className={clsx({[classes.rootStepperShadow]: activeStep === EStep.INFORMATION || activeStep === EStep.SCENES})}
           connector={
             <StepConnector
               classes={{
