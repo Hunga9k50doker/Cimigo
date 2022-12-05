@@ -163,7 +163,7 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
               <ParagraphSmall $colorName="--gray-80" className={classes.subInformation} translation-key="setup_video_choice_popup_video__sub_title">{t("setup_video_choice_popup_video__sub_title")}</ParagraphSmall>
             </Box>
             <Grid>
-              <Grid container className={classes.boxSubTitle}>
+              {!!fieldsScenes?.length && <Grid container className={classes.boxSubTitle}>
                 <Grid item xs={4}>
                   <SubTitle translation-key="setup_video_choice_popup_video_sub_scene_name">{t("setup_video_choice_popup_video_sub_scene_name")}</SubTitle>
                 </Grid>
@@ -173,8 +173,7 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
                 <Grid item xs={3} className={classes.boxTitleEnd}>
                   <SubTitle translation-key="setup_video_choice_popup_video_sub_end_time">{t("setup_video_choice_popup_video_sub_end_time")}</SubTitle>
                 </Grid>
-              </Grid>
-
+              </Grid>}
               {!!fieldsScenes?.length && 
                 fieldsScenes?.map((field, index) => (
                   <div className={classes.rowScenesControl}>

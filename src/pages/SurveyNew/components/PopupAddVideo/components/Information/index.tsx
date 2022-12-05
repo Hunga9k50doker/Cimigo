@@ -124,8 +124,8 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
                 <Heading5 $colorName="--eerie-black" translation-key="setup_video_choice_popup_video_information_marketing_stage">{t("setup_video_choice_popup_video_information_marketing_stage")}</Heading5>
                 <BasicTooltip arrow title={
                   <div>
-                    <Heading6 translation-key="setup_video_choice_popup_video_information_question_key_message">{t("setup_video_choice_popup_video_information_question_key_message")}</Heading6>
-                    <ParagraphExtraSmall translation-key="setup_video_choice_popup_video_information_question_key_message_sub">{t("setup_video_choice_popup_video_information_question_key_message_sub")}</ParagraphExtraSmall>
+                    <Heading6 translation-key="setup_video_choice_popup_video_information_question_marketing_stage">{t("setup_video_choice_popup_video_information_question_marketing_stage")}</Heading6>
+                    <ParagraphExtraSmall translation-key="setup_video_choice_popup_video_information_question_marketing_stage_sub">{t("setup_video_choice_popup_video_information_question_marketing_stage_sub")}</ParagraphExtraSmall>
                   </div>
                 }>
                   <HelpOutlineIcon sx={{ ml: 1, fontSize: "16px", color: "var(--gray-40)" }}></HelpOutlineIcon>
