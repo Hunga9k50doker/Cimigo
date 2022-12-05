@@ -1,6 +1,8 @@
 .root {
     display: flex;
     padding: 16px 24px 24px 24px;
+    overflow-y: auto;
+    max-height: 350px;
     @media only screen and (max-width: 767px) {
         display: block;
     }
@@ -53,8 +55,12 @@
     align-items: center;
 }
 .boxInputTextArea {
+    padding-bottom: 24px;
     p {
         margin-left: auto;
+    }
+    @media only screen and (max-width: 767px) {
+        padding-bottom: 0;
     }
 }
 
@@ -67,8 +73,6 @@
 }
 
 .boxAction {
-    position:sticky;
-    bottom: 0;
     padding-top: 24px;
     display: flex;
     justify-content: flex-end;
