@@ -99,7 +99,7 @@ const Information = ({ type, videoFromDevice, videoFromYoutube, data, onSubmit }
 
   return (
     <>
-      <Grid component="form" onSubmit={handleSubmit(_onSubmit)}>
+      <Grid component="form" onSubmit={handleSubmit(_onSubmit)} className={classes.form}>
         <Grid className={classes.root}>
           <Grid className={classes.containerInformation}>
             <Box sx={{ mb: 3 }}>

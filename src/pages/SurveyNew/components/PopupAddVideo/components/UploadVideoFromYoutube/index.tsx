@@ -116,7 +116,7 @@ const UploadVideoFromYoutube = ({ projectId, onSubmit }: Props) => {
   return (
     <>
       <Grid component="form" onSubmit={handleSubmit(_onSubmit)}>
-        <ParagraphSmall $colorName="--eerie-black" translation-key="setup_video_choice_popup_video_upload_youtube_title">{t("setup_video_choice_popup_video_upload_youtube_title")}</ParagraphSmall>
+        <ParagraphSmall sx={{paddingTop: '16px'}}$colorName="--eerie-black" translation-key="setup_video_choice_popup_video_upload_youtube_title">{t("setup_video_choice_popup_video_upload_youtube_title")}</ParagraphSmall>
         <Grid
           className={classes.videoUp}
         >
