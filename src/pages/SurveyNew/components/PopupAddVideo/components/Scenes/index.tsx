@@ -155,7 +155,7 @@ const Scenes = ({ type, videoFromDevice, videoFromYoutube, information, data, on
 
   return (
     <>
-      <Grid component="form" onSubmit={handleSubmit(_onSubmit)}>
+      <Grid component="form" onSubmit={handleSubmit(_onSubmit)} className={classes.form}>
         <Grid className={classes.root} container>
           <Grid className={classes.containerInformation} item xs={8}>
             <Box sx={{ mb: 3 }}>
