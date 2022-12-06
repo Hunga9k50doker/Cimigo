@@ -37,6 +37,7 @@ import PopupHouseholdIncomeMobile from "./components/PopupHouseholdIncomeMobile"
 import PopupAgeCoverageMobile from "./components/PopupAgeCoverageMobile";
 import ChooseSampleSize from "./ChooseSampleSize";
 import ChooseEyeTrackingSampleSize from "./ChooseEyeTrackingSampleSize";
+import { ESOLUTION_TYPE } from "models/solution";
 
 enum ErrorKeyAdd {
   SAMPLE_SIZE = "SAMPLE_SIZE",
@@ -237,6 +238,22 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
     }
   }
 
+  const renderOutLineTitleETT = () => {
+    switch (project?.solution?.typeId) {
+      case ESOLUTION_TYPE.PACK:
+        return (
+          <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_eye_tracking_samples">
+            {t("project_right_panel_step_eye_tracking_samples", { project: project?.eyeTrackingSampleSize || 0 })}
+          </Heading5>
+        )
+      case ESOLUTION_TYPE.VIDEO_CHOICE:
+        return (
+          <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_eye_tracking_samples_video_choice">
+            {t("project_right_panel_step_eye_tracking_samples_video_choice", { project: project?.eyeTrackingSampleSize || 0 })}
+          </Heading5>
+        )
+    }
+  }
   return (
     <PageRoot className={classes.root}>
       <LeftContent>
@@ -374,7 +391,7 @@ const Target = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOutlin
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
                       >
                         <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", { number: 2 })}</ParagraphExtraSmall>
-                        <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_eye_tracking_samples">{t("project_right_panel_step_eye_tracking_samples", { project: project?.eyeTrackingSampleSize || 0 })}</Heading5>
+                        {renderOutLineTitleETT()}
                       </RPStepLabel>
                       <RPStepContent>
                         <Chip
