@@ -26,6 +26,7 @@ import { routes } from "routers/routes";
 import PopupHowToSetupSurvey from "pages/SurveyNew/components/PopupHowToSetupSurvey";
 import { setHowToSetupSurveyReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import {AddVideoIcon} from "components/icons";
+import PopupMissingRequirement from "./components/PopupMissingRequirement";
 
 interface AdtractionTestProps {
   projectId: number;
@@ -43,12 +44,18 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
 
   const dispatch = useDispatch()
 
+  const [openMissingRequirement, setOpenMissingRequirement] = useState(false);
+
   const { project, scrollToSection, showHowToSetup } = useSelector((state: ReducerType) => state.project)
 
   const editable = useMemo(() => editableProject(project), [project])
   
   const isValidSetup = useMemo(() => {
     return ProjectHelper.isValidSetup(project)
+  }, [project])
+
+  const isValidVideos = useMemo(() => {
+    return ProjectHelper.isValidVideos(project)
   }, [project])
 
   const [onOpenHowToSetupSurvey, setOnOpenHowToSetupSurvey] = useState(false);
@@ -70,10 +77,19 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
     setOnOpenHowToSetupSurvey(false);
   }
 
+  const onCloseMissingRequirement = () => {
+    setOpenMissingRequirement(false)
+  }
+
+  const onOpenMissingRequirement = () => {
+    setOpenMissingRequirement(true)
+  }
 
   const onNextSetupTarget = () => {
     if (!editable || isValidSetup) {
       dispatch(push(routes.project.detail.target.replace(":id", `${projectId}`)))
+    } else {
+      onOpenMissingRequirement()
     }
   }
 
@@ -157,10 +173,10 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
             <RightPanelContent>
               <RightPanelBody>
                 <RPStepper orientation="vertical" connector={<RPStepConnector />}>
-                  <Step expanded>
+                  <Step active={isValidVideos} expanded>
                     <RPStepLabel
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.add_video)}
-                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><AddVideoIcon active /></RPStepIconBox>}
+                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><AddVideoIcon /></RPStepIconBox>}
                     >
                       <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", { number: 1 })}</ParagraphExtraSmall>
                       <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_add_video">{t("project_right_panel_step_add_video",  {number: project?.videos?.length || 0})}</Heading5>
@@ -245,6 +261,15 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
         isOpen={onOpenHowToSetupSurvey}
         project={project}
         onClose={onClosePopupHowToSetupSurvey}
+      />
+      <PopupMissingRequirement
+        isOpen={openMissingRequirement}
+        isValidVideos={isValidVideos}
+        onClose={onCloseMissingRequirement}
+        onScrollSection={(e) => {
+          onCloseMissingRequirement()
+          scrollToElement(e)
+        }}
       />
     </PageRoot>
   )
