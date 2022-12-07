@@ -55,6 +55,9 @@ const PopupMissingRequirement = ({ isOpen, isValidVideos, onClose, onScrollSecti
             </ParagraphBody>
           )}
         </ul>
+        {/*
+- Ngành hàng sản phẩm được nhắc đến trong đoạn phim (không được để trống) */}
+
         <ParagraphBody mt={4} $colorName='--gray-80' translation-key="setup_survey_popup_missing_required_remind">{t("setup_survey_popup_missing_required_remind")}</ParagraphBody>
       </DialogContentConfirm>
       <DialogActionsConfirm>

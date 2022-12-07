@@ -266,7 +266,7 @@ const PaymentHistory = memo(({ }: Props) => {
                       </TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>
                         <ParagraphBody className={clsx(classes.cellText, classes.alignText)}>
-                          {getCostCurrency(item.amount, null, item.usdToVNDRate)?.show}
+                          {getCostCurrency(item.totalAmount, null, item.usdToVNDRate)?.show}
                         </ParagraphBody>
                       </TableCell>
                       <TableCell sx={{ textAlign: "center" }}>
@@ -304,7 +304,7 @@ const PaymentHistory = memo(({ }: Props) => {
                       <div>
                         <ParagraphSmall $colorName="--cimigo-blue" className="underline" onClick={() => onClickProjectName(item.project?.id)}>{item.project?.name}</ParagraphSmall>
                         <Grid sx={{ margin: '4px 0' }}>
-                          <ParagraphSmall $colorName="---gray-60" className={classes.priceInvoice}><span>{getCostCurrency(item.amount, null, item.usdToVNDRate)?.show}</span> -  {item.orderId}</ParagraphSmall>
+                          <ParagraphSmall $colorName="---gray-60" className={classes.priceInvoice}><span>{getCostCurrency(item.totalAmount, null, item.usdToVNDRate)?.show}</span> -  {item.orderId}</ParagraphSmall>
                         </Grid>
                       </div>
                       <IconButton className={classes.iconButton} onClick={() => getInvoice(item.project?.id)}>
