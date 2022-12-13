@@ -18,12 +18,13 @@ import ProjectHelper from 'helpers/project';
 
 interface Props {
   isOpen: boolean,
+  isValidBasic: boolean,
   isValidVideos: boolean,
   onClose: () => void
   onScrollSection: (section: SETUP_SURVEY_SECTION) => void,
 }
 
-const PopupMissingRequirement = ({ isOpen, isValidVideos, onClose, onScrollSection }: Props) => {
+const PopupMissingRequirement = ({ isOpen, isValidBasic, isValidVideos, onClose, onScrollSection }: Props) => {
 
   const { t } = useTranslation()
 
@@ -49,15 +50,17 @@ const PopupMissingRequirement = ({ isOpen, isValidVideos, onClose, onScrollSecti
       <DialogContentConfirm dividers>
         <ParagraphBody $colorName='--gray-80' translation-key="setup_survey_popup_missing_required_subtitle">{t("setup_survey_popup_missing_required_subtitle")}</ParagraphBody>
         <ul className={classes.list}>
+          {!isValidBasic && (
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80' translation-key="setup_survey_video_choice_popup_missing_required_basic_information_required">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.basic_information)} className="cursor-pointer underline" translation-key="setup_survey_video_choice_popup_missing_required_basic_information">{t("setup_survey_video_choice_popup_missing_required_basic_information")}</span> {t("setup_survey_video_choice_popup_missing_required_basic_information_required")}
+            </ParagraphBody>
+          )}
           {!isValidVideos && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'translation-key="setup_survey_popup_missing_add_videos_min">
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.add_video)} className="cursor-pointer underline" translation-key="setup_survey_popup_missing_add_videos">{t("setup_survey_popup_missing_add_videos")}</span> {t("setup_survey_popup_missing_add_videos_min", {min: minVideo})}
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80' translation-key="setup_survey_popup_missing_add_videos_min">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.add_video)} className="cursor-pointer underline" translation-key="setup_survey_popup_missing_add_videos">{t("setup_survey_popup_missing_add_videos")}</span> {t("setup_survey_popup_missing_add_videos_min", { min: minVideo })}
             </ParagraphBody>
           )}
         </ul>
-        {/*
-- Ngành hàng sản phẩm được nhắc đến trong đoạn phim (không được để trống) */}
-
         <ParagraphBody mt={4} $colorName='--gray-80' translation-key="setup_survey_popup_missing_required_remind">{t("setup_survey_popup_missing_required_remind")}</ParagraphBody>
       </DialogContentConfirm>
       <DialogActionsConfirm>

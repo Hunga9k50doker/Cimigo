@@ -29,10 +29,11 @@ import { IconAddVideoMenu } from "components/icons";
 import PopupAddVideo from "pages/SurveyNew/components/PopupAddVideo";
 
 interface AddVideosProps {
+  step: number,
   project: Project
 }
 
-const AddVideos = memo(({ project }: AddVideosProps) => {
+const AddVideos = memo(({ step, project }: AddVideosProps) => {
 
   const { t } = useTranslation()
   const dispatch = useDispatch()
@@ -123,14 +124,14 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
   }
 
   return (
-    <Grid id={SETUP_SURVEY_SECTION.add_video}>
+    <Grid id={SETUP_SURVEY_SECTION.add_video} mt={4}>
       <Heading4
         $fontSizeMobile={"16px"}
         $colorName="--eerie-black"
         translation-key="setup_survey_video_choice_add_video_title"
         sx={{ display: "inline-block", verticalAlign: "middle" }}
       >
-        {t("setup_survey_video_choice_add_video_title", {number: 1})}
+        {t("setup_survey_video_choice_add_video_title", { number: step })}
       </Heading4>
       <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxVideo}</ParagraphSmall>} />
       <ParagraphBody $colorName="--gray-80" mt={1} translation-key="setup_survey_video_choice_add_video_sub_title">
@@ -143,8 +144,9 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
             sx={{ "& > span": { fontWeight: 600 } }}
             dangerouslySetInnerHTML={{
               __html: t("setup_add_videos_note_warning", {
-              number: videoNeedMore,}),
-              }}
+                number: videoNeedMore,
+              }),
+            }}
           >
           </ParagraphSmall>
         </NoteWarning>
@@ -167,7 +169,7 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
         disabled={!editable || project?.videos?.length >= maxVideo}
         btnType={BtnType.Outlined}
         translation-key=""
-        startIcon={<IconAddVideoMenu sx={{color: !editable || project?.videos?.length >= maxVideo ? 'var(--eerie-black-40)' : "#1F61A9"}}/>}
+        startIcon={<IconAddVideoMenu sx={{ color: !editable || project?.videos?.length >= maxVideo ? 'var(--eerie-black-40)' : "#1F61A9" }} />}
         children={<TextBtnSmall translation-key="setup_video_choice_btn_add_video">{t("setup_video_choice_btn_add_video")}</TextBtnSmall>}
         endIcon={<ArrowDropDownIcon sx={{ fontSize: "16px !important" }} />}
       />
@@ -183,11 +185,11 @@ const AddVideos = memo(({ project }: AddVideosProps) => {
         </MenuItem>
         <MenuItem className={classes.menuItem} onClick={() => onOpenPopupAddVideo(EVIDEO_TYPE.YOUTUBE)}>
           <YouTubeIcon sx={{ color: '#DD352E' }} />
-          <ParagraphExtraSmall className={classes.menuItemText}  translation-key="setup_video_choice_add_video_from_youtube">{t("setup_video_choice_add_video_from_youtube")}</ParagraphExtraSmall>
+          <ParagraphExtraSmall className={classes.menuItemText} translation-key="setup_video_choice_add_video_from_youtube">{t("setup_video_choice_add_video_from_youtube")}</ParagraphExtraSmall>
         </MenuItem>
       </Menu>
       {!enableAddVideos && (
-        <ParagraphSmall mt={1} translation-key="setup_survey_add_video_error_max" $colorName="--red-error">{t("setup_survey_add_video_error_max", {number: maxVideo})}</ParagraphSmall>
+        <ParagraphSmall mt={1} translation-key="setup_survey_add_video_error_max" $colorName="--red-error">{t("setup_survey_add_video_error_max", { number: maxVideo })}</ParagraphSmall>
       )}
       <Menu
         $minWidth={"120px"}

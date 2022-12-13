@@ -185,14 +185,14 @@ const ProjectReview = memo(({ }: ProjectReviewProps) => {
       <Grid className={classes.body}>
         <Grid className={classes.content}>
           <Grid>
-            <Grid className={classes.rowItem}>
+            <Grid className={classes.rowItem} sx={{ alignItems: "flex-start !important" }}>
               <Grid className={classes.leftItem}>
                 <Heading5 $colorName="--eerie-black" translation-key="payment_billing_sub_tab_preview_solution">
                   {t('payment_billing_sub_tab_preview_solution')}
                 </Heading5>
               </Grid>
               <Grid className={classes.rightItem} sx={{display: "flex", justifyContent: "center"}}>
-                <Box display="flex" alignItems="center">
+                <Box display="flex" alignItems="flex-start">
                   <img className={classes.solutionImg} src={project?.solution.image || Images.icPack} alt="" />
                   <ParagraphBody $colorName="--eerie-black">{project?.solution?.title}</ParagraphBody>
                 </Box>

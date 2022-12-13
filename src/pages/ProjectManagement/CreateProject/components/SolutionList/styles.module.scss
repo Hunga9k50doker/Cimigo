@@ -3,6 +3,7 @@
 }
 .titleCard{
   display: flex;
+  align-items: center;
   padding-bottom: 15px;
   @media only screen and (max-width: 767px) {
     display: block;
@@ -12,9 +13,6 @@
     max-width: 42px;
     max-height: 42px;
     margin-right: 10px;
-  }
-  p {
-    margin-top: 20px;
   }
 }
 .container {

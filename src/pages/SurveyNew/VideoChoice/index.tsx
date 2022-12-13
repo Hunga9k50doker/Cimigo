@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import LockIcon from "../components/LockIcon";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
-import { Help as HelpIcon, ArrowForward, FormatAlignLeft as FormatAlignLeftIcon, SentimentSatisfiedRounded, ArrowCircleUpRounded, ArrowCircleDownRounded } from '@mui/icons-material';
+import { Help as HelpIcon, ArrowForward, FormatAlignLeft as FormatAlignLeftIcon, SentimentSatisfiedRounded, ArrowCircleUpRounded, ArrowCircleDownRounded, Check as CheckIcon } from '@mui/icons-material';
 import TabPanelBox from "components/TabPanelBox";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
@@ -25,8 +25,9 @@ import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import PopupHowToSetupSurvey from "pages/SurveyNew/components/PopupHowToSetupSurvey";
 import { setHowToSetupSurveyReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
-import {AddVideoIcon} from "components/icons";
+import { AddVideoIcon } from "components/icons";
 import PopupMissingRequirement from "./components/PopupMissingRequirement";
+import BasicInformation from "./components/BasicInformation";
 
 interface AdtractionTestProps {
   projectId: number;
@@ -49,7 +50,11 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
   const { project, scrollToSection, showHowToSetup } = useSelector((state: ReducerType) => state.project)
 
   const editable = useMemo(() => editableProject(project), [project])
-  
+
+  const isValidBasic = useMemo(() => {
+    return ProjectHelper.isValidBasic(project)
+  }, [project])
+
   const isValidSetup = useMemo(() => {
     return ProjectHelper.isValidSetup(project)
   }, [project])
@@ -65,7 +70,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
   const scrollToElement = (id: string) => {
     const el = document.getElementById(id)
     if (!el) return
-    const content = document.getElementById(SETUP_SURVEY_SECTION.add_video)
+    const content = document.getElementById(SETUP_SURVEY_SECTION.basic_information)
     document.getElementById(SETUP_SURVEY_SECTION.content_survey_setup).scrollTo({ behavior: 'smooth', top: el.offsetTop - content.offsetTop })
   }
 
@@ -128,17 +133,22 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
           )}
         </PageTitle>
         <Content id={SETUP_SURVEY_SECTION.content_survey_setup}>
+          <BasicInformation
+            step={1}
+            project={project}
+          />
           <AddVideos
+            step={2}
             project={project}
           />
           <CustomQuestions
             project={project}
-            step={2}
+            step={3}
           />
           <EmotionMeasurement
             price={price}
             project={project}
-            step={3}
+            step={4}
           />
         </Content>
         <MobileAction>
@@ -173,13 +183,27 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
             <RightPanelContent>
               <RightPanelBody>
                 <RPStepper orientation="vertical" connector={<RPStepConnector />}>
+                  <Step active={isValidBasic} expanded>
+                    <RPStepLabel
+                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.basic_information)}
+                      StepIconComponent={({ active }) => <RPStepIconBox $active={active}><CheckIcon /></RPStepIconBox>}
+                    >
+                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", { number: 1 })}</ParagraphExtraSmall>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_video_choice_right_panel_step_basic_info">{t("project_video_choice_right_panel_step_basic_info")}</Heading5>
+                    </RPStepLabel>
+                    <RPStepContent>
+                      <ParagraphSmall $colorName="--eerie-black" translation-key="project_video_choice_right_panel_step_basic_info_subtitle">
+                        {t("project_video_choice_right_panel_step_basic_info_subtitle")}
+                      </ParagraphSmall>
+                    </RPStepContent>
+                  </Step>
                   <Step active={isValidVideos} expanded>
                     <RPStepLabel
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.add_video)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}><AddVideoIcon /></RPStepIconBox>}
                     >
-                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", { number: 1 })}</ParagraphExtraSmall>
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_add_video">{t("project_right_panel_step_add_video",  {number: project?.videos?.length || 0})}</Heading5>
+                      <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number">{t("common_step_number", { number: 2 })}</ParagraphExtraSmall>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_add_video">{t("project_right_panel_step_add_video", { number: project?.videos?.length || 0 })}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
                       <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_add_video_sub_title">
@@ -192,7 +216,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
                       <RPStepLabel
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.custom_questions)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><FormatAlignLeftIcon /></RPStepIconBox>}>
-                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", { number: 2 })}</ParagraphExtraSmall>
+                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", { number: 3 })}</ParagraphExtraSmall>
                         <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_custom_question">{t("project_right_panel_step_custom_question", { customQuestionLength: project?.customQuestions?.length || 0 })}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
@@ -209,7 +233,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
                       <RPStepLabel
                         onClick={() => scrollToElement(SETUP_SURVEY_SECTION.emotion_measurement)}
                         StepIconComponent={({ active }) => <RPStepIconBox $active={active}><SentimentSatisfiedRounded /></RPStepIconBox>}>
-                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", { number: project?.solution?.enableCustomQuestion ? 3 : 2 })}</ParagraphExtraSmall>
+                        <ParagraphExtraSmall $colorName="--gray-60" translation-key="common_step_number_optional">{t("common_step_number_optional", { number: project?.solution?.enableCustomQuestion ? 4 : 3 })}</ParagraphExtraSmall>
                         <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_emotion">{t("project_right_panel_step_emotion")}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
@@ -264,6 +288,7 @@ const AdtractionTest = memo(({ projectId, isHaveChangePrice, tabRightPanel, togg
       />
       <PopupMissingRequirement
         isOpen={openMissingRequirement}
+        isValidBasic={isValidBasic}
         isValidVideos={isValidVideos}
         onClose={onCloseMissingRequirement}
         onScrollSection={(e) => {

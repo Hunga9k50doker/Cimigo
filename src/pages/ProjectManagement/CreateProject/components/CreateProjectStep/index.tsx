@@ -254,6 +254,56 @@ const CreateProjectStep = memo(
                   </Accordion>
                 </Grid>
               )}
+               {solutionSelected?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
+                <Grid className={classes.accordion}>
+                  <Accordion className={classes.accordionContent}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                    >
+                      <Grid>
+                        <Heading5
+                          $colorName={"--cimigo-blue"}
+                          translation-key="project_create_tab_create_project_infor_video_choice"
+                        >
+                          {t("project_create_tab_create_project_infor_video_choice")}
+                        </Heading5>
+                        <ParagraphExtraSmall
+                          $colorName={"--gray-60"}
+                          translation-key="common_optional_upper"
+                        >
+                          {t("common_optional_upper")}
+                        </ParagraphExtraSmall>
+                      </Grid>
+                    </AccordionSummary>
+                    <AccordionDetails sx={{ paddingBottom: '24px' }}>
+                      <Grid>
+                        <ParagraphSmall
+                          $colorName={"--gray-80"}
+                          translation-key="project_create_tab_create_project_description_video_choice"
+                          dangerouslySetInnerHTML={{
+                            __html: t("project_create_tab_create_project_description_video_choice"),
+                          }}
+                        ></ParagraphSmall>
+                        <Grid container rowSpacing={2} sx={{ marginTop: "0" }}>
+                          <Grid item xs={12}>
+                            <InputTextfield
+                              className={classes.inputAccordion}
+                              name="category"
+                              type="text"
+                              inputProps={{ maxLength: "50" }}
+                              placeholder={t("field_video_choice_project_category_placeholder")}
+                              translation-key-placeholder="field_video_choice_project_category_placeholder"
+                              inputRef={register("category")}
+                              errorMessage={errors.category?.message}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+              )}
               <Grid className={classes.buttonSubmit}>
                 <Button
                   fullWidth

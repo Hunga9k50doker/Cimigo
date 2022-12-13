@@ -194,7 +194,8 @@ export class ProjectHelper {
           ProjectHelper.isValidAdditionalBrand(project) &&
           ProjectHelper.isValidEyeTracking(project)
       case ESOLUTION_TYPE.VIDEO_CHOICE:
-        return ProjectHelper.isValidVideos(project)
+        return ProjectHelper.isValidBasic(project) &&
+        ProjectHelper.isValidVideos(project)
     }
   }
 
