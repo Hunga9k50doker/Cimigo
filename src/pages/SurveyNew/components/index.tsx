@@ -182,8 +182,14 @@ export const RPStepConnector = styled(StepConnector)`
   }
 `;
 
-export const RPStepLabel = styled(StepLabel)`
+interface RPStepLabelProps {
+  $padding?: string;
+}
+export const RPStepLabel = styled(StepLabel)<RPStepLabelProps>`
   cursor: pointer !important;
+  ${props => props.$padding && css`
+    padding: ${props.$padding};
+  `}
   .MuiStepLabel-iconContainer {
     padding: 0;
     margin-right: 16px;
