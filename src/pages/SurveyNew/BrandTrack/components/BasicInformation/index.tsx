@@ -1,20 +1,17 @@
 import { Grid } from "@mui/material"
 import { Project, SETUP_SURVEY_SECTION } from "models/project"
-import { memo, useMemo } from "react"
+import { memo } from "react"
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import Heading4 from "components/common/text/Heading4"
 import ParagraphBody from "components/common/text/ParagraphBody"
-import { useTranslation } from "react-i18next"
-import { editableProject } from "helpers/project"
-import { useDispatch } from "react-redux"
 import ControlCheckbox from "components/common/control/ControlCheckbox";
 import InputCheckbox from "components/common/inputs/InputCheckbox";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import InputSelect from "components/common/inputs/InputSelect";
 import { categoryTypes, OptionItemT } from "models/general";
-import { HelpOutline as HelpIcon, ArrowForward, Check as CheckIcon, BurstMode as BurstModeIcon, FactCheck as FactCheckIcon, PlaylistAdd as PlaylistAddIcon, FormatAlignLeft as FormatAlignLeftIcon, RemoveRedEye as RemoveRedEyeIcon, ArrowCircleUpRounded, ArrowCircleDownRounded } from '@mui/icons-material';
+import { HelpOutline as HelpIcon } from '@mui/icons-material';
 import classes from "./styles.module.scss"
 import TooltipWrapper from "pages/SurveyNew/components/TooltipWrapper";
 
@@ -27,12 +24,6 @@ interface BasicInformationProps {
 }
 
 const BasicInformation = memo(({ project }: BasicInformationProps) => {
-
-  const { t } = useTranslation()
-  const dispatch = useDispatch()
-
-  const editable = useMemo(() => editableProject(project), [project])
-
   const schema = yup.object().shape({
     category: yup
       .object({
@@ -41,7 +32,7 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
       .required("This field is required"),
   })
 
-  const { register, control, handleSubmit, formState: { errors }, reset } = useForm<BasicInformationForm>({
+  const { control, handleSubmit, formState: { errors } } = useForm<BasicInformationForm>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
