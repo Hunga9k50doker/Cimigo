@@ -22,6 +22,11 @@ export interface UpdateAttribute {
   language?: string;
 }
 
+export interface AttributeCategory {
+  id: number;
+  name: string;
+}
+
 export interface Attribute {
   id: number;
   solutionId: number;
@@ -29,13 +34,15 @@ export interface Attribute {
   type: OptionItem;
   start: string;
   end: string;
+  content: string;
   parentLanguage: number;
   language: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
   solution?: Solution;
-  languages?: Attribute[]
+  languages?: Attribute[];
+  category: AttributeCategory;
 }
 
 export enum AttributeType {

@@ -145,8 +145,8 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
     if (userAttributeEdit) {
       dispatch(setLoading(true))
       UserAttributeService.update(userAttributeEdit.id, {
-        start: data.start,
-        end: data.end
+        content: data.content,
+        contentTypeId: 1,
       })
         .then(() => {
           dispatch(getUserAttributesRequest(project.id))
@@ -158,8 +158,8 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
       dispatch(setLoading(true))
       UserAttributeService.create({
         projectId: project.id,
-        start: data.start,
-        end: data.end
+        content: data.content,
+        contentTypeId :1,
       })
         .then(() => {
           dispatch(getUserAttributesRequest(project.id))

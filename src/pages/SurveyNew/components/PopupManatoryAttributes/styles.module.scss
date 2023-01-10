@@ -1,6 +1,5 @@
 .paper {
-  width: 800px;
-  max-width: 800px;
+  max-width: 576px;
   @media only screen and (max-width: 767px) {
     width: 100%;
     max-width: 100%;
@@ -12,46 +11,28 @@
 .body {
   border: none !important;
   min-height: 300px;
+  margin-bottom: 24px;
+}
+
+.rootList {
+  padding-top: 24px;
+  flex-direction: column;
+}
+
+.titleWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
 }
 
 .listFlex {
   display: flex;
-  justify-content: center;
   align-items: center;
-  @media only screen and (max-width: 767px) {
-    flex-direction: column;
-    > div {
-      > p {
-        text-align: center;
-      }
-      &:not(:first-child) {
-        margin-top: 10px;
-      }
-    }
-  }
 }
 .listTextLeft {
   > p {
     margin: 0;
     text-align: end;
-  }
-  .listTextRightMoblie {
-    display: none;
-  }
-  @media only screen and (max-width: 767px) {
-    max-width: unset;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    > * {
-      &:not(:first-child) {
-        margin-left: 25px;
-      }
-    }
-    .listTextRightMoblie {
-      display: block;
-    }
   }
 }
 
@@ -60,50 +41,26 @@
     margin: 0;
     text-align: start;
   }
-  @media only screen and (max-width: 767px) {
-    display: none;
-  }
 }
-.listNumber {
+.arrowBreak {
   margin: auto 16px;
-  max-width: 240px;
+  max-width: 72px;
   div {
     display: flex;
-    min-width: 200px;
-    justify-content: space-between;
-    border-radius: 4px;
-    border: 1px solid #dddddd;
-    span {
-      width: 24px;
-      height: 24px;
-      max-width: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 400;
-      font-size: 12px;
-      color: rgba(28, 28, 28, 0.65);
-    }
-    span:not(:last-child) {
-      border-right: 1px solid #dddddd;
-    }
+    justify-content: center;
+  }
+  @media only screen and (max-width: 767px) {
+    margin: 0;
   }
 }
 .rootListItem {
-  &:nth-child(odd) {
-    background: #eef0f2;
-  }
+  border: 1px solid #dddddd;
 }
-.rootListItem > div {
-  &:first-child {
-    display: block;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
+.listItemTitle {
+  flex: 1;
 }
 
-.btn {
-  @media only screen and (max-width: 767px) {
-   width: 100%;
-  }
+.rootCheckbox {
+  padding-left: 16px;
+  padding-right: 16px;
 }

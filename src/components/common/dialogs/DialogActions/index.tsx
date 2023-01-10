@@ -7,6 +7,8 @@ export const DialogActions = styled(DialogActionsMUI)`
   padding: 24px 24px 32px;
   @media only screen and (max-width: 767px) {
     padding-bottom: 24px;
+    flex-direction: column;
+    gap: 8px;
   }
 `
 

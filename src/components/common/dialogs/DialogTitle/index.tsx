@@ -3,8 +3,12 @@ import {
   DialogTitle as DialogTitleMUI,
 } from "@mui/material";
 
-export const DialogTitle = styled(DialogTitleMUI)`
-  background-color: var(--cimigo-blue-dark-1);
+interface DialogTitleProps {
+  $bgColor?: string;
+}
+export const DialogTitle = styled(DialogTitleMUI)<DialogTitleProps>`
+  background-color: ${props => `var(${props.$bgColor || '--cimigo-blue-dark-1'})`};
+  border-bottom: ${props => props.$bgColor ? "1px solid var(--gray-40)" : "unset"};
   display: flex;
   justify-content: space-between;
   padding: 24px;
