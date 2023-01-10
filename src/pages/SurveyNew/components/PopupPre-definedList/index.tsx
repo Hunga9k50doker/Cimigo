@@ -73,6 +73,16 @@ const PopupPreDefinedList = memo((props: Props) => {
     setAttributesSelected(_attributesSelected)
   }
 
+  const getNumberOfAttributesSelected = (key) => {
+    let numberOfSelected = 0
+    listAttributes[key].forEach(item => {
+      if(attributesSelected.includes(item.id)) {
+        numberOfSelected++
+      }
+    })
+    return numberOfSelected
+  }
+
   const _onSubmit = () => {
     if (!attributesSelected?.length) {
       onClose()
@@ -115,16 +125,6 @@ const PopupPreDefinedList = memo((props: Props) => {
     })
     setOpenAttributeCategory(tempOpenAttributeCategory)
   }, [listAttributes])
-
-  const getNumberOfAttributesSelected = (key) => {
-    let numberOfSelected = 0
-    listAttributes[key].forEach(item => {
-      if(attributesSelected.includes(item.id)) {
-        numberOfSelected++
-      }
-    })
-    return numberOfSelected
-  }
 
   return (
     <Dialog
