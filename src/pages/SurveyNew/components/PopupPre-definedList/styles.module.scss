@@ -64,13 +64,10 @@
 }
 .arrowBreak {
   margin: auto 16px;
-  max-width: 72px;
-  div {
-    display: flex;
-    justify-content: center;
-  }
-  @media only screen and (max-width: 767px) {
-    margin: 0;
+  flex: unset;
+  display: flex;
+  svg {
+    width: 40px;
   }
 }
 .rootListItem {
@@ -106,6 +103,10 @@
   padding-right: 16px;
 }
 
+.dialogActionsWrapper {
+  flex-direction: column;
+  gap: 8px;
+}
 .btn {
   margin-left: 16px !important;
   @media only screen and (max-width: 767px) {

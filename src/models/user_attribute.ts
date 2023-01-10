@@ -24,3 +24,8 @@ export interface UserAttribute {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export enum EATTRIBUTE_CONTENT_TYPE_ID {
+  SINGLE = 1,
+  MULTIPLE = 2
+}

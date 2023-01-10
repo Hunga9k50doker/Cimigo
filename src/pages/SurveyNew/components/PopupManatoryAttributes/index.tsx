@@ -12,10 +12,9 @@ import ButtonClose from "components/common/buttons/ButtonClose";
 import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
 import ParagraphBody from 'components/common/text/ParagraphBody';
 import clsx from 'clsx';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import ArrowIconCustom from 'components/common/arrow/ArrowIconCustom';
+import { ExpandLess, ExpandMore, Info } from '@mui/icons-material';
+import { ReactComponent as ArrowBreak } from 'assets/img/icon/arrow-break.svg';
 import Heading5 from 'components/common/text/Heading5';
-import ButtonInfo from 'components/common/buttons/ButtonInfo';
 interface Props {
   isOpen: boolean,
   project: Project,
@@ -48,7 +47,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
     >
       <DialogTitle $bgColor="--white">
         <div className={classes.titleWrapper}>
-          <ButtonInfo></ButtonInfo>
+          <Info className={classes.infoIcon}/>
           <Heading3 $colorName="--gray-90" translation-key="setup_survey_add_att_popup_m_att_title">{t('setup_survey_add_att_popup_m_att_title')}</Heading3>
         </div>
         <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onClose}>
@@ -100,7 +99,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
                           <ParagraphExtraSmall $colorName="--eerie-black">{item.start}</ParagraphExtraSmall>
                         </Grid>
                         <Grid item xs={4} className={classes.arrowBreak}>
-                          <ArrowIconCustom/>
+                          <ArrowBreak/>
                         </Grid>
                         <Grid item xs={4} className={classes.listTextRight}>
                           <ParagraphExtraSmall $colorName="--eerie-black">{item.end}</ParagraphExtraSmall>

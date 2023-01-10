@@ -24,6 +24,11 @@
   flex-direction: row;
   gap: 16px;
 }
+.infoIcon {
+  color: var(--eerie-black-40);
+  width: 26.67px;
+  height: 26.67px;
+}
 
 .listFlex {
   display: flex;
@@ -44,13 +49,10 @@
 }
 .arrowBreak {
   margin: auto 16px;
-  max-width: 72px;
-  div {
-    display: flex;
-    justify-content: center;
-  }
-  @media only screen and (max-width: 767px) {
-    margin: 0;
+  flex: unset;
+  display: flex;
+  svg {
+    width: 40px;
   }
 }
 .rootListItem {

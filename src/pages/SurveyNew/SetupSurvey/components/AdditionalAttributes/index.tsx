@@ -5,7 +5,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall"
 import { editableProject } from "helpers/project"
 import { Project, SETUP_SURVEY_SECTION } from "models/project"
 import { ProjectAttribute } from "models/project_attribute"
-import { UserAttribute } from "models/user_attribute"
+import { EATTRIBUTE_CONTENT_TYPE_ID, UserAttribute } from "models/user_attribute"
 import PopupManatoryAttributes from "pages/SurveyNew/components/PopupManatoryAttributes"
 import { MaxChip, Tip } from "pages/SurveyNew/components"
 import { memo, useMemo, useState } from "react"
@@ -146,7 +146,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
       dispatch(setLoading(true))
       UserAttributeService.update(userAttributeEdit.id, {
         content: data.content,
-        contentTypeId: 1,
+        contentTypeId: EATTRIBUTE_CONTENT_TYPE_ID.SINGLE,
       })
         .then(() => {
           dispatch(getUserAttributesRequest(project.id))
@@ -159,7 +159,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
       UserAttributeService.create({
         projectId: project.id,
         content: data.content,
-        contentTypeId :1,
+        contentTypeId: EATTRIBUTE_CONTENT_TYPE_ID.SINGLE,
       })
         .then(() => {
           dispatch(getUserAttributesRequest(project.id))

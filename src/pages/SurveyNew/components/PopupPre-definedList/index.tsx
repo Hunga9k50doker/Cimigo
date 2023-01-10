@@ -18,7 +18,7 @@ import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
 import ParagraphBody from 'components/common/text/ParagraphBody';
 import InputCheckbox from 'components/common/inputs/InputCheckbox';
 import { ExpandLess, ExpandMore, UnfoldMore, UnfoldLess } from '@mui/icons-material';
-import ArrowIconCustom from 'components/common/arrow/ArrowIconCustom';
+import { ReactComponent as ArrowBreak } from 'assets/img/icon/arrow-break.svg';
 import _ from 'lodash';
 
 interface Props {
@@ -203,7 +203,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                                   <ParagraphExtraSmall $colorName="--eerie-black">{item.start}</ParagraphExtraSmall>
                                 </Grid>
                                 <Grid item xs={4} className={classes.arrowBreak}>
-                                  <ArrowIconCustom/>
+                                  <ArrowBreak/>
                                 </Grid>
                                 <Grid item xs={4} className={classes.listTextRight}>
                                   <ParagraphExtraSmall $colorName="--eerie-black">{item.end}</ParagraphExtraSmall>
@@ -221,7 +221,7 @@ const PopupPreDefinedList = memo((props: Props) => {
           }
         </Grid> 
       </DialogContent>
-      <DialogActions> 
+      <DialogActions className={classes.dialogActionsWrapper}> 
         <ParagraphSmall $colorName="--cimigo-blue-dark-2" className={classes.remaining}>Remaining: {maxSelect - attributesSelected.length}</ParagraphSmall>
         <Button className={clsx(classes.btn, classes.hideOnMobile)} children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onClose}/>
         <Button className={clsx(classes.btn, classes.btnAdd)} children="Add" translation-key="setup_survey_add_att_btn_add" btnType={BtnType.Raised} onClick={_onSubmit}/>

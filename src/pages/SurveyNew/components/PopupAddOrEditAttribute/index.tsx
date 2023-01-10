@@ -40,7 +40,7 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
 
   const schema = useMemo(() => {
     return yup.object().shape({
-      content: yup.string().required(t('setup_survey_popup_your_own_att_start_point_label_required')),
+      content: yup.string().required("This field is required"),
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
