@@ -25,7 +25,7 @@ export interface UserAttribute {
   updatedAt: Date;
 }
 
-export enum EATTRIBUTE_CONTENT_TYPE_ID {
+export enum AttributeContentType {
   SINGLE = 1,
   MULTIPLE = 2
 }

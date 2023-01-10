@@ -13,8 +13,9 @@ import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
 import ParagraphBody from 'components/common/text/ParagraphBody';
 import clsx from 'clsx';
 import { ExpandLess, ExpandMore, Info } from '@mui/icons-material';
-import { ReactComponent as ArrowBreak } from 'assets/img/icon/arrow-break.svg';
 import Heading5 from 'components/common/text/Heading5';
+import { AttributeContentType } from 'models/user_attribute';
+import ArrowBreak from 'components/icons/IconArrowBreak';
 interface Props {
   isOpen: boolean,
   project: Project,
@@ -70,7 +71,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
                   classes={{ root: classes.rootListItem }}
                   disablePadding
                 >
-                  {item?.contentTypeId === 1 ? (
+                  {item?.contentTypeId === AttributeContentType.SINGLE ? (
                     <ListItemText>
                       <Grid className={classes.listFlex}>
                         <Grid>

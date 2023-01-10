@@ -18,8 +18,9 @@ import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
 import ParagraphBody from 'components/common/text/ParagraphBody';
 import InputCheckbox from 'components/common/inputs/InputCheckbox';
 import { ExpandLess, ExpandMore, UnfoldMore, UnfoldLess } from '@mui/icons-material';
-import { ReactComponent as ArrowBreak } from 'assets/img/icon/arrow-break.svg';
 import _ from 'lodash';
+import { AttributeContentType } from 'models/user_attribute';
+import ArrowBreak from 'components/icons/IconArrowBreak';
 
 interface Props {
   isOpen: boolean,
@@ -174,7 +175,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                           disablePadding
                           onClick={() => onChange(item)}
                         >
-                          {item?.contentTypeId === 1 ? (
+                          {item?.contentTypeId === AttributeContentType.SINGLE ? (
                             <ListItemText>
                               <Grid className={clsx(classes.listFlex, { [classes.listFlexChecked]: attributesSelected.includes(item.id) })}>
                                 <Grid>
