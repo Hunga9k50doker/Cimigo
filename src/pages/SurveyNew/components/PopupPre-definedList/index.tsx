@@ -131,7 +131,7 @@ const PopupPreDefinedList = memo((props: Props) => {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle $bgColor="--white">
-        <Heading3 $colorName="--gray-90" translation-key="setup_survey_add_att_popup_pre_defined_title">Add attributes</Heading3>
+        <Heading3 $colorName="--gray-90">Add attributes</Heading3>
         <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onClose}>
         </ButtonClose>
       </DialogTitle>
@@ -224,7 +224,7 @@ const PopupPreDefinedList = memo((props: Props) => {
       <DialogActions className={classes.dialogActionsWrapper}> 
         <ParagraphSmall $colorName="--cimigo-blue-dark-2" className={classes.remaining}>Remaining: {maxSelect - attributesSelected.length}</ParagraphSmall>
         <Button className={clsx(classes.btn, classes.hideOnMobile)} children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onClose}/>
-        <Button className={clsx(classes.btn, classes.btnAdd)} children="Add" translation-key="setup_survey_add_att_btn_add" btnType={BtnType.Raised} onClick={_onSubmit}/>
+        <Button className={clsx(classes.btn, classes.btnAdd)} children="Add" btnType={BtnType.Raised} onClick={_onSubmit}/>
         <Button className={clsx(classes.btn, classes.hideOnDesktop)} children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onClose}/>
       </DialogActions>
     </Dialog>

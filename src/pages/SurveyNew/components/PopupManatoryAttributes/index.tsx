@@ -54,7 +54,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
         </ButtonClose>
       </DialogTitle>
       <DialogContent className={classes.body} dividers>
-      <ParagraphBody $colorName="--eerie-black" translation-key="setup_survey_add_att_popup_m_att_sub_title">The following attributes are mandatory attributes that always be asked for brand equity sections.</ParagraphBody>
+      <ParagraphBody $colorName="--eerie-black">The following attributes are mandatory attributes that always be asked for brand equity sections.</ParagraphBody>
         <Grid container sx={{paddingTop:"24px"}} classes={{ root: classes.rootList }}>
           <ListItemButton classes={{ root: clsx(classes.rootListItem) }} onClick={()=>{setIsExpand(!isExpand)}}>
             <Heading5 className={classes.listItemTitle} translation-key="setup_survey_add_att_popup_m_att_title">{t('setup_survey_add_att_popup_m_att_title')}</Heading5>

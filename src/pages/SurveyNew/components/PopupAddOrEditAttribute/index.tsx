@@ -97,7 +97,7 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
           </ButtonClose>
         </DialogTitle>
         <DialogContent className={classes.body} dividers>
-          <ParagraphSmall $colorName="--eerie-black" translation-key="setup_survey_popup_your_own_att_sub_title">Your attribute will be asked as a scale for every provided pack, providing you with the participants’ agreement or disagreement with the asked attribute.</ParagraphSmall>
+          <ParagraphSmall $colorName="--eerie-black">Your attribute will be asked as a scale for every provided pack, providing you with the participants’ agreement or disagreement with the asked attribute.</ParagraphSmall>
           <Grid container classes={{ root: classes.rootList }}>
             <ListItem
               alignItems="center"
@@ -114,7 +114,6 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
                       className={classes.inputPoint}
                       name="content"
                       placeholder={"e.g. This pack is durable"}
-                      translation-key-placeholder="setup_survey_popup_your_own_att_start_point_label_placeholder"
                       inputRef={register('content')}
                       startAdornment={
                         <InputAdornment position="start">
@@ -143,15 +142,14 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
                   color: expanded ? "var(--gray-80)" : "var(--cimigo-blue)",
                   marginLeft: expanded ? "0px" : "12px"
                 }}
-                translation-key="setup_survey_popup_your_own_att_tip_title"
                 $fontWeight="700"
               >
                 Tip:
               </Heading6>
               <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <ParagraphSmall className={classes.itemTip} translation-key="setup_survey_popup_your_own_att_tip_sub"><span className={classes.itemDotTip}></span>Keep attributes short and simple.</ParagraphSmall>
-                <ParagraphSmall className={classes.itemTip} translation-key="setup_survey_popup_your_own_att_tip_sub"><span className={classes.itemDotTip}></span>Make sure there is only one possible interpretation or meaning for the attribute.</ParagraphSmall>
-                <ParagraphSmall className={classes.itemTip} translation-key="setup_survey_popup_your_own_att_tip_sub"><span className={classes.itemDotTip}></span>Ensure your attributes is related to the packs.</ParagraphSmall>
+                <ParagraphSmall className={classes.itemTip}><span className={classes.itemDotTip}></span>Keep attributes short and simple.</ParagraphSmall>
+                <ParagraphSmall className={classes.itemTip}><span className={classes.itemDotTip}></span>Make sure there is only one possible interpretation or meaning for the attribute.</ParagraphSmall>
+                <ParagraphSmall className={classes.itemTip}><span className={classes.itemDotTip}></span>Ensure your attributes is related to the packs.</ParagraphSmall>
               </Collapse>
             </Grid>
           </Grid>
@@ -161,7 +159,6 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
           <Button
             type="submit"
             children={"Save"}
-            translation-key={itemEdit ? 'setup_survey_add_att_btn_edit' : 'setup_survey_add_att_btn_add'}
             btnType={BtnType.Raised}
             className={classes.btnSave}
           />
