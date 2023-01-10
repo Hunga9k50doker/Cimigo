@@ -174,7 +174,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                           disablePadding
                           onClick={() => onChange(item)}
                         >
-                          {item?.content ? (
+                          {item?.contentTypeId === 1 ? (
                             <ListItemText>
                               <Grid className={clsx(classes.listFlex, { [classes.listFlexChecked]: attributesSelected.includes(item.id) })}>
                                 <Grid>

@@ -71,7 +71,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
                   classes={{ root: classes.rootListItem }}
                   disablePadding
                 >
-                  {item?.content ? (
+                  {item?.contentTypeId === 1 ? (
                     <ListItemText>
                       <Grid className={classes.listFlex}>
                         <Grid>

@@ -35,6 +35,7 @@ export interface Attribute {
   start: string;
   end: string;
   content: string;
+  contentTypeId: number;
   parentLanguage: number;
   language: number;
   createdAt: Date;
