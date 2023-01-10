@@ -38,22 +38,27 @@ const PopupPreDefinedList = memo((props: Props) => {
 
   const [attributes, setAttributes] = useState<Attribute[]>([])
   const [attributesSelected, setAttributesSelected] = useState<number[]>([])
-  const [attributesSelectedByCategory, setAttributesSelectedByCategory] = useState({})
-  const [openAttributeCategory, setOpenAttributeCategory] = useState([]);
+  const [openAttributeCategory, setOpenAttributeCategory] = useState({});
 
-  const handleClick = (index) => {
-    const tempOpen = [...openAttributeCategory]
-    tempOpen[index] = !tempOpen[index]
+  const handleCollapse = (key) => {
+    const tempOpen = {...openAttributeCategory}
+    tempOpen[key] = !tempOpen[key]
     setOpenAttributeCategory(tempOpen);
   };
   
   const handleExpandAll = () => {
-    const tempOpen = openAttributeCategory.map( ()=> true)
+    let tempOpen = {}
+    Object.keys(openAttributeCategory).map((att) => {
+      tempOpen = {...tempOpen, [att]: true}
+    })
     setOpenAttributeCategory(tempOpen);
   };
   
   const handleCollapseAll = () => {
-    const tempOpen = openAttributeCategory.map(() => false)
+    let tempOpen = {}
+    Object.keys(openAttributeCategory).map((att) => {
+      tempOpen = {...tempOpen, [att]: false}
+    })
     setOpenAttributeCategory(tempOpen);
   };
 
@@ -62,18 +67,8 @@ const PopupPreDefinedList = memo((props: Props) => {
     let _attributesSelected = [...attributesSelected]
     if (_attributesSelected.includes(item.id)) {
       _attributesSelected = _attributesSelected.filter(it => it !== item.id)
-      if(item?.category){
-        setAttributesSelectedByCategory((prev) => ({...prev, [item.category.id] : attributesSelectedByCategory[item.category.id] - 1}))
-      } else {
-        setAttributesSelectedByCategory((prev) => ({...prev, undefined : attributesSelectedByCategory["undefined"] - 1}))
-      }
     } else {
       _attributesSelected.push(item.id)
-      if(item?.category){
-        setAttributesSelectedByCategory((prev) => ({...prev, [item.category.id] : attributesSelectedByCategory[item.category.id] + 1}))
-      } else {
-        setAttributesSelectedByCategory((prev) => ({...prev, undefined : attributesSelectedByCategory["undefined"] + 1}))
-      }
     }
     setAttributesSelected(_attributesSelected)
   }
@@ -114,15 +109,22 @@ const PopupPreDefinedList = memo((props: Props) => {
   }, [attributes])
 
   useEffect(()=>{
-    let tempOpen = []
-    let tempAttributesSelectedByCategory = {}
+    let tempOpenAttributeCategory = {}
     Object.keys(listAttributes).map((att) => {
-      tempOpen.push(false)
-      tempAttributesSelectedByCategory = {...tempAttributesSelectedByCategory, [att]: 0}
-      setAttributesSelectedByCategory(tempAttributesSelectedByCategory)
+      tempOpenAttributeCategory = {...tempOpenAttributeCategory, [att]: false}
     })
-    setOpenAttributeCategory(tempOpen)
+    setOpenAttributeCategory(tempOpenAttributeCategory)
   }, [listAttributes])
+
+  const getNumberOfAttributesSelected = (key) => {
+    let numberOfSelected = 0
+    listAttributes[key].forEach(item => {
+      if(attributesSelected.includes(item.id)) {
+        numberOfSelected++
+      }
+    })
+    return numberOfSelected
+  }
 
   return (
     <Dialog
@@ -150,23 +152,23 @@ const PopupPreDefinedList = memo((props: Props) => {
 
         <Grid container classes={{ root: classes.rootList }}>
           {
-            Object.keys(listAttributes).map((item, indexCategory)=>{
+            Object.keys(listAttributes).map((keyId, indexCategory)=>{
               return (
                 <div key={indexCategory}>
-                  <ListItemButton classes={{ root: clsx(classes.rootListItem) }} onClick={()=>handleClick(indexCategory)}>
-                    <ListItemText classes={{ root: clsx(classes.attributeTitle) }} primary={item === "undefined" ? "Other" : listAttributes[item][0]?.category?.name} />
+                  <ListItemButton classes={{ root: clsx(classes.rootListItem) }} onClick={()=>handleCollapse(keyId)}>
+                    <ListItemText classes={{ root: clsx(classes.attributeTitle) }} primary={keyId === "undefined" ? "Other" : listAttributes[keyId][0]?.category?.name} />
                     <Chip
                       sx={{ height: 24, backgroundColor: "var(--cimigo-blue-light-4)", "& .MuiChip-label": { px: 2 } }}
-                      label={<ParagraphSmall $colorName="--cimigo-blue-dark-1">{listAttributes[item].length}</ParagraphSmall>}
+                      label={<ParagraphSmall $colorName="--cimigo-blue-dark-1">{listAttributes[keyId].length}</ParagraphSmall>}
                       color="secondary"
                       classes={{ root: classes.numberOfAttibute }}
                     />
-                    <ParagraphSmall $colorName="--cimigo-blue" className={classes.numberOfSelected}>{attributesSelectedByCategory[item]} selected</ParagraphSmall>
+                    <ParagraphSmall $colorName="--cimigo-blue" className={classes.numberOfSelected}>{getNumberOfAttributesSelected(keyId)} selected</ParagraphSmall>
                     {openAttributeCategory[indexCategory] ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
-                  <Collapse in={openAttributeCategory[indexCategory]} timeout="auto" unmountOnExit>
+                  <Collapse in={openAttributeCategory[keyId]} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                      {listAttributes[item]?.map((item, index) => (
+                      {listAttributes[keyId]?.map((item) => (
                         <ListItem
                           alignItems="center"
                           component="div"
