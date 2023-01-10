@@ -104,8 +104,10 @@
 }
 
 .dialogActionsWrapper {
-  flex-direction: column;
-  gap: 8px;
+  @media only screen and (max-width: 767px) {
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 .btn {
   margin-left: 16px !important;
