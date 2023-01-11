@@ -1,3 +1,5 @@
+import { OptionItem } from "models/general";
+
 export interface GetUserAttributeParams {
   take?: number;
   page?: number;
@@ -18,8 +20,11 @@ export interface UpdateUserAttribute {
 export interface UserAttribute {
   id: number;
   userId: number;
-  start: string;
-  end: string;
+  start?: string;
+  end?: string;
+  content?: string;
+  contentTypeId: number;
+  contentType?: OptionItem;
   createdAt: Date;
   updatedAt: Date;
 }
