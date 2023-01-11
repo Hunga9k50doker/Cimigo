@@ -4,6 +4,7 @@ import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material"
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
 import { Solution } from "models/Admin/solution";
+import { AttributeCategory } from "models/Admin/attribute";
 import { memo, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -14,7 +15,8 @@ import { OptionItem } from "models/general";
 import InputSelect from "components/InputsSelect";
 import { setErrorMess } from "redux/reducers/Status/actionTypes";
 import AdminSolutionService from "services/admin/solution";
-import { Attribute, attributeTypes } from "models/Admin/attribute";
+import { AdminAttributeService } from "services/admin/attribute";
+import { Attribute, attributeTypes, attributeContentTypes, AttributeContentType } from "models/Admin/attribute";
 
 const schema = yup.object().shape({
   solutionId: yup.object().shape({
@@ -25,15 +27,39 @@ const schema = yup.object().shape({
     id: yup.number().required('Type is required.'),
     name: yup.string().required()
   }).required(),
-  start: yup.string().required('Start is required.'),
-  end: yup.string().required('End is required.'),
+  categoryId: yup.object().shape({
+    id: yup.number().required('Category is required'),
+    name: yup.string().required()
+  }).required(),
+  contentTypeId: yup.object().shape({
+    id: yup.number().required('Content type is required'),
+    name: yup.string().required()
+  }).required(),
+  start: yup.string().when("contentTypeId", {
+    is: (value: OptionItem) => value.id === AttributeContentType.MULTIPLE,
+    then: yup.string().required('Start is required.'),
+    otherwise: yup.string()
+  }),
+  end: yup.string().when("contentTypeId", {
+    is: (value: OptionItem) => value.id === AttributeContentType.MULTIPLE,
+    then: yup.string().required('End is required.'),
+    otherwise: yup.string()
+  }),
+  content: yup.string().when("contentTypeId", {
+    is: (value: OptionItem) => value.id === AttributeContentType.SINGLE,
+    then: yup.string().required('Content is required.'),
+    otherwise: yup.string()
+  }),
 })
 
 export interface AttributeFormData {
   solutionId: OptionItem;
   typeId: OptionItem;
-  start: string;
-  end: string;
+  contentTypeId: OptionItem;
+  content?: string;
+  start?: string;
+  end?: string;
+  categoryId: OptionItem;
 }
 
 interface Props {
@@ -47,7 +73,8 @@ const AttributeForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
 
   const dispatch = useDispatch();
   const [solutions, setSolutions] = useState<OptionItem[]>([]);
-  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<AttributeFormData>({
+  const [categories, setCategories] = useState<OptionItem[]>([]);
+  const { register, handleSubmit, formState: { errors }, reset, control, watch } = useForm<AttributeFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
@@ -65,19 +92,23 @@ const AttributeForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
       reset({
         solutionId: itemEdit.solution ? { id: itemEdit.solution.id, name: itemEdit.solution.title } : null,
         typeId: itemEdit.type ? { id: itemEdit.type.id, name: itemEdit.type.name } : null,
-        start: itemEdit.start,
-        end: itemEdit.end
+        start: itemEdit.start || "",
+        end: itemEdit.end || "",
+        content: itemEdit.content || "",
+        categoryId: itemEdit.category ? { id: itemEdit.category.id, name: itemEdit.category.name } : null,
+        contentTypeId: itemEdit.contentType ? { id: itemEdit.contentType.id, name: itemEdit.contentType.name } : null
       })
     }
   }, [reset, itemEdit])
 
   useEffect(() => {
     const fetchOption = async () => {
-      AdminSolutionService.getSolutions({ take: 9999 })
-      .then((res) => {
-        setSolutions((res.data as Solution[]).map((it) => ({ id: it.id, name: it.title })))
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
+      Promise.all([AdminSolutionService.getSolutions({ take: 9999 }), AdminAttributeService.getAttributeCategories({ take: 9999 })])
+        .then(([solutions, categories]) => {
+          setSolutions((solutions.data as Solution[]).map((it) => ({ id: it.id, name: it.title })))
+          setCategories((categories.data as AttributeCategory[]).map((it) => ({ id: it.id, name: it.name })))
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
     }
     fetchOption()
   }, [dispatch])
@@ -107,23 +138,75 @@ const AttributeForm = memo(({ title, itemEdit, langEdit, onSubmit }: Props) => {
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <Inputs
-                      title="Start"
-                      name="start"
-                      type="text"
-                      inputRef={register('start')}
-                      errorMessage={errors.start?.message}
+                    <InputSelect
+                      fullWidth
+                      title="Category"
+                      name="categoryId"
+                      control={control}
+                      selectProps={{
+                        options: categories,
+                        placeholder: "Select category",
+                        isDisabled: !!langEdit
+                      }}
+                      errorMessage={(errors.categoryId as any)?.id?.message}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Inputs
-                      title="End"
-                      name="end"
-                      type="text"
-                      inputRef={register('end')}
-                      errorMessage={errors.end?.message}
+                    <InputSelect
+                      fullWidth
+                      title="Content type"
+                      name="contentTypeId"
+                      control={control}
+                      selectProps={{
+                        options: attributeContentTypes,
+                        placeholder: "Select content type",
+                        isDisabled: !!langEdit
+                      }}
+                      errorMessage={(errors.contentTypeId as any)?.id?.message}
                     />
                   </Grid>
+                  {
+                    watch("contentTypeId")?.id === AttributeContentType.MULTIPLE && (
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Start"
+                          name="start"
+                          type="text"
+                          inputRef={register('start')}
+                          errorMessage={errors.start?.message}
+                        />
+                      </Grid>
+                    )
+                  }
+                  {
+                    watch("contentTypeId")?.id === AttributeContentType.MULTIPLE &&
+                    (
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="End"
+                          name="end"
+                          type="text"
+                          inputRef={register('end')}
+                          errorMessage={errors.end?.message}
+                        />
+                      </Grid>
+                    )
+                  }
+                  {
+                    watch("contentTypeId")?.id === AttributeContentType.SINGLE &&
+                    (
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Content"
+                          name="content"
+                          type="text"
+                          inputRef={register('content')}
+                          errorMessage={errors.content?.message}
+                        />
+                      </Grid>
+                    )
+                  }
+
                   <Grid item xs={12} sm={6}>
                     <InputSelect
                       fullWidth
