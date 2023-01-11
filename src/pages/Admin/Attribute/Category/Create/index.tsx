@@ -16,7 +16,7 @@ const Create = memo((props: Props) => {
 
   const onSubmit = (data: AttributeCategoryFormData) => {
     dispatch(setLoading(true))
-    AdminAttributeService.createSolutionCategory({
+    AdminAttributeService.createAttributeCategory({
       name: data.name
     })
       .then(() => {

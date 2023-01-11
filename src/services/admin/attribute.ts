@@ -118,7 +118,7 @@ export class AdminAttributeService {
       })
   }
 
-  static async createSolutionCategory(data: CreateAttributeCategoryParams): Promise<any> {
+  static async createAttributeCategory(data: CreateAttributeCategoryParams): Promise<any> {
     return await api.post(API.ADMIN.ATTRIBUTE_CATEGORY.DEFAULT, data)
       .then((res) => {
         return Promise.resolve(res.data)
