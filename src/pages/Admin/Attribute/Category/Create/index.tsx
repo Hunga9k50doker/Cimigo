@@ -4,29 +4,23 @@ import { useDispatch } from "react-redux"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { routes } from "routers/routes"
 import { AdminAttributeService } from "services/admin/attribute"
-import AttributeForm, { AttributeFormData } from "../components/AttributeForm"
+import AttributeCategoryForm, { AttributeCategoryFormData } from "../components/AttributeCategoryForm"
 
 interface Props {
 
 }
 
-const CreateAttribute = memo((props: Props) => {
+const Create = memo((props: Props) => {
 
   const dispatch = useDispatch()
 
-  const onSubmit = (data: AttributeFormData) => {
+  const onSubmit = (data: AttributeCategoryFormData) => {
     dispatch(setLoading(true))
-    AdminAttributeService.create({
-      solutionId: data.solutionId.id,
-      categoryId: data.categoryId.id,
-      content: data.content,
-      contentTypeId: data.contentTypeId.id,
-      typeId: data.typeId.id,
-      start: data.start,
-      end: data.end
+    AdminAttributeService.createAttributeCategory({
+      name: data.name
     })
       .then(() => {
-        dispatch(push(routes.admin.attribute.root))
+        dispatch(push(routes.admin.attribute.category.root))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -34,12 +28,12 @@ const CreateAttribute = memo((props: Props) => {
 
   return (
     <>
-      <AttributeForm
-        title="Create Attribute"
+      <AttributeCategoryForm
+        title={'Create Attribute Category'}
         onSubmit={onSubmit}
       />
     </>
   )
 })
 
-export default CreateAttribute
+export default Create

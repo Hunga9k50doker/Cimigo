@@ -5,7 +5,7 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import QueryString from 'query-string';
 import { push } from "connected-react-router"
 import { routes } from "routers/routes"
-import { Attribute, UpdateAttribute } from "models/Admin/attribute"
+import { Attribute, UpdateAttribute, AttributeContentType } from "models/Admin/attribute"
 import AttributeForm, { AttributeFormData } from "../components/AttributeForm"
 import { AdminAttributeService } from "services/admin/attribute"
 
@@ -25,15 +25,15 @@ const EditAttribute = memo((props: Props) => {
   const { lang }: IQueryString = QueryString.parse(window.location.search);
 
   useEffect(() => {
-    if(id && !isNaN(Number(id))) {
+    if (id && !isNaN(Number(id))) {
       const fetchData = async () => {
         dispatch(setLoading(true))
         AdminAttributeService.getAttribute(Number(id), lang)
-        .then((res) => {
-          setItemEdit(res)
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
+          .then((res) => {
+            setItemEdit(res)
+          })
+          .catch((e) => dispatch(setErrorMess(e)))
+          .finally(() => dispatch(setLoading(false)))
       }
       fetchData()
     }
@@ -41,13 +41,31 @@ const EditAttribute = memo((props: Props) => {
 
   const onSubmit = (data: AttributeFormData) => {
     dispatch(setLoading(true))
-    const form: UpdateAttribute = {
+    let form: UpdateAttribute = {
       solutionId: data.solutionId.id,
-      typeId: data.typeId.id,
-      start: data.start,
-      end: data.end
+      categoryId: data.categoryId.id,
+      contentTypeId: data.contentTypeId.id,
+      typeId: data.typeId.id
     }
-    if (lang) form.language = lang
+
+    switch (form.contentTypeId) {
+      case AttributeContentType.SINGLE:
+        form = {
+          ...form,
+          content: data.content
+        }
+        break;
+      case AttributeContentType.MULTIPLE:
+        form = {
+          ...form,
+          start: data.start,
+          end: data.end
+        }
+        break;
+      default:
+        return;
+    }
+    if (lang) form.language = lang;
     AdminAttributeService.update(Number(id), form)
       .then(() => {
         dispatch(push(routes.admin.attribute.root))
@@ -55,7 +73,7 @@ const EditAttribute = memo((props: Props) => {
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
   }
-  
+
   return (
     <>
       <AttributeForm
