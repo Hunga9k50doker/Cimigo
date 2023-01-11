@@ -79,7 +79,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
                             />
                         </Grid>
                         <Grid item>
-                          <ParagraphExtraSmall $colorName="--eerie-black">{item.start}</ParagraphExtraSmall>
+                          <ParagraphExtraSmall $colorName="--eerie-black">{item.content}</ParagraphExtraSmall>
                         </Grid>
                       </Grid>
                     </ListItemText>
