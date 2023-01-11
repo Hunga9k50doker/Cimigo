@@ -80,7 +80,7 @@
 }
 
 .border {
-  background: rgba(28, 28, 28, 0.4);
+  background: var(--gray-60);
   width: 1px;
   height: 96px;
   margin: auto 8px;
@@ -96,7 +96,6 @@
 }
 
 .collapse > p {
-  margin-top: 3px;
   margin-bottom: 8px;
   cursor: pointer;
 }

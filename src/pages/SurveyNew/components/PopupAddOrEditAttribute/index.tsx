@@ -1,7 +1,6 @@
 import { memo, useState, useEffect, useMemo } from 'react';
 import { Collapse, Dialog, Grid, ListItem, ListItemText, InputAdornment, Tooltip } from '@mui/material';
 import classes from './styles.module.scss';
-import Images from "config/images";
 import { UserAttribute } from 'models/user_attribute';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -18,6 +17,7 @@ import ButtonClose from "components/common/buttons/ButtonClose";
 import Button, {BtnType} from "components/common/buttons/Button";
 import ParagraphSmall from 'components/common/text/ParagraphSmall';
 import ParagraphBody from 'components/common/text/ParagraphBody';
+import Tip from 'components/icons/IconTip';
 
 
 export interface UserAttributeFormData {
@@ -133,7 +133,7 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
             </ListItem>
           </Grid>
           <Grid className={classes.tips}>
-            <img src={expanded ? Images.icTipGray : Images.icTipBlue} alt="" onClick={handleExpandClick} />
+            <Tip sx={{color: expanded ? "var(--gray-60)" : "var(--cimigo-blue)", width: "14px", height: "20px", marginTop: "2px"}}/>
             <div style={{ display: expanded ? "flex" : "none" }}className={classes.border}/>
             <Grid className={classes.collapse} > 
               <Heading6

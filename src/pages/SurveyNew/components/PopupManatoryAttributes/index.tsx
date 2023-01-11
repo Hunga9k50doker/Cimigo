@@ -47,10 +47,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle $bgColor="--white">
-        <div className={classes.titleWrapper}>
-          <Info className={classes.infoIcon}/>
-          <Heading3 $colorName="--gray-90" translation-key="setup_survey_add_att_popup_m_att_title">{t('setup_survey_add_att_popup_m_att_title')}</Heading3>
-        </div>
+        <Heading3 $colorName="--gray-90" translation-key="setup_survey_add_att_popup_m_att_title">{t('setup_survey_add_att_popup_m_att_title')}</Heading3>
         <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onClose}>
         </ButtonClose>
       </DialogTitle>
@@ -100,7 +97,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
                           <ParagraphExtraSmall $colorName="--eerie-black">{item.start}</ParagraphExtraSmall>
                         </Grid>
                         <Grid item xs={4} className={classes.arrowBreak}>
-                          <ArrowBreak/>
+                          <ArrowBreak sx={{color: "var(--gray-20)", width: "40px"}}/>
                         </Grid>
                         <Grid item xs={4} className={classes.listTextRight}>
                           <ParagraphExtraSmall $colorName="--eerie-black">{item.end}</ParagraphExtraSmall>

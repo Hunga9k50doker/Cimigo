@@ -38,28 +38,29 @@ const PopupPreDefinedList = memo((props: Props) => {
 
   const [attributes, setAttributes] = useState<Attribute[]>([])
   const [attributesSelected, setAttributesSelected] = useState<number[]>([])
-  const [openAttributeCategory, setOpenAttributeCategory] = useState({});
+  const [openCategories, setOpenCategories] = useState<{ [key: number]: boolean }>({});
 
-  const handleCollapse = (key) => {
-    const tempOpen = {...openAttributeCategory}
-    tempOpen[key] = !tempOpen[key]
-    setOpenAttributeCategory(tempOpen);
+  const listCategories = useMemo(()=>{
+    return _.chain(attributes)
+    .groupBy(item => item.categoryId)
+    .map((value) => ({ category: value?.[0].category, attributes: value }))
+    .value()
+  }, [attributes])
+
+  const handleCollapse = (categoryId?: number) => {
+    setOpenCategories((pre) => ({ [categoryId ?? 0]: !pre[categoryId ?? 0] }))
   };
   
   const handleExpandAll = () => {
-    let tempOpen = {}
-    Object.keys(openAttributeCategory).map((att) => {
-      tempOpen = {...tempOpen, [att]: true}
-    })
-    setOpenAttributeCategory(tempOpen);
+    const _openCategories = {}
+    listCategories.forEach(item => _openCategories[item.category?.id ?? 0] = true)
+    setOpenCategories(_openCategories)
   };
   
   const handleCollapseAll = () => {
-    let tempOpen = {}
-    Object.keys(openAttributeCategory).map((att) => {
-      tempOpen = {...tempOpen, [att]: false}
-    })
-    setOpenAttributeCategory(tempOpen);
+    const _openCategories = {}
+    listCategories.forEach(item => _openCategories[item.category?.id ?? 0] = false)
+    setOpenCategories(_openCategories)
   };
 
   const onChange = (item: Attribute) => {
@@ -73,14 +74,8 @@ const PopupPreDefinedList = memo((props: Props) => {
     setAttributesSelected(_attributesSelected)
   }
 
-  const getNumberOfAttributesSelected = (key) => {
-    let numberOfSelected = 0
-    listAttributes[key].forEach(item => {
-      if(attributesSelected.includes(item.id)) {
-        numberOfSelected++
-      }
-    })
-    return numberOfSelected
+  const getNumberOfAttributesSelected = (data: Attribute[]) => {
+    return data?.filter(item => attributesSelected.includes(item.id))?.length || 0
   }
 
   const _onSubmit = () => {
@@ -114,17 +109,9 @@ const PopupPreDefinedList = memo((props: Props) => {
     return !attributesSelected.includes(item.id) && maxSelect <= attributesSelected.length
   }
 
-  const listAttributes = useMemo(()=>{
-    return _.groupBy(attributes, (item)=>item?.category?.id)
-  }, [attributes])
-
   useEffect(()=>{
-    let tempOpenAttributeCategory = {}
-    Object.keys(listAttributes).map((att) => {
-      tempOpenAttributeCategory = {...tempOpenAttributeCategory, [att]: false}
-    })
-    setOpenAttributeCategory(tempOpenAttributeCategory)
-  }, [listAttributes])
+    handleCollapseAll()
+  }, [listCategories])
 
   return (
     <Dialog
@@ -152,23 +139,23 @@ const PopupPreDefinedList = memo((props: Props) => {
 
         <Grid container classes={{ root: classes.rootList }}>
           {
-            Object.keys(listAttributes).map((keyId, indexCategory)=>{
+            listCategories.map((item, index)=>{
               return (
-                <div key={indexCategory}>
-                  <ListItemButton classes={{ root: clsx(classes.rootListItem) }} onClick={()=>handleCollapse(keyId)}>
-                    <ListItemText classes={{ root: clsx(classes.attributeTitle) }} primary={keyId === "undefined" ? "Other" : listAttributes[keyId][0]?.category?.name} />
+                <div key={index}>
+                  <ListItemButton classes={{ root: clsx(classes.rootListItem) }} onClick={()=> handleCollapse(item.category?.id)}>
+                    <ListItemText classes={{ root: clsx(classes.attributeTitle) }} primary={item.category?.name || "Other"} />
                     <Chip
                       sx={{ height: 24, backgroundColor: "var(--cimigo-blue-light-4)", "& .MuiChip-label": { px: 2 } }}
-                      label={<ParagraphSmall $colorName="--cimigo-blue-dark-1">{listAttributes[keyId].length}</ParagraphSmall>}
+                      label={<ParagraphSmall $colorName="--cimigo-blue-dark-1">{item.attributes.length}</ParagraphSmall>}
                       color="secondary"
                       classes={{ root: classes.numberOfAttibute }}
                     />
-                    <ParagraphSmall $colorName="--cimigo-blue" className={classes.numberOfSelected}>{getNumberOfAttributesSelected(keyId)} selected</ParagraphSmall>
-                    {openAttributeCategory[indexCategory] ? <ExpandLess /> : <ExpandMore />}
+                    <ParagraphSmall $colorName="--cimigo-blue" className={classes.numberOfSelected}>{getNumberOfAttributesSelected(item.attributes)} selected</ParagraphSmall>
+                    {openCategories[item.category?.id ?? 0] ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
-                  <Collapse in={openAttributeCategory[keyId]} timeout="auto" unmountOnExit>
+                  <Collapse in={openCategories[item.category?.id ?? 0]} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                      {listAttributes[keyId]?.map((item) => (
+                      {item.attributes?.map((item) => (
                         <ListItem
                           alignItems="center"
                           component="div"
@@ -206,7 +193,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                                   <ParagraphExtraSmall $colorName="--eerie-black">{item.start}</ParagraphExtraSmall>
                                 </Grid>
                                 <Grid item xs={4} className={classes.arrowBreak}>
-                                  <ArrowBreak/>
+                                  <ArrowBreak sx={{color: "var(--gray-20)", width: "40px"}}/>
                                 </Grid>
                                 <Grid item xs={4} className={classes.listTextRight}>
                                   <ParagraphExtraSmall $colorName="--eerie-black">{item.end}</ParagraphExtraSmall>

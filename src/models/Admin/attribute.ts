@@ -44,6 +44,7 @@ export interface Attribute {
   solution?: Solution;
   languages?: Attribute[];
   category: AttributeCategory;
+  categoryId: number;
 }
 
 export enum AttributeType {
