@@ -30,7 +30,7 @@ const DetailSurveySetupForPack = memo(({ project }: Props) => {
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
   }
-
+  
   return (
     <Box>
       <Typography variant="h6" component="div" mb={2}>
@@ -117,14 +117,14 @@ const DetailSurveySetupForPack = memo(({ project }: Props) => {
               <TableBody>
                 {project?.projectAttributes?.map(item => (
                   <TableRow key={item.id}>
-                    <TableCell>{item.attribute?.start}</TableCell>
+                    <TableCell>{item.attribute?.start || item.attribute?.content}</TableCell>
                     <TableCell>{item.attribute?.end}</TableCell>
-                    <TableCell>Manatory attribute</TableCell>
+                    <TableCell>{item.attribute?.type?.name}</TableCell>
                   </TableRow>
                 ))}
                 {project?.userAttributes?.map(item => (
                   <TableRow key={item.id}>
-                    <TableCell>{item.start}</TableCell>
+                    <TableCell>{item.start || item.content}</TableCell>
                     <TableCell>{item.end}</TableCell>
                     <TableCell>User attribute</TableCell>
                   </TableRow>
