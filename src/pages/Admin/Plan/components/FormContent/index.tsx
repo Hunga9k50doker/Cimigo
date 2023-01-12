@@ -21,6 +21,7 @@ const schema = yup.object().shape({
   price: yup.number().typeError('Price is required.').positive('Price must be a positive number').required('Price is required.'),
   solutionId: yup.mixed().required('Solution is required.'),
   sampleSize: yup.number().typeError('Sample size is required.').positive('Sample size must be a positive number').required('Sample size is required.'),
+  month: yup.number().transform(value => (isNaN(value) ? undefined : value)).notRequired().positive('Month must be a positive number'),
   content: yup.array(yup.object({
     id: yup.string().required('Content is required.'),
     name: yup.string().required('Content is required.')
@@ -37,7 +38,7 @@ export interface PlanFormData {
   content: OptionItem<string>[];
   isMostPopular: boolean;
   order: number;
-
+  month: number;
 }
 
 interface PlanFormDataProps {
@@ -73,6 +74,7 @@ const FormContent = memo(({ langEdit, itemEdit, onSubmit }: PlanFormDataProps) =
       sampleSize: data.sampleSize,
       content: data.content.map(it => it.id),
       isMostPopular: data.isMostPopular,
+      month: data.month,
       order: data.order,
       language: langEdit
     })
@@ -87,6 +89,7 @@ const FormContent = memo(({ langEdit, itemEdit, onSubmit }: PlanFormDataProps) =
         sampleSize: itemEdit.sampleSize,
         content: itemEdit.content.map(it => ({ id: it, name: it})),
         isMostPopular: itemEdit.isMostPopular,
+        month: itemEdit.month,
         order: itemEdit.order,
       })
     }
@@ -166,6 +169,16 @@ const FormContent = memo(({ langEdit, itemEdit, onSubmit }: PlanFormDataProps) =
                       disabled={!!langEdit}
                       inputRef={register('sampleSize')}
                       errorMessage={errors.sampleSize?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Inputs
+                      title="Month"
+                      name="month"
+                      type="number"
+                      disabled={!!langEdit}
+                      inputRef={register('month')}
+                      errorMessage={errors.month?.message}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
