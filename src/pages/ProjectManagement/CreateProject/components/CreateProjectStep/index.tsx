@@ -3,14 +3,14 @@ import Grid from "@mui/material/Grid";
 import Heading1 from "components/common/text/Heading1";
 import Heading5 from "components/common/text/Heading5";
 
-import { memo, useMemo } from "react";
+import { memo, useMemo ,useEffect,useState} from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import classes from "./styles.module.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import InputSelect from "components/common/inputs/InputSelect";
-import { OptionItemT, Lang, langOptions } from "models/general";
+import { OptionItemT, Lang, langOptions,DataPagination } from "models/general";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Accordion from "@mui/material/Accordion";
@@ -20,6 +20,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { Solution } from "models/Admin/solution";
+import { PlanService } from "services/plan";
 import { Plan } from "models/Admin/plan";
 import { useDispatch } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
@@ -33,6 +34,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import { setHowToSetupSurveyReducer } from "redux/reducers/Project/actionTypes";
 import { usePrice } from "helpers/price";
 import { ESOLUTION_TYPE } from "models";
+import { UserGetPlans } from "models/plan";
 
 export interface CreateProjectFormData {
   name: string;
@@ -54,7 +56,7 @@ const CreateProjectStep = memo(
   }: CreateProjectStepProps) => {
 
     const { t, i18n } = useTranslation();
-
+const [plan, setPlan] = useState<DataPagination<Plan>>()
     const dispatch = useDispatch();
 
     const { getCostCurrency } = usePrice()
@@ -103,6 +105,26 @@ const CreateProjectStep = memo(
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)));
     };
+
+     useEffect(() => {
+    const getPlans = async () => {
+      dispatch(setLoading(true));
+      const params: UserGetPlans = {
+        take: 99999,
+        solutionId: solutionSelected?.id || undefined,
+      };
+      PlanService.getPlans(params)
+        .then((res) => {
+          setPlan({
+            data: res.data,
+            meta: res.meta,
+          });
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)));
+    };
+    getPlans();
+  }, [solutionSelected, dispatch]);
     return (
       <Container maxWidth="sm" className={classes.bodyContent}>
         <Grid justifyContent="center">
@@ -145,7 +167,19 @@ const CreateProjectStep = memo(
               $fontWeight={"600"}
               $colorName={"--eerie-black"}
             >{`${planSelected?.title} (${getCostCurrency(planSelected?.price || 0)?.show})`}</Heading5>
-            <ParagraphSmallUnderline2
+            {
+              plan?.data?.length === 1 ?
+                  <ParagraphSmallUnderline2
+              translation-key="common_review"
+              className={classes.link}
+              onClick={() => {
+                onClickHandleBack(EStep.SELECT_PLAN);
+              }}
+            >
+              ({t("common_review")})
+            </ParagraphSmallUnderline2>
+                :
+                  <ParagraphSmallUnderline2
               translation-key="common_change"
               className={classes.link}
               onClick={() => {
@@ -154,6 +188,16 @@ const CreateProjectStep = memo(
             >
               ({t("common_change")})
             </ParagraphSmallUnderline2>
+            }
+            {/* <ParagraphSmallUnderline2
+              translation-key="common_change"
+              className={classes.link}
+              onClick={() => {
+                onClickHandleBack(EStep.SELECT_PLAN);
+              }}
+            >
+              ({t("common_change")})
+            </ParagraphSmallUnderline2> */}
           </Grid>
         </Grid>
         <Grid className={classes.note} mt={2}>

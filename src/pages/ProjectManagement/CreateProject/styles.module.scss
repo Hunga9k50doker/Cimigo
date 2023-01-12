@@ -18,7 +18,7 @@
   }
 }
 .rootStepper {
-  padding: 30px 0px 48px 0px;
+  padding: 32px 0;
   width: 624px;
   margin: auto;
   min-width: 624px;
@@ -65,7 +65,7 @@
 }
 .linkTextHome {
   display: none;
-  span{
+  span {
     color: var(--cimigo-blue);
   }
   @media only screen and (max-width: 767px) {
@@ -144,5 +144,3 @@
 .btnMobile {
   white-space: nowrap;
 }
-
-
