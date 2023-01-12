@@ -48,7 +48,9 @@ const PopupPreDefinedList = memo((props: Props) => {
   }, [attributes])
 
   const handleCollapse = (categoryId?: number) => {
-    setOpenCategories((pre) => ({ [categoryId ?? 0]: !pre[categoryId ?? 0] }))
+    const _openCategories = {...openCategories}
+    _openCategories[categoryId ?? 0] = !_openCategories[categoryId ?? 0]
+    setOpenCategories(_openCategories)
   };
   
   const handleExpandAll = () => {
@@ -109,9 +111,9 @@ const PopupPreDefinedList = memo((props: Props) => {
     return !attributesSelected.includes(item.id) && maxSelect <= attributesSelected.length
   }
 
-  useEffect(()=>{
-    handleCollapseAll()
-  }, [listCategories])
+  // useEffect(()=>{
+  //   handleCollapseAll()
+  // }, [listCategories])
 
   return (
     <Dialog
