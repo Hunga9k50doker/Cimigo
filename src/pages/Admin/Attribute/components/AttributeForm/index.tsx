@@ -28,9 +28,9 @@ const schema = yup.object().shape({
     name: yup.string().required()
   }).required(),
   categoryId: yup.object().shape({
-    id: yup.number().required('Category is required'),
-    name: yup.string().required()
-  }).required(),
+    id: yup.number(),
+    name: yup.string()
+  }).nullable(),
   contentTypeId: yup.object().shape({
     id: yup.number().required('Content type is required'),
     name: yup.string().required()
@@ -59,7 +59,7 @@ export interface AttributeFormData {
   content?: string;
   start?: string;
   end?: string;
-  categoryId: OptionItem;
+  categoryId?: OptionItem;
 }
 
 interface Props {

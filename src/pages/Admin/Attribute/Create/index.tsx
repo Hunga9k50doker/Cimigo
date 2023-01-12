@@ -18,7 +18,7 @@ const CreateAttribute = memo((props: Props) => {
     dispatch(setLoading(true))
     AdminAttributeService.create({
       solutionId: data.solutionId.id,
-      categoryId: data.categoryId.id,
+      categoryId: data?.categoryId?.id,
       content: data.content,
       contentTypeId: data.contentTypeId.id,
       typeId: data.typeId.id,

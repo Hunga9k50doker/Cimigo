@@ -43,7 +43,7 @@ const EditAttribute = memo((props: Props) => {
     dispatch(setLoading(true))
     let form: UpdateAttribute = {
       solutionId: data.solutionId.id,
-      categoryId: data.categoryId.id,
+      categoryId: data?.categoryId?.id,
       contentTypeId: data.contentTypeId.id,
       typeId: data.typeId.id
     }
