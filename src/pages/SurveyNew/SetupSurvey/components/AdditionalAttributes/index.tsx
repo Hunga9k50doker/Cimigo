@@ -218,7 +218,6 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
       <Heading4
         $fontSizeMobile={"16px"}
         $colorName="--eerie-black"
-        translation-key="setup_survey_add_att_title"
         sx={{ display: "inline-block", verticalAlign: "middle" }}
       >
         {t("STEP 4: Additional attributes", { step: 4 })}

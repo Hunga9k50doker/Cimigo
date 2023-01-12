@@ -113,7 +113,6 @@ const UploadPacks = memo(({ project }: UploadPacksProps) => {
       <Heading4
         $fontSizeMobile={"16px"}
         $colorName="--eerie-black"
-        translation-key="setup_survey_summary_pack"
         sx={{ display: "inline-block", verticalAlign: "middle" }}
       >
         {t("STEP 2: Upload packs", { step: 2 })}
