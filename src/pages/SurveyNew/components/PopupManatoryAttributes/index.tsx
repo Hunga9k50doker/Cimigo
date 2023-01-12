@@ -46,7 +46,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
       onClose={onClose}
       classes={{ paper: classes.paper }}
     >
-      <DialogTitle $bgColor="--white">
+      <DialogTitle $backgroundColor="--white">
         <Heading3 $colorName="--gray-90" translation-key="setup_survey_add_att_popup_m_att_title">{t('setup_survey_add_att_popup_m_att_title')}</Heading3>
         <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onClose}>
         </ButtonClose>

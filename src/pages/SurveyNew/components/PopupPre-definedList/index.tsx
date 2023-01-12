@@ -122,7 +122,7 @@ const PopupPreDefinedList = memo((props: Props) => {
       onClose={onClose}
       classes={{ paper: classes.paper }}
     >
-      <DialogTitle $bgColor="--white">
+      <DialogTitle $backgroundColor="--white">
         <Heading3 $colorName="--gray-90">Add attributes</Heading3>
         <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onClose}>
         </ButtonClose>

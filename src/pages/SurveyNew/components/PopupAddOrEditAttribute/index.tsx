@@ -87,7 +87,7 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
       classes={{ paper: classes.paper }}
     >
       <form autoComplete="off" className={classes.form} noValidate onSubmit={handleSubmit(_onSubmit)}>
-        <DialogTitle $bgColor="--white" className={classes.header}>
+        <DialogTitle $backgroundColor="--white" className={classes.header}>
           {itemEdit ? (
             <Heading3 $colorName="--gray-90" translation-key="setup_survey_popup_edit_your_own_att_title">{t('setup_survey_popup_edit_your_own_att_title')}</Heading3>
           ) : (
