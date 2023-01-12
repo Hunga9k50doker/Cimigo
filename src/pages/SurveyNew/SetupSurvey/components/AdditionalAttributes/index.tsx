@@ -238,7 +238,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
             alignItems="center"
             component="div"
             key={index}
-            className={clsx(classes.rootListItem, (index > 4 && !showMoreAttributes && classes.notDisplayed))}
+            className={clsx(classes.rootListItem, {[classes.notDisplayed]: index > 4 && !showMoreAttributes})}
             secondaryAction={
               <div className={classes.btnAction}>
                 {editable && (
