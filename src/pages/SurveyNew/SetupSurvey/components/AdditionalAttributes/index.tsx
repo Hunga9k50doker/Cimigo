@@ -299,7 +299,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
       {/* =======start mobile===== */}
       <Grid className={classes.rootListMobile} mt={3}>
         {attributes?.map((item, index) => (
-          <Accordion key={index} className={clsx(classes.itemListMobile, (index > 4 && !showMoreAttributes && classes.notDisplayed))}>
+          <Accordion key={index} className={clsx(classes.itemListMobile, {[classes.notDisplayed]: index > 4 && !showMoreAttributes})}>
             <AccordionSummary
               expandIcon={<ExpandMore />}
             >
