@@ -70,6 +70,14 @@
 .rootListItem {
   border: 1px solid #dddddd;
   cursor: pointer;
+  border-top: none;
+}
+.firstRootListItem {
+  border-top: 1px solid #dddddd;
+}
+.listItem {
+  border: 1px solid #dddddd;
+  border-top: none;
 }
 .attributeTitle {
   flex: unset;

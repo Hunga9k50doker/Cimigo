@@ -159,10 +159,9 @@ const EyeTracking = memo(({ project, price, step }: EyeTrackingProps) => {
           <Heading4
             $fontSizeMobile={"16px"}
             $colorName="--eerie-black"
-            translation-key="setup_survey_eye_tracking_title"
             className={clsx({ [classes.titleDisabled]: !project?.enableEyeTracking })}
           >
-            {t("setup_survey_eye_tracking_title", { step: step })}
+            {t("STEP 6: Eye-tracking", { step: step })}
           </Heading4>
           {!!project?.solution?.eyeTrackingHelp && (
             <BasicTooltip arrow title={<div dangerouslySetInnerHTML={{ __html: project?.solution.eyeTrackingHelp }}></div>}>

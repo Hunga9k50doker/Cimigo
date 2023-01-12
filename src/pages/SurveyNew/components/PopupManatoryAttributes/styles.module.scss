@@ -56,6 +56,10 @@
 .rootListItem {
   border: 1px solid #dddddd;
 }
+.listItem {
+  border: 1px solid #dddddd;
+  border-top: none;
+}
 .listItemTitle {
   flex: 1;
 }

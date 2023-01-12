@@ -65,7 +65,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
                   alignItems="center"
                   component="div"
                   key={item?.id}
-                  classes={{ root: classes.rootListItem }}
+                  classes={{ root: classes.listItem }}
                   disablePadding
                 >
                   {item?.contentTypeId === AttributeContentType.SINGLE ? (

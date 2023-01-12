@@ -35,6 +35,9 @@ export interface Project {
   solutionId: number;
   planId: number;
   category: string;
+  brand: string;
+  variant: string;
+  manufacturer: string;
   sampleSize: number;
   eyeTrackingSampleSize: number;
   status: ProjectStatus;
@@ -101,6 +104,9 @@ export interface RenameProject {
 
 export interface UpdateProjectBasicInformation {
   category?: string,
+  brand?: string,
+  variant?: string,
+  manufacturer?: string,
 }
 
 export interface ProjectTarget {

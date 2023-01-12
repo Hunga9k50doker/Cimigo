@@ -142,7 +142,7 @@ const PopupPreDefinedList = memo((props: Props) => {
             listCategories.map((item, index)=>{
               return (
                 <div key={index}>
-                  <ListItemButton classes={{ root: clsx(classes.rootListItem) }} onClick={()=> handleCollapse(item.category?.id)}>
+                  <ListItemButton classes={{ root: clsx(classes.rootListItem, index === 0 && classes.firstRootListItem) }} onClick={()=> handleCollapse(item.category?.id)}>
                     <ListItemText classes={{ root: clsx(classes.attributeTitle) }} primary={item.category?.name || "Other"} />
                     <Chip
                       sx={{ height: 24, backgroundColor: "var(--cimigo-blue-light-4)", "& .MuiChip-label": { px: 2 } }}
@@ -160,7 +160,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                           alignItems="center"
                           component="div"
                           key={item?.id}
-                          classes={{ root: clsx(classes.rootListItem, {[classes.disabled]: isDisabled(item)}) }}
+                          classes={{ root: clsx(classes.listItem, {[classes.disabled]: isDisabled(item)}) }}
                           disablePadding
                           onClick={() => onChange(item)}
                         >
