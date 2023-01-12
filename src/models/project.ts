@@ -101,9 +101,6 @@ export interface RenameProject {
 
 export interface UpdateProjectBasicInformation {
   category?: string,
-  brand?: string,
-  variant?: string,
-  manufacturer?: string,
 }
 
 export interface ProjectTarget {
