@@ -82,6 +82,11 @@
 .attributeTitle {
   flex: unset;
 }
+.categorySelected {
+  span {
+    font-weight: 600;
+  }
+}
 .numberOfAttibute {
   border-radius: 4px;
   span {
