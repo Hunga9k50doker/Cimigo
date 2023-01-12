@@ -109,6 +109,7 @@
 }
 
 .dialogActionsWrapper {
+  border-top: 1px solid var(--gray-20);
   @media only screen and (max-width: 767px) {
     flex-direction: column;
     gap: 8px;
