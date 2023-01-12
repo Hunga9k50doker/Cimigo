@@ -111,9 +111,9 @@ const PopupPreDefinedList = memo((props: Props) => {
     return !attributesSelected.includes(item.id) && maxSelect <= attributesSelected.length
   }
 
-  // useEffect(()=>{
-  //   handleCollapseAll()
-  // }, [listCategories])
+  useEffect(()=>{
+    handleCollapseAll()
+  }, [listCategories])
 
   return (
     <Dialog
