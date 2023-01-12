@@ -129,7 +129,7 @@ const SetupSurvey = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleO
         <PageTitle className={classes.pageTitle}>
           <PageTitleLeft>
             <PageTitleText translation-key="setup_survey_title_left_panel"
-            dangerouslySetInnerHTML={{ __html: t("Setup your pack test survey", {title: project?.solution?.title})}}
+            dangerouslySetInnerHTML={{ __html: t('setup_survey_title_left_panel', {title: project?.solution?.title})}}
             ></PageTitleText>
             {!editable && <LockIcon status={project?.status} />}
           </PageTitleLeft>

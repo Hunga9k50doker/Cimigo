@@ -35,9 +35,6 @@ export interface Project {
   solutionId: number;
   planId: number;
   category: string;
-  brand: string;
-  variant: string;
-  manufacturer: string;
   sampleSize: number;
   eyeTrackingSampleSize: number;
   status: ProjectStatus;

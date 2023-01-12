@@ -457,10 +457,11 @@ export const CustomQuestions = memo(({ project, step }: CustomQuestionsProps) =>
           <Heading4
             $fontSizeMobile={"16px"}
             $colorName="--eerie-black"
+            translation-key="setup_survey_custom_question_title"
             sx={{ display: "inline-block", verticalAlign: "middle" }}
             className={clsx({ [classes.titleDisabled]: !project?.enableCustomQuestion })}
           >
-            {t("STEP 5: Custom questions", { step: step })}
+            {t('setup_survey_custom_question_title', { step: step })}
           </Heading4>
           <MaxChip
             sx={{ ml: 1 }}

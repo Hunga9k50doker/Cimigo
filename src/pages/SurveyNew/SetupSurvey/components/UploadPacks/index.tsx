@@ -113,9 +113,10 @@ const UploadPacks = memo(({ project }: UploadPacksProps) => {
       <Heading4
         $fontSizeMobile={"16px"}
         $colorName="--eerie-black"
+        translation-key="setup_survey_summary_pack"
         sx={{ display: "inline-block", verticalAlign: "middle" }}
       >
-        {t("STEP 2: Upload packs", { step: 2 })}
+        {t('setup_survey_summary_pack', { step: 2 })}
       </Heading4>
       <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxPack}</ParagraphSmall>} />
       <ParagraphBody $colorName="--gray-80" mt={1} translation-key="setup_survey_packs_sub_title">{t("setup_survey_packs_sub_title")}</ParagraphBody>

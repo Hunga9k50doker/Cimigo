@@ -16,13 +16,9 @@ import { useDispatch } from "react-redux"
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes"
 import { ProjectService } from "services/project"
 import { setProjectReducer } from "redux/reducers/Project/actionTypes"
-import TextTitle from "components/common/text/TextTitle";
 
 interface BasicInformationForm {
   category: string,
-  brand: string,
-  variant: string,
-  manufacturer: string,
 }
 
 interface BasicInformationProps {
@@ -38,9 +34,6 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
 
   const schema = yup.object().shape({
     category: yup.string(),
-    brand: yup.string(),
-    variant: yup.string(),
-    manufacturer: yup.string(),
   })
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<BasicInformationForm>({
@@ -67,9 +60,6 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
     if (project) {
       reset({
         category: project.category,
-        brand: project.brand,
-        variant: project.variant,
-        manufacturer: project.manufacturer,
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,49 +67,23 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
 
   return (
     <Grid component="form" autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)} id={SETUP_SURVEY_SECTION.basic_information}>
-      <Heading4 $fontSizeMobile={"16px"} mb={1} $colorName="--eerie-black">{t("STEP 1: Basic information", { step: 1 })}</Heading4>
-      <ParagraphBody $colorName="--gray-80" mb={{ xs: 1, sm: 2 }}>Your product basic information. Some basic information about your product is necessary, and this information will be used in our survey when we interview the respondents.</ParagraphBody>
+      <Heading4 $fontSizeMobile={"16px"} mb={1} $colorName="--eerie-black" translation-key="setup_survey_basic_infor_title">{t('setup_survey_basic_infor_title', { step: 1 })}</Heading4>
+      <ParagraphBody $colorName="--gray-80" mb={{ xs: 1, sm: 2 }} translation-key="setup_survey_basic_infor_sub_title">{t('setup_survey_basic_infor_sub_title')}</ParagraphBody>
       <Grid container spacing={2} maxWidth={{ xs: "unset", sm: "684px" }}>
         <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-category`}>
-          <TextTitle>Category</TextTitle>
           <InputTextfield
+            translation-key="field_project_category"
             name="category"
-            placeholder="Enter your product category"
+            placeholder={t('field_project_category_placeholder')}
+            translation-key-placeholder="field_project_category_placeholder"
             inputRef={register('category')}
             errorMessage={errors.category?.message}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-category`}>
-          <TextTitle>Brand </TextTitle>
-          <InputTextfield
-            name="brand"
-            placeholder="Enter your product brand "
-            inputRef={register('brand')}
-            errorMessage={errors.brand?.message}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-category`}>
-          <TextTitle>Variant</TextTitle>
-          <InputTextfield
-            name="variant"
-            placeholder="Enter your product variant"
-            inputRef={register('variant')}
-            errorMessage={errors.variant?.message}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-category`}>
-          <TextTitle>Manufacturer</TextTitle>
-          <InputTextfield
-            name="manufacturer"
-            placeholder="Enter your product manufacturer"
-            inputRef={register('manufacturer')}
-            errorMessage={errors.manufacturer?.message}
           />
         </Grid>
       </Grid>
       {editable && (
         <Button
-          sx={{ mt: 3, width: { xs: "100%", sm: "auto" } }}
+          sx={{ mt: 2, width: { xs: "100%", sm: "auto" } }}
           type="submit"
           btnType={BtnType.Outlined}
           translation-key="common_save_changes"

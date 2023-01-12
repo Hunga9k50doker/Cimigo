@@ -218,9 +218,10 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
       <Heading4
         $fontSizeMobile={"16px"}
         $colorName="--eerie-black"
+        translation-key="setup_survey_add_att_title"
         sx={{ display: "inline-block", verticalAlign: "middle" }}
       >
-        {t("STEP 4: Additional attributes", { step: 4 })}
+        {t('setup_survey_add_att_title', { step: 4 })}
       </Heading4>
       <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxAdditionalAttribute}</ParagraphSmall>} />
       <ParagraphBody

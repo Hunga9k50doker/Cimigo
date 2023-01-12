@@ -191,9 +191,10 @@ const AdditionalBrandList = memo(({ project }: AdditionalBrandListProps) => {
       <Heading4
         $fontSizeMobile={"16px"}
         $colorName="--eerie-black"
+        translation-key="setup_survey_add_brand_title"
         sx={{ display: "inline-block", verticalAlign: "middle" }}
       >
-        {t("STEP 3: Additional brand list", { step: 3 })}
+        {t('setup_survey_add_brand_title', { step: 3 })}
       </Heading4>
       <MaxChip sx={{ ml: 1 }} label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxAdditionalBrand}</ParagraphSmall>} />
       <ParagraphBody
