@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import useAuth from "hooks/useAuth";
 import { IconStarted } from "components/icons";
+import { setListPlanReducer } from 'redux/reducers/Project/actionTypes';
 
 interface SelectPlanProps {
   solution?: Solution;
@@ -39,8 +40,9 @@ const SelectPlan = memo(({ solution, onChangePlanSelected }: SelectPlanProps) =>
 
   useEffect(() => {
     if (plan?.data) {
-      // dispatch({type: 'SET_LIST_PLAN_REDUCER',payload: plan.data})
+      dispatch(setListPlanReducer(plan?.data))
       setPlanLenght(plan.data.length);
+      // setPlanLenght(1);
     }
   }, [plan,dispatch]);
 
@@ -98,7 +100,7 @@ const SelectPlan = memo(({ solution, onChangePlanSelected }: SelectPlanProps) =>
       </Grid>
       <div className={classes.selectTypePrice}></div>
       <div>
-        <Grid container columnSpacing={4} rowGap={10} className={classes.body} justifyContent="center">
+        <Grid container columnSpacing={4} rowSpacing={planLenght <= 2 ? 8 : 0}  className={classes.body} justifyContent="center">
           {plan?.data.map((plan) => {
             return (
               <Grid
@@ -150,11 +152,11 @@ const SelectPlan = memo(({ solution, onChangePlanSelected }: SelectPlanProps) =>
                             <ParagraphBody
                               className={classes.expTime}
                               $colorName={"--gray-80"}
-                              translation-key="project_create_tab_plan_start_at"
+                              translation-key="project_create_tab_plan_time_plan_title"
                               variant="body2"
                               variantMapping={{ body2: "span" }}
                             >
-                              {/* {t("project_create_tab_plan_start_at")} */}/ 3 months
+                             / 3 {t("project_create_tab_plan_time_plan_title")}
                             </ParagraphBody>
                           </Typography>
                           <Typography className={classes.tax} color={"--gray-60"}>
@@ -189,7 +191,7 @@ const SelectPlan = memo(({ solution, onChangePlanSelected }: SelectPlanProps) =>
                         <div className={classes.line}></div>
                       </Typography>
                       <Grid className={classes.contentInPlan} container px={1}>
-                        <Grid className={classes.contentPlan} xs={6}>
+                        <Grid className={classes.contentPlan} xs={planLenght <= 2 ? 6 : 12}>
                           <DoneIcon className={classes.iconContentPlan} />
                           <ParagraphBody
                             ml={1.5}

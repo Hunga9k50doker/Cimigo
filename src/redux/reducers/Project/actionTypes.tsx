@@ -2,6 +2,8 @@ import { AdditionalBrand } from "models/additional_brand";
 import { CustomQuestion } from "models/custom_question";
 import { Pack } from "models/pack";
 import { CreateProjectRedirect, Project, ProjectTarget } from "models/project";
+import { DataPagination } from "models/general";
+import { Plan } from "models/Admin/plan";
 import { ProjectAttribute } from "models/project_attribute";
 import { UserAttribute } from "models/user_attribute";
 import { Video } from "models/video";
@@ -9,6 +11,8 @@ import { Video } from "models/video";
 export const GET_PROJECT_REQUEST = 'GET_PROJECT_REQUEST';
 
 export const SET_PROJECT_REDUCER = 'SET_PROJECT_REDUCER';
+
+export const SET_LIST_PLAN_REDUCER = 'SET_LIST_PLAN_REDUCER';
 
 export const SET_CREATE_PROJECT_REDIRECT_OF_PROJECT_REDUCER = 'SET_CREATE_PROJECT_REDIRECT_OF_PROJECT_REDUCER';
 
@@ -61,6 +65,13 @@ export const getProjectRequest = (id: number, callback?: () => void, getFull: bo
 export const setProjectReducer = (data: Project) => {
   return {
     type: SET_PROJECT_REDUCER,
+    data: data
+  }
+}
+
+export const setListPlanReducer = (data:Array<Plan>) => {
+  return {
+    type: SET_LIST_PLAN_REDUCER,
     data: data
   }
 }

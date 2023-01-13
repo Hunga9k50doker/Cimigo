@@ -1,11 +1,13 @@
 import produce from 'immer';
 import _ from 'lodash';
+import { Plan } from 'models/Admin/plan';
 import { CreateProjectRedirect, Project } from 'models/project';
 import * as types from './actionTypes';
 
 export interface ProjectState {
   createProjectRedirect?: CreateProjectRedirect,
   project?: Project,
+  listPlan :Array<Plan>,
   cancelPayment?: boolean,
   scrollToSection?: string,
   showHowToSetup?: boolean,
@@ -14,6 +16,7 @@ export interface ProjectState {
 const initial: ProjectState = {
   createProjectRedirect: null,
   project: null,
+  listPlan :[],
   cancelPayment: false,
   scrollToSection: null,
   showHowToSetup: false
@@ -91,6 +94,15 @@ export const projectReducer = (state = initial, action: any) =>
         break;
       case types.SET_HOW_TO_SETUP_SURVEY_REDUCER:
         draft.showHowToSetup = action.data
+        break;
+       case types.SET_LIST_PLAN_REDUCER:
+         if (action.data && !_.isEmpty(action.data)) {
+          draft.listPlan = [
+            ...action.data
+          ];
+        } else {
+          draft.project = null
+        }
         break;
       default:
         return state;
