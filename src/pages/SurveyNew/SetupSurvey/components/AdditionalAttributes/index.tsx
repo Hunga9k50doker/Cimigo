@@ -243,7 +243,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
               <div className={classes.btnAction}>
                 {editable && (
                   <>
-                    {item.type === AttributeShowType.User && (
+                    {item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
                       <IconButton onClick={() => onEditUserAttribute(item.data as any)} className={classes.iconAction} edge="end" aria-label="Edit">
                         <EditIcon sx={{ fontSize: "20px", color: "var(--gray-60)" }} />
                       </IconButton>
@@ -260,8 +260,8 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
             {item?.contentTypeId === AttributeContentType.SINGLE ? (
               <ListItemButton className={classes.listItem}>
                 <Grid display="flex" alignItems="center">
-                  <Grid className={classes.iconEditSquare}>
-                    {item.type === AttributeShowType.User && (
+                  <Grid className={classes.iconEditSquareWrapper}>
+                    {editable && item.type === AttributeShowType.User && (
                       <EditSquare sx={{color: "var(--gray-40)", width: "16px", height: "16px"}}/>
                     )}
                   </Grid>
@@ -273,8 +273,8 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
             ) : (
               <ListItemButton className={classes.listItem}>
                 <Grid display="flex" alignItems="center" justifyContent="center">
-                  <Grid className={classes.iconEditSquare}>
-                    {item.type === AttributeShowType.User && (
+                  <Grid className={classes.iconEditSquareWrapper}>
+                    {editable && item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
                       <EditSquare sx={{color: "var(--gray-40)", width: "16px", height: "16px"}}/>
                     )}
                   </Grid>
@@ -332,7 +332,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
                 )}
                 {editable && (
                   <Box className={classes.listMobileAction}>
-                    {item.type === AttributeShowType.User && (
+                    {item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
                       <Button
                         onClick={(e) => { e.stopPropagation(); onEditUserAttribute(item.data as any) }}
                         btnType={BtnType.Text}
