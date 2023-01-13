@@ -159,20 +159,6 @@ const SelectPlan = memo(
                           >
                             {formatMoney(plan)}
                           </Heading1>
-                          {
-                            plan.month &&
-                            (
-                              <ParagraphBody
-                                $colorName={"--gray-80"}
-                                variant="body2"
-                                variantMapping={{ body2: "span" }}
-                                className={classes.month}
-                                translation-key={plan.month > 1 ? t("project_create_tab_plan_months") : t("project_create_tab_plan_month")}
-                              >
-                                / {plan.month} {plan.month > 1 ? t("project_create_tab_plan_months") : t("project_create_tab_plan_month")}
-                              </ParagraphBody>
-                            )
-                          }
                         </Typography>
                         <Typography className={classes.tax} color={"--gray-60"}>
                           <ParagraphExtraSmall
