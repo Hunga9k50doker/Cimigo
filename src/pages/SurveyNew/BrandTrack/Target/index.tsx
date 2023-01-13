@@ -49,10 +49,10 @@ import {
   RPStepLabel,
   RPStepper,
   TabRightPanel,
-} from "../components";
-import CostSummary from "../components/CostSummary";
-import LockIcon from "../components/LockIcon";
-import { ETab, TabItem } from "../Target/models";
+} from "../../components";
+import CostSummary from "../../components/CostSummary";
+import LockIcon from "../../components/LockIcon";
+import { ETab, TabItem } from "../../Target/models";
 import classes from "./styles.module.scss";
 import images from "config/images";
 import { TargetQuestion, TargetQuestionType } from "models/Admin/target";
@@ -60,9 +60,9 @@ import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnder
 import clsx from "clsx";
 import React from "react";
 import { TargetService } from "services/target";
-import HouseholdIncomeTab from "../Target/HouseholdIncomeTab";
-import AgeCoverageTab from "../Target/AgeCoverageTab";
-import LocationTab from "../Target/LocationTab";
+import HouseholdIncomeTab from "../../Target/HouseholdIncomeTab";
+import AgeCoverageTab from "../../Target/AgeCoverageTab";
+import LocationTab from "../../Target/LocationTab";
 
 enum ErrorKeyAdd {
   SAMPLE_SIZE = "SAMPLE_SIZE",
@@ -330,8 +330,7 @@ const BrandTrack = memo(
           </PageTitle>
           <Content id={TARGET_SECTION.CONTENT}>
             <Grid>
-              <ParagraphBody $colorName={"--gray-80"} $fontWeight={400}>
-                Your plan is set up with <b>200</b> sample size monthly.
+              <ParagraphBody $colorName={"--gray-80"} $fontWeight={400} className={classes.descriptionPlan} translation-key="brand_track_your_plan" dangerouslySetInnerHTML={{ __html: t('brand_track_your_plan', { sampleSize: project?.sampleSize }) }}>
               </ParagraphBody>
             </Grid>
             <Grid mt={4} id={TARGET_SECTION.SELECT_TARGET}>
