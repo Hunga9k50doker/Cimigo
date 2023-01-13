@@ -332,7 +332,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
                 )}
                 {editable && (
                   <Box className={classes.listMobileAction}>
-                    {item.type === AttributeShowType.User && (
+                    {item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
                       <Button
                         onClick={(e) => { e.stopPropagation(); onEditUserAttribute(item.data as any) }}
                         btnType={BtnType.Text}
