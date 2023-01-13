@@ -1,6 +1,6 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
 
-const Started = ({ ...props }: SvgIconProps) => {
+const IconNextOutline = ({ ...props }: SvgIconProps) => {
   return (
     <SvgIcon width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
@@ -11,4 +11,4 @@ const Started = ({ ...props }: SvgIconProps) => {
   );
 };
 
-export default Started;
+export default IconNextOutline;

@@ -4,7 +4,6 @@ import Heading1 from "components/common/text/Heading1";
 import Heading5 from "components/common/text/Heading5";
 
 import { memo, useMemo } from "react";
-import { useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import classes from "./styles.module.scss";
@@ -34,8 +33,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import { setHowToSetupSurveyReducer } from "redux/reducers/Project/actionTypes";
 import { usePrice } from "helpers/price";
 import { ESOLUTION_TYPE } from "models";
-import { ReducerType } from "redux/reducers";
-import { setListPlanReducer } from 'redux/reducers/Project/actionTypes';
+import { DataPagination } from "models/general";
 
 export interface CreateProjectFormData {
   name: string;
@@ -46,6 +44,7 @@ export interface CreateProjectFormData {
 interface CreateProjectStepProps {
   solutionSelected?: Solution;
   planSelected?: Plan;
+  plan?: DataPagination<Plan>;
   onClickHandleBack?: (step: number) => void;
 }
 
@@ -53,10 +52,10 @@ const CreateProjectStep = memo(
   ({
     solutionSelected,
     planSelected,
+    plan,
     onClickHandleBack,
   }: CreateProjectStepProps) => {
 
-    const listPlan = useSelector((state:ReducerType) => state?.project?.listPlan)
     const { t, i18n } = useTranslation();
     
     const dispatch = useDispatch();
@@ -103,7 +102,6 @@ const CreateProjectStep = memo(
           dispatch(
             push(routes.project.detail.root.replace(":id", `${res.id}`))
           );
-          dispatch(setListPlanReducer([]))
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() =>dispatch(setLoading(false)));
@@ -152,7 +150,7 @@ const CreateProjectStep = memo(
               $colorName={"--eerie-black"}
             >{`${planSelected?.title} (${getCostCurrency(planSelected?.price || 0)?.show})`}</Heading5>
             {
-              listPlan?.length === 1 ?
+              plan?.data?.length === 1 ?
                   <ParagraphSmallUnderline2
               translation-key="common_review"
               className={classes.link}
@@ -173,15 +171,6 @@ const CreateProjectStep = memo(
               ({t("common_change")})
             </ParagraphSmallUnderline2>
             }
-            {/* <ParagraphSmallUnderline2
-              translation-key="common_change"
-              className={classes.link}
-              onClick={() => {
-                onClickHandleBack(EStep.SELECT_PLAN);
-              }}
-            >
-              ({t("common_change")})
-            </ParagraphSmallUnderline2> */}
           </Grid>
         </Grid>
         <Grid className={classes.note} mt={2}>

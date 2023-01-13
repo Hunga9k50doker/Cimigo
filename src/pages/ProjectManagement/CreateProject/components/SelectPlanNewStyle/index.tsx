@@ -18,12 +18,14 @@ import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import useAuth from "hooks/useAuth";
+import { IconNextOutline } from "components/icons";
+
 interface SelectPlanProps {
   solution?: Solution;
   plan?: DataPagination<Plan>;
   onChangePlanSelected?: (plan: Plan) => void;
 }
-const SelectPlan = memo(({ solution, onChangePlanSelected, plan }: SelectPlanProps) => {
+const SelectPlanNewStyle = memo(({ solution, onChangePlanSelected, plan }: SelectPlanProps) => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const formatMoney = useCallback(
@@ -70,11 +72,10 @@ const SelectPlan = memo(({ solution, onChangePlanSelected, plan }: SelectPlanPro
                 })}
                 item
                 xs={12}
-                md={6}
-                lg={4}
+                md={8}
+                lg={7}
               >
                 <Grid
-                  pt={4}
                   className={clsx(classes.layoutCard, {
                     [classes.layoutCardPopular]: plan?.isMostPopular,
                   })}
@@ -89,7 +90,7 @@ const SelectPlan = memo(({ solution, onChangePlanSelected, plan }: SelectPlanPro
                   <Card sx={{ minWidth: 300 }} className={classes.cardPlan}>
                     <CardContent className={classes.cardCustom}>
                       <Grid container px={1}>
-                        <Grid xs={12}>
+                        <Grid xs={6}>
                           <Typography>
                             <Heading3 $fontWeight={"500"} $colorName={"--eerie-black-00"} variant="body2" variantMapping={{ body2: "span" }}>
                               {plan.title}
@@ -130,12 +131,25 @@ const SelectPlan = memo(({ solution, onChangePlanSelected, plan }: SelectPlanPro
                             </ParagraphExtraSmall>
                           </Typography>
                         </Grid>
+                        <Grid xs={6} display="flex" justifyContent="end" alignItems="center">
+                          <CardActions className={classes.itemCenter}>
+                            <Button
+                              fullWidth
+                              btnType={BtnType.Raised}
+                              translation-key="setup_survey_popup_save_question_title"
+                              children={<TextBtnSecondary translation-key="common_start">{t("common_start")}</TextBtnSecondary>}
+                              className={classes.btnSave}
+                              onClick={() => onClick(plan)}
+                              endIcon={<IconNextOutline />}
+                            />
+                          </CardActions>
+                        </Grid>
                       </Grid>
                       <Typography variant="body2" variantMapping={{ body2: "div" }}>
                         <div className={classes.line}></div>
                       </Typography>
                       <Grid className={classes.contentInPlan} container px={1}>
-                        <Grid className={classes.contentPlan} xs={12}>
+                        <Grid className={classes.contentPlan} xs={6}>
                           <DoneIcon className={classes.iconContentPlan} />
                           <ParagraphBody
                             ml={1.5}
@@ -149,7 +163,7 @@ const SelectPlan = memo(({ solution, onChangePlanSelected, plan }: SelectPlanPro
                         </Grid>
                         {plan?.content.map((item, index) => {
                           return (
-                            <Grid className={classes.contentPlan} key={index} xs={12}>
+                            <Grid className={classes.contentPlan} key={index} xs={6}>
                               <DoneIcon className={classes.iconContentPlan} />
                               <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"}>
                                 {item}
@@ -159,17 +173,6 @@ const SelectPlan = memo(({ solution, onChangePlanSelected, plan }: SelectPlanPro
                         })}
                       </Grid>
                     </CardContent>
-                      <CardActions className={classes.itemCenter}>
-                        <Button
-                          fullWidth
-                          sx={{ mx: 7.25 }}
-                          btnType={BtnType.Raised}
-                          translation-key="setup_survey_popup_save_question_title"
-                          children={<TextBtnSecondary translation-key="common_select">{t("common_select")}</TextBtnSecondary>}
-                          className={classes.btnSave}
-                          onClick={() => onClick(plan)}
-                        />
-                      </CardActions>
                   </Card>
                 </Grid>
               </Grid>
@@ -180,4 +183,4 @@ const SelectPlan = memo(({ solution, onChangePlanSelected, plan }: SelectPlanPro
     </>
   );
 });
-export default SelectPlan;
+export default SelectPlanNewStyle;
