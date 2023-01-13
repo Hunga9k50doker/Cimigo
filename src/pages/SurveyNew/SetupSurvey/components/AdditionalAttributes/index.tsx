@@ -261,7 +261,9 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
               <ListItemButton className={classes.listItem}>
                 <Grid display="flex" alignItems="center">
                   <Grid className={classes.iconEditSquare}>
-                    <EditSquare sx={{color: "var(--gray-40)", width: "16px", height: "16px"}}/>
+                    {item.type === AttributeShowType.User && (
+                      <EditSquare sx={{color: "var(--gray-40)", width: "16px", height: "16px"}}/>
+                    )}
                   </Grid>
                   <Grid item>
                     <ParagraphSmall $colorName="--eerie-black">{item.content}</ParagraphSmall>
@@ -272,7 +274,9 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
               <ListItemButton className={classes.listItem}>
                 <Grid display="flex" alignItems="center" justifyContent="center">
                   <Grid className={classes.iconEditSquare}>
-                    <EditSquare sx={{color: "var(--gray-40)", width: "16px", height: "16px"}}/>
+                    {item.type === AttributeShowType.User && (
+                      <EditSquare sx={{color: "var(--gray-40)", width: "16px", height: "16px"}}/>
+                    )}
                   </Grid>
                   <Grid className={classes.listTextLeft}>
                     <ParagraphSmall $colorName="--eerie-black">{item.start}</ParagraphSmall>

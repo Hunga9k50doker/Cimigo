@@ -36,19 +36,13 @@
   .iconEditSquare {
     margin-right: 9px;
     width: 16px;
-    svg {
-      display: none;
-    }
+    display: flex;
+    align-items: center;
   }
   &:hover {
     background: rgba(28, 28, 28, 0.05);
     .btnAction {
       visibility: visible !important;
-    }
-    .iconEditSquare {
-      svg {
-        display: block;
-      }
     }
   }
 }
