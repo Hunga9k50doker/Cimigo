@@ -123,19 +123,19 @@ const PopupPreDefinedList = memo((props: Props) => {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle $backgroundColor="--white">
-        <Heading3 $colorName="--gray-90">Add attributes</Heading3>
+        <Heading3 $colorName="--gray-90" translation-key="solution_type_1_setup_survey_popup_pre_defined_title">{t('solution_type_1_setup_survey_popup_pre_defined_title')}</Heading3>
         <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onClose}>
         </ButtonClose>
       </DialogTitle>
       <DialogContent className={classes.body} dividers>
-        <ParagraphBody $colorName="--eerie-black" translation-key="setup_survey_add_att_popup_pre_defined_sub_title">{t('setup_survey_add_att_popup_pre_defined_sub_title')}</ParagraphBody>
+        <ParagraphBody $colorName="--eerie-black" translation-key="solution_type_1_setup_survey_popup_pre_defined_sub_title">{t('solution_type_1_setup_survey_popup_pre_defined_sub_title')}</ParagraphBody>
         <ParagraphSmall $colorName="--gray-80" className={classes.unfoldWrapper}>
-          <div className={classes.unfoldItemWrapper} onClick={handleExpandAll}>
-            <UnfoldMore/> Expand all
+          <div className={classes.unfoldItemWrapper} onClick={handleExpandAll} translation-key="solution_type_1_setup_survey_popup_pre_defined_expand_all">
+            <UnfoldMore/> {t('solution_type_1_setup_survey_popup_pre_defined_expand_all')}
           </div>
           <div className={classes.lineDivide}></div>
-          <div className={classes.unfoldItemWrapper} onClick={handleCollapseAll}>
-            <UnfoldLess/> Collapse all
+          <div className={classes.unfoldItemWrapper} onClick={handleCollapseAll} translation-key="solution_type_1_setup_survey_popup_pre_defined_collapse_all">
+            <UnfoldLess/> {t('solution_type_1_setup_survey_popup_pre_defined_collapse_all')}
           </div>
         </ParagraphSmall>
 
@@ -145,14 +145,14 @@ const PopupPreDefinedList = memo((props: Props) => {
               return (
                 <div key={index}>
                   <ListItemButton classes={{ root: clsx(classes.rootListItem, {[classes.firstRootListItem]: index === 0}) }} onClick={()=> handleCollapse(item.category?.id)}>
-                    <ListItemText classes={{ root: clsx(classes.attributeTitle, {[classes.categorySelected]: openCategories[item.category?.id ?? 0]}) }} primary={item.category?.name || "Other"} />
+                    <ListItemText classes={{ root: clsx(classes.attributeTitle, {[classes.categorySelected]: openCategories[item.category?.id ?? 0]}) }} translation-key="solution_type_1_setup_survey_popup_pre_defined_other_category" primary={item.category?.name || t('solution_type_1_setup_survey_popup_pre_defined_other_category')} />
                     <Chip
                       sx={{ height: 24, backgroundColor: "var(--cimigo-blue-light-4)", "& .MuiChip-label": { px: 2 } }}
                       label={<ParagraphSmall $colorName="--cimigo-blue-dark-1">{item.attributes.length}</ParagraphSmall>}
                       color="secondary"
                       classes={{ root: classes.numberOfAttibute }}
                     />
-                    <ParagraphSmall $colorName="--cimigo-blue" className={classes.numberOfSelected}>{getNumberOfAttributesSelected(item.attributes)} selected</ParagraphSmall>
+                    <ParagraphSmall $colorName="--cimigo-blue" className={classes.numberOfSelected} translation-key="solution_type_1_setup_survey_popup_pre_defined_number_att_selected">{getNumberOfAttributesSelected(item.attributes)} {t('solution_type_1_setup_survey_popup_pre_defined_number_att_selected')}</ParagraphSmall>
                     {openCategories[item.category?.id ?? 0] ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
                   <Collapse in={openCategories[item.category?.id ?? 0]} timeout="auto" unmountOnExit>
@@ -214,9 +214,9 @@ const PopupPreDefinedList = memo((props: Props) => {
         </Grid> 
       </DialogContent>
       <DialogActions className={classes.dialogActionsWrapper}> 
-        <ParagraphSmall $colorName="--cimigo-blue-dark-2" className={classes.remaining}>Remaining: {maxSelect - attributesSelected.length}</ParagraphSmall>
+        <ParagraphSmall $colorName="--cimigo-blue-dark-2" className={classes.remaining} translation-key="solution_type_1_setup_survey_popup_pre_defined_number_att_remaining">{t('solution_type_1_setup_survey_popup_pre_defined_number_att_remaining')}: {maxSelect - attributesSelected.length}</ParagraphSmall>
         <Button className={clsx(classes.btn, classes.hideOnMobile)} children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onClose}/>
-        <Button className={clsx(classes.btn, classes.btnAdd)} children="Add" btnType={BtnType.Raised} onClick={_onSubmit}/>
+        <Button className={clsx(classes.btn, classes.btnAdd)} children={t('common_add')} translation-key="common_add" btnType={BtnType.Raised} onClick={_onSubmit}/>
         <Button className={clsx(classes.btn, classes.hideOnDesktop)} children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onClose}/>
       </DialogActions>
     </Dialog>

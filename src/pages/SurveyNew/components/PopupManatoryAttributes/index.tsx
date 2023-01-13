@@ -47,15 +47,15 @@ const PopupManatoryAttributes = memo((props: Props) => {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle $backgroundColor="--white">
-        <Heading3 $colorName="--gray-90" translation-key="setup_survey_add_att_popup_m_att_title">{t('setup_survey_add_att_popup_m_att_title')}</Heading3>
+        <Heading3 $colorName="--gray-90" translation-key="solution_type_1_setup_survey_popup_m_att_title">{t('solution_type_1_setup_survey_popup_m_att_title')}</Heading3>
         <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onClose}>
         </ButtonClose>
       </DialogTitle>
       <DialogContent className={classes.body} dividers>
-      <ParagraphBody $colorName="--eerie-black">The following attributes are mandatory attributes that always be asked for brand equity sections.</ParagraphBody>
+      <ParagraphBody $colorName="--eerie-black" translation-key="solution_type_1_setup_survey_popup_m_att_sub_title">{t('solution_type_1_setup_survey_popup_m_att_sub_title')}</ParagraphBody>
         <Grid container sx={{paddingTop:"24px"}} classes={{ root: classes.rootList }}>
           <ListItemButton classes={{ root: clsx(classes.rootListItem) }} onClick={()=>{setIsExpand(!isExpand)}}>
-            <Heading5 $fontWeight={400} className={clsx(classes.listItemTitle, {[classes.selected]: isExpand})} translation-key="setup_survey_add_att_popup_m_att_title">{t('setup_survey_add_att_popup_m_att_title')}</Heading5>
+            <Heading5 $fontWeight={400} className={clsx(classes.listItemTitle, {[classes.selected]: isExpand})} translation-key="solution_type_1_setup_survey_popup_m_att_title">{t('solution_type_1_setup_survey_popup_m_att_title')}</Heading5>
             {isExpand ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={isExpand} timeout="auto" unmountOnExit>
