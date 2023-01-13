@@ -7,14 +7,14 @@ export interface GetUserAttributeParams {
 }
 
 export interface CreateUserAttribute {
-  start: string;
-  end: string;
+  content: string;
+  contentTypeId : number;
   projectId: number
 }
 
 export interface UpdateUserAttribute {
-  start?: string;
-  end?: string;
+  content?: string;
+  contentTypeId : number;
 }
 
 export interface UserAttribute {
@@ -27,4 +27,9 @@ export interface UserAttribute {
   contentType?: OptionItem;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export enum AttributeContentType {
+  SINGLE = 1,
+  MULTIPLE = 2
 }

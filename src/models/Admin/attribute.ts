@@ -28,14 +28,20 @@ export interface UpdateAttribute {
   language?: string;
 }
 
+export interface AttributeCategory {
+  id: number;
+  name: string;
+}
+
 export interface Attribute {
   id: number;
   solutionId: number;
   typeId: AttributeType;
   type: OptionItem;
-  content?: string;
-  start?: string;
-  end?: string;
+  start: string;
+  end: string;
+  content: string;
+  contentTypeId: number;
   parentLanguage: number;
   language: number;
   contentType: OptionItem;

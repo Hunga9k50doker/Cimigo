@@ -13,7 +13,11 @@
   }
 }
 
+.notDisplayed {
+  display: none;
+}
 .rootListItem {
+  border-bottom: 1px solid #dddddd;
   .btnAction {
     width: 70px;
     display: flex;
@@ -25,14 +29,26 @@
       height: 32px;
       margin-left: 10px;
       &:hover {
-        background-color: #ffffff !important;
+        background-color: var(--gray-10) !important;
       }
+    }
+  }
+  .iconEditSquare {
+    margin-right: 9px;
+    width: 16px;
+    svg {
+      display: none;
     }
   }
   &:hover {
     background: rgba(28, 28, 28, 0.05);
     .btnAction {
       visibility: visible !important;
+    }
+    .iconEditSquare {
+      svg {
+        display: block;
+      }
     }
   }
 }
@@ -97,9 +113,9 @@
     box-shadow: none;
     border-right: 1px solid #dddddd;
     border-left: 1px solid #dddddd;
-    border-top: 1px solid #dddddd;
-    &:last-child {
-      border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    &:first-child {
+      border-top: 1px solid #dddddd;
     }
     &::before {
       display: none;

@@ -1,6 +1,5 @@
 .paper {
-  width: 950px;
-  max-width: 950px;
+  max-width: 676px;
   @media only screen and (max-width: 767px) {
     width: 100%;
     max-width: 100%;
@@ -17,51 +16,12 @@
 .rootList {
   padding: 16px 0px 24px 0;
   @media only screen and (max-width: 767px) {
-    padding-bottom: 16px;
+    padding-top: 24px;
   }
 }
-.listFlex {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  @media only screen and (max-width: 767px) {
-    flex-direction: column;
-    justify-content: unset;
-    align-items: unset;
-  }
-}
-.listTextLeft {
-  @media only screen and (max-width: 767px) {
-    max-width: unset !important;
-    margin-bottom: 15px;
-  }
-}
-.listTextRight {
-  @media only screen and (max-width: 767px) {
-    max-width: unset !important;
-  }
-}
-.listTextLeft {
-  p {
-    margin: 0;
-    font-weight: 600;
-    font-size: 16px;
-    color: var(--eerie-black);
-    @media only screen and (max-width: 767px) {
-      color: var(--gray-80);
-    }
-  }
-}
-.listTextRight {
-  p {
-    margin: 0;
-    font-weight: 600;
-    font-size: 16px;
-    color: var(--eerie-black);
-    @media only screen and (max-width: 767px) {
-      color: var(--gray-80);
-    }
-  }
+
+.subInputTitle {
+  padding-bottom: 8px;
 }
 
 .inputPoint {
@@ -87,77 +47,6 @@
   line-height: 14.6px;
   text-transform: uppercase;
 }
-.listNumber {
-  margin: 24px 24px 0 24px;
-  max-width: 240px;
-  @media only screen and (max-width: 767px) {
-    display: none;
-  }
-  div {
-    display: flex;
-    min-width: 200px;
-    justify-content: space-between;
-    border-radius: 4px;
-    border: 1px solid #dddddd;
-    span {
-      width: 24px;
-      height: 24px;
-      max-width: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 400;
-      font-size: 12px;
-      color: rgba(28, 28, 28, 0.65);
-    }
-    span:not(:last-child) {
-      border-right: 1px solid #dddddd;
-    }
-  }
-}
-.listNumberMobile {
-  display: none;
-  @media only screen and (max-width: 767px) {
-    display: block;
-    margin: 24px auto 0px auto;
-    max-width: 350px;
-  }
-}
-.textMobile {
-  @media only screen and (max-width: 767px) {
-    display: flex;
-    justify-content: space-between;
-    p {
-      color: #000000;
-      margin-bottom: 12px;
-    }
-  }
-}
-.numberMobile {
-  @media only screen and (max-width: 767px) {
-    display: flex;
-    min-width: 200px;
-    justify-content: space-between;
-    border-radius: 4px;
-    border: 1px solid #dddddd;
-    max-width: 240px;
-    margin: auto;
-    span {
-      width: 24px;
-      height: 24px;
-      max-width: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 400;
-      font-size: 12px;
-      color: rgba(28, 28, 28, 0.65);
-    }
-    span:not(:last-child) {
-      border-right: 1px solid #dddddd;
-    }
-  }
-}
 .rootListItem {
   &:nth-child(even) {
     background: #eef0f2;
@@ -174,40 +63,64 @@
 .tips {
   display: flex;
   align-items: flex-start;
-  padding-right: 40px;
   img {
     cursor: pointer;
   }
 }
+.itemTip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.itemDotTip {
+  padding: 1.4px;
+  border-radius: 100%;
+  background-color: #000;
+  margin: 0 10px;
+}
 
 .border {
-  background: rgba(28, 28, 28, 0.4);
+  background: var(--gray-60);
   width: 1px;
-  height: 135px;
-  margin: auto 12px;
+  height: 96px;
+  margin: auto 8px;
+  @media only screen and (max-width: 676px) {
+    height: 120px;
+  }
+  @media only screen and (max-width: 427px) {
+    height: 166px;
+  }
+  @media only screen and (max-width: 345px) {
+    height: 186px;
+  }
 }
 
 .collapse > p {
-  margin-top: 3px;
   margin-bottom: 8px;
   cursor: pointer;
 }
 
 .btn {
+  border-top: 1px solid var(--gray-20);
   button:not(:first-child) {
     margin-left: 16px;
   }
   @media only screen and (max-width: 767px) {
     display: flex;
     flex-direction: column-reverse;
+    gap: 0;
     button {
       width: 100%;
       &:not(:first-child) {
         margin-left: 0;
       }
       &:first-child {
-        margin-top: 16px;
+        margin-top: 8px;
       }
     }
   }
+}
+
+.btnSave {
+  min-width: 123px;
 }
