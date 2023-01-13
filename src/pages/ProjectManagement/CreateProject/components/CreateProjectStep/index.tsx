@@ -35,6 +35,7 @@ import { setHowToSetupSurveyReducer } from "redux/reducers/Project/actionTypes";
 import { usePrice } from "helpers/price";
 import { ESOLUTION_TYPE } from "models";
 import { ReducerType } from "redux/reducers";
+import { setListPlanReducer } from 'redux/reducers/Project/actionTypes';
 
 export interface CreateProjectFormData {
   name: string;
@@ -102,9 +103,10 @@ const CreateProjectStep = memo(
           dispatch(
             push(routes.project.detail.root.replace(":id", `${res.id}`))
           );
+          dispatch(setListPlanReducer([]))
         })
         .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)));
+        .finally(() =>dispatch(setLoading(false)));
     };
 
     return (
