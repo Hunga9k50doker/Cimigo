@@ -8,6 +8,7 @@ export interface Plan {
   sampleSize: number;
   content: string[];
   isMostPopular: boolean;
+  month?: number;
   status: number;
   order: number;
   parentLanguage: number,
@@ -35,6 +36,7 @@ export interface CreateOrUpdatePlanInput {
   sampleSize: number;
   content: string[];
   isMostPopular?: boolean;
+  month?: number;
   order?: number;
   language?: string;
 }
