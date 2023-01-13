@@ -94,7 +94,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
         content: it.content,
         contentTypeId: it.contentTypeId,
       })) || [])
-    ]
+    ].sort((a, b) => a?.contentTypeId - b?.contentTypeId)
   }, [project])
 
   const onEditUserAttribute = (item: UserAttribute) => {
