@@ -123,7 +123,78 @@ const schema = yup.object().shape({
         .required('Max Video is required.'),
       otherwise: yup.number().empty().notRequired().nullable()
     }),
-
+  minCompetingBrand: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Min Competing Brand is required.')
+        .positive('Min Competing Brand must be a positive number')
+        .required('Min Competing Brand is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+  maxCompetingBrand: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Max Competing Brand is required.')
+        .positive('Max Competing Brand must be a positive number')
+        .required('Max Competing Brand is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+  minCompetitiveBrand: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Min Competitive Brand is required.')
+        .positive('Min Competitive Brand must be a positive number')
+        .required('Min Competitive Brand is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+  maxCompetitiveBrand: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Max Competitive Brand is required.')
+        .positive('Max Competitive Brand must be a positive number')
+        .required('Max Competitive Brand is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+  minEquityAttributes: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Min Equity Attributes is required.')
+        .positive('Min Equity Attributes must be a positive number')
+        .required('Min Equity Attributes is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+  maxEquityAttributes: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Max Equity Attributes is required.')
+        .positive('Max Equity Attributes must be a positive number')
+        .required('Max Equity Attributes is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+  minBrandAssetRecognition: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Min Brand Asset Recognition is required.')
+        .positive('Min Brand Asset Recognition must be a positive number')
+        .required('Min Brand Asset Recognition is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+  maxBrandAssetRecognition: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Max Brand Asset Recognition is required.')
+        .positive('Max Brand Asset Recognition must be a positive number')
+        .required('Max Brand Asset Recognition is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
   enableCustomQuestion: yup.boolean().required('Enable Custom Question is required.'),
   maxCustomQuestion: yup.number()
     .when('enableCustomQuestion', {
@@ -205,6 +276,14 @@ export interface SolutionFormData {
   minAdditionalBrand: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;
+  minCompetingBrand: number;
+  maxCompetingBrand: number;
+  minCompetitiveBrand: number;
+  maxCompetitiveBrand: number;
+  minEquityAttributes: number;
+  maxEquityAttributes: number;
+  minBrandAssetRecognition: number;
+  maxBrandAssetRecognition: number;
   maxCustomQuestion: number;
   enableCustomQuestion: boolean;
   enableEyeTracking: boolean;
@@ -253,6 +332,16 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     formData.append('typeId', `${data.typeId.id}`)
     formData.append('enableEyeTracking', `${data.enableEyeTracking}`)
     switch (data.typeId.id) {
+      case ESOLUTION_TYPE.BRAND_TRACKING:
+        formData.append('minCompetingBrand', `${data.minCompetingBrand}`)
+        formData.append('maxCompetingBrand', `${data.maxCompetingBrand}`)
+        formData.append('minCompetitiveBrand', `${data.minCompetitiveBrand}`)
+        formData.append('maxCompetitiveBrand', `${data.maxCompetitiveBrand}`)
+        formData.append('minEquityAttributes', `${data.minEquityAttributes}`)
+        formData.append('maxEquityAttributes', `${data.maxEquityAttributes}`)
+        formData.append('minBrandAssetRecognition', `${data.minBrandAssetRecognition}`)
+        formData.append('maxBrandAssetRecognition', `${data.maxBrandAssetRecognition}`)
+        break;
       case ESOLUTION_TYPE.VIDEO_CHOICE:
         formData.append('minVideo', `${data.minVideo}`)
         formData.append('maxVideo', `${data.maxVideo}`)
@@ -303,6 +392,14 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         maxAdditionalAttribute: itemEdit.maxAdditionalAttribute,
         minVideo: itemEdit.minVideo,
         maxVideo: itemEdit.maxVideo,
+        minCompetingBrand: itemEdit.minCompetingBrand,
+        maxCompetingBrand: itemEdit.maxCompetingBrand,
+        minCompetitiveBrand: itemEdit.minCompetitiveBrand,
+        maxCompetitiveBrand: itemEdit.maxCompetitiveBrand,
+        minEquityAttributes: itemEdit.minEquityAttributes,
+        maxEquityAttributes: itemEdit.maxEquityAttributes,
+        minBrandAssetRecognition: itemEdit.minBrandAssetRecognition,
+        maxBrandAssetRecognition: itemEdit.maxBrandAssetRecognition,
         enableCustomQuestion: itemEdit.enableCustomQuestion,
         maxCustomQuestion: itemEdit.maxCustomQuestion,
         enableEyeTracking: itemEdit.enableEyeTracking,
@@ -557,6 +654,90 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                           disabled={!!langEdit}
                           inputRef={register('maxVideo')}
                           errorMessage={errors.maxVideo?.message}
+                        />
+                      </Grid>
+                    </>
+                  )}
+                  {type?.id === ESOLUTION_TYPE.BRAND_TRACKING && (
+                    <>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Min competing brand"
+                          name="minCompetingBrand"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('minCompetingBrand')}
+                          errorMessage={errors.minCompetingBrand?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Max competing brand"
+                          name="maxCompetingBrand"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('maxCompetingBrand')}
+                          errorMessage={errors.maxCompetingBrand?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Min competitive brand"
+                          name="minCompetitiveBrand"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('minCompetitiveBrand')}
+                          errorMessage={errors.minCompetitiveBrand?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Max competitive brand"
+                          name="maxCompetitiveBrand"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('maxCompetitiveBrand')}
+                          errorMessage={errors.maxCompetitiveBrand?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Min equity attribute"
+                          name="minEquityAttributes"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('minEquityAttributes')}
+                          errorMessage={errors.minEquityAttributes?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Max equity attribute"
+                          name="maxEquityAttributes"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('maxEquityAttributes')}
+                          errorMessage={errors.maxEquityAttributes?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Min brand asset recognition"
+                          name="minBrandAssetRecognition"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('minBrandAssetRecognition')}
+                          errorMessage={errors.minBrandAssetRecognition?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Max brand asset recognition"
+                          name="maxBrandAssetRecognition"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('maxBrandAssetRecognition')}
+                          errorMessage={errors.maxBrandAssetRecognition?.message}
                         />
                       </Grid>
                     </>
