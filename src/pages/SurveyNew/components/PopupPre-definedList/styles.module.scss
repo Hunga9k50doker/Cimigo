@@ -42,18 +42,6 @@
   display: flex;
   align-items: center;
 }
-.listFlexChecked {
-  .listTextLeft > p,
-  .listTextRight > p {
-    color: var(--cimigo-green);
-  }
-  .listNumber div {
-    border-color: var(--cimigo-green);
-    span {
-      color: var(--cimigo-green);
-    }
-  }
-}
 .listTextLeft > p {
   margin: 0;
   text-align: end;
@@ -111,6 +99,17 @@
 .rootCheckbox {
   padding-left: 16px;
   padding-right: 16px;
+}
+
+.rootCheckboxIcon {
+  &:hover {
+    color: var(--cimigo-blue);
+  }
+}
+
+.rootCheckboxCheckedIcon {
+  color: var(--white);
+  background: var(--cimigo-blue);
 }
 
 .dialogActionsWrapper {

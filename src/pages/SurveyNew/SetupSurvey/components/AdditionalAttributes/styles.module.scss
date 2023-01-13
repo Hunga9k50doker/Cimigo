@@ -94,6 +94,13 @@
     }
   }
 }
+.itemItemAddAttributeWrapper {
+  &:hover {
+    svg {
+      color: var(--cimigo-blue-light-1);
+    }
+  }
+}
 .itemAddAttribute {
   font-size: 14px !important;
 }

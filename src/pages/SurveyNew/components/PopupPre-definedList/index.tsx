@@ -7,12 +7,12 @@ import { Project } from 'models/project';
 import { ProjectAttribute } from 'models/project_attribute';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-import {DialogTitle} from "components/common/dialogs/DialogTitle";
+import { DialogTitle } from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import { DialogActions } from "components/common/dialogs/DialogActions";
 import Heading3 from "components/common/text/Heading3";
 import ButtonClose from "components/common/buttons/ButtonClose";
-import Button, {BtnType} from "components/common/buttons/Button";
+import Button, { BtnType } from "components/common/buttons/Button";
 import ParagraphSmall from 'components/common/text/ParagraphSmall';
 import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
 import ParagraphBody from 'components/common/text/ParagraphBody';
@@ -40,25 +40,25 @@ const PopupPreDefinedList = memo((props: Props) => {
   const [attributesSelected, setAttributesSelected] = useState<number[]>([])
   const [openCategories, setOpenCategories] = useState<{ [key: number]: boolean }>({});
 
-  const listCategories = useMemo(()=>{
+  const listCategories = useMemo(() => {
     return _.chain(attributes)
-    .groupBy(item => item.categoryId)
-    .map((value) => ({ category: value?.[0].category, attributes: value }))
-    .value()
+      .groupBy(item => item.categoryId)
+      .map((value) => ({ category: value?.[0].category, attributes: value }))
+      .value()
   }, [attributes])
 
   const handleCollapse = (categoryId?: number) => {
-    const _openCategories = {...openCategories}
+    const _openCategories = { ...openCategories }
     _openCategories[categoryId ?? 0] = !_openCategories[categoryId ?? 0]
     setOpenCategories(_openCategories)
   };
-  
+
   const handleExpandAll = () => {
     const _openCategories = {}
     listCategories.forEach(item => _openCategories[item.category?.id ?? 0] = true)
     setOpenCategories(_openCategories)
   };
-  
+
   const handleCollapseAll = () => {
     const _openCategories = {}
     listCategories.forEach(item => _openCategories[item.category?.id ?? 0] = false)
@@ -111,7 +111,7 @@ const PopupPreDefinedList = memo((props: Props) => {
     return !attributesSelected.includes(item.id) && maxSelect <= attributesSelected.length
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     handleCollapseAll()
   }, [listCategories])
 
@@ -131,28 +131,33 @@ const PopupPreDefinedList = memo((props: Props) => {
         <ParagraphBody $colorName="--eerie-black" translation-key="setup_survey_add_att_popup_pre_defined_sub_title">{t('setup_survey_add_att_popup_pre_defined_sub_title')}</ParagraphBody>
         <ParagraphSmall $colorName="--gray-80" className={classes.unfoldWrapper}>
           <div className={classes.unfoldItemWrapper} onClick={handleExpandAll}>
-            <UnfoldMore/> Expand all
+            <UnfoldMore /> Expand all
           </div>
           <div className={classes.lineDivide}></div>
           <div className={classes.unfoldItemWrapper} onClick={handleCollapseAll}>
-            <UnfoldLess/> Collapse all
+            <UnfoldLess /> Collapse all
           </div>
         </ParagraphSmall>
 
         <Grid container classes={{ root: classes.rootList }}>
           {
-            listCategories.map((item, index)=>{
+            listCategories.map((item, index) => {
               return (
                 <div key={index}>
-                  <ListItemButton classes={{ root: clsx(classes.rootListItem, {[classes.firstRootListItem]: index === 0}) }} onClick={()=> handleCollapse(item.category?.id)}>
-                    <ListItemText classes={{ root: clsx(classes.attributeTitle, {[classes.categorySelected]: openCategories[item.category?.id ?? 0]}) }} primary={item.category?.name || "Other"} />
+                  <ListItemButton classes={{ root: clsx(classes.rootListItem, { [classes.firstRootListItem]: index === 0 }) }} onClick={() => handleCollapse(item.category?.id)}>
+                    <ListItemText classes={{ root: clsx(classes.attributeTitle, { [classes.categorySelected]: openCategories[item.category?.id ?? 0] }) }} primary={item.category?.name || "Other"} />
                     <Chip
                       sx={{ height: 24, backgroundColor: "var(--cimigo-blue-light-4)", "& .MuiChip-label": { px: 2 } }}
                       label={<ParagraphSmall $colorName="--cimigo-blue-dark-1">{item.attributes.length}</ParagraphSmall>}
                       color="secondary"
                       classes={{ root: classes.numberOfAttibute }}
                     />
-                    <ParagraphSmall $colorName="--cimigo-blue" className={classes.numberOfSelected}>{getNumberOfAttributesSelected(item.attributes)} selected</ParagraphSmall>
+                    {
+                      getNumberOfAttributesSelected(item.attributes) > 0 &&
+                      (
+                        <ParagraphSmall $colorName="--cimigo-blue" className={classes.numberOfSelected}>{getNumberOfAttributesSelected(item.attributes)} selected</ParagraphSmall>
+                      )
+                    }
                     {openCategories[item.category?.id ?? 0] ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
                   <Collapse in={openCategories[item.category?.id ?? 0]} timeout="auto" unmountOnExit>
@@ -162,19 +167,21 @@ const PopupPreDefinedList = memo((props: Props) => {
                           alignItems="center"
                           component="div"
                           key={item?.id}
-                          classes={{ root: clsx(classes.listItem, {[classes.disabled]: isDisabled(item)}) }}
+                          classes={{ root: clsx(classes.listItem, { [classes.disabled]: isDisabled(item) }) }}
                           disablePadding
                           onClick={() => onChange(item)}
                         >
                           {item?.contentTypeId === AttributeContentType.SINGLE ? (
                             <ListItemText>
-                              <Grid className={clsx(classes.listFlex, { [classes.listFlexChecked]: attributesSelected.includes(item.id) })}>
+                              <Grid className={classes.listFlex}>
                                 <Grid>
                                   <InputCheckbox
                                     disabled={isDisabled(item)}
                                     checked={attributesSelected.includes(item.id)}
                                     classes={{ root: classes.rootCheckbox }}
-                                    />
+                                    iconClassName={classes.rootCheckboxIcon}
+                                    checkedIconClassName={classes.rootCheckboxCheckedIcon}
+                                  />
                                 </Grid>
                                 <Grid item>
                                   <ParagraphExtraSmall $colorName="--eerie-black">{item.content}</ParagraphExtraSmall>
@@ -183,19 +190,21 @@ const PopupPreDefinedList = memo((props: Props) => {
                             </ListItemText>
                           ) : (
                             <ListItemText>
-                              <Grid className={clsx(classes.listFlex, { [classes.listFlexChecked]: attributesSelected.includes(item.id) })}>
+                              <Grid className={classes.listFlex}>
                                 <Grid>
                                   <InputCheckbox
                                     disabled={isDisabled(item)}
                                     checked={attributesSelected.includes(item.id)}
                                     classes={{ root: classes.rootCheckbox }}
-                                    />
+                                    iconClassName={classes.rootCheckboxIcon}
+                                    checkedIconClassName={classes.rootCheckboxCheckedIcon}
+                                  />
                                 </Grid>
                                 <Grid item xs={4} className={classes.listTextLeft}>
                                   <ParagraphExtraSmall $colorName="--eerie-black">{item.start}</ParagraphExtraSmall>
                                 </Grid>
                                 <Grid item xs={4} className={classes.arrowBreak}>
-                                  <ArrowBreak sx={{color: "var(--gray-20)", width: "40px"}}/>
+                                  <ArrowBreak sx={{ color: "var(--gray-20)", width: "40px" }} />
                                 </Grid>
                                 <Grid item xs={4} className={classes.listTextRight}>
                                   <ParagraphExtraSmall $colorName="--eerie-black">{item.end}</ParagraphExtraSmall>
@@ -211,13 +220,13 @@ const PopupPreDefinedList = memo((props: Props) => {
               )
             })
           }
-        </Grid> 
+        </Grid>
       </DialogContent>
-      <DialogActions className={classes.dialogActionsWrapper}> 
+      <DialogActions className={classes.dialogActionsWrapper}>
         <ParagraphSmall $colorName="--cimigo-blue-dark-2" className={classes.remaining}>Remaining: {maxSelect - attributesSelected.length}</ParagraphSmall>
-        <Button className={clsx(classes.btn, classes.hideOnMobile)} children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onClose}/>
-        <Button className={clsx(classes.btn, classes.btnAdd)} children="Add" btnType={BtnType.Raised} onClick={_onSubmit}/>
-        <Button className={clsx(classes.btn, classes.hideOnDesktop)} children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onClose}/>
+        <Button className={clsx(classes.btn, classes.hideOnMobile)} children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onClose} />
+        <Button className={clsx(classes.btn, classes.btnAdd)} children="Add" btnType={BtnType.Raised} onClick={_onSubmit} />
+        <Button className={clsx(classes.btn, classes.hideOnDesktop)} children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onClose} />
       </DialogActions>
     </Dialog>
   );
