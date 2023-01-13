@@ -322,31 +322,31 @@ const BrandTrack = memo(
         <LeftContent>
           <PageTitle>
             <PageTitleLeft>
-              <PageTitleText >
-                Setup your target respondents
+              <PageTitleText translation-key="target_title_left_panel">
+                {t("target_title_left_panel")}
               </PageTitleText>
               {!editable && <LockIcon status={project?.status} />}
             </PageTitleLeft>
           </PageTitle>
           <Content id={TARGET_SECTION.CONTENT}>
             <Grid>
-              <ParagraphBody $colorName={"--gray-80"} $fontWeight={400} className={classes.descriptionPlan} >
-              Your plan is set up with <span>{project?.sampleSize}</span> sample size monthly.
+              <ParagraphBody $colorName={"--gray-80"} $fontWeight={400} className={classes.descriptionPlan} translation-key="brand_track_your_plan" dangerouslySetInnerHTML={{ __html: t('brand_track_your_plan', { sampleSize: project?.sampleSize }) }}>
               </ParagraphBody>
             </Grid>
             <Grid mt={4} id={TARGET_SECTION.SELECT_TARGET}>
               <Heading4
                 $fontSizeMobile={"16px"}
                 $colorName="--eerie-black"
+                translation-key="brand_track_who_do_you_want_target_title"
               >
-                Who do you want to target?
+                {t("brand_track_who_do_you_want_target_title")}
               </Heading4>
               <ParagraphBody
                 $colorName="--gray-80"
                 mt={1}
-                translation-key="target_who_do_you_want_target_sub_title"
+                translation-key="brand_track_who_do_you_want_target_sub_title"
               >
-                {t("target_who_do_you_want_target_sub_title")}
+                {t("brand_track_who_do_you_want_target_sub_title")}
               </ParagraphBody>
               <Grid className={classes.targetBox}>
                 <Box className={classes.targetTabs}>
@@ -477,18 +477,18 @@ const BrandTrack = memo(
                         <Heading5
                           className="title"
                           $colorName="--gray-90"
-                          translation-key="project_right_panel_step_target_criteria_title"
+                          translation-key="project_right_panel_step_brand_track_criteria_title"
                         >
-                          {t("project_right_panel_step_target_criteria_title")}
+                          {t("project_right_panel_step_brand_track_criteria_title")}
                         </Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <ParagraphExtraSmall
                           $colorName="--gray-80"
-                          translation-key="project_right_panel_step_target_criteria_sub_title"
+                          translation-key="project_right_panel_step_brand_track_criteria_sub_title"
                         >
                           {t(
-                            "project_right_panel_step_target_criteria_sub_title"
+                            "project_right_panel_step_brand_track_criteria_sub_title"
                           )}
                         </ParagraphExtraSmall>
                       </RPStepContent>
