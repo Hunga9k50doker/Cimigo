@@ -118,17 +118,17 @@ const BrandTrack = memo(
       return [
         {
           id: ETab.Location,
-          title: t("brand_track_sub_tab_location"),
+          title: t("target_sub_tab_location"),
           img: images.imgTargetTabLocation,
         },
         {
           id: ETab.Household_Income,
-          title: t("brand_track_sub_tab_household_income"),
+          title: t("target_sub_tab_household_income"),
           img: images.imgTargetTabHI,
         },
         {
           id: ETab.Age_Coverage,
-          title: t("brand_track_sub_tab_age_coverage"),
+          title: t("target_sub_tab_age_coverage"),
           img: images.imgTargetTabAC,
         },
       ];
@@ -252,8 +252,8 @@ const BrandTrack = memo(
           } else
             return (
               <Grid className={classes.tabBodyDefault}>
-                <ParagraphSmallUnderline2 translation-key="brand_track_sub_tab_location_sub">
-                  {t("brand_track_sub_tab_location_sub")}
+                <ParagraphSmallUnderline2 translation-key="target_sub_tab_location_sub">
+                  {t("target_sub_tab_location_sub")}
                 </ParagraphSmallUnderline2>
               </Grid>
             );
@@ -280,8 +280,8 @@ const BrandTrack = memo(
           } else
             return (
               <Grid className={classes.tabBodyDefault}>
-                <ParagraphSmallUnderline2 translation-key="brand_track_choose_household_income">
-                  {t("brand_track_choose_household_income")}
+                <ParagraphSmallUnderline2 translation-key="target_choose_household_income">
+                  {t("target_choose_household_income")}
                 </ParagraphSmallUnderline2>
               </Grid>
             );
@@ -310,8 +310,8 @@ const BrandTrack = memo(
           } else
             return (
               <Grid className={classes.tabBodyDefault}>
-                <ParagraphSmallUnderline2 translation-key="brand_track_sub_tab_age_coverage_sub">
-                  {t("brand_track_sub_tab_age_coverage_sub")}
+                <ParagraphSmallUnderline2 translation-key="target_sub_tab_age_coverage_sub">
+                  {t("target_sub_tab_age_coverage_sub")}
                 </ParagraphSmallUnderline2>
               </Grid>
             );
@@ -322,31 +322,31 @@ const BrandTrack = memo(
         <LeftContent>
           <PageTitle>
             <PageTitleLeft>
-              <PageTitleText translation-key="brand_strack_title_left_panel">
-                {t("brand_strack_title_left_panel")}
+              <PageTitleText >
+                Setup your target respondents
               </PageTitleText>
               {!editable && <LockIcon status={project?.status} />}
             </PageTitleLeft>
           </PageTitle>
           <Content id={TARGET_SECTION.CONTENT}>
             <Grid>
-              <ParagraphBody $colorName={"--gray-80"} $fontWeight={400} className={classes.descriptionPlan} translation-key="brand_track_your_plan" dangerouslySetInnerHTML={{ __html: t('brand_track_your_plan', { sampleSize: project?.sampleSize }) }}>
+              <ParagraphBody $colorName={"--gray-80"} $fontWeight={400} className={classes.descriptionPlan} >
+              Your plan is set up with <span>{project?.sampleSize}</span> sample size monthly.
               </ParagraphBody>
             </Grid>
             <Grid mt={4} id={TARGET_SECTION.SELECT_TARGET}>
               <Heading4
                 $fontSizeMobile={"16px"}
                 $colorName="--eerie-black"
-                translation-key="brand_track_who_do_you_want_target_title"
               >
-                {t("brand_track_who_do_you_want_target_title")}
+                Who do you want to target?
               </Heading4>
               <ParagraphBody
                 $colorName="--gray-80"
                 mt={1}
-                translation-key="brand_track_who_do_you_want_target_sub_title"
+                translation-key="target_who_do_you_want_target_sub_title"
               >
-                {t("brand_track_who_do_you_want_target_sub_title")}
+                {t("target_who_do_you_want_target_sub_title")}
               </ParagraphBody>
               <Grid className={classes.targetBox}>
                 <Box className={classes.targetTabs}>
@@ -500,8 +500,8 @@ const BrandTrack = memo(
                     fullWidth
                     btnType={BtnType.Raised}
                     children={
-                      <TextBtnSecondary translation-key="brand_track_next_btn_review">
-                        {t("brand_track_next_btn_review")}
+                      <TextBtnSecondary translation-key="target_next_btn_review">
+                        {t("target_next_btn_review")}
                       </TextBtnSecondary>
                     }
                     endIcon={<ArrowForward />}
@@ -524,8 +524,8 @@ const BrandTrack = memo(
                     fullWidth
                     btnType={BtnType.Raised}
                     children={
-                      <TextBtnSecondary translation-key="brand_track_next_btn_review">
-                        {t("brand_track_next_btn_review")}
+                      <TextBtnSecondary translation-key="target_next_btn_review">
+                        {t("target_next_btn_review")}
                       </TextBtnSecondary>
                     }
                     endIcon={<ArrowForward />}
