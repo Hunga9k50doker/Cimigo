@@ -70,13 +70,8 @@ import PopupLocationMobile from "pages/SurveyNew/Target/components/PopupLocation
 import PopupHouseholdIncomeMobile from "pages/SurveyNew/Target/components/PopupHouseholdIncomeMobile";
 import PopupAgeCoverageMobile from "pages/SurveyNew/Target/components/PopupAgeCoverageMobile";
 
-enum ErrorKeyAdd {
-  SAMPLE_SIZE = "SAMPLE_SIZE",
-  EYE_TRACKING_SAMPLE_SIZE = "EYE_TRACKING_SAMPLE_SIZE",
-}
-
 type ErrorsTarget = {
-  [key in ETab | ErrorKeyAdd]?: boolean;
+  [key in ETab ]?: boolean;
 };
 
 interface BrandTrackProps {
@@ -180,14 +175,6 @@ const BrandTrack = memo(
       if (editable) {
         const _errorsTarget = triggerErrors();
         setErrorsTarget(_errorsTarget);
-        if (_errorsTarget[ErrorKeyAdd.SAMPLE_SIZE]) {
-          scrollToElement(TARGET_SECTION.SAMPLE_SIZE);
-          return;
-        }
-        if (_errorsTarget[ErrorKeyAdd.EYE_TRACKING_SAMPLE_SIZE]) {
-          scrollToElement(TARGET_SECTION.EYE_TRACKING_SAMPLE_SIZE);
-          return;
-        }
         if (
           _errorsTarget[ETab.Location] ||
           _errorsTarget[ETab.Household_Income] ||
@@ -518,10 +505,10 @@ const BrandTrack = memo(
                         <Heading5
                           className="title"
                           $colorName="--gray-90"
-                          translation-key="project_right_panel_step_brand_track_criteria_title"
+                          translation-key="brand_track_project_right_panel_step_criteria_title"
                         >
                           {t(
-                            "project_right_panel_step_brand_track_criteria_title"
+                            "brand_track_project_right_panel_step_criteria_title"
                           )}
                         </Heading5>
                       </RPStepLabel>
@@ -529,10 +516,10 @@ const BrandTrack = memo(
                         <ParagraphExtraSmall
                           className={classes.descriptionStep}
                           $colorName="--gray-80"
-                          translation-key="project_right_panel_step_brand_track_criteria_sub_title"
+                          translation-key="brand_track_project_right_panel_step_criteria_sub_title"
                         >
                           {t(
-                            "project_right_panel_step_brand_track_criteria_sub_title"
+                            "brand_track_project_right_panel_step_criteria_sub_title"
                           )}
                         </ParagraphExtraSmall>
                       </RPStepContent>
