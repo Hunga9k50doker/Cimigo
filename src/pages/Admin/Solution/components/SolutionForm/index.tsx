@@ -123,6 +123,24 @@ const schema = yup.object().shape({
         .required('Max Video is required.'),
       otherwise: yup.number().empty().notRequired().nullable()
     }),
+  minMainBrand: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Min Main Brand is required.')
+        .positive('Min Main Brand must be a positive number')
+        .required('Min Main Brand is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+  maxMainBrand: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Max Main Brand is required.')
+        .positive('Max Main Brand must be a positive number')
+        .required('Max Main Brand is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
   minCompetingBrand: yup.number()
     .when('typeId', {
       is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
@@ -276,6 +294,8 @@ export interface SolutionFormData {
   minAdditionalBrand: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;
+  minMainBrand: number;
+  maxMainBrand: number;
   minCompetingBrand: number;
   maxCompetingBrand: number;
   minCompetitiveBrand: number;
@@ -333,6 +353,8 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
     formData.append('enableEyeTracking', `${data.enableEyeTracking}`)
     switch (data.typeId.id) {
       case ESOLUTION_TYPE.BRAND_TRACKING:
+        formData.append('minMainBrand', `${data.minMainBrand}`)
+        formData.append('maxMainBrand', `${data.maxMainBrand}`)
         formData.append('minCompetingBrand', `${data.minCompetingBrand}`)
         formData.append('maxCompetingBrand', `${data.maxCompetingBrand}`)
         formData.append('minCompetitiveBrand', `${data.minCompetitiveBrand}`)
@@ -392,6 +414,8 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         maxAdditionalAttribute: itemEdit.maxAdditionalAttribute,
         minVideo: itemEdit.minVideo,
         maxVideo: itemEdit.maxVideo,
+        minMainBrand: itemEdit.minMainBrand,
+        maxMainBrand: itemEdit.maxMainBrand,
         minCompetingBrand: itemEdit.minCompetingBrand,
         maxCompetingBrand: itemEdit.maxCompetingBrand,
         minCompetitiveBrand: itemEdit.minCompetitiveBrand,
@@ -660,6 +684,26 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                   )}
                   {type?.id === ESOLUTION_TYPE.BRAND_TRACKING && (
                     <>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Min main brand"
+                          name="minMainBrand"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('minMainBrand')}
+                          errorMessage={errors.minMainBrand?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Max Main brand"
+                          name="maxMainBrand"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('maxMainBrand')}
+                          errorMessage={errors.maxMainBrand?.message}
+                        />
+                      </Grid>
                       <Grid item xs={12} sm={6}>
                         <Inputs
                           title="Min competing brand"

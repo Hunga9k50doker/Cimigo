@@ -49,6 +49,8 @@ export interface Solution {
   minAdditionalBrand: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;
+  minMainBrand: number;
+  maxMainBrand: number;
   minCompetingBrand: number;
   maxCompetingBrand: number;
   minCompetitiveBrand: number;
