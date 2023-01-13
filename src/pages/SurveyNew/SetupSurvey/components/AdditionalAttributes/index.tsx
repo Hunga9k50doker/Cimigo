@@ -260,8 +260,8 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
             {item?.contentTypeId === AttributeContentType.SINGLE ? (
               <ListItemButton className={classes.listItem}>
                 <Grid display="flex" alignItems="center">
-                  <Grid className={classes.iconEditSquare}>
-                    {item.type === AttributeShowType.User && (
+                  <Grid className={classes.iconEditSquareWrapper}>
+                    {editable && item.type === AttributeShowType.User && (
                       <EditSquare sx={{color: "var(--gray-40)", width: "16px", height: "16px"}}/>
                     )}
                   </Grid>
@@ -273,8 +273,8 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
             ) : (
               <ListItemButton className={classes.listItem}>
                 <Grid display="flex" alignItems="center" justifyContent="center">
-                  <Grid className={classes.iconEditSquare}>
-                    {item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
+                  <Grid className={classes.iconEditSquareWrapper}>
+                    {editable && item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
                       <EditSquare sx={{color: "var(--gray-40)", width: "16px", height: "16px"}}/>
                     )}
                   </Grid>
