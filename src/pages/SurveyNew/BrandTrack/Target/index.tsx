@@ -1,5 +1,6 @@
 import {
   ArrowCircleDownRounded,
+  ArrowCircleUpRounded,
   ArrowForward,
   KeyboardArrowRight,
 } from "@mui/icons-material";
@@ -33,7 +34,9 @@ import { routes } from "routers/routes";
 import {
   Content,
   LeftContent,
+  MobileAction,
   MobileOutline,
+  ModalMobile,
   PageRoot,
   PageTitle,
   PageTitleLeft,
@@ -63,6 +66,9 @@ import { TargetService } from "services/target";
 import HouseholdIncomeTab from "../../Target/HouseholdIncomeTab";
 import AgeCoverageTab from "../../Target/AgeCoverageTab";
 import LocationTab from "../../Target/LocationTab";
+import PopupLocationMobile from "pages/SurveyNew/Target/components/PopupLocationMobile";
+import PopupHouseholdIncomeMobile from "pages/SurveyNew/Target/components/PopupHouseholdIncomeMobile";
+import PopupAgeCoverageMobile from "pages/SurveyNew/Target/components/PopupAgeCoverageMobile";
 
 enum ErrorKeyAdd {
   SAMPLE_SIZE = "SAMPLE_SIZE",
@@ -330,8 +336,17 @@ const BrandTrack = memo(
           </PageTitle>
           <Content id={TARGET_SECTION.CONTENT}>
             <Grid>
-              <ParagraphBody $colorName={"--gray-80"} $fontWeight={400} className={classes.descriptionPlan} translation-key="brand_track_your_plan" dangerouslySetInnerHTML={{ __html: t('brand_track_your_plan', { sampleSize: project?.sampleSize }) }}>
-              </ParagraphBody>
+              <ParagraphBody
+                $colorName={"--gray-80"}
+                $fontWeight={400}
+                className={classes.descriptionPlan}
+                translation-key="brand_track_your_plan"
+                dangerouslySetInnerHTML={{
+                  __html: t("brand_track_your_plan", {
+                    sampleSize: project?.sampleSize,
+                  }),
+                }}
+              ></ParagraphBody>
             </Grid>
             <Grid mt={4} id={TARGET_SECTION.SELECT_TARGET}>
               <Heading4
@@ -421,6 +436,32 @@ const BrandTrack = memo(
               </Grid>
             </Grid>
           </Content>
+          <MobileAction>
+            <Button
+              fullWidth
+              btnType={BtnType.Raised}
+              children={
+                <TextBtnSecondary translation-key="target_next_btn">
+                  {t("target_next_btn")}
+                </TextBtnSecondary>
+              }
+              endIcon={<ArrowForward />}
+              padding="13px 8px !important"
+              onClick={onNextQuotas}
+            />
+            <MobileOutline onClick={onToggleViewOutlineMobile}>
+              <ParagraphSmall
+                $colorName="--cimigo-blue"
+                translation-key="common_btn_view_outline"
+              >
+                {t("common_btn_view_outline")}
+              </ParagraphSmall>
+              <ArrowCircleUpRounded />
+            </MobileOutline>
+            <ModalMobile
+              $toggleOutlineMobile={toggleOutlineMobile}
+            ></ModalMobile>
+          </MobileAction>
         </LeftContent>
         <RightContent $toggleOutlineMobile={toggleOutlineMobile}>
           <RightPanel>
@@ -479,11 +520,14 @@ const BrandTrack = memo(
                           $colorName="--gray-90"
                           translation-key="project_right_panel_step_brand_track_criteria_title"
                         >
-                          {t("project_right_panel_step_brand_track_criteria_title")}
+                          {t(
+                            "project_right_panel_step_brand_track_criteria_title"
+                          )}
                         </Heading5>
                       </RPStepLabel>
                       <RPStepContent>
                         <ParagraphExtraSmall
+                          className={classes.descriptionStep}
                           $colorName="--gray-80"
                           translation-key="project_right_panel_step_brand_track_criteria_sub_title"
                         >
@@ -537,6 +581,29 @@ const BrandTrack = memo(
             </TabPanelBox>
           </RightPanel>
         </RightContent>
+        {isMobile && (
+          <>
+            <PopupLocationMobile
+              isOpen={activeTab === ETab.Location}
+              project={project}
+              questions={questionsLocation}
+              onCancel={() => onChangeTab()}
+            />
+            <PopupHouseholdIncomeMobile
+              isOpen={activeTab === ETab.Household_Income}
+              project={project}
+              questions={questionsHouseholdIncome}
+              onCancel={() => onChangeTab()}
+            />
+            <PopupAgeCoverageMobile
+              isOpen={activeTab === ETab.Age_Coverage}
+              project={project}
+              questionsAgeGender={questionsAgeGender}
+              questionsMum={questionsMum}
+              onCancel={() => onChangeTab()}
+            />
+          </>
+        )}
       </PageRoot>
     );
   }
