@@ -34,7 +34,11 @@ const SelectPlan = memo(({onChangePlanSelected, plan }: SelectPlanProps) => {
   return (
     <>
       <Grid justifyContent="center" className={classes.titleSelectPlan}>
-        <Heading1 className={classes.title} $colorName={"--cimigo-blue"} translation-key="project_create_tab_plan_select_plan_title">
+        <Heading1
+          className={classes.title}
+          $colorName={"--cimigo-blue"}
+          translation-key="project_create_tab_plan_select_plan_title"
+        >
           {t("project_create_tab_plan_select_plan_title")}
         </Heading1>
         <Grid className={classes.titleSelectPlan}>

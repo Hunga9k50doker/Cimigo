@@ -104,9 +104,8 @@ const CreateProjectStep = memo(
           );
         })
         .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() =>dispatch(setLoading(false)));
+        .finally(() => dispatch(setLoading(false)));
     };
-
     return (
       <Container maxWidth="sm" className={classes.bodyContent}>
         <Grid justifyContent="center">

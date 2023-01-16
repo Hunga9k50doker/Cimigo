@@ -15,8 +15,6 @@ import { useTranslation } from "react-i18next";
 import HomeIcon from "@mui/icons-material/Home";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Helmet } from "react-helmet";
-import { isEmpty } from "lodash";
-
 import QontoStepIcon from "../components/QontoStepIcon";
 import { SolutionService } from "services/solution";
 import { Solution } from "models/Admin/solution";
@@ -166,15 +164,23 @@ const CreateProject = () => {
   }, [activeStep]);
 
   return (
-    <BasicLayout className={classes.root} HeaderProps={{ project: true }}>
+    <BasicLayout
+      className={classes.root}
+      HeaderProps={{ project: true }}
+    >
       <Helmet>
         <title>RapidSurvey - Create new project</title>
       </Helmet>
       <Grid className={classes.container}>
         <div className={classes.linkTextHome}>
-          <HomeIcon className={classes.icHome} onClick={() => history.push(routes.project.management)}></HomeIcon>
+          <HomeIcon
+            className={classes.icHome}
+            onClick={() => history.push(routes.project.management)}
+          ></HomeIcon>
           <ArrowForwardIosIcon className={classes.icHome}></ArrowForwardIosIcon>
-          <SubTitle $colorName={"--cimigo-green-dark-2"} translation-key="header_projects">
+          <SubTitle
+            $colorName={"--cimigo-green-dark-2"}
+            translation-key="header_projects">
             {t("header_projects")}
           </SubTitle>
         </div>
@@ -203,20 +209,33 @@ const CreateProject = () => {
                     label: classes.rootStepLabel,
                   }}
                 >
-                  {item.name} {!isMobile && <ParagraphExtraSmall $colorName={"--gray-60"}>{stepLabel(item.id)}</ParagraphExtraSmall>}
+                  {item.name}{" "}
+                  {!isMobile &&
+                    <ParagraphExtraSmall $colorName={"--gray-60"}>
+                      {stepLabel(item.id)}
+                    </ParagraphExtraSmall>}
                 </StepLabel>
               </Step>
             );
           })}
         </Stepper>
         {activeStep === EStep.SELECT_SOLUTION && (
-          <SolutionList solutionShow={solutionShow} onChangeSolution={onChangeSolution} handleNextStep={handleNextStep} />
+          <SolutionList
+            solutionShow={solutionShow}
+            onChangeSolution={onChangeSolution}
+            handleNextStep={handleNextStep} />
         )}
-        {activeStep === EStep.SELECT_PLAN &&
-          !isEmpty(plan) && (<SelectPlan plan={plan} onChangePlanSelected={onChangePlanSelected} />
+        {activeStep === EStep.SELECT_PLAN && (
+          <SelectPlan
+            plan={plan}
+            onChangePlanSelected=
+            {onChangePlanSelected} />
         )}
         {activeStep === EStep.CREATE_PROJECT && (
-          <CreateProjectStep solutionSelected={solutionSelected} planSelected={planSelected} onClickHandleBack={onClickHandleBack} />
+          <CreateProjectStep
+            solutionSelected={solutionSelected}
+            planSelected={planSelected}
+            onClickHandleBack={onClickHandleBack} />
         )}
       </Grid>
     </BasicLayout>
