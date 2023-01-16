@@ -55,8 +55,16 @@ const SelectPlan = memo(({onChangePlanSelected, plan }: SelectPlanProps) => {
       <div>
         {
           plan?.data?.length > 2
-            ? <ListPlanGreaterTwo plan={plan} onChangePlanSelected={handleChangeSelected} formatMoney={formatMoney} />
-            : <ListPlanTwoOrLess plan={plan} onChangePlanSelected={handleChangeSelected} formatMoney={formatMoney}/>
+            ? <ListPlanGreaterTwo
+                plan={plan}
+                onChangePlanSelected={handleChangeSelected}
+                formatMoney={formatMoney}
+              />
+            : <ListPlanTwoOrLess
+                plan={plan}
+                onChangePlanSelected={handleChangeSelected}
+                formatMoney={formatMoney}
+              />
         }
       </div>
     </>
