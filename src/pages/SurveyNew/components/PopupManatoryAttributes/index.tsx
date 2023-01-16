@@ -81,7 +81,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
                             />
                         </Grid>
                         <Grid item>
-                          <ParagraphBody $colorName="--eerie-black">{item.content}</ParagraphBody>
+                          <ParagraphBody $colorName="--cimigo-theme-light-on-surface">{item.content}</ParagraphBody>
                         </Grid>
                       </Grid>
                     </ListItemText>
@@ -96,13 +96,13 @@ const PopupManatoryAttributes = memo((props: Props) => {
                             />
                         </Grid>
                         <Grid item xs={4} className={classes.listTextLeft}>
-                          <ParagraphBody $colorName="--eerie-black">{item.start}</ParagraphBody>
+                          <ParagraphBody $colorName="--cimigo-theme-light-on-surface">{item.start}</ParagraphBody>
                         </Grid>
                         <Grid item xs={4} className={classes.arrowBreak}>
                           <ArrowBreak sx={{color: "var(--gray-20)", width: "40px"}}/>
                         </Grid>
                         <Grid item xs={4} className={classes.listTextRight}>
-                          <ParagraphBody $colorName="--eerie-black">{item.end}</ParagraphBody>
+                          <ParagraphBody $colorName="--cimigo-theme-light-on-surface">{item.end}</ParagraphBody>
                         </Grid>
                       </Grid>
                     </ListItemText>
