@@ -50,7 +50,7 @@ const SelectPlan = memo(({onChangePlanSelected, plan }: SelectPlanProps) => {
       <div className={classes.selectTypePrice}></div>
       <div>
         {
-          plan?.data?.length === 2
+          plan?.data?.length > 2
             ? <ListPlanGreaterTwo plan={plan} onChangePlanSelected={handleChangeSelected} formatMoney={formatMoney} />
             : <ListPlanTwoOrLess plan={plan} onChangePlanSelected={handleChangeSelected} formatMoney={formatMoney}/>
         }
