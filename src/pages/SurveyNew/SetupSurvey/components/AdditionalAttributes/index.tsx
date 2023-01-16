@@ -27,6 +27,7 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import PopupConfirmDelete from "components/PopupConfirmDelete"
 import ArrowBreak from "components/icons/IconArrowBreak"
 import EditSquare from "components/icons/IconEditSquare"
+import CheckList from "components/icons/IconCheckList"
 import ParagraphBodyUnderline from "components/common/text/ParagraphBodyUnderline"
 import clsx from "clsx"
 
@@ -238,7 +239,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
             alignItems="center"
             component="div"
             key={index}
-            className={clsx(classes.rootListItem, {[classes.notDisplayed]: index > 4 && !showMoreAttributes})}
+            className={clsx(classes.rootListItem, { [classes.notDisplayed]: index > 4 && !showMoreAttributes })}
             secondaryAction={
               <div className={classes.btnAction}>
                 {editable && (
@@ -262,7 +263,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
                 <Grid display="flex" alignItems="center">
                   <Grid className={classes.iconEditSquareWrapper}>
                     {editable && item.type === AttributeShowType.User && (
-                      <EditSquare sx={{color: "var(--gray-40)", width: "16px", height: "16px"}}/>
+                      <EditSquare sx={{ color: "var(--gray-40)", width: "16px", height: "16px" }} />
                     )}
                   </Grid>
                   <Grid item>
@@ -275,14 +276,14 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
                 <Grid display="flex" alignItems="center" justifyContent="center">
                   <Grid className={classes.iconEditSquareWrapper}>
                     {editable && item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
-                      <EditSquare sx={{color: "var(--gray-40)", width: "16px", height: "16px"}}/>
+                      <EditSquare sx={{ color: "var(--gray-40)", width: "16px", height: "16px" }} />
                     )}
                   </Grid>
                   <Grid className={classes.listTextLeft}>
                     <ParagraphSmall $colorName="--eerie-black">{item.start}</ParagraphSmall>
                   </Grid>
                   <Grid className={classes.listNumber}>
-                    <ArrowBreak sx={{color: "var(--gray-20)", width: "40px"}}/>
+                    <ArrowBreak sx={{ color: "var(--gray-20)", width: "40px" }} />
                   </Grid>
                   <Grid className={classes.listTextRight}>
                     <ParagraphSmall $colorName="--
@@ -294,7 +295,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
           </ListItem>
         ))}
         {attributes.length > 5 && (
-          <ParagraphBodyUnderline sx={{margin: "8px 0 0 16px"}} onClick={onShowMoreAttributes}>
+          <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes}>
             {showMoreAttributes ? "- 1 less attribute" : "+ 1 more attribute"}
           </ParagraphBodyUnderline>
         )}
@@ -303,7 +304,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
       {/* =======start mobile===== */}
       <Grid className={classes.rootListMobile} mt={3}>
         {attributes?.map((item, index) => (
-          <Accordion key={index} className={clsx(classes.itemListMobile, {[classes.notDisplayed]: index > 4 && !showMoreAttributes})}>
+          <Accordion key={index} className={clsx(classes.itemListMobile, { [classes.notDisplayed]: index > 4 && !showMoreAttributes })}>
             <AccordionSummary
               expandIcon={<ExpandMore />}
             >
@@ -354,7 +355,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
           </Accordion>
         ))}
         {attributes.length > 5 && (
-          <ParagraphBodyUnderline sx={{margin: "8px 0 0 16px"}} onClick={onShowMoreAttributes}>
+          <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes}>
             {showMoreAttributes ? "- 1 less attribute" : "+ 1 more attribute"}
           </ParagraphBodyUnderline>
         )}
@@ -375,11 +376,17 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
         open={Boolean(anchorElMenuAttributes)}
         onClose={handleCloseMenuAttributes}
       >
-        <MenuItem onClick={onOpenPopupPreDefined}>
-          <ParagraphBody translation-key="setup_survey_add_att_menu_action_from_pre_defined_list" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_from_pre_defined_list')}</ParagraphBody>
+        <MenuItem onClick={onOpenPopupPreDefined} className={classes.itemItemAddAttributeWrapper}>
+          <ParagraphBody translation-key="setup_survey_add_att_menu_action_from_pre_defined_list" className={classes.itemAddAttribute}>
+            <CheckList sx={{ color: "var(--gray-80)", width: "16px", height: "16px", marginRight: "12px", verticalAlign: "middle" }} />
+            {t('setup_survey_add_att_menu_action_from_pre_defined_list')}
+          </ParagraphBody>
         </MenuItem>
-        <MenuItem onClick={onOpenPopupAddAttributes}>
-          <ParagraphBody translation-key="setup_survey_add_att_menu_action_your_own_attribute" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_your_own_attribute')}</ParagraphBody>
+        <MenuItem onClick={onOpenPopupAddAttributes} className={classes.itemItemAddAttributeWrapper}>
+          <ParagraphBody translation-key="setup_survey_add_att_menu_action_your_own_attribute" className={classes.itemAddAttribute}>
+            <EditSquare sx={{ color: "var(--gray-80)", width: "16px", height: "16px", marginRight: "12px", verticalAlign: "middle" }} />
+            {t('setup_survey_add_att_menu_action_your_own_attribute')}
+          </ParagraphBody>
         </MenuItem>
       </Menu>
       {!enableAdditionalAttributes && (
