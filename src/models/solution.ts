@@ -17,9 +17,11 @@ export interface UserGetSolutionCategories {
 export enum ESOLUTION_TYPE {
   PACK = 1,
   VIDEO_CHOICE = 2,
+  BRAND_TRACKING = 3
 }
 
 export const solutionTypes: OptionItem[] = [
   { id: ESOLUTION_TYPE.PACK, name: 'Pack test' },
-  { id: ESOLUTION_TYPE.VIDEO_CHOICE, name: 'Video choice' }
+  { id: ESOLUTION_TYPE.VIDEO_CHOICE, name: 'Video choice' },
+  { id: ESOLUTION_TYPE.BRAND_TRACKING, name: 'Brand tracking' }
 ]
