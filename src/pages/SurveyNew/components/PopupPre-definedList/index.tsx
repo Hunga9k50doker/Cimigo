@@ -148,14 +148,18 @@ const PopupPreDefinedList = memo((props: Props) => {
               return (
                 <div key={index}>
                   <ListItemButton classes={{ root: clsx(classes.rootListItem, { [classes.firstRootListItem]: index === 0 }) }} onClick={() => handleCollapse(item.category?.id)}>
-                    <ListItemText classes={{ root: clsx(classes.attributeTitle, { [classes.categorySelected]: openCategories[item.category?.id ?? 0] }) }} translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_other_category`} primary={item.category?.name || t(`${prefix_trans}_setup_survey_popup_pre_defined_other_category`)} />
-                    <div className={classes.numberOfAttibute}>
-                      <Chip
-                        sx={{ height: 24, backgroundColor: "var(--cimigo-blue-light-4)", "& .MuiChip-label": { px: 2 } }}
-                        label={<ParagraphSmall $colorName="--cimigo-blue-dark-1" $fontWeight="600">{item.attributes.length}</ParagraphSmall>}
-                        color="secondary"
-                      />
-                    </div>
+                    <ListItemText classes={{ root: clsx({[classes.attributeTitle]: !openCategories[item.category?.id ?? 0], [classes.categorySelected]: openCategories[item.category?.id ?? 0] }) }} translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_other_category`} primary={item.category?.name || t(`${prefix_trans}_setup_survey_popup_pre_defined_other_category`)} />
+                    {
+                      !openCategories[item.category?.id ?? 0] && (
+                        <div className={classes.numberOfAttibute}>
+                          <Chip
+                            sx={{ height: 24, backgroundColor: "var(--cimigo-blue-light-4)", "& .MuiChip-label": { px: 2 } }}
+                            label={<ParagraphSmall $colorName="--cimigo-blue-dark-1" $fontWeight="600">{item.attributes.length}</ParagraphSmall>}
+                            color="secondary"
+                          />
+                        </div>
+                      )
+                    }
                     {
                       getNumberOfAttributesSelected(item.attributes) > 0 &&
                       (
