@@ -101,17 +101,6 @@
   padding-right: 16px;
 }
 
-.rootCheckboxIcon {
-  &:hover {
-    color: var(--cimigo-blue);
-  }
-}
-
-.rootCheckboxCheckedIcon {
-  color: var(--white);
-  background: var(--cimigo-blue);
-}
-
 .dialogActionsWrapper {
   border-top: 1px solid var(--gray-20);
   @media only screen and (max-width: 767px) {

@@ -179,8 +179,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                                     disabled={isDisabled(item)}
                                     checked={attributesSelected.includes(item.id)}
                                     classes={{ root: classes.rootCheckbox }}
-                                    iconClassName={classes.rootCheckboxIcon}
-                                    checkedIconClassName={classes.rootCheckboxCheckedIcon}
+                                    checkboxColorType="blue"
                                   />
                                 </Grid>
                                 <Grid item>
@@ -196,8 +195,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                                     disabled={isDisabled(item)}
                                     checked={attributesSelected.includes(item.id)}
                                     classes={{ root: classes.rootCheckbox }}
-                                    iconClassName={classes.rootCheckboxIcon}
-                                    checkedIconClassName={classes.rootCheckboxCheckedIcon}
+                                    checkboxColorType="blue"
                                   />
                                 </Grid>
                                 <Grid item xs={4} className={classes.listTextLeft}>

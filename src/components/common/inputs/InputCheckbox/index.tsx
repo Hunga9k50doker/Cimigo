@@ -6,15 +6,14 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import clsx from "clsx";
 interface Props extends CheckboxProps {
   cleanPadding?: boolean;
-  iconClassName?: string;
-  checkedIconClassName?: string;
+  checkboxColorType?: string;
 }
 
-const InputCheckbox = memo(({ cleanPadding, iconClassName, checkedIconClassName, ...rest}: Props) => {
+const InputCheckbox = memo(({ cleanPadding, checkboxColorType, ...rest}: Props) => {
   return <Checkbox
     className={clsx(classes.root, {[classes.cleanPadding]: cleanPadding})}
-    icon={<CheckBoxOutlineBlankIcon className={clsx(classes.icon, iconClassName)} />}
-    checkedIcon={<CheckIcon className={clsx(classes.checkIcon, checkedIconClassName)} fontSize="small" />}
+    icon={<CheckBoxOutlineBlankIcon className={clsx(classes.icon, {[classes.blueCheckboxIcon]: checkboxColorType === "blue"})} />}
+    checkedIcon={<CheckIcon className={clsx(classes.checkIcon, {[classes.blueCheckboxCheckIcon]: checkboxColorType === "blue"})} fontSize="small" />}
     {...rest}
   />
 })

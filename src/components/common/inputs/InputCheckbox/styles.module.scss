@@ -34,3 +34,13 @@
   }
 }
 
+.blueCheckboxIcon {
+  &:hover {
+    color: var(--cimigo-blue);
+  }
+}
+
+.blueCheckboxCheckIcon {
+  color: var(--white);
+  background: var(--cimigo-blue);
+}
