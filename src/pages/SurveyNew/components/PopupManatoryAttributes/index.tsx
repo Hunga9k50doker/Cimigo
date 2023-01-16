@@ -9,10 +9,9 @@ import {DialogTitle} from "components/common/dialogs/DialogTitle";
 import { DialogContent } from "components/common/dialogs/DialogContent";
 import Heading3 from "components/common/text/Heading3";
 import ButtonClose from "components/common/buttons/ButtonClose";
-import ParagraphExtraSmall from 'components/common/text/ParagraphExtraSmall';
 import ParagraphBody from 'components/common/text/ParagraphBody';
 import clsx from 'clsx';
-import { ExpandLess, ExpandMore, Info } from '@mui/icons-material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import Heading5 from 'components/common/text/Heading5';
 import { AttributeContentType } from 'models/user_attribute';
 import ArrowBreak from 'components/icons/IconArrowBreak';
@@ -82,7 +81,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
                             />
                         </Grid>
                         <Grid item>
-                          <ParagraphExtraSmall $colorName="--eerie-black">{item.content}</ParagraphExtraSmall>
+                          <ParagraphBody $colorName="--eerie-black">{item.content}</ParagraphBody>
                         </Grid>
                       </Grid>
                     </ListItemText>
@@ -97,13 +96,13 @@ const PopupManatoryAttributes = memo((props: Props) => {
                             />
                         </Grid>
                         <Grid item xs={4} className={classes.listTextLeft}>
-                          <ParagraphExtraSmall $colorName="--eerie-black">{item.start}</ParagraphExtraSmall>
+                          <ParagraphBody $colorName="--eerie-black">{item.start}</ParagraphBody>
                         </Grid>
                         <Grid item xs={4} className={classes.arrowBreak}>
                           <ArrowBreak sx={{color: "var(--gray-20)", width: "40px"}}/>
                         </Grid>
                         <Grid item xs={4} className={classes.listTextRight}>
-                          <ParagraphExtraSmall $colorName="--eerie-black">{item.end}</ParagraphExtraSmall>
+                          <ParagraphBody $colorName="--eerie-black">{item.end}</ParagraphBody>
                         </Grid>
                       </Grid>
                     </ListItemText>

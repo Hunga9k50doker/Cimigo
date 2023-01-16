@@ -93,7 +93,7 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
           </ButtonClose>
         </DialogTitle>
         <DialogContent className={classes.body} dividers>
-          <ParagraphSmall $colorName="--eerie-black" translation-key={`${prefix_trans}_setup_survey_popup_your_own_att_sub_title`}>{t(`${prefix_trans}_setup_survey_popup_your_own_att_sub_title`)}</ParagraphSmall>
+          <ParagraphBody $colorName="--eerie-black" translation-key={`${prefix_trans}_setup_survey_popup_your_own_att_sub_title`}>{t(`${prefix_trans}_setup_survey_popup_your_own_att_sub_title`)}</ParagraphBody>
           <Grid container classes={{ root: classes.rootList }}>
             <ListItem
               alignItems="center"
