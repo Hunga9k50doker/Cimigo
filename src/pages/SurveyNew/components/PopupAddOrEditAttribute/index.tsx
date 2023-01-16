@@ -1,5 +1,5 @@
-import { memo, useState, useEffect, useMemo } from 'react';
-import { Collapse, Dialog, Grid, ListItem, ListItemText, InputAdornment, Tooltip } from '@mui/material';
+import { memo, useEffect, useMemo } from 'react';
+import { Dialog, Grid, ListItem, ListItemText, InputAdornment, Tooltip } from '@mui/material';
 import classes from './styles.module.scss';
 import { UserAttribute } from 'models/user_attribute';
 import * as yup from 'yup';
@@ -46,12 +46,6 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
-  const [expanded, setExpanded] = useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
   const { register, handleSubmit, formState: { errors }, reset } = useForm<UserAttributeFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange'
@@ -66,7 +60,6 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
       reset({
         content: '',
       })
-      setExpanded(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdd, itemEdit])
@@ -137,25 +130,24 @@ const PopupAddOrEditAttribute = memo((props: Props) => {
             </ListItem>
           </Grid>
           <Grid className={classes.tips}>
-            <Tip sx={{color: expanded ? "var(--gray-60)" : "var(--cimigo-blue)", width: "14px", height: "20px", marginTop: "2px"}}/>
-            <div style={{ display: expanded ? "flex" : "none" }}className={classes.border}/>
-            <Grid className={classes.collapse} > 
+            <Tip sx={{color: "var(--gray-60)", width: "14px", height: "20px", margin: "2px 5px 0 0"}}/>
+            <div className={classes.border}/>
+            <Grid className={classes.tipsDescription} > 
               <Heading6
-                onClick={handleExpandClick}
                 style={{
-                  color: expanded ? "var(--gray-80)" : "var(--cimigo-blue)",
-                  marginLeft: expanded ? "0px" : "12px"
+                  color: "var(--gray-80)",
+                  marginLeft: "0px"
                 }}
                 $fontWeight="700"
                 translation-key={`${prefix_trans}_setup_survey_popup_your_own_att_tip_title`}
               >
                 {t(`${prefix_trans}_setup_survey_popup_your_own_att_tip_title`)}:
               </Heading6>
-              <Collapse in={expanded} timeout="auto" unmountOnExit>
+              <div>
                 <ParagraphSmall className={classes.itemTip}><span className={classes.itemDotTip} translation-key={`${prefix_trans}_setup_survey_popup_your_own_att_tip_description_1`}></span>{t(`${prefix_trans}_setup_survey_popup_your_own_att_tip_description_1`)}</ParagraphSmall>
                 <ParagraphSmall className={classes.itemTip}><span className={classes.itemDotTip} translation-key={`${prefix_trans}_setup_survey_popup_your_own_att_tip_description_2`}></span>{t(`${prefix_trans}_setup_survey_popup_your_own_att_tip_description_2`)}</ParagraphSmall>
                 <ParagraphSmall className={classes.itemTip}><span className={classes.itemDotTip} translation-key={`${prefix_trans}_setup_survey_popup_your_own_att_tip_description_3`}></span>{t(`${prefix_trans}_setup_survey_popup_your_own_att_tip_description_3`)}</ParagraphSmall>
-              </Collapse>
+              </div>
             </Grid>
           </Grid>
         </DialogContent>
