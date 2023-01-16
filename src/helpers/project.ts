@@ -13,6 +13,10 @@ export const editableProject = (project: Project) => {
 }
 export class ProjectHelper {
 
+  static getPrefixTrans = (solutionType?: number) => {
+    return `solution_type_${solutionType || ESOLUTION_TYPE.PACK}`
+  }
+
   static getExpectedDelivery = (project: Project) => {
     return project?.sampleSize <= 500 ? 10 : 15
   }

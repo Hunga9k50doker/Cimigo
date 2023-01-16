@@ -21,6 +21,7 @@ import { ExpandLess, ExpandMore, UnfoldMore, UnfoldLess } from '@mui/icons-mater
 import _ from 'lodash';
 import { AttributeContentType } from 'models/user_attribute';
 import ArrowBreak from 'components/icons/IconArrowBreak';
+import ProjectHelper from 'helpers/project';
 
 interface Props {
   isOpen: boolean,
@@ -115,6 +116,8 @@ const PopupPreDefinedList = memo((props: Props) => {
     handleCollapseAll()
   }, [listCategories])
 
+  const prefix_trans = useMemo(() => ProjectHelper.getPrefixTrans(project?.solution?.typeId), [project?.solution?.typeId])
+
   return (
     <Dialog
       scroll="paper"
@@ -123,19 +126,19 @@ const PopupPreDefinedList = memo((props: Props) => {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle $backgroundColor="--white">
-        <Heading3 $colorName="--gray-90">Add attributes</Heading3>
+        <Heading3 $colorName="--gray-90" translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_title`}>{t(`${prefix_trans}_setup_survey_popup_pre_defined_title`)}</Heading3>
         <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onClose}>
         </ButtonClose>
       </DialogTitle>
       <DialogContent className={classes.body} dividers>
-        <ParagraphBody $colorName="--eerie-black" translation-key="setup_survey_add_att_popup_pre_defined_sub_title">{t('setup_survey_add_att_popup_pre_defined_sub_title')}</ParagraphBody>
+        <ParagraphBody $colorName="--eerie-black" translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_sub_title`}>{t(`${prefix_trans}_setup_survey_popup_pre_defined_sub_title`)}</ParagraphBody>
         <ParagraphSmall $colorName="--gray-80" className={classes.unfoldWrapper}>
-          <div className={classes.unfoldItemWrapper} onClick={handleExpandAll}>
-            <UnfoldMore /> Expand all
+          <div className={classes.unfoldItemWrapper} onClick={handleExpandAll} translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_expand_all`}>
+            <UnfoldMore /> {t(`${prefix_trans}_setup_survey_popup_pre_defined_expand_all`)}
           </div>
           <div className={classes.lineDivide}></div>
-          <div className={classes.unfoldItemWrapper} onClick={handleCollapseAll}>
-            <UnfoldLess /> Collapse all
+          <div className={classes.unfoldItemWrapper} onClick={handleCollapseAll} translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_collapse_all`}>
+            <UnfoldLess /> {t(`${prefix_trans}_setup_survey_popup_pre_defined_collapse_all`)}
           </div>
         </ParagraphSmall>
 
@@ -145,7 +148,7 @@ const PopupPreDefinedList = memo((props: Props) => {
               return (
                 <div key={index}>
                   <ListItemButton classes={{ root: clsx(classes.rootListItem, { [classes.firstRootListItem]: index === 0 }) }} onClick={() => handleCollapse(item.category?.id)}>
-                    <ListItemText classes={{ root: clsx(classes.attributeTitle, { [classes.categorySelected]: openCategories[item.category?.id ?? 0] }) }} primary={item.category?.name || "Other"} />
+                    <ListItemText classes={{ root: clsx(classes.attributeTitle, { [classes.categorySelected]: openCategories[item.category?.id ?? 0] }) }} translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_other_category`} primary={item.category?.name || t(`${prefix_trans}_setup_survey_popup_pre_defined_other_category`)} />
                     <Chip
                       sx={{ height: 24, backgroundColor: "var(--cimigo-blue-light-4)", "& .MuiChip-label": { px: 2 } }}
                       label={<ParagraphSmall $colorName="--cimigo-blue-dark-1">{item.attributes.length}</ParagraphSmall>}
@@ -155,7 +158,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                     {
                       getNumberOfAttributesSelected(item.attributes) > 0 &&
                       (
-                        <ParagraphSmall $colorName="--cimigo-blue" className={classes.numberOfSelected}>{getNumberOfAttributesSelected(item.attributes)} selected</ParagraphSmall>
+                        <ParagraphSmall $colorName="--cimigo-blue" className={classes.numberOfSelected} translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_number_att_selected`}>{t(`${prefix_trans}_setup_survey_popup_pre_defined_number_att_selected`, { number: getNumberOfAttributesSelected(item.attributes) })}</ParagraphSmall>
                       )
                     }
                     {openCategories[item.category?.id ?? 0] ? <ExpandLess /> : <ExpandMore />}
@@ -221,9 +224,9 @@ const PopupPreDefinedList = memo((props: Props) => {
         </Grid>
       </DialogContent>
       <DialogActions className={classes.dialogActionsWrapper}>
-        <ParagraphSmall $colorName="--cimigo-blue-dark-2" className={classes.remaining}>Remaining: {maxSelect - attributesSelected.length}</ParagraphSmall>
+        <ParagraphSmall $colorName="--cimigo-blue-dark-2" className={classes.remaining} translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_number_att_remaining`}>{t(`${prefix_trans}_setup_survey_popup_pre_defined_number_att_remaining`, { number: maxSelect - attributesSelected.length })}</ParagraphSmall>
         <Button className={clsx(classes.btn, classes.hideOnMobile)} children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onClose} />
-        <Button className={clsx(classes.btn, classes.btnAdd)} children="Add" btnType={BtnType.Raised} onClick={_onSubmit} />
+        <Button className={clsx(classes.btn, classes.btnAdd)} children={t('common_add')} translation-key="common_add" btnType={BtnType.Raised} onClick={_onSubmit} />
         <Button className={clsx(classes.btn, classes.hideOnDesktop)} children={t('common_cancel')} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onClose} />
       </DialogActions>
     </Dialog>
