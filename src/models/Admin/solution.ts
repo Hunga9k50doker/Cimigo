@@ -49,6 +49,16 @@ export interface Solution {
   minAdditionalBrand: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;
+  minMainBrand: number;
+  maxMainBrand: number;
+  minCompetingBrand: number;
+  maxCompetingBrand: number;
+  minCompetitiveBrand: number;
+  maxCompetitiveBrand: number;
+  minEquityAttributes: number;
+  maxEquityAttributes: number;
+  minBrandAssetRecognition: number;
+  maxBrandAssetRecognition: number;
   maxCustomQuestion: number;
   enableCustomQuestion: boolean;
   enableEyeTracking: boolean;
