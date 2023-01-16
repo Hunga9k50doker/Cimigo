@@ -38,15 +38,15 @@
   &:hover {
     background-color: unset;
   }
-}
 
-.blueCheckboxIcon {
-  &:hover {
-    color: var(--cimigo-blue);
+  & > .icon {
+    &:hover {
+      color: var(--cimigo-blue);
+    }
   }
-}
 
-.blueCheckboxCheckIcon {
-  color: var(--white);
-  background: var(--cimigo-blue);
+  & > .checkIcon {
+    color: var(--white);
+    background: var(--cimigo-blue);
+  }
 }
