@@ -186,7 +186,7 @@ const PopupPreDefinedList = memo((props: Props) => {
                                   />
                                 </Grid>
                                 <Grid item>
-                                  <ParagraphExtraSmall $colorName="--eerie-black">{item.content}</ParagraphExtraSmall>
+                                  <ParagraphBody $colorName="--eerie-black">{item.content}</ParagraphBody>
                                 </Grid>
                               </Grid>
                             </ListItemText>
@@ -202,13 +202,13 @@ const PopupPreDefinedList = memo((props: Props) => {
                                   />
                                 </Grid>
                                 <Grid item xs={4} className={classes.listTextLeft}>
-                                  <ParagraphExtraSmall $colorName="--eerie-black">{item.start}</ParagraphExtraSmall>
+                                  <ParagraphBody $colorName="--eerie-black">{item.start}</ParagraphBody>
                                 </Grid>
                                 <Grid item xs={4} className={classes.arrowBreak}>
                                   <ArrowBreak sx={{ color: "var(--gray-20)", width: "40px" }} />
                                 </Grid>
                                 <Grid item xs={4} className={classes.listTextRight}>
-                                  <ParagraphExtraSmall $colorName="--eerie-black">{item.end}</ParagraphExtraSmall>
+                                  <ParagraphBody $colorName="--eerie-black">{item.end}</ParagraphBody>
                                 </Grid>
                               </Grid>
                             </ListItemText>

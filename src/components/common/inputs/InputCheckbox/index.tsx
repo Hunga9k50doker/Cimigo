@@ -11,7 +11,7 @@ interface Props extends CheckboxProps {
 
 const InputCheckbox = memo(({ cleanPadding, checkboxColorType, ...rest}: Props) => {
   return <Checkbox
-    className={clsx(classes.root, {[classes.cleanPadding]: cleanPadding})}
+    className={clsx(classes.root, {[classes.cleanPadding]: cleanPadding}, {[classes.blueRoot]: checkboxColorType === "blue"})}
     icon={<CheckBoxOutlineBlankIcon className={clsx(classes.icon, {[classes.blueCheckboxIcon]: checkboxColorType === "blue"})} />}
     checkedIcon={<CheckIcon className={clsx(classes.checkIcon, {[classes.blueCheckboxCheckIcon]: checkboxColorType === "blue"})} fontSize="small" />}
     {...rest}
