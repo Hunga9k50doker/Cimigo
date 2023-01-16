@@ -76,15 +76,16 @@
   }
 }
 .numberOfAttibute {
-  border-radius: 4px;
-  span {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
+  flex: 1;
+  div {
+    border-radius: 4px;
+    span {
+      padding-left: 8px !important;
+      padding-right: 8px !important;
+    }
   }
 }
 .numberOfSelected {
-  flex: 1;
-  text-align: end;
   padding-right: 16px;
 }
 .disabled {

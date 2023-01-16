@@ -59,7 +59,7 @@ const PopupManatoryAttributes = memo((props: Props) => {
         <Grid container sx={{paddingTop:"24px"}} classes={{ root: classes.rootList }}>
           <ListItemButton classes={{ root: clsx(classes.rootListItem) }} onClick={()=>{setIsExpand(!isExpand)}}>
             <Heading5 $fontWeight={400} className={clsx(classes.listItemTitle, {[classes.selected]: isExpand})} translation-key={`${prefix_trans}_setup_survey_popup_m_att_title`}>{t(`${prefix_trans}_setup_survey_popup_m_att_title`)}</Heading5>
-            {isExpand ? <ExpandLess /> : <ExpandMore />}
+            {isExpand ? <ExpandLess sx={{color: "var(--gray-90)"}} /> : <ExpandMore sx={{color: "var(--gray-50)"}} />}
           </ListItemButton>
           <Collapse in={isExpand} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
