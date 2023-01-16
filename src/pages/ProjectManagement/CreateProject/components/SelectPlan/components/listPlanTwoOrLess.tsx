@@ -1,9 +1,9 @@
 import Grid from "@mui/material/Grid";
-import { memo, useCallback } from "react";
-import classes from "./styles.module.scss";
+import { memo } from "react";
+import classes from "../styles.module.scss";
 import { Plan } from "models/Admin/plan";
 import Heading1 from "components/common/text/Heading1";
-import { DataPagination, ECurrency, currencySymbol } from "models/general";
+import { DataPagination} from "models/general";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -13,56 +13,22 @@ import CardActions from "@mui/material/CardActions";
 import Button, { BtnType } from "components/common/buttons/Button";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
-import { Solution } from "models/Admin/solution";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
-import useAuth from "hooks/useAuth";
-import { IconNextOutline } from "components/icons";
 
 interface SelectPlanProps {
-  solution?: Solution;
   plan?: DataPagination<Plan>;
   onChangePlanSelected?: (plan: Plan) => void;
+  formatMoney?: (plan: Plan) => any;
+    
 }
-const SelectPlanNewStyle = memo(({ solution, onChangePlanSelected, plan }: SelectPlanProps) => {
-  const { t } = useTranslation();
-  const { user } = useAuth();
-  const formatMoney = useCallback(
-    (plan: Plan) => {
-      switch (user?.currency) {
-        case ECurrency.VND:
-          return `${currencySymbol[ECurrency.VND].first}${plan.priceVND}${currencySymbol[ECurrency.VND].last}`;
-        case ECurrency.USD:
-          return `${currencySymbol[ECurrency.USD].first}${plan.priceUSD}${currencySymbol[ECurrency.USD].last}`;
-      }
-    },
-    [user?.currency]
-  );
-
-  const onClick = (plan: Plan) => {
-    onChangePlanSelected(plan);
-  };
-
+// style plan have >= 3 options
+const ListPlanTwoOrLess = memo(({formatMoney, onChangePlanSelected, plan }: SelectPlanProps) => {
+    const { t } = useTranslation();
+    
   return (
-    <>
-      <Grid justifyContent="center" className={classes.titleSelectPlan}>
-        <Heading1 className={classes.title} $colorName={"--cimigo-blue"} translation-key="project_create_tab_plan_select_plan_title">
-          {t("project_create_tab_plan_select_plan_title")}
-        </Heading1>
-        <Grid className={classes.titleSelectPlan}>
-          <ParagraphBody
-            $colorName={"--eerie-black"}
-            translation-key="project_create_tab_plan_description_plan"
-            dangerouslySetInnerHTML={{
-              __html: t("project_create_tab_plan_description_plan"),
-            }}
-          ></ParagraphBody>
-        </Grid>
-      </Grid>
-      <div className={classes.selectTypePrice}></div>
-      <div>
-        <Grid container columnSpacing={4} className={classes.body} justifyContent="center">
+      <Grid container columnSpacing={4} className={classes.body} justifyContent="center">
           {plan?.data.map((plan) => {
             return (
               <Grid
@@ -72,10 +38,11 @@ const SelectPlanNewStyle = memo(({ solution, onChangePlanSelected, plan }: Selec
                 })}
                 item
                 xs={12}
-                md={8}
-                lg={7}
+                md={6}
+                lg={4}
               >
                 <Grid
+                  pt={4}
                   className={clsx(classes.layoutCard, {
                     [classes.layoutCardPopular]: plan?.isMostPopular,
                   })}
@@ -90,7 +57,7 @@ const SelectPlanNewStyle = memo(({ solution, onChangePlanSelected, plan }: Selec
                   <Card sx={{ minWidth: 300 }} className={classes.cardPlan}>
                     <CardContent className={classes.cardCustom}>
                       <Grid container px={1}>
-                        <Grid xs={6}>
+                        <Grid xs={12}>
                           <Typography>
                             <Heading3 $fontWeight={"500"} $colorName={"--eerie-black-00"} variant="body2" variantMapping={{ body2: "span" }}>
                               {plan.title}
@@ -131,25 +98,12 @@ const SelectPlanNewStyle = memo(({ solution, onChangePlanSelected, plan }: Selec
                             </ParagraphExtraSmall>
                           </Typography>
                         </Grid>
-                        <Grid xs={6} display="flex" justifyContent="end" alignItems="center">
-                          <CardActions className={classes.itemCenter}>
-                            <Button
-                              fullWidth
-                              btnType={BtnType.Raised}
-                              translation-key="setup_survey_popup_save_question_title"
-                              children={<TextBtnSecondary translation-key="common_start">{t("common_start")}</TextBtnSecondary>}
-                              className={classes.btnSave}
-                              onClick={() => onClick(plan)}
-                              endIcon={<IconNextOutline />}
-                            />
-                          </CardActions>
-                        </Grid>
                       </Grid>
                       <Typography variant="body2" variantMapping={{ body2: "div" }}>
                         <div className={classes.line}></div>
                       </Typography>
                       <Grid className={classes.contentInPlan} container px={1}>
-                        <Grid className={classes.contentPlan} xs={6}>
+                        <Grid className={classes.contentPlan} xs={12}>
                           <DoneIcon className={classes.iconContentPlan} />
                           <ParagraphBody
                             ml={1.5}
@@ -163,7 +117,7 @@ const SelectPlanNewStyle = memo(({ solution, onChangePlanSelected, plan }: Selec
                         </Grid>
                         {plan?.content.map((item, index) => {
                           return (
-                            <Grid className={classes.contentPlan} key={index} xs={6}>
+                            <Grid className={classes.contentPlan} key={index} xs={12}>
                               <DoneIcon className={classes.iconContentPlan} />
                               <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"}>
                                 {item}
@@ -173,14 +127,23 @@ const SelectPlanNewStyle = memo(({ solution, onChangePlanSelected, plan }: Selec
                         })}
                       </Grid>
                     </CardContent>
+                      <CardActions className={classes.itemCenter}>
+                        <Button
+                          fullWidth
+                          sx={{ mx: 7.25 }}
+                          btnType={BtnType.Raised}
+                          translation-key="setup_survey_popup_save_question_title"
+                          children={<TextBtnSecondary translation-key="common_select">{t("common_select")}</TextBtnSecondary>}
+                          className={classes.btnSave}
+                          onClick={() => onChangePlanSelected(plan)}
+                        />
+                      </CardActions>
                   </Card>
                 </Grid>
               </Grid>
             );
           })}
-        </Grid>
-      </div>
-    </>
+    </Grid>
   );
 });
-export default SelectPlanNewStyle;
+export default ListPlanTwoOrLess;

@@ -23,7 +23,6 @@ import { Solution } from "models/Admin/solution";
 import { routes } from "routers/routes";
 import { ReducerType } from "redux/reducers";
 import SelectPlan from "./components/SelectPlan";
-import SelectPlanNewStyle from "./components/SelectPlanNewStyle";
 import { Plan } from "models/Admin/plan";
 import CreateProjectStep from "./components/CreateProjectStep";
 import SolutionList from "./components/SolutionList";
@@ -214,13 +213,8 @@ const CreateProject = () => {
           <SolutionList solutionShow={solutionShow} onChangeSolution={onChangeSolution} handleNextStep={handleNextStep} />
         )}
         {activeStep === EStep.SELECT_PLAN &&
-          !isEmpty(plan) && (
-            plan?.data.length > 2 ? (
-              <SelectPlan plan={plan} solution={solutionSelected} onChangePlanSelected={onChangePlanSelected} />
-            ) : (
-              <SelectPlanNewStyle plan={plan} solution={solutionSelected} onChangePlanSelected={onChangePlanSelected} />
-            )
-          )}
+          !isEmpty(plan) && (<SelectPlan plan={plan} onChangePlanSelected={onChangePlanSelected} />
+        )}
         {activeStep === EStep.CREATE_PROJECT && (
           <CreateProjectStep solutionSelected={solutionSelected} planSelected={planSelected} onClickHandleBack={onClickHandleBack} />
         )}
