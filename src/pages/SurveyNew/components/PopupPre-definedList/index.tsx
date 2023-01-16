@@ -134,11 +134,11 @@ const PopupPreDefinedList = memo((props: Props) => {
         <ParagraphBody $colorName="--eerie-black" translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_sub_title`}>{t(`${prefix_trans}_setup_survey_popup_pre_defined_sub_title`)}</ParagraphBody>
         <ParagraphSmall $colorName="--gray-80" className={classes.unfoldWrapper}>
           <div className={classes.unfoldItemWrapper} onClick={handleExpandAll} translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_expand_all`}>
-            <UnfoldMore sx={{width: "0.7em"}} /> {t(`${prefix_trans}_setup_survey_popup_pre_defined_expand_all`)}
+            <UnfoldMore sx={{width: "18px"}} /> {t(`${prefix_trans}_setup_survey_popup_pre_defined_expand_all`)}
           </div>
           <div className={classes.lineDivide}></div>
           <div className={classes.unfoldItemWrapper} onClick={handleCollapseAll} translation-key={`${prefix_trans}_setup_survey_popup_pre_defined_collapse_all`}>
-            <UnfoldLess sx={{width: "0.7em"}} /> {t(`${prefix_trans}_setup_survey_popup_pre_defined_collapse_all`)}
+            <UnfoldLess sx={{width: "18px"}} /> {t(`${prefix_trans}_setup_survey_popup_pre_defined_collapse_all`)}
           </div>
         </ParagraphSmall>
 
