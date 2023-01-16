@@ -267,7 +267,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
                     )}
                   </Grid>
                   <Grid item>
-                    <ParagraphSmall $colorName="--eerie-black">{item.content}</ParagraphSmall>
+                    <ParagraphSmall $colorName="--cimigo-theme-light-on-surface">{item.content}</ParagraphSmall>
                   </Grid>
                 </Grid>
               </ListItemButton>
@@ -280,14 +280,13 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
                     )}
                   </Grid>
                   <Grid className={classes.listTextLeft}>
-                    <ParagraphSmall $colorName="--eerie-black">{item.start}</ParagraphSmall>
+                    <ParagraphSmall $colorName="--cimigo-theme-light-on-surface">{item.start}</ParagraphSmall>
                   </Grid>
                   <Grid className={classes.listNumber}>
                     <ArrowBreak sx={{ color: "var(--gray-20)", width: "40px" }} />
                   </Grid>
                   <Grid className={classes.listTextRight}>
-                    <ParagraphSmall $colorName="--
-                    eerie-black">{item.end}</ParagraphSmall>
+                    <ParagraphSmall $colorName="--cimigo-theme-light-on-surface">{item.end}</ParagraphSmall>
                   </Grid>
                 </Grid>
               </ListItemButton>
