@@ -33,7 +33,7 @@ import { ETabRightPanel } from "models/project";
 import { useChangePrice } from "hooks/useChangePrice";
 import { Helmet } from "react-helmet";
 import { ESOLUTION_TYPE } from "models";
-import BrandTrack from "./BrandTrack/Target";
+import Target from "./BrandTrack/Target";
 
 export const Survey = () => {
 
@@ -270,7 +270,7 @@ export const Survey = () => {
           <Route
             exact
             path={routes.project.detail.target}
-            render={(routeProps) => <BrandTrack
+            render={(routeProps) => <Target
               {...routeProps}
               projectId={Number(id)}
               isHaveChangePrice={isHaveChangePrice}

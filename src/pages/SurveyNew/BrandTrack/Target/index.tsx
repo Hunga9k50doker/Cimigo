@@ -2,14 +2,12 @@ import {
   ArrowCircleDownRounded,
   ArrowCircleUpRounded,
   ArrowForward,
-  KeyboardArrowRight,
 } from "@mui/icons-material";
 import {
   Tab,
   Badge,
   Step,
   Grid,
-  Box,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
@@ -55,22 +53,16 @@ import {
 } from "../../components";
 import CostSummary from "../../components/CostSummary";
 import LockIcon from "../../components/LockIcon";
-import { ETab, TabItem } from "../../Target/models";
+import { ETab } from "../../Target/models";
 import classes from "./styles.module.scss";
-import images from "config/images";
 import { TargetQuestion, TargetQuestionType } from "models/Admin/target";
-import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
-import clsx from "clsx";
-import React from "react";
 import { TargetService } from "services/target";
-import HouseholdIncomeTab from "../../Target/HouseholdIncomeTab";
-import AgeCoverageTab from "../../Target/AgeCoverageTab";
-import LocationTab from "../../Target/LocationTab";
 import PopupLocationMobile from "pages/SurveyNew/Target/components/PopupLocationMobile";
 import PopupHouseholdIncomeMobile from "pages/SurveyNew/Target/components/PopupHouseholdIncomeMobile";
 import PopupAgeCoverageMobile from "pages/SurveyNew/Target/components/PopupAgeCoverageMobile";
+import SelectTargetBox from "pages/SurveyNew/Target/SelectTargetBox";
 
-type ErrorsTarget = {
+export type ErrorsTarget = {
   [key in ETab ]?: boolean;
 };
 
@@ -92,7 +84,7 @@ const BrandTrack = memo(
     onToggleViewOutlineMobile,
   }: BrandTrackProps) => {
     const dispatch = useDispatch();
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down(1024));
 
@@ -109,32 +101,12 @@ const BrandTrack = memo(
     const [questionsAgeGender, setQuestionsAgeGender] = useState<
       TargetQuestion[]
     >([]);
+    const [checkSelectTarget,setCheckSelectTarget] = useState<boolean>(false);
     const [questionsMum, setQuestionsMum] = useState<TargetQuestion[]>([]);
 
     const editable = useMemo(() => editableProject(project), [project]);
 
     const { price } = usePrice();
-
-    const listTabs: TabItem[] = useMemo(() => {
-      return [
-        {
-          id: ETab.Location,
-          title: t("target_sub_tab_location"),
-          img: images.imgTargetTabLocation,
-        },
-        {
-          id: ETab.Household_Income,
-          title: t("target_sub_tab_household_income"),
-          img: images.imgTargetTabHI,
-        },
-        {
-          id: ETab.Age_Coverage,
-          title: t("target_sub_tab_age_coverage"),
-          img: images.imgTargetTabAC,
-        },
-      ];
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [i18n.language]);
 
     const isValidTarget = useMemo(() => {
       return ProjectHelper.isValidTarget(project);
@@ -170,25 +142,25 @@ const BrandTrack = memo(
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [project]);
-
+    const returnDefaultCheckSelectTarget = (val: boolean) =>{
+      if(!val){
+        setCheckSelectTarget(val)
+      }
+      if(val && checkSelectTarget){
+        dispatch(
+          push(routes.project.detail.quotas.replace(":id", `${projectId}`))
+        );
+      }
+    }
     const onNextQuotas = () => {
       if (editable) {
-        const _errorsTarget = triggerErrors();
-        setErrorsTarget(_errorsTarget);
-        if (
-          _errorsTarget[ETab.Location] ||
-          _errorsTarget[ETab.Household_Income] ||
-          _errorsTarget[ETab.Age_Coverage]
-        ) {
-          scrollToElement(TARGET_SECTION.SELECT_TARGET);
-          return;
-        }
+        setCheckSelectTarget(true)
+        return
       }
       dispatch(
         push(routes.project.detail.quotas.replace(":id", `${projectId}`))
       );
     };
-
     useEffect(() => {
       const fetchData = async () => {
         const questions: TargetQuestion[] = await TargetService.getQuestions({
@@ -219,96 +191,6 @@ const BrandTrack = memo(
     const onChangeTab = (tab?: ETab) => {
       if (activeTab === tab) return;
       setActiveTab(tab);
-    };
-
-    const renderHeaderTab = (tab: TabItem) => {
-      switch (tab.id) {
-        case ETab.Location:
-          const targetLs = project?.targets?.filter(
-            (it) => it.targetQuestion?.typeId === TargetQuestionType.Location
-          );
-          if (targetLs?.length) {
-            return (
-              <Grid className={classes.tabBodySelected}>
-                {targetLs.map((it) => (
-                  <ParagraphSmall
-                    $colorName="--eerie-black"
-                    key={it.id}
-                    sx={{ "& >span": { fontWeight: 500 } }}
-                  >
-                    <span>{it.targetQuestion?.name}: </span>
-                    {it.answers.map((it) => it.name).join(", ")}.
-                  </ParagraphSmall>
-                ))}
-              </Grid>
-            );
-          } else
-            return (
-              <Grid className={classes.tabBodyDefault}>
-                <ParagraphSmallUnderline2 translation-key="target_sub_tab_location_sub">
-                  {t("target_sub_tab_location_sub")}
-                </ParagraphSmallUnderline2>
-              </Grid>
-            );
-        case ETab.Household_Income:
-          const targetECs = project?.targets?.filter(
-            (it) =>
-              it.targetQuestion?.typeId === TargetQuestionType.Household_Income
-          );
-          if (targetECs?.length) {
-            return (
-              <Grid className={classes.tabBodySelected}>
-                {targetECs.map((it) => (
-                  <ParagraphSmall
-                    $colorName="--eerie-black"
-                    key={it.id}
-                    sx={{ "& >span": { fontWeight: 500 } }}
-                  >
-                    <span>{it.targetQuestion?.name}: </span>
-                    {it.answers.map((it) => it.name).join(", ")}.
-                  </ParagraphSmall>
-                ))}
-              </Grid>
-            );
-          } else
-            return (
-              <Grid className={classes.tabBodyDefault}>
-                <ParagraphSmallUnderline2 translation-key="target_choose_household_income">
-                  {t("target_choose_household_income")}
-                </ParagraphSmallUnderline2>
-              </Grid>
-            );
-        case ETab.Age_Coverage:
-          const targetACs = project?.targets?.filter((it) =>
-            [
-              TargetQuestionType.Mums_Only,
-              TargetQuestionType.Gender_And_Age_Quotas,
-            ].includes(it.targetQuestion?.typeId || 0)
-          );
-          if (targetACs?.length) {
-            return (
-              <Grid className={classes.tabBodySelected}>
-                {targetACs.map((it) => (
-                  <ParagraphSmall
-                    $colorName="--eerie-black"
-                    key={it.id}
-                    sx={{ "& >span": { fontWeight: 500 } }}
-                  >
-                    <span>{it.targetQuestion?.name}: </span>
-                    {it.answers.map((it) => it.name).join(", ")}.
-                  </ParagraphSmall>
-                ))}
-              </Grid>
-            );
-          } else
-            return (
-              <Grid className={classes.tabBodyDefault}>
-                <ParagraphSmallUnderline2 translation-key="target_sub_tab_age_coverage_sub">
-                  {t("target_sub_tab_age_coverage_sub")}
-                </ParagraphSmallUnderline2>
-              </Grid>
-            );
-      }
     };
     return (
       <PageRoot className={classes.root}>
@@ -350,77 +232,16 @@ const BrandTrack = memo(
               >
                 {t("brand_track_who_do_you_want_target_sub_title")}
               </ParagraphBody>
-              <Grid className={classes.targetBox}>
-                <Box className={classes.targetTabs}>
-                  {listTabs.map((item, index) => (
-                    <React.Fragment key={index}>
-                      <Box
-                        onClick={() =>
-                          onChangeTab(
-                            activeTab === item.id ? undefined : item.id
-                          )
-                        }
-                        className={clsx(classes.targetTab, {
-                          [classes.targetTabActive]:
-                            activeTab === item.id && !isMobile,
-                          [classes.tabError]: errorsTarget[item.id],
-                        })}
-                      >
-                        <Box className={classes.tabHeader}>
-                          <Box className={classes.tabBoxTitle}>
-                            <ParagraphExtraSmall $colorName="--gray-90">
-                              {item.title}
-                            </ParagraphExtraSmall>
-                          </Box>
-                          <img
-                            className={classes.tabImg}
-                            src={item.img}
-                            alt="tab target"
-                          />
-                        </Box>
-                        <Box className={classes.tabBody}>
-                          {renderHeaderTab(item)}
-                        </Box>
-                      </Box>
-                      {listTabs.length - 1 !== index && (
-                        <Box className={classes.tabIconBox}>
-                          <KeyboardArrowRight />
-                        </Box>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </Box>
-                {activeTab && !isMobile && (
-                  <Box
-                    className={clsx(classes.tabPanel, {
-                      [classes.error]: errorsTarget[activeTab],
-                    })}
-                  >
-                    {activeTab === ETab.Location && (
-                      <LocationTab
-                        project={project}
-                        questions={questionsLocation}
-                        onNextStep={() => onChangeTab(ETab.Household_Income)}
-                      />
-                    )}
-                    {activeTab === ETab.Household_Income && (
-                      <HouseholdIncomeTab
-                        project={project}
-                        questions={questionsHouseholdIncome}
-                        onNextStep={() => onChangeTab(ETab.Age_Coverage)}
-                      />
-                    )}
-                    {activeTab === ETab.Age_Coverage && (
-                      <AgeCoverageTab
-                        project={project}
-                        questionsAgeGender={questionsAgeGender}
-                        questionsMum={questionsMum}
-                        onNextStep={() => onChangeTab()}
-                      />
-                    )}
-                  </Box>
-                )}
-              </Grid>
+              <SelectTargetBox 
+                isMobile = {isMobile}
+                project = {project}
+                questionsLocation = {questionsLocation}
+                questionsHouseholdIncome = {questionsHouseholdIncome}
+                questionsAgeGender = {questionsAgeGender}
+                questionsMum = {questionsMum}
+                checkSelectTarget={checkSelectTarget}
+                returnDefaultCheckSelectTarget = {returnDefaultCheckSelectTarget}
+              />
             </Grid>
           </Content>
           <MobileAction>
