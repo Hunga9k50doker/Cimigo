@@ -41,6 +41,7 @@
   }
   &:hover {
     background: rgba(28, 28, 28, 0.05);
+    cursor: default;
     .btnAction {
       visibility: visible !important;
     }
@@ -52,6 +53,7 @@
   min-height: 40px;
   &:hover {
     background: transparent;
+    cursor: default;
   }
   .listTextLeft {
     flex: 1;
