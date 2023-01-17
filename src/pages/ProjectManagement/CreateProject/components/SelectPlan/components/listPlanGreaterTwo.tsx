@@ -16,7 +16,6 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
-import { isEmpty } from "lodash";
 interface SelectPlanProps {
   plan?: DataPagination<Plan>;
   onChangePlanSelected?: (plan: Plan) => void;
@@ -76,24 +75,15 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                         <Heading1 $fontWeight={"600"} $colorName={"--cimigo-blue"} variant="body2" variantMapping={{ body2: "span" }}>
                           {formatMoney(plan)}
                         </Heading1>
-                        {!isEmpty(plan.month) && (
+                        {plan.month && (
                           <ParagraphBody
                             className={classes.expTime}
                             $colorName={"--gray-80"}
-                            translation-key={
-                              plan.month === 1 ? "project_create_tab_plan_time_plan_title" : "project_create_tab_plan_multiple_time_plan_title"
-                            }
+                            translation-key={"project_create_tab_plan_time_plan_title"}
                             variant="body2"
                             variantMapping={{ body2: "span" }}
                           >
-                            &nbsp; /{" "}
-                            {plan.month === 1 ? (
-                              <>{t("project_create_tab_plan_time_plan_title")}</>
-                            ) : (
-                              <>
-                                {plan.month} {t("project_create_tab_plan_multiple_time_plan_title")}
-                              </>
-                            )}
+                           / {plan.month} {t("project_create_tab_plan_time_plan_title",{month: plan.month === 1 ? "month" : "months"})}
                           </ParagraphBody>
                         )}
                       </Typography>
@@ -123,26 +113,17 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                         translation-key="project_create_tab_plan_interviews"
                       >
                         <span className={classes.sampleSize}>{plan.sampleSize + " "}</span> {t("project_create_tab_plan_interviews")}
-                        {!isEmpty(plan.month) && (
-                          <ParagraphBody
-                            className={classes.expTime}
-                            $colorName={"--gray-80"}
-                            translation-key={
-                              plan.month === 1 ? "project_create_tab_plan_time_plan_title" : "project_create_tab_plan_multiple_time_plan_title"
-                            }
-                            variant="body2"
-                            variantMapping={{ body2: "span" }}
-                          >
-                            &nbsp; /{" "}
-                            {plan.month === 1 ? (
-                              <>{t("project_create_tab_plan_time_plan_title")}</>
-                            ) : (
-                              <>
-                                {plan.month} {t("project_create_tab_plan_multiple_time_plan_title")}
-                              </>
+                          {plan.month && (
+                              <ParagraphBody
+                                className={classes.expTime}
+                                $colorName={"--gray-80"}
+                                translation-key={"project_create_tab_plan_time_plan_title"}
+                                variant="body2"
+                                variantMapping={{ body2: "span" }}
+                              >
+                              / {plan.month} {t("project_create_tab_plan_time_plan_title",{month: plan.month === 1 ? "month" : "months"})}
+                              </ParagraphBody>
                             )}
-                          </ParagraphBody>
-                        )}
                       </ParagraphBody>
                     </Grid>
                     {plan?.content.map((item, index) => {
