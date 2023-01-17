@@ -27,7 +27,7 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
   const { t } = useTranslation();
 
   return (
-    <Grid container columnSpacing={4} className={classes.body} justifyContent="center">
+    <Grid container gap={4} className={classes.body} justifyContent="center" alignItems={"flex-start"}>
       {plan?.data.map((plan) => {
         return (
           <Grid
@@ -43,7 +43,6 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
             <Grid
               className={clsx(classes.layoutCard, {
                 [classes.layoutCardPopular]: plan?.isMostPopular,
-                [classes.mtListPlan]: plan?.isMostPopular,
               })}
             >
               {plan?.isMostPopular && (

@@ -16,6 +16,7 @@
 //==================================card============================//
 .body {
   padding-bottom: 300px !important;
+  margin: 0 !important;
   @media only screen and (max-width: 897px) {
     margin-top: 0px;
     margin-bottom: 0px;
@@ -32,17 +33,7 @@
     padding-bottom: 32px;
   }
 }
-.cardPopular{
-  @media only screen and (min-width: 897px) {
-    margin-top: -40px;
-    margin-bottom: 40px;
-  }
-  @media only screen and (max-width: 786px) {
-    margin-top: 0px;
-    margin-bottom: 0px;
-    padding-bottom: 32px;
-  }
-}
+
 .layoutCard {
   height: 100%;
    @media only screen and (max-width: 768px) {
@@ -110,6 +101,7 @@
 }
 .layoutCardPopular {
   height: 100%;
+  padding-top: 0 !important;
   .cardPlan { 
       display: flex;
       flex-direction: column;
@@ -125,9 +117,6 @@
           color: var(--gray-20);
       }
   } 
-}
-.mtListPlan{
-  margin-top: 64px;
 }
 .contentInPlan{
   padding-top: 16px;

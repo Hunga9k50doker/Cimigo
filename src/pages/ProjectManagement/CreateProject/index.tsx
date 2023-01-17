@@ -180,7 +180,8 @@ const CreateProject = () => {
           <ArrowForwardIosIcon className={classes.icHome}></ArrowForwardIosIcon>
           <SubTitle
             $colorName={"--cimigo-green-dark-2"}
-            translation-key="header_projects">
+            translation-key="header_projects"
+          >
             {t("header_projects")}
           </SubTitle>
         </div>
@@ -210,10 +211,11 @@ const CreateProject = () => {
                   }}
                 >
                   {item.name}{" "}
-                  {!isMobile &&
+                  {!isMobile && (
                     <ParagraphExtraSmall $colorName={"--gray-60"}>
                       {stepLabel(item.id)}
-                    </ParagraphExtraSmall>}
+                    </ParagraphExtraSmall>
+                  )}
                 </StepLabel>
               </Step>
             );
@@ -223,19 +225,22 @@ const CreateProject = () => {
           <SolutionList
             solutionShow={solutionShow}
             onChangeSolution={onChangeSolution}
-            handleNextStep={handleNextStep} />
+            handleNextStep={handleNextStep}
+          />
         )}
         {activeStep === EStep.SELECT_PLAN && (
           <SelectPlan
             plan={plan}
             onChangePlanSelected=
-            {onChangePlanSelected} />
+            {onChangePlanSelected}
+          />
         )}
         {activeStep === EStep.CREATE_PROJECT && (
           <CreateProjectStep
             solutionSelected={solutionSelected}
             planSelected={planSelected}
-            onClickHandleBack={onClickHandleBack} />
+            onClickHandleBack={onClickHandleBack}
+          />
         )}
       </Grid>
     </BasicLayout>

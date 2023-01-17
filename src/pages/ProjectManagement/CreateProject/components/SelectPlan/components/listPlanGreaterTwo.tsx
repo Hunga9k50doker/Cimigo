@@ -26,7 +26,7 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
   const { t } = useTranslation();
 
   return (
-    <Grid container columnSpacing={4} className={classes.body} justifyContent="center">
+    <Grid container className={classes.body} flexWrap={{lg:"nowrap"}} gap={4} justifyContent="center" alignItems="flex-end">
       {plan?.data.map((plan) => {
         return (
           <Grid
@@ -36,11 +36,10 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
             })}
             item
             xs={12}
-            md={6}
-            lg={4}
+            sm={6}
+            md={4}
           >
             <Grid
-              pt={4}
               className={clsx(classes.layoutCard, {
                 [classes.layoutCardPopular]: plan?.isMostPopular,
               })}
