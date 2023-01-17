@@ -66,6 +66,10 @@
 .listItem {
   border: 1px solid #dddddd;
   border-top: none;
+  &:hover {
+    cursor: pointer;
+    background: rgba(28, 28, 28, 0.02);
+  }
 }
 .attributeTitle {
   flex: unset;
@@ -89,7 +93,7 @@
   padding-right: 16px;
 }
 .disabled {
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 .rootListItem > div {
   &:first-child {
