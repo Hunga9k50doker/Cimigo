@@ -65,7 +65,7 @@
 }
 .linkTextHome {
   display: none;
-  span {
+  span{
     color: var(--cimigo-blue);
   }
   @media only screen and (max-width: 767px) {
@@ -144,3 +144,4 @@
 .btnMobile {
   white-space: nowrap;
 }
+

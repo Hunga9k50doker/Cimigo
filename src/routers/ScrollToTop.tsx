@@ -2,7 +2,7 @@ import { PROJECT_DETAIL_SECTION } from "models/project";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-const ScrollToTop = () => {
+ const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {

@@ -1,15 +1,15 @@
 .titleSelectPlan {
   text-align: center;
-  p {
+   p {
     margin-bottom: 16px;
   }
-  .title {
+  .title{
     font-weight: 600 !important;
     font-size: 32px !important;
     line-height: 48px !important;
   }
   @media only screen and (max-width: 768px) {
-    padding-top: 0;
+    padding-top: 0px;
   }
 }
 
@@ -19,7 +19,7 @@
   @media only screen and (max-width: 897px) {
     margin-top: 0px;
     margin-bottom: 0px;
-    padding-bottom: 43px;
+    padding-bottom: 43px
   }
   @media only screen and (max-width: 600px) {
     padding-left: 30px;
@@ -32,7 +32,7 @@
     padding-bottom: 32px;
   }
 }
-.cardPopular {
+.cardPopular{
   @media only screen and (min-width: 897px) {
     margin-top: -40px;
     margin-bottom: 40px;
@@ -53,7 +53,7 @@
   justify-content: center;
   padding: 0;
   padding-bottom: 24px;
-  button {
+  button{
     width: 100%;
     min-height: 48px;
     min-width: 184px;
@@ -69,105 +69,105 @@
   border-radius: 8px 8px 8px 8px;
   border: 1px solid var(--gray-20);
   @media only screen and (max-width: 367px) {
-    width: auto;
+      width: auto;
   }
   .tax {
-    font-family: "Montserrat";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 12px;
-    padding-bottom: 24px;
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 12px;
+      padding-bottom: 24px;
   }
-  .line {
-    content: " ";
-    border-bottom: 1px solid;
-    color: var(--gray-20);
+  .line{
+      content: " ";
+      border-bottom: 1px solid;
+      color: var(--gray-20);
   }
-  .startAt {
-    padding-top: 16px;
+  .startAt{
+      padding-top: 16px;
   }
+
+
 }
 
-.contentInPlan {
+.contentInPlan{
   > p {
-    padding-top: 16px !important;
+      padding-top: 16px !important;
   }
 }
 .headerCart {
-  background: #a6cc17;
+  background: #A6CC17;
   border: 1px solid var(--gray-20);
   border-radius: 8px 8px 0px 0px;
   border-bottom: none;
   min-width: 300px;
-  .title {
-    text-align: center;
-    padding: 8px;
-    padding-left: 12px;
+  .title{  
+      text-align: center;
+      padding: 8px;
+      padding-left: 12px;
   }
 }
 .layoutCardPopular {
   height: 100%;
-  .cardPlan {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    border-radius: 0px 0px 8px 8px;
-    border: 1px solid var(--gray-20);
-    @media only screen and (max-width: 367px) {
-      width: auto;
-    }
-    .line {
-      content: " ";
-      border-bottom: 1px solid;
-      color: var(--gray-20);
-    }
-  }
+  .cardPlan { 
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      border-radius: 0px 0px 8px 8px;
+      border: 1px solid var(--gray-20);
+      @media only screen and (max-width: 367px) {
+          width: auto;
+      }
+      .line{
+          content: " ";
+          border-bottom: 1px solid;
+          color: var(--gray-20);
+      }
+  } 
 }
-
 .mtListPlan{
   margin-top: 64px;
 }
-
-.contentInPlan {
+.contentInPlan{
   padding-top: 16px;
 }
 .contentPlan {
   display: flex;
   padding: 8px 0px;
 }
-.iconContentPlan {
+.iconContentPlan{
   color: var(--cimigo-blue);
 }
 //==================================endcard============================//
 .selectTypePrice {
   padding-top: 16px;
   text-align: right;
-  // padding-bottom: 44px;
   @media only screen and (max-width: 767px) {
-    text-align: right;
-    padding-right: 0px;
-    padding-bottom: 0px;
+      text-align: right;
+      padding-right: 0px;
+      padding-bottom: 0px;
   }
   @media only screen and (max-width: 695px) {
-    margin-right: 20px !important;
-  }
+      margin-right: 20px !important;
+}
   @media only screen and (max-width: 386px) {
-    margin-right: -20px !important;
+      margin-right: -20px !important;
   }
   @media only screen and (max-width: 341px) {
-    margin-right: 0px !important;
+      margin-right: 0px !important;
   }
 }
 .customSelect {
-  div {
+  div{
     border: none;
   }
-  div :hover {
+  div :hover{
     border: none;
   }
+  
 }
-.cardCustom {
+.cardCustom{
   padding: 24px;
 }
 .cardPlan:first {
@@ -176,10 +176,9 @@
 .selectOption:hover {
   color: blue;
 }
-.sampleSize {
+.sampleSize{
   font-weight: 600;
 }
-
 .expTime {
   position: relative;
   transform: translate(6px, -12px);
