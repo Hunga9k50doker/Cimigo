@@ -27,7 +27,6 @@ interface SolutionListProps {
   solutionShow?: Solution;
   handleNextStep: () => void;
   onChangeSolution?: (solution: Solution) => void;
-  // getListPlan?: () => void;
 }
 
 const SolutionList = memo(
