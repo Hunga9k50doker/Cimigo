@@ -7,3 +7,7 @@ export {default as IconBranding} from "./IconBranding";
 export { default as IconInformation} from "./IconInformation";
 export { default as IconPlayMini} from "./IconPlayMini";
 export { default as IconScenesStep} from "./IconScenesStep";
+export { default as IconMoneyCash} from "./IconMoneyCash";
+export { default as IconPaymentError1} from "./IconPaymentError1";
+export { default as IconSuportAgent} from "./IconSuportAgent";
+

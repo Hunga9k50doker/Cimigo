@@ -5,12 +5,13 @@ interface Props {
   $colorName?: string;
   $fontSizeMobile?: string;
   $lineHeightMobile?: string;
+  $fontWeight?: number | string;
 }
 
 const Heading4 = styled(Typography) <Props>`
     font-family: 'Montserrat';
     font-style: normal;
-    font-weight: 600;
+    font-weight: ${props => props.$fontWeight || 600};
     font-size: 18px;
     line-height: 24px;
     color: ${props => `var(${props.$colorName || '--gray-80'})`};
