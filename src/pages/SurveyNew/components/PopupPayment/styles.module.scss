@@ -33,7 +33,7 @@
   }
 }
 .accordionBankTransfer {
-  border: 1px solid var("--cimigo-blue-light-4");
+  border: 1px solid var(--cimigo-blue-light-4);
   border-radius: 4px;
   .accordionSummary {
     padding: 8px 16px;
@@ -50,4 +50,8 @@
     border-bottom-right-radius: 4px;
   }
 }
-
+.linkA {
+  > a {
+    color: var(--cimigo-blue);
+  }
+}

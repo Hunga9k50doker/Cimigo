@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { memo, useMemo } from "react";
 import styled from "styled-components";
 import { Box, Dialog } from "@mui/material";
@@ -40,19 +41,13 @@ interface Props {
   onCancel: () => void;
 }
 
-// const IconArrowRight = (props) => {
-//   return (
-//     <ArrowRightIcon {...props} sx={{ color: "var(--cimigo-blue)", fontSize: "20px !important" }} />
-//   );
-// };
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
   <MuiAccordionSummary
-    expandIcon={
-      <ArrowRightIcon sx={{ color: "var(--cimigo-blue)", fontSize: "20px !important" }} />
-    }
+    expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />}
     {...props}
   />
 ))(({ theme }) => ({
+  width: "fit-content",
   justifyContent: "flex-start",
   "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
     transform: "rotate(90deg)",
@@ -60,9 +55,6 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 }));
 
 const ImagePopup = styled.img`
-  // margin: 32px auto 16px auto;
-  //   width: 135px;
-  //   height: 135px;
   object-fit: contain;
   display: block;
   @media only screen and (max-width: 767px) {
@@ -162,9 +154,7 @@ const PopupPayment = memo((props: Props) => {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"}>
-                Order summary
-              </Heading4>
+              <Heading4 $colorName={"--cimigo-blue"}>Order summary</Heading4>
             </AccordionSummary>
             <AccordionDetails className={classes.accordionDetails}>
               <Grid
@@ -250,8 +240,13 @@ const PopupPayment = memo((props: Props) => {
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
-        <Typography my={3} color={"var(--gray-60)"} textAlign="center">
-          Change payment method? Click here
+        <Typography
+          my={3}
+          color={"var(--eerie-black)"}
+          textAlign="center"
+          className={classes.linkA}
+        >
+          Change payment method? <a href="#">Click here</a>
         </Typography>
       </DialogContentConfirm>
     </Dialog>
