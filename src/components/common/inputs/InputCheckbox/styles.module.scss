@@ -34,3 +34,19 @@
   }
 }
 
+.blueRoot {
+  &:hover {
+    background-color: unset;
+  }
+
+  & > .icon {
+    &:hover {
+      color: var(--cimigo-blue);
+    }
+  }
+
+  & > .checkIcon {
+    color: var(--white);
+    background: var(--cimigo-blue);
+  }
+}
