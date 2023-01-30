@@ -1,11 +1,11 @@
-import { Accordion, AccordionSummary, Box, Grid, IconButton, ListItem, ListItemButton, MenuItem } from "@mui/material"
+import { Accordion, AccordionSummary, Box, Grid, IconButton, ListItem, ListItemButton, ListItemText, MenuItem } from "@mui/material"
 import Heading4 from "components/common/text/Heading4"
 import ParagraphBody from "components/common/text/ParagraphBody"
 import ParagraphSmall from "components/common/text/ParagraphSmall"
 import { editableProject } from "helpers/project"
 import { Project, SETUP_SURVEY_SECTION } from "models/project"
 import { ProjectAttribute } from "models/project_attribute"
-import { UserAttribute } from "models/user_attribute"
+import { AttributeContentType, UserAttribute } from "models/user_attribute"
 import PopupManatoryAttributes from "pages/SurveyNew/components/PopupManatoryAttributes"
 import { MaxChip, Tip } from "pages/SurveyNew/components"
 import { memo, useMemo, useState } from "react"
@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import classes from "./styles.module.scss"
 import { Edit as EditIcon, DeleteForever as DeleteForeverIcon, KeyboardArrowDown, ExpandMore, LightbulbOutlined } from "@mui/icons-material"
+import CloseIcon from '@mui/icons-material/Close';
 import Button, { BtnType } from "components/common/buttons/Button"
 import TextBtnSmall from "components/common/text/TextBtnSmall"
 import { Menu } from "components/common/memu/Menu"
@@ -24,6 +25,11 @@ import { getProjectAttributesRequest, getUserAttributesRequest } from "redux/red
 import { UserAttributeService } from "services/user_attribute"
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import PopupConfirmDelete from "components/PopupConfirmDelete"
+import ArrowBreak from "components/icons/IconArrowBreak"
+import EditSquare from "components/icons/IconEditSquare"
+import CheckList from "components/icons/IconCheckList"
+import ParagraphBodyUnderline from "components/common/text/ParagraphBodyUnderline"
+import clsx from "clsx"
 
 enum AttributeShowType {
   Project = 1,
@@ -35,7 +41,9 @@ interface AttributeShow {
   start: string,
   end: string,
   data: ProjectAttribute | UserAttribute,
-  type: AttributeShowType
+  type: AttributeShowType,
+  content: string,
+  contentTypeId: number
 }
 
 interface AdditionalAttributesProps {
@@ -57,6 +65,7 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
   const [userAttributeDelete, setUserAttributeDelete] = useState<UserAttribute>()
   const [projectAttributeDelete, setProjectAttributeDelete] = useState<ProjectAttribute>()
   const [anchorElMenuAttributes, setAnchorElMenuAttributes] = useState<null | HTMLElement>(null);
+  const [showMoreAttributes, setShowMoreAttributes] = useState<boolean>(false);
 
   const editable = useMemo(() => editableProject(project), [project])
 
@@ -73,16 +82,20 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
         start: it.attribute.start,
         end: it.attribute.end,
         type: AttributeShowType.Project,
-        data: it
+        data: it,
+        content: it.attribute.content,
+        contentTypeId: it.attribute.contentTypeId,
       })) || []),
       ...(project?.userAttributes?.map(it => ({
         id: it.id,
         start: it.start,
         end: it.end,
         type: AttributeShowType.User,
-        data: it
+        data: it,
+        content: it.content,
+        contentTypeId: it.contentTypeId,
       })) || [])
-    ]
+    ].sort((a, b) => a?.contentTypeId - b?.contentTypeId)
   }, [project])
 
   const onEditUserAttribute = (item: UserAttribute) => {
@@ -145,8 +158,8 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
     if (userAttributeEdit) {
       dispatch(setLoading(true))
       UserAttributeService.update(userAttributeEdit.id, {
-        start: data.start,
-        end: data.end
+        content: data.content,
+        contentTypeId: AttributeContentType.SINGLE,
       })
         .then(() => {
           dispatch(getUserAttributesRequest(project.id))
@@ -158,8 +171,8 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
       dispatch(setLoading(true))
       UserAttributeService.create({
         projectId: project.id,
-        start: data.start,
-        end: data.end
+        content: data.content,
+        contentTypeId: AttributeContentType.SINGLE,
       })
         .then(() => {
           dispatch(getUserAttributesRequest(project.id))
@@ -197,6 +210,9 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
         .finally(() => dispatch(setLoading(false)))
     }
   }
+  const onShowMoreAttributes = () => {
+    setShowMoreAttributes(!showMoreAttributes)
+  }
 
   return (
     <Grid id={SETUP_SURVEY_SECTION.additional_attributes} mt={4}>
@@ -223,18 +239,18 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
             alignItems="center"
             component="div"
             key={index}
-            className={classes.rootListItem}
+            className={clsx(classes.rootListItem, { [classes.notDisplayed]: index > 4 && !showMoreAttributes })}
             secondaryAction={
               <div className={classes.btnAction}>
                 {editable && (
                   <>
-                    {item.type === AttributeShowType.User && (
+                    {item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
                       <IconButton onClick={() => onEditUserAttribute(item.data as any)} className={classes.iconAction} edge="end" aria-label="Edit">
-                        <EditIcon sx={{ fontSize: "20px" }} />
+                        <EditIcon sx={{ fontSize: "20px", color: "var(--gray-60)" }} />
                       </IconButton>
                     )}
                     <IconButton onClick={() => onShowConfirmDeleteAttribute(item)} className={classes.iconAction} edge="end" aria-label="Delete">
-                      <DeleteForeverIcon sx={{ fontSize: "20px", color: "var(--red-error)" }} />
+                      <CloseIcon sx={{ fontSize: "20px", color: "var(--gray-60)" }} />
                     </IconButton>
                   </>
                 )}
@@ -242,43 +258,81 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
             }
             disablePadding
           >
-            <ListItemButton className={classes.listItem}>
-              <Grid display="flex" alignItems="center" justifyContent="center">
-                <Grid className={classes.listTextLeft}>
-                  <ParagraphSmall $colorName="--eerie-black">{item.start}</ParagraphSmall>
+            {item?.contentTypeId === AttributeContentType.SINGLE ? (
+              <ListItemButton className={classes.listItem}>
+                <Grid display="flex" alignItems="center">
+                  <Grid className={classes.iconEditSquareWrapper}>
+                    {editable && item.type === AttributeShowType.User && (
+                      <EditSquare sx={{ color: "var(--gray-40)", width: "16px", height: "16px" }} />
+                    )}
+                  </Grid>
+                  <Grid item>
+                    <ParagraphSmall $colorName="--cimigo-theme-light-on-surface">{item.content}</ParagraphSmall>
+                  </Grid>
                 </Grid>
-                <Grid className={classes.listNumber}>
-                  <div>{[...Array(10)].map((_, index) => (<span key={index}>{index + 1}</span>))}</div>
+              </ListItemButton>
+            ) : (
+              <ListItemButton className={classes.listItem}>
+                <Grid display="flex" alignItems="center" justifyContent="center">
+                  <Grid className={classes.iconEditSquareWrapper}>
+                    {editable && item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
+                      <EditSquare sx={{ color: "var(--gray-40)", width: "16px", height: "16px" }} />
+                    )}
+                  </Grid>
+                  <Grid className={classes.listTextLeft}>
+                    <ParagraphSmall $colorName="--cimigo-theme-light-on-surface">{item.start}</ParagraphSmall>
+                  </Grid>
+                  <Grid className={classes.listNumber}>
+                    <ArrowBreak sx={{ color: "var(--gray-20)", width: "40px" }} />
+                  </Grid>
+                  <Grid className={classes.listTextRight}>
+                    <ParagraphSmall $colorName="--cimigo-theme-light-on-surface">{item.end}</ParagraphSmall>
+                  </Grid>
                 </Grid>
-                <Grid className={classes.listTextRight}>
-                  <ParagraphSmall $colorName="--eerie-black">{item.end}</ParagraphSmall>
-                </Grid>
-              </Grid>
-            </ListItemButton>
+              </ListItemButton>
+            )}
           </ListItem>
         ))}
+        {attributes.length > 5 && (
+          <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes}>
+            {showMoreAttributes ? "- 1 less attribute" : "+ 1 more attribute"}
+          </ParagraphBodyUnderline>
+        )}
       </Grid>
       {/* =======end desktop===== */}
       {/* =======start mobile===== */}
       <Grid className={classes.rootListMobile} mt={3}>
         {attributes?.map((item, index) => (
-          <Accordion key={index} className={classes.itemListMobile}>
+          <Accordion key={index} className={clsx(classes.itemListMobile, { [classes.notDisplayed]: index > 4 && !showMoreAttributes })}>
             <AccordionSummary
               expandIcon={<ExpandMore />}
             >
               <Box>
-                <ParagraphSmall className={classes.listMobileTitle} >{item.start}</ParagraphSmall>
-                <Box className={classes.listMobileContent}>
-                  <ParagraphExtraSmall className={classes.listMobileText}>
-                    <span translation-key="setup_survey_add_att_start_label">{t("setup_survey_add_att_start_label")}: </span>{item.start}
-                  </ParagraphExtraSmall>
-                  <ParagraphExtraSmall mt={1} className={classes.listMobileText}>
-                    <span translation-key="setup_survey_add_att_end_label">{t("setup_survey_add_att_end_label")}: </span>{item.end}
-                  </ParagraphExtraSmall>
-                </Box>
+                {item?.contentTypeId === AttributeContentType.SINGLE ? (
+                  <>
+                    <ParagraphSmall className={classes.listMobileTitle} >{item.content}</ParagraphSmall>
+                    <Box className={classes.listMobileContent}>
+                      <ParagraphExtraSmall className={classes.listMobileText}>
+                        {item.content}
+                      </ParagraphExtraSmall>
+                    </Box>
+                  </>
+                ) : (
+                  <>
+                    <ParagraphSmall className={classes.listMobileTitle} >{item.start}</ParagraphSmall>
+                    <Box className={classes.listMobileContent}>
+                      <ParagraphExtraSmall className={classes.listMobileText}>
+                        <span translation-key="setup_survey_add_att_start_label">{t("setup_survey_add_att_start_label")}: </span>{item.start}
+                      </ParagraphExtraSmall>
+                      <ParagraphExtraSmall mt={1} className={classes.listMobileText}>
+                        <span translation-key="setup_survey_add_att_end_label">{t("setup_survey_add_att_end_label")}: </span>{item.end}
+                      </ParagraphExtraSmall>
+                    </Box>
+                  </>
+                )}
                 {editable && (
                   <Box className={classes.listMobileAction}>
-                    {item.type === AttributeShowType.User && (
+                    {item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
                       <Button
                         onClick={(e) => { e.stopPropagation(); onEditUserAttribute(item.data as any) }}
                         btnType={BtnType.Text}
@@ -299,6 +353,11 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
             </AccordionSummary>
           </Accordion>
         ))}
+        {attributes.length > 5 && (
+          <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes}>
+            {showMoreAttributes ? "- 1 less attribute" : "+ 1 more attribute"}
+          </ParagraphBodyUnderline>
+        )}
       </Grid>
       {/* =======end mobile===== */}
       <Button
@@ -316,11 +375,17 @@ const AdditionalAttributes = memo(({ project }: AdditionalAttributesProps) => {
         open={Boolean(anchorElMenuAttributes)}
         onClose={handleCloseMenuAttributes}
       >
-        <MenuItem onClick={onOpenPopupPreDefined}>
-          <ParagraphBody translation-key="setup_survey_add_att_menu_action_from_pre_defined_list" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_from_pre_defined_list')}</ParagraphBody>
+        <MenuItem onClick={onOpenPopupPreDefined} className={classes.itemItemAddAttributeWrapper}>
+          <ParagraphBody translation-key="setup_survey_add_att_menu_action_from_pre_defined_list" className={classes.itemAddAttribute}>
+            <CheckList sx={{ color: "var(--gray-80)", width: "16px", height: "16px", marginRight: "12px", verticalAlign: "middle" }} />
+            {t('setup_survey_add_att_menu_action_from_pre_defined_list')}
+          </ParagraphBody>
         </MenuItem>
-        <MenuItem onClick={onOpenPopupAddAttributes}>
-          <ParagraphBody translation-key="setup_survey_add_att_menu_action_your_own_attribute" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_your_own_attribute')}</ParagraphBody>
+        <MenuItem onClick={onOpenPopupAddAttributes} className={classes.itemItemAddAttributeWrapper}>
+          <ParagraphBody translation-key="setup_survey_add_att_menu_action_your_own_attribute" className={classes.itemAddAttribute}>
+            <EditSquare sx={{ color: "var(--gray-80)", width: "16px", height: "16px", marginRight: "12px", verticalAlign: "middle" }} />
+            {t('setup_survey_add_att_menu_action_your_own_attribute')}
+          </ParagraphBody>
         </MenuItem>
       </Menu>
       {!enableAdditionalAttributes && (

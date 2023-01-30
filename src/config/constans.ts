@@ -128,6 +128,10 @@ export const API = {
     ATTRIBUTE: {
       DEFAULT: '/v1.0/admin/attribute',
     },
+    ATTRIBUTE_CATEGORY: {
+      DEFAULT: '/v1.0/admin/attribute-category',
+      UPDATE_STATUS: '/v1.0/admin/attribute-category/update-status/:id',
+    },
     TRANSLATION: {
       DEFAULT: '/v1.0/admin/translation',
     },
