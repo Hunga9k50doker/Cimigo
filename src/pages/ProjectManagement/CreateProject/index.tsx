@@ -239,6 +239,7 @@ const CreateProject = () => {
           <CreateProjectStep
             solutionSelected={solutionSelected}
             planSelected={planSelected}
+            plan={plan}
             onClickHandleBack={onClickHandleBack}
           />
         )}

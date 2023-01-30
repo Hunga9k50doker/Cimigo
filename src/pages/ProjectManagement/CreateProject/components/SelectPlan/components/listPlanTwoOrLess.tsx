@@ -27,7 +27,13 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
   const { t } = useTranslation();
 
   return (
-    <Grid container gap={4} className={classes.body} justifyContent="center" alignItems={"flex-start"}>
+    <Grid
+      container
+      gap={4}
+      className={classes.body}
+      justifyContent="center"
+      alignItems={"flex-start"}
+    >
       {plan?.data.map((plan) => {
         return (
           <Grid
@@ -47,7 +53,11 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
             >
               {plan?.isMostPopular && (
                 <div className={classes.headerCart}>
-                  <ParagraphBody className={classes.title} $colorName={"--cimigo-green-dark-3"} translation-key="common_most_pupular">
+                  <ParagraphBody
+                    className={classes.title}
+                    $colorName={"--cimigo-green-dark-3"}
+                    translation-key="common_most_pupular"
+                  >
                     {t("common_most_pupular")}
                   </ParagraphBody>
                 </div>
@@ -57,7 +67,12 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                   <Grid container px={1}>
                     <Grid xs={6}>
                       <Typography>
-                        <Heading3 $fontWeight={"500"} $colorName={"--eerie-black-00"} variant="body2" variantMapping={{ body2: "span" }}>
+                        <Heading3
+                          $fontWeight={"500"}
+                          $colorName={"--eerie-black-00"}
+                          variant="body2"
+                          variantMapping={{ body2: "span" }}
+                        >
                           {plan.title}
                         </Heading3>
                       </Typography>
@@ -72,20 +87,28 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                         </ParagraphBody>
                       </Typography>
                       <Typography display={"flex"} alignItems={"center"}>
-                        <Heading1 $fontWeight={"600"} $colorName={"--cimigo-blue"} variant="body2" variantMapping={{ body2: "span" }}>
+                        <Heading1
+                          $fontWeight={"600"}
+                          $colorName={"--cimigo-blue"}
+                          variant="body2"
+                          variantMapping={{ body2: "span" }}
+                        >
                           {formatMoney(plan)}
                         </Heading1>
-                          {plan.month && (
-                            <ParagraphBody
-                              className={classes.expTime}
-                              $colorName={"--gray-80"}
-                              translation-key={"project_create_tab_plan_time_plan_title"}
-                              variant="body2"
-                              variantMapping={{ body2: "span" }}
-                            >
-                            / {plan.month} {t("project_create_tab_plan_time_plan_title",{month: plan.month === 1 ? "month" : "months"})}
-                            </ParagraphBody>
-                          )}
+                        {plan.month && (
+                          <ParagraphBody
+                            className={classes.expTime}
+                            $colorName={"--gray-80"}
+                            translation-key={"project_create_tab_plan_time_plan_title"}
+                            variant="body2"
+                            variantMapping={{ body2: "span" }}
+                          >
+                            / {plan.month}{" "}
+                            {t("project_create_tab_plan_time_plan_title", {
+                              month: plan.month === 1 ? "month" : "months",
+                            })}
+                          </ParagraphBody>
+                        )}
                       </Typography>
                       <Typography className={classes.tax} color={"--gray-60"}>
                         <ParagraphExtraSmall
@@ -98,13 +121,22 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                         </ParagraphExtraSmall>
                       </Typography>
                     </Grid>
-                    <Grid xs={6} display="flex" justifyContent="end" alignItems="center">
+                    <Grid
+                      xs
+                      display="flex"
+                      justifyContent={{ xs: "center", sm: "end" }}
+                      alignItems="center"
+                    >
                       <CardActions className={classes.itemCenter}>
                         <Button
                           fullWidth
                           btnType={BtnType.Raised}
                           translation-key="setup_survey_popup_save_question_title"
-                          children={<TextBtnSecondary translation-key="common_start">{t("common_start")}</TextBtnSecondary>}
+                          children={
+                            <TextBtnSecondary translation-key="common_start" whiteSpace={"nowrap"}>
+                              {t("common_start")}
+                            </TextBtnSecondary>
+                          }
                           className={classes.btnSave}
                           onClick={() => onChangePlanSelected(plan)}
                           endIcon={<IconNextOutline />}
@@ -125,18 +157,22 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                         variantMapping={{ body2: "span" }}
                         translation-key="project_create_tab_plan_interviews"
                       >
-                        <span className={classes.sampleSize}>{plan.sampleSize + " "}</span> {t("project_create_tab_plan_interviews")}
-                          {plan.month && (
-                            <ParagraphBody
-                              className={classes.expTime}
-                              $colorName={"--gray-80"}
-                              translation-key={"project_create_tab_plan_time_plan_title"}
-                              variant="body2"
-                              variantMapping={{ body2: "span" }}
-                            >
-                            / {plan.month} {t("project_create_tab_plan_time_plan_title",{month: plan.month === 1 ? "month" : "months"})}
-                            </ParagraphBody>
-                          )}
+                        <span className={classes.sampleSize}>{plan.sampleSize + " "}</span>{" "}
+                        {t("project_create_tab_plan_interviews")}{" "}
+                        {plan.month && (
+                          <ParagraphBody
+                            className={classes.expTime}
+                            $colorName={"--gray-80"}
+                            translation-key={"project_create_tab_plan_time_plan_title"}
+                            variant="body2"
+                            variantMapping={{ body2: "span" }}
+                          >
+                            / {plan.month}{" "}
+                            {t("project_create_tab_plan_time_plan_title", {
+                              month: plan.month === 1 ? "month" : "months",
+                            })}
+                          </ParagraphBody>
+                        )}
                       </ParagraphBody>
                     </Grid>
                     {plan?.content.map((item, index) => {

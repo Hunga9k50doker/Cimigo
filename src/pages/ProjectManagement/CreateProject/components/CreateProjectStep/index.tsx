@@ -143,11 +143,19 @@ const CreateProjectStep = memo(
             <ParagraphBody $colorName={"--eerie-black"} translation-key="common_plan">
               {t("common_plan")}:
             </ParagraphBody>
-            <Heading5
+           <Heading5
               mx={0.5}
               $fontWeight={"600"}
               $colorName={"--eerie-black"}
-            >{`${planSelected?.title} (${getCostCurrency(planSelected?.price || 0)?.show})`}</Heading5>
+              translation-key={"project_create_tab_plan_time_plan_title"}
+            >{`${planSelected?.title} (${getCostCurrency(planSelected?.price || 0)?.show} 
+            ${
+              planSelected?.month
+                ?"/ " + planSelected.month + " " + t("project_create_tab_plan_time_plan_title", {
+                    month: planSelected.month === 1 ? "month" : "months",
+                  })
+                : ""
+            })`}</Heading5>
             {
               plan?.data?.length === 1 ?
                   <ParagraphSmallUnderline2

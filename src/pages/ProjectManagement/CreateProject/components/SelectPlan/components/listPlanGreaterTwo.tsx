@@ -26,7 +26,14 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
   const { t } = useTranslation();
 
   return (
-    <Grid container className={classes.body} flexWrap={{lg:"nowrap"}} gap={4} justifyContent="center" alignItems="flex-end">
+    <Grid
+      container
+      className={classes.body}
+      flexWrap={{ lg: "nowrap" }}
+      gap={{ sm: 4 }}
+      justifyContent="center"
+      alignItems="flex-end"
+    >
       {plan?.data.map((plan) => {
         return (
           <Grid
@@ -46,17 +53,26 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
             >
               {plan?.isMostPopular && (
                 <div className={classes.headerCart}>
-                  <ParagraphBody className={classes.title} $colorName={"--cimigo-green-dark-3"} translation-key="common_most_pupular">
+                  <ParagraphBody
+                    className={classes.title}
+                    $colorName={"--cimigo-green-dark-3"}
+                    translation-key="common_most_pupular"
+                  >
                     {t("common_most_pupular")}
                   </ParagraphBody>
                 </div>
               )}
-              <Card sx={{ minWidth: 300 }} className={classes.cardPlan}>
+              <Card sx={{ minWidth: 350 }} className={classes.cardPlan}>
                 <CardContent className={classes.cardCustom}>
                   <Grid container px={1}>
                     <Grid xs={12}>
                       <Typography>
-                        <Heading3 $fontWeight={"500"} $colorName={"--eerie-black-00"} variant="body2" variantMapping={{ body2: "span" }}>
+                        <Heading3
+                          $fontWeight={"500"}
+                          $colorName={"--eerie-black-00"}
+                          variant="body2"
+                          variantMapping={{ body2: "span" }}
+                        >
                           {plan.title}
                         </Heading3>
                       </Typography>
@@ -71,7 +87,12 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                         </ParagraphBody>
                       </Typography>
                       <Typography display={"flex"} alignItems={"center"}>
-                        <Heading1 $fontWeight={"600"} $colorName={"--cimigo-blue"} variant="body2" variantMapping={{ body2: "span" }}>
+                        <Heading1
+                          $fontWeight={"600"}
+                          $colorName={"--cimigo-blue"}
+                          variant="body2"
+                          variantMapping={{ body2: "span" }}
+                        >
                           {formatMoney(plan)}
                         </Heading1>
                         {plan.month && (
@@ -82,7 +103,10 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                             variant="body2"
                             variantMapping={{ body2: "span" }}
                           >
-                           / {plan.month} {t("project_create_tab_plan_time_plan_title",{month: plan.month === 1 ? "month" : "months"})}
+                            / {plan.month}{" "}
+                            {t("project_create_tab_plan_time_plan_title", {
+                              month: plan.month === 1 ? "month" : "months",
+                            })}
                           </ParagraphBody>
                         )}
                       </Typography>
@@ -111,18 +135,22 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                         variantMapping={{ body2: "span" }}
                         translation-key="project_create_tab_plan_interviews"
                       >
-                        <span className={classes.sampleSize}>{plan.sampleSize + " "}</span> {t("project_create_tab_plan_interviews")}
-                          {plan.month && (
-                              <ParagraphBody
-                                className={classes.expTime}
-                                $colorName={"--gray-80"}
-                                translation-key={"project_create_tab_plan_time_plan_title"}
-                                variant="body2"
-                                variantMapping={{ body2: "span" }}
-                              >
-                              / {plan.month} {t("project_create_tab_plan_time_plan_title",{month: plan.month === 1 ? "month" : "months"})}
-                              </ParagraphBody>
-                            )}
+                        <span className={classes.sampleSize}>{plan.sampleSize + " "}</span>{" "}
+                        {t("project_create_tab_plan_interviews")}{" "}
+                        {plan.month && (
+                          <ParagraphBody
+                            className={classes.expTime}
+                            $colorName={"--gray-80"}
+                            translation-key={"project_create_tab_plan_time_plan_title"}
+                            variant="body2"
+                            variantMapping={{ body2: "span" }}
+                          >
+                            / {plan.month}{" "}
+                            {t("project_create_tab_plan_time_plan_title", {
+                              month: plan.month === 1 ? "month" : "months",
+                            })}
+                          </ParagraphBody>
+                        )}
                       </ParagraphBody>
                     </Grid>
                     {plan?.content.map((item, index) => {
@@ -143,7 +171,11 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                     sx={{ mx: 7.25 }}
                     btnType={BtnType.Raised}
                     translation-key="setup_survey_popup_save_question_title"
-                    children={<TextBtnSecondary translation-key="common_select">{t("common_select")}</TextBtnSecondary>}
+                    children={
+                      <TextBtnSecondary translation-key="common_select">
+                        {t("common_select")}
+                      </TextBtnSecondary>
+                    }
                     className={classes.btnSave}
                     onClick={() => onChangePlanSelected(plan)}
                   />
