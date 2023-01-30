@@ -8,8 +8,6 @@ import {
   Badge,
   Step,
   Grid,
-  useTheme,
-  useMediaQuery,
 } from "@mui/material";
 import Button, { BtnType } from "components/common/buttons/Button";
 import Heading4 from "components/common/text/Heading4";
@@ -55,11 +53,6 @@ import CostSummary from "../../components/CostSummary";
 import LockIcon from "../../components/LockIcon";
 import { ETab } from "../../Target/models";
 import classes from "./styles.module.scss";
-import { TargetQuestion, TargetQuestionType } from "models/Admin/target";
-import { TargetService } from "services/target";
-import PopupLocationMobile from "pages/SurveyNew/Target/components/PopupLocationMobile";
-import PopupHouseholdIncomeMobile from "pages/SurveyNew/Target/components/PopupHouseholdIncomeMobile";
-import PopupAgeCoverageMobile from "pages/SurveyNew/Target/components/PopupAgeCoverageMobile";
 import SelectTargetBox from "pages/SurveyNew/Target/SelectTargetBox";
 
 export type ErrorsTarget = {
@@ -85,24 +78,10 @@ const BrandTrack = memo(
   }: BrandTrackProps) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down(1024));
 
     const { project } = useSelector((state: ReducerType) => state.project);
-
-    const [activeTab, setActiveTab] = useState<ETab>();
     const [errorsTarget, setErrorsTarget] = useState<ErrorsTarget>({});
-    const [questionsLocation, setQuestionsLocation] = useState<
-      TargetQuestion[]
-    >([]);
-    const [questionsHouseholdIncome, setQuestionsHouseholdIncome] = useState<
-      TargetQuestion[]
-    >([]);
-    const [questionsAgeGender, setQuestionsAgeGender] = useState<
-      TargetQuestion[]
-    >([]);
     const [checkSelectTarget,setCheckSelectTarget] = useState<boolean>(false);
-    const [questionsMum, setQuestionsMum] = useState<TargetQuestion[]>([]);
 
     const editable = useMemo(() => editableProject(project), [project]);
 
@@ -161,37 +140,6 @@ const BrandTrack = memo(
         push(routes.project.detail.quotas.replace(":id", `${projectId}`))
       );
     };
-    useEffect(() => {
-      const fetchData = async () => {
-        const questions: TargetQuestion[] = await TargetService.getQuestions({
-          take: 9999,
-        })
-          .then((res) => res.data)
-          .catch(() => Promise.resolve([]));
-        const _questionsLocation = questions.filter(
-          (it) => it.typeId === TargetQuestionType.Location
-        );
-        const _questionsHouseholdIncome = questions.filter(
-          (it) => it.typeId === TargetQuestionType.Household_Income
-        );
-        const _questionsAgeGender = questions.filter(
-          (it) => it.typeId === TargetQuestionType.Gender_And_Age_Quotas
-        );
-        const _questionsMum = questions.filter(
-          (it) => it.typeId === TargetQuestionType.Mums_Only
-        );
-        setQuestionsLocation(_questionsLocation);
-        setQuestionsHouseholdIncome(_questionsHouseholdIncome);
-        setQuestionsAgeGender(_questionsAgeGender);
-        setQuestionsMum(_questionsMum);
-      };
-      fetchData();
-    }, []);
-
-    const onChangeTab = (tab?: ETab) => {
-      if (activeTab === tab) return;
-      setActiveTab(tab);
-    };
     return (
       <PageRoot className={classes.root}>
         <LeftContent>
@@ -233,12 +181,7 @@ const BrandTrack = memo(
                 {t("brand_track_who_do_you_want_target_sub_title")}
               </ParagraphBody>
               <SelectTargetBox 
-                isMobile = {isMobile}
                 project = {project}
-                questionsLocation = {questionsLocation}
-                questionsHouseholdIncome = {questionsHouseholdIncome}
-                questionsAgeGender = {questionsAgeGender}
-                questionsMum = {questionsMum}
                 checkSelectTarget={checkSelectTarget}
                 returnDefaultCheckSelectTarget = {returnDefaultCheckSelectTarget}
               />
@@ -389,29 +332,6 @@ const BrandTrack = memo(
             </TabPanelBox>
           </RightPanel>
         </RightContent>
-        {isMobile && (
-          <>
-            <PopupLocationMobile
-              isOpen={activeTab === ETab.Location}
-              project={project}
-              questions={questionsLocation}
-              onCancel={() => onChangeTab()}
-            />
-            <PopupHouseholdIncomeMobile
-              isOpen={activeTab === ETab.Household_Income}
-              project={project}
-              questions={questionsHouseholdIncome}
-              onCancel={() => onChangeTab()}
-            />
-            <PopupAgeCoverageMobile
-              isOpen={activeTab === ETab.Age_Coverage}
-              project={project}
-              questionsAgeGender={questionsAgeGender}
-              questionsMum={questionsMum}
-              onCancel={() => onChangeTab()}
-            />
-          </>
-        )}
       </PageRoot>
     );
   }

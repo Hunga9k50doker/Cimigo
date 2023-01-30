@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, useTheme, useMediaQuery } from "@mui/material";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ETab, TabItem } from "../models";
@@ -21,32 +21,31 @@ import PopupHouseholdIncomeMobile from "../components/PopupHouseholdIncomeMobile
 import PopupAgeCoverageMobile from "../components/PopupAgeCoverageMobile";
 import ProjectHelper from "helpers/project";
 import _ from "lodash";
+import { TargetService } from "services/target";
 
 interface SelectTargetBoxProp {
-  isMobile?: boolean;
   project?: Project;
-  questionsLocation: TargetQuestion[];
-  questionsHouseholdIncome: TargetQuestion[];
-  questionsAgeGender: TargetQuestion[];
-  questionsMum: TargetQuestion[];
   checkSelectTarget?: boolean;
   returnDefaultCheckSelectTarget?: (val: boolean) => void;
 }
 
 const SelectTargetBox = memo(
   ({
-    isMobile,
     project,
-    questionsLocation,
-    questionsHouseholdIncome,
-    questionsAgeGender,
-    questionsMum,
     checkSelectTarget,
     returnDefaultCheckSelectTarget,
   }: SelectTargetBoxProp) => {
     const { t, i18n } = useTranslation();
     const [activeTab, setActiveTab] = useState<ETab>();
     const [errorsTarget, setErrorsTarget] = useState<ErrorsTarget>({});
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down(1024));
+    const [questionsLocation, setQuestionsLocation] = useState<TargetQuestion[]>([])
+    const [questionsHouseholdIncome, setQuestionsHouseholdIncome] = useState<TargetQuestion[]>([])
+    const [questionsAgeGender, setQuestionsAgeGender] = useState<TargetQuestion[]>([])
+    const [questionsMum, setQuestionsMum] = useState<TargetQuestion[]>([])
+    
+
     const listTabs: TabItem[] = useMemo(() => {
       return [
         {
@@ -195,6 +194,32 @@ const SelectTargetBox = memo(
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [checkSelectTarget]);
+    useEffect(() => {
+      const fetchData = async () => {
+        const questions: TargetQuestion[] = await TargetService.getQuestions({
+          take: 9999,
+        })
+          .then((res) => res.data)
+          .catch(() => Promise.resolve([]));
+        const _questionsLocation = questions.filter(
+          (it) => it.typeId === TargetQuestionType.Location
+        );
+        const _questionsHouseholdIncome = questions.filter(
+          (it) => it.typeId === TargetQuestionType.Household_Income
+        );
+        const _questionsAgeGender = questions.filter(
+          (it) => it.typeId === TargetQuestionType.Gender_And_Age_Quotas
+        );
+        const _questionsMum = questions.filter(
+          (it) => it.typeId === TargetQuestionType.Mums_Only
+        );
+        setQuestionsLocation(_questionsLocation);
+        setQuestionsHouseholdIncome(_questionsHouseholdIncome);
+        setQuestionsAgeGender(_questionsAgeGender);
+        setQuestionsMum(_questionsMum);
+      };
+      fetchData();
+    }, []);
     return (
       <Grid className={classes.targetBox}>
         <Box className={classes.targetTabs}>
@@ -289,3 +314,4 @@ const SelectTargetBox = memo(
   }
 );
 export default SelectTargetBox;
+
