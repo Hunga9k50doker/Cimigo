@@ -145,7 +145,7 @@ const PopupPayment = memo((props: Props) => {
           />
         </Box>
         <Typography color={"var(--gray-60)"}>
-          Red invoice will be issued when we receive your payment.
+          Read invoice will be issued when we receive your payment.
         </Typography>
         <Box mb={2}>
           <Accordion className={classes.accordion}>

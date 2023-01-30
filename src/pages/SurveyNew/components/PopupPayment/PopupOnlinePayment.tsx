@@ -5,7 +5,7 @@ import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined
 import ParagraphBody from "components/common/text/ParagraphBody";
 import PopupPayment from "./components";
 import images from "config/images";
-
+import classes from "./styles.module.scss";
 interface Props {
   isOpen: boolean;
   onCancel: () => void;
@@ -26,12 +26,14 @@ const PopupBankTransfer = memo((props: Props) => {
       onCancel={onCancel}
     >
       <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
-        <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
-        <ParagraphBody my={2} ml={1}>
+        <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)", fontWeight: 400 }} />
+        <ParagraphBody my={2} ml={1} $colorName={"--gray-80"}>
           Due date: Nov 25, 2022
         </ParagraphBody>
       </Box>
-      <ParagraphBody textAlign={"center"}>You haven't paid yet? Try again</ParagraphBody>
+      <ParagraphBody textAlign={"center"} className={classes.linkA} $colorName={"--gray-80"}>
+        You haven't paid yet? <a href="#">Try again</a>
+      </ParagraphBody>
     </PopupPayment>
   );
 });

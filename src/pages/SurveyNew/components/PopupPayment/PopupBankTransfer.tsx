@@ -213,11 +213,13 @@ const PopupBankTransfer = memo((props: Props) => {
       </Grid>
       <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
         <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
-        <ParagraphBody my={2} ml={1}>
+        <ParagraphBody my={2} ml={1} $colorName={"--gray-80"}>
           Due date: Nov 25, 2022
         </ParagraphBody>
       </Box>
-      <ParagraphBody textAlign={"center"}>Have you made the payment? Notify us</ParagraphBody>
+      <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} className={classes.linkA}>
+        Have you made the payment? <a href="#"> Notify us</a>
+      </ParagraphBody>
     </PopupPayment>
   );
 });
