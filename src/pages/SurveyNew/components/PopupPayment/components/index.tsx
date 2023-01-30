@@ -114,7 +114,9 @@ const PopupPayment = memo((props: Props) => {
               {isPopupSupportAgent && (
                 <Box display={"flex"} alignItems={"center"} justifyContent={"center"} ml={3}>
                   <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
-                  <ParagraphBody ml={1}>Due date: Nov 25, 2022</ParagraphBody>
+                  <ParagraphBody ml={1} $colorName={"--gray-80"}>
+                    Due date: Nov 25, 2022
+                  </ParagraphBody>
                 </Box>
               )}
             </Grid>
