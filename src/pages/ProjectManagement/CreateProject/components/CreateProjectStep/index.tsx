@@ -136,7 +136,7 @@ const CreateProjectStep = memo(
                 onClickHandleBack(EStep.SELECT_SOLUTION);
               }}
             >
-              ({t("common_change",{change: "Change", changeVn: "Thay đổi"})})
+              ({t("common_change",{change: "change", changeVn: "thay đổi"})})
             </ParagraphSmallUnderline2>
           </Grid>
           <Grid className={classes.handleLinkFormat}>
@@ -165,7 +165,7 @@ const CreateProjectStep = memo(
                 onClickHandleBack(EStep.SELECT_PLAN);
               }}
             >
-              ({t("common_change",{change: "Review", changeVn: "Chi tiết"})})
+              ({t("common_change",{change: "review", changeVn: "chi tiết"})})
             </ParagraphSmallUnderline2>
                 :
                   <ParagraphSmallUnderline2
@@ -175,7 +175,7 @@ const CreateProjectStep = memo(
                 onClickHandleBack(EStep.SELECT_PLAN);
               }}
             >
-              ({t("common_change",{change: "Change", changeVn: "Thay đổi"})})
+              ({t("common_change",{change: "change", changeVn: "thay đổi"})})
             </ParagraphSmallUnderline2>
             }
           </Grid>
