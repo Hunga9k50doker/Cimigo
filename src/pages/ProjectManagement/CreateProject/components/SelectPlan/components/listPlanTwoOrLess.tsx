@@ -138,8 +138,8 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                   <Typography variant="body2" variantMapping={{ body2: "div" }}>
                     <div className={classes.line}></div>
                   </Typography>
-                  <Grid className={classes.contentInPlan} container px={1}>
-                    <Grid className={classes.contentPlan} xs={6}>
+                  <Grid className={classes.contentInPlan} container px={2}>
+                    <Grid className={classes.contentPlan} xs={12} sm={6}>
                       <DoneIcon className={classes.iconContentPlan} />
                       <ParagraphBody
                         ml={1.5}
@@ -168,7 +168,7 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                     </Grid>
                     {plan?.content.map((item, index) => {
                       return (
-                        <Grid className={classes.contentPlan} key={index} xs={6}>
+                        <Grid className={classes.contentPlan} key={index} xs sm={6}>
                           <DoneIcon className={classes.iconContentPlan} />
                           <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"}>
                             {item}

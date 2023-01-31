@@ -116,7 +116,7 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                   <Typography variant="body2" variantMapping={{ body2: "div" }}>
                     <div className={classes.line}></div>
                   </Typography>
-                  <Grid className={classes.contentInPlan} container px={1}>
+                  <Grid className={classes.contentInPlan} container px={2}>
                     <Grid className={classes.contentPlan} xs={12}>
                       <DoneIcon className={classes.iconContentPlan} />
                       <ParagraphBody
