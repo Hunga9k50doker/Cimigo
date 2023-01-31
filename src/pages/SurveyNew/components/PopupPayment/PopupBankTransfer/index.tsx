@@ -1,10 +1,12 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { Box, Dialog } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import classes from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import Typography from "@mui/material/Typography";
 import Accordion from "@mui/material/Accordion";
+import { useSelector } from "react-redux";
+import { ReducerType } from "redux/reducers";
 import clsx from "clsx";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -22,72 +24,22 @@ import Heading1 from "components/common/text/Heading1";
 import Heading3 from "components/common/text/Heading3";
 import Heading4 from "components/common/text/Heading4";
 import ButtonClose from "components/common/buttons/ButtonClose";
+import { getPayment } from "pages/SurveyNew/Pay/models";
+import { usePrice } from "helpers/price";
+
 interface Props {
   isOpen: boolean;
   onCancel: () => void;
 }
 
-const data = [
-  {
-    title: "Transfer in VND",
-    bankName: {
-      title: "Bank Name",
-      value: "Vietnam Technological and Commercial Joint Stock Bank (TCB)",
-    },
-    Beneficiary: {
-      title: "Beneficiary",
-      value: "CIMIGO",
-    },
-    accountNumber: {
-      title: "Account number",
-      value: "19026245046014",
-    },
-    currency: {
-      title: "Currency",
-      value: "VND",
-    },
-    transferAmount: {
-      title: "Transfer amount",
-      value: "$1,000",
-    },
-    paymentReference: {
-      title: "Payment reference",
-      value: "RP1234",
-    },
-  },
-  {
-    title: "Transfer in USD",
-    bankName: {
-      title: "Bank Name",
-      value: "Vietnam Technological and Commercial Joint Stock Bank (TCB)",
-    },
-    Beneficiary: {
-      title: "Beneficiary",
-      value: "CIMIGO",
-    },
-    accountNumber: {
-      title: "Account number",
-      value: "19026245046014",
-    },
-    currency: {
-      title: "Currency",
-      value: "USD",
-    },
-    transferAmount: {
-      title: "Transfer amount",
-      value: "$1,000",
-    },
-    paymentReference: {
-      title: "Payment reference",
-      value: "RP1234",
-    },
-  },
-];
-
 const PopupBankTransfer = memo((props: Props) => {
   const { isOpen, onCancel } = props;
   const { t } = useTranslation();
+  const { project } = useSelector((state: ReducerType) => state.project);
+  const payment = useMemo(() => getPayment(project?.payments), [project]);
+  const { getCostCurrency } = usePrice();
 
+  console.log(payment);
   return (
     <Dialog scroll="paper" open={isOpen} onClose={onCancel} classes={{ paper: classes.paper }}>
       <DialogTitleConfirm sx={{ paddingTop: 0 }}>
@@ -126,87 +78,239 @@ const PopupBankTransfer = memo((props: Props) => {
           }}
         />
         <Grid>
-          {data.map((item, key) => (
-            <Accordion
-              className={clsx(classes.accordion, classes.accordionBankTransfer)}
-              sx={{ mt: 2, border: "1px solid var(--cimigo-blue-light-4)" }}
-              key={key}
+          <Accordion
+            className={clsx(classes.accordion, classes.accordionBankTransfer)}
+            sx={{ mt: 2, border: "1px solid var(--cimigo-blue-light-4)" }}
+          >
+            <AccordionSummary
+              sx={{
+                backgroundColor: "var(--cimigo-blue-light-4)",
+                "&:hover": {
+                  backgroundColor: "var(--cimigo-blue-light-3)",
+                },
+              }}
+              width={"100%"}
+              className={classes.accordionSummary}
+              expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
             >
-              <AccordionSummary
-                sx={{
-                  backgroundColor: "var(--cimigo-blue-light-4)",
-                  "&:hover": {
-                    backgroundColor: "var(--cimigo-blue-light-3)",
-                  },
-                }}
-                width={"100%"}
-                className={classes.accordionSummary}
-                expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
+              <Heading4
+                $colorName={"--cimigo-blue"}
+                display={"flex"}
+                alignItems={"center"}
+                translation-key="payment_billing_transfer"
               >
-                <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"}>
-                  {item.title}
-                </Heading4>
-              </AccordionSummary>
-              <AccordionDetails
-                className={classes.accordionDetails}
-                sx={{ backgroundColor: "var(--cimigo-blue-light-5)" }}
+                {t("payment_billing_transfer", { transfer: "VND" })}
+              </Heading4>
+            </AccordionSummary>
+            <AccordionDetails
+              className={classes.accordionDetails}
+              sx={{ backgroundColor: "var(--cimigo-blue-light-5)" }}
+            >
+              <Grid rowGap={1} py={2}>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                  <ParagraphSmall translation-key="payment_billing_bank_name">
+                    {t("payment_billing_bank_name")}
+                  </ParagraphSmall>
+                  <Typography
+                    className={classes.boldText}
+                    translation-key="payment_billing_bank_name_name"
+                  >
+                    {t("payment_billing_bank_name_name")}
+                  </Typography>
+                </Grid>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                  <ParagraphSmall translation-key="payment_billing_beneficiary">
+                    {t("payment_billing_beneficiary")}
+                  </ParagraphSmall>
+                  <Typography
+                    className={classes.boldText}
+                    translation-key="payment_billing_beneficiary_name"
+                  >
+                    {t("payment_billing_beneficiary_name")}
+                  </Typography>
+                </Grid>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                  <ParagraphSmall translation-key="payment_billing_account_number">
+                    {t("payment_billing_account_number")}
+                  </ParagraphSmall>
+                  <Typography
+                    className={classes.boldText}
+                    translation-key="payment_billing_account_number_bank"
+                  >
+                    {t("payment_billing_account_number_bank")}
+                  </Typography>
+                </Grid>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                  <ParagraphSmall translation-key="payment_billing_currency">
+                    {t("payment_billing_currency")}
+                  </ParagraphSmall>
+                  <Typography
+                    className={classes.boldText}
+                    translation-key="payment_billing_currency_VND"
+                  >
+                    {t("payment_billing_currency_VND")}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid py={2}>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  py={0.5}
+                  className={classes.box}
+                >
+                  <Heading4
+                    className={classes.boldText}
+                    translation-key="payment_billing_transfer_amount"
+                  >
+                    {t("payment_billing_transfer_amount")}
+                  </Heading4>
+                  <Heading4 className={classes.boldText}>
+                    {getCostCurrency(payment?.totalAmount, payment?.currency)?.VNDShow}
+                  </Heading4>
+                </Box>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  py={0.5}
+                >
+                  <Heading4
+                    className={classes.boldText}
+                    translation-key="payment_billing_payment_reference"
+                  >
+                    {t("payment_billing_payment_reference")}
+                  </Heading4>
+                  <Heading4 className={classes.boldText}>{payment?.orderId}</Heading4>
+                </Box>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion
+            className={clsx(classes.accordion, classes.accordionBankTransfer)}
+            sx={{ mt: 2, border: "1px solid var(--cimigo-blue-light-4)" }}
+          >
+            <AccordionSummary
+              sx={{
+                backgroundColor: "var(--cimigo-blue-light-4)",
+                "&:hover": {
+                  backgroundColor: "var(--cimigo-blue-light-3)",
+                },
+              }}
+              width={"100%"}
+              className={classes.accordionSummary}
+              expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Heading4
+                $colorName={"--cimigo-blue"}
+                display={"flex"}
+                alignItems={"center"}
+                translation-key="payment_billing_transfer"
               >
-                <Grid rowGap={1} py={2}>
-                  <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                    <ParagraphSmall>{item.bankName.title}</ParagraphSmall>
-                    <Typography className={classes.boldText}>{item.bankName.value}</Typography>
-                  </Grid>
-                  <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                    <ParagraphSmall>{item.Beneficiary.title}</ParagraphSmall>
-                    <Typography className={classes.boldText}>{item.Beneficiary.value}</Typography>
-                  </Grid>
-                  <Grid
-                    display={"flex"}
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
-                    className={classes.box}
+                {t("payment_billing_transfer", { transfer: "USD" })}
+              </Heading4>
+            </AccordionSummary>
+            <AccordionDetails
+              className={classes.accordionDetails}
+              sx={{ backgroundColor: "var(--cimigo-blue-light-5)" }}
+            >
+              <Grid rowGap={1} py={2}>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                  <ParagraphSmall translation-key="payment_billing_bank_name">
+                    {t("payment_billing_bank_name")}
+                  </ParagraphSmall>
+                  <Typography
+                    className={classes.boldText}
+                    translation-key="payment_billing_bank_name_name"
                   >
-                    <ParagraphSmall>{item.accountNumber.title}</ParagraphSmall>
-                    <Typography className={classes.boldText}>{item.accountNumber.value}</Typography>
-                  </Grid>
-                  <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                    <ParagraphSmall>{item.currency.title}</ParagraphSmall>
-                    <Typography className={classes.boldText}>{item.currency.value}</Typography>
-                  </Grid>
+                    {t("payment_billing_bank_name_name")}
+                  </Typography>
                 </Grid>
-                <Grid py={2}>
-                  <Box
-                    display={"flex"}
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
-                    py={0.5}
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                  <ParagraphSmall translation-key="payment_billing_beneficiary">
+                    {t("payment_billing_beneficiary")}
+                  </ParagraphSmall>
+                  <Typography
+                    className={classes.boldText}
+                    translation-key="payment_billing_beneficiary_name"
                   >
-                    <Heading4 className={classes.boldText} translation-key="">
-                      {item.transferAmount.title}
-                    </Heading4>
-                    <Heading4 className={classes.boldText} translation-key="">
-                      {item.transferAmount.value}
-                    </Heading4>
-                  </Box>
-                  <Box
-                    display={"flex"}
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
-                    py={0.5}
-                  >
-                    <Heading4 className={classes.boldText} translation-key="">
-                      {item.paymentReference.title}
-                    </Heading4>
-                    <Heading4 className={classes.boldText} translation-key="">
-                      {item.paymentReference.value}
-                    </Heading4>
-                  </Box>
+                    {t("payment_billing_beneficiary_name")}
+                  </Typography>
                 </Grid>
-              </AccordionDetails>
-            </Accordion>
-          ))}
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                  <ParagraphSmall translation-key="payment_billing_account_number">
+                    {t("payment_billing_account_number")}
+                  </ParagraphSmall>
+                  <Typography
+                    className={classes.boldText}
+                    translation-key="payment_billing_account_number_bank"
+                  >
+                    {t("payment_billing_account_number_bank")}
+                  </Typography>
+                </Grid>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                  <ParagraphSmall translation-key="payment_billing_SWIFT_code">
+                    {t("payment_billing_SWIFT_code")}
+                  </ParagraphSmall>
+                  <Typography
+                    className={classes.boldText}
+                    translation-key="payment_billing_SWIFT_code_name"
+                  >
+                    {t("payment_billing_SWIFT_code_name")}
+                  </Typography>
+                </Grid>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                  <ParagraphSmall translation-key="payment_billing_currency">
+                    {t("payment_billing_currency")}
+                  </ParagraphSmall>
+                  <Typography
+                    className={classes.boldText}
+                    translation-key="payment_billing_currency_USD"
+                  >
+                    {t("payment_billing_currency_USD")}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid py={2}>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  py={0.5}
+                  className={classes.box}
+                >
+                  <Heading4
+                    className={classes.boldText}
+                    translation-key="payment_billing_transfer_amount"
+                  >
+                    {t("payment_billing_transfer_amount")}
+                  </Heading4>
+                  <Heading4 className={classes.boldText}>
+                    {getCostCurrency(payment?.totalAmount, payment?.currency)?.USDShow}
+                  </Heading4>
+                </Box>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  py={0.5}
+                >
+                  <Heading4
+                    className={classes.boldText}
+                    translation-key="payment_billing_payment_reference"
+                  >
+                    {t("payment_billing_payment_reference")}
+                  </Heading4>
+                  <Heading4 className={classes.boldText}>{payment?.orderId}</Heading4>
+                </Box>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
         </Grid>
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
           <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />

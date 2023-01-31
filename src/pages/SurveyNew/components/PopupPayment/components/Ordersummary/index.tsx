@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { memo } from "react";
 import { Box } from "@mui/material";
+import { useSelector } from "react-redux";
+import { ReducerType } from "redux/reducers";
 import classes from "./styles.module.scss";
 import Grid from "@mui/material/Grid";
 import { useTranslation } from "react-i18next";
@@ -12,10 +14,14 @@ import Heading6 from "components/common/text/Heading6";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import AccordionSummary from "../AccordionSummary";
+import { usePrice } from "helpers/price";
 
 const Ordersummary = memo(() => {
   const { t } = useTranslation();
+  const { price } = usePrice();
+  const {  configs } = useSelector((state: ReducerType) => state.user);
 
+  console.log(price);
   return (
     <Box mb={2}>
       <Accordion className={classes.accordion}>
@@ -59,32 +65,32 @@ const Ordersummary = memo(() => {
           </Grid>
           <Grid component="div" pt={2} sx={{ borderTop: "1px solid var(--gray-10)" }}>
             <ParagraphBody display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-              <ParagraphSmall color={"var(--gray-60)"}>Subtotal</ParagraphSmall>
-              <Heading6
-                className={classes.boldText}
-                $colorName={"--eerie-black"}
-                translation-key=""
-              >
-                150,000,000 đ
+              <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
+                {t("common_sub_total")}
+              </ParagraphSmall>
+              <Heading6 className={classes.boldText} $colorName={"--eerie-black"}>
+                {price?.amountCost?.show}
               </Heading6>
             </ParagraphBody>
             <ParagraphBody display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-              <ParagraphSmall color={"var(--gray-60)"}>VAT (10%)</ParagraphSmall>
-              <Heading6
-                className={classes.boldText}
-                $colorName={"--eerie-black"}
-                translation-key=""
-              >
-                15,000,000 đ
+              <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
+                {t("common_vat", { percent: (configs?.vat || 0) * 100 })}
+              </ParagraphSmall>
+              <Heading6 className={classes.boldText} $colorName={"--eerie-black"}>
+                {price?.vatCost?.show}
               </Heading6>
             </ParagraphBody>
           </Grid>
           <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} pt={3}>
-            <Heading4 className={classes.boldText} $colorName={"--eerie-black"} translation-key="">
-              Total
+            <Heading4
+              className={classes.boldText}
+              $colorName={"--eerie-black"}
+              translation-key="common_total"
+            >
+              {t("common_total")}
             </Heading4>
-            <Heading4 className={classes.boldText} $colorName={"--eerie-black"} translation-key="">
-              165,000,000 đ
+            <Heading4 className={classes.boldText} $colorName={"--eerie-black"}>
+              {price?.totalAmountCost?.show}
             </Heading4>
           </Box>
         </AccordionDetails>
