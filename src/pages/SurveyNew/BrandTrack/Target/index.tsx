@@ -3,12 +3,7 @@ import {
   ArrowCircleUpRounded,
   ArrowForward,
 } from "@mui/icons-material";
-import {
-  Tab,
-  Badge,
-  Step,
-  Grid,
-} from "@mui/material";
+import { Tab, Badge, Step, Grid } from "@mui/material";
 import Button, { BtnType } from "components/common/buttons/Button";
 import Heading4 from "components/common/text/Heading4";
 import Heading5 from "components/common/text/Heading5";
@@ -17,16 +12,13 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import TabPanelBox from "components/TabPanelBox";
-import { push } from "connected-react-router";
 import { usePrice } from "helpers/price";
 import ProjectHelper, { editableProject } from "helpers/project";
-import _ from "lodash";
 import { ETabRightPanel, TARGET_SECTION } from "models/project";
-import { memo, useState, useMemo, useEffect } from "react";
+import { memo, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
-import { routes } from "routers/routes";
 import {
   Content,
   LeftContent,
@@ -56,7 +48,7 @@ import classes from "./styles.module.scss";
 import SelectTargetBox from "pages/SurveyNew/Target/SelectTargetBox";
 
 export type ErrorsTarget = {
-  [key in ETab ]?: boolean;
+  [key in ETab]?: boolean;
 };
 
 interface BrandTrackProps {
@@ -69,19 +61,16 @@ interface BrandTrackProps {
 }
 const BrandTrack = memo(
   ({
-    projectId,
     isHaveChangePrice,
     tabRightPanel,
     toggleOutlineMobile,
     onChangeTabRightPanel,
     onToggleViewOutlineMobile,
   }: BrandTrackProps) => {
-    const dispatch = useDispatch();
     const { t } = useTranslation();
 
     const { project } = useSelector((state: ReducerType) => state.project);
-    const [errorsTarget, setErrorsTarget] = useState<ErrorsTarget>({});
-    const [checkSelectTarget,setCheckSelectTarget] = useState<boolean>(false);
+    const [clickNextQuotas, setClickNextQuotas] = useState<boolean>(false);
 
     const editable = useMemo(() => editableProject(project), [project]);
 
@@ -100,45 +89,8 @@ const BrandTrack = memo(
         top: el.offsetTop - content.offsetTop,
       });
     };
-
-    const triggerErrors = () => {
-      const _errorsTarget: ErrorsTarget = {};
-      if (!ProjectHelper.isValidTargetTabLocation(project)) {
-        _errorsTarget[ETab.Location] = true;
-      }
-      if (!ProjectHelper.isValidTargetTabHI(project)) {
-        _errorsTarget[ETab.Household_Income] = true;
-      }
-      if (!ProjectHelper.isValidTargetTabAC(project)) {
-        _errorsTarget[ETab.Age_Coverage] = true;
-      }
-      return _errorsTarget;
-    };
-
-    useEffect(() => {
-      if (project && !_.isEmpty(errorsTarget)) {
-        setErrorsTarget(triggerErrors());
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [project]);
-    const returnDefaultCheckSelectTarget = (val: boolean) =>{
-      if(!val){
-        setCheckSelectTarget(val)
-      }
-      if(val && checkSelectTarget){
-        dispatch(
-          push(routes.project.detail.quotas.replace(":id", `${projectId}`))
-        );
-      }
-    }
     const onNextQuotas = () => {
-      if (editable) {
-        setCheckSelectTarget(true)
-        return
-      }
-      dispatch(
-        push(routes.project.detail.quotas.replace(":id", `${projectId}`))
-      );
+      setClickNextQuotas(true);
     };
     return (
       <PageRoot className={classes.root}>
@@ -180,10 +132,10 @@ const BrandTrack = memo(
               >
                 {t("brand_track_who_do_you_want_target_sub_title")}
               </ParagraphBody>
-              <SelectTargetBox 
-                project = {project}
-                checkSelectTarget={checkSelectTarget}
-                returnDefaultCheckSelectTarget = {returnDefaultCheckSelectTarget}
+              <SelectTargetBox
+                project={project}
+                clickNextQuotas={clickNextQuotas}
+                setClickNextQuotas={setClickNextQuotas}
               />
             </Grid>
           </Content>

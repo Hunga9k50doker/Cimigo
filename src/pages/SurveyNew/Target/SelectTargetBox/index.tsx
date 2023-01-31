@@ -22,18 +22,20 @@ import PopupAgeCoverageMobile from "../components/PopupAgeCoverageMobile";
 import ProjectHelper from "helpers/project";
 import _ from "lodash";
 import { TargetService } from "services/target";
-
+import { useDispatch } from "react-redux";
+import { push } from "connected-react-router";
+import { routes } from "routers/routes";
 interface SelectTargetBoxProp {
   project?: Project;
-  checkSelectTarget?: boolean;
-  returnDefaultCheckSelectTarget?: (val: boolean) => void;
+  clickNextQuotas?:boolean;
+  setClickNextQuotas?: (val: boolean) => void;
 }
 
 const SelectTargetBox = memo(
   ({
     project,
-    checkSelectTarget,
-    returnDefaultCheckSelectTarget,
+    clickNextQuotas,
+    setClickNextQuotas,
   }: SelectTargetBoxProp) => {
     const { t, i18n } = useTranslation();
     const [activeTab, setActiveTab] = useState<ETab>();
@@ -44,7 +46,7 @@ const SelectTargetBox = memo(
     const [questionsHouseholdIncome, setQuestionsHouseholdIncome] = useState<TargetQuestion[]>([])
     const [questionsAgeGender, setQuestionsAgeGender] = useState<TargetQuestion[]>([])
     const [questionsMum, setQuestionsMum] = useState<TargetQuestion[]>([])
-    
+    const dispatch = useDispatch();
 
     const listTabs: TabItem[] = useMemo(() => {
       return [
@@ -179,7 +181,8 @@ const SelectTargetBox = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [project]);
     useEffect(() => {
-      if (checkSelectTarget) {
+      if (clickNextQuotas) {
+        setClickNextQuotas(!clickNextQuotas);
         const _errorsTarget = triggerErrors();
         setErrorsTarget(_errorsTarget);
         if (
@@ -187,13 +190,15 @@ const SelectTargetBox = memo(
           _errorsTarget[ETab.Household_Income] ||
           _errorsTarget[ETab.Age_Coverage]
         ) {
-          returnDefaultCheckSelectTarget(false);
+          return;
         }else{
-          returnDefaultCheckSelectTarget(true);
+          dispatch(
+            push(routes.project.detail.quotas.replace(":id", `${project.id}`))
+          );
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [checkSelectTarget]);
+    }, [clickNextQuotas]);
     useEffect(() => {
       const fetchData = async () => {
         const questions: TargetQuestion[] = await TargetService.getQuestions({
