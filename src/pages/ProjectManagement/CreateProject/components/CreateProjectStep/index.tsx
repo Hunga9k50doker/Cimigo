@@ -136,7 +136,7 @@ const CreateProjectStep = memo(
                 onClickHandleBack(EStep.SELECT_SOLUTION);
               }}
             >
-              ({t("common_change")})
+              ({t("common_change",{change: "Change"})})
             </ParagraphSmallUnderline2>
           </Grid>
           <Grid className={classes.handleLinkFormat}>
@@ -151,21 +151,21 @@ const CreateProjectStep = memo(
             >{`${planSelected?.title} (${getCostCurrency(planSelected?.price || 0)?.show} 
             ${
               planSelected?.month
-                ?"/ " + planSelected.month + " " + t("project_create_tab_plan_time_plan_title", {
-                    month: planSelected.month === 1 ? "month" : "months",
+                ?"/ " + planSelected.month + t("project_create_tab_plan_time_plan_title", {
+                    month: planSelected.month === 1 ? " month" : " months",
                   })
                 : ""
             })`}</Heading5>
             {
               plan?.data?.length === 1 ?
                   <ParagraphSmallUnderline2
-              translation-key="common_review"
+              translation-key="common_change"
               className={classes.link}
               onClick={() => {
                 onClickHandleBack(EStep.SELECT_PLAN);
               }}
             >
-              ({t("common_review")})
+              ({t("common_change",{change: "Review"})})
             </ParagraphSmallUnderline2>
                 :
                   <ParagraphSmallUnderline2
@@ -175,7 +175,7 @@ const CreateProjectStep = memo(
                 onClickHandleBack(EStep.SELECT_PLAN);
               }}
             >
-              ({t("common_change")})
+              ({t("common_change",{change: "Change"})})
             </ParagraphSmallUnderline2>
             }
           </Grid>

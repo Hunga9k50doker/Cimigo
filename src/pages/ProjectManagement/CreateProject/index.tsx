@@ -112,29 +112,24 @@ const CreateProject = () => {
     return null;
   };
 
-   const getPlans = async () => {
-     dispatch(setLoading(true));
-     const params: UserGetPlans = {
-       take: 99999,
-       solutionId: solutionSelected?.id || undefined,
-     };
-     PlanService.getPlans(params)
-       .then((res) => {
-         setPlan({
-           data: res.data,
-           meta: res.meta,
-         });
-       })
-       .catch((e) => dispatch(setErrorMess(e)))
-       .finally(() => dispatch(setLoading(false)));
-   };
-  
   useEffect(() => {
     if (solutionSelected?.id) {
-      getPlans();
+        dispatch(setLoading(true));
+        const params: UserGetPlans = {
+          take: 99999,
+          solutionId: solutionSelected?.id || undefined,
+        };
+        PlanService.getPlans(params)
+          .then((res) => {
+            setPlan({
+              data: res.data,
+              meta: res.meta,
+            });
+          })
+          .catch((e) => dispatch(setErrorMess(e)))
+          .finally(() => dispatch(setLoading(false)));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [solutionSelected]);
+  }, [dispatch, solutionSelected]);
 
   useEffect(() => {
     if (createProjectRedirect?.solutionId && createProjectRedirect.planId) {

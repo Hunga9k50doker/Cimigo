@@ -62,7 +62,7 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                   </ParagraphBody>
                 </div>
               )}
-              <Card sx={{ minWidth: 300 }} className={classes.cardPlan}>
+              <Card sx={{ minWidth: 362 }} className={classes.cardPlan}>
                 <CardContent className={classes.cardCustom}>
                   <Grid container px={1}>
                     <Grid xs={6}>
@@ -76,18 +76,9 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                           {plan.title}
                         </Heading3>
                       </Typography>
-                      <Typography className={classes.startAt}>
-                        <ParagraphBody
-                          $colorName={"--eerie-black-00"}
-                          translation-key="project_create_tab_plan_start_at"
-                          variant="body2"
-                          variantMapping={{ body2: "span" }}
-                        >
-                          {t("project_create_tab_plan_start_at")}
-                        </ParagraphBody>
-                      </Typography>
                       <Typography display={"flex"} alignItems={"center"}>
                         <Heading1
+                          $fontSize={"28px"}
                           $fontWeight={"600"}
                           $colorName={"--cimigo-blue"}
                           variant="body2"
@@ -157,7 +148,7 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                         variantMapping={{ body2: "span" }}
                         translation-key="project_create_tab_plan_interviews"
                       >
-                        <span className={classes.sampleSize}>{plan.sampleSize + " "}</span>{" "}
+                        <span className={classes.sampleSize}>{plan.sampleSize}</span>{" "}
                         {t("project_create_tab_plan_interviews")}{" "}
                         {plan.month && (
                           <ParagraphBody
