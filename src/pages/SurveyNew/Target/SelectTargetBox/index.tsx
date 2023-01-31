@@ -6,7 +6,6 @@ import classes from "./styles.module.scss";
 import images from "config/images";
 import React from "react";
 import clsx from "clsx";
-import { ErrorsTarget } from "pages/SurveyNew/BrandTrack/Target";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { Project } from "models/project";
@@ -25,6 +24,10 @@ import { TargetService } from "services/target";
 import { useDispatch } from "react-redux";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
+
+type ErrorsTarget = {
+  [key in ETab]?: boolean;
+};
 interface SelectTargetBoxProp {
   project?: Project;
   clickNextQuotas?:boolean;

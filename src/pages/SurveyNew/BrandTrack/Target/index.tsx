@@ -43,14 +43,8 @@ import {
 } from "../../components";
 import CostSummary from "../../components/CostSummary";
 import LockIcon from "../../components/LockIcon";
-import { ETab } from "../../Target/models";
 import classes from "./styles.module.scss";
 import SelectTargetBox from "pages/SurveyNew/Target/SelectTargetBox";
-
-export type ErrorsTarget = {
-  [key in ETab]?: boolean;
-};
-
 interface BrandTrackProps {
   projectId: number;
   isHaveChangePrice: boolean;
