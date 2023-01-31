@@ -90,14 +90,12 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                           <ParagraphBody
                             className={classes.expTime}
                             $colorName={"--gray-80"}
-                            translation-key={"project_create_tab_plan_time_plan_title"}
+                            translation-key={plan.month === 1 ? "common_month" : "common_months"}
                             variant="body2"
                             variantMapping={{ body2: "span" }}
                           >
                             / {plan.month}{" "}
-                            {t("project_create_tab_plan_time_plan_title", {
-                              month: plan.month === 1 ? "month" : "months",
-                            })}
+                            {plan.month === 1 ? t("common_month") : t("common_months")}
                           </ParagraphBody>
                         )}
                       </Typography>
@@ -132,14 +130,12 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                           <ParagraphBody
                             className={classes.expTime}
                             $colorName={"--gray-80"}
-                            translation-key={"project_create_tab_plan_time_plan_title"}
+                            translation-key={plan.month === 1 ? "common_month" : "common_months"}
                             variant="body2"
                             variantMapping={{ body2: "span" }}
                           >
                             / {plan.month}{" "}
-                            {t("project_create_tab_plan_time_plan_title", {
-                              month: plan.month === 1 ? "month" : "months",
-                            })}
+                            {plan.month === 1 ? t("common_month") : t("common_months")}
                           </ParagraphBody>
                         )}
                       </ParagraphBody>

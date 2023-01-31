@@ -136,7 +136,7 @@ const CreateProjectStep = memo(
                 onClickHandleBack(EStep.SELECT_SOLUTION);
               }}
             >
-              ({t("common_change",{change: "change", changeVn: "thay đổi"})})
+              ({t("common_change")})
             </ParagraphSmallUnderline2>
           </Grid>
           <Grid className={classes.handleLinkFormat}>
@@ -147,37 +147,22 @@ const CreateProjectStep = memo(
               mx={0.5}
               $fontWeight={"600"}
               $colorName={"--eerie-black"}
-              translation-key={"project_create_tab_plan_time_plan_title"}
+              translation-key={planSelected.month === 1 ? t("common_month") : t("common_months")}
             >{`${planSelected?.title} (${getCostCurrency(planSelected?.price || 0)?.show} 
             ${
               planSelected?.month
-                ?`/ ${planSelected.month} ` + t("project_create_tab_plan_time_plan_title", {
-                    month: planSelected.month === 1 ? "month" : "months",
-                  })
+                ? `/ ${planSelected.month} ${planSelected.month === 1 ? t("common_month") : t("common_months")}`
                 : ""
             })`}</Heading5>
-            {
-              plan?.data?.length === 1 ?
-                  <ParagraphSmallUnderline2
-              translation-key="common_change"
+            <ParagraphSmallUnderline2
+              translation-key={plan?.data?.length !== 1 ? "common_change": "common_review"}
               className={classes.link}
               onClick={() => {
                 onClickHandleBack(EStep.SELECT_PLAN);
               }}
-            >
-              ({t("common_change",{change: "review", changeVn: "chi tiết"})})
+                >
+                  {plan?.data?.length !== 1 ? `(${t("common_change")})`: `(${t("common_review")})`}
             </ParagraphSmallUnderline2>
-                :
-                  <ParagraphSmallUnderline2
-              translation-key="common_change"
-              className={classes.link}
-              onClick={() => {
-                onClickHandleBack(EStep.SELECT_PLAN);
-              }}
-            >
-              ({t("common_change",{change: "change", changeVn: "thay đổi"})})
-            </ParagraphSmallUnderline2>
-            }
           </Grid>
         </Grid>
         <Grid className={classes.note} mt={2}>
