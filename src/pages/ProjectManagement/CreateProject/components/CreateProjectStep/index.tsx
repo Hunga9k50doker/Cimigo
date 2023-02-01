@@ -143,25 +143,27 @@ const CreateProjectStep = memo(
             <ParagraphBody $colorName={"--eerie-black"} translation-key="common_plan">
               {t("common_plan")}:
             </ParagraphBody>
-           <Heading5
+            <Heading5
               mx={0.5}
               $fontWeight={"600"}
               $colorName={"--eerie-black"}
-              translation-key={planSelected.month === 1 ? t("common_month") : t("common_months")}
+              translation-key={"common_month"}
             >{`${planSelected?.title} (${getCostCurrency(planSelected?.price || 0)?.show} 
             ${
               planSelected?.month
-                ? `/ ${planSelected.month} ${planSelected.month === 1 ? t("common_month") : t("common_months")}`
+                ? `/ ${planSelected.month} ${t("common_month", {
+                      s:planSelected.month === 1 ? "" : t("common_s"),
+                    })}`
                 : ""
             })`}</Heading5>
             <ParagraphSmallUnderline2
-              translation-key={plan?.data?.length !== 1 ? "common_change": "common_review"}
+              translation-key={plan?.data?.length !== 1 ? "common_change" : "common_review"}
               className={classes.link}
               onClick={() => {
                 onClickHandleBack(EStep.SELECT_PLAN);
               }}
-                >
-                  {plan?.data?.length !== 1 ? `(${t("common_change")})`: `(${t("common_review")})`}
+            >
+              {plan?.data?.length !== 1 ? `(${t("common_change")})` : `(${t("common_review")})`}
             </ParagraphSmallUnderline2>
           </Grid>
         </Grid>
@@ -263,7 +265,7 @@ const CreateProjectStep = memo(
                   </Accordion>
                 </Grid>
               )}
-               {solutionSelected?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
+              {solutionSelected?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
                 <Grid className={classes.accordion}>
                   <Accordion className={classes.accordionContent}>
                     <AccordionSummary

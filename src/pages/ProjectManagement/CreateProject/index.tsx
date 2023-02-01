@@ -114,6 +114,7 @@ const CreateProject = () => {
 
   useEffect(() => {
     if (solutionSelected?.id) {
+      const getListPlan = () => {
         dispatch(setLoading(true));
         const params: UserGetPlans = {
           take: 99999,
@@ -128,6 +129,8 @@ const CreateProject = () => {
           })
           .catch((e) => dispatch(setErrorMess(e)))
           .finally(() => dispatch(setLoading(false)));
+      }
+      getListPlan();
     }
   }, [dispatch, solutionSelected]);
 

@@ -65,7 +65,7 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
               <Card sx={{ minWidth: 362 }} className={classes.cardPlan}>
                 <CardContent className={classes.cardCustom}>
                   <Grid container px={{ sm: 2, xs: 1 }}>
-                    <Grid xs={12}>
+                    <Grid xs={12} item>
                       <Typography>
                         <Heading3
                           $fontWeight={"500"}
@@ -90,12 +90,14 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                           <ParagraphBody
                             className={classes.expTime}
                             $colorName={"--gray-80"}
-                            translation-key={plan.month === 1 ? "common_month" : "common_months"}
+                            translation-key="common_month"
                             variant="body2"
                             variantMapping={{ body2: "span" }}
                           >
                             / {plan.month}{" "}
-                            {plan.month === 1 ? t("common_month") : t("common_months")}
+                            {t("common_month", {
+                              s: plan.month === 1 ? "" : t("common_s"),
+                            })}
                           </ParagraphBody>
                         )}
                       </Typography>
@@ -115,7 +117,7 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                     <div className={classes.line}></div>
                   </Typography>
                   <Grid className={classes.contentInPlan} container px={2}>
-                    <Grid className={classes.contentPlan} xs={12}>
+                    <Grid className={classes.contentPlan} xs={12} item>
                       <DoneIcon className={classes.iconContentPlan} />
                       <ParagraphBody
                         ml={1.5}
@@ -130,19 +132,21 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                           <ParagraphBody
                             className={classes.expTime}
                             $colorName={"--gray-80"}
-                            translation-key={plan.month === 1 ? "common_month" : "common_months"}
+                            translation-key={"common_month"}
                             variant="body2"
                             variantMapping={{ body2: "span" }}
                           >
                             / {plan.month}{" "}
-                            {plan.month === 1 ? t("common_month") : t("common_months")}
+                            {t("common_month", {
+                              s: plan.month === 1 ? "" : t("common_s"),
+                            })}
                           </ParagraphBody>
                         )}
                       </ParagraphBody>
                     </Grid>
                     {plan?.content.map((item, index) => {
                       return (
-                        <Grid className={classes.contentPlan} key={index} xs={12}>
+                        <Grid className={classes.contentPlan} key={index} xs={12} item>
                           <DoneIcon className={classes.iconContentPlan} />
                           <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"}>
                             {item}
