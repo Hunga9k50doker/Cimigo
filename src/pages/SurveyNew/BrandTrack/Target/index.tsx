@@ -45,7 +45,7 @@ import CostSummary from "../../components/CostSummary";
 import LockIcon from "../../components/LockIcon";
 import classes from "./styles.module.scss";
 import SelectTargetBox from "pages/SurveyNew/Target/SelectTargetBox";
-interface BrandTrackProps {
+interface TargetProps {
   projectId: number;
   isHaveChangePrice: boolean;
   tabRightPanel: ETabRightPanel;
@@ -53,14 +53,14 @@ interface BrandTrackProps {
   onChangeTabRightPanel: (tab: number) => void;
   onToggleViewOutlineMobile: () => void;
 }
-const BrandTrack = memo(
+const Target = memo(
   ({
     isHaveChangePrice,
     tabRightPanel,
     toggleOutlineMobile,
     onChangeTabRightPanel,
     onToggleViewOutlineMobile,
-  }: BrandTrackProps) => {
+  }: TargetProps) => {
     const { t } = useTranslation();
 
     const { project } = useSelector((state: ReducerType) => state.project);
@@ -282,4 +282,4 @@ const BrandTrack = memo(
     );
   }
 );
-export default BrandTrack;
+export default Target;

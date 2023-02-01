@@ -33,7 +33,7 @@ import { ETabRightPanel } from "models/project";
 import { useChangePrice } from "hooks/useChangePrice";
 import { Helmet } from "react-helmet";
 import { ESOLUTION_TYPE } from "models";
-import Target from "./BrandTrack/Target";
+import Target from "./Target";
 
 export const Survey = () => {
 
