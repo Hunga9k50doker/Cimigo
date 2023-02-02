@@ -39,7 +39,6 @@ const PopupBankTransfer = memo((props: Props) => {
   const payment = useMemo(() => getPayment(project?.payments), [project]);
   const { getCostCurrency } = usePrice();
 
-  console.log(payment);
   return (
     <Dialog scroll="paper" open={isOpen} onClose={onCancel} classes={{ paper: classes.paper }}>
       <DialogTitleConfirm sx={{ paddingTop: 0 }}>
