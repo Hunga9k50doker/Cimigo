@@ -1,0 +1,163 @@
+.root {
+    max-width: 1048px;
+    margin: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 96px;
+    @media only screen and (max-width: 767px) {
+        padding-bottom: 85px;
+    }
+}
+.alert{
+    margin-top: 32px;
+    display: flex;
+    border: 1px solid var(--white);
+    padding: 16px;
+    border-left: 4px solid var(--cimigo-green-dark);
+    border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 1%), 0 6px 10px 0 rgb(0 0 0 / 10%);
+    .content{
+        padding-left: 18px;
+    }
+    .iconAlert, .btnClose{
+        display: flex;
+        align-items: center;
+        color: var(--cimigo-green-dark);
+    }
+    .btnClose{
+        button{
+            color: var(--gray-40);
+        }
+        
+    }
+}
+.yourNextPaymentHeader{
+    display: flex;
+    justify-content: space-between;
+}
+.itemSlide{
+    border: 1px solid var(--cimigo-blue);
+}
+.itemSlideProcessing{
+    border: 1px solid var(--gray-40);
+}
+.itemSlide, .itemSlideProcessing, .itemSlideCompleted{
+    padding: 16px 24px;
+    border-radius: 8px;
+    .contentSlide{
+        display: flex;
+        justify-content: space-between;
+        .contentRight{
+            display: flex;
+            align-items: center;
+        }
+        @media only screen and (max-width: 980px) {
+            display: block;
+            .contentRight{
+                padding-top: 8px;
+            }
+        }
+    }
+}
+.itemSlideProcessing{
+    .contentRight{
+        .statusPayment{
+            border: 1px solid var(--orange-light);
+            border-radius: 4px;
+            background: var(--orange-light);
+            display: flex;
+            color: var(--warning-dark);
+            padding: 6px 8px 10px 12px;
+        }   
+        .urlViewDetail{
+            text-align: right;
+            @media only screen and (max-width: 980px) {
+                text-align: left;
+            }
+        }
+    }
+}
+.itemSlideDisabled{
+    padding: 16px 24px;
+    border: 1px solid var(--gray-20);
+    border-radius: 8px;
+    background: var(--gray-2);
+    .contentSlide{
+        display: flex;
+        justify-content: space-between;
+        .contentRight{
+            display: flex;
+            align-items: center;
+        }
+        @media only screen and (max-width: 980px) {
+            display: block;
+            .contentRight{
+                padding-top: 8px;
+            }
+        }
+    }
+    .iconDolar{
+        color: var(--gray-20);
+    }
+}
+.itemSlideCompleted{
+    border: 1px solid var(--cimigo-green-dark);
+    .contentRight{
+        .icon{
+            text-align: center;
+            color: var(--cimigo-green);
+        }
+        .urlViewDetail{
+            text-align: center;
+            @media only screen and (max-width: 980px) {
+                text-align: left;
+            }
+        }
+    }
+}
+.itemPayment{
+    border-bottom: 1px solid var(--gray-10);
+    padding: 16px 23px;
+    cursor: pointer;
+    .money,.date{
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 32px;
+    }
+    .iconCalendar{
+        position: relative;
+        top: 3px;
+    }
+    .moneyAndDate{
+        display: flex;
+        @media only screen and (max-width: 767px) {
+            display: block;
+        }
+    }
+    .linkDownload{
+        float: right;
+        padding-top: 16px;
+        // @media only screen and (max-width: 767px) {
+        //     float: left;
+        // }
+    }
+}
+.itemPayment:hover{
+    background: var(--gray-2);
+}
+.iconDolar{
+    position: relative;
+    top: 5px;
+    padding-right: 10px;
+}
+.pagination{
+    display: flex;
+    justify-content: right;
+}
+.customItemSilde{
+    margin: 0px 16px;
+    display: block !important;
+    width: auto !important;
+}

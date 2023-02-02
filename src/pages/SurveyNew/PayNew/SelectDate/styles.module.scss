@@ -1,0 +1,96 @@
+.root {
+  max-width: 1048px;
+  margin: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 96px;
+  @media only screen and (max-width: 767px) {
+    padding-bottom: 85px;
+  }
+}
+.itemDate{
+  border: 1px solid var(--gray-20);
+  max-width: 120px;
+  max-width: 104px;
+  padding: 16px 36px;
+  text-align: center;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  .iconActive{
+    display: none;
+  }
+}
+.itemDateActive{
+  border: 1px solid var(--cimigo-blue);
+  max-width: 120px;
+  max-width: 104px;
+  text-align: center;
+  border-radius: 5px;
+  padding: 0px 36px 16px 36px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  .titleMonth{
+    margin-top: -5px;
+  }
+  .iconActive{
+    position: relative;
+    left: 35px;
+    top: 10px;
+    svg{
+      border: 1px solid var(--white);
+      width: 17px;
+      height: 17px;
+      background: var(--cimigo-blue);
+      color: var(--white);
+      border-radius: 50%  ;
+    }
+  }
+}
+.listDate{
+  padding-top: 24px;
+  .contentListDate{
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+.bold{
+  font-weight: 600;
+}
+.linkViewPS{
+  display: flex;
+  svg{
+    color: var(--cimigo-blue);
+  }
+}
+.btnFooter{
+  display: flex;
+  justify-content: right;
+  margin-right: -15px;
+  .btnBack{
+    margin-right: 16px;
+    border-color: var(--white);
+  }
+}
+.disTermsOfServices{
+  text-align: right;
+}
+.listPayment{
+  .payment{
+    width: 100%;
+    border: 1px solid var(--gray-2);
+    background: var(--gray-10);
+    .contentPayment{
+      padding: 16px 0px 16px 24px;
+    }
+  }
+}
+.iconDolar{
+  position: relative;
+  top: 5px;
+  padding-right: 10px;
+}
+.linkTermOfService{
+  color: var(--gray-60);
+  text-decoration:underline;
+}

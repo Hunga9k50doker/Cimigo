@@ -1,0 +1,90 @@
+.root {
+  max-width: 1048px;
+  margin: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 96px;
+  @media only screen and (max-width: 767px) {
+    padding-bottom: 85px;
+  }
+}
+.content{
+  margin-top: 24px;
+  border: solid 1px var(--gray-40);
+  border-radius: 15px;
+  width: 100%;
+  padding: 24px 24px 24px 24px;
+}
+.btn{
+  display: flex; 
+  justify-content: right;
+  p{
+    padding-left: 41.5px;
+    padding-right: 41.5px;
+  }
+}
+.disBtn{
+  padding-top: 8px;
+  float: right;
+}
+.leftContent{
+  .solution{
+    display: flex;
+    .solutionItem{
+      display: flex;
+      padding-left: 144px;
+      @media only screen and (max-width: 767px) {
+        padding-left: 50px;
+      }
+    } 
+    img{
+      width: 24px;
+      height: 24px;
+    }
+  }
+  .sampleTarget{
+    display: flex;
+    button{
+      margin-left: 24px;
+    }
+  }
+  .delivery{
+    display: flex;
+  }
+  .contentSampleTarget{
+    border-left: 1px dashed var(--gray-20);
+    .value{
+
+    }
+  }
+}
+.rightContent{
+  .survey{
+    display: flex;
+  }
+  button{
+    margin-left: 24px;
+  }
+  .rightContent2{
+    border-left: 1px dashed var(--gray-20);
+    .boldContent{
+      font-weight: 600;
+    }
+  }
+}
+.customBtnContentPayment{
+  .titleBtn{
+    color: var(--cimigo-blue-dark-2);
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: var(--cimigo-blue-dark-2);
+  }
+  background: var(--cultured-gray);
+}
+.customGridItem{
+  padding-top: 0px !important;
+}
+
