@@ -43,7 +43,7 @@ const DowloadInvoice = memo(() => {
         />
       </Box>
       <Typography color={"var(--gray-60)"}>
-        Read invoice will be issued when we receive your payment.
+        Red invoice will be issued when we receive your payment.
       </Typography>
     </>
   );
