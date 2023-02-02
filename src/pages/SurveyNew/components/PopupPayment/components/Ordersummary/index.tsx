@@ -19,39 +19,21 @@ import { usePrice } from "helpers/price";
 const Ordersummary = memo(() => {
   const { t } = useTranslation();
   const { price } = usePrice();
-  const {  configs } = useSelector((state: ReducerType) => state.user);
+  const { configs } = useSelector((state: ReducerType) => state.user);
 
   return (
     <Box mb={2}>
       <Accordion className={classes.accordion}>
-        <AccordionSummary
-          className={classes.accordionSummary}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
+        <AccordionSummary className={classes.accordionSummary} aria-controls="panel1a-content" id="panel1a-header">
           <Heading4 $colorName={"--cimigo-blue"}>Order summary</Heading4>
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
-          <Grid
-            component="div"
-            py={2}
-            mt={1}
-            className={classes.box}
-            sx={{ borderTop: "1px solid var(--gray-10)" }}
-          >
+          <Grid component="div" py={2} mt={1} className={classes.box} sx={{ borderTop: "1px solid var(--gray-10)" }}>
             <ParagraphBody display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-              <Heading6
-                className={classes.boldText}
-                $colorName={"--eerie-black"}
-                translation-key=""
-              >
+              <Heading6 className={classes.boldText} $colorName={"--eerie-black"} translation-key="">
                 Brand track (3 months)
               </Heading6>
-              <Heading6
-                className={classes.boldText}
-                $colorName={"--eerie-black"}
-                translation-key=""
-              >
+              <Heading6 className={classes.boldText} $colorName={"--eerie-black"} translation-key="">
                 150,000,000 đ
               </Heading6>
             </ParagraphBody>
@@ -81,11 +63,7 @@ const Ordersummary = memo(() => {
             </ParagraphBody>
           </Grid>
           <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} pt={3}>
-            <Heading4
-              className={classes.boldText}
-              $colorName={"--eerie-black"}
-              translation-key="common_total"
-            >
+            <Heading4 className={classes.boldText} $colorName={"--eerie-black"} translation-key="common_total">
               {t("common_total")}
             </Heading4>
             <Heading4 className={classes.boldText} $colorName={"--eerie-black"}>

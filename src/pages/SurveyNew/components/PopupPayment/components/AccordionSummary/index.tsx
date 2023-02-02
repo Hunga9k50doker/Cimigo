@@ -6,10 +6,7 @@ interface PropsType {
   width?: number | string;
 }
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
-  <MuiAccordionSummary
-    expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />}
-    {...props}
-  />
+  <MuiAccordionSummary expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />} {...props} />
 ))(({ width }: PropsType) => ({
   width: width ?? "fit-content",
   justifyContent: "flex-start",

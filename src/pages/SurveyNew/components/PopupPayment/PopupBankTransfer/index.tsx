@@ -61,11 +61,7 @@ const PopupBankTransfer = memo((props: Props) => {
             </Grid>
           </Box>
         </Box>
-        <ButtonClose
-          $backgroundColor="--eerie-black-5"
-          $colorName="--eerie-black-40"
-          onClick={onCancel}
-        />
+        <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onCancel} />
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
         <ParagraphBody
@@ -94,95 +90,48 @@ const PopupBankTransfer = memo((props: Props) => {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Heading4
-                $colorName={"--cimigo-blue"}
-                display={"flex"}
-                alignItems={"center"}
-                translation-key="payment_billing_transfer"
-              >
+              <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"} translation-key="payment_billing_transfer">
                 {/* {t("payment_billing_transfer", { transfer: "VND" })} */}
                 Transfer in VND
               </Heading4>
             </AccordionSummary>
-            <AccordionDetails
-              className={classes.accordionDetails}
-              sx={{ backgroundColor: "var(--cimigo-blue-light-5)" }}
-            >
+            <AccordionDetails className={classes.accordionDetails} sx={{ backgroundColor: "var(--cimigo-blue-light-5)" }}>
               <Grid rowGap={1} py={2}>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                  <ParagraphSmall translation-key="payment_billing_bank_name">
-                    {t("payment_billing_bank_name")}
-                  </ParagraphSmall>
-                  <Typography
-                    className={classes.boldText}
-                    translation-key="payment_billing_bank_name_name"
-                  >
+                  <ParagraphSmall translation-key="payment_billing_bank_name">{t("payment_billing_bank_name")}</ParagraphSmall>
+                  <Typography className={classes.boldText} translation-key="payment_billing_bank_name_name">
                     {t("payment_billing_bank_name_name")}
                   </Typography>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                  <ParagraphSmall translation-key="payment_billing_beneficiary">
-                    {t("payment_billing_beneficiary")}
-                  </ParagraphSmall>
-                  <Typography
-                    className={classes.boldText}
-                    translation-key="payment_billing_beneficiary_name"
-                  >
+                  <ParagraphSmall translation-key="payment_billing_beneficiary">{t("payment_billing_beneficiary")}</ParagraphSmall>
+                  <Typography className={classes.boldText} translation-key="payment_billing_beneficiary_name">
                     {t("payment_billing_beneficiary_name")}
                   </Typography>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                  <ParagraphSmall translation-key="payment_billing_account_number">
-                    {t("payment_billing_account_number")}
-                  </ParagraphSmall>
-                  <Typography
-                    className={classes.boldText}
-                    translation-key="payment_billing_account_number_bank"
-                  >
+                  <ParagraphSmall translation-key="payment_billing_account_number">{t("payment_billing_account_number")}</ParagraphSmall>
+                  <Typography className={classes.boldText} translation-key="payment_billing_account_number_bank">
                     {t("payment_billing_account_number_bank")}
                   </Typography>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                  <ParagraphSmall translation-key="payment_billing_currency">
-                    {t("payment_billing_currency")}
-                  </ParagraphSmall>
-                  <Typography
-                    className={classes.boldText}
-                    translation-key="payment_billing_currency_VND"
-                  >
+                  <ParagraphSmall translation-key="payment_billing_currency">{t("payment_billing_currency")}</ParagraphSmall>
+                  <Typography className={classes.boldText} translation-key="payment_billing_currency_VND">
                     {t("payment_billing_currency_VND")}
                   </Typography>
                 </Grid>
               </Grid>
               <Grid py={2}>
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                  py={0.5}
-                  className={classes.box}
-                >
-                  <Heading4
-                    className={classes.boldText}
-                    translation-key="payment_billing_transfer_amount"
-                  >
+                <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} className={classes.box}>
+                  <Heading4 className={classes.boldText} translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount
                   </Heading4>
-                  <Heading4 className={classes.boldText}>
-                    {getCostCurrency(payment?.totalAmount, payment?.currency)?.VNDShow}
-                  </Heading4>
+                  <Heading4 className={classes.boldText}>{getCostCurrency(payment?.totalAmount, payment?.currency)?.VNDShow}</Heading4>
                 </Box>
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                  py={0.5}
-                >
-                  <Heading4
-                    className={classes.boldText}
-                    translation-key="payment_billing_payment_reference"
-                  >
+                <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5}>
+                  <Heading4 className={classes.boldText} translation-key="payment_billing_payment_reference">
                     {t("payment_billing_payment_reference")}
                   </Heading4>
                   <Heading4 className={classes.boldText}>{payment?.orderId}</Heading4>
@@ -207,106 +156,54 @@ const PopupBankTransfer = memo((props: Props) => {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Heading4
-                $colorName={"--cimigo-blue"}
-                display={"flex"}
-                alignItems={"center"}
-                translation-key="payment_billing_transfer"
-              >
+              <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"} translation-key="payment_billing_transfer">
                 {/* {t("payment_billing_transfer", { transfer: "USD" })} */}
                 Transfer in USD
               </Heading4>
             </AccordionSummary>
-            <AccordionDetails
-              className={classes.accordionDetails}
-              sx={{ backgroundColor: "var(--cimigo-blue-light-5)" }}
-            >
+            <AccordionDetails className={classes.accordionDetails} sx={{ backgroundColor: "var(--cimigo-blue-light-5)" }}>
               <Grid rowGap={1} py={2}>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                  <ParagraphSmall translation-key="payment_billing_bank_name">
-                    {t("payment_billing_bank_name")}
-                  </ParagraphSmall>
-                  <Typography
-                    className={classes.boldText}
-                    translation-key="payment_billing_bank_name_name"
-                  >
+                  <ParagraphSmall translation-key="payment_billing_bank_name">{t("payment_billing_bank_name")}</ParagraphSmall>
+                  <Typography className={classes.boldText} translation-key="payment_billing_bank_name_name">
                     {t("payment_billing_bank_name_name")}
                   </Typography>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                  <ParagraphSmall translation-key="payment_billing_beneficiary">
-                    {t("payment_billing_beneficiary")}
-                  </ParagraphSmall>
-                  <Typography
-                    className={classes.boldText}
-                    translation-key="payment_billing_beneficiary_name"
-                  >
+                  <ParagraphSmall translation-key="payment_billing_beneficiary">{t("payment_billing_beneficiary")}</ParagraphSmall>
+                  <Typography className={classes.boldText} translation-key="payment_billing_beneficiary_name">
                     {t("payment_billing_beneficiary_name")}
                   </Typography>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                  <ParagraphSmall translation-key="payment_billing_account_number">
-                    {t("payment_billing_account_number")}
-                  </ParagraphSmall>
-                  <Typography
-                    className={classes.boldText}
-                    translation-key="payment_billing_account_number_bank"
-                  >
+                  <ParagraphSmall translation-key="payment_billing_account_number">{t("payment_billing_account_number")}</ParagraphSmall>
+                  <Typography className={classes.boldText} translation-key="payment_billing_account_number_bank">
                     {t("payment_billing_account_number_bank")}
                   </Typography>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                  <ParagraphSmall translation-key="payment_billing_SWIFT_code">
-                    {t("payment_billing_SWIFT_code")}
-                  </ParagraphSmall>
-                  <Typography
-                    className={classes.boldText}
-                    translation-key="payment_billing_SWIFT_code_name"
-                  >
+                  <ParagraphSmall translation-key="payment_billing_SWIFT_code">{t("payment_billing_SWIFT_code")}</ParagraphSmall>
+                  <Typography className={classes.boldText} translation-key="payment_billing_SWIFT_code_name">
                     {t("payment_billing_SWIFT_code_name")}
                   </Typography>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-                  <ParagraphSmall translation-key="payment_billing_currency">
-                    {t("payment_billing_currency")}
-                  </ParagraphSmall>
-                  <Typography
-                    className={classes.boldText}
-                    translation-key="payment_billing_currency_USD"
-                  >
+                  <ParagraphSmall translation-key="payment_billing_currency">{t("payment_billing_currency")}</ParagraphSmall>
+                  <Typography className={classes.boldText} translation-key="payment_billing_currency_USD">
                     {t("payment_billing_currency_USD")}
                   </Typography>
                 </Grid>
               </Grid>
               <Grid py={2}>
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                  py={0.5}
-                  className={classes.box}
-                >
-                  <Heading4
-                    className={classes.boldText}
-                    translation-key="payment_billing_transfer_amount"
-                  >
+                <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} className={classes.box}>
+                  <Heading4 className={classes.boldText} translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount
                   </Heading4>
-                  <Heading4 className={classes.boldText}>
-                    {getCostCurrency(payment?.totalAmount, payment?.currency)?.USDShow}
-                  </Heading4>
+                  <Heading4 className={classes.boldText}>{getCostCurrency(payment?.totalAmount, payment?.currency)?.USDShow}</Heading4>
                 </Box>
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                  py={0.5}
-                >
-                  <Heading4
-                    className={classes.boldText}
-                    translation-key="payment_billing_payment_reference"
-                  >
+                <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5}>
+                  <Heading4 className={classes.boldText} translation-key="payment_billing_payment_reference">
                     {t("payment_billing_payment_reference")}
                   </Heading4>
                   <Heading4 className={classes.boldText}>{payment?.orderId}</Heading4>
@@ -336,9 +233,8 @@ const PopupBankTransfer = memo((props: Props) => {
         <DowloadInvoice />
         <Ordersummary />
         <ParagraphBody $colorName={"--eerie-black-00"}>
-          Please note that it takes approximately 1 to 3 days to process your bank transfer,
-          although it normally takes shorter. Once payment has been settled, we will send an email
-          to notify you.
+          Please note that it takes approximately 1 to 3 days to process your bank transfer, although it normally takes shorter. Once payment has been
+          settled, we will send an email to notify you.
         </ParagraphBody>
         <Box mt={2}>
           <ParagraphBody
@@ -348,12 +244,7 @@ const PopupBankTransfer = memo((props: Props) => {
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
-        <Typography
-          my={3}
-          color={"var(--eerie-black)"}
-          textAlign="center"
-          className={classes.linkA}
-        >
+        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" className={classes.linkA}>
           Change payment method? <a href="#">Click here</a>
         </Typography>
       </DialogContentConfirm>

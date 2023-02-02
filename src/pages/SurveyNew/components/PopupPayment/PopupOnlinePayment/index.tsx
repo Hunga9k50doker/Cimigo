@@ -47,11 +47,7 @@ const PopupOnlinePayment = memo((props: Props) => {
             </Grid>
           </Box>
         </Box>
-        <ButtonClose
-          $backgroundColor="--eerie-black-5"
-          $colorName="--eerie-black-40"
-          onClick={onCancel}
-        />
+        <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onCancel} />
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
         <ParagraphBody
@@ -82,12 +78,7 @@ const PopupOnlinePayment = memo((props: Props) => {
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
-        <Typography
-          my={3}
-          color={"var(--eerie-black)"}
-          textAlign="center"
-          className={classes.linkA}
-        >
+        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" className={classes.linkA}>
           Change payment method? <a href="#">Click here</a>
         </Typography>
       </DialogContentConfirm>

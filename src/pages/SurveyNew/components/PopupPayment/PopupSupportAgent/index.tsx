@@ -58,11 +58,7 @@ const PopupSupportAgent = memo((props: Props) => {
             </Grid>
           </Box>
         </Box>
-        <ButtonClose
-          $backgroundColor="--eerie-black-5"
-          $colorName="--eerie-black-40"
-          onClick={onCancel}
-        />
+        <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onCancel} />
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
         <ParagraphBody
@@ -75,11 +71,7 @@ const PopupSupportAgent = memo((props: Props) => {
         />
         <Grid>
           <Accordion className={clsx(classes.accordion, classes.accordionSupportAgent)}>
-            <AccordionSummary
-              className={classes.accordionSummary}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
+            <AccordionSummary className={classes.accordionSummary} aria-controls="panel1a-content" id="panel1a-header">
               <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"}>
                 Contact information
               </Heading4>
@@ -99,12 +91,7 @@ const PopupSupportAgent = memo((props: Props) => {
                     Nguyen Thanh Son
                   </Typography>
                 </Grid>
-                <Grid
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                  className={classes.box}
-                >
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} className={classes.box}>
                   <ParagraphSmall>Contact email</ParagraphSmall>
                   <Typography className={classes.boldText} color={"var(--eerie-black)"}>
                     sondeptrai@cimigo.com
@@ -133,12 +120,7 @@ const PopupSupportAgent = memo((props: Props) => {
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
-        <Typography
-          my={3}
-          color={"var(--eerie-black)"}
-          textAlign="center"
-          className={classes.linkA}
-        >
+        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" className={classes.linkA}>
           Change payment method? <a href="#">Click here</a>
         </Typography>
       </DialogContentConfirm>

@@ -42,9 +42,7 @@ const DowloadInvoice = memo(() => {
           dangerouslySetInnerHTML={{ __html: "Download proforma invoice" }}
         />
       </Box>
-      <Typography color={"var(--gray-60)"}>
-        Red invoice will be issued when we receive your payment.
-      </Typography>
+      <Typography color={"var(--gray-60)"}>Red invoice will be issued when we receive your payment.</Typography>
     </>
   );
 });
