@@ -21,6 +21,7 @@ import Heading3 from "components/common/text/Heading3";
 import Heading4 from "components/common/text/Heading4";
 import ButtonClose from "components/common/buttons/ButtonClose";
 import AccordionSummary from "../components/AccordionSummary";
+import { ImageMain } from "../components/PopupImage";
 interface Props {
   isOpen: boolean;
   onCancel: () => void;
@@ -34,7 +35,7 @@ const PopupSupportAgent = memo((props: Props) => {
     <Dialog scroll="paper" open={isOpen} onClose={onCancel} classes={{ paper: classes.paper }}>
       <DialogTitleConfirm sx={{ paddingTop: 0 }}>
         <Box display="flex" alignItems={"flex-end"} mt={3}>
-          <img src={images.imgSupportAgent} alt="" className={classes.imagePopup} />
+          <ImageMain src={images.imgSupportAgent} alt="" />
           <Box ml={3}>
             <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="">
               Support on payment

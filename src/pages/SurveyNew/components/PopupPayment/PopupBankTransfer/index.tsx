@@ -26,7 +26,7 @@ import Heading4 from "components/common/text/Heading4";
 import ButtonClose from "components/common/buttons/ButtonClose";
 import { getPayment } from "pages/SurveyNew/Pay/models";
 import { usePrice } from "helpers/price";
-
+import { ImageMain } from "../components/PopupImage";
 interface Props {
   isOpen: boolean;
   onCancel: () => void;
@@ -43,7 +43,7 @@ const PopupBankTransfer = memo((props: Props) => {
     <Dialog scroll="paper" open={isOpen} onClose={onCancel} classes={{ paper: classes.paper }}>
       <DialogTitleConfirm sx={{ paddingTop: 0 }}>
         <Box display="flex" alignItems={"flex-end"} mt={3}>
-          <img src={images.imgPaymentError1} alt="" className={classes.imagePopup} />
+          <ImageMain src={images.imgPaymentError1} alt="" />
           <Box ml={3}>
             <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="">
               Bank transfer processing

@@ -12,6 +12,7 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { getPayment } from "pages/SurveyNew/Pay/models";
 import ParagraphBodyUnderline from "components/common/text/ParagraphBodyUnderline";
 import images from "config/images";
+import { ImageSecond } from "../PopupImage";
 
 const DowloadInvoice = memo(() => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const DowloadInvoice = memo(() => {
   return (
     <>
       <Box display={"flex"} alignItems={"center"} mt={3} mb={0.5}>
-        <img src={images.icInvoice} alt="" />
+        <ImageSecond src={images.icInvoice} alt="" />
         <ParagraphBodyUnderline
           onClick={getInvoice}
           ml={1}
