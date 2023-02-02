@@ -43,7 +43,7 @@ const PopupSupportAgent = memo((props: Props) => {
               Dec 2022 - Feb 2023 payment
             </Heading3>
             <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-              <Box display="flex" mt={1}>
+              <Box display="flex">
                 <IconMoneyCash />
                 <Heading4 ml={1} $fontWeight={400} translation-key="">
                   165,000,000 đ

@@ -54,7 +54,9 @@
     color: var(--cimigo-blue);
   }
 }
-
+.subtitle {
+  border-radius: 4px;
+}
 .imagePopup {
   object-fit: contain;
   display: block;

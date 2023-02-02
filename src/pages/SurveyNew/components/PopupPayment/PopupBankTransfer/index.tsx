@@ -74,7 +74,7 @@ const PopupBankTransfer = memo((props: Props) => {
           translation-key="quotas_invalid_popup_subtitle"
           dangerouslySetInnerHTML={{
             __html:
-              "You have chosen <strong>bank account transfer</strong> as the payment. <br/> method for this payment. Please bank-in cheque/cash to one of following accounts by <strong>Nov 25, 2022</strong> to avoid being terminated.",
+              "You have chosen <strong>bank account transfer</strong> as the payment method for this payment. <br/><br/> Please bank-in cheque/cash to one of following accounts by <strong>Nov 25, 2022</strong> to avoid being terminated.",
           }}
         />
         <Grid>
@@ -101,7 +101,8 @@ const PopupBankTransfer = memo((props: Props) => {
                 alignItems={"center"}
                 translation-key="payment_billing_transfer"
               >
-                {t("payment_billing_transfer", { transfer: "VND" })}
+                {/* {t("payment_billing_transfer", { transfer: "VND" })} */}
+                Transfer in VND
               </Heading4>
             </AccordionSummary>
             <AccordionDetails
@@ -166,7 +167,8 @@ const PopupBankTransfer = memo((props: Props) => {
                     className={classes.boldText}
                     translation-key="payment_billing_transfer_amount"
                   >
-                    {t("payment_billing_transfer_amount")}
+                    {/* {t("payment_billing_transfer_amount")} */}
+                    Transfer amount
                   </Heading4>
                   <Heading4 className={classes.boldText}>
                     {getCostCurrency(payment?.totalAmount, payment?.currency)?.VNDShow}
@@ -212,7 +214,8 @@ const PopupBankTransfer = memo((props: Props) => {
                 alignItems={"center"}
                 translation-key="payment_billing_transfer"
               >
-                {t("payment_billing_transfer", { transfer: "USD" })}
+                {/* {t("payment_billing_transfer", { transfer: "USD" })} */}
+                Transfer in USD
               </Heading4>
             </AccordionSummary>
             <AccordionDetails
@@ -288,7 +291,8 @@ const PopupBankTransfer = memo((props: Props) => {
                     className={classes.boldText}
                     translation-key="payment_billing_transfer_amount"
                   >
-                    {t("payment_billing_transfer_amount")}
+                    {/* {t("payment_billing_transfer_amount")} */}
+                    Transfer amount
                   </Heading4>
                   <Heading4 className={classes.boldText}>
                     {getCostCurrency(payment?.totalAmount, payment?.currency)?.USDShow}
@@ -321,6 +325,15 @@ const PopupBankTransfer = memo((props: Props) => {
         <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} className={classes.linkA}>
           Have you made the payment? <a href="#"> Notify us</a>
         </ParagraphBody>
+        {/* <ParagraphBody
+          textAlign={"center"}
+          $colorName={"--gray-80"}
+          sx={{ background: "#f9f9f9", padding: "4px" }}
+          className={classes.subtitle}
+        >
+          Thank you for your payment.
+          <br /> It might take 1 - 3 days for us to confirm your payment.
+        </ParagraphBody> */}
         <DowloadInvoice />
         <Ordersummary />
         <ParagraphBody $colorName={"--eerie-black-00"}>

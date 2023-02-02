@@ -21,7 +21,6 @@ const Ordersummary = memo(() => {
   const { price } = usePrice();
   const {  configs } = useSelector((state: ReducerType) => state.user);
 
-  console.log(price);
   return (
     <Box mb={2}>
       <Accordion className={classes.accordion}>
