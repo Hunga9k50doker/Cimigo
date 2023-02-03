@@ -4,7 +4,7 @@ import { memo, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { TargetAnswer, TargetQuestionType, TargetQuestion } from "models/Admin/target";
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes";
-import { DataSelected, onToggleAnswer, isDisableSubmit, isSelectAll, onSelectAll } from "../models";
+import { DataSelected, onToggleAnswer, isDisableSubmit, isSelectAll, onSelectAll } from "../../models";
 import { ProjectService } from "services/project";
 import { getTargetRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { editableProject } from "helpers/project";
@@ -13,7 +13,7 @@ import PopupConfirmChangeSampleSize, { DataConfirmChangeSampleSize } from "pages
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
-import { AnswerList, AnswerListItem, QuestionBoxBody, QuestionBoxContainer, QuestionBoxHeader } from "../components";
+import { AnswerList, AnswerListItem, QuestionBoxBody, QuestionBoxContainer, QuestionBoxHeader } from "../../components";
 import Heading5 from "components/common/text/Heading5";
 import ControlCheckbox from "components/common/control/ControlCheckbox";
 import InputCheckbox from "components/common/inputs/InputCheckbox";

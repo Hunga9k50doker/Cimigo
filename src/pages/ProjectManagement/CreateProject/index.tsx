@@ -9,13 +9,16 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import QontoStepIcon from "../components/QontoStepIcon";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import HomeIcon from "@mui/icons-material/Home";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { Helmet } from "react-helmet";
+import QontoStepIcon from "../components/QontoStepIcon";
 import { SolutionService } from "services/solution";
 import { Solution } from "models/Admin/solution";
 import { routes } from "routers/routes";
-import { useHistory } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { ReducerType } from "redux/reducers";
 import SelectPlan from "./components/SelectPlan";
 import { Plan } from "models/Admin/plan";
@@ -23,13 +26,12 @@ import CreateProjectStep from "./components/CreateProjectStep";
 import SolutionList from "./components/SolutionList";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import { setCreateProjectRedirectReducer } from "redux/reducers/Project/actionTypes";
-import HomeIcon from "@mui/icons-material/Home";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import SubTitle from "components/common/text/SubTitle";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { PlanService } from "services/plan";
 import BasicLayout from "layout/BasicLayout";
-import { Helmet } from "react-helmet";
+import { DataPagination } from "models/general";
+import { UserGetPlans } from "models/plan";
 import { usePrice } from "helpers/price";
 export enum EStep {
   SELECT_SOLUTION,
@@ -61,6 +63,7 @@ const CreateProject = () => {
   const [solutionSelected, setSolutionSelected] = useState<Solution>();
   const [activeStep, setActiveStep] = useState<EStep>(EStep.SELECT_SOLUTION);
   const [planSelected, setPlanSelected] = useState<Plan>(null);
+  const [plan, setPlan] = useState<DataPagination<Plan>>();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down(767));
 
@@ -108,6 +111,29 @@ const CreateProject = () => {
     }
     return null;
   };
+
+  useEffect(() => {
+    if (solutionSelected?.id) {
+      const getListPlan = () => {
+        dispatch(setLoading(true));
+        const params: UserGetPlans = {
+          take: 99999,
+          solutionId: solutionSelected?.id || undefined,
+        };
+        PlanService.getPlans(params)
+          .then((res) => {
+            setPlan({
+              data: res.data,
+              meta: res.meta,
+            });
+          })
+          .catch((e) => dispatch(setErrorMess(e)))
+          .finally(() => dispatch(setLoading(false)));
+      }
+      getListPlan();
+    }
+  }, [dispatch, solutionSelected]);
+
   useEffect(() => {
     if (createProjectRedirect?.solutionId && createProjectRedirect.planId) {
       dispatch(setLoading(true));
@@ -202,14 +228,16 @@ const CreateProject = () => {
         )}
         {activeStep === EStep.SELECT_PLAN && (
           <SelectPlan
-            solution={solutionSelected}
-            onChangePlanSelected={onChangePlanSelected}
+            plan={plan}
+            onChangePlanSelected=
+            {onChangePlanSelected}
           />
         )}
         {activeStep === EStep.CREATE_PROJECT && (
           <CreateProjectStep
             solutionSelected={solutionSelected}
             planSelected={planSelected}
+            plan={plan}
             onClickHandleBack={onClickHandleBack}
           />
         )}

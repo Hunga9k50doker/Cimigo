@@ -25,7 +25,6 @@ import SubTitle from "components/common/text/SubTitle";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import SetupSurvey from "./SetupSurvey";
 import VideoChoice from "./VideoChoice";
-import Target from "./Target";
 import Quotas from "./Quotas";
 import Pay from "./Pay";
 import ProjectHelper from "helpers/project";
@@ -35,6 +34,7 @@ import { useChangePrice } from "hooks/useChangePrice";
 import { Helmet } from "react-helmet";
 import { ESOLUTION_TYPE } from "models";
 import BrandTrack from "./BrandTrack";
+import Target from "./Target";
 
 export const Survey = () => {
 
