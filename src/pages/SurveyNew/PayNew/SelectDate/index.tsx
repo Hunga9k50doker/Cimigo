@@ -26,6 +26,7 @@ import moment from "moment";
 import useAuth from "hooks/useAuth";
 import { fCurrencyVND } from "utils/formatNumber";
 import PopupConfirmMakeAnOrder from "../components/PopupConfirmMakeAnOrder";
+import { authPreviewOrPayment } from "../models";
 export interface DateItem {
   id: number;
   month: number;
@@ -139,7 +140,13 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
   };
-
+  const onRedirect = (route: string) => {
+    dispatch(push(route.replace(":id", `${project.id}`)));
+  };
+  useEffect(() => {
+    authPreviewOrPayment(project, onRedirect);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project]);
   useEffect(() => {
     let days = [];
     var today = new Date();

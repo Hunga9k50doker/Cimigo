@@ -11,16 +11,10 @@ export const getPayment = (payments: Payment[]) => {
 export const authPreviewOrPayment = (project: Project, onRedirect: (route: string) => void) => {
   if (!project) return
   const payment = getPayment(project.payments)
+  console.log(payment,'88888888888888888')
   switch (project.status) {
     case ProjectStatus.AWAIT_PAYMENT:
-      if (!payment) return
-      if ([EPaymentMethod.MAKE_AN_ORDER, EPaymentMethod.BANK_TRANSFER].includes(payment.paymentMethodId)) {
-        if (payment?.userConfirm) onRedirect(routes.project.detail.paymentBilling.waiting)
-        else onRedirect(routes.project.detail.paymentBilling.order)
-      } else if ([EPaymentMethod.ONEPAY_GENERAL].includes(payment.paymentMethodId)) {
-        if (payment.status === EPaymentStatus.FAILED) onRedirect(routes.project.detail.paymentBilling.onPayFail)
-        else onRedirect(routes.project.detail.paymentBilling.onPayPending)
-      }
+      onRedirect(routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder);
       break;
     case ProjectStatus.IN_PROGRESS:
     case ProjectStatus.COMPLETED:

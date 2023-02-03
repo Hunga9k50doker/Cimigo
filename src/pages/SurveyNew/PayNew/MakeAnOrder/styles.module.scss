@@ -57,6 +57,12 @@
                 padding-top: 8px;
             }
         }
+        @media only screen and (max-width: 768px) {
+            display: flex;
+        }
+        @media only screen and (max-width: 500px) {
+            display: block;
+        }
     }
 }
 .itemSlideProcessing{
@@ -125,8 +131,11 @@
     @media only screen and (max-width: 980px) {
         min-height: 241px;
     }
-    @media only screen and (max-width: 476px) {
-        min-height: 296px;
+    @media only screen and (max-width: 768px) {
+        min-height: auto;
+    }
+    @media only screen and (max-width: 500px) {
+        min-height: 209px;
     }
 }
 .itemPayment{
@@ -153,9 +162,10 @@
     .linkDownload{
         float: right;
         padding-top: 16px;
-        // @media only screen and (max-width: 767px) {
-        //     float: left;
-        // }
+        @media only screen and (max-width: 768px) {
+            float: left;
+            padding-top:0px;
+        }
     }
 }
 .itemPayment:hover{

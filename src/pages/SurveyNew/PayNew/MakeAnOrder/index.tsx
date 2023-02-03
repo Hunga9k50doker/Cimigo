@@ -1,4 +1,4 @@
-import { Box, TablePagination } from "@mui/material";
+import { Box, TablePagination, useMediaQuery, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Slider from "react-slick";
 import Heading4 from "components/common/text/Heading4";
@@ -21,7 +21,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import DolarDisabled from "components/icons/IconDolarDisabled";
 import Footer from "components/Footer";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Alert, { AlerType } from "../Alert";
 import { useTranslation } from "react-i18next";
 import { PayMentHistory, SlidePaymentMakeAnOrder } from "models/schedule";
@@ -30,6 +30,8 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { DataPagination } from "models/general";
 import PopupConfirmCancelSubsription from "../components/PopupConfirmCancelSubsription";
+import { useSelector } from "react-redux";
+import { ReducerType } from "redux/reducers";
 interface MakeAnOrderProp {}
 enum SortedField {
   name = "name",
@@ -61,7 +63,6 @@ const paramsSlideDefault: CustomSlide = {
   slidesToScroll: 2,
   prevArrow: (
     <span className="customIcon">
-      {" "}
       <KeyboardArrowLeftIcon />{" "}
     </span>
   ),
@@ -74,9 +75,14 @@ const paramsSlideDefault: CustomSlide = {
 };
 const MakeAnOrder = ({}: MakeAnOrderProp) => {
   const { t } = useTranslation();
+  const theme = useTheme();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down(768));
   const [slide, setSlide] = useState<DataPagination<SlidePaymentMakeAnOrder>>();
   const [params, setParams] = useState<any>({ ...paramsDefault });
-  const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] = useState(false);
+  const { project } = useSelector((state: ReducerType) => state.project);
+  const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
+    useState(false);
   const [customSlide, setCustomSlide] = useState<CustomSlide>({
     ...paramsSlideDefault,
   });
@@ -101,15 +107,44 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
   }, []);
   const onCloseSubmitCancelSubsription = () => {
     setOnSubmitCancelSubsription(false);
-  }
+  };
   const submitCancelSubsription = (reson: string) => {
-    console.log(reson,'888888888888888888')
+    console.log(reson, "888888888888888888");
     setOnSubmitCancelSubsription(false);
-  }
+  };
   const cancelSubscription = () => {
     setOnSubmitCancelSubsription(true);
   };
   const goToPayNow = () => {};
+  useEffect(()=>{
+    console.log(project,'555555555555555555555555')
+  },[project])
+  useEffect(()=>{
+    var customReponsiveSlide = {
+      navigator: true,
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 2,
+      slidesToScroll: 2,
+      prevArrow: (
+        <span className="customIcon">
+          <KeyboardArrowLeftIcon />{" "}
+        </span>
+      ),
+      nextArrow: (
+        <span className="customIcon">
+          {" "}
+          <KeyboardArrowRightIcon />{" "}
+        </span>
+      ),
+    }; 
+    if(isMobile){
+      customReponsiveSlide.slidesToScroll = 1;
+      customReponsiveSlide.slidesToShow = 1;
+    }
+    setCustomSlide(customReponsiveSlide);
+  },[isMobile])
   return (
     <>
       <Grid classes={{ root: classes.root }}>
@@ -324,7 +359,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
             <Grid className={classes.listPayemnt} pt={2}>
               <Box className={classes.itemPayment}>
                 <Grid container spacing={1}>
-                  <Grid item xs={6} md={8}>
+                  <Grid item xs={12} sm={8}>
                     <Heading5 $colorName={"--gray-90"}>
                       SEP 2022 - NOV 2022
                     </Heading5>
@@ -344,7 +379,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item xs={6} md={4}>
+                  <Grid item xs={12} sm={4}>
                     <ParagraphSmallUnderline2 className={classes.linkDownload}>
                       Download invoice
                     </ParagraphSmallUnderline2>
@@ -353,7 +388,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
               </Box>
               <Box className={classes.itemPayment}>
                 <Grid container spacing={1}>
-                  <Grid item xs={6} md={8}>
+                  <Grid item xs={12} sm={8}>
                     <Heading5 $colorName={"--gray-90"}>
                       SEP 2022 - NOV 2022
                     </Heading5>
@@ -373,7 +408,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item xs={6} md={4}>
+                  <Grid item xs={12} sm={4}>
                     <ParagraphSmallUnderline2 className={classes.linkDownload}>
                       Download invoice
                     </ParagraphSmallUnderline2>
@@ -382,7 +417,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
               </Box>
               <Box className={classes.itemPayment}>
                 <Grid container spacing={1}>
-                  <Grid item xs={6} md={8}>
+                  <Grid item xs={12} sm={8}>
                     <Heading5 $colorName={"--gray-90"}>
                       SEP 2022 - NOV 2022
                     </Heading5>
@@ -402,7 +437,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item xs={6} md={4}>
+                  <Grid item xs={12} sm={4}>
                     <ParagraphSmallUnderline2 className={classes.linkDownload}>
                       Download invoice
                     </ParagraphSmallUnderline2>
@@ -411,7 +446,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
               </Box>
               <Box className={classes.itemPayment}>
                 <Grid container spacing={1}>
-                  <Grid item xs={6} md={8}>
+                  <Grid item xs={12} sm={8}>
                     <Heading5 $colorName={"--gray-90"}>
                       SEP 2022 - NOV 2022
                     </Heading5>
@@ -431,7 +466,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item xs={6} md={4}>
+                  <Grid item xs={12} sm={4}>
                     <ParagraphSmallUnderline2 className={classes.linkDownload}>
                       Download invoice
                     </ParagraphSmallUnderline2>

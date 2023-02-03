@@ -19,6 +19,10 @@
   border-radius: 15px;
   width: 100%;
   padding: 24px 24px 24px 24px;
+  @media only screen and (max-width: 899px) {
+    border: none;
+    padding: 0;
+  }
 }
 .btn{
   display: flex; 
@@ -35,6 +39,12 @@
 .leftContent{
   .solution{
     display: flex;
+    padding-bottom: 36px;
+    @media only screen and (max-width: 899px) {
+      border-bottom: 1px solid var(--gray-20);
+      padding-bottom: 16px;
+      justify-content: space-between;
+    }
     .solutionItem{
       display: flex;
       padding-left: 144px;
@@ -47,25 +57,44 @@
       height: 24px;
     }
   }
-  .sampleTarget{
-    display: flex;
-    button{
-      margin-left: 24px;
+  .contentSampleAndTarhet{
+    .sampleTarget{
+      display: flex;
+      button{
+        margin-left: 24px;
+      }
+      @media only screen and (max-width: 899px) {
+        justify-content: space-between;
+      }
+    }
+    .contentSampleTarget{
+      border-left: 1px dashed var(--gray-20);
+    }
+    @media only screen and (max-width: 899px) {
+      padding-top: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-20);
     }
   }
+  
   .delivery{
+    padding-bottom: 36px;
     display: flex;
-  }
-  .contentSampleTarget{
-    border-left: 1px dashed var(--gray-20);
-    .value{
-
+    @media only screen and (max-width: 899px) {
+      justify-content: space-between;
+      padding-top: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-20);
     }
   }
+  
 }
 .rightContent{
   .survey{
     display: flex;
+    @media only screen and (max-width: 899px) { 
+      justify-content: space-between;
+    }
   }
   button{
     margin-left: 24px;
@@ -75,6 +104,9 @@
     .boldContent{
       font-weight: 600;
     }
+  }
+  @media only screen and (max-width: 899px) { 
+    padding-top: 16px;
   }
 }
 .customBtnContentPayment{

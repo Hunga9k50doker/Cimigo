@@ -81,15 +81,22 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
               making an order.
             </ParagraphBody>
           ) : (
-            <ParagraphBody className={clsx(classes.title, classes.titleDanger)} $colorName="--eerie-black" dangerouslySetInnerHTML={{ __html: t('payment_billing_sub_tab_preview_sub_title_error') }} translation-key="payment_billing_sub_tab_preview_sub_title_error" />
+            <ParagraphBody
+              className={clsx(classes.title, classes.titleDanger)}
+              $colorName="--eerie-black"
+              dangerouslySetInnerHTML={{
+                __html: t("payment_billing_sub_tab_preview_sub_title_error"),
+              }}
+              translation-key="payment_billing_sub_tab_preview_sub_title_error"
+            />
           )}
 
           <Grid className={classes.content}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={0.5}>
-                <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                   <Box className={classes.leftContent}>
-                    <Grid className={classes.solution} pb={4.5}>
+                    <Grid className={classes.solution}>
                       <Heading5 $colorName={"--eerie-black"}>Solution</Heading5>
                       <Box className={classes.solutionItem}>
                         <img
@@ -103,7 +110,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                         </ParagraphBody>
                       </Box>
                     </Grid>
-                    <Grid className={classes.delivery} pb={4.5}>
+                    <Grid className={classes.delivery}>
                       <Heading5 $colorName={"--eerie-black"}>
                         Delivery results
                       </Heading5>
@@ -111,66 +118,71 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                         Monthly tracking
                       </ParagraphBody>
                     </Grid>
-                    <Grid className={classes.sampleTarget}>
-                      <Heading5 $colorName={"--eerie-black"}>
-                        Sample and target
-                      </Heading5>
-                      <Button
-                        className={classes.customBtnContentPayment}
-                        children={
-                          <span className={classes.titleBtn}>Edit setup</span>
-                        }
-                        endIcon={<KeyboardArrowRightIcon />}
-                        onClick={gotoTarget}
-                      />
-                    </Grid>
-                    <Grid className={classes.contentSampleTarget} pl={1} mt={2}>
-                      <Box className={classes.value} pt={2}>
-                        <Grid container spacing={2}>
-                          <Grid
-                            item
-                            xs={6.5}
-                            className={classes.customGridItem}
-                            pl={3}
-                          >
-                            <ParagraphBody $colorName={"--eerie-black"}>
-                              Sample size
-                            </ParagraphBody>
-                          </Grid>
-                          <Grid
-                            item
-                            xs={5.5}
-                            pt={0}
-                            className={classes.customGridItem}
-                          >
-                            <ParagraphBody $colorName={"--eerie-black"}>
-                              600 first wave
-                            </ParagraphBody>
-                            <ParagraphBody $colorName={"--eerie-black"}>
-                              200 subsequent waves
-                            </ParagraphBody>
-                          </Grid>
-                        </Grid>
-                        <Grid container spacing={2} pt={2}>
-                          <Grid item xs={6.5} pl={3}>
-                            <ParagraphBody $colorName={"--eerie-black"}>
-                              Target criteria
-                            </ParagraphBody>
-                          </Grid>
-                          <Grid item xs={5.5}>
-                            <ParagraphSmallUnderline2
-                              $colorName={"--cimigo-blue"}
+                    <Grid className={classes.contentSampleAndTarhet}>
+                      <Grid className={classes.sampleTarget}>
+                        <Heading5 $colorName={"--eerie-black"}>
+                          Sample and target
+                        </Heading5>
+                        <Button
+                          className={classes.customBtnContentPayment}
+                          children={
+                            <span className={classes.titleBtn}>Edit setup</span>
+                          }
+                          endIcon={<KeyboardArrowRightIcon />}
+                          onClick={gotoTarget}
+                        />
+                      </Grid>
+                      <Grid
+                        className={classes.contentSampleTarget}
+                        pl={1}
+                        mt={2}
+                      >
+                        <Box className={classes.value} pt={2}>
+                          <Grid container spacing={2}>
+                            <Grid
+                              item
+                              xs={6.5}
+                              className={classes.customGridItem}
+                              pl={3}
                             >
-                              View detail
-                            </ParagraphSmallUnderline2>
+                              <ParagraphBody $colorName={"--eerie-black"}>
+                                Sample size
+                              </ParagraphBody>
+                            </Grid>
+                            <Grid
+                              item
+                              xs={5.5}
+                              pt={0}
+                              className={classes.customGridItem}
+                            >
+                              <ParagraphBody $colorName={"--eerie-black"}>
+                                600 first wave
+                              </ParagraphBody>
+                              <ParagraphBody $colorName={"--eerie-black"}>
+                                200 subsequent waves
+                              </ParagraphBody>
+                            </Grid>
                           </Grid>
-                        </Grid>
-                      </Box>
+                          <Grid container spacing={2} pt={2}>
+                            <Grid item xs={6.5} pl={3}>
+                              <ParagraphBody $colorName={"--eerie-black"}>
+                                Target criteria
+                              </ParagraphBody>
+                            </Grid>
+                            <Grid item xs={5.5}>
+                              <ParagraphSmallUnderline2
+                                $colorName={"--cimigo-blue"}
+                              >
+                                View detail
+                              </ParagraphSmallUnderline2>
+                            </Grid>
+                          </Grid>
+                        </Box>
+                      </Grid>
                     </Grid>
-                    <Grid></Grid>
                   </Box>
                 </Grid>
-                <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                   <Box className={classes.rightContent}>
                     <Grid className={classes.survey}>
                       <Heading5 $colorName={"--eerie-black"}>
