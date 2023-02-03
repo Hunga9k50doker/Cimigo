@@ -4,7 +4,7 @@ import classes from './styles.module.scss';
 import { Project } from "models/project";
 import { TargetAnswer, TargetQuestion, TargetQuestionType } from "models/Admin/target";
 import { useDispatch } from "react-redux";
-import { DataSelected, isDisableSubmit, isSelectAll, onSelectAll, onToggleAnswer } from "../models";
+import { DataSelected, isDisableSubmit, isSelectAll, onSelectAll, onToggleAnswer } from "../../models";
 import { ProjectService } from "services/project";
 import { setLoading, setSuccessMess, setErrorMess } from "redux/reducers/Status/actionTypes";
 import { getTargetRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
@@ -18,7 +18,7 @@ import ParagraphBody from "components/common/text/ParagraphBody";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
-import { AnswerList, AnswerListItem, QuestionBoxBody, QuestionBoxContainer, QuestionBoxHeader } from "../components";
+import { AnswerList, AnswerListItem, QuestionBoxBody, QuestionBoxContainer, QuestionBoxHeader } from "../../components";
 import ControlCheckbox from "components/common/control/ControlCheckbox";
 import InputCheckbox from "components/common/inputs/InputCheckbox";
 
