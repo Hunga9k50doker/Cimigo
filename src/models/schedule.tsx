@@ -8,9 +8,12 @@ export interface SchedulePreview{
     totalAmountUSD: number;
     order: number;
     scheduledMonths: number;
-    start: Date;
-    end: Date;
+    startDate: Date;
+    endDate: Date;
     dueDate: Date;
+}
+export interface SlidePaymentMakeAnOrder{
+
 }
 export interface MakeAnOrder{
   projectId: number;

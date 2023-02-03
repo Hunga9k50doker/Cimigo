@@ -8,6 +8,11 @@
     padding-bottom: 85px;
   }
 }
+.titleDanger {
+  span {
+    color: var(--cimigo-danger);
+  }
+}
 .content{
   margin-top: 24px;
   border: solid 1px var(--gray-40);

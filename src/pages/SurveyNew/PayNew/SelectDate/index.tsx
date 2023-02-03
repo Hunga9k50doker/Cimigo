@@ -46,7 +46,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const [viewPS, setViewPS] = useState<Boolean>(false);
   const [duaDate, setDuaDate] = useState("");
   const [selectedDate, setSelectedDate] = useState<DateItem>();
-  const [createFolder, setCreateFolder] = useState(false);
+  const [onSubmitMakeAnOrder, seOnSubmitMakeAnOrder] = useState(false);
   const [listSchedulePreview, setListSchedulePreview] =
     useState<DataPagination<SchedulePreview>>();
   const onClickDate = (dateItem: DateItem) => {
@@ -88,7 +88,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
     );
   };
   const goToMakeAnOrder = () => {
-    setCreateFolder(true);
+    seOnSubmitMakeAnOrder(true);
   };
   const formatMoney = useCallback(
     (schedule: SchedulePreview) => {
@@ -114,10 +114,10 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
         return day + "th";
     }
   };
-  const onCloseCreateOrEditFolder = () => {
-    setCreateFolder(false);
+  const onConfirmMakeAnOrder = () => {
+    seOnSubmitMakeAnOrder(false);
   };
-  const onSubmitMakeAnOrder = () => {
+  const submitMakeAnOrder = () => {
     if (!selectedDate) return;
     dispatch(setLoading(true));
     ScheduleService.makeAnOrder({
@@ -126,7 +126,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
       year: selectedDate.year,
     })
       .then(() => {
-        setCreateFolder(false)
+        seOnSubmitMakeAnOrder(false)
         dispatch(
           push(
             routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder.replace(
@@ -260,10 +260,10 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
                                 </Heading3>
                                 <ParagraphBody $colorName={"--gray-80"}>
                                   {schedulePreview.scheduledMonths} months (
-                                  {`${moment(schedulePreview.start)
+                                  {`${moment(schedulePreview.startDate)
                                     .lang(i18n.language)
                                     .format("MMM yyyy")} - ${moment(
-                                    schedulePreview.end
+                                    schedulePreview.endDate
                                   )
                                     .lang(i18n.language)
                                     .format("MMM yyyy")}`}
@@ -330,12 +330,12 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
         </Grid>
       </Grid>
       <PopupConfirmMakeAnOrder
-        isOpen={createFolder}
+        isOpen={onSubmitMakeAnOrder}
         project={project}
         duaDate={duaDate}
         selectedDate={selectedDate}
-        onCancel={onCloseCreateOrEditFolder}
-        onSubmit={() => onSubmitMakeAnOrder()}
+        onCancel={onConfirmMakeAnOrder}
+        onSubmit={() => submitMakeAnOrder()}
       />
       <Footer />
     </>

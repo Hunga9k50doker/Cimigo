@@ -20,3 +20,11 @@
 .description > span {
   font-weight: 800;
 }
+.btnStopMySubscription{
+    color: var(--gray-10);
+    background: var(--cimigo-danger);
+}
+.btnStopMySubscription:hover{
+    background: var(--cimigo-danger);
+    color: var(--gray-10);
+}

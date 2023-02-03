@@ -4,13 +4,6 @@ import Slider from "react-slick";
 import Heading4 from "components/common/text/Heading4";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import classes from "./styles.module.scss";
-//swiper
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import "swiper/css";
-// import "swiper/css/pagination";
-// import "swiper/css/navigation";
-// import "./styles.css";
-// import { Pagination, Navigation } from "swiper";
 //slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -31,10 +24,12 @@ import Footer from "components/Footer";
 import { useMemo, useState } from "react";
 import Alert, { AlerType } from "../Alert";
 import { useTranslation } from "react-i18next";
-import { PayMentHistory } from "models/schedule";
+import { PayMentHistory, SlidePaymentMakeAnOrder } from "models/schedule";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { DataPagination } from "models/general";
+import PopupConfirmCancelSubsription from "../components/PopupConfirmCancelSubsription";
 interface MakeAnOrderProp {}
 enum SortedField {
   name = "name",
@@ -47,29 +42,44 @@ const paramsDefault: PayMentHistory = {
   sortedField: SortedField.updatedAt,
   isDescending: true,
 };
+interface CustomSlide {
+  navigator: boolean;
+  dots: boolean;
+  infinite: boolean;
+  speed: number;
+  slidesToShow: number;
+  slidesToScroll: number;
+  prevArrow: React.ReactNode;
+  nextArrow: React.ReactNode;
+}
+const paramsSlideDefault: CustomSlide = {
+  navigator: true,
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 2,
+  slidesToScroll: 2,
+  prevArrow: (
+    <span className="customIcon">
+      {" "}
+      <KeyboardArrowLeftIcon />{" "}
+    </span>
+  ),
+  nextArrow: (
+    <span className="customIcon">
+      {" "}
+      <KeyboardArrowRightIcon />{" "}
+    </span>
+  ),
+};
 const MakeAnOrder = ({}: MakeAnOrderProp) => {
   const { t } = useTranslation();
+  const [slide, setSlide] = useState<DataPagination<SlidePaymentMakeAnOrder>>();
   const [params, setParams] = useState<any>({ ...paramsDefault });
-  var settings = {
-    navigator: true,
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 2,
-    slidesToScroll: 2,
-    prevArrow: (
-      <span className="customIcon">
-        {" "}
-        <KeyboardArrowLeftIcon />{" "}
-      </span>
-    ),
-    nextArrow: (
-      <span className="customIcon">
-        {" "}
-        <KeyboardArrowRightIcon />{" "}
-      </span>
-    ),
-  };
+  const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] = useState(false);
+  const [customSlide, setCustomSlide] = useState<CustomSlide>({
+    ...paramsSlideDefault,
+  });
   const handleChangePage = (
     _: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     newPage: number
@@ -89,7 +99,16 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
     return 1;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  const onCloseSubmitCancelSubsription = () => {
+    setOnSubmitCancelSubsription(false);
+  }
+  const submitCancelSubsription = (reson: string) => {
+    console.log(reson,'888888888888888888')
+    setOnSubmitCancelSubsription(false);
+  }
+  const cancelSubscription = () => {
+    setOnSubmitCancelSubsription(true);
+  };
   const goToPayNow = () => {};
   return (
     <>
@@ -136,12 +155,17 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
             <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"}>
               Your next payments
             </Heading4>
-            <TextBtnSmall $colorName={"--gray-80"} pr={1}>
+            <TextBtnSmall
+              className={classes.cancelSub}
+              $colorName={"--gray-80"}
+              pr={1}
+              onClick={cancelSubscription}
+            >
               Cancel subscription
             </TextBtnSmall>
           </Grid>
           <Box className={classes.slidePayment} pt={4}>
-            <Slider {...settings}>
+            <Slider {...customSlide}>
               <Grid className={classes.customItemSilde}>
                 <div className={classes.itemSlide}>
                   <Box className={classes.contentSlide}>
@@ -276,7 +300,9 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
                         <Box className={classes.icon}>
                           <CheckCircleIcon />
                         </Box>
-                        <ParagraphSmall $colorName={"--cimigo-green-dark-2"}>Payment completed</ParagraphSmall>
+                        <ParagraphSmall $colorName={"--cimigo-green-dark-2"}>
+                          Payment completed
+                        </ParagraphSmall>
                         <ParagraphSmallUnderline2
                           $colorName={"--gray-90"}
                           className={classes.urlViewDetail}
@@ -438,6 +464,11 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
           </Grid>
         </Grid>
       </Grid>
+      <PopupConfirmCancelSubsription
+        isOpen={onSubmitCancelSubsription}
+        onCancel={onCloseSubmitCancelSubsription}
+        onSubmit={(reson) => submitCancelSubsription(reson)}
+      />
       <Footer />
     </>
   );

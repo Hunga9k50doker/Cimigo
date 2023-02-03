@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useMemo } from "react";
 import { Grid, Box } from "@mui/material";
 import classes from "./styles.module.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,9 +6,7 @@ import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import { ReducerType } from "redux/reducers";
 import { authPreviewOrPayment } from "../models";
-import {
-  setCancelPayment,
-} from "redux/reducers/Project/actionTypes";
+import { setCancelPayment } from "redux/reducers/Project/actionTypes";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Heading5 from "components/common/text/Heading5";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
@@ -18,13 +16,15 @@ import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Footer from "components/Footer";
+import ProjectHelper from "helpers/project";
+import clsx from "clsx";
+import { useTranslation } from "react-i18next";
 
 interface ProjectReviewProps {}
 // eslint-disable-next-line
 const ProjectReview = memo(({}: ProjectReviewProps) => {
-
   const dispatch = useDispatch();
-
+  const { t, i18n } = useTranslation();
   // const { configs } = useSelector((state: ReducerType) => state.user)
   const { project, cancelPayment } = useSelector(
     (state: ReducerType) => state.project
@@ -44,6 +44,10 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
 
+  const isValidCheckout = useMemo(() => {
+    return ProjectHelper.isValidCheckout(project);
+  }, [project]);
+
   useEffect(() => {
     authPreviewOrPayment(project, onRedirect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,6 +60,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const onNextPayment = () => {
+    // if(!isValidCheckout) return;
     dispatch(
       push(
         routes.project.detail.paymentBilling.previewAndPayment.selectDate.replace(
@@ -70,10 +75,15 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
       <Grid classes={{ root: classes.root }}>
         <Grid pt={4}>
           <Heading4>Review your project details</Heading4>
-          <ParagraphBody>
-            Please review your project setup. You can not edit these after
-            making an order.
-          </ParagraphBody>
+          {isValidCheckout ? (
+            <ParagraphBody>
+              Please review your project setup. You can not edit these after
+              making an order.
+            </ParagraphBody>
+          ) : (
+            <ParagraphBody className={clsx(classes.title, classes.titleDanger)} $colorName="--eerie-black" dangerouslySetInnerHTML={{ __html: t('payment_billing_sub_tab_preview_sub_title_error') }} translation-key="payment_billing_sub_tab_preview_sub_title_error" />
+          )}
+
           <Grid className={classes.content}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={0.5}>
@@ -259,6 +269,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
           </Grid>
           <Grid mt={3} className={classes.btn}>
             <Button
+              // disabled={!isValidCheckout}
               btnType={BtnType.Raised}
               children={<TextBtnSecondary>Next</TextBtnSecondary>}
               onClick={onNextPayment}

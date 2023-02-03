@@ -102,6 +102,9 @@
 }
 .itemSlideCompleted{
     border: 1px solid var(--cimigo-green-dark);
+    @media only screen and (max-width: 980px) {
+        min-height: 211px;
+    }
     .contentRight{
         .icon{
             text-align: center;
@@ -113,6 +116,17 @@
                 text-align: left;
             }
         }
+    }
+}
+.itemSlideCompleted, .itemSlideDisabled, .itemSlideProcessing, .itemSlide{
+    @media only screen and (max-width: 980px) {
+        min-height: 211px;
+    }
+    @media only screen and (max-width: 980px) {
+        min-height: 241px;
+    }
+    @media only screen and (max-width: 476px) {
+        min-height: 296px;
     }
 }
 .itemPayment{
@@ -160,4 +174,7 @@
     margin: 0px 16px;
     display: block !important;
     width: auto !important;
+}
+.cancelSub:hover{
+    cursor: pointer;
 }
