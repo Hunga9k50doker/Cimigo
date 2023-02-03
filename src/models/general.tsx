@@ -184,17 +184,3 @@ export enum EVIDEO_MARKETING_STAGE {
   POST_LAUNCH = 1,
   PRE_LAUNCH = 2
 }
-
-export enum CATEGORY_TYPE {
-  FOOD_BEVERAGE = 1,
-  AUTOMOBILE = 2,
-  TECHNOLOGY = 3,
-  OTHER = 4,
-}
-
-export const categoryTypes: OptionItem[] = [
-  { id: CATEGORY_TYPE.FOOD_BEVERAGE, name: 'Food & beverage' },
-  { id: CATEGORY_TYPE.AUTOMOBILE, name: 'Automobile' },
-  { id: CATEGORY_TYPE.TECHNOLOGY, name: 'Technology' },
-  { id: CATEGORY_TYPE.OTHER, name: 'Other (specify)' }
-]

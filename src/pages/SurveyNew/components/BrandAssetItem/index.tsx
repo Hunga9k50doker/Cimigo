@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Grid, Box, MenuItem, IconButton } from "@mui/material";
 import ParagraphBody from "components/common/text/ParagraphBody"
 import classes from "./styles.module.scss";
-import { useTranslation } from "react-i18next";
 import { BrandAsset, EBRAND_ASSET_TYPE } from "models/brand_asset";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
@@ -11,14 +10,14 @@ import { Menu } from "components/common/memu/Menu";
 import getAudioDuration from "utils/getAudioDuration";
 
 interface Props {
-  brandAsset?: BrandAsset;
+  brandAsset: BrandAsset;
+  editable: boolean;
   onPopupEditBrandAsset?: () => void;
   onOpenPopupConfirmDelete?: () => void;
 }
 
 const BrandAssetItem = (props: Props) => {
-  const { brandAsset, onPopupEditBrandAsset, onOpenPopupConfirmDelete } = props;
-  const { t, i18n } = useTranslation();
+  const { brandAsset, editable, onPopupEditBrandAsset, onOpenPopupConfirmDelete } = props;
 
   const [anchorElMenuAction, setAnchorElMenuAction] = useState<null | HTMLElement>(null);
   const [soundDuration, setSoundDuration] = useState<number>(0)
@@ -57,7 +56,7 @@ const BrandAssetItem = (props: Props) => {
           <ParagraphExtraSmall $colorName={"--eerie-black"}>{brandAsset?.typeId === EBRAND_ASSET_TYPE.SLOGAN ? `${brandAsset?.slogan}` : `${soundDuration}s audio`}</ParagraphExtraSmall>
         )}
       </Grid>
-      <IconButton onClick={handleClickMenuAction}>
+      <IconButton disabled={!editable} onClick={handleClickMenuAction}>
         <MoreVert sx={{fontSize: "20px", color: "var(--gray-60)"}}/>
       </IconButton>
       <Menu

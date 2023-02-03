@@ -67,7 +67,6 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
     }
   }
 
-
   const handleDeleteBrandAsset = () => {
     if(brandAssetDelete) {
       BrandAssetService.delete(brandAssetDelete?.id)
@@ -107,6 +106,7 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
           {project?.brandAssets?.map(assetItem => (
             <BrandAssetItem 
               brandAsset={assetItem}
+              editable={editable}
               onPopupEditBrandAsset={() => {
                 setBrandAssetEdit(assetItem)
                 onOpenPopupAddOrEditBrandAsset()
