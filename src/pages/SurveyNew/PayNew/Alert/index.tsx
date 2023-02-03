@@ -8,13 +8,13 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import WarningIcon from "@mui/icons-material/Warning";
 import InfoIcon from "@mui/icons-material/Info";
 
-export enum AlerType {
-  Success = "Success",
-  Default = "Default",
-  Warning = "Warning",
-}
+// export enum AlerType {
+//   Success = "Success",
+//   Default = "Default",
+//   Warning = "Warning",
+// }
 interface AlertProp {
-  type?: AlerType;
+  type?: string;
   content?: React.ReactNode;
   title?: string;
 }
@@ -24,10 +24,10 @@ const Alert = memo((props: AlertProp) => {
   const [borderLeft, setBorderLeft] = useState("");
   useEffect(() => {
     switch (type) {
-      case "Success":
+      case "A":
         setBorderLeft("4px solid var(--cimigo-green-dark) !important");
         break;
-      case "Warning":
+      case "B":
         setBorderLeft("4px solid var(--warning-dark) !important");
         break;
       default:
@@ -42,17 +42,17 @@ const Alert = memo((props: AlertProp) => {
       {...rest}
     >
       <Box className={classes.left}>
-        {type === "Success" && (
+        {type === "A" && (
           <Box className={classes.iconSuccess}>
             <CheckCircleIcon />
           </Box>
         )}
-        {type === "Warning" && (
+        {type === "B" && (
           <Box className={classes.iconWarning}>
             <WarningIcon />
           </Box>
         )}
-        {type === "Default" && (
+        {type === "C" && (
           <Box className={classes.iconDefault}>
             <InfoIcon />
           </Box>

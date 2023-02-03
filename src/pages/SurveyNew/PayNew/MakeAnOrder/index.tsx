@@ -22,7 +22,7 @@ import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import DolarDisabled from "components/icons/IconDolarDisabled";
 import Footer from "components/Footer";
 import { useEffect, useMemo, useState } from "react";
-import Alert, { AlerType } from "../Alert";
+import Alert from "../Alert";
 import { useTranslation } from "react-i18next";
 import { PayMentHistory, SlidePaymentMakeAnOrder } from "models/schedule";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -63,13 +63,12 @@ const paramsSlideDefault: CustomSlide = {
   slidesToScroll: 2,
   prevArrow: (
     <span className="customIcon">
-      <KeyboardArrowLeftIcon />{" "}
+      <KeyboardArrowLeftIcon />
     </span>
   ),
   nextArrow: (
     <span className="customIcon">
-      {" "}
-      <KeyboardArrowRightIcon />{" "}
+      <KeyboardArrowRightIcon />
     </span>
   ),
 };
@@ -129,13 +128,12 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
       slidesToScroll: 2,
       prevArrow: (
         <span className="customIcon">
-          <KeyboardArrowLeftIcon />{" "}
+          <KeyboardArrowLeftIcon />
         </span>
       ),
       nextArrow: (
         <span className="customIcon">
-          {" "}
-          <KeyboardArrowRightIcon />{" "}
+          <KeyboardArrowRightIcon />
         </span>
       ),
     }; 
@@ -157,7 +155,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
               every 3 months.
             </ParagraphBody>
           }
-          type={AlerType.Success}
+          type={"A"}
         />
         <Alert
           title={"A payment is about to become due."}
@@ -173,7 +171,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
               </ParagraphBody>
             </Box>
           }
-          type={AlerType.Warning}
+          type={"B"}
         />
         <Alert
           title={"Your subscription canceled!"}
@@ -183,7 +181,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
               available to you.
             </ParagraphBody>
           }
-          type={AlerType.Default}
+          type={"C"}
         />
         <Grid pt={4}>
           <Grid className={classes.yourNextPaymentHeader}>
