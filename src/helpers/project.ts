@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { ESOLUTION_TYPE } from "models";
+import { EBrandType } from "models/additional_brand";
 import { TargetQuestionType } from "models/Admin/target";
 import { ConfigData } from "models/config";
 import { CustomQuestionType } from "models/custom_question";
@@ -116,6 +117,31 @@ export class ProjectHelper {
     return _project?.solution?.minAdditionalBrand ?? 0
   }
 
+  static minMainBrand(project: Project) {
+    const _project = ProjectHelper.getProject(project)
+    return _project?.solution?.minMainBrand ?? 0
+  }
+
+  static minCompetingBrand(project: Project) {
+    const _project = ProjectHelper.getProject(project)
+    return _project?.solution?.minCompetingBrand ?? 0
+  }
+
+  static minCompetitiveBrand(project: Project) {
+    const _project = ProjectHelper.getProject(project)
+    return _project?.solution?.minCompetitiveBrand ?? 0
+  }
+
+  static minEquityAttributes(project: Project) {
+    const _project = ProjectHelper.getProject(project)
+    return _project?.solution?.minEquityAttributes ?? 0
+  }
+
+  static minBrandAssetRecognition(project: Project) {
+    const _project = ProjectHelper.getProject(project)
+    return _project?.solution?.minBrandAssetRecognition ?? 0
+  }
+
   static minEyeTrackingPack(project: Project) {
     const _project = ProjectHelper.getProject(project)
     const minEyeTrackingPack = _project?.solution?.minEyeTrackingPack ?? 0
@@ -190,6 +216,22 @@ export class ProjectHelper {
     return !!project?.category
   }
 
+  static isValidBrandList(project: Project): boolean {
+    const isValidMainBrand = (project?.additionalBrands?.filter(item => item?.typeId === EBrandType.MAIN)?.length ?? 0) >= ProjectHelper.minMainBrand(project)
+    const isValidCompetingBrand = (project?.additionalBrands?.filter(item => item?.typeId === EBrandType.COMPETING)?.length ?? 0) >= ProjectHelper.minCompetingBrand(project)
+    return isValidMainBrand && isValidCompetingBrand
+  }
+
+  static isValidDispositionAndEquity(project: Project): boolean {
+    const isValidCompetitiveBrand = (project?.projectBrands?.length ?? 0) >= ProjectHelper.minCompetitiveBrand(project)
+    const isValidEquityAttributes = (project?.projectAttributes?.length + project?.userAttributes?.length ?? 0) >= ProjectHelper.minEquityAttributes(project)
+    return isValidCompetitiveBrand && isValidEquityAttributes
+  }
+
+  static isValidBrandAssetRecognition(project: Project) {
+    return (project?.brandAssets?.length ?? 0) >= ProjectHelper.minBrandAssetRecognition(project)
+  }
+
   static isValidSetup(project: Project) {
     switch (project?.solution?.typeId) {
       case ESOLUTION_TYPE.PACK:
@@ -200,6 +242,11 @@ export class ProjectHelper {
       case ESOLUTION_TYPE.VIDEO_CHOICE:
         return ProjectHelper.isValidBasic(project) &&
         ProjectHelper.isValidVideos(project)
+      case ESOLUTION_TYPE.BRAND_TRACKING:
+        return ProjectHelper.isValidBasic(project) &&
+        ProjectHelper.isValidBrandList(project) &&
+        ProjectHelper.isValidDispositionAndEquity(project) &&
+        ProjectHelper.isValidBrandAssetRecognition(project)
     }
   }
 
@@ -219,6 +266,18 @@ export class ProjectHelper {
           ProjectHelper.isValidVideos(project) &&
           ProjectHelper.isValidEyeTrackingSampleSize(project)
     }
+  }
+  
+  static competingBrandNeedMore(project: Project) {
+    const totalCompetingBrand = project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING)?.length || 0
+    const minCompetingBrand = project?.solution?.minCompetingBrand
+    return totalCompetingBrand >= minCompetingBrand ? 0 : minCompetingBrand - totalCompetingBrand
+  }
+
+  static numberOfCompetingBrandCanBeAdd(project: Project) {
+    const totalCompetingBrand = project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING)?.length || 0
+    const maxCompetingBrand = project?.solution?.maxCompetingBrand
+    return maxCompetingBrand > totalCompetingBrand ? maxCompetingBrand - totalCompetingBrand : 0
   }
 }
 

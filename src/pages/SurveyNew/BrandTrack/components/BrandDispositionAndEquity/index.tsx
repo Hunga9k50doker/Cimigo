@@ -1,24 +1,605 @@
-import { Grid } from "@mui/material"
+import { KeyboardArrowDown, PlayArrow, Edit as EditIcon, Help, ExpandMore } from "@mui/icons-material"
+import {  Accordion, AccordionSummary, Box, Grid, IconButton, ListItem, ListItemButton, MenuItem, Tooltip } from "@mui/material"
+import Button, { BtnType } from "components/common/buttons/Button"
 import Heading4 from "components/common/text/Heading4"
+import ParagraphBody from "components/common/text/ParagraphBody"
+import ParagraphBodyUnderline from "components/common/text/ParagraphBodyUnderline"
+import ParagraphSmall from "components/common/text/ParagraphSmall"
+import TextBtnSmall from "components/common/text/TextBtnSmall"
+import NoteWarning from "components/common/warnings/NoteWarning"
+import { editableProject } from "helpers/project"
+import { AdditionalBrand, EBrandType } from "models/additional_brand"
 import { Project, SETUP_SURVEY_SECTION } from "models/project"
-import { memo } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
+import { useDispatch } from "react-redux"
+import { getProjectAttributesRequest, getProjectBrandsRequest, getUserAttributesRequest } from "redux/reducers/Project/actionTypes"
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
+import { ProjectAttributeService } from "services/project_attribute"
+import { ProjectBrandService } from "services/project_brand"
+import classes from "./styles.module.scss"
+import { Menu } from "components/common/memu/Menu"
+import { useTranslation } from "react-i18next"
+import PopupPreDefinedList from "pages/SurveyNew/components/PopupPre-definedList"
+import PopupAddOrEditAttribute, { UserAttributeFormData } from "pages/SurveyNew/components/PopupAddOrEditAttribute"
+import { AttributeContentType, UserAttribute } from "models/user_attribute"
+import { UserAttributeService } from "services/user_attribute"
+import clsx from "clsx"
+import InputCheckbox from "components/common/inputs/InputCheckbox"
+import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
+import TagCustom from "components/common/tag/TagCustom"
+import { ProjectAttribute } from "models/project_attribute"
+import CloseIcon from '@mui/icons-material/Close';
+import EditSquare from "components/icons/IconEditSquare"
+import ArrowBreak from "components/icons/IconArrowBreak"
+import PopupConfirmDelete from "components/PopupConfirmDelete"
+import PopupManatoryAttributes from "pages/SurveyNew/components/PopupManatoryAttributes"
 
 interface BrandDispositionAndEquityProps {
   project: Project
 }
+enum AttributeShowType {
+  Project = 1,
+  User
+}
+interface AttributeShow {
+  id: number,
+  start: string,
+  end: string,
+  data: ProjectAttribute | UserAttribute,
+  type: AttributeShowType,
+  content: string,
+  contentTypeId: number
+}
 
 const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityProps) => {
+  const { t } = useTranslation()
+  const dispatch = useDispatch()
+  const [displaySelectBrandButton, setDisplaySelectBrandButton] = useState<boolean>(false)
+  const [competingBrandDatas, setCompetingBrandDatas] = useState<AdditionalBrand[]>([])
+  const [competingBrandsSelected, setCompetingBrandsSelected] = useState<number[]>([])
+  const [anchorElMenuAttributes, setAnchorElMenuAttributes] = useState<null | HTMLElement>(null);
+  const [anchorElMenuChooseBrand, setAnchorElMenuChooseBrand] = useState<null | HTMLElement>(null);
+
+  const [openPopupMandatory, setOpenPopupMandatory] = useState(false)
+  const [openPopupPreDefined, setOpenPopupPreDefined] = useState(false)
+  const [openPopupAddAttributes, setOpenPopupAddAttributes] = useState(false)
+  const [userAttributeEdit, setUserAttributeEdit] = useState<UserAttribute>()
+  const [showMoreAttributes, setShowMoreAttributes] = useState<boolean>(false);
+  const [userAttributeDelete, setUserAttributeDelete] = useState<UserAttribute>()
+  const [projectAttributeDelete, setProjectAttributeDelete] = useState<ProjectAttribute>()
+  
+  const editable = useMemo(() => editableProject(project), [project])
+  const maxCompetitiveBrand = useMemo(() => project?.solution?.maxCompetitiveBrand || 0, [project])
+  const maxAdditionalAttribute = useMemo(() => project?.solution?.maxAdditionalAttribute || 0, [project])
+  const enableAdditionalAttributes = useMemo(() => {
+    return maxAdditionalAttribute > ((project?.projectAttributes?.length || 0) + (project?.userAttributes?.length || 0))
+  }, [maxAdditionalAttribute, project])
+  const attributes: AttributeShow[] = useMemo(() => {
+    return [
+      ...(project?.projectAttributes?.map(it => ({
+        id: it.id,
+        start: it.attribute.start,
+        end: it.attribute.end,
+        type: AttributeShowType.Project,
+        data: it,
+        content: it.attribute.content,
+        contentTypeId: it.attribute.contentTypeId,
+      })) || []),
+      ...(project?.userAttributes?.map(it => ({
+        id: it.id,
+        start: it.start,
+        end: it.end,
+        type: AttributeShowType.User,
+        data: it,
+        content: it.content,
+        contentTypeId: it.contentTypeId,
+      })) || [])
+    ].sort((a, b) => a?.contentTypeId - b?.contentTypeId)
+  }, [project])
+
+  useEffect(() => {
+    const _competingBrands = project?.additionalBrands?.filter((item) => item?.typeId !== EBrandType.MAIN)
+    setCompetingBrandDatas(_competingBrands)
+    const _competingBrandsSelected = []
+    project?.projectBrands?.forEach(item => {
+      _competingBrandsSelected.push(item.brandId)
+    })
+    setCompetingBrandsSelected(_competingBrandsSelected)
+
+    if(project?.projectBrands?.length > 0) {
+      setDisplaySelectBrandButton(true)
+    }
+  }, [project, anchorElMenuChooseBrand])
+
+  const onDisplaySelectBrandButton = () => {
+    setDisplaySelectBrandButton(true)
+  }
+  const handleClickMenuChooseBrand = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElMenuChooseBrand(event.currentTarget)
+  }
+  const handleCloseMenuChooseBrand = () => {
+    setCompetingBrandsSelected([])
+    setAnchorElMenuChooseBrand(null);
+  }
+  
+  const isDisabled = (item: AdditionalBrand) => {
+    return !competingBrandsSelected.includes(item.id) && maxCompetitiveBrand <= competingBrandsSelected.length
+  }
+
+  const onChangeChooseCompetingBrand = (item: AdditionalBrand) => {
+    if (isDisabled(item)) return
+    let _competingBrandsSelected = [...competingBrandsSelected]
+    if (_competingBrandsSelected.includes(item.id)) {
+      _competingBrandsSelected = _competingBrandsSelected.filter(it => it !== item.id)
+    } else {
+      _competingBrandsSelected.push(item.id)
+    }
+    setCompetingBrandsSelected(_competingBrandsSelected)
+  }
+  
+  const onSubmitChooseProjectBrand = () => {
+    dispatch(setLoading(true))
+    // Delete project brand
+    const projectBrandsNeedDelete = project?.projectBrands?.filter(item => !competingBrandsSelected.includes(item.brandId))
+    const requestSubmit = []
+    if(projectBrandsNeedDelete?.length > 0) {
+      projectBrandsNeedDelete.forEach(item => {
+        requestSubmit.push(ProjectBrandService.delete(item.id))
+      })
+    }
+    
+    // Add new project brand
+    const projectBrandIds = project?.projectBrands?.map(item => item.brandId)
+    const projectBrandsNew = competingBrandsSelected.filter(item => !projectBrandIds.includes(item))
+    if(projectBrandsNew?.length > 0) {
+      requestSubmit.push(
+        ProjectBrandService.create({
+          projectId: project.id,
+          brandIds: projectBrandsNew
+        })
+      )
+    }
+
+    Promise.all([...requestSubmit])
+      .then(() => {
+        dispatch(getProjectBrandsRequest(project.id))
+        handleCloseMenuChooseBrand()
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onDeleteProjectBrand = (id) => {
+    dispatch(setLoading(true))
+    ProjectBrandService.delete(id)
+      .then(() => {
+        dispatch(getProjectBrandsRequest(project.id))
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  // Attributes
+  const handleClickMenuAttributes = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElMenuAttributes(event.currentTarget)
+  }
+  const handleCloseMenuAttributes = () => {
+    setAnchorElMenuAttributes(null);
+  }
+
+  const onOpenPopupPreDefined = () => {
+    setOpenPopupPreDefined(true)
+    handleCloseMenuAttributes()
+  }
+
+  const onOpenPopupAddAttributes = () => {
+    setOpenPopupAddAttributes(true)
+    handleCloseMenuAttributes()
+  }
+  const onClosePopupAttribute = () => {
+    setOpenPopupAddAttributes(false)
+    setUserAttributeEdit(null)
+  }
+
+  const onAddProjectAttribute = (attributeIds: number[]) => {
+    if (!attributeIds?.length) {
+      setOpenPopupPreDefined(false)
+      return
+    }
+    dispatch(setLoading(true))
+    ProjectAttributeService.create({
+      projectId: project.id,
+      attributeIds: attributeIds
+    })
+      .then(() => {
+        dispatch(getProjectAttributesRequest(project.id))
+        setOpenPopupPreDefined(false)
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onAddOrEditUserAttribute = (data: UserAttributeFormData) => {
+    if (userAttributeEdit) {
+      dispatch(setLoading(true))
+      UserAttributeService.update(userAttributeEdit.id, {
+        content: data.content,
+        contentTypeId: AttributeContentType.SINGLE,
+      })
+        .then(() => {
+          dispatch(getUserAttributesRequest(project.id))
+          onClosePopupAttribute()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true))
+      UserAttributeService.create({
+        projectId: project.id,
+        content: data.content,
+        contentTypeId: AttributeContentType.SINGLE,
+      })
+        .then(() => {
+          dispatch(getUserAttributesRequest(project.id))
+          onClosePopupAttribute()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+  
+  const onEditUserAttribute = (item: UserAttribute) => {
+    setUserAttributeEdit(item)
+  }
+  const onShowMoreAttributes = () => {
+    setShowMoreAttributes(!showMoreAttributes)
+  }  
+  const onShowConfirmDeleteAttribute = (item: AttributeShow) => {
+    switch (item.type) {
+      case AttributeShowType.User:
+        setUserAttributeDelete(item.data as UserAttribute)
+        break;
+      case AttributeShowType.Project:
+        setProjectAttributeDelete(item.data as ProjectAttribute)
+        break;
+    }
+  }
+  const onCloseConfirmDeleteAttribute = () => {
+    setUserAttributeDelete(null)
+    setProjectAttributeDelete(null)
+  }
+  const onDeleteAttribute = () => {
+    if (userAttributeDelete) {
+      dispatch(setLoading(true))
+      UserAttributeService.delete(userAttributeDelete.id)
+        .then(() => {
+          dispatch(getUserAttributesRequest(project.id))
+          onCloseConfirmDeleteAttribute()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+    if (projectAttributeDelete) {
+      dispatch(setLoading(true))
+      ProjectAttributeService.delete(projectAttributeDelete.id)
+        .then(() => {
+          dispatch(getProjectAttributesRequest(project.id))
+          onCloseConfirmDeleteAttribute()
+        })
+        .catch(e => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
   return (
-    <Grid id={SETUP_SURVEY_SECTION.additional_brand_list} mt={4}>
-      <Heading4
-        $fontSizeMobile={"16px"}
-        $colorName="--eerie-black"
-        translation-key="setup_survey_add_brand_title"
-        sx={{ display: "inline-block", verticalAlign: "middle" }}
-      >
-        STEP 3: Brand disposition and equity
-      </Heading4>
-    </Grid >
+    <>
+      <Grid id={SETUP_SURVEY_SECTION.additional_brand_list} mt={4}>
+        <Grid sx={{display: "flex", alignItems: "center", gap: "4px"}}>
+          <Heading4
+            $fontSizeMobile={"16px"}
+            $colorName="--eerie-black"
+            translation-key="setup_survey_add_brand_title"
+            sx={{ display: "inline-block", verticalAlign: "middle" }}
+          >
+            STEP 3: Brand disposition and equity
+          </Heading4>
+          <Tooltip
+            placement="right"
+            arrow
+            classes={{ popper: clsx(classes.tooltipPopper) }}
+            title={(
+              <Grid>
+                <ParagraphExtraSmall $colorName={"var(--eerie-black)"} className={classes.tooltipContent}>
+                  <span>Brand disposition</span> measures consumer attitudes to a repertoire of brands to understand the level of familiarity, consideration, preference or rejection towards brands.
+                </ParagraphExtraSmall>
+                <ParagraphExtraSmall $colorName={"var(--eerie-black)"} className={classes.tooltipContent} mt={2}>
+                  <span>Brand equity</span> measures different associations (or equities) that consumers hold towards a repertoire of brands to understand the comparative positioning consumers hold towards brands.
+                </ParagraphExtraSmall>
+              </Grid>
+            )}
+          >
+            <Help sx={{ fontSize: "16px", color: "var(--gray-60)" }} className={classes.helpIcon} />
+          </Tooltip>
+        </Grid>
+        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 }>Performance on brand disposition and brand equity is very important for any brand. Tracking this will help your determine the value of your brand.</ParagraphBody>
+        <Grid>
+          <div className={classes.competitiveBrandTitle}>
+            <PlayArrow sx={{height: "18px"}}/>
+            <ParagraphBody $fontWeight={600} $colorName="--eerie-black">
+              Choose competitive brands
+            </ParagraphBody>
+          </div>
+          <ParagraphBody $colorName="--eerie-black" ml={ 3 }>Please select the key competitive brands in your category that will be used to compare your brands' performance on brand disposition and brand equity.  </ParagraphBody>
+          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 }>Your brand and these competitive brands are compared.</ParagraphBody> 
+          {displaySelectBrandButton ? (
+            <>
+              {project?.projectBrands?.length < 1 && (
+                <NoteWarning mb={ 3 } ml={ 3 }>
+                  <ParagraphSmall $colorName="--warning-dark" className={classes.warning}>Select at least 1 more brands.</ParagraphSmall>
+                </NoteWarning>
+                )}
+              <Grid className={classes.competingBrandListWrapper}>
+                {project?.projectBrands?.map(item => (
+                  <TagCustom key={item?.id} editable={editable} onDelete={()=>onDeleteProjectBrand(item?.id)}>{item?.brand?.brand}</TagCustom>
+                ))}
+                <Button
+                  sx={{ width: { xs: "100%", sm: "auto" }, maxHeight: "36px" }}
+                  onClick={handleClickMenuChooseBrand}
+                  disabled={!enableAdditionalAttributes || !editable}
+                  btnType={BtnType.Outlined}
+                  children={<TextBtnSmall>Select brand</TextBtnSmall>}
+                  endIcon={<KeyboardArrowDown sx={{ fontSize: "16px !important" }} />}
+                  />
+              </Grid>
+            </>
+          ) : (
+            <NoteWarning mb={ 3 } ml={ 3 }>
+              <ParagraphSmall $colorName="--warning-dark" className={classes.warning}>There are no brands in the brand list to choose from.<span onClick={onDisplaySelectBrandButton}>Add new brand +</span></ParagraphSmall>
+            </NoteWarning>
+          )}
+          <Menu
+            $minWidth={"354px"}
+            anchorEl={anchorElMenuChooseBrand}
+            open={Boolean(anchorElMenuChooseBrand)}
+            onClose={handleCloseMenuChooseBrand}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            sx={{mt: 1}}
+          >
+            <Grid className={classes.menuChooseBrand}>
+              {competingBrandDatas?.map(item => (
+                <MenuItem classes={{ root: clsx(classes.rootMenuItemChooseBrand, { [classes.disabled]: isDisabled(item) }) }} onClick={() => onChangeChooseCompetingBrand(item)}>
+                  <Grid className={clsx(classes.menuItemFlex, { [classes.listFlexChecked]: competingBrandsSelected.includes(item?.id) })}>
+                    <Grid>
+                      <InputCheckbox
+                        disabled={isDisabled(item)}
+                        checkboxColorType={"blue"}
+                        checked={competingBrandsSelected.includes(item?.id)}
+                        classes={{ root: classes.rootMenuCheckbox }}
+                        />
+                    </Grid>
+                    <Grid item className={classes.listTextLeft}>
+                      <ParagraphBody $colorName="--gray-80">{item.brand}</ParagraphBody>
+                    </Grid>
+                  </Grid>
+                </MenuItem>
+              ))}
+            </Grid>
+            <Grid className={classes.menuChooseBrandAction}>
+              <Button
+                btnType={BtnType.Text}
+                translation-key="common_cancel"
+                children={<TextBtnSmall>{t("common_cancel")}</TextBtnSmall>}
+                onClick={handleCloseMenuChooseBrand}
+              />
+              <Button
+                btnType={BtnType.Raised}
+                children={<TextBtnSmall>Done</TextBtnSmall>}
+                className={classes.btnSave}
+                onClick={onSubmitChooseProjectBrand}
+              />
+            </Grid>
+          </Menu>
+          {project?.projectBrands?.length >= maxCompetitiveBrand && (
+            <ParagraphSmall $colorName="--gray-60" sx={{mt: 1, ml: 3}}>You have reached the limit of {maxCompetitiveBrand} competitive brands.</ParagraphSmall>
+          )}
+          <ParagraphBody $colorName="--gray-80" className={classes.note}><span>Note:</span> In the survey design, Cimigo will add the consumers' brand used most often if it is not already your nor amongst your selected competitive brands.</ParagraphBody>
+        </Grid>
+        <Grid>
+          <div className={classes.brandEquity}>
+            <PlayArrow sx={{height: "18px"}}/>
+            <ParagraphBody $fontWeight={600} $colorName="--eerie-black">
+              Choose brand equity attributes
+            </ParagraphBody>
+          </div>
+          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } className={classes.brandEquitySubTitle}>In additional to <span onClick={() => setOpenPopupMandatory(true)}>7 mandatory attributes.</span> You may add up to 7 more attributes for the brand equity sections.</ParagraphBody>
+          
+          {/* =======start desktop===== */}
+          <Grid className={classes.rootList} mt={2}>
+            {attributes?.map((item, index) => (
+              <ListItem
+                alignItems="center"
+                component="div"
+                key={index}
+                className={clsx(classes.rootListItem, { [classes.notDisplayed]: index > 4 && !showMoreAttributes })}
+                secondaryAction={
+                  <div className={classes.btnAction}>
+                    {editable && (
+                      <>
+                        {item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
+                          <IconButton onClick={() => onEditUserAttribute(item.data as any)} className={classes.iconAction} edge="end" aria-label="Edit">
+                            <EditIcon sx={{ fontSize: "20px", color: "var(--gray-60)" }} />
+                          </IconButton>
+                        )}
+                        <IconButton onClick={() => onShowConfirmDeleteAttribute(item)} className={classes.iconAction} edge="end" aria-label="Delete">
+                          <CloseIcon sx={{ fontSize: "20px", color: "var(--gray-60)" }} />
+                        </IconButton>
+                      </>
+                    )}
+                  </div>
+                }
+                disablePadding
+              >
+                {item?.contentTypeId === AttributeContentType.SINGLE ? (
+                  <ListItemButton className={classes.listItem}>
+                    <Grid display="flex" alignItems="center">
+                      <Grid className={classes.iconEditSquareWrapper}>
+                        {editable && item.type === AttributeShowType.User && (
+                          <EditSquare sx={{ color: "var(--gray-40)", width: "16px", height: "16px" }} />
+                        )}
+                      </Grid>
+                      <Grid item>
+                        <ParagraphSmall $colorName="--cimigo-theme-light-on-surface">{item.content}</ParagraphSmall>
+                      </Grid>
+                    </Grid>
+                  </ListItemButton>
+                ) : (
+                  <ListItemButton className={classes.listItem}>
+                    <Grid display="flex" alignItems="center" justifyContent="center">
+                      <Grid className={classes.iconEditSquareWrapper}>
+                        {editable && item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
+                          <EditSquare sx={{ color: "var(--gray-40)", width: "16px", height: "16px" }} />
+                        )}
+                      </Grid>
+                      <Grid className={classes.listTextLeft}>
+                        <ParagraphSmall $colorName="--cimigo-theme-light-on-surface">{item.start}</ParagraphSmall>
+                      </Grid>
+                      <Grid className={classes.listNumber}>
+                        <ArrowBreak sx={{ color: "var(--gray-20)", width: "40px" }} />
+                      </Grid>
+                      <Grid className={classes.listTextRight}>
+                        <ParagraphSmall $colorName="--cimigo-theme-light-on-surface">{item.end}</ParagraphSmall>
+                      </Grid>
+                    </Grid>
+                  </ListItemButton>
+                )}
+              </ListItem>
+            ))}
+            {attributes.length > 5 && (
+              <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes}>
+                {showMoreAttributes ? `- ${attributes.length - 5} less attribute` : `+ ${attributes.length - 5} more attribute`}
+              </ParagraphBodyUnderline>
+            )}
+          </Grid>
+          {/* =======end desktop===== */}
+          {/* =======start mobile===== */}
+          <Grid className={classes.rootListMobile} mt={3}>
+            {attributes?.map((item, index) => (
+              <Accordion key={index} className={clsx(classes.itemListMobile, { [classes.notDisplayed]: index > 4 && !showMoreAttributes })}>
+                <AccordionSummary
+                  expandIcon={<ExpandMore />}
+                >
+                  <Box>
+                    {item?.contentTypeId === AttributeContentType.SINGLE ? (
+                      <>
+                        <ParagraphSmall className={classes.listMobileTitle} >{item.content}</ParagraphSmall>
+                        <Box className={classes.listMobileContent}>
+                          <ParagraphExtraSmall className={classes.listMobileText}>
+                            {item.content}
+                          </ParagraphExtraSmall>
+                        </Box>
+                      </>
+                    ) : (
+                      <>
+                        <ParagraphSmall className={classes.listMobileTitle} >{item.start}</ParagraphSmall>
+                        <Box className={classes.listMobileContent}>
+                          <ParagraphExtraSmall className={classes.listMobileText}>
+                            <span translation-key="setup_survey_add_att_start_label">{t("setup_survey_add_att_start_label")}: </span>{item.start}
+                          </ParagraphExtraSmall>
+                          <ParagraphExtraSmall mt={1} className={classes.listMobileText}>
+                            <span translation-key="setup_survey_add_att_end_label">{t("setup_survey_add_att_end_label")}: </span>{item.end}
+                          </ParagraphExtraSmall>
+                        </Box>
+                      </>
+                    )}
+                    {editable && (
+                      <Box className={classes.listMobileAction}>
+                        {item.type === AttributeShowType.User && item.contentTypeId === AttributeContentType.SINGLE && (
+                          <Button
+                            onClick={(e) => { e.stopPropagation(); onEditUserAttribute(item.data as any) }}
+                            btnType={BtnType.Text}
+                            translation-key="common_edit"
+                            children={<ParagraphExtraSmall>{t('common_edit')}</ParagraphExtraSmall>}
+                          />
+                        )}
+                        <Button
+                          onClick={(e) => { e.stopPropagation(); onShowConfirmDeleteAttribute(item) }}
+                          className={classes.listMobileActionDelete}
+                          btnType={BtnType.Text}
+                          translation-key="common_delete"
+                          children={<ParagraphExtraSmall>{t('common_delete')}</ParagraphExtraSmall>}
+                        />
+                      </Box>
+                    )}
+                  </Box>
+                </AccordionSummary>
+              </Accordion>
+            ))}
+            {attributes.length > 5 && (
+              <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes}>
+                {showMoreAttributes ? "- 1 less attribute" : "+ 1 more attribute"}
+              </ParagraphBodyUnderline>
+            )}
+          </Grid>
+          {/* =======end mobile===== */}
+          <Button
+            sx={{ mt: 3, width: { xs: "100%", sm: "auto" } }}
+            onClick={handleClickMenuAttributes}
+            disabled={!enableAdditionalAttributes || !editable}
+            btnType={BtnType.Outlined}
+            translation-key="setup_survey_add_att_menu_action_placeholder"
+            children={<TextBtnSmall>{t('setup_survey_add_att_menu_action_placeholder')}</TextBtnSmall>}
+            endIcon={<KeyboardArrowDown sx={{ fontSize: "16px !important" }} />}
+          />
+          <Menu
+            $minWidth={"unset"}
+            anchorEl={anchorElMenuAttributes}
+            open={Boolean(anchorElMenuAttributes)}
+            onClose={handleCloseMenuAttributes}
+          >
+            <MenuItem onClick={onOpenPopupPreDefined}>
+              <ParagraphBody translation-key="setup_survey_add_att_menu_action_from_pre_defined_list" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_from_pre_defined_list')}</ParagraphBody>
+            </MenuItem>
+            <MenuItem onClick={onOpenPopupAddAttributes}>
+              <ParagraphBody translation-key="setup_survey_add_att_menu_action_your_own_attribute" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_your_own_attribute')}</ParagraphBody>
+            </MenuItem>
+          </Menu>
+        </Grid>
+      </Grid >
+      <PopupManatoryAttributes
+        isOpen={openPopupMandatory}
+        project={project}
+        onClose={() => setOpenPopupMandatory(false)}
+      />
+      <PopupPreDefinedList
+        isOpen={openPopupPreDefined}
+        project={project}
+        projectAttributes={project?.projectAttributes}
+        maxSelect={(project?.solution?.maxAdditionalAttribute || 0) - ((project?.projectAttributes?.length || 0) + (project?.userAttributes?.length || 0))}
+        onClose={() => setOpenPopupPreDefined(false)}
+        onSubmit={onAddProjectAttribute}
+      />
+      <PopupAddOrEditAttribute
+        isAdd={openPopupAddAttributes}
+        itemEdit={userAttributeEdit}
+        project={project}
+        onCancel={() => onClosePopupAttribute()}
+        onSubmit={onAddOrEditUserAttribute}
+      />
+      <PopupConfirmDelete
+        isOpen={!!userAttributeDelete || !!projectAttributeDelete}
+        title={t('setup_survey_add_att_confirm_delete_title')}
+        description={t('setup_survey_add_att_confirm_delete_sub')}
+        onCancel={() => onCloseConfirmDeleteAttribute()}
+        onDelete={onDeleteAttribute}
+      />
+    </>
   )
 })
 

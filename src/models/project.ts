@@ -12,6 +12,8 @@ import { User } from './user';
 import { CustomQuestion } from './custom_question';
 import { Plan } from './Admin/plan';
 import { Video } from './video';
+import { ProjectBrand } from './project_brand';
+import { BrandAsset } from './brand_asset';
 export interface CreateProjectData {
   solutionId: number;
   planId: number;
@@ -35,6 +37,7 @@ export interface Project {
   solutionId: number;
   planId: number;
   category: string;
+  onPremise?: boolean;
   sampleSize: number;
   eyeTrackingSampleSize: number;
   status: ProjectStatus;
@@ -60,6 +63,8 @@ export interface Project {
   videos?: Video[];
   eyeTrackingPacks?: Pack[];
   additionalBrands?: AdditionalBrand[];
+  projectBrands?: ProjectBrand[];
+  brandAssets?: BrandAsset[];
   projectAttributes?: ProjectAttribute[];
   userAttributes?: UserAttribute[];
   customQuestions?: CustomQuestion[];
@@ -101,6 +106,7 @@ export interface RenameProject {
 
 export interface UpdateProjectBasicInformation {
   category?: string,
+  onPremise?: boolean,
 }
 
 export interface ProjectTarget {
@@ -153,6 +159,9 @@ export enum SETUP_SURVEY_SECTION {
   eye_tracking = 'eye-tracking',
   add_video = 'add-video',
   emotion_measurement = 'emotion-measurement',
+  brand_list = 'brand-list',
+  brand_disposition_and_equity = 'brand-disposition-and-equity',
+  brand_asset_recognition = 'brand-asset-recognition',
 }
 
 export enum TARGET_SECTION {

@@ -1,4 +1,4 @@
-import { memo, useMemo, useEffect } from "react";
+import { memo, useMemo, useEffect, useState } from "react";
 import classes from './styles.module.scss';
 import { Tab, Badge, Step, Chip } from "@mui/material";
 import { Content, LeftContent, MobileAction, MobileOutline, ModalMobile, PageRoot, PageTitle, PageTitleLeft, PageTitleRight, PageTitleText, RightContent, RightPanel, RightPanelAction, RightPanelBody, RightPanelContent, RPStepConnector, RPStepContent, RPStepIconBox, RPStepLabel, RPStepper, TabRightPanel } from "../components";
@@ -23,7 +23,12 @@ import BrandDispositionAndEquity from "./components/BrandDispositionAndEquity";
 import BrandAssetRecognition from "./components/BrandAssetRecognition";
 import CustomQuestions from "./components/CustomQuestions";
 import { useTranslation } from "react-i18next";
-import { setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
+import { setHowToSetupSurveyReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
+import PopupHowToSetupSurvey from "../components/PopupHowToSetupSurvey";
+import PopupMissingRequirement from "./components/PopupMissingRequirement";
+import { push } from "connected-react-router";
+import { routes } from "routers/routes";
+import CostSummaryBrandTrack from "../components/CostSummaryBrandTrack";
 
 interface SetupSurvey {
   projectId: number;
@@ -40,21 +45,33 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
   const { t } = useTranslation();
 
   const dispatch = useDispatch()
+  
+  const { project, scrollToSection, showHowToSetup } = useSelector((state: ReducerType) => state.project)
 
-  const { project, scrollToSection } = useSelector((state: ReducerType) => state.project)
-
+  const [openMissingRequirement, setOpenMissingRequirement] = useState(false);
+  const [onOpenHowToSetupSurvey, setOnOpenHowToSetupSurvey] = useState(false);
+  
   const { price } = usePrice()
-
+  
+  const editable = useMemo(() => editableProject(project), [project])
   const isValidBasic = useMemo(() => {
     return ProjectHelper.isValidBasic(project)
   }, [project])
 
-  const isValidPacks = useMemo(() => {
-    return ProjectHelper.isValidPacks(project)
+  const isValidBrandList = useMemo(() => {
+    return ProjectHelper.isValidBrandList(project)
   }, [project])
 
-  const isValidAdditionalBrand = useMemo(() => {
-    return ProjectHelper.isValidAdditionalBrand(project)
+  const isValidDispositionAndEquity = useMemo(() => {
+    return ProjectHelper.isValidDispositionAndEquity(project)
+  }, [project])
+
+  const isValidBrandAssetRecognition = useMemo(() => {
+    return ProjectHelper.isValidBrandAssetRecognition(project)
+  }, [project])
+
+  const isValidSetup = useMemo(() => {
+    return ProjectHelper.isValidSetup(project)
   }, [project])
 
   const scrollToElement = (id: string) => {
@@ -64,12 +81,45 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
     document.getElementById(SETUP_SURVEY_SECTION.content_survey_setup).scrollTo({ behavior: 'smooth', top: el.offsetTop - content.offsetTop })
   }
 
+  const onOpenPopupHowToSetupSurvey = () => {
+    setOnOpenHowToSetupSurvey(true);
+  }
+
+  const onClosePopupHowToSetupSurvey = () => {
+    setOnOpenHowToSetupSurvey(false);
+  }
+
+  const onCloseMissingRequirement = () => {
+    setOpenMissingRequirement(false)
+  }
+
+  const onOpenMissingRequirement = () => {
+    setOpenMissingRequirement(true)
+  }
+  
+  const onNextSetupTarget = () => {
+    if (!editable || isValidSetup) {
+      dispatch(push(routes.project.detail.target.replace(":id", `${projectId}`)))
+    } else {
+      onOpenMissingRequirement()
+    }
+  }
+
   useEffect(() => {
     if (scrollToSection) {
       scrollToElement(scrollToSection)
       dispatch(setScrollToSectionReducer(null))
     }
   }, [scrollToSection, dispatch])
+  
+  useEffect(() => {
+    if (showHowToSetup && project?.solution) {
+      if (project?.solution?.enableHowToSetUpSurvey) {
+        onOpenPopupHowToSetupSurvey()
+      }
+      dispatch(setHowToSetupSurveyReducer(false))
+    }
+  }, [showHowToSetup, project, dispatch])
 
   return (
     <PageRoot className={classes.root}>
@@ -77,12 +127,12 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
         <PageTitle className={classes.pageTitle}>
           <PageTitleLeft>
             <PageTitleText>Setup your brand track survey</PageTitleText>
-            {<LockIcon status={project?.status} />}
+            {!editable && <LockIcon status={project?.status} />}
           </PageTitleLeft>
           {project?.solution?.enableHowToSetUpSurvey && (
             <PageTitleRight>
               <HelpIcon sx={{ fontSize: "16px", marginRight: "4px", color: "var(--cimigo-blue)" }} />
-              <ParagraphSmallUnderline2>{project?.solution?.howToSetUpSurveyPageTitle}</ParagraphSmallUnderline2>
+              <ParagraphSmallUnderline2 onClick={onOpenPopupHowToSetupSurvey}>{project?.solution?.howToSetUpSurveyPageTitle}</ParagraphSmallUnderline2>
             </PageTitleRight>
           )}  
         </PageTitle>
@@ -113,6 +163,7 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
             children={<TextBtnSecondary translation-key="setup_next_btn">{t("setup_next_btn")}</TextBtnSecondary>}
             endIcon={<ArrowForward />}
             padding="13px 8px !important"
+            onClick={onNextSetupTarget}
           />
           <MobileOutline onClick={onToggleViewOutlineMobile}>
             <ParagraphSmall $colorName="--cimigo-blue" translation-key="common_btn_view_outline">{t("common_btn_view_outline")}</ParagraphSmall>
@@ -152,10 +203,10 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
-                  <Step active={isValidPacks} expanded>
+                  <Step active={isValidBrandList} expanded>
                     <RPStepLabel
                       $padding={"0"}
-                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.upload_packs)}
+                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.brand_list)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}>2</RPStepIconBox>}
                     >
                       <Heading5 className="title" $colorName="--gray-60">Brand list</Heading5>
@@ -166,10 +217,10 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
-                  <Step active={isValidAdditionalBrand} expanded>
+                  <Step active={isValidDispositionAndEquity} expanded>
                     <RPStepLabel
                       $padding={"0"}
-                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.additional_brand_list)}
+                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.brand_disposition_and_equity)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}>3</RPStepIconBox>}
                     >
                       <Heading5 className="title" $colorName="--gray-60">Brand disposition & equity</Heading5>
@@ -180,10 +231,10 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
-                  <Step active={!!project?.projectAttributes?.length || !!project?.userAttributes?.length} expanded>
+                  <Step active={isValidBrandAssetRecognition} expanded>
                     <RPStepLabel
                       $padding={"0"}
-                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.additional_attributes)}
+                      onClick={() => scrollToElement(SETUP_SURVEY_SECTION.brand_asset_recognition)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}>4</RPStepIconBox>}
                     >
                       <Heading5 className="title" $colorName="--gray-60">Brand assets</Heading5>
@@ -227,6 +278,7 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                   children={<TextBtnSecondary translation-key="setup_next_btn">{t("setup_next_btn")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
                   padding="13px 8px !important"
+                  onClick={onNextSetupTarget}
                 />
               </RightPanelAction>
             </RightPanelContent>
@@ -234,7 +286,7 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
           <TabPanelBox value={tabRightPanel} index={ETabRightPanel.COST_SUMMARY}>
             <RightPanelContent>
               <RightPanelBody>
-                <CostSummary
+                <CostSummaryBrandTrack
                   project={project}
                   price={price}
                 />
@@ -246,12 +298,30 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                   children={<TextBtnSecondary translation-key="setup_next_btn">{t("setup_next_btn")}</TextBtnSecondary>}
                   endIcon={<ArrowForward />}
                   padding="13px 8px !important"
+                  onClick={onNextSetupTarget}
                 />
               </RightPanelAction>
             </RightPanelContent>
           </TabPanelBox>
         </RightPanel>
       </RightContent>
+      <PopupHowToSetupSurvey
+        isOpen={onOpenHowToSetupSurvey}
+        project={project}
+        onClose={onClosePopupHowToSetupSurvey}
+      />
+      <PopupMissingRequirement
+        isOpen={openMissingRequirement}
+        isValidBasic={isValidBasic}
+        isValidBrandList={isValidBrandList}
+        isValidDispositionAndEquity={isValidDispositionAndEquity}
+        isValidBrandAssetRecognition={isValidBrandAssetRecognition}
+        onClose={onCloseMissingRequirement}
+        onScrollSection={(e) => {
+          onCloseMissingRequirement()
+          scrollToElement(e)
+        }}
+      />
     </PageRoot>
   )
 })
