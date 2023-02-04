@@ -1,7 +1,6 @@
 import { memo } from "react";
 import Grid from "@mui/material/Grid";
-import { Box, Dialog } from "@mui/material";
-import classes from "./styles.module.scss";
+import { Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import Typography from "@mui/material/Typography";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
@@ -17,6 +16,9 @@ import Heading3 from "components/common/text/Heading3";
 import Heading4 from "components/common/text/Heading4";
 import ButtonClose from "components/common/buttons/ButtonClose";
 import { ImageMain } from "../components/PopupImage";
+import PopupPayment from "../components/PopupPayment";
+import Span from "../components/Span";
+
 interface Props {
   isOpen: boolean;
   onCancel: () => void;
@@ -27,7 +29,7 @@ const PopupOnlinePayment = memo((props: Props) => {
   const { t } = useTranslation();
 
   return (
-    <Dialog scroll="paper" open={isOpen} onClose={onCancel} classes={{ paper: classes.paper }}>
+    <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
       <DialogTitleConfirm sx={{ paddingTop: 0 }}>
         <Box display="flex" alignItems={"flex-end"} mt={3}>
           <ImageMain src={images.imgPaymentError1} alt="" />
@@ -67,23 +69,22 @@ const PopupOnlinePayment = memo((props: Props) => {
           </ParagraphBody>
         </Box>
         <ParagraphBody textAlign={"center"} $colorName={"--gray-80"}>
-          You haven't paid yet? <span className={classes.linkA}>Try again</span>
+          You haven't paid yet? <Span>Try again</Span>
         </ParagraphBody>
         <DowloadInvoice />
         <Ordersummary />
         <Box mt={2}>
           <ParagraphBody
-            className={classes.blueA}
             $colorName="--eerie-black"
             translation-key="payment_billing_order_bank_transfer_sub_6"
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
         <Typography my={3} color={"var(--eerie-black)"} textAlign="center">
-          Change payment method? <span className={classes.linkA}>Click here</span>
+          Change payment method? <Span>Click here</Span>
         </Typography>
       </DialogContentConfirm>
-    </Dialog>
+    </PopupPayment>
   );
 });
 

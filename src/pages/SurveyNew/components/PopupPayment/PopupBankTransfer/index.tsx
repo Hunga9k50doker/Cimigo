@@ -1,11 +1,8 @@
 import { memo } from "react";
-import { Box, Dialog } from "@mui/material";
+import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import classes from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import Typography from "@mui/material/Typography";
-import Accordion from "@mui/material/Accordion";
-import clsx from "clsx";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
@@ -24,6 +21,11 @@ import Heading4 from "components/common/text/Heading4";
 import Heading6 from "components/common/text/Heading6";
 import ButtonClose from "components/common/buttons/ButtonClose";
 import { ImageMain } from "../components/PopupImage";
+import PopupPayment from "../components/PopupPayment";
+import Accordion from "../components/Accordion";
+import Span from "../components/Span";
+import BoxCustom from "../components/Box";
+
 interface Props {
   isOpen: boolean;
   onCancel: () => void;
@@ -34,7 +36,7 @@ const PopupBankTransfer = memo((props: Props) => {
   const { t } = useTranslation();
 
   return (
-    <Dialog scroll="paper" open={isOpen} onClose={onCancel} classes={{ paper: classes.paper }}>
+    <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
       <DialogTitleConfirm sx={{ paddingTop: 0 }}>
         <Box display="flex" alignItems={"flex-end"} mt={3}>
           <ImageMain src={images.imgPaymentError1} alt="" />
@@ -67,19 +69,14 @@ const PopupBankTransfer = memo((props: Props) => {
           }}
         />
         <Grid>
-          <Accordion className={clsx(classes.accordion, classes.accordionBankTransfer)}>
-            <AccordionSummary
-              width={"100%"}
-              className={classes.accordionSummary}
-              expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />}
-              aria-controls="panel1a-content"
-            >
+          <Accordion $accordionMain={true} $accordionBankTransfer={true}>
+            <AccordionSummary width={"100%"} expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />} aria-controls="panel1a-content">
               <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"} translation-key="payment_billing_transfer">
                 {/* {t("payment_billing_transfer", { transfer: "VND" })} */}
                 Transfer in VND
               </Heading4>
             </AccordionSummary>
-            <AccordionDetails className={classes.accordionDetails}>
+            <AccordionDetails>
               <Grid rowGap={1} py={2}>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_bank_name">{t("payment_billing_bank_name")}</ParagraphSmall>
@@ -107,7 +104,7 @@ const PopupBankTransfer = memo((props: Props) => {
                 </Grid>
               </Grid>
               <Grid py={2}>
-                <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} className={classes.box}>
+                <BoxCustom display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} $borderTop={true}>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount
@@ -115,7 +112,7 @@ const PopupBankTransfer = memo((props: Props) => {
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     165,000,000 đ
                   </Heading6>
-                </Box>
+                </BoxCustom>
                 <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5}>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_payment_reference">
                     {t("payment_billing_payment_reference")}
@@ -127,19 +124,14 @@ const PopupBankTransfer = memo((props: Props) => {
               </Grid>
             </AccordionDetails>
           </Accordion>
-          <Accordion className={clsx(classes.accordion, classes.accordionBankTransfer)}>
-            <AccordionSummary
-              width={"100%"}
-              className={classes.accordionSummary}
-              expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />}
-              aria-controls="panel1a-content"
-            >
+          <Accordion $accordionMain={true} $accordionBankTransfer={true}>
+            <AccordionSummary width={"100%"} expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />} aria-controls="panel1a-content">
               <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"} translation-key="payment_billing_transfer">
                 {/* {t("payment_billing_transfer", { transfer: "USD" })} */}
                 Transfer in USD
               </Heading4>
             </AccordionSummary>
-            <AccordionDetails className={classes.accordionDetails}>
+            <AccordionDetails>
               <Grid rowGap={1} py={2}>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_bank_name">{t("payment_billing_bank_name")}</ParagraphSmall>
@@ -173,7 +165,7 @@ const PopupBankTransfer = memo((props: Props) => {
                 </Grid>
               </Grid>
               <Grid py={2}>
-                <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} className={classes.box}>
+                <BoxCustom display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} $borderTop={true}>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount
@@ -181,7 +173,7 @@ const PopupBankTransfer = memo((props: Props) => {
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     $1,000
                   </Heading6>
-                </Box>
+                </BoxCustom>
                 <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5}>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_payment_reference">
                     {t("payment_billing_payment_reference")}
@@ -201,12 +193,12 @@ const PopupBankTransfer = memo((props: Props) => {
           </ParagraphBody>
         </Box>
         <ParagraphBody textAlign={"center"} $colorName={"--gray-80"}>
-          Have you made the payment? <span className={classes.linkA}> Notify us</span>
+          Have you made the payment? <Span>Notify us</Span>
         </ParagraphBody>
         {/* <ParagraphBody
           textAlign={"center"}
           $colorName={"--gray-80"}
-          sx={{ background: "#f9f9f9", padding: "4px" }}
+          sx={{ background: "#f9f9f9", padding: "4px", bordeRadius: "4px" }}
           className={classes.subtitle}
         >
           Thank you for your payment.
@@ -220,17 +212,16 @@ const PopupBankTransfer = memo((props: Props) => {
         </ParagraphBody>
         <Box mt={2}>
           <ParagraphBody
-            className={classes.blueA}
             $colorName="--eerie-black-00"
             translation-key="payment_billing_order_bank_transfer_sub_6"
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
         <Typography my={3} color={"var(--eerie-black)"} textAlign="center">
-          Change payment method? <span className={classes.linkA}>Click here</span>
+          Change payment method? <Span>Click here</Span>
         </Typography>
       </DialogContentConfirm>
-    </Dialog>
+    </PopupPayment>
   );
 });
 

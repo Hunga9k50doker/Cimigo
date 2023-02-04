@@ -4,8 +4,6 @@ import { Box, Dialog } from "@mui/material";
 import classes from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import Typography from "@mui/material/Typography";
-import Accordion from "@mui/material/Accordion";
-import clsx from "clsx";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import { IconMoneyCash } from "components/icons";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -23,6 +21,9 @@ import Heading6 from "components/common/text/Heading6";
 import ButtonClose from "components/common/buttons/ButtonClose";
 import AccordionSummary from "../components/AccordionSummary";
 import { ImageMain } from "../components/PopupImage";
+import PopupPayment from "../components/PopupPayment";
+import Accordion from "../components/Accordion";
+import Span from "../components/Span";
 interface Props {
   isOpen: boolean;
   onCancel: () => void;
@@ -33,7 +34,7 @@ const PopupSupportAgent = memo((props: Props) => {
   const { t } = useTranslation();
 
   return (
-    <Dialog scroll="paper" open={isOpen} onClose={onCancel} classes={{ paper: classes.paper }}>
+    <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
       <DialogTitleConfirm sx={{ paddingTop: 0 }}>
         <Box display="flex" alignItems={"flex-end"} mt={3}>
           <ImageMain src={images.imgSupportAgent} alt="" />
@@ -72,13 +73,13 @@ const PopupSupportAgent = memo((props: Props) => {
           }}
         />
         <Grid>
-          <Accordion className={clsx(classes.accordion, classes.accordionSupportAgent)}>
-            <AccordionSummary className={classes.accordionSummary} aria-controls="panel1a-content">
+          <Accordion $accordionMain={true}>
+            <AccordionSummary aria-controls="panel1a-content">
               <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"}>
                 Contact information
               </Heading4>
             </AccordionSummary>
-            <AccordionDetails className={classes.accordionDetails}>
+            <AccordionDetails>
               <Grid display={"flex"} flexDirection="column" gap={1}>
                 <Grid className={classes.box}>
                   <ParagraphSmall>Contact name</ParagraphSmall>
@@ -109,17 +110,16 @@ const PopupSupportAgent = memo((props: Props) => {
         <Ordersummary />
         <Box mt={2}>
           <ParagraphBody
-            className={classes.blueA}
             $colorName="--eerie-black"
             translation-key="payment_billing_order_bank_transfer_sub_6"
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
         <Typography my={3} color={"var(--eerie-black)"} textAlign="center">
-          Change payment method? <span className={classes.linkA}>Click here</span>
+          Change payment method? <Span>Click here</Span>
         </Typography>
       </DialogContentConfirm>
-    </Dialog>
+    </PopupPayment>
   );
 });
 
