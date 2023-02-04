@@ -16,6 +16,7 @@
 .accordion {
   margin-top: 16px !important;
   box-shadow: unset;
+  border: 1px solid var(--cimigo-blue-light-4);
   &::before {
     display: none;
   }
@@ -38,6 +39,10 @@
     padding: 8px 16px;
     border-radius: 4px;
     overflow: hidden;
+    background-color: var(--cimigo-blue-light-4);
+    &:hover {
+      background-color: var(--cimigo-blue-light-3);
+    }
   }
   [class~="Mui-expanded"] {
     border-bottom-left-radius: 0px;
@@ -50,19 +55,12 @@
   }
 }
 .linkA {
-  > a {
-    color: var(--cimigo-blue);
-  }
+  color: var(--cimigo-blue);
+  cursor: pointer;
 }
 .subtitle {
   border-radius: 4px;
 }
-.boldText {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--eerie-black);
-}
-
 .box {
   border-top: 1px solid var(--gray-10);
   padding-top: 16px;

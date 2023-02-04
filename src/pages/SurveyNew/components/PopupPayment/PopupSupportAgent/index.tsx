@@ -19,6 +19,7 @@ import Ordersummary from "../components/Ordersummary";
 import Heading1 from "components/common/text/Heading1";
 import Heading3 from "components/common/text/Heading3";
 import Heading4 from "components/common/text/Heading4";
+import Heading6 from "components/common/text/Heading6";
 import ButtonClose from "components/common/buttons/ButtonClose";
 import AccordionSummary from "../components/AccordionSummary";
 import { ImageMain } from "../components/PopupImage";
@@ -72,37 +73,30 @@ const PopupSupportAgent = memo((props: Props) => {
         />
         <Grid>
           <Accordion className={clsx(classes.accordion, classes.accordionSupportAgent)}>
-            <AccordionSummary className={classes.accordionSummary} aria-controls="panel1a-content" id="panel1a-header">
+            <AccordionSummary className={classes.accordionSummary} aria-controls="panel1a-content">
               <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"}>
                 Contact information
               </Heading4>
             </AccordionSummary>
             <AccordionDetails className={classes.accordionDetails}>
               <Grid display={"flex"} flexDirection="column" gap={1}>
-                <Grid
-                  sx={{ borderTop: "1px solid var(--gray-10)" }}
-                  pt={2}
-                  mt={1}
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                >
+                <Grid className={classes.box}>
                   <ParagraphSmall>Contact name</ParagraphSmall>
-                  <Typography className={classes.boldText} color={"var(--eerie-black)"}>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     Nguyen Thanh Son
-                  </Typography>
+                  </Heading6>
                 </Grid>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} className={classes.box}>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall>Contact email</ParagraphSmall>
-                  <Typography className={classes.boldText} color={"var(--eerie-black)"}>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     sondeptrai@cimigo.com
-                  </Typography>
+                  </Heading6>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall>Contact phone</ParagraphSmall>
-                  <Typography className={classes.boldText} color={"var(--eerie-black)"}>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     +840932123321
-                  </Typography>
+                  </Heading6>
                 </Grid>
               </Grid>
             </AccordionDetails>
@@ -121,8 +115,8 @@ const PopupSupportAgent = memo((props: Props) => {
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
-        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" className={classes.linkA}>
-          Change payment method? <a href="#">Click here</a>
+        <Typography my={3} color={"var(--eerie-black)"} textAlign="center">
+          Change payment method? <span className={classes.linkA}>Click here</span>
         </Typography>
       </DialogContentConfirm>
     </Dialog>

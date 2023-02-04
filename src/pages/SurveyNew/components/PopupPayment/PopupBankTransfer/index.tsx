@@ -1,12 +1,10 @@
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import { Box, Dialog } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import classes from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import Typography from "@mui/material/Typography";
 import Accordion from "@mui/material/Accordion";
-import { useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
 import clsx from "clsx";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -23,9 +21,8 @@ import AccordionSummary from "../components/AccordionSummary";
 import Heading1 from "components/common/text/Heading1";
 import Heading3 from "components/common/text/Heading3";
 import Heading4 from "components/common/text/Heading4";
+import Heading6 from "components/common/text/Heading6";
 import ButtonClose from "components/common/buttons/ButtonClose";
-import { getPayment } from "pages/SurveyNew/Pay/models";
-import { usePrice } from "helpers/price";
 import { ImageMain } from "../components/PopupImage";
 interface Props {
   isOpen: boolean;
@@ -35,9 +32,6 @@ interface Props {
 const PopupBankTransfer = memo((props: Props) => {
   const { isOpen, onCancel } = props;
   const { t } = useTranslation();
-  const { project } = useSelector((state: ReducerType) => state.project);
-  const payment = useMemo(() => getPayment(project?.payments), [project]);
-  const { getCostCurrency } = usePrice();
 
   return (
     <Dialog scroll="paper" open={isOpen} onClose={onCancel} classes={{ paper: classes.paper }}>
@@ -73,22 +67,12 @@ const PopupBankTransfer = memo((props: Props) => {
           }}
         />
         <Grid>
-          <Accordion
-            className={clsx(classes.accordion, classes.accordionBankTransfer)}
-            sx={{ mt: 2, border: "1px solid var(--cimigo-blue-light-4)" }}
-          >
+          <Accordion className={clsx(classes.accordion, classes.accordionBankTransfer)}>
             <AccordionSummary
-              sx={{
-                backgroundColor: "var(--cimigo-blue-light-4)",
-                "&:hover": {
-                  backgroundColor: "var(--cimigo-blue-light-3)",
-                },
-              }}
               width={"100%"}
               className={classes.accordionSummary}
               expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />}
               aria-controls="panel1a-content"
-              id="panel1a-header"
             >
               <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"} translation-key="payment_billing_transfer">
                 {/* {t("payment_billing_transfer", { transfer: "VND" })} */}
@@ -99,62 +83,56 @@ const PopupBankTransfer = memo((props: Props) => {
               <Grid rowGap={1} py={2}>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_bank_name">{t("payment_billing_bank_name")}</ParagraphSmall>
-                  <Typography className={classes.boldText} translation-key="payment_billing_bank_name_name">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">
                     {t("payment_billing_bank_name_name")}
-                  </Typography>
+                  </Heading6>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_beneficiary">{t("payment_billing_beneficiary")}</ParagraphSmall>
-                  <Typography className={classes.boldText} translation-key="payment_billing_beneficiary_name">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_beneficiary_name">
                     {t("payment_billing_beneficiary_name")}
-                  </Typography>
+                  </Heading6>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_account_number">{t("payment_billing_account_number")}</ParagraphSmall>
-                  <Typography className={classes.boldText} translation-key="payment_billing_account_number_bank">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_account_number_bank">
                     {t("payment_billing_account_number_bank")}
-                  </Typography>
+                  </Heading6>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_currency">{t("payment_billing_currency")}</ParagraphSmall>
-                  <Typography className={classes.boldText} translation-key="payment_billing_currency_VND">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_currency_VND">
                     {t("payment_billing_currency_VND")}
-                  </Typography>
+                  </Heading6>
                 </Grid>
               </Grid>
               <Grid py={2}>
                 <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} className={classes.box}>
-                  <Heading4 className={classes.boldText} translation-key="payment_billing_transfer_amount">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount
-                  </Heading4>
-                  <Heading4 className={classes.boldText}>{getCostCurrency(payment?.totalAmount, payment?.currency)?.VNDShow}</Heading4>
+                  </Heading6>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black">
+                    165,000,000 đ
+                  </Heading6>
                 </Box>
                 <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5}>
-                  <Heading4 className={classes.boldText} translation-key="payment_billing_payment_reference">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_payment_reference">
                     {t("payment_billing_payment_reference")}
-                  </Heading4>
-                  <Heading4 className={classes.boldText}>{payment?.orderId}</Heading4>
+                  </Heading6>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black">
+                    RP1234
+                  </Heading6>
                 </Box>
               </Grid>
             </AccordionDetails>
           </Accordion>
-          <Accordion
-            className={clsx(classes.accordion, classes.accordionBankTransfer)}
-            sx={{ mt: 2, border: "1px solid var(--cimigo-blue-light-4)" }}
-          >
+          <Accordion className={clsx(classes.accordion, classes.accordionBankTransfer)}>
             <AccordionSummary
-              sx={{
-                backgroundColor: "var(--cimigo-blue-light-4)",
-                "&:hover": {
-                  backgroundColor: "var(--cimigo-blue-light-3)",
-                },
-              }}
               width={"100%"}
               className={classes.accordionSummary}
               expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />}
               aria-controls="panel1a-content"
-              id="panel1a-header"
             >
               <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"} translation-key="payment_billing_transfer">
                 {/* {t("payment_billing_transfer", { transfer: "USD" })} */}
@@ -165,48 +143,52 @@ const PopupBankTransfer = memo((props: Props) => {
               <Grid rowGap={1} py={2}>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_bank_name">{t("payment_billing_bank_name")}</ParagraphSmall>
-                  <Typography className={classes.boldText} translation-key="payment_billing_bank_name_name">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">
                     {t("payment_billing_bank_name_name")}
-                  </Typography>
+                  </Heading6>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_beneficiary">{t("payment_billing_beneficiary")}</ParagraphSmall>
-                  <Typography className={classes.boldText} translation-key="payment_billing_beneficiary_name">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_beneficiary_name">
                     {t("payment_billing_beneficiary_name")}
-                  </Typography>
+                  </Heading6>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_account_number">{t("payment_billing_account_number")}</ParagraphSmall>
-                  <Typography className={classes.boldText} translation-key="payment_billing_account_number_bank">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_account_number_bank">
                     {t("payment_billing_account_number_bank")}
-                  </Typography>
+                  </Heading6>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_SWIFT_code">{t("payment_billing_SWIFT_code")}</ParagraphSmall>
-                  <Typography className={classes.boldText} translation-key="payment_billing_SWIFT_code_name">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_SWIFT_code_name">
                     {t("payment_billing_SWIFT_code_name")}
-                  </Typography>
+                  </Heading6>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_currency">{t("payment_billing_currency")}</ParagraphSmall>
-                  <Typography className={classes.boldText} translation-key="payment_billing_currency_USD">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_currency_USD">
                     {t("payment_billing_currency_USD")}
-                  </Typography>
+                  </Heading6>
                 </Grid>
               </Grid>
               <Grid py={2}>
                 <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} className={classes.box}>
-                  <Heading4 className={classes.boldText} translation-key="payment_billing_transfer_amount">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount
-                  </Heading4>
-                  <Heading4 className={classes.boldText}>{getCostCurrency(payment?.totalAmount, payment?.currency)?.USDShow}</Heading4>
+                  </Heading6>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black">
+                    $1,000
+                  </Heading6>
                 </Box>
                 <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5}>
-                  <Heading4 className={classes.boldText} translation-key="payment_billing_payment_reference">
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_payment_reference">
                     {t("payment_billing_payment_reference")}
-                  </Heading4>
-                  <Heading4 className={classes.boldText}>{payment?.orderId}</Heading4>
+                  </Heading6>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black">
+                    RP1234
+                  </Heading6>
                 </Box>
               </Grid>
             </AccordionDetails>
@@ -218,8 +200,8 @@ const PopupBankTransfer = memo((props: Props) => {
             Due date: Nov 25, 2022
           </ParagraphBody>
         </Box>
-        <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} className={classes.linkA}>
-          Have you made the payment? <a href="#"> Notify us</a>
+        <ParagraphBody textAlign={"center"} $colorName={"--gray-80"}>
+          Have you made the payment? <span className={classes.linkA}> Notify us</span>
         </ParagraphBody>
         {/* <ParagraphBody
           textAlign={"center"}
@@ -239,13 +221,13 @@ const PopupBankTransfer = memo((props: Props) => {
         <Box mt={2}>
           <ParagraphBody
             className={classes.blueA}
-            $colorName="--eerie-black"
+            $colorName="--eerie-black-00"
             translation-key="payment_billing_order_bank_transfer_sub_6"
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
-        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" className={classes.linkA}>
-          Change payment method? <a href="#">Click here</a>
+        <Typography my={3} color={"var(--eerie-black)"} textAlign="center">
+          Change payment method? <span className={classes.linkA}>Click here</span>
         </Typography>
       </DialogContentConfirm>
     </Dialog>

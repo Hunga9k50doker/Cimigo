@@ -50,11 +50,6 @@
   }
 }
 .linkA {
-  > a {
-    color: var(--cimigo-blue);
-  }
-}
-.boldText {
-  font-size: 14px;
-  font-weight: 500;
+  color: var(--cimigo-blue);
+  cursor: pointer;
 }

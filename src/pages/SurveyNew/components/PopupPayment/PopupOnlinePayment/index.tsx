@@ -66,8 +66,8 @@ const PopupOnlinePayment = memo((props: Props) => {
             Due date: Nov 25, 2022
           </ParagraphBody>
         </Box>
-        <ParagraphBody textAlign={"center"} className={classes.linkA} $colorName={"--gray-80"}>
-          You haven't paid yet? <a href="#">Try again</a>
+        <ParagraphBody textAlign={"center"} $colorName={"--gray-80"}>
+          You haven't paid yet? <span className={classes.linkA}>Try again</span>
         </ParagraphBody>
         <DowloadInvoice />
         <Ordersummary />
@@ -79,8 +79,8 @@ const PopupOnlinePayment = memo((props: Props) => {
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
-        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" className={classes.linkA}>
-          Change payment method? <a href="#">Click here</a>
+        <Typography my={3} color={"var(--eerie-black)"} textAlign="center">
+          Change payment method? <span className={classes.linkA}>Click here</span>
         </Typography>
       </DialogContentConfirm>
     </Dialog>

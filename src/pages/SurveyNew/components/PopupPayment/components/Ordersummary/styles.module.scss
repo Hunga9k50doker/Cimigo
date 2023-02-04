@@ -1,9 +1,3 @@
-.boldText {
-  font-weight: 500;
-}
-.smallText {
-  font-size: 12px;
-}
 .accordion {
   margin-top: 16px !important;
   box-shadow: unset;
@@ -21,4 +15,7 @@
   [class~="MuiAccordionSummary-content"] {
     margin: 0;
   }
+}
+.box {
+  border-top: 1px solid var(--gray-10);
 }
