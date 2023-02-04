@@ -22,6 +22,7 @@ import AdminSolutionService from "services/admin/solution";
 import UploadFile from "components/UploadFile";
 import { FileUpload } from "models/attachment";
 import { ESOLUTION_TYPE, solutionTypes } from "models";
+import { EOPERATION_TYPE, operationTypes } from "models/general";
 import InputTextareaAutosize from "components/InputTextareaAutosize";
 
 const modules = {
@@ -213,6 +214,42 @@ const schema = yup.object().shape({
         .required('Max Brand Asset Recognition is required.'),
       otherwise: yup.number().empty().notRequired().nullable()
     }),
+  daysOfDueDate: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Days of payment due date is required.')
+        .positive('Days of payment due date must be a positive number.')
+        .required('Days of payment due date is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
+  daysOfDueDateType: yup.object().shape({
+    id: yup.number(),
+    name: yup.string()
+  })
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.object().shape({
+        id: yup.number().required('Type of payment due day is required.'),
+        name: yup.string()
+      })
+        .required('Type of payment due day is required.'),
+      otherwise: yup.object().shape({
+        id: yup.number(),
+        name: yup.string()
+      })
+        .notRequired()
+        .nullable()
+    }),
+  paymentMonthSchedule: yup.number()
+    .when('typeId', {
+      is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
+      then: yup.number()
+        .typeError('Month schedule is required.')
+        .positive('Month schedule must be a positive number.')
+        .required('Month schedule is required.'),
+      otherwise: yup.number().empty().notRequired().nullable()
+    }),
   enableCustomQuestion: yup.boolean().required('Enable Custom Question is required.'),
   maxCustomQuestion: yup.number()
     .when('enableCustomQuestion', {
@@ -304,6 +341,9 @@ export interface SolutionFormData {
   maxEquityAttributes: number;
   minBrandAssetRecognition: number;
   maxBrandAssetRecognition: number;
+  daysOfDueDate: number;
+  daysOfDueDateType: OptionItem;
+  paymentMonthSchedule: number;
   maxCustomQuestion: number;
   enableCustomQuestion: boolean;
   enableEyeTracking: boolean;
@@ -363,6 +403,9 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         formData.append('maxEquityAttributes', `${data.maxEquityAttributes}`)
         formData.append('minBrandAssetRecognition', `${data.minBrandAssetRecognition}`)
         formData.append('maxBrandAssetRecognition', `${data.maxBrandAssetRecognition}`)
+        formData.append('daysOfDueDate', `${data.daysOfDueDate}`)
+        formData.append('daysOfDueDateType', `${data.daysOfDueDateType.id}`)
+        formData.append('paymentMonthSchedule', `${data.paymentMonthSchedule}`)
         break;
       case ESOLUTION_TYPE.VIDEO_CHOICE:
         formData.append('minVideo', `${data.minVideo}`)
@@ -424,6 +467,9 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
         maxEquityAttributes: itemEdit.maxEquityAttributes,
         minBrandAssetRecognition: itemEdit.minBrandAssetRecognition,
         maxBrandAssetRecognition: itemEdit.maxBrandAssetRecognition,
+        daysOfDueDate: itemEdit.daysOfDueDate,
+        daysOfDueDateType: operationTypes.find((item) => item.id === itemEdit.daysOfDueDateType),
+        paymentMonthSchedule: itemEdit.paymentMonthSchedule,
         enableCustomQuestion: itemEdit.enableCustomQuestion,
         maxCustomQuestion: itemEdit.maxCustomQuestion,
         enableEyeTracking: itemEdit.enableEyeTracking,
@@ -782,6 +828,40 @@ const SolutionForm = memo(({ title, itemEdit, langEdit, onSubmit }: SolutionForm
                           disabled={!!langEdit}
                           inputRef={register('maxBrandAssetRecognition')}
                           errorMessage={errors.maxBrandAssetRecognition?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Days of payment due date"
+                          name="daysOfDueDate"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('daysOfDueDate')}
+                          errorMessage={errors.daysOfDueDate?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <InputSelect
+                          fullWidth
+                          title="Type of payment due date"
+                          name="daysOfDueDateType"
+                          control={control}
+                          selectProps={{
+                            options: operationTypes,
+                            placeholder: "Select type of due date",
+                            isDisabled: !!langEdit
+                          }}
+                          errorMessage={(errors.daysOfDueDateType as any)?.id?.message}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Inputs
+                          title="Payment month schedule"
+                          name="paymentMonthSchedule"
+                          type="number"
+                          disabled={!!langEdit}
+                          inputRef={register('paymentMonthSchedule')}
+                          errorMessage={errors.paymentMonthSchedule?.message}
                         />
                       </Grid>
                     </>
