@@ -2,6 +2,7 @@ import { Attachment } from "models/attachment";
 import { ESOLUTION_TYPE } from "models/solution";
 import { EyeTrackingSampleSize } from "./eye_tracking_sample_size";
 import { SampleSize } from "./sample_size";
+import { EOPERATION_TYPE } from "models/general";
 
 export interface SolutionCategory {
   id: number;
@@ -59,6 +60,9 @@ export interface Solution {
   maxEquityAttributes: number;
   minBrandAssetRecognition: number;
   maxBrandAssetRecognition: number;
+  daysOfDueDate: number;
+  daysOfDueDateType: EOPERATION_TYPE;
+  paymentMonthSchedule: number;
   maxCustomQuestion: number;
   enableCustomQuestion: boolean;
   enableEyeTracking: boolean;
