@@ -79,7 +79,7 @@ const PopupBankTransfer = memo((props: Props) => {
                 Transfer in VND
               </Heading4>
             </AccordionSummary>
-            <AccordionDetails className={classes.accordionDetails} sx={{ backgroundColor: "var(--cimigo-blue-light-5)" }}>
+            <AccordionDetails className={classes.accordionDetails}>
               <Grid rowGap={1} py={2}>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_bank_name">{t("payment_billing_bank_name")}</ParagraphSmall>
@@ -139,7 +139,7 @@ const PopupBankTransfer = memo((props: Props) => {
                 Transfer in USD
               </Heading4>
             </AccordionSummary>
-            <AccordionDetails className={classes.accordionDetails} sx={{ backgroundColor: "var(--cimigo-blue-light-5)" }}>
+            <AccordionDetails className={classes.accordionDetails}>
               <Grid rowGap={1} py={2}>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall translation-key="payment_billing_bank_name">{t("payment_billing_bank_name")}</ParagraphSmall>
