@@ -36,24 +36,24 @@ const PopupSupportAgent = memo((props: Props) => {
 
   return (
     <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
-      <DialogTitleConfirm sx={{ paddingTop: 0 }}>
-        <Box display="flex" alignItems={"flex-end"} mt={3}>
+      <DialogTitleConfirm $padding="24px 24px 8px 24px">
+        <Box display="flex" alignItems={{ sm: "flex-end", xs: "flex-start" }} mt={3}>
           <ImageMain src={images.imgSupportAgent} alt="" />
-          <Box ml={3}>
+          <Box ml={{ sm: 3 }}>
             <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="">
               Support on payment
             </Heading1>
             <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="">
               Dec 2022 - Feb 2023 payment
             </Heading3>
-            <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+            <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
               <Box display="flex">
                 <IconMoneyCash />
-                <Heading4 ml={1} $fontWeight={400} translation-key="">
+                <Heading4 ml={1} mr={3} $fontWeight={400} translation-key="">
                   165,000,000 đ
                 </Heading4>
               </Box>
-              <Box display={"flex"} alignItems={"center"} justifyContent={"center"} ml={3}>
+              <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
                 <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
                 <Heading4 $fontWeight={400} ml={1} $colorName={"--gray-80"}>
                   Due date: Nov 25, 2022
@@ -66,6 +66,7 @@ const PopupSupportAgent = memo((props: Props) => {
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
         <ParagraphBody
+          paddingTop={2}
           $colorName="--gray-80"
           translation-key="quotas_invalid_popup_subtitle"
           dangerouslySetInnerHTML={{
@@ -82,19 +83,19 @@ const PopupSupportAgent = memo((props: Props) => {
             </AccordionSummary>
             <AccordionDetails>
               <Grid display={"flex"} flexDirection="column" gap={1}>
-                <BoxCustom $marginTop={true} $paddingTop={true} $borderTop={true}>
+                <BoxCustom $marginTop={true} $paddingTop={true} $borderTop={true} $flexBox={true}>
                   <ParagraphSmall>Contact name</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     Nguyen Thanh Son
                   </Heading6>
                 </BoxCustom>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
                   <ParagraphSmall>Contact email</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     sondeptrai@cimigo.com
                   </Heading6>
                 </Grid>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
                   <ParagraphSmall>Contact phone</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     +840932123321

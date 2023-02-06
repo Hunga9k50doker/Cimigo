@@ -37,31 +37,31 @@ const Ordersummary = memo(() => {
             <ParagraphExtraSmall $colorName={"--gray-60"}>Project ID: 6</ParagraphExtraSmall>
           </BoxCustom>
           <BoxCustom $borderTop={true} $paddingTop={true}>
-            <ParagraphBody display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+            <BoxCustom $flexBox={true}>
               <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
                 {t("common_sub_total")}
               </ParagraphSmall>
               <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
                 150,000,000 đ
               </Heading6>
-            </ParagraphBody>
-            <ParagraphBody display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+            </BoxCustom>
+            <BoxCustom $flexBox={true}>
               <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
                 {t("common_vat", { percent: (configs?.vat || 0) * 100 })}
               </ParagraphSmall>
               <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
                 15,000,000 đ
               </Heading6>
-            </ParagraphBody>
+            </BoxCustom>
           </BoxCustom>
-          <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} pt={3}>
+          <BoxCustom $flexBox={true} pt={3}>
             <Heading4 $fontWeight={500} $colorName={"--eerie-black"} translation-key="common_total">
               {t("common_total")}
             </Heading4>
             <Heading4 $fontWeight={500} $colorName={"--eerie-black"}>
               165,000,000 đ
             </Heading4>
-          </Box>
+          </BoxCustom>
         </AccordionDetails>
       </Accordion>
     </Box>

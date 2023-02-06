@@ -1,4 +1,4 @@
-import { Box  } from "@mui/material";
+import { Box } from "@mui/material";
 import styled, { css } from "styled-components";
 
 interface Props {
@@ -15,6 +15,7 @@ const BoxCustom = styled(Box)<Props>`
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
     `}
 
   ${(props) =>

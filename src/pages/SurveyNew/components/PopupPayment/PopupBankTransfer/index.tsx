@@ -37,10 +37,10 @@ const PopupBankTransfer = memo((props: Props) => {
 
   return (
     <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
-      <DialogTitleConfirm sx={{ paddingTop: 0 }}>
-        <Box display="flex" alignItems={"flex-end"} mt={3}>
+      <DialogTitleConfirm $padding={"24px 24px 8px 24px"}>
+        <Box display="flex" alignItems={{ sm: "flex-end", xs: "flex-start" }} mt={3}>
           <ImageMain src={images.imgPaymentError1} alt="" />
-          <Box ml={3}>
+          <Box ml={{ sm: 3 }}>
             <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="">
               Bank transfer processing
             </Heading1>
@@ -61,6 +61,7 @@ const PopupBankTransfer = memo((props: Props) => {
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
         <ParagraphBody
+          paddingTop={2}
           $colorName="--gray-80"
           translation-key="quotas_invalid_popup_subtitle"
           dangerouslySetInnerHTML={{
@@ -78,33 +79,33 @@ const PopupBankTransfer = memo((props: Props) => {
             </AccordionSummary>
             <AccordionDetails>
               <Grid rowGap={1} py={2}>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                <BoxCustom $flexBox={true}>
                   <ParagraphSmall translation-key="payment_billing_bank_name">{t("payment_billing_bank_name")}</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">
                     {t("payment_billing_bank_name_name")}
                   </Heading6>
-                </Grid>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                </BoxCustom>
+                <BoxCustom $flexBox={true}>
                   <ParagraphSmall translation-key="payment_billing_beneficiary">{t("payment_billing_beneficiary")}</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_beneficiary_name">
                     {t("payment_billing_beneficiary_name")}
                   </Heading6>
-                </Grid>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                </BoxCustom>
+                <BoxCustom $flexBox={true}>
                   <ParagraphSmall translation-key="payment_billing_account_number">{t("payment_billing_account_number")}</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_account_number_bank">
                     {t("payment_billing_account_number_bank")}
                   </Heading6>
-                </Grid>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                </BoxCustom>
+                <BoxCustom $flexBox={true}>
                   <ParagraphSmall translation-key="payment_billing_currency">{t("payment_billing_currency")}</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_currency_VND">
                     {t("payment_billing_currency_VND")}
                   </Heading6>
-                </Grid>
+                </BoxCustom>
               </Grid>
               <Grid paddingBottom={2}>
-                <BoxCustom display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} $paddingTop={true} $borderTop={true}>
+                <BoxCustom $flexBox={true} py={0.5} $paddingTop={true} $borderTop={true}>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount
@@ -113,14 +114,14 @@ const PopupBankTransfer = memo((props: Props) => {
                     165,000,000 đ
                   </Heading6>
                 </BoxCustom>
-                <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5}>
+                <BoxCustom $flexBox={true} py={0.5}>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_payment_reference">
                     {t("payment_billing_payment_reference")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     RP1234
                   </Heading6>
-                </Box>
+                </BoxCustom>
               </Grid>
             </AccordionDetails>
           </Accordion>
@@ -133,39 +134,39 @@ const PopupBankTransfer = memo((props: Props) => {
             </AccordionSummary>
             <AccordionDetails>
               <Grid rowGap={1} py={2}>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                <BoxCustom $flexBox={true}>
                   <ParagraphSmall translation-key="payment_billing_bank_name">{t("payment_billing_bank_name")}</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_bank_name_name">
                     {t("payment_billing_bank_name_name")}
                   </Heading6>
-                </Grid>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                </BoxCustom>
+                <BoxCustom $flexBox={true}>
                   <ParagraphSmall translation-key="payment_billing_beneficiary">{t("payment_billing_beneficiary")}</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_beneficiary_name">
                     {t("payment_billing_beneficiary_name")}
                   </Heading6>
-                </Grid>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                </BoxCustom>
+                <BoxCustom $flexBox={true}>
                   <ParagraphSmall translation-key="payment_billing_account_number">{t("payment_billing_account_number")}</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_account_number_bank">
                     {t("payment_billing_account_number_bank")}
                   </Heading6>
-                </Grid>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                </BoxCustom>
+                <BoxCustom $flexBox={true}>
                   <ParagraphSmall translation-key="payment_billing_SWIFT_code">{t("payment_billing_SWIFT_code")}</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_SWIFT_code_name">
                     {t("payment_billing_SWIFT_code_name")}
                   </Heading6>
-                </Grid>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+                </BoxCustom>
+                <BoxCustom $flexBox={true}>
                   <ParagraphSmall translation-key="payment_billing_currency">{t("payment_billing_currency")}</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_currency_USD">
                     {t("payment_billing_currency_USD")}
                   </Heading6>
-                </Grid>
+                </BoxCustom>
               </Grid>
               <Grid paddingBottom={2}>
-                <BoxCustom display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} $paddingTop={true} $borderTop={true}>
+                <BoxCustom $flexBox={true} py={0.5} $paddingTop={true} $borderTop={true}>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount

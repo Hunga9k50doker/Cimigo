@@ -30,10 +30,10 @@ const PopupOnlinePayment = memo((props: Props) => {
 
   return (
     <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
-      <DialogTitleConfirm sx={{ paddingTop: 0 }}>
-        <Box display="flex" alignItems={"flex-end"} mt={3}>
+      <DialogTitleConfirm $padding="24px 24px 8px 24px">
+        <Box display="flex" alignItems={{ sm: "flex-end", xs: "flex-start" }} mt={3}>
           <ImageMain src={images.imgPaymentError1} alt="" />
-          <Box ml={3}>
+          <Box ml={{ sm: 3 }}>
             <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="">
               Online payment processing
             </Heading1>
@@ -54,6 +54,7 @@ const PopupOnlinePayment = memo((props: Props) => {
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
         <ParagraphBody
+          paddingTop={2}
           $colorName="--gray-80"
           translation-key="quotas_invalid_popup_subtitle"
           dangerouslySetInnerHTML={{
