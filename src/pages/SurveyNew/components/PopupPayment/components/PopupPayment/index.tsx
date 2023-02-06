@@ -9,10 +9,5 @@ const PopupPayment = styled(Dialog)`
       margin: 0 !important;
     }
   }
-
-  a {
-    font-weight: 600;
-    color: var(--cimigo-blue);
-  }
 `;
 export default PopupPayment;

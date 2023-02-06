@@ -213,6 +213,7 @@ const PopupBankTransfer = memo((props: Props) => {
         </ParagraphBody>
         <Box mt={2}>
           <ParagraphBody
+            className="blueText"
             $colorName="--eerie-black-00"
             translation-key="payment_billing_order_bank_transfer_sub_6"
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
