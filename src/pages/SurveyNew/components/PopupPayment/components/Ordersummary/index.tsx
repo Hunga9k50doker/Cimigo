@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Heading4 from "components/common/text/Heading4";
 import Heading6 from "components/common/text/Heading6";
-import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import AccordionSummary from "../AccordionSummary";
