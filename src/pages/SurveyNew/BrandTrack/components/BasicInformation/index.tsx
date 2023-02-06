@@ -1,5 +1,5 @@
 import { Grid, InputAdornment } from "@mui/material"
-import { Project, SETUP_SURVEY_SECTION } from "models/project"
+import { Project, SETUP_SURVEY_SECTION, UpdateProjectBasicInformation } from "models/project"
 import { memo, useEffect, useMemo } from "react"
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -43,21 +43,6 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
     resolver: yupResolver(schema),
     mode: 'onChange'
   });
-
-  const onSubmit = (data: BasicInformationForm) => {
-    if (!editable) return
-    dispatch(setLoading(true))
-    ProjectService.updateProjectBasicInformation(project.id, data)
-      .then((res) => {
-        dispatch(setProjectReducer({
-          ...project,
-          category: data.category,
-        }))
-        dispatch(setSuccessMess(res.message))
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)))
-  }
   
   useEffect(() => {
     if (project) {
@@ -67,22 +52,29 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
     }
   }, [project, reset])
 
-  const onTogglePremise = (checked) => {
-    if (!editable) return
+  const handleUpdateBasicInformation = (data: UpdateProjectBasicInformation) => {
     dispatch(setLoading(true))
-    ProjectService.updateProjectBasicInformation(project.id, {
-      category: project.category,
-      onPremise: checked
-    })
+    ProjectService.updateProjectBasicInformation(project.id, {...project,...data})
       .then((res) => {
         dispatch(setProjectReducer({
           ...project,
-          onPremise: checked,
+          category: res.data.category,
+          onPremise: res.data.onPremise,
         }))
         dispatch(setSuccessMess(res.message))
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
+  }
+
+  const onSubmit = (data: BasicInformationForm) => {
+    if (!editable) return
+    handleUpdateBasicInformation(data)
+  }
+
+  const onTogglePremise = (checked: boolean) => {
+    if (!editable) return
+    handleUpdateBasicInformation({ onPremise: checked })
   }
 
   return (

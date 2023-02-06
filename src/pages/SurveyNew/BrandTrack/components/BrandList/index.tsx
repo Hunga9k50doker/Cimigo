@@ -36,15 +36,11 @@ const BrandList = memo(({ project }: BrandListProps) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
 
-  const [isOpenAddOrEditMainBrandModal, setIsOpenAddOrEditMainBrandModal] = useState<boolean>(false)
-  const [mainBrandEdit, setMainBrandEdit] = useState<AdditionalBrand>(null)
-  
-  const [isOpenAddOrEditCompetingBrandModal, setIsOpenAddOrEditCompetingBrandModal] = useState<boolean>(false)
-  const [showMoreCompetingBrand, setShowMoreCompetingBrand] = useState<boolean>(false);
-  const [competingBrandEdit, setCompetingBrandEdit] = useState<AdditionalBrand>(null)
-  const [competingBrandDelete, setCompetingBrandDelete] = useState<AdditionalBrand>(null)
-
+  const [isOpenAddOrEditBrandModal, setIsOpenAddOrEditBrandModal] = useState<boolean>(false)
+  const [brandEdit, setBrandEdit] = useState<AdditionalBrand>(null)
   const [brandType, setBrandType] = useState<EBrandType>(EBrandType.MAIN)
+  const [showMoreCompetingBrand, setShowMoreCompetingBrand] = useState<boolean>(false)
+  const [competingBrandDelete, setCompetingBrandDelete] = useState<AdditionalBrand>(null)
 
   const mainBrandDatas = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.MAIN) || [], [project])
   const competingBrandDatas = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING) || [], [project])
@@ -57,53 +53,35 @@ const BrandList = memo(({ project }: BrandListProps) => {
 
   const onAddMainBrand = () => {
     setBrandType(EBrandType.MAIN)
-    setIsOpenAddOrEditMainBrandModal(true)
+    setIsOpenAddOrEditBrandModal(true)
   }
   const onEditMainBrand = (mainBrand: AdditionalBrand) => {
-    setMainBrandEdit(mainBrand)
+    setBrandEdit(mainBrand)
     setBrandType(EBrandType.MAIN)
-    setIsOpenAddOrEditMainBrandModal(true)
-  }
-  const onCloseAddOrEditMainBrandModal = () => {
-    setMainBrandEdit(null)
-    setIsOpenAddOrEditMainBrandModal(false)
-  }
-
-  const onAddCompetingBrand = () => {
-    setBrandType(EBrandType.COMPETING)
-    setIsOpenAddOrEditCompetingBrandModal(true)
-  }
-  const onEditCompetingBrand = (competingBrand: AdditionalBrand) => {
-    setCompetingBrandEdit(competingBrand)
-    setBrandType(EBrandType.COMPETING)
-    setIsOpenAddOrEditCompetingBrandModal(true)
-  }
-  const onCloseAddOrEditCompetingBrandModal = () => {
-    setCompetingBrandEdit(null)
-    setIsOpenAddOrEditCompetingBrandModal(false)
+    setIsOpenAddOrEditBrandModal(true)
   }
   
+  const onAddCompetingBrand = () => {
+    setBrandType(EBrandType.COMPETING)
+    setIsOpenAddOrEditBrandModal(true)
+  }
+  const onEditCompetingBrand = (competingBrand: AdditionalBrand) => {
+    setBrandEdit(competingBrand)
+    setBrandType(EBrandType.COMPETING)
+    setIsOpenAddOrEditBrandModal(true)
+  }
+  
+  const onClosePopupAddOrEditBrand = () => {
+    setBrandEdit(null)
+    setIsOpenAddOrEditBrandModal(false)
+  }
+
   const handleAddOrEditBrand = (data: BrandForm) => {
-    if (mainBrandEdit?.id) {
+    if (brandEdit?.id) {
       dispatch(setLoading(true))
-      AdditionalBrandService.update(mainBrandEdit.id, {
-        brand: data.brand,
-        manufacturer: data.manufacturer,
-        variant: data.variant,
+      AdditionalBrandService.update(brandEdit.id, {
         typeId: brandType,
-      })
-        .then(() => {
-          dispatch(getAdditionalBrandsRequest(project.id))
-        })
-        .catch(e => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)))
-    } else if (competingBrandEdit?.id) {
-      dispatch(setLoading(true))
-      AdditionalBrandService.update(competingBrandEdit.id, {
-        brand: data.brand,
-        manufacturer: data.manufacturer,
-        variant: data.variant,
-        typeId: brandType,
+        ...data
       })
         .then(() => {
           dispatch(getAdditionalBrandsRequest(project.id))
@@ -114,10 +92,8 @@ const BrandList = memo(({ project }: BrandListProps) => {
       dispatch(setLoading(true))
       AdditionalBrandService.create({
         projectId: project.id,
-        brand: data.brand,
-        manufacturer: data.manufacturer,
-        variant: data.variant,
         typeId: brandType,
+        ...data
       })
         .then(() => {
           dispatch(getAdditionalBrandsRequest(project.id))
@@ -263,9 +239,9 @@ const BrandList = memo(({ project }: BrandListProps) => {
         </Grid>
       </Grid>
       <PopupAddOrEditAdditionalBrand
-        isOpen={brandType === EBrandType.MAIN ? isOpenAddOrEditMainBrandModal : isOpenAddOrEditCompetingBrandModal}
-        onClose={brandType === EBrandType.MAIN ? onCloseAddOrEditMainBrandModal : onCloseAddOrEditCompetingBrandModal}
-        brand={brandType === EBrandType.MAIN ? mainBrandEdit : competingBrandEdit}
+        isOpen={isOpenAddOrEditBrandModal}
+        onClose={onClosePopupAddOrEditBrand}
+        brand={brandEdit}
         project={project}
         onSubmit={handleAddOrEditBrand}
         brandType={brandType}

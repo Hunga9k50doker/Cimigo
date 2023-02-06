@@ -19,9 +19,7 @@ export class PriceService {
     const sampleSize = _project?.sampleSize || 0
     switch (project?.solution?.typeId) {
       case ESOLUTION_TYPE.BRAND_TRACKING:
-        const planPricePerMonth = project?.planPricePerMonth
-        const brandTrackPriceVND = Math.round(sampleSize * planPricePerMonth)
-        return brandTrackPriceVND
+        return project?.planPricePerMonth
       default:
         const sampleSizeConstConfig = PriceService.getSampleSizeConstConfig(project)
         const unitPrice = sampleSizeConstConfig.find((it, index) => it.limit > sampleSize || (it.limit === sampleSize && index === (sampleSizeConstConfig.length - 1)))?.price || 0
