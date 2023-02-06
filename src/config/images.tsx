@@ -87,9 +87,6 @@ import imgTargetTabHI from 'assets/img/target-tab-hi.svg';
 import imgNoResultNotPay from 'assets/img/no-result-not-pay.svg';
 import imgNoResultPaid from 'assets/img/no-result-paid.svg';
 import icPaymentHistory from "assets/img/icon/ic-payment-history.svg";
-import icImagesMode from 'assets/img/icon/ic-images-mode.svg';
-import icTitle from 'assets/img/icon/ic-title.svg';
-import icMusic from 'assets/img/icon/ic-music.svg';
 
 const images = {
   // ===================== Images =========================
@@ -182,9 +179,6 @@ const images = {
   imgSad,
   imgPain,
   icPaymentHistory,
-  icImagesMode,
-  icTitle,
-  icMusic,
 }
 
 export default images

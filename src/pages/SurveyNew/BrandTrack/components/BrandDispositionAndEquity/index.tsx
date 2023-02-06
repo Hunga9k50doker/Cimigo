@@ -299,7 +299,6 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
           <Heading4
             $fontSizeMobile={"16px"}
             $colorName="--eerie-black"
-            translation-key="setup_survey_add_brand_title"
             sx={{ display: "inline-block", verticalAlign: "middle" }}
           >
             STEP 3: Brand disposition and equity

@@ -93,7 +93,6 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
         <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-category`} className={classes.categoryInputWrapper}>
           <InputTextfield
             readOnly={!editable}
-            translation-key="field_project_category"
             name="category"
             placeholder={"Enter your brand category"}
             inputRef={register('category')}
