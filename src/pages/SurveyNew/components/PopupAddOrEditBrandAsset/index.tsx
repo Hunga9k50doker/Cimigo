@@ -272,7 +272,6 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                 <Grid className={classes.btnUploadWrapper}>
                   <Button
                     btnType={BtnType.Outlined}
-                    translation-key="common_save"
                     children={<TextBtnSmall sx={{display: "flex", alignItems: "center", gap: "8px"}}><BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />{imageReview ? "Change asset" : "Upload asset"}</TextBtnSmall>}
                     className={classes.btnSave}
                     {...getRootProps()}
@@ -329,7 +328,6 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                 <Grid className={classes.btnUploadWrapper}>
                   <Button
                     btnType={BtnType.Outlined}
-                    translation-key="common_save"
                     children={<TextBtnSmall sx={{display: "flex", alignItems: "center", gap: "8px"}}><BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />{soundReview ? "Change asset" : "Upload asset"}</TextBtnSmall>}
                     className={classes.btnSave}
                     {...getRootProps()}
