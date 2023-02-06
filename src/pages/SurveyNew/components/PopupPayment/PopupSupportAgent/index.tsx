@@ -83,7 +83,7 @@ const PopupSupportAgent = memo((props: Props) => {
             </AccordionSummary>
             <AccordionDetails>
               <Grid display={"flex"} flexDirection="column" gap={1}>
-                <BoxCustom $marginTop={true} $paddingTop={true} $borderTop={true} $flexBox={true}>
+                <BoxCustom mt={1} pt={2} $borderTop={true} $flexBox={true}>
                   <ParagraphSmall>Contact name</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     Nguyen Thanh Son

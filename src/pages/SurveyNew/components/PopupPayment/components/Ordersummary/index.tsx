@@ -36,7 +36,7 @@ const Ordersummary = memo(() => {
             <ParagraphExtraSmall $colorName={"--gray-60"}>Dec 2022 - Feb 2023</ParagraphExtraSmall>
             <ParagraphExtraSmall $colorName={"--gray-60"}>Project ID: 6</ParagraphExtraSmall>
           </BoxCustom>
-          <BoxCustom $borderTop={true} $paddingTop={true}>
+          <BoxCustom $borderTop={true} pt={2}>
             <BoxCustom $flexBox={true}>
               <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
                 {t("common_sub_total")}

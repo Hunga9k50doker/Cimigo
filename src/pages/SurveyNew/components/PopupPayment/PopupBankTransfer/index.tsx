@@ -47,14 +47,14 @@ const PopupBankTransfer = memo((props: Props) => {
             <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="">
               Dec 2022 - Feb 2023 payment
             </Heading3>
-            <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-              <Box display="flex" mt={1}>
+            <BoxCustom $flexBox={true}>
+              <Box display="flex">
                 <IconMoneyCash />
                 <Heading4 ml={1} $fontWeight={400} translation-key="">
                   165,000,000 đ
                 </Heading4>
               </Box>
-            </Grid>
+            </BoxCustom>
           </Box>
         </Box>
         <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onCancel} />
@@ -105,7 +105,7 @@ const PopupBankTransfer = memo((props: Props) => {
                 </BoxCustom>
               </Grid>
               <Grid paddingBottom={2}>
-                <BoxCustom $flexBox={true} py={0.5} $paddingTop={true} $borderTop={true}>
+                <BoxCustom $flexBox={true} py={0.5} pt={2} $borderTop={true}>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount
@@ -166,7 +166,7 @@ const PopupBankTransfer = memo((props: Props) => {
                 </BoxCustom>
               </Grid>
               <Grid paddingBottom={2}>
-                <BoxCustom $flexBox={true} py={0.5} $paddingTop={true} $borderTop={true}>
+                <BoxCustom $flexBox={true} py={0.5} pt={2} $borderTop={true}>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount
