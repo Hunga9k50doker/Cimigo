@@ -76,7 +76,7 @@ const PopupOnlinePayment = memo((props: Props) => {
         <Ordersummary />
         <Box mt={2}>
           <ParagraphBody
-            className="blueText"
+            className="nestedLink"
             $colorName="--eerie-black"
             translation-key="payment_billing_order_bank_transfer_sub_6"
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
