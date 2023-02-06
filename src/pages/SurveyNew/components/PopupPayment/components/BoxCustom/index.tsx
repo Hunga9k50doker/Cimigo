@@ -1,4 +1,4 @@
-import { Box as BoxRoot } from "@mui/material";
+import { Box  } from "@mui/material";
 import styled, { css } from "styled-components";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   $paddingTop?: boolean;
 }
 
-const Box = styled(BoxRoot)<Props>`
+const BoxCustom = styled(Box)<Props>`
   ${(props) =>
     props.$flexBox &&
     css`
@@ -34,4 +34,4 @@ const Box = styled(BoxRoot)<Props>`
     `}
 `;
 
-export default Box;
+export default BoxCustom;

@@ -23,7 +23,7 @@ import { ImageMain } from "../components/PopupImage";
 import PopupPayment from "../components/PopupPayment";
 import Accordion from "../components/Accordion";
 import Span from "../components/Span";
-import BoxCustom from "../components/Box";
+import BoxCustom from "../components/BoxCustom";
 
 interface Props {
   isOpen: boolean;

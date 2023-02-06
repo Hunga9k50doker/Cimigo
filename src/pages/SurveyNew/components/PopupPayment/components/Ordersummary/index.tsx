@@ -12,7 +12,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import AccordionSummary from "../AccordionSummary";
 import Accordion from "../../components/Accordion";
-import BoxCustom from "../../components/Box";
+import BoxCustom from "../BoxCustom";
 const Ordersummary = memo(() => {
   const { t } = useTranslation();
   const { configs } = useSelector((state: ReducerType) => state.user);
