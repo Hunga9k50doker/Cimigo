@@ -25,14 +25,14 @@ const Ordersummary = memo(() => {
         </AccordionSummary>
         <AccordionDetails>
           <BoxCustom py={2} mt={1} $borderTop={true}>
-            <ParagraphBody display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+            <BoxCustom $flexBox={true}>
               <Heading6 $fontWeight={500} $colorName={"--eerie-black"} translation-key="">
                 Brand track (3 months)
               </Heading6>
               <Heading6 $fontWeight={500} $colorName={"--eerie-black"} translation-key="">
                 150,000,000 đ
               </Heading6>
-            </ParagraphBody>
+            </BoxCustom>
             <ParagraphExtraSmall $colorName={"--gray-60"}>Dec 2022 - Feb 2023</ParagraphExtraSmall>
             <ParagraphExtraSmall $colorName={"--gray-60"}>Project ID: 6</ParagraphExtraSmall>
           </BoxCustom>
