@@ -1,5 +1,5 @@
 import { KeyboardArrowDown, PlayArrow, Edit as EditIcon, Help, ExpandMore } from "@mui/icons-material"
-import {  Accordion, AccordionSummary, Box, Grid, IconButton, ListItem, ListItemButton, MenuItem, Tooltip } from "@mui/material"
+import {  Accordion, AccordionSummary, Box, Chip, Grid, IconButton, ListItem, ListItemButton, MenuItem, Tooltip } from "@mui/material"
 import Button, { BtnType } from "components/common/buttons/Button"
 import Heading4 from "components/common/text/Heading4"
 import ParagraphBody from "components/common/text/ParagraphBody"
@@ -7,7 +7,7 @@ import ParagraphBodyUnderline from "components/common/text/ParagraphBodyUnderlin
 import ParagraphSmall from "components/common/text/ParagraphSmall"
 import TextBtnSmall from "components/common/text/TextBtnSmall"
 import NoteWarning from "components/common/warnings/NoteWarning"
-import { editableProject } from "helpers/project"
+import ProjectHelper, { editableProject } from "helpers/project"
 import { AdditionalBrand, EBrandType } from "models/additional_brand"
 import { Project, SETUP_SURVEY_SECTION } from "models/project"
 import { memo, useEffect, useMemo, useState } from "react"
@@ -26,7 +26,6 @@ import { UserAttributeService } from "services/user_attribute"
 import clsx from "clsx"
 import InputCheckbox from "components/common/inputs/InputCheckbox"
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
-import TagCustom from "components/common/tag/TagCustom"
 import { ProjectAttribute } from "models/project_attribute"
 import CloseIcon from '@mui/icons-material/Close';
 import EditSquare from "components/icons/IconEditSquare"
@@ -96,6 +95,8 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
       })) || [])
     ].sort((a, b) => a?.contentTypeId - b?.contentTypeId)
   }, [project])
+  const competitiveBrandNeedMore = useMemo(() => ProjectHelper.competitiveBrandNeedMore(project) || 0, [project])
+  const brandEquityAttributesNeedMore = useMemo(() => ProjectHelper.brandEquityAttributesNeedMore(project) || 0, [project])
 
   useEffect(() => {
     const _competingBrands = project?.additionalBrands?.filter((item) => item?.typeId !== EBrandType.MAIN)
@@ -293,7 +294,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
 
   return (
     <>
-      <Grid id={SETUP_SURVEY_SECTION.additional_brand_list} mt={4}>
+      <Grid id={SETUP_SURVEY_SECTION.brand_disposition_and_equity} mt={4}>
         <Grid sx={{display: "flex", alignItems: "center", gap: "4px"}}>
           <Heading4
             $fontSizeMobile={"16px"}
@@ -333,14 +334,20 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
           <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 }>Your brand and these competitive brands are compared.</ParagraphBody> 
           {displaySelectBrandButton ? (
             <>
-              {project?.projectBrands?.length < 1 && (
+              {!!competitiveBrandNeedMore && (
                 <NoteWarning mb={ 3 } ml={ 3 }>
-                  <ParagraphSmall $colorName="--warning-dark" className={classes.warning}>Select at least 1 more brands.</ParagraphSmall>
+                  <ParagraphSmall $colorName="--warning-dark" className={classes.warning}>Select at least {competitiveBrandNeedMore} more brands.</ParagraphSmall>
                 </NoteWarning>
                 )}
               <Grid className={classes.competingBrandListWrapper}>
                 {project?.projectBrands?.map(item => (
-                  <TagCustom key={item?.id} editable={editable} onDelete={()=>onDeleteProjectBrand(item?.id)}>{item?.brand?.brand}</TagCustom>
+                  <Chip
+                    classes={{ root: classes.rootChip }}
+                    label={item?.brand?.brand}
+                    onDelete={()=>onDeleteProjectBrand(item?.id)}
+                    deleteIcon={<div><CloseIcon sx={{ fontSize: "20px", color: "var(--cimigo-blue)" }} /></div>}
+                    disabled={!editable}
+                  />
                 ))}
                 <Button
                   sx={{ width: { xs: "100%", sm: "auto" }, maxHeight: "36px" }}
@@ -419,9 +426,13 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
             </ParagraphBody>
           </div>
           <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } className={classes.brandEquitySubTitle}>In additional to <span onClick={() => setOpenPopupMandatory(true)}>7 mandatory attributes.</span> You may add up to 7 more attributes for the brand equity sections.</ParagraphBody>
-          
+          {!!brandEquityAttributesNeedMore && (
+            <NoteWarning mt={0} mb={2}>
+              <ParagraphSmall $colorName="--warning-dark">Require at least {brandEquityAttributesNeedMore} more brand equity attributes</ParagraphSmall>
+            </NoteWarning>
+          )}
           {/* =======start desktop===== */}
-          <Grid className={classes.rootList} mt={2}>
+          <Grid className={classes.rootList}>
             {attributes?.map((item, index) => (
               <ListItem
                 alignItems="center"
@@ -489,7 +500,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
           </Grid>
           {/* =======end desktop===== */}
           {/* =======start mobile===== */}
-          <Grid className={classes.rootListMobile} mt={3}>
+          <Grid className={classes.rootListMobile}>
             {attributes?.map((item, index) => (
               <Accordion key={index} className={clsx(classes.itemListMobile, { [classes.notDisplayed]: index > 4 && !showMoreAttributes })}>
                 <AccordionSummary

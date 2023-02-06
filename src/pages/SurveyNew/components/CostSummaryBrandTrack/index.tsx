@@ -33,7 +33,7 @@ const CostSummaryBrandTrack = memo(({ project, price }: CostSummaryBrandTrackPro
       <Box display="flex" justifyContent="space-between" mb={2}>
         <Box>
           <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"}>Brand track</ParagraphSmall>
-          <ParagraphExtraSmall $colorName="--gray-60" className={classes.itemSubTitle}>Sample size: <span>200</span></ParagraphExtraSmall>
+          <ParagraphExtraSmall $colorName="--gray-60" className={classes.itemSubTitle}>Sample size: <span>{project?.sampleSize}</span></ParagraphExtraSmall>
         </Box>
         <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"}>{price?.sampleSizeCost?.show}</ParagraphSmall>
       </Box>
@@ -60,7 +60,7 @@ const CostSummaryBrandTrack = memo(({ project, price }: CostSummaryBrandTrackPro
         <Heading3 $fontWeight={500} $colorName="--eerie-black" align="right">{price?.totalAmountCost?.show}</Heading3>
       </Box>
       <Box display="flex" justifyContent="flex-end">
-        <ParagraphSmall $colorName="--gray-80" align="right">*3 months billing cycles</ParagraphSmall>
+        <ParagraphSmall $colorName="--gray-80" align="right">*{project?.solution?.paymentMonthSchedule} months billing cycles</ParagraphSmall>
       </Box>
     </>
   )

@@ -1,5 +1,6 @@
 import { OptionItem } from "./general";
-import images from "config/images";
+import { IconImagesMode } from "components/icons"
+import { MusicNote, Title } from "@mui/icons-material";
 
 export enum EBRAND_ASSET_TYPE {
   IMAGE = 1,
@@ -19,9 +20,9 @@ export interface BrandAsset {
 }
 
 export const brandAssetTypes: OptionItem[] = [
-  { id: EBRAND_ASSET_TYPE.IMAGE, name: 'Unbranded image', img: images.icImagesMode },
-  { id: EBRAND_ASSET_TYPE.SLOGAN, name: 'Slogan or tagline', img: images.icTitle },
-  { id: EBRAND_ASSET_TYPE.SOUND, name: 'Song or sound', img: images.icMusic }
+  { id: EBRAND_ASSET_TYPE.IMAGE, name: 'Unbranded image', icon: IconImagesMode },
+  { id: EBRAND_ASSET_TYPE.SLOGAN, name: 'Slogan or tagline', icon: Title },
+  { id: EBRAND_ASSET_TYPE.SOUND, name: 'Song or sound', icon: MusicNote }
 ]
 
 export interface GetBrandAssetParams {

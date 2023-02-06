@@ -20,13 +20,13 @@ interface Props {
   isOpen: boolean,
   isValidBasic: boolean,
   isValidBrandList: boolean,
-  isValidDispositionAndEquity: boolean,
+  isValidBrandDispositionAndEquity: boolean,
   isValidBrandAssetRecognition: boolean,
   onClose: () => void
   onScrollSection: (section: SETUP_SURVEY_SECTION) => void,
 }
 
-const PopupMissingRequirement = ({ isOpen, isValidBasic, isValidBrandList, isValidDispositionAndEquity, isValidBrandAssetRecognition, onClose, onScrollSection }: Props) => {
+const PopupMissingRequirement = ({ isOpen, isValidBasic, isValidBrandList, isValidBrandDispositionAndEquity, isValidBrandAssetRecognition, onClose, onScrollSection }: Props) => {
 
   const { t } = useTranslation()
 
@@ -67,7 +67,7 @@ const PopupMissingRequirement = ({ isOpen, isValidBasic, isValidBrandList, isVal
               <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_list)} className="cursor-pointer underline">Building your brand list</span> minimum of {minMainBrand} main brand(s) and {minCompetingBrand} competing brand(s) are required
             </ParagraphBody>
           )}
-          {!isValidDispositionAndEquity && (
+          {!isValidBrandDispositionAndEquity && (
             <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
               <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_disposition_and_equity)} className="cursor-pointer underline">Brand disposition and equity</span> minimum of {minCompetitiveBrand} competing brand(s) and {minEquityAttributes} equity attribute(s) are required
             </ParagraphBody>

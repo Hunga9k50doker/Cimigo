@@ -10,12 +10,16 @@ import ParagraphBody from 'components/common/text/ParagraphBody';
 
 interface Props {
   isOpen: boolean,
+  title: string,
+  description: string,
+  cancelText: string,
+  deleteText: string,
   onCancel: () => void,
   onDelete: () => void,
 }
 
 const PopupConfirmDeleteBrandAsset = memo((props: Props) => {
-  const { onCancel, isOpen, onDelete } = props;
+  const { title, description, cancelText, deleteText, onCancel, isOpen, onDelete } = props;
   const { t } = useTranslation()
 
   return (
@@ -29,14 +33,14 @@ const PopupConfirmDeleteBrandAsset = memo((props: Props) => {
           <ButtonClose $backgroundColor='--eerie-black-5' $colorName='--eerie-black-40' onClick={onCancel}/>
         </Grid>
         <Grid sx={{textAlign: 'center'}}>
-          <Heading2 $colorName="--cimigo-theme-light-on-surface" className={classes.title}>Delete this asset?</Heading2>
+          <Heading2 $colorName="--cimigo-theme-light-on-surface" className={classes.title}>{title}</Heading2>
         </Grid>
         <Grid sx={{textAlign: 'center'}} mt={2} mb={4}>
-          <ParagraphBody $colorName="--cimigo-theme-light-on-surface">Deleting this asset will remove it from asset list.</ParagraphBody>
+          <ParagraphBody $colorName="--cimigo-theme-light-on-surface">{description}</ParagraphBody>
         </Grid>
         <Grid className={classes.btn}>
-          <Button children={"NO, KEEP ASSET"} translation-key="common_cancel" btnType={BtnType.Secondary} onClick={onCancel} />
-          <Buttons children={"YES, DELETE ASSET"} translation-key="common_delete" btnType='Red' padding='8px 16px' onClick={onDelete}/>
+          <Button children={cancelText} btnType={BtnType.Secondary} onClick={onCancel} />
+          <Buttons children={deleteText} btnType='Red' padding='8px 16px' onClick={onDelete}/>
         </Grid>
       </Grid>
     </Dialog>

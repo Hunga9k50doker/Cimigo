@@ -64,6 +64,34 @@
   margin-left: 24px;
   flex-flow: wrap;
 }
+.rootChip {
+  background: var(--cimigo-blue-light-4);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--cimigo-blue);
+  border-radius: 8px;
+  height: fit-content;
+  span {
+    line-height: 24px;
+    padding: 6px 8px 6px 12px;
+  }
+  div {
+    height: 36px;
+    width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    margin: 0 !important;
+    svg {
+      color: var(--cimigo-blue) !important;
+    }
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+}
 .menuChooseBrand {
   margin-top: 6px;
   max-height: 224px;

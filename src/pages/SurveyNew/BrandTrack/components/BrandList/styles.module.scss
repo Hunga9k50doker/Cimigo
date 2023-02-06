@@ -29,9 +29,10 @@
 
 .btnAddBrand {
   margin: 16px 0 0 24px;
-  width: calc(100% - 24px);
-  @media only screen and (min-width: 768px) {
-    min-width: 218px;
+  min-width: 218px;
+  @media only screen and (max-width: 767px) {
+    min-width: unset;
+    width: calc(100% - 24px);
   }
 }
 .rootListItem {
@@ -59,4 +60,7 @@
 }
 .listItem {
   border-bottom: 1px solid #dddddd;
+}
+.notDisplayed {
+  display: none;
 }

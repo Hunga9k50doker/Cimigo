@@ -1,6 +1,6 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
 
-const AddBrand = ({ ...props }: SvgIconProps) => {
+const IconNewLabelFilled = ({ ...props }: SvgIconProps) => {
     return (
         <SvgIcon width="13" height="11" viewBox="0 0 13 11" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
             <g clipPath="url(#add_brand_1)">
@@ -18,4 +18,4 @@ const AddBrand = ({ ...props }: SvgIconProps) => {
     )
 }
 
-export default AddBrand;
+export default IconNewLabelFilled;

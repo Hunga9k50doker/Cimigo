@@ -26,15 +26,15 @@ import { setErrorMess } from "redux/reducers/Status/actionTypes";
 import { useDispatch } from "react-redux";
 import useIsMountedRef from "hooks/useIsMountedRef";
 import { OptionItem } from "models/general";
-import getBrandAssetType from "utils/getBrandAssetType";
 import { MusicNote, Error, Title } from "@mui/icons-material";
-import IconImage from "components/icons/IconImage";
+import IconImagesMode from "components/icons/IconImagesMode";
+import { convertFileToBase64 } from "utils/file";
 
 const MAX_CHARACTER_OF_SLOGAN = 100;
 const MAX_CHARACTER_OF_DESCRIPTION = 200;
 const IMAGE_SIZE = 5 * 1000000; // bytes
 const IMAGE_FORMATS = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
-const SOUND_FORMAT = ["audio/3gpp", "audio/aac", "audio/flac", "audio/mpeg", "audio/mp3", "audio/mp4", "audio/ogg", "audio/wav", "audio/webm"];
+const SOUND_FORMAT = ["audio/3gpp", "audio/aac", "audio/flac", "audio/mpeg", "audio/mp3", "audio/ogg", "audio/wav", "audio/webm"];
 const SOUND_DURATION = 30;
 
 interface BrandAssetForm {
@@ -93,13 +93,17 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
   const watchDescription = watch("description")
   const watchSlogan = watch("slogan")
 
-  const _onSubmit = (data: BrandAssetForm) => {
+  const _onSubmit = async (data: BrandAssetForm) => {
     const form = new FormData()
     form.append('brand', data.brand)
     form.append('description', data?.description)
     form.append('typeId', data?.typeId?.id.toString())
     form.append('slogan', data?.slogan)
     if (data.asset && typeof data.asset === 'object') form.append('asset', data.asset)
+    if (data?.typeId?.id === EBRAND_ASSET_TYPE.SOUND) {
+      const duration = await getDuration(data.asset as File)
+      form.append('duration', Math.floor(duration).toString())
+    }
     onSubmit(form)
   };
 
@@ -116,53 +120,42 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
       asset: null,
     });
   };
-
-  useEffect(() => {
-    handleCountCharacter("description", "description-character")
-  }, [watchDescription])
-
-  useEffect(() => {
-    handleCountCharacter("slogan", "slogan-character")
-  }, [watchSlogan])
   
   useEffect(()=>{
     if(watchAsset && watchBrandAssetTypeId?.id === EBRAND_ASSET_TYPE.IMAGE) {
       if (typeof watchAsset === "object") {
-        const reader = new FileReader();
-        reader.readAsDataURL(watchAsset);
-        reader.onload = () => setImageReview(reader.result as string);
+        convertFileToBase64(watchAsset).then((res) => {
+          setImageReview(res as string)
+        })
       } else {
         setImageReview(watchAsset as string)
       }
       clearErrors("asset")
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchAsset])
 
   useEffect(() => {
     if (!isOpen) {
       clearForm()
-    } else {
-      if(brandAsset) {
-        reset({
-          brand: brandAsset.brand,
-          description: brandAsset.description,
-          typeId: getBrandAssetType(brandAsset?.typeId),
-          slogan: brandAsset.slogan,
-          asset: brandAsset.asset,
-        });
-      }
+      setImageReview(null)
+      setSoundReview(null)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, project])
 
-  const handleCountCharacter = (rootEleId, counterEleId) => {
-    const counterEle = document.getElementById(counterEleId);
-    const rootEle = document.getElementById(rootEleId) as HTMLTextAreaElement;
-    
-    if(rootEle && counterEle) {
-      const currentLength = rootEle.value.length;
-      counterEle.innerHTML = `${currentLength}`;
+  useEffect(() => {
+    if(isOpen && brandAsset) {
+      reset({
+        brand: brandAsset.brand,
+        description: brandAsset.description,
+        typeId: brandAssetTypes.filter(item => item?.id === brandAsset?.typeId)[0],
+        slogan: brandAsset.slogan,
+        asset: brandAsset.asset,
+      });
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [brandAsset])
 
   const getDuration = async (file: File) => {
     const duration = await VideoService.getVideoDuration(file)
@@ -266,7 +259,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
             {watchBrandAssetTypeId?.id === EBRAND_ASSET_TYPE.IMAGE && (
               <Grid item xs={12} className={classes.assetContentWrapper}>
                 <ParagraphBody $colorName="--eerie-black" $fontWeight={600} className={classes.assetContentTitle}>
-                  <IconImage sx={{fontSize: "16px", color: "var(--gray-80)"}}/>
+                  <IconImagesMode sx={{fontSize: "16px", color: "var(--gray-80)"}}/>
                   Unbranded image
                 </ParagraphBody>
                 <ParagraphSmall $colorName="--eerie-black">
@@ -280,7 +273,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                   <Button
                     btnType={BtnType.Outlined}
                     translation-key="common_save"
-                    children={<TextBtnSmall sx={{display: "flex", alignItems: "center", gap: "8px"}}><BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />Upload asset</TextBtnSmall>}
+                    children={<TextBtnSmall sx={{display: "flex", alignItems: "center", gap: "8px"}}><BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />{imageReview ? "Change asset" : "Upload asset"}</TextBtnSmall>}
                     className={classes.btnSave}
                     {...getRootProps()}
                   />
@@ -314,7 +307,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                   errorMessage={errors.slogan?.message}
                   maxLength={MAX_CHARACTER_OF_SLOGAN}
                 />
-                <ParagraphSmall sx={{textAlign: "end", mt: "-15px"}}><span id="slogan-character">0</span>/{MAX_CHARACTER_OF_SLOGAN}</ParagraphSmall>
+                <ParagraphSmall sx={{textAlign: "end", mt: "-15px"}}>{watchSlogan?.length}/{MAX_CHARACTER_OF_SLOGAN}</ParagraphSmall>
               </Grid>
             )}
             {/* ========song========= */}
@@ -337,7 +330,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                   <Button
                     btnType={BtnType.Outlined}
                     translation-key="common_save"
-                    children={<TextBtnSmall sx={{display: "flex", alignItems: "center", gap: "8px"}}><BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />Upload asset</TextBtnSmall>}
+                    children={<TextBtnSmall sx={{display: "flex", alignItems: "center", gap: "8px"}}><BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />{soundReview ? "Change asset" : "Upload asset"}</TextBtnSmall>}
                     className={classes.btnSave}
                     {...getRootProps()}
                   />
@@ -383,7 +376,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                 errorMessage={errors.description?.message}
                 maxLength={MAX_CHARACTER_OF_DESCRIPTION}
               />
-              <ParagraphSmall sx={{textAlign: "end", mt: "-15px"}}><span id="description-character">0</span>/{MAX_CHARACTER_OF_DESCRIPTION}</ParagraphSmall>
+              <ParagraphSmall sx={{textAlign: "end", mt: "-15px"}}>{watchDescription?.length}/{MAX_CHARACTER_OF_DESCRIPTION}</ParagraphSmall>
             </Grid>
           </Grid>
         </DialogContent>

@@ -15,11 +15,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import InputTextfield from "components/common/inputs/InputTextfield";
 import { useTranslation } from "react-i18next";
-import { AdditionalBrand } from "models/additional_brand";
-import ProjectHelper from "helpers/project";
+import { AdditionalBrand, EBrandType } from "models/additional_brand";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
+import ProjectHelper from "helpers/project";
 
-interface CompetingBrandForm {
+interface BrandForm {
   brand: string;
   variant: string;
   manufacturer: string;
@@ -28,14 +28,16 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   project?: Project;
-  onSubmit: (data: CompetingBrandForm) => void;
+  onSubmit: (data: BrandForm) => void;
   brand: AdditionalBrand;
+  brandType: EBrandType;
 }
 
-const PopupAddOrEditCompetingBrand = (props: Props) => {
-  const { isOpen, project, brand, onClose, onSubmit } = props;
-  const { t, i18n } = useTranslation();
+const PopupAddOrEditAdditionalBrand = (props: Props) => {
+  const { isOpen, project, brand, brandType, onClose, onSubmit } = props;
 
+  const { t, i18n } = useTranslation();
+  
   const numberOfCompetingBrandCanBeAdd = useMemo(() => ProjectHelper.numberOfCompetingBrandCanBeAdd(project) || 0, [project])
 
   const schema = useMemo(() => {
@@ -53,7 +55,7 @@ const PopupAddOrEditCompetingBrand = (props: Props) => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<CompetingBrandForm>({
+  } = useForm<BrandForm>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
@@ -62,6 +64,7 @@ const PopupAddOrEditCompetingBrand = (props: Props) => {
     onSubmit(data)
     onClose()
   };
+  
   const onSaveAndAddAnother = (data) => {
     onSubmit(data)
     clearForm()
@@ -103,7 +106,8 @@ const PopupAddOrEditCompetingBrand = (props: Props) => {
       <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle $backgroundColor="--white">
           <Heading3 $colorName="--gray-90">
-            {brand ? "Edit brand" : "Add new brand"}
+            {brandType === EBrandType.MAIN ? "Your main brand" : brand ? "Edit brand" : "Add new brand"}
+            
           </Heading3>
           <ButtonCLose
             $backgroundColor="--eerie-black-5"
@@ -111,9 +115,9 @@ const PopupAddOrEditCompetingBrand = (props: Props) => {
             onClick={() => _onClose()}>
           </ButtonCLose>
         </DialogTitle>
-        <DialogContent dividers>
+        <DialogContent dividers sx={{marginBottom: "8px"}}>
           <ParagraphBody $colorName="--eerie-black" mb={3}>
-            Please enter some information below to add a new brand.
+            {brandType === EBrandType.MAIN ? "What is your main brand to track?" : "Please enter some information below to add a new brand."}
           </ParagraphBody>
           <Grid container rowSpacing={2} columnSpacing={3}>
             <Grid item xs={12} md={6}>
@@ -172,7 +176,7 @@ const PopupAddOrEditCompetingBrand = (props: Props) => {
             children={<TextBtnSmall>{t("common_save")}</TextBtnSmall>}
             className={classes.btnSave}
           />
-          {numberOfCompetingBrandCanBeAdd > 1 && (
+          {brandType === EBrandType.COMPETING && numberOfCompetingBrandCanBeAdd > 1 && (
             <Button
               btnType={BtnType.Raised}
               children={<TextBtnSmall>Save & Add another</TextBtnSmall>}
@@ -186,4 +190,4 @@ const PopupAddOrEditCompetingBrand = (props: Props) => {
   );
 };
 
-export default PopupAddOrEditCompetingBrand;
+export default PopupAddOrEditAdditionalBrand;

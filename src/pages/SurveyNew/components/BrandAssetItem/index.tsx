@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Grid, Box, MenuItem, IconButton } from "@mui/material";
 import ParagraphBody from "components/common/text/ParagraphBody"
 import classes from "./styles.module.scss";
@@ -7,7 +7,6 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import { Edit as EditIcon, DeleteForever as DeleteForeverIcon, MoreVert, Title, MusicNote } from "@mui/icons-material";
 import { Menu } from "components/common/memu/Menu";
-import getAudioDuration from "utils/getAudioDuration";
 
 interface Props {
   brandAsset: BrandAsset;
@@ -20,15 +19,6 @@ const BrandAssetItem = (props: Props) => {
   const { brandAsset, editable, onPopupEditBrandAsset, onOpenPopupConfirmDelete } = props;
 
   const [anchorElMenuAction, setAnchorElMenuAction] = useState<null | HTMLElement>(null);
-  const [soundDuration, setSoundDuration] = useState<number>(0)
-
-  useEffect(() => {
-    if(brandAsset && brandAsset?.typeId === EBRAND_ASSET_TYPE.SOUND) {
-      getAudioDuration(brandAsset.asset).then((res) => {
-        setSoundDuration(Math.floor(res as number))
-      })
-    }
-  }, [brandAsset])
   
   const handleClickMenuAction = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorElMenuAction(event.currentTarget)
@@ -53,7 +43,7 @@ const BrandAssetItem = (props: Props) => {
       <Grid sx={{flex: 1}}>
         <ParagraphSmall $fontWeight={600} $colorName={"--eerie-black"}>{brandAsset?.brand}</ParagraphSmall>
         {brandAsset?.typeId !== EBRAND_ASSET_TYPE.IMAGE && (
-          <ParagraphExtraSmall $colorName={"--eerie-black"}>{brandAsset?.typeId === EBRAND_ASSET_TYPE.SLOGAN ? `${brandAsset?.slogan}` : `${soundDuration}s audio`}</ParagraphExtraSmall>
+          <ParagraphExtraSmall $colorName={"--eerie-black"}>{brandAsset?.typeId === EBRAND_ASSET_TYPE.SLOGAN ? `${brandAsset?.slogan}` : `${brandAsset?.duration}s audio`}</ParagraphExtraSmall>
         )}
       </Grid>
       <IconButton disabled={!editable} onClick={handleClickMenuAction}>

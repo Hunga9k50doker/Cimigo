@@ -70,6 +70,7 @@ export interface Project {
   customQuestions?: CustomQuestion[];
   user?: User;
   plan?: Plan;
+  planPricePerMonth?: number;
 }
 
 export enum ProjectStatus {

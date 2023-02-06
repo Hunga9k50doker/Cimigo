@@ -13,7 +13,6 @@ import TextBtnSecondary from "components/common/text/TextBtnSecondary";
 import Heading5 from "components/common/text/Heading5";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import CostSummary from "../components/CostSummary";
 import BasicInformation from "./components/BasicInformation";
 import ProjectHelper, { editableProject } from "helpers/project";
 import { usePrice } from "helpers/price";
@@ -21,7 +20,6 @@ import { ETabRightPanel, SETUP_SURVEY_SECTION } from "models/project";
 import BrandList from "./components/BrandList";
 import BrandDispositionAndEquity from "./components/BrandDispositionAndEquity";
 import BrandAssetRecognition from "./components/BrandAssetRecognition";
-import CustomQuestions from "./components/CustomQuestions";
 import { useTranslation } from "react-i18next";
 import { setHowToSetupSurveyReducer, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import PopupHowToSetupSurvey from "../components/PopupHowToSetupSurvey";
@@ -29,6 +27,7 @@ import PopupMissingRequirement from "./components/PopupMissingRequirement";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import CostSummaryBrandTrack from "../components/CostSummaryBrandTrack";
+import CustomQuestions from "../SetupSurvey/components/CustomQuestions";
 
 interface SetupSurvey {
   projectId: number;
@@ -62,8 +61,8 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
     return ProjectHelper.isValidBrandList(project)
   }, [project])
 
-  const isValidDispositionAndEquity = useMemo(() => {
-    return ProjectHelper.isValidDispositionAndEquity(project)
+  const isValidBrandDispositionAndEquity = useMemo(() => {
+    return ProjectHelper.isValidBrandDispositionAndEquity(project)
   }, [project])
 
   const isValidBrandAssetRecognition = useMemo(() => {
@@ -217,7 +216,7 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       </ParagraphSmall>
                     </RPStepContent>
                   </Step>
-                  <Step active={isValidDispositionAndEquity} expanded>
+                  <Step active={isValidBrandDispositionAndEquity} expanded>
                     <RPStepLabel
                       $padding={"0"}
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.brand_disposition_and_equity)}
@@ -314,7 +313,7 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
         isOpen={openMissingRequirement}
         isValidBasic={isValidBasic}
         isValidBrandList={isValidBrandList}
-        isValidDispositionAndEquity={isValidDispositionAndEquity}
+        isValidBrandDispositionAndEquity={isValidBrandDispositionAndEquity}
         isValidBrandAssetRecognition={isValidBrandAssetRecognition}
         onClose={onCloseMissingRequirement}
         onScrollSection={(e) => {
