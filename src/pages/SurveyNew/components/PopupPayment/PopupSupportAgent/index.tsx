@@ -1,7 +1,6 @@
 import { memo } from "react";
 import Grid from "@mui/material/Grid";
-import { Box, Dialog } from "@mui/material";
-import classes from "./styles.module.scss";
+import { Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import Typography from "@mui/material/Typography";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
@@ -24,6 +23,8 @@ import { ImageMain } from "../components/PopupImage";
 import PopupPayment from "../components/PopupPayment";
 import Accordion from "../components/Accordion";
 import Span from "../components/Span";
+import BoxCustom from "../components/Box";
+
 interface Props {
   isOpen: boolean;
   onCancel: () => void;
@@ -73,7 +74,7 @@ const PopupSupportAgent = memo((props: Props) => {
           }}
         />
         <Grid>
-          <Accordion $accordionMain={true}>
+          <Accordion $accordionOrderSummary={true}>
             <AccordionSummary aria-controls="panel1a-content">
               <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"}>
                 Contact information
@@ -81,12 +82,12 @@ const PopupSupportAgent = memo((props: Props) => {
             </AccordionSummary>
             <AccordionDetails>
               <Grid display={"flex"} flexDirection="column" gap={1}>
-                <Grid className={classes.box}>
+                <BoxCustom $marginTop={true} $paddingTop={true} $borderTop={true}>
                   <ParagraphSmall>Contact name</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     Nguyen Thanh Son
                   </Heading6>
-                </Grid>
+                </BoxCustom>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
                   <ParagraphSmall>Contact email</ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">

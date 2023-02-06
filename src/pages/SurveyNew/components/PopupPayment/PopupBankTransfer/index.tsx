@@ -103,8 +103,8 @@ const PopupBankTransfer = memo((props: Props) => {
                   </Heading6>
                 </Grid>
               </Grid>
-              <Grid py={2}>
-                <BoxCustom display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} $borderTop={true}>
+              <Grid paddingBottom={2}>
+                <BoxCustom display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} $paddingTop={true} $borderTop={true}>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount
@@ -164,8 +164,8 @@ const PopupBankTransfer = memo((props: Props) => {
                   </Heading6>
                 </Grid>
               </Grid>
-              <Grid py={2}>
-                <BoxCustom display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} $borderTop={true}>
+              <Grid paddingBottom={2}>
+                <BoxCustom display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5} $paddingTop={true} $borderTop={true}>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="payment_billing_transfer_amount">
                     {/* {t("payment_billing_transfer_amount")} */}
                     Transfer amount

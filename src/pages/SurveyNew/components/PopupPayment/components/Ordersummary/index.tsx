@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { useTranslation } from "react-i18next";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import Heading4 from "components/common/text/Heading5";
+import Heading4 from "components/common/text/Heading4";
 import Heading6 from "components/common/text/Heading6";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
@@ -24,7 +24,7 @@ const Ordersummary = memo(() => {
           <Heading4 $colorName={"--cimigo-blue"}>Order summary</Heading4>
         </AccordionSummary>
         <AccordionDetails>
-          <BoxCustom py={2} mt={1}>
+          <BoxCustom py={2} mt={1} $borderTop={true}>
             <ParagraphBody display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
               <Heading6 $fontWeight={500} $colorName={"--eerie-black"} translation-key="">
                 Brand track (3 months)
@@ -36,7 +36,7 @@ const Ordersummary = memo(() => {
             <ParagraphExtraSmall $colorName={"--gray-60"}>Dec 2022 - Feb 2023</ParagraphExtraSmall>
             <ParagraphExtraSmall $colorName={"--gray-60"}>Project ID: 6</ParagraphExtraSmall>
           </BoxCustom>
-          <BoxCustom>
+          <BoxCustom $borderTop={true} $paddingTop={true}>
             <ParagraphBody display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
               <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
                 {t("common_sub_total")}

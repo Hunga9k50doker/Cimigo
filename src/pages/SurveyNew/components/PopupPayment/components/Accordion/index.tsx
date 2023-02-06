@@ -59,6 +59,7 @@ const Accordion = styled(AccordionRoot)<Props>`
     css`
       margin-top: 16px !important;
       box-shadow: unset;
+      border: 0;
       &::before {
         display: none;
       }
