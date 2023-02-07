@@ -54,7 +54,6 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const [displaySelectBrandButton, setDisplaySelectBrandButton] = useState<boolean>(false)
-  const [competingBrandDatas, setCompetingBrandDatas] = useState<AdditionalBrand[]>([])
   const [competingBrandsSelected, setCompetingBrandsSelected] = useState<number[]>([])
   const [anchorElMenuAttributes, setAnchorElMenuAttributes] = useState<null | HTMLElement>(null);
   const [anchorElMenuChooseBrand, setAnchorElMenuChooseBrand] = useState<null | HTMLElement>(null);
@@ -68,6 +67,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
   const [projectAttributeDelete, setProjectAttributeDelete] = useState<ProjectAttribute>()
   
   const editable = useMemo(() => editableProject(project), [project])
+  const competingBrandDatas = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING) || [], [project])
   const maxCompetitiveBrand = useMemo(() => project?.solution?.maxCompetitiveBrand || 0, [project])
   const maxAdditionalAttribute = useMemo(() => project?.solution?.maxAdditionalAttribute || 0, [project])
   const enableAdditionalAttributes = useMemo(() => {
@@ -99,8 +99,6 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
   const brandEquityAttributesNeedMore = useMemo(() => ProjectHelper.brandEquityAttributesNeedMore(project) || 0, [project])
 
   useEffect(() => {
-    const _competingBrands = project?.additionalBrands?.filter((item) => item?.typeId !== EBrandType.MAIN)
-    setCompetingBrandDatas(_competingBrands)
     const _competingBrandsSelected = []
     project?.projectBrands?.forEach(item => {
       _competingBrandsSelected.push(item.brandId)

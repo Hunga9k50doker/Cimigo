@@ -28,6 +28,7 @@ import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import CostSummaryBrandTrack from "../components/CostSummaryBrandTrack";
 import CustomQuestions from "../SetupSurvey/components/CustomQuestions";
+import { EBrandType } from "models/additional_brand";
 
 interface SetupSurvey {
   projectId: number;
@@ -46,6 +47,12 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
   const dispatch = useDispatch()
   
   const { project, scrollToSection, showHowToSetup } = useSelector((state: ReducerType) => state.project)
+
+  const mainBrands = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.MAIN) || [], [project])
+  const competingBrands = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING) || [], [project])
+  const competitiveBrands = useMemo(() => project?.projectBrands || [], [project])
+  const numberOfBrandEquityAttributes = useMemo(() => project?.projectAttributes?.length + project?.userAttributes?.length || 0, [project])
+  const brandAssets = useMemo(() => project?.brandAssets || [], [project])
 
   const [openMissingRequirement, setOpenMissingRequirement] = useState(false);
   const [onOpenHowToSetupSurvey, setOnOpenHowToSetupSurvey] = useState(false);
@@ -197,9 +204,9 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                     </RPStepLabel>
 
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black">
+                      <ParagraphExtraSmall $colorName="--eerie-black">
                         The category in which the main brand is active in 
-                      </ParagraphSmall>
+                      </ParagraphExtraSmall>
                     </RPStepContent>
                   </Step>
                   <Step active={isValidBrandList} expanded>
@@ -211,9 +218,15 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       <Heading5 className="title" $colorName="--gray-60">Brand list</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black"> 
+                      <ParagraphExtraSmall $colorName="--eerie-black" mb={1}> 
                         Building your brand list to track
-                      </ParagraphSmall>
+                      </ParagraphExtraSmall>
+                      {mainBrands?.map(item => (
+                        <ParagraphSmall $colorName="--eerie-black" $fontWeight={500}>{item?.brand}</ParagraphSmall>
+                      ))}
+                      {competingBrands?.length > 0 && (
+                        <ParagraphSmall $colorName="--eerie-black">+ {competingBrands?.length} more </ParagraphSmall>
+                      )}
                     </RPStepContent>
                   </Step>
                   <Step active={isValidBrandDispositionAndEquity} expanded>
@@ -225,9 +238,15 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       <Heading5 className="title" $colorName="--gray-60">Brand disposition & equity</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black">
+                      <ParagraphExtraSmall $colorName="--eerie-black" mb={1}>
                         How customers perceive a brand name
-                      </ParagraphSmall>
+                      </ParagraphExtraSmall>
+                      {competitiveBrands?.length > 0 && (
+                        <ParagraphSmall $colorName="--eerie-black" className={classes.outlineSectionDescription}><span>{competitiveBrands?.length}</span> competitive brand(s) </ParagraphSmall>
+                      )}
+                      {numberOfBrandEquityAttributes > 0 && (
+                        <ParagraphSmall $colorName="--eerie-black" className={classes.outlineSectionDescription}><span>{numberOfBrandEquityAttributes}</span> equity attribute(s) </ParagraphSmall>
+                      )}
                     </RPStepContent>
                   </Step>
                   <Step active={isValidBrandAssetRecognition} expanded>
@@ -239,9 +258,12 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       <Heading5 className="title" $colorName="--gray-60">Brand assets</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphSmall $colorName="--eerie-black">
+                      <ParagraphExtraSmall $colorName="--eerie-black" mb={1}>
                         OPTIONAL
-                      </ParagraphSmall>
+                      </ParagraphExtraSmall>
+                      {brandAssets?.length > 0 && (
+                        <ParagraphSmall $colorName="--eerie-black" className={classes.outlineSectionDescription}><span>{brandAssets?.length}</span> brand asset(s) </ParagraphSmall>
+                      )}
                     </RPStepContent>
                   </Step>
                   {project?.solution?.enableCustomQuestion && (
@@ -253,9 +275,9 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                         <Heading5 className="title" $colorName="--gray-60">Custom questions</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
-                        <ParagraphSmall $colorName="--eerie-black">
+                        <ParagraphExtraSmall $colorName="--eerie-black">
                           Add your own custom questions
-                        </ParagraphSmall>
+                        </ParagraphExtraSmall>
                         <div className={classes.questionsPriceWrapper}>
                           <Chip
                             classes={{ root: classes.pricesOfQuestions }}
