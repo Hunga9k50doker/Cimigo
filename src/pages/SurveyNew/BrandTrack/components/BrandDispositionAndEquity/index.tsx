@@ -557,7 +557,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
           </Grid>
           {/* =======end mobile===== */}
           <Button
-            sx={{ mt: 3, width: { xs: "100%", sm: "auto" } }}
+            sx={{ mt: attributes?.length > 0 ? 3 : 1, width: { xs: "100%", sm: "auto" } }}
             onClick={handleClickMenuAttributes}
             disabled={!enableAdditionalAttributes || !editable}
             btnType={BtnType.Outlined}
