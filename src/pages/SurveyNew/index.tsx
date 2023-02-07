@@ -26,7 +26,7 @@ import InputTextfield from "components/common/inputs/InputTextfield";
 import SetupSurvey from "./SetupSurvey";
 import VideoChoice from "./VideoChoice";
 import Quotas from "./Quotas";
-import Pay from "./BrandTrack/PayNew";
+import Pay from "./Pay";
 import ProjectHelper from "helpers/project";
 import Report from "./Report";
 import { ETabRightPanel } from "models/project";
