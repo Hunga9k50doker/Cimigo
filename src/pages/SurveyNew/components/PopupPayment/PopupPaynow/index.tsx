@@ -5,7 +5,6 @@ import images from "config/images";
 import InputSelect from "components/common/inputs/InputSelect";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
-import { usePrice } from "helpers/price";
 import { EPaymentMethod, OptionItem } from "models/general";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import CountryService from "services/country";
@@ -16,9 +15,7 @@ import { PaymentService } from "services/payment";
 import { Payment } from "models/payment";
 import UserService from "services/user";
 import { PaymentInfo } from "models/payment_info";
-import { getProjectRequest, setCancelPayment } from "redux/reducers/Project/actionTypes";
-import { push } from "connected-react-router";
-import { authPreviewOrPayment } from "pages/SurveyNew/Pay/models";
+import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { routes } from "routers/routes";
 import { useTranslation } from "react-i18next";
 import { VALIDATION } from "config/constans";
@@ -35,10 +32,8 @@ import Heading3 from "components/common/text/Heading3";
 import Heading4 from "components/common/text/Heading4";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSecondary from "components/common/text/TextBtnSecondary";
-import PopupConfirmCancelOrder from "pages/SurveyNew/components/PopupConfirmCancelOrder";
 import { AttachmentService } from "services/attachment";
 import FileSaver from "file-saver";
-import { ESOLUTION_TYPE } from "models/solution";
 import { DialogContentConfirm } from "components/common/dialogs/DialogContent";
 import ButtonClose from "components/common/buttons/ButtonClose";
 import PopupPayment from "../components/PopupPayment";
@@ -64,7 +59,7 @@ interface Props {
   onCancel: () => void;
 }
 
-const PopupPaynow = memo((props: Props) => {
+const PopupPayNow = memo((props: Props) => {
   const { isOpen, onCancel } = props;
   const { t, i18n } = useTranslation();
 
@@ -166,7 +161,6 @@ const PopupPaynow = memo((props: Props) => {
   const [countries, setCountries] = useState<OptionItem[]>([]);
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>();
   const [showSkipInfor, setShowSkipInfor] = useState<DataForm>();
-  const [isConfirmCancel, setIsConfirmCancel] = useState<boolean>(false);
   const [isExpandedInfo, setIsExpandedInfo] = useState<boolean>(true);
 
   useEffect(() => {
@@ -209,7 +203,6 @@ const PopupPaynow = memo((props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentInfo, user]);
 
-  const { price } = usePrice();
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -277,26 +270,6 @@ const PopupPaynow = memo((props: Props) => {
     onCheckout(data);
   };
 
-  const onRedirect = (route: string) => {
-    dispatch(push(route.replace(":id", `${project.id}`)));
-  };
-
-  useEffect(() => {
-    const checkValidConfirm = () => {
-      if (!project) return;
-      dispatch(setLoading(true));
-      PaymentService.validConfirm(project.id)
-        .then((res) => {
-          if (!res) onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview);
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)));
-    };
-    checkValidConfirm();
-    authPreviewOrPayment(project, onRedirect);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [project]);
-
   const onSkipUpdateInfo = () => {
     if (!showSkipInfor) return;
     onCheckout(showSkipInfor);
@@ -315,15 +288,6 @@ const PopupPaynow = memo((props: Props) => {
     window.scrollTo({ behavior: "smooth", top: el.offsetTop - headerHeight - 10 });
   };
 
-  const onCancelPayment = () => {
-    dispatch(setCancelPayment(true));
-    onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview);
-  };
-
-  const onCloseConfirmCancel = () => {
-    setIsConfirmCancel(false);
-  };
-
   const onDownloadContract = () => {
     if (!configs.viewContract) return;
     dispatch(setLoading(true));
@@ -340,23 +304,6 @@ const PopupPaynow = memo((props: Props) => {
         dispatch(setLoading(false));
         dispatch(setErrorMess(e));
       });
-  };
-
-  const renderEmotion = () => {
-    switch (project?.solution?.typeId) {
-      case ESOLUTION_TYPE.PACK:
-        return (
-          <ParagraphBody $colorName="--eerie-black" translation-key="payment_project_order_summary_eye_tracking">
-            {t("payment_project_order_summary_eye_tracking")} ({project?.eyeTrackingSampleSize || 0})
-          </ParagraphBody>
-        );
-      case ESOLUTION_TYPE.VIDEO_CHOICE:
-        return (
-          <ParagraphBody $colorName="--eerie-black-00" translation-key="payment_project_order_summary_eye_tracking_video_choice">
-            {t("payment_project_order_summary_eye_tracking_video_choice")} ({project?.eyeTrackingSampleSize || 0})
-          </ParagraphBody>
-        );
-    }
   };
 
   return (
@@ -681,20 +628,6 @@ const PopupPaynow = memo((props: Props) => {
                 </div>
                 <ParagraphExtraSmall $colorName="--eerie-black">Dec 2022 - Feb 2023</ParagraphExtraSmall>
                 <ParagraphExtraSmall $colorName="--eerie-black">Project ID: 6</ParagraphExtraSmall>
-                {project?.customQuestions?.length > 0 && (
-                  <div className={classes.flexOrder}>
-                    <ParagraphBody $colorName="--eerie-black" translation-key="common_custom_question">
-                      {t("common_custom_question")} {`(${project?.customQuestions?.length || 0})`}
-                    </ParagraphBody>
-                    <ParagraphBody $colorName="--eerie-black">{price?.customQuestionCost?.show}</ParagraphBody>
-                  </div>
-                )}
-                {project?.enableEyeTracking && (
-                  <div className={classes.flexOrder}>
-                    {renderEmotion()}
-                    <ParagraphBody $colorName="--eerie-black">{price?.eyeTrackingSampleSizeCost?.show}</ParagraphBody>
-                  </div>
-                )}
                 <Divider />
                 <div className={classes.flexOrder}>
                   <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
@@ -747,11 +680,10 @@ const PopupPaynow = memo((props: Props) => {
             </Button>
           </Grid>
           <PopupConfirmInvoiceInfo isOpen={!!showSkipInfor} onClose={onUpdateInfo} onYes={onSkipUpdateInfo} />
-          <PopupConfirmCancelOrder isOpen={isConfirmCancel} onClose={onCloseConfirmCancel} onConfirm={onCancelPayment} />
         </Grid>
       </DialogContentConfirm>
     </PopupPayment>
   );
 });
 
-export default PopupPaynow;
+export default PopupPayNow;
