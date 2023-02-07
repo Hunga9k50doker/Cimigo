@@ -17,7 +17,7 @@ interface Props {
   onDelete: () => void,
 }
 
-const PopupConfirmDeleteBrandAsset = memo((props: Props) => {
+const PopupConfirmDeleteCommon = memo((props: Props) => {
   const { title, description, cancelText, deleteText, onCancel, isOpen, onDelete } = props;
 
   return (
@@ -44,4 +44,4 @@ const PopupConfirmDeleteBrandAsset = memo((props: Props) => {
     </Dialog>
   );
 });
-export default PopupConfirmDeleteBrandAsset;
+export default PopupConfirmDeleteCommon;
