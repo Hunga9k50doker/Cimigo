@@ -203,10 +203,12 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     if (projectId) {
       getListSlide();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId]);
   useEffect(() => {
     setParams({ ...params, projectId: projectId });
     getPaymmentHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId]);
   useEffect(() => {
     var customReponsiveSlide = {
@@ -232,6 +234,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
       customReponsiveSlide.slidesToShow = 1;
     }
     setCustomSlide(customReponsiveSlide);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile]);
   useEffect(() => {
     getPaymmentHistory();
