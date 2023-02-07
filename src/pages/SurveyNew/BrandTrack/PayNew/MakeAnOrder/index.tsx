@@ -17,8 +17,6 @@ import ParagraphBody from "components/common/text/ParagraphBody";
 import Button, { BtnType } from "components/common/buttons/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
-import DolarDisabled from "components/icons/IconDolarDisabled";
 import Footer from "components/Footer";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Alert, { AlerType } from "../Alert";
@@ -31,11 +29,9 @@ import {
 } from "models/payment_schedule";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { DataPagination, ECurrency } from "models/general";
 import PopupConfirmCancelSubsription from "../components/PopupConfirmCancelSubsription";
-import { useDispatch, useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
+import { useDispatch } from "react-redux";
 import clsx from "clsx";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import moment from "moment";
@@ -72,29 +68,6 @@ interface CustomSlide {
   prevArrow: React.ReactNode;
   nextArrow: React.ReactNode;
 }
-const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
-  <span
-    {...props}
-    className={"customIcon" + (currentSlide === 0 ? " slick-disabled" : "")}
-    aria-hidden="true"
-    aria-disabled={currentSlide === 0 ? true : false}
-  >
-    <KeyboardArrowLeftIcon />
-  </span>
-);
-const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
-  <span
-    {...props}
-    className={
-      "slick-next slick-arrow" +
-      (currentSlide === slideCount - 1 ? " slick-disabled" : "")
-    }
-    aria-hidden="true"
-    aria-disabled={currentSlide === slideCount - 1 ? true : false}
-  >
-    <KeyboardArrowRightIcon />
-  </span>
-);
 const paramsSlideDefault: CustomSlide = {
   navigator: true,
   dots: true,
@@ -103,19 +76,11 @@ const paramsSlideDefault: CustomSlide = {
   slidesToShow: 2,
   slidesToScroll: 2,
   prevArrow: (
-    // <SlickArrowLeft
-    //   slideCount={4}
-    //   currentSlide={1}
-    // />
     <span className="customIcon">
       <KeyboardArrowLeftIcon />
     </span>
   ),
   nextArrow: (
-    // <SlickArrowRight
-    //   slideCount={4}
-    //   currentSlide={1}
-    // />
     <span className="customIcon">
       <KeyboardArrowRightIcon />
     </span>
@@ -139,7 +104,6 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     useState<DataPagination<SlidePaymentScheduleMakeAnOrder>>();
   const [params, setParams] = useState<GetListPaymentScheduleHistory>({ ...paramsListPaymentHistoryDefault })
   const [listPaymentHistory, setListPaymentHistory] = useState<DataPagination<PayMentScheduleHistory>>();
-  // const { project } = useSelector((state: ReducerType) => state.project);
   const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
     useState(false);
   const [customSlide, setCustomSlide] = useState<CustomSlide>({
