@@ -98,6 +98,12 @@ export const API = {
     UPDATE_INVOICE_INFO: '/v1.0/payment/:id/invoice-info',
     CHANGE_PAYMENT_METHOD: '/v1.0/payment/:id/change-payment-method',
   },
+  PAYMENT_SCHEDULE: {
+    PREVIEW: 'v1.0/payment-schedule/preview',
+    MAKE_AN_ORDER: 'v1.0/payment-schedule/make-order',
+    SLIDE: 'v1.0/payment-schedule/next-payment',
+    PAYMENT_SCHEDULE_HISTORY: 'v1.0/payment/history/brand-track'
+  },
   ATTACHMENT: {
     DEFAULT: '/v1.0/attachment/',
     DOWNLOAD: '/v1.0/attachment/:id/download',
