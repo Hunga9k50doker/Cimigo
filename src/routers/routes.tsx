@@ -34,6 +34,8 @@ export const routes = {
           root: '/project/:id/payment/steps',
           preview: '/project/:id/payment/steps/preview',
           payment: '/project/:id/payment/steps/payment',
+          selectDate: '/project/:id/payment/steps/select-date',
+          makeAnOrder: '/project/:id/payment/steps/make-an-order',
         },
         order: '/project/:id/payment/order',
         waiting: '/project/:id/payment/waiting',
