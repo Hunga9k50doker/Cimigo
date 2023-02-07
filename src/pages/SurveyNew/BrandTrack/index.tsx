@@ -52,6 +52,7 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
   const competingBrands = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING) || [], [project])
   const competitiveBrands = useMemo(() => project?.projectBrands || [], [project])
   const numberOfBrandEquityAttributes = useMemo(() => project?.projectAttributes?.length + project?.userAttributes?.length || 0, [project])
+  const minBrandAssetRecognition = useMemo(() => project?.solution?.minBrandAssetRecognition || 0, [project])
   const brandAssets = useMemo(() => project?.brandAssets || [], [project])
 
   const [openMissingRequirement, setOpenMissingRequirement] = useState(false);
@@ -258,9 +259,11 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       <Heading5 className="title" $colorName="--gray-60">Brand assets</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphExtraSmall $colorName="--eerie-black" mb={1}>
-                        OPTIONAL
-                      </ParagraphExtraSmall>
+                      {minBrandAssetRecognition < 1 && (
+                        <ParagraphExtraSmall $colorName="--eerie-black" mb={1}>
+                          OPTIONAL
+                        </ParagraphExtraSmall>
+                      )}
                       {brandAssets?.length > 0 && (
                         <ParagraphSmall $colorName="--eerie-black" className={classes.outlineSectionDescription}><span>{brandAssets?.length}</span> brand asset(s) </ParagraphSmall>
                       )}
