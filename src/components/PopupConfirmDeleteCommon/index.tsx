@@ -2,7 +2,6 @@ import { memo } from 'react';
 import { Dialog, Grid } from '@mui/material';
 import classes from './styles.module.scss';
 import Buttons from 'components/Buttons';
-import { useTranslation } from 'react-i18next';
 import Heading2 from "components/common/text/Heading2";
 import ButtonClose from "components/common/buttons/ButtonClose";
 import Button, {BtnType} from "components/common/buttons/Button";
@@ -20,7 +19,6 @@ interface Props {
 
 const PopupConfirmDeleteBrandAsset = memo((props: Props) => {
   const { title, description, cancelText, deleteText, onCancel, isOpen, onDelete } = props;
-  const { t } = useTranslation()
 
   return (
     <Dialog

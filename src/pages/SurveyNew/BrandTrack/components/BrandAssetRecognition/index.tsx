@@ -7,7 +7,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import NoteWarning from "components/common/warnings/NoteWarning";
 import HeartPlus from "components/icons/IconHeartPlus";
-import PopupConfirmDeleteBrandAsset from "components/PopupConfirmDeleteBrandAsset";
+import PopupConfirmDeleteCommon from "components/PopupConfirmDeleteCommon";
 import ProjectHelper, { editableProject } from "helpers/project";
 import { BrandAsset } from "models/brand_asset";
 import { Project, SETUP_SURVEY_SECTION } from "models/project"
@@ -143,7 +143,7 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
         onSubmit={handleAddOrEdit}
         brandAsset={brandAssetEdit}
       />
-      <PopupConfirmDeleteBrandAsset
+      <PopupConfirmDeleteCommon
         isOpen={openPopupConfirmDelete}
         title={"Delete this asset?"}
         description={"Deleting this asset will remove it from asset list."}
