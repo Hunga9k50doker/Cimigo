@@ -62,7 +62,6 @@ export interface Solution {
   maxBrandAssetRecognition: number;
   daysOfDueDate: number;
   daysOfDueDateType: EOPERATION_TYPE;
-  paymentMonthSchedule: number;
   maxCustomQuestion: number;
   enableCustomQuestion: boolean;
   enableEyeTracking: boolean;
@@ -83,6 +82,7 @@ export interface Solution {
   categoryHome?: SolutionCategoryHome;
   sampleSizes?: SampleSize[];
   eyeTrackingSampleSizes?: EyeTrackingSampleSize[];
+  paymentMonthSchedule?: number;
 }
 
 export interface GetSolutionsParams {

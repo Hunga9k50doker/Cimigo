@@ -1,0 +1,159 @@
+import { Grid } from "@mui/material"
+import clsx from "clsx";
+import Button, { BtnType } from "components/common/buttons/Button";
+import Heading4 from "components/common/text/Heading4"
+import ParagraphBody from "components/common/text/ParagraphBody";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
+import TextBtnSmall from "components/common/text/TextBtnSmall";
+import NoteWarning from "components/common/warnings/NoteWarning";
+import HeartPlus from "components/icons/IconHeartPlus";
+import PopupConfirmDeleteCommon from "components/PopupConfirmDeleteCommon";
+import ProjectHelper, { editableProject } from "helpers/project";
+import { BrandAsset } from "models/brand_asset";
+import { Project, SETUP_SURVEY_SECTION } from "models/project"
+import { MaxChip } from "pages/SurveyNew/components";
+import BrandAssetItem from "pages/SurveyNew/components/BrandAssetItem";
+import PopupAddOrEditBrandAsset from "pages/SurveyNew/components/PopupAddOrEditBrandAsset";
+import { memo, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { getBrandAssetsRequest } from "redux/reducers/Project/actionTypes";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { BrandAssetService } from "services/brand_asset";
+import classes from "./styles.module.scss"
+
+interface BrandAssetRecognitionProps {
+  project: Project;
+}
+
+const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => {
+  const { t } = useTranslation()
+  const dispatch = useDispatch()
+  
+  const editable = useMemo(() => editableProject(project), [project])
+  const maxBrandAssetRecognition = useMemo(() => project?.solution?.maxBrandAssetRecognition || 0, [project])
+  const minBrandAssetRecognition = useMemo(() => project?.solution?.minBrandAssetRecognition || 0, [project])
+  const brandAssetRecognitionNeedMore = useMemo(() => ProjectHelper.brandAssetRecognitionNeedMore(project) || 0, [project])
+  
+  const [openPopupAddOrEdit, setOpenPopupAddOrEdit] = useState<boolean>(false)
+  const [openPopupConfirmDelete, setOpenPopupConfirmDelete] = useState<boolean>(false)
+  const [brandAssetEdit, setBrandAssetEdit] = useState<BrandAsset>(null)
+  const [brandAssetDelete, setBrandAssetDelete] = useState<BrandAsset>(null)
+
+  const onOpenPopupAddOrEdit = () => {
+    setOpenPopupAddOrEdit(true)
+  }
+  const onClosePopupAddOrEdit = () => {
+    setBrandAssetEdit(null)
+    setOpenPopupAddOrEdit(false)
+  }
+  const handleAddOrEdit = (data: FormData) => {
+    data.append('projectId', `${project.id}`)
+    if (brandAssetEdit) {
+      dispatch(setLoading(true))
+      BrandAssetService.update(brandAssetEdit.id, data)
+        .then(() => {
+          dispatch(getBrandAssetsRequest(project.id))
+          onClosePopupAddOrEdit()
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    } else {
+      dispatch(setLoading(true))
+      BrandAssetService.create(data)
+        .then(() => {
+          dispatch(getBrandAssetsRequest(project.id))
+          onClosePopupAddOrEdit()
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+
+  const handleDelete = () => {
+    if(brandAssetDelete) {
+      BrandAssetService.delete(brandAssetDelete?.id)
+        .then(() => {
+          dispatch(getBrandAssetsRequest(project.id))
+          onClosePopupConfirmDelete()
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)))
+    }
+  }
+  const onOpenPopupConfirmDelete = (brandAsset) => {
+    setBrandAssetDelete(brandAsset)
+    setOpenPopupConfirmDelete(true)
+  }
+  const onClosePopupConfirmDelete = () => {
+    setBrandAssetDelete(null)
+    setOpenPopupConfirmDelete(false)
+  }
+  return (
+    <>
+      <Grid id={SETUP_SURVEY_SECTION.brand_asset_recognition} mt={4}>
+        <Heading4
+          $fontSizeMobile={"16px"}
+          $colorName="--eerie-black"
+          sx={{ display: "inline-block", verticalAlign: "middle" }}
+        >
+          STEP 4{!!minBrandAssetRecognition ? "" : " (OPTIONAL)"}: Brand asset recognition
+        </Heading4>
+        <MaxChip
+          sx={{ ml: 1 }}
+          label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxBrandAssetRecognition}</ParagraphSmall>}
+        />
+        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 }>Brand assets are recognisable elements that embody a brand's identity. From logos and typography to taglines, brand assets make it easy to identify a brand, help it stand out from competitors and cue brand associations.</ParagraphBody>
+        <ParagraphBody $colorName="--eerie-black">Cimigo recommend measuring brand asset recognition for your brand and a key competitor brand (as a comparison).</ParagraphBody>
+        {!!brandAssetRecognitionNeedMore && (
+            <NoteWarning>
+              <ParagraphSmall $colorName="--warning-dark">Require at least {brandAssetRecognitionNeedMore} more brand assets</ParagraphSmall>
+            </NoteWarning>
+          )}
+        <Grid className={clsx({[classes.brandAssetsWrapper]: project?.brandAssets?.length > 0})}>
+          {project?.brandAssets?.map(assetItem => (
+            <BrandAssetItem 
+              brandAsset={assetItem}
+              editable={editable}
+              onPopupEditBrandAsset={() => {
+                setBrandAssetEdit(assetItem)
+                onOpenPopupAddOrEdit()
+              }}
+              onOpenPopupConfirmDelete={() => onOpenPopupConfirmDelete(assetItem)}
+            />
+          ))}
+        </Grid>
+        <Button
+          disabled={!editable || project?.brandAssets?.length >= maxBrandAssetRecognition}
+          className={classes.btnAddBrand}
+          btnType={BtnType.Outlined}
+          children={<TextBtnSmall>Add brand asset</TextBtnSmall>}
+          startIcon={<HeartPlus sx={{ fontSize: "14px !important" }} />}
+          onClick={onOpenPopupAddOrEdit}
+          sx={{  width: { xs: "100%", sm: "auto" } }}
+        />
+        {project?.brandAssets?.length >= maxBrandAssetRecognition && (
+            <ParagraphSmall $colorName="--gray-60" sx={{mt: 1}}>You have reached the limit of {maxBrandAssetRecognition} brand assets.</ParagraphSmall>
+          )}
+      </Grid>
+      <PopupAddOrEditBrandAsset
+        isOpen={openPopupAddOrEdit}
+        onClose={onClosePopupAddOrEdit}
+        project={project}
+        onSubmit={handleAddOrEdit}
+        brandAsset={brandAssetEdit}
+      />
+      <PopupConfirmDeleteCommon
+        isOpen={openPopupConfirmDelete}
+        title={"Delete this asset?"}
+        description={"Deleting this asset will remove it from asset list."}
+        cancelText={"NO, KEEP ASSET"}
+        deleteText={"YES, DELETE ASSET"}
+        onCancel={onClosePopupConfirmDelete}
+        onDelete={handleDelete}
+      />
+    </>
+  )
+})
+
+export default BrandAssetRecognition
