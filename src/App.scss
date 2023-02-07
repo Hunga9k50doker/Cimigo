@@ -19,6 +19,7 @@
   --cimigo-blue-light-2: #7cafe7;
   --cimigo-blue-light-3: #bed7f3;
   --cimigo-blue-light-4: #e8f1fb;
+  --cimigo-blue-light-5: #f6f9fc;
   --cimigo-blue-dark-1: #17497f;
   --cimigo-blue-dark-2: #103055;
   --cimigo-blue-dark-3: #08182a;
@@ -151,4 +152,11 @@ input[type="number"] {
 
 .break-word {
   word-break: break-word;
+}
+
+.nestedLink {
+  a {
+    font-weight: 600;
+    color: var(--cimigo-blue);
+  }
 }
