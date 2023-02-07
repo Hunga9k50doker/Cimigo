@@ -1,11 +1,13 @@
-const Dolar =  () => {
+import {SvgIcon, SvgIconProps} from "@mui/material";
+const Dolar =  (props: SvgIconProps) => {
   return (
-    <svg
+    <SvgIcon
       width="24"
       height="24"
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <g clip-path="url(#clip0_735_17918)">
         <path
@@ -18,7 +20,7 @@ const Dolar =  () => {
           <rect width="24" height="24" fill="white" />
         </clipPath>
       </defs>
-    </svg>
+    </SvgIcon>
   );
 };
 

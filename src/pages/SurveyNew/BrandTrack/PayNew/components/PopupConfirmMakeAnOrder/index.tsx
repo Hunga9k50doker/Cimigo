@@ -17,7 +17,6 @@ import moment from "moment";
 interface PopupConfirmMakeAnOrderProps {
   project?: Project;
   isOpen: boolean;
-  duaDate: string;
   selectedDate: DateItem;
   onCancel: () => void;
   onSubmit: () => void;
@@ -26,7 +25,7 @@ interface PopupConfirmMakeAnOrderProps {
 const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
   const { t, i18n } = useTranslation();
 
-  const { onCancel, onSubmit, isOpen, project, duaDate, selectedDate } = props;
+  const { onCancel, onSubmit, isOpen, project, selectedDate } = props;
 
   const _onCancel = () => {
     onCancel();
@@ -59,11 +58,11 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
             Please confirm to make an order for <span>{project?.name}</span> project.
           </ParagraphBody>
           <ParagraphBody pt={3} $colorName="--eerie-black" className={classes.description}>
-            The fieldwork will be kicked off at beginning of <span>{selectedDate?.date && moment(selectedDate?.date).lang(i18n.language).format("MMM yyyy")}</span>.
+            The fieldwork will be kicked off at beginning of <span>{moment(selectedDate?.date).lang(i18n.language).format("MMM yyyy")}</span>.
           </ParagraphBody>
           <ParagraphBody pt={3} $colorName="--eerie-black" className={classes.description}>
             <span>Note:</span> For the project to start, you will need to make the first
-            payment by <span>{duaDate}</span>. Subsequent payments will be made every 3
+            payment by <span>{moment(selectedDate?.date).subtract(7,'days').lang(i18n.language).format("MMM DD, yyyy")}</span>. Subsequent payments will be made every 3
             months.
           </ParagraphBody>
         </Box>

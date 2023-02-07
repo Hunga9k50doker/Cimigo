@@ -19,21 +19,19 @@ import { useTranslation } from "react-i18next";
 import Dolar from "components/icons/IconDolar";
 import Footer from "components/Footer";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
-import { GetSchedulePreview, SchedulePreview } from "models/schedule";
-import { ScheduleService } from "services/schedule";
+
+import { PaymentScheduleService } from "services/payment_schedule";
 import { DataPagination, ECurrency } from "models/general";
 import moment from "moment";
 import useAuth from "hooks/useAuth";
 import { fCurrencyVND } from "utils/formatNumber";
 import PopupConfirmMakeAnOrder from "../components/PopupConfirmMakeAnOrder";
-import { authPreviewOrPayment } from "../models";
+import { authPreviewOrPayment, formatOrdinalumbers } from "../models";
+import { GetPaymentSchedulePreview, PaymentSchedulePreview } from "models/payment_schedule";
+import clsx from "clsx";
 export interface DateItem {
   id: number;
-  month: number;
-  year: number;
-  day: number;
   date?: string;
-  active?: boolean;
 }
 interface SelectDateProps {
   projectId: number;
@@ -43,37 +41,20 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const { project } = useSelector((state: ReducerType) => state.project);
   const { i18n } = useTranslation();
   const { user } = useAuth();
-  const [date, setDate] = useState<DateItem[]>([]);
+  const [listDate, setListDate] = useState<DateItem[]>([]);
   const [viewPS, setViewPS] = useState<Boolean>(false);
   const [duaDate, setDuaDate] = useState("");
   const [selectedDate, setSelectedDate] = useState<DateItem>();
   const [onSubmitMakeAnOrder, seOnSubmitMakeAnOrder] = useState(false);
   const [listSchedulePreview, setListSchedulePreview] =
-    useState<DataPagination<SchedulePreview>>();
+    useState<DataPagination<PaymentSchedulePreview>>();
   const onClickDate = (dateItem: DateItem) => {
-    const newDates = date.map((obj) => {
-      // 👇️ if id equals 2, update country property
-      if (obj.id === dateItem.id) {
-        return { ...obj, active: true };
-      }
-      if (obj.id !== dateItem.id) {
-        return { ...obj, active: false };
-      }
-      return obj;
-    });
-    setDate(newDates);
     setSelectedDate(dateItem);
     setDuaDate(formatDateToString(dateItem));
   };
   const formatDateToString = (val: DateItem) => {
-    let stringDueDate = val.year + "-" + val.month + "-" + val.day;
-    var newDate = new Date(stringDueDate);
-    return moment(newDate.setDate(newDate.getDate() - 7))
-      .lang(i18n.language)
-      .format("MMM DD, yyyy");
-  };
-  const formatNameMonth = (date: DateItem) => {
-    return moment(date.date).lang(i18n.language).format("MMM");
+    var newDate = new Date(val.date);
+    return moment(newDate.setDate(newDate.getDate() - 7)).lang(i18n.language).format("MMM DD, yyyy");
   };
   const viewListPS = () => {
     setViewPS(!viewPS);
@@ -92,7 +73,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
     seOnSubmitMakeAnOrder(true);
   };
   const formatMoney = useCallback(
-    (schedule: SchedulePreview) => {
+    (schedule: PaymentSchedulePreview) => {
       switch (user?.currency) {
         case ECurrency.VND:
           return `${fCurrencyVND(schedule.totalAmount)}`;
@@ -102,29 +83,15 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
     },
     [user?.currency]
   );
-  const formatDay = (day: number) => {
-    if (day > 3 && day < 21) return day + "th";
-    switch (day % 10) {
-      case 1:
-        return day + "st";
-      case 2:
-        return day + "nd";
-      case 3:
-        return day + "rd";
-      default:
-        return day + "th";
-    }
-  };
   const onConfirmMakeAnOrder = () => {
     seOnSubmitMakeAnOrder(false);
   };
   const submitMakeAnOrder = () => {
     if (!selectedDate) return;
     dispatch(setLoading(true));
-    ScheduleService.makeAnOrder({
+    PaymentScheduleService.paymentScheduleMakeAnOrder({
       projectId: projectId,
-      month: selectedDate.month,
-      year: selectedDate.year,
+      startDate: new Date(moment(selectedDate.date).format('YYYY-MM-DD')),
     })
       .then(() => {
         seOnSubmitMakeAnOrder(false)
@@ -149,34 +116,28 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   }, [project]);
   useEffect(() => {
     let days = [];
-    var today = new Date();
+    var today = moment().startOf('month').format('YYYY-MM-DD');
     for (var i = 0; i < 6; i++) {
       days[i] = {
         id: i,
-        month: today.getMonth() + 2 + i,
-        year: today.getFullYear(),
-        day: 1,
-        date: `${today.getFullYear()}-${today.getMonth() + 2 + i}-${1}`,
-        active: i === 0 ? true : false,
+        date: moment(today).add(i+1, 'M').format('YYYY-MM-DD'),
       };
       if (i === 0) {
         setSelectedDate(days[i]);
-        setDate(days[i]);
         setDuaDate(formatDateToString(days[i]));
       }
     }
-    setDate([...days]);
+    setListDate([...days]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     const getSchedulePreview = async () => {
       dispatch(setLoading(true));
-      const params: GetSchedulePreview = {
-        projectId: project?.id ? project.id : projectId,
-        month: selectedDate.month,
-        year: selectedDate.year,
+      const params: GetPaymentSchedulePreview = {
+        projectId: projectId,
+        startDate: new Date(moment(selectedDate.date).format('YYYY-MM-DD')),
       };
-      ScheduleService.getSchedulePreview(params)
+      PaymentScheduleService.getPaymentSchedulePreview(params)
         .then((res) => {
           setListSchedulePreview({
             data: res.data,
@@ -205,12 +166,15 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
           </ParagraphBody>
           <Grid className={classes.listDate}>
             <Grid ml={3} className={classes.contentListDate}>
-              {date?.map((item, index) => (
+              {listDate?.map((item, index) => (
                 <Box
                   mr={2}
                   key={index}
                   className={
-                    item.active ? classes.itemDateActive : classes.itemDate
+                    clsx(
+                      {[classes.itemDateActive]: index === selectedDate.id },
+                      {[classes.itemDate]: index !== selectedDate.id }
+                      )
                   }
                   onClick={() => {
                     onClickDate(item);
@@ -220,20 +184,20 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
                     <DoneIcon />
                   </span>
                   <Heading5 className={classes.titleMonth} pb={2}>
-                    {formatNameMonth(item).toUpperCase()}
+                    {moment(item.date).lang(i18n.language).format("MMM").toUpperCase()}
                   </Heading5>
-                  <ParagraphBody>{item.year}</ParagraphBody>
+                  <ParagraphBody>{+moment(item.date).format("yyyy")}</ParagraphBody>
                 </Box>
               ))}
             </Grid>
           </Grid>
-          {duaDate && (
+          {selectedDate && (
             <Grid pb={4} className={classes.noteSelectDate}>
               <ParagraphBody $colorName={"--eerie-black"}>
                 {" "}
                 <span className={classes.bold}>Note:</span> For the project to
                 start, you would need to make the first payment by{" "}
-                <span className={classes.bold}> {duaDate} </span>. Subsequent
+                <span className={classes.bold}> {moment(selectedDate.date).subtract(7,'days').lang(i18n.language).format("MMM DD, yyyy")} </span>. Subsequent
                 payments will be made every 3 months.
               </ParagraphBody>
             </Grid>
@@ -250,7 +214,6 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
                 </ParagraphBodyUnderline>
               </Grid>
               {viewPS && (
-                // {moment(item.updatedAt).format("DD-MM-yyyy")}
                 <Grid className={classes.contentPS} pt={2}>
                   <ParagraphBody $colorName={"--eerie-black"}>
                     The following is the schedule for the next 4 payments:
@@ -263,7 +226,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
                             <Box className={classes.payment}>
                               <Grid className={classes.contentPayment}>
                                 <Heading3 $colorName={"--gray-80"}>
-                                  {formatDay(schedulePreview.order)} payment
+                                  {formatOrdinalumbers(schedulePreview.order,i18n.language)} payment
                                 </Heading3>
                                 <ParagraphBody $colorName={"--gray-80"}>
                                   {schedulePreview.scheduledMonths} months (
@@ -339,7 +302,6 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
       <PopupConfirmMakeAnOrder
         isOpen={onSubmitMakeAnOrder}
         project={project}
-        duaDate={duaDate}
         selectedDate={selectedDate}
         onCancel={onConfirmMakeAnOrder}
         onSubmit={() => submitMakeAnOrder()}

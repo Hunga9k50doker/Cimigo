@@ -7,10 +7,7 @@ import { useSelector } from "react-redux";
 import { matchPath, Redirect, Route, Switch } from "react-router-dom";
 import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
-import MakeAnOrder from "../MakeAnOrder";
-import Payment from "../Payment";
 import ProjectReview from "../ProjectReview";
-import SelectDate from "../SelectDate";
 import classes from './styles.module.scss';
 
 interface Props {
@@ -53,9 +50,6 @@ const ProjectReviewAndPayment = memo(({projectId }: Props) => {
           )}
           <Switch>
             <Route exact path={routes.project.detail.paymentBilling.previewAndPayment.preview} render={(routeProps) => <ProjectReview {...routeProps} />} />
-            <Route exact path={routes.project.detail.paymentBilling.previewAndPayment.payment} render={(routeProps) => <Payment {...routeProps} />} />
-            <Route exact path={routes.project.detail.paymentBilling.previewAndPayment.selectDate} render={(routeProps) => <SelectDate {...routeProps} projectId={Number(projectId)}/>} />
-            <Route exact path={routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder} render={(routeProps) => <MakeAnOrder {...routeProps} />} />
             <Redirect from={routes.project.detail.paymentBilling.previewAndPayment.root} to={routes.project.detail.paymentBilling.previewAndPayment.preview} />
           </Switch>
         </Content>

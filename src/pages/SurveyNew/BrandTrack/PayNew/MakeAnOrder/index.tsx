@@ -7,7 +7,6 @@ import classes from "./styles.module.scss";
 //slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./SlickCustom.css";
 //end import slick
 import Heading5 from "components/common/text/Heading5";
 import Dolar from "components/icons/IconDolar";
@@ -21,24 +20,43 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import DolarDisabled from "components/icons/IconDolarDisabled";
 import Footer from "components/Footer";
-import { useEffect, useMemo, useState } from "react";
-import Alert from "../Alert";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Alert, { AlerType } from "../Alert";
 import { useTranslation } from "react-i18next";
-import { PayMentHistory, SlidePaymentMakeAnOrder } from "models/schedule";
+import {
+  GetListPaymentScheduleHistory,
+  GetSlidePaymentSchedule,
+  PayMentScheduleHistory,
+  SlidePaymentScheduleMakeAnOrder,
+} from "models/payment_schedule";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { DataPagination } from "models/general";
+import { DataPagination, ECurrency } from "models/general";
 import PopupConfirmCancelSubsription from "../components/PopupConfirmCancelSubsription";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
-interface MakeAnOrderProp {}
+import clsx from "clsx";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import moment from "moment";
+import { PaymentScheduleService } from "services/payment_schedule";
+import { fCurrencyVND } from "utils/formatNumber";
+import useAuth from "hooks/useAuth";
+interface MakeAnOrderProp {
+  projectId: number;
+}
 enum SortedField {
   name = "name",
   createdAt = "createdAt",
   updatedAt = "updatedAt",
 }
-const paramsDefault: PayMentHistory = {
+enum StatusSlide {
+  NOT_PAID,
+  IN_PROGRESS,
+  PAID,
+  OVERDUE,
+}
+const paramsDefault: PayMentScheduleHistory = {
   take: 10,
   page: 1,
   sortedField: SortedField.updatedAt,
@@ -54,6 +72,29 @@ interface CustomSlide {
   prevArrow: React.ReactNode;
   nextArrow: React.ReactNode;
 }
+const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
+  <span
+    {...props}
+    className={"customIcon" + (currentSlide === 0 ? " slick-disabled" : "")}
+    aria-hidden="true"
+    aria-disabled={currentSlide === 0 ? true : false}
+  >
+    <KeyboardArrowLeftIcon />
+  </span>
+);
+const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
+  <span
+    {...props}
+    className={
+      "slick-next slick-arrow" +
+      (currentSlide === slideCount - 1 ? " slick-disabled" : "")
+    }
+    aria-hidden="true"
+    aria-disabled={currentSlide === slideCount - 1 ? true : false}
+  >
+    <KeyboardArrowRightIcon />
+  </span>
+);
 const paramsSlideDefault: CustomSlide = {
   navigator: true,
   dots: true,
@@ -62,34 +103,50 @@ const paramsSlideDefault: CustomSlide = {
   slidesToShow: 2,
   slidesToScroll: 2,
   prevArrow: (
+    // <SlickArrowLeft
+    //   slideCount={4}
+    //   currentSlide={1}
+    // />
     <span className="customIcon">
       <KeyboardArrowLeftIcon />
     </span>
   ),
   nextArrow: (
+    // <SlickArrowRight
+    //   slideCount={4}
+    //   currentSlide={1}
+    // />
     <span className="customIcon">
       <KeyboardArrowRightIcon />
     </span>
   ),
 };
-const MakeAnOrder = ({}: MakeAnOrderProp) => {
-  const { t } = useTranslation();
+const paramsListPaymentHistoryDefault: GetListPaymentScheduleHistory = {
+  take: 10,
+  page: 1,
+  sortedField: SortedField.updatedAt,
+  isDescending: true,
+  projectId: 0,
+}
+const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
+  
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
-
+  const { user } = useAuth();
+  const dispatch = useDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down(768));
-  const [slide, setSlide] = useState<DataPagination<SlidePaymentMakeAnOrder>>();
-  const [params, setParams] = useState<any>({ ...paramsDefault });
-  const { project } = useSelector((state: ReducerType) => state.project);
+  const [slide, setSlide] =
+    useState<DataPagination<SlidePaymentScheduleMakeAnOrder>>();
+  const [params, setParams] = useState<GetListPaymentScheduleHistory>({ ...paramsListPaymentHistoryDefault })
+  const [listPaymentHistory, setListPaymentHistory] = useState<DataPagination<PayMentScheduleHistory>>();
+  // const { project } = useSelector((state: ReducerType) => state.project);
   const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
     useState(false);
   const [customSlide, setCustomSlide] = useState<CustomSlide>({
     ...paramsSlideDefault,
   });
-  const handleChangePage = (
-    _: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    newPage: number
-  ) => {
-    setParams({ ...params, page: newPage + 1 });
+  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => {
+    setParams({ ...params, page: newPage + 1 })
   };
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -100,25 +157,78 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
       page: 1,
     });
   };
+  const inValidPage = () => {
+    if (!listPaymentHistory) return false
+    return listPaymentHistory.meta.page > 1 && Math.ceil(listPaymentHistory.meta.itemCount / listPaymentHistory.meta.take) < listPaymentHistory.meta.page
+  }
   const pageIndex = useMemo(() => {
-    return 1;
+    if (!listPaymentHistory) return 0
+    if (inValidPage()) return listPaymentHistory.meta.page - 2
+    return listPaymentHistory.meta.page - 1
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const onCloseSubmitCancelSubsription = () => {
     setOnSubmitCancelSubsription(false);
   };
   const submitCancelSubsription = (reson: string) => {
-    console.log(reson, "888888888888888888");
     setOnSubmitCancelSubsription(false);
   };
   const cancelSubscription = () => {
     setOnSubmitCancelSubsription(true);
   };
   const goToPayNow = () => {};
-  useEffect(()=>{
-    console.log(project,'555555555555555555555555')
-  },[project])
-  useEffect(()=>{
+  const formatMoney = useCallback(
+    (slide: SlidePaymentScheduleMakeAnOrder) => {
+      switch (user?.currency) {
+        case ECurrency.VND:
+          return `${fCurrencyVND(slide.totalAmount)}`;
+        case ECurrency.USD:
+          return `$${slide.totalAmountUSD}`;
+      }
+    },
+    [user?.currency]
+  );
+  const getPaymmentHistory = async () => {
+        PaymentScheduleService.getListPaymentScheduleHistory(params).then((res) => {
+          setListPaymentHistory({
+            data: res.data,
+            meta: res.meta,
+          });
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)));
+  }
+  useEffect(() => {
+    if (inValidPage()) {
+      handleChangePage(null, listPaymentHistory.meta.page - 2)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listPaymentHistory])
+  useEffect(() => {
+    const getListSlide = async () => {
+      dispatch(setLoading(true));
+      const data: GetSlidePaymentSchedule = {
+        projectId: projectId,
+      };
+      PaymentScheduleService.getSlideMakeAnOrderPaymentSchedule(data)
+        .then((res) => {
+          setSlide({
+            data: res.data,
+            meta: res.meta,
+          });
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)));
+    };
+    if (projectId) {
+      getListSlide();
+    }
+  }, [projectId]);
+  useEffect(() => {
+    setParams({ ...params, projectId: projectId });
+    getPaymmentHistory();
+  },[projectId])
+  useEffect(() => {
     var customReponsiveSlide = {
       navigator: true,
       dots: true,
@@ -136,13 +246,17 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
           <KeyboardArrowRightIcon />
         </span>
       ),
-    }; 
-    if(isMobile){
+    };
+    if (isMobile) {
       customReponsiveSlide.slidesToScroll = 1;
       customReponsiveSlide.slidesToShow = 1;
     }
     setCustomSlide(customReponsiveSlide);
-  },[isMobile])
+  }, [isMobile]);
+  useEffect(() => {
+    getPaymmentHistory()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params])
   return (
     <>
       <Grid classes={{ root: classes.root }}>
@@ -155,7 +269,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
               every 3 months.
             </ParagraphBody>
           }
-          type={"A"}
+          type={AlerType.Success}
         />
         <Alert
           title={"A payment is about to become due."}
@@ -171,7 +285,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
               </ParagraphBody>
             </Box>
           }
-          type={"B"}
+          type={AlerType.Warning}
         />
         <Alert
           title={"Your subscription canceled!"}
@@ -181,7 +295,7 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
               available to you.
             </ParagraphBody>
           }
-          type={"C"}
+          type={AlerType.Default}
         />
         <Grid pt={4}>
           <Grid className={classes.yourNextPaymentHeader}>
@@ -199,155 +313,72 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
           </Grid>
           <Box className={classes.slidePayment} pt={4}>
             <Slider {...customSlide}>
-              <Grid className={classes.customItemSilde}>
-                <div className={classes.itemSlide}>
-                  <Box className={classes.contentSlide}>
-                    <Grid className={classes.contentLeft}>
-                      <Heading3 $colorName={"--gray-80"}>
-                        DEC 2022 - FEB 2023
-                      </Heading3>
-                      <ParagraphBody $colorName={"--gray-80"}>
-                        3 months
-                      </ParagraphBody>
-                      <Heading3 $colorName={"--gray-80"} $fontWeight={400}>
-                        <span className={classes.iconDolar}>
-                          <Dolar />
-                        </span>{" "}
-                        165,000,000 đ
-                      </Heading3>
-                    </Grid>
-                    <Box className={classes.contentRight}>
-                      <Box>
-                        <Button
-                          btnType={BtnType.Raised}
-                          endIcon={<CreditCardIcon />}
-                          children={
-                            <TextBtnSmall $colorName={"--white"}>
-                              Pay now
-                            </TextBtnSmall>
-                          }
-                          onClick={goToPayNow}
-                        />
-                        <ParagraphSmall pt={0.5}>
-                          Due Dec 25, 2022
-                        </ParagraphSmall>
-                      </Box>
-                    </Box>
-                  </Box>
-                </div>
-              </Grid>
-              <Grid className={classes.customItemSilde}>
-                <div className={classes.itemSlideProcessing}>
-                  <Box className={classes.contentSlide}>
-                    <Grid className={classes.contentLeft}>
-                      <Heading3 $colorName={"--gray-80"}>
-                        DEC 2022 - FEB 2023
-                      </Heading3>
-                      <ParagraphBody $colorName={"--gray-80"}>
-                        3 months
-                      </ParagraphBody>
-                      <Heading3 $colorName={"--gray-80"} $fontWeight={400}>
-                        <span className={classes.iconDolar}>
-                          <Dolar />
-                        </span>{" "}
-                        165,000,000 đ
-                      </Heading3>
-                    </Grid>
-                    <Box className={classes.contentRight}>
-                      <Box>
-                        <Box className={classes.statusPayment}>
-                          <HourglassBottomIcon />
-                          <ParagraphSmall $colorName={"--warning-dark"} pl={1}>
-                            Processing...
-                          </ParagraphSmall>
+              {slide?.data.map((item) => {
+                return (
+                  <Grid className={classes.customItemSilde} key={item.id}>
+                    <div
+                      className={clsx(
+                        {
+                          [classes.itemSlide]:
+                            item.status === StatusSlide.NOT_PAID,
+                        },
+                        {
+                          [classes.itemSlideProcessing]:
+                            item.status === StatusSlide.IN_PROGRESS,
+                        },
+                        {
+                          [classes.itemSlideDisabled]:
+                            item.status === StatusSlide.OVERDUE,
+                        },
+                        {
+                          [classes.itemSlideCompleted]:
+                            item.status === StatusSlide.PAID,
+                        }
+                      )}
+                    >
+                      <Box className={classes.contentSlide}>
+                        <Grid className={classes.contentLeft}>
+                          <Heading3 $colorName={"--gray-80"}>
+                            {`${moment(item.start)
+                              .lang(i18n.language)
+                              .format("MMM yyyy")} - ${moment(item.end)
+                              .lang(i18n.language)
+                              .format("MMM yyyy")}`}
+                          </Heading3>
+                          <ParagraphBody $colorName={"--gray-80"}>
+                            {item.solutionConfig.paymentMonthSchedule} months
+                          </ParagraphBody>
+                          <Heading3 $colorName={"--gray-80"} $fontWeight={400}>
+                            <span className={classes.iconDolar}>
+                              <Dolar />
+                            </span>
+                            {formatMoney(item)}
+                          </Heading3>
+                        </Grid>
+                        <Box className={classes.contentRight}>
+                          <Box>
+                            <Button
+                              btnType={BtnType.Raised}
+                              endIcon={<CreditCardIcon />}
+                              children={
+                                <TextBtnSmall $colorName={"--white"}>
+                                  Pay now
+                                </TextBtnSmall>
+                              }
+                              onClick={goToPayNow}
+                            />
+                            <ParagraphSmall pt={0.5}>
+                              {`Due ${moment(item.dueDate)
+                                .lang(i18n.language)
+                                .format("MMM DD, yyyy")}`}
+                            </ParagraphSmall>
+                          </Box>
                         </Box>
-                        <ParagraphSmallUnderline2
-                          $colorName={"--gray-90"}
-                          className={classes.urlViewDetail}
-                          pt={0.5}
-                        >
-                          View details
-                        </ParagraphSmallUnderline2>
                       </Box>
-                    </Box>
-                  </Box>
-                </div>
-              </Grid>
-              <Grid className={classes.customItemSilde}>
-                <div className={classes.itemSlideDisabled}>
-                  <Box className={classes.contentSlide}>
-                    <Grid className={classes.contentLeft}>
-                      <Heading3 $colorName={"--gray-20"}>
-                        DEC 2022 - FEB 2023
-                      </Heading3>
-                      <ParagraphBody $colorName={"--gray-20"}>
-                        3 months
-                      </ParagraphBody>
-                      <Heading3 $colorName={"--gray-20"} $fontWeight={400}>
-                        <span className={classes.iconDolar}>
-                          <DolarDisabled />
-                        </span>{" "}
-                        165,000,000 đ
-                      </Heading3>
-                    </Grid>
-                    <Box className={classes.contentRight}>
-                      <Box>
-                        <Button
-                          className={classes.btnWaiting}
-                          btnType={BtnType.Raised}
-                          endIcon={<CreditCardIcon />}
-                          disabled={true}
-                          children={
-                            <TextBtnSmall $colorName={"--gray-20"}>
-                              Waiting
-                            </TextBtnSmall>
-                          }
-                        />
-                        <ParagraphSmall pt={0.5} $colorName={"--gray-40"}>
-                          Due Dec 25, 2022
-                        </ParagraphSmall>
-                      </Box>
-                    </Box>
-                  </Box>
-                </div>
-              </Grid>
-              <Grid className={classes.customItemSilde}>
-                <div className={classes.itemSlideCompleted}>
-                  <Box className={classes.contentSlide}>
-                    <Grid className={classes.contentLeft}>
-                      <Heading3 $colorName={"--gray-80"}>
-                        DEC 2022 - FEB 2023
-                      </Heading3>
-                      <ParagraphBody $colorName={"--gray-80"}>
-                        3 months
-                      </ParagraphBody>
-                      <Heading3 $colorName={"--gray-80"} $fontWeight={400}>
-                        <span className={classes.iconDolar}>
-                          <Dolar />
-                        </span>{" "}
-                        165,000,000 đ
-                      </Heading3>
-                    </Grid>
-                    <Box className={classes.contentRight}>
-                      <Box>
-                        <Box className={classes.icon}>
-                          <CheckCircleIcon />
-                        </Box>
-                        <ParagraphSmall $colorName={"--cimigo-green-dark-2"}>
-                          Payment completed
-                        </ParagraphSmall>
-                        <ParagraphSmallUnderline2
-                          $colorName={"--gray-90"}
-                          className={classes.urlViewDetail}
-                          pt={0.5}
-                        >
-                          Download invoice
-                        </ParagraphSmallUnderline2>
-                      </Box>
-                    </Box>
-                  </Box>
-                </div>
-              </Grid>
+                    </div>
+                  </Grid>
+                );
+              })}
             </Slider>
           </Box>
           <Grid className={classes.paymentHistory} pt={6}>
@@ -476,20 +507,12 @@ const MakeAnOrder = ({}: MakeAnOrderProp) => {
           <Grid className={classes.pagination} pt={4}>
             <TablePagination
               labelRowsPerPage={t("common_row_per_page")}
-              labelDisplayedRows={function defaultLabelDisplayedRows({
-                from,
-                to,
-                count,
-              }) {
-                return t("common_row_of_page", {
-                  from: from,
-                  to: to,
-                  count: count,
-                });
+              labelDisplayedRows={function defaultLabelDisplayedRows({ from, to, count }) {
+                return t("common_row_of_page", { from: from, to: to, count: count });
               }}
               component="div"
-              count={10 || 0}
-              rowsPerPage={10 || 10}
+              count={listPaymentHistory?.meta?.itemCount || 0}
+              rowsPerPage={listPaymentHistory?.meta?.take || 10}
               page={pageIndex}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}

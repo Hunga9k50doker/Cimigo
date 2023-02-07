@@ -40,3 +40,12 @@
     }
     
 }
+.borderLeftSuccess{
+    border-left: 4px solid var(--cimigo-green-dark) !important;
+}
+.borderLeft{
+    border-left: 4px solid var(--cimigo-blue) !important;
+}
+.borderLeftWarning{
+    border-left: 4px solid var(--warning-dark) !important;
+}

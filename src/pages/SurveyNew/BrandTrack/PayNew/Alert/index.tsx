@@ -7,14 +7,15 @@ import Heading4 from "components/common/text/Heading4";
 import Button, { BtnType } from "components/common/buttons/Button";
 import WarningIcon from "@mui/icons-material/Warning";
 import InfoIcon from "@mui/icons-material/Info";
+import clsx from "clsx";
 
-// export enum AlerType {
-//   Success = "Success",
-//   Default = "Default",
-//   Warning = "Warning",
-// }
+export enum AlerType {
+  Success = "Success",
+  Default = "Default",
+  Warning = "Warning",
+}
 interface AlertProp {
-  type?: string;
+  type?: AlerType;
   content?: React.ReactNode;
   title?: string;
 }
@@ -22,37 +23,48 @@ const Alert = memo((props: AlertProp) => {
   const { type, content, title, ...rest } = props;
   const [closeAlert, setCloseAlert] = useState("");
   const [borderLeft, setBorderLeft] = useState("");
-  useEffect(() => {
-    switch (type) {
-      case "A":
-        setBorderLeft("4px solid var(--cimigo-green-dark) !important");
-        break;
-      case "B":
-        setBorderLeft("4px solid var(--warning-dark) !important");
-        break;
-      default:
-        setBorderLeft("4px solid var(--cimigo-blue) !important");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   switch (type) {
+  //     case "A":
+  //       setBorderLeft("4px solid var(--cimigo-green-dark) !important");
+  //       break;
+  //     case "B":
+  //       setBorderLeft("4px solid var(--warning-dark) !important");
+  //       break;
+  //     default:
+  //       setBorderLeft("4px solid var(--cimigo-blue) !important");
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
   return (
     <Box
-      className={classes.alert}
+    
+      className={clsx(classes.alert, 
+        {
+          [classes.borderLeftSuccess]: type === AlerType.Success
+        },
+        {
+          [classes.borderLeftWarning]: type === AlerType.Warning
+        },
+        {
+          [classes.borderLeft]: type === AlerType.Default
+        }
+      )}
       sx={{ display: closeAlert, borderLeft: borderLeft }}
       {...rest}
     >
       <Box className={classes.left}>
-        {type === "A" && (
+        {type === AlerType.Success && (
           <Box className={classes.iconSuccess}>
             <CheckCircleIcon />
           </Box>
         )}
-        {type === "B" && (
+        {type === AlerType.Warning && (
           <Box className={classes.iconWarning}>
             <WarningIcon />
           </Box>
         )}
-        {type === "C" && (
+        {type === AlerType.Default && (
           <Box className={classes.iconDefault}>
             <InfoIcon />
           </Box>

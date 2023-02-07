@@ -1,0 +1,59 @@
+import { API } from "config/constans";
+import {
+  GetListPaymentScheduleHistory,
+  GetPaymentSchedulePreview,
+  GetSlidePaymentSchedule,
+  PaymentScheduleMakeAnOrder,
+} from "models/payment_schedule";
+import api from "services/configApi";
+
+export class PaymentScheduleService {
+  static async getPaymentSchedulePreview(
+    data: GetPaymentSchedulePreview
+  ): Promise<any> {
+    return await api
+      .get(API.PAYMENT_SCHEDULE.PREVIEW, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+  static async paymentScheduleMakeAnOrder(
+    data: PaymentScheduleMakeAnOrder
+  ): Promise<any> {
+    return await api
+      .post(API.PAYMENT_SCHEDULE.MAKE_AN_ORDER, data)
+      .then((res) => {
+        return Promise.resolve(res.data.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+  static async getSlideMakeAnOrderPaymentSchedule(
+    data: GetSlidePaymentSchedule
+  ): Promise<any> {
+    return await api
+      .get(API.PAYMENT_SCHEDULE.SLIDE, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+  static async getListPaymentScheduleHistory(
+    data: GetListPaymentScheduleHistory
+  ): Promise<any> {
+    return await api
+      .get(API.PAYMENT_SCHEDULE.PAYMENT_SCHEDULE_HISTORY, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+}
