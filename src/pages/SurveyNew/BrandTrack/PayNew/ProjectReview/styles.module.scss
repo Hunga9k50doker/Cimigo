@@ -94,6 +94,7 @@
 .rightContent{
   .survey{
     display: flex;
+    align-items: center;
     @media only screen and (max-width: 899px) { 
       justify-content: space-between;
     }
@@ -103,9 +104,15 @@
   }
   .rightContent2{
     border-left: 1px dashed var(--gray-20);
+    margin-left: 8px;
+    margin-top: 16px;
     .boldContent{
       font-weight: 600;
     }
+  }
+  .mainBrandItem {
+    word-wrap: break-word;
+    white-space: pre-wrap;
   }
   @media only screen and (max-width: 899px) { 
     padding-top: 16px;
@@ -122,8 +129,15 @@
     color: var(--cimigo-blue-dark-2);
   }
   background: var(--cultured-gray);
+  height: 29px;
 }
 .customGridItem{
   padding-top: 0px !important;
 }
 
+.dangerText {
+  color: var(--red-error) !important;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}

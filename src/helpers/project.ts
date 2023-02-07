@@ -265,6 +265,11 @@ export class ProjectHelper {
           ProjectHelper.isValidTarget(project) &&
           ProjectHelper.isValidVideos(project) &&
           ProjectHelper.isValidEyeTrackingSampleSize(project)
+      case ESOLUTION_TYPE.BRAND_TRACKING:
+        return ProjectHelper.isValidSampleSize(project) &&
+          ProjectHelper.isValidSetup(project) &&
+          ProjectHelper.isValidTarget(project) &&
+          ProjectHelper.isValidEyeTrackingSampleSize(project)
     }
   }
   
