@@ -34,15 +34,6 @@ export interface PaymentScheduleMakeAnOrder{
   projectId: number;
   startDate: Date;
 }
-export interface PayMentScheduleHistory {
-  sortedField?: string;
-  isDescending?: boolean;
-  folderIds?: number[];
-  statusIds?: number[];
-  keyword?: string;
-  take?: number;
-  page?: number;
-}
 interface Schedule {
   id: number;
   start: Date;
@@ -57,11 +48,12 @@ export interface PaymentScheduleHistory {
   completedDate?: Date;
 }
 export interface GetListPaymentScheduleHistory {
-  page: number;
-  take: number;
   projectId: number;
   sortedField?: string;
   isDescending?: boolean;
   folderIds?: number[];
   statusIds?: number[];
+  keyword?: string;
+  take?: number;
+  page?: number;
 }

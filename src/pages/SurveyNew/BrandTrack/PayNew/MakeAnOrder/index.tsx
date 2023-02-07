@@ -24,7 +24,7 @@ import { useTranslation } from "react-i18next";
 import {
   GetListPaymentScheduleHistory,
   GetSlidePaymentSchedule,
-  PayMentScheduleHistory,
+  PaymentScheduleHistory,
   SlidePaymentScheduleMakeAnOrder,
 } from "models/payment_schedule";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -52,12 +52,6 @@ enum StatusSlide {
   PAID,
   OVERDUE,
 }
-const paramsDefault: PayMentScheduleHistory = {
-  take: 10,
-  page: 1,
-  sortedField: SortedField.updatedAt,
-  isDescending: true,
-};
 interface CustomSlide {
   navigator: boolean;
   dots: boolean;
@@ -92,9 +86,8 @@ const paramsListPaymentHistoryDefault: GetListPaymentScheduleHistory = {
   sortedField: SortedField.updatedAt,
   isDescending: true,
   projectId: 0,
-}
+};
 const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
-  
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const { user } = useAuth();
@@ -102,15 +95,21 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const isMobile = useMediaQuery(theme.breakpoints.down(768));
   const [slide, setSlide] =
     useState<DataPagination<SlidePaymentScheduleMakeAnOrder>>();
-  const [params, setParams] = useState<GetListPaymentScheduleHistory>({ ...paramsListPaymentHistoryDefault })
-  const [listPaymentHistory, setListPaymentHistory] = useState<DataPagination<PayMentScheduleHistory>>();
+  const [params, setParams] = useState<GetListPaymentScheduleHistory>({
+    ...paramsListPaymentHistoryDefault,
+  });
+  const [listPaymentHistory, setListPaymentHistory] =
+    useState<DataPagination<PaymentScheduleHistory>>();
   const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
     useState(false);
   const [customSlide, setCustomSlide] = useState<CustomSlide>({
     ...paramsSlideDefault,
   });
-  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => {
-    setParams({ ...params, page: newPage + 1 })
+  const handleChangePage = (
+    _: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    newPage: number
+  ) => {
+    setParams({ ...params, page: newPage + 1 });
   };
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -122,13 +121,18 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     });
   };
   const inValidPage = () => {
-    if (!listPaymentHistory) return false
-    return listPaymentHistory.meta.page > 1 && Math.ceil(listPaymentHistory.meta.itemCount / listPaymentHistory.meta.take) < listPaymentHistory.meta.page
-  }
+    if (!listPaymentHistory) return false;
+    return (
+      listPaymentHistory.meta.page > 1 &&
+      Math.ceil(
+        listPaymentHistory.meta.itemCount / listPaymentHistory.meta.take
+      ) < listPaymentHistory.meta.page
+    );
+  };
   const pageIndex = useMemo(() => {
-    if (!listPaymentHistory) return 0
-    if (inValidPage()) return listPaymentHistory.meta.page - 2
-    return listPaymentHistory.meta.page - 1
+    if (!listPaymentHistory) return 0;
+    if (inValidPage()) return listPaymentHistory.meta.page - 2;
+    return listPaymentHistory.meta.page - 1;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const onCloseSubmitCancelSubsription = () => {
@@ -152,22 +156,34 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     },
     [user?.currency]
   );
+  const formatMoneyHistory = useCallback(
+    (itemPaymentHistory: PaymentScheduleHistory) => {
+      switch (user?.currency) {
+        case ECurrency.VND:
+          return `${fCurrencyVND(itemPaymentHistory.totalAmount)}`;
+        case ECurrency.USD:
+          return `$${itemPaymentHistory.totalAmountUSD}`;
+      }
+    },
+    [user?.currency]
+  );
   const getPaymmentHistory = async () => {
-        PaymentScheduleService.getListPaymentScheduleHistory(params).then((res) => {
-          setListPaymentHistory({
-            data: res.data,
-            meta: res.meta,
-          });
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)));
-  }
+    PaymentScheduleService.getListPaymentScheduleHistory(params)
+      .then((res) => {
+        setListPaymentHistory({
+          data: res.data,
+          meta: res.meta,
+        });
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
+  };
   useEffect(() => {
     if (inValidPage()) {
-      handleChangePage(null, listPaymentHistory.meta.page - 2)
+      handleChangePage(null, listPaymentHistory.meta.page - 2);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listPaymentHistory])
+  }, [listPaymentHistory]);
   useEffect(() => {
     const getListSlide = async () => {
       dispatch(setLoading(true));
@@ -191,7 +207,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   useEffect(() => {
     setParams({ ...params, projectId: projectId });
     getPaymmentHistory();
-  },[projectId])
+  }, [projectId]);
   useEffect(() => {
     var customReponsiveSlide = {
       navigator: true,
@@ -218,9 +234,9 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     setCustomSlide(customReponsiveSlide);
   }, [isMobile]);
   useEffect(() => {
-    getPaymmentHistory()
+    getPaymmentHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params])
+  }, [params]);
   return (
     <>
       <Grid classes={{ root: classes.root }}>
@@ -345,143 +361,93 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
               })}
             </Slider>
           </Box>
-          <Grid className={classes.paymentHistory} pt={6}>
-            <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"}>
+          {listPaymentHistory?.data.length  ? (
+          <>
+            <Grid className={classes.paymentHistory} pt={6}>
+              <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"}>
+                Payment history
+              </Heading4>
+              
+              <Grid className={classes.listPayemnt} pt={2}>
+                {listPaymentHistory?.data.map((itemPaymentHistory) => {
+                    <Box
+                      className={classes.itemPayment}
+                      key={itemPaymentHistory.id}
+                    >
+                      <Grid container spacing={1}>
+                        <Grid item xs={12} sm={8}>
+                          <Heading5 $colorName={"--gray-90"}>
+                            {`${moment(itemPaymentHistory.schedule.start)
+                              .lang(i18n.language)
+                              .format("MMM yyyy")} - ${moment(
+                                itemPaymentHistory.schedule.end
+                            )
+                              .lang(i18n.language)
+                              .format("MMM yyyy")}`}
+                          </Heading5>
+                          <Grid className={classes.moneyAndDate} pt={1}>
+                            <Grid className={classes.money} pr={2.5}>
+                              <span className={classes.iconDolar}>
+                                <Dolar />
+                              </span>
+                              {formatMoneyHistory(itemPaymentHistory)}
+                            </Grid>
+                            <Grid className={classes.date}>
+                              <DateRangeIcon
+                                className={classes.iconCalendar}
+                                sx={{ marginRight: "10px" }}
+                              />
+                              {moment(itemPaymentHistory.completedDate)
+                                .lang(i18n.language)
+                                .format("MMM DD, yyyy")}
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <ParagraphSmallUnderline2
+                            className={classes.linkDownload}
+                          >
+                            Download invoice
+                          </ParagraphSmallUnderline2>
+                        </Grid>
+                      </Grid>
+                    </Box>;
+                  })}
+              </Grid>
+            </Grid>
+            <Grid className={classes.pagination} pt={4}>
+              <TablePagination
+                labelRowsPerPage={t("common_row_per_page")}
+                labelDisplayedRows={function defaultLabelDisplayedRows({
+                  from,
+                  to,
+                  count,
+                }) {
+                  return t("common_row_of_page", {
+                    from: from,
+                    to: to,
+                    count: count,
+                  });
+                }}
+                component="div"
+                count={listPaymentHistory?.meta?.itemCount || 0}
+                rowsPerPage={listPaymentHistory?.meta?.take || 10}
+                page={pageIndex}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Grid>
+          </>):(
+            <Grid className={classes.paymentHistory} pt={6}>
+            <Heading4  $fontWeight={"400"} $colorName={"--gray-black"}>
               Payment history
             </Heading4>
             <Grid className={classes.listPayemnt} pt={2}>
-              <Box className={classes.itemPayment}>
-                <Grid container spacing={1}>
-                  <Grid item xs={12} sm={8}>
-                    <Heading5 $colorName={"--gray-90"}>
-                      SEP 2022 - NOV 2022
-                    </Heading5>
-                    <Grid className={classes.moneyAndDate} pt={1}>
-                      <Grid className={classes.money} pr={2.5}>
-                        <span className={classes.iconDolar}>
-                          <Dolar />
-                        </span>{" "}
-                        150,000,000 đ
-                      </Grid>
-                      <Grid className={classes.date}>
-                        <DateRangeIcon
-                          className={classes.iconCalendar}
-                          sx={{ marginRight: "10px" }}
-                        />
-                        Nov 25, 2022
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <ParagraphSmallUnderline2 className={classes.linkDownload}>
-                      Download invoice
-                    </ParagraphSmallUnderline2>
-                  </Grid>
-                </Grid>
-              </Box>
-              <Box className={classes.itemPayment}>
-                <Grid container spacing={1}>
-                  <Grid item xs={12} sm={8}>
-                    <Heading5 $colorName={"--gray-90"}>
-                      SEP 2022 - NOV 2022
-                    </Heading5>
-                    <Grid className={classes.moneyAndDate} pt={1}>
-                      <Grid className={classes.money} pr={2.5}>
-                        <span className={classes.iconDolar}>
-                          <Dolar />
-                        </span>{" "}
-                        150,000,000 đ
-                      </Grid>
-                      <Grid className={classes.date}>
-                        <DateRangeIcon
-                          className={classes.iconCalendar}
-                          sx={{ marginRight: "10px" }}
-                        />
-                        Nov 25, 2022
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <ParagraphSmallUnderline2 className={classes.linkDownload}>
-                      Download invoice
-                    </ParagraphSmallUnderline2>
-                  </Grid>
-                </Grid>
-              </Box>
-              <Box className={classes.itemPayment}>
-                <Grid container spacing={1}>
-                  <Grid item xs={12} sm={8}>
-                    <Heading5 $colorName={"--gray-90"}>
-                      SEP 2022 - NOV 2022
-                    </Heading5>
-                    <Grid className={classes.moneyAndDate} pt={1}>
-                      <Grid className={classes.money} pr={2.5}>
-                        <span className={classes.iconDolar}>
-                          <Dolar />
-                        </span>{" "}
-                        150,000,000 đ
-                      </Grid>
-                      <Grid className={classes.date}>
-                        <DateRangeIcon
-                          className={classes.iconCalendar}
-                          sx={{ marginRight: "10px" }}
-                        />
-                        Nov 25, 2022
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <ParagraphSmallUnderline2 className={classes.linkDownload}>
-                      Download invoice
-                    </ParagraphSmallUnderline2>
-                  </Grid>
-                </Grid>
-              </Box>
-              <Box className={classes.itemPayment}>
-                <Grid container spacing={1}>
-                  <Grid item xs={12} sm={8}>
-                    <Heading5 $colorName={"--gray-90"}>
-                      SEP 2022 - NOV 2022
-                    </Heading5>
-                    <Grid className={classes.moneyAndDate} pt={1}>
-                      <Grid className={classes.money} pr={2.5}>
-                        <span className={classes.iconDolar}>
-                          <Dolar />
-                        </span>{" "}
-                        150,000,000 đ
-                      </Grid>
-                      <Grid className={classes.date}>
-                        <DateRangeIcon
-                          className={classes.iconCalendar}
-                          sx={{ marginRight: "10px" }}
-                        />
-                        Nov 25, 2022
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <ParagraphSmallUnderline2 className={classes.linkDownload}>
-                      Download invoice
-                    </ParagraphSmallUnderline2>
-                  </Grid>
-                </Grid>
-              </Box>
+              <Heading4 $fontWeight={"400"} textAlign={"center"} $colorName={"--gray-40"}>List Payment History Not Found!</Heading4>
             </Grid>
           </Grid>
-          <Grid className={classes.pagination} pt={4}>
-            <TablePagination
-              labelRowsPerPage={t("common_row_per_page")}
-              labelDisplayedRows={function defaultLabelDisplayedRows({ from, to, count }) {
-                return t("common_row_of_page", { from: from, to: to, count: count });
-              }}
-              component="div"
-              count={listPaymentHistory?.meta?.itemCount || 0}
-              rowsPerPage={listPaymentHistory?.meta?.take || 10}
-              page={pageIndex}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Grid>
+          )
+          }
         </Grid>
       </Grid>
       <PopupConfirmCancelSubsription
