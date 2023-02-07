@@ -66,6 +66,12 @@ export const API = {
   PROJECT_ATTRIBUTE: {
     DEFAULT: '/v1.0/project-attribute',
   },
+  PROJECT_BRAND: {
+    DEFAULT: '/v1.0/project-brand',
+  },
+  BRAND_ASSET: {
+    DEFAULT: '/v1.0/brand-asset',
+  },
   USER_ATTRIBUTE: {
     DEFAULT: '/v1.0/user-attribute',
   },
@@ -133,6 +139,10 @@ export const API = {
     },
     ATTRIBUTE: {
       DEFAULT: '/v1.0/admin/attribute',
+    },
+    ATTRIBUTE_CATEGORY: {
+      DEFAULT: '/v1.0/admin/attribute-category',
+      UPDATE_STATUS: '/v1.0/admin/attribute-category/update-status/:id',
     },
     TRANSLATION: {
       DEFAULT: '/v1.0/admin/translation',

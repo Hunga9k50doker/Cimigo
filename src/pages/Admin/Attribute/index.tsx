@@ -6,7 +6,7 @@ import { routes } from "routers/routes"
 import Create from "./Create"
 import Edit from "./Edit"
 import List from "./List"
-
+import Category from "./Category";
 interface Props {
 
 }
@@ -32,6 +32,7 @@ const AttributePage = memo(({ }: Props) => {
         />
         <Route exact path={routes.admin.attribute.create} component={Create} />
         <Route exact path={routes.admin.attribute.edit} component={Edit} />
+        <Route path={routes.admin.attribute.category.root} component={Category} />
 
         <Redirect from={routes.admin.attribute.root} to={routes.admin.attribute.root} />
       </Switch>

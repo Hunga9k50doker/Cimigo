@@ -33,6 +33,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import { setHowToSetupSurveyReducer } from "redux/reducers/Project/actionTypes";
 import { usePrice } from "helpers/price";
 import { ESOLUTION_TYPE } from "models";
+import { DataPagination } from "models/general";
 
 export interface CreateProjectFormData {
   name: string;
@@ -43,6 +44,7 @@ export interface CreateProjectFormData {
 interface CreateProjectStepProps {
   solutionSelected?: Solution;
   planSelected?: Plan;
+  plan?: DataPagination<Plan>;
   onClickHandleBack?: (step: number) => void;
 }
 
@@ -50,11 +52,12 @@ const CreateProjectStep = memo(
   ({
     solutionSelected,
     planSelected,
+    plan,
     onClickHandleBack,
   }: CreateProjectStepProps) => {
 
     const { t, i18n } = useTranslation();
-
+    
     const dispatch = useDispatch();
 
     const { getCostCurrency } = usePrice()
@@ -144,15 +147,23 @@ const CreateProjectStep = memo(
               mx={0.5}
               $fontWeight={"600"}
               $colorName={"--eerie-black"}
-            >{`${planSelected?.title} (${getCostCurrency(planSelected?.price || 0)?.show})`}</Heading5>
+              translation-key={"common_month"}
+            >{`${planSelected?.title} (${getCostCurrency(planSelected?.price || 0)?.show} 
+            ${
+              planSelected?.month
+                ? `/ ${planSelected.month} ${t("common_month", {
+                      s:planSelected.month === 1 ? "" : t("common_s"),
+                    })}`
+                : ""
+            })`}</Heading5>
             <ParagraphSmallUnderline2
-              translation-key="common_change"
+              translation-key={plan?.data?.length !== 1 ? "common_change" : "common_review"}
               className={classes.link}
               onClick={() => {
                 onClickHandleBack(EStep.SELECT_PLAN);
               }}
             >
-              ({t("common_change")})
+              {plan?.data?.length !== 1 ? `(${t("common_change")})` : `(${t("common_review")})`}
             </ParagraphSmallUnderline2>
           </Grid>
         </Grid>
@@ -254,7 +265,7 @@ const CreateProjectStep = memo(
                   </Accordion>
                 </Grid>
               )}
-               {solutionSelected?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
+              {solutionSelected?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
                 <Grid className={classes.accordion}>
                   <Accordion className={classes.accordionContent}>
                     <AccordionSummary

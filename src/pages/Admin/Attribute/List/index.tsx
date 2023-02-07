@@ -18,10 +18,13 @@ import classes from './styles.module.scss';
 
 const tableHeaders: TableHeaderLabel[] = [
   { name: 'id', label: 'Id', sortable: false },
+  { name: 'content', label: 'Content', sortable: false },
   { name: 'start', label: 'Start', sortable: false },
   { name: 'end', label: 'End', sortable: false },
   { name: 'type', label: 'Type', sortable: false },
   { name: 'solution', label: 'Solution', sortable: false },
+  { name: 'category', label: 'Category', sortable: false },
+  { name: 'contentType', label: 'Content type', sortable: false },
   { name: 'languages', label: 'Languages', sortable: false },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
@@ -43,6 +46,10 @@ const List = memo(({ keyword, setKeyword, data, setData }: Props) => {
 
   const handleAdd = () => {
     dispatch(push(routes.admin.attribute.create));
+  }
+
+  const handleRedirectToCategory = () => {
+    dispatch(push(routes.admin.attribute.category.root));
   }
 
   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => {
@@ -175,6 +182,10 @@ const List = memo(({ keyword, setKeyword, data, setData }: Props) => {
         </Grid>
         <Grid item xs={6}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button sx={{ marginRight: 2 }} variant="contained" color="primary" onClick={handleRedirectToCategory}>
+              Attribute category
+            </Button>
+
             <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleAdd}>
               Create
             </Button>
@@ -207,6 +218,9 @@ const List = memo(({ keyword, setKeyword, data, setData }: Props) => {
                             {item.id}
                           </TableCell>
                           <TableCell component="th">
+                            <Link onClick={() => onRedirectEdit(item)}>{item.content}</Link>
+                          </TableCell>
+                          <TableCell component="th">
                             <Link onClick={() => onRedirectEdit(item)}>{item.start}</Link>
                           </TableCell>
                           <TableCell component="th">
@@ -217,6 +231,12 @@ const List = memo(({ keyword, setKeyword, data, setData }: Props) => {
                           </TableCell>
                           <TableCell component="th">
                             {item?.solution?.title}
+                          </TableCell>
+                          <TableCell component="th">
+                            {item?.category?.name}
+                          </TableCell>
+                          <TableCell component="th">
+                            {item?.contentType?.name}
                           </TableCell>
                           <TableCell component="th">
                             {item?.languages?.map(it => it.language).join(', ')}

@@ -19,6 +19,7 @@
   --cimigo-blue-light-2: #7cafe7;
   --cimigo-blue-light-3: #bed7f3;
   --cimigo-blue-light-4: #e8f1fb;
+  --cimigo-blue-light-5: #f6f9fc;
   --cimigo-blue-dark-1: #17497f;
   --cimigo-blue-dark-2: #103055;
   --cimigo-blue-dark-3: #08182a;
@@ -27,6 +28,7 @@
   --cimigo-green-dark-1: #7c9911;
   --cimigo-green-dark-2: #53660c;
   --cimigo-green-dark-3: #293306;
+  --cimigo-theme-light-on-surface: #1a1c1e;
   --gray-02: #373d3f;
   --gray-2: #F9F9F9;
   --gray-5: #f4f4f4;
@@ -152,4 +154,11 @@ input[type="number"] {
 
 .break-word {
   word-break: break-word;
+}
+
+.nestedLink {
+  a {
+    font-weight: 600;
+    color: var(--cimigo-blue);
+  }
 }

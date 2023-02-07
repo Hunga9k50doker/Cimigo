@@ -92,6 +92,18 @@ export const projectReducer = (state = initial, action: any) =>
       case types.SET_HOW_TO_SETUP_SURVEY_REDUCER:
         draft.showHowToSetup = action.data
         break;
+      case types.SET_PROJECT_BRANDS_REDUCER:
+        draft.project = {
+          ...draft.project,
+          projectBrands: action.data
+        };
+        break;
+      case types.SET_BRAND_ASSETS_REDUCER:
+        draft.project = {
+          ...draft.project,
+          brandAssets: action.data
+        };
+        break;
       default:
         return state;
     }

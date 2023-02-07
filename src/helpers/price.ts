@@ -1,3 +1,4 @@
+import { ESOLUTION_TYPE } from "models";
 import { CustomQuestion, CustomQuestionType, ECustomQuestionType } from "models/custom_question";
 import { ECurrency } from "models/general";
 import { Project } from "models/project";
@@ -16,10 +17,15 @@ export class PriceService {
   static getSampleSizeCost = (project: Project) => {
     const _project = ProjectHelper.getProject(project)
     const sampleSize = _project?.sampleSize || 0
-    const sampleSizeConstConfig = PriceService.getSampleSizeConstConfig(project)
-    const unitPrice = sampleSizeConstConfig.find((it, index) => it.limit > sampleSize || (it.limit === sampleSize && index === (sampleSizeConstConfig.length - 1)))?.price || 0
-    const priceVND = Math.round(sampleSize * unitPrice)
-    return priceVND
+    switch (project?.solution?.typeId) {
+      case ESOLUTION_TYPE.BRAND_TRACKING:
+        return project?.planPricePerMonth
+      default:
+        const sampleSizeConstConfig = PriceService.getSampleSizeConstConfig(project)
+        const unitPrice = sampleSizeConstConfig.find((it, index) => it.limit > sampleSize || (it.limit === sampleSize && index === (sampleSizeConstConfig.length - 1)))?.price || 0
+        const priceVND = Math.round(sampleSize * unitPrice)
+        return priceVND
+    }
   }
 
   static getEyeTrackingSampleSizeConstConfig = (project: Project) => {

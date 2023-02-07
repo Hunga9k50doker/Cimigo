@@ -1,0 +1,30 @@
+@media only screen and (max-width: 767px) {
+  .pageTitle {
+    display: block !important;
+    [class~="MuiBox-root"] {
+      display: none;
+    }
+  }
+  .boxOutline {
+    max-height: 350px;
+  }
+}
+
+.outlineSectionDescription {
+  span {
+    font-weight: 500;
+  }
+}
+
+.questionsPriceWrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pricesOfQuestions {
+  border-radius: 4px;
+  p {
+    color: var(--gray-80);
+  }
+}

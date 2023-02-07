@@ -2,6 +2,7 @@ import { Attachment } from "models/attachment";
 import { ESOLUTION_TYPE } from "models/solution";
 import { EyeTrackingSampleSize } from "./eye_tracking_sample_size";
 import { SampleSize } from "./sample_size";
+import { EOPERATION_TYPE } from "models/general";
 
 export interface SolutionCategory {
   id: number;
@@ -49,6 +50,18 @@ export interface Solution {
   minAdditionalBrand: number;
   maxAdditionalBrand: number;
   maxAdditionalAttribute: number;
+  minMainBrand: number;
+  maxMainBrand: number;
+  minCompetingBrand: number;
+  maxCompetingBrand: number;
+  minCompetitiveBrand: number;
+  maxCompetitiveBrand: number;
+  minEquityAttributes: number;
+  maxEquityAttributes: number;
+  minBrandAssetRecognition: number;
+  maxBrandAssetRecognition: number;
+  daysOfDueDate: number;
+  daysOfDueDateType: EOPERATION_TYPE;
   maxCustomQuestion: number;
   enableCustomQuestion: boolean;
   enableEyeTracking: boolean;
@@ -69,6 +82,7 @@ export interface Solution {
   categoryHome?: SolutionCategoryHome;
   sampleSizes?: SampleSize[];
   eyeTrackingSampleSizes?: EyeTrackingSampleSize[];
+  paymentMonthSchedule?: number;
 }
 
 export interface GetSolutionsParams {

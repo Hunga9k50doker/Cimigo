@@ -46,9 +46,9 @@ export const routes = {
       report: '/project/:id/report',
     }
   },
-  account:{
+  account: {
     root: '/account',
-    userProfile:'/account/user-profile',
+    userProfile: '/account/user-profile',
     changePassword: '/account/change-password',
     paymentInfo: '/account/payment-info',
   },
@@ -89,6 +89,11 @@ export const routes = {
       root: '/admin/attribute',
       create: '/admin/attribute/create',
       edit: '/admin/attribute/:id/edit',
+      category: {
+        root: '/admin/attribute/category',
+        create: '/admin/attribute/category/create',
+        edit: '/admin/attribute/category/:id/edit',
+      }
     },
     translation: {
       root: '/admin/translation',

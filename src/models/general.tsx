@@ -23,6 +23,7 @@ export interface OptionItem<T=number> {
   translation?: string;
   img?: string;
   subName?: string;
+  icon?: any;
 }
 
 export interface OptionItemT<T> {
@@ -184,3 +185,13 @@ export enum EVIDEO_MARKETING_STAGE {
   POST_LAUNCH = 1,
   PRE_LAUNCH = 2
 }
+
+export enum EOPERATION_TYPE {
+  ADD = 1,
+  SUBTRACT = 2
+}
+
+export const operationTypes: OptionItem[] = [
+  { id: EOPERATION_TYPE.ADD, name: "Add" },
+  { id: EOPERATION_TYPE.SUBTRACT, name: "Subtract" },
+]
