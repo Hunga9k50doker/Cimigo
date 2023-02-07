@@ -320,10 +320,6 @@ const PopupPaynow = memo((props: Props) => {
     onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview);
   };
 
-  const onShowConfirmCancel = () => {
-    setIsConfirmCancel(true);
-  };
-
   const onCloseConfirmCancel = () => {
     setIsConfirmCancel(false);
   };
