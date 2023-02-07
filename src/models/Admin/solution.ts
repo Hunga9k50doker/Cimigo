@@ -62,7 +62,6 @@ export interface Solution {
   maxBrandAssetRecognition: number;
   daysOfDueDate: number;
   daysOfDueDateType: EOPERATION_TYPE;
-  paymentMonthSchedule: number;
   maxCustomQuestion: number;
   enableCustomQuestion: boolean;
   enableEyeTracking: boolean;
