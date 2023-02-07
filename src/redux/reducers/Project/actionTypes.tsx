@@ -1,8 +1,10 @@
 import { AdditionalBrand } from "models/additional_brand";
+import { BrandAsset } from "models/brand_asset";
 import { CustomQuestion } from "models/custom_question";
 import { Pack } from "models/pack";
 import { CreateProjectRedirect, Project, ProjectTarget } from "models/project";
 import { ProjectAttribute } from "models/project_attribute";
+import { ProjectBrand } from "models/project_brand";
 import { UserAttribute } from "models/user_attribute";
 import { Video } from "models/video";
 
@@ -48,6 +50,12 @@ export const SET_HOW_TO_SETUP_SURVEY_REDUCER = "SET_HOW_TO_SETUP_SURVEY_REDUCER"
 
 export const GET_VIDEOS_OF_PROJECT_REQUEST = 'GET_VIDEOS_OF_PROJECT_REQUEST';
 export const SET_VIDEOS_OF_PROJECT_REDUCER = 'SET_VIDEOS_OF_PROJECT_REDUCER';
+
+export const GET_PROJECT_BRANDS_REQUEST = 'GET_PROJECT_BRANDS_REQUEST';
+export const SET_PROJECT_BRANDS_REDUCER = 'SET_PROJECT_BRANDS_REDUCER';
+
+export const GET_BRAND_ASSETS_REQUEST = 'GET_BRAND_ASSETS_REQUEST';
+export const SET_BRAND_ASSETS_REDUCER = 'SET_BRAND_ASSETS_REDUCER';
 
 export const getProjectRequest = (id: number, callback?: () => void, getFull: boolean = false) => {
   return {
@@ -202,6 +210,34 @@ export const getVideosRequest = (projectId: number) => {
 export const setVideosReducer = (data: Video[]) => {
   return {
     type: SET_VIDEOS_OF_PROJECT_REDUCER,
+    data
+  }
+}
+
+export const getProjectBrandsRequest = (projectId: number) => {
+  return {
+    type: GET_PROJECT_BRANDS_REQUEST,
+    projectId
+  }
+}
+
+export const setProjectBrandsReducer = (data: ProjectBrand[]) => {
+  return {
+    type: SET_PROJECT_BRANDS_REDUCER,
+    data
+  }
+}
+
+export const getBrandAssetsRequest = (projectId: number) => {
+  return {
+    type: GET_BRAND_ASSETS_REQUEST,
+    projectId
+  }
+}
+
+export const setBrandAssetsReducer = (data: BrandAsset[]) => {
+  return {
+    type: SET_BRAND_ASSETS_REDUCER,
     data
   }
 }

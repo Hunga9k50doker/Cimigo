@@ -90,6 +90,7 @@ const DropdownIndicator = (props: DropdownIndicatorProps) => {
 const Option = ({ children, ...props }: OptionProps<any>) => (
   <components.Option {...props}>
     {props.data?.img && <img src={props.data.img} alt="" className={classes.iconOption} />}
+    {props.data?.icon && <props.data.icon className={classes.iconPrefix}/>}
     {children}
   </components.Option>
 )
@@ -97,6 +98,7 @@ const Option = ({ children, ...props }: OptionProps<any>) => (
 const SingleValue = ({ children, ...props }: SingleValueProps<any>) => (
   <components.SingleValue {...props}>
     {props.data?.img && <img src={props.data.img} alt="" className={classes.iconValue} />}
+    {props.data?.icon && <props.data.icon className={classes.iconPrefix}/>}
     {children}
   </components.SingleValue>
 );

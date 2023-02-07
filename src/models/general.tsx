@@ -23,6 +23,7 @@ export interface OptionItem<T=number> {
   translation?: string;
   img?: string;
   subName?: string;
+  icon?: any;
 }
 
 export interface OptionItemT<T> {

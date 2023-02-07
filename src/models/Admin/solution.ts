@@ -83,6 +83,7 @@ export interface Solution {
   categoryHome?: SolutionCategoryHome;
   sampleSizes?: SampleSize[];
   eyeTrackingSampleSizes?: EyeTrackingSampleSize[];
+  paymentMonthSchedule?: number;
 }
 
 export interface GetSolutionsParams {

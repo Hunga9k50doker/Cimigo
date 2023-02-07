@@ -1,7 +1,7 @@
 import { push } from 'connected-react-router';
 import { Project } from 'models/project';
 import { put, takeLatest, call } from 'redux-saga/effects';
-import { getVideosRequest, getTargetRequest, getAdditionalBrandsRequest, getPacksRequest, GET_PROJECT_REQUEST, setProjectReducer, getUserAttributesRequest, getProjectAttributesRequest, getCustomQuestionsRequest, getEyeTrackingPacksRequest } from 'redux/reducers/Project/actionTypes';
+import { getVideosRequest, getTargetRequest, getAdditionalBrandsRequest, getPacksRequest, GET_PROJECT_REQUEST, setProjectReducer, getUserAttributesRequest, getProjectAttributesRequest, getCustomQuestionsRequest, getEyeTrackingPacksRequest, getProjectBrandsRequest, getBrandAssetsRequest } from 'redux/reducers/Project/actionTypes';
 import { setErrorMess, setLoading } from 'redux/reducers/Status/actionTypes';
 import { routes } from 'routers/routes';
 import { ProjectService } from 'services/project';
@@ -22,6 +22,13 @@ function* requestGetProject(data: { type: string, id: number, callback: () => vo
         yield put(getEyeTrackingPacksRequest(data.id))
       } else if (project?.solution?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE){
         yield put(getVideosRequest(data.id))
+        yield put(getCustomQuestionsRequest(data.id))
+      } else if (project?.solution?.typeId === ESOLUTION_TYPE.BRAND_TRACKING){
+        yield put(getAdditionalBrandsRequest(data.id))
+        yield put(getProjectAttributesRequest(data.id))
+        yield put(getUserAttributesRequest(data.id))
+        yield put(getProjectBrandsRequest(data.id))
+        yield put(getBrandAssetsRequest(data.id))
         yield put(getCustomQuestionsRequest(data.id))
       }
       yield put(getTargetRequest(data.id))

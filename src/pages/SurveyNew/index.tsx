@@ -33,6 +33,7 @@ import { ETabRightPanel } from "models/project";
 import { useChangePrice } from "hooks/useChangePrice";
 import { Helmet } from "react-helmet";
 import { ESOLUTION_TYPE } from "models";
+import BrandTrack from "./BrandTrack";
 import Target from "./Target";
 
 export const Survey = () => {
@@ -255,6 +256,18 @@ export const Survey = () => {
                 case ESOLUTION_TYPE.PACK:
                   return (
                     <SetupSurvey
+                      {...routeProps}
+                      projectId={Number(id)}
+                      isHaveChangePrice={isHaveChangePrice}
+                      tabRightPanel={tabRightPanel}
+                      toggleOutlineMobile={toggleOutlineMobile}
+                      onToggleViewOutlineMobile={onToggleViewOutlineMobile}
+                      onChangeTabRightPanel={onChangeTabRightPanel}
+                    />
+                  )
+                case ESOLUTION_TYPE.BRAND_TRACKING:
+                  return (
+                    <BrandTrack
                       {...routeProps}
                       projectId={Number(id)}
                       isHaveChangePrice={isHaveChangePrice}
