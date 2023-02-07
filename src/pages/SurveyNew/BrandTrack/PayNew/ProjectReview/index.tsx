@@ -74,7 +74,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
     <>
       <Grid classes={{ root: classes.root }}>
         <Grid pt={4}>
-          <Heading4>Review your project details</Heading4>
+          <Heading4 $colorName="--eerie-black">Review your project details</Heading4>
           {isValidCheckout ? (
             <ParagraphBody>
               Please review your project setup. You can not edit these after
@@ -118,7 +118,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                         Monthly tracking
                       </ParagraphBody>
                     </Grid>
-                    <Grid className={classes.contentSampleAndTarhet}>
+                    <Grid className={classes.contentSampleAndTarget}>
                       <Grid className={classes.sampleTarget}>
                         <Heading5 $colorName={"--eerie-black"}>
                           Sample and target
@@ -134,7 +134,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                       </Grid>
                       <Grid
                         className={classes.contentSampleTarget}
-                        pl={1}
+                        pl={2}
                         mt={2}
                       >
                         <Box className={classes.value} pt={2}>
@@ -156,10 +156,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                               className={classes.customGridItem}
                             >
                               <ParagraphBody $colorName={"--eerie-black"}>
-                                600 first wave
-                              </ParagraphBody>
-                              <ParagraphBody $colorName={"--eerie-black"}>
-                                200 subsequent waves
+                                {project?.sampleSize} / month
                               </ParagraphBody>
                             </Grid>
                           </Grid>

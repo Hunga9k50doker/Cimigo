@@ -57,9 +57,10 @@
       height: 24px;
     }
   }
-  .contentSampleAndTarhet{
+  .contentSampleAndTarget{
     .sampleTarget{
       display: flex;
+      align-items: center;
       button{
         margin-left: 24px;
       }
@@ -68,6 +69,7 @@
       }
     }
     .contentSampleTarget{
+      margin-left: 8px;
       border-left: 1px dashed var(--gray-20);
     }
     @media only screen and (max-width: 899px) {
