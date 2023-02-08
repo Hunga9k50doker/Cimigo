@@ -29,6 +29,8 @@ import PopupConfirmMakeAnOrder from "../components/PopupConfirmMakeAnOrder";
 import { authPreviewOrPayment, formatOrdinalumbers } from "../models";
 import { GetPaymentSchedulePreview, PaymentSchedulePreview } from "models/payment_schedule";
 import clsx from "clsx";
+import {setMakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
+import { MakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule";
 export interface DateItem {
   id: number;
   date?: string;
@@ -43,18 +45,12 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const { user } = useAuth();
   const [listDate, setListDate] = useState<DateItem[]>([]);
   const [viewPS, setViewPS] = useState<Boolean>(false);
-  const [duaDate, setDuaDate] = useState("");
   const [selectedDate, setSelectedDate] = useState<DateItem>();
   const [onSubmitMakeAnOrder, seOnSubmitMakeAnOrder] = useState(false);
   const [listSchedulePreview, setListSchedulePreview] =
     useState<DataPagination<PaymentSchedulePreview>>();
   const onClickDate = (dateItem: DateItem) => {
     setSelectedDate(dateItem);
-    setDuaDate(formatDateToString(dateItem));
-  };
-  const formatDateToString = (val: DateItem) => {
-    var newDate = new Date(val.date);
-    return moment(newDate.setDate(newDate.getDate() - 7)).lang(i18n.language).format("MMM DD, yyyy");
   };
   const viewListPS = () => {
     setViewPS(!viewPS);
@@ -95,6 +91,11 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
     })
       .then(() => {
         seOnSubmitMakeAnOrder(false)
+        const paramMakeAnOrder: MakeAnOrderReducer = {
+          projectId,
+          startDate: new Date(moment(selectedDate.date).format('YYYY-MM-DD')),
+        }
+        dispatch(setMakeAnOrderReducer(paramMakeAnOrder));
         dispatch(
           push(
             routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder.replace(
@@ -124,7 +125,6 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
       };
       if (i === 0) {
         setSelectedDate(days[i]);
-        setDuaDate(formatDateToString(days[i]));
       }
     }
     setListDate([...days]);

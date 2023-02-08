@@ -31,13 +31,18 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { DataPagination, ECurrency } from "models/general";
 import PopupConfirmCancelSubsription from "../components/PopupConfirmCancelSubsription";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import moment from "moment";
 import { PaymentScheduleService } from "services/payment_schedule";
 import { fCurrencyVND } from "utils/formatNumber";
 import useAuth from "hooks/useAuth";
+import { ReducerType } from "redux/reducers";
+import { push } from "connected-react-router";
+import { authPreviewOrPayment } from "../models";
+import { MakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule";
+import { setMakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
 interface MakeAnOrderProp {
   projectId: number;
 }
@@ -62,6 +67,7 @@ interface CustomSlide {
   prevArrow: React.ReactNode;
   nextArrow: React.ReactNode;
 }
+
 const paramsSlideDefault: CustomSlide = {
   navigator: true,
   dots: true,
@@ -93,6 +99,10 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const { user } = useAuth();
   const dispatch = useDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down(768));
+  const { project } = useSelector((state: ReducerType) => state.project);
+  const { makeAnOrderPaymentSchedule } = useSelector(
+    (state: ReducerType) => state.makeAnOrder
+  );
   const [slide, setSlide] =
     useState<DataPagination<SlidePaymentScheduleMakeAnOrder>>();
   const [params, setParams] = useState<GetListPaymentScheduleHistory>({
@@ -105,6 +115,9 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const [customSlide, setCustomSlide] = useState<CustomSlide>({
     ...paramsSlideDefault,
   });
+  const [checkMakeAnOrder, setCheckMakeAnOrder] = useState<Boolean>(false);
+  const [alertPaymentReminder, setAlertPaymentReminder] =
+    useState<SlidePaymentScheduleMakeAnOrder>();
   const handleChangePage = (
     _: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     newPage: number
@@ -178,6 +191,25 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
   };
+  const onRedirect = (route: string) => {
+    dispatch(push(route.replace(":id", `${project.id}`)));
+  };
+  const setDefaultMakeAnOrderReducer = () => {
+    const paramMakeAnOrder: MakeAnOrderReducer = {
+      projectId: null,
+      startDate: null,
+    };
+    dispatch(setMakeAnOrderReducer(paramMakeAnOrder));
+  };
+
+  useEffect(() => {
+    authPreviewOrPayment(project, onRedirect);
+    if (project && project?.id === makeAnOrderPaymentSchedule?.projectId) {
+      setCheckMakeAnOrder(true);
+      setDefaultMakeAnOrderReducer();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project]);
   useEffect(() => {
     if (inValidPage()) {
       handleChangePage(null, listPaymentHistory.meta.page - 2);
@@ -200,12 +232,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)));
     };
-    if (projectId) {
-      getListSlide();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectId]);
-  useEffect(() => {
+    getListSlide();
     setParams({ ...params, projectId: projectId });
     getPaymmentHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -240,46 +267,77 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     getPaymmentHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
+  useEffect(() => {
+    const checkPaymentReminder = () => {
+      var now = moment().add(14, "d").format("DD MMM yyyy");
+      console.log(now, "99999999999999999");
+      slide?.data.map((item) => {
+        var dueDate = moment(item.dueDate).format("DD MMM yyyy");
+        console.log(
+          `dueDate: ${dueDate} <=> Now: ${now}`,
+          "66666666666666666666"
+        );
+        if (now >= dueDate && item.status === 0) {
+          setAlertPaymentReminder(item);
+          console.log(item, "88888888888888888");
+        }
+      });
+    };
+    if (slide?.data) {
+      checkPaymentReminder();
+    }
+  }, [slide]);
   return (
     <>
       <Grid classes={{ root: classes.root }}>
-        <Alert
-          title={"Thanks for making an order!"}
-          content={
-            <ParagraphBody $colorName={"--eerie-black"}>
-              Fieldwork will start at the beginning of Jan 2023 if you make the
-              first payment by Nov 25, 2023. Subsequent payments will be made
-              every 3 months.
-            </ParagraphBody>
-          }
-          type={AlerType.Success}
-        />
-        <Alert
-          title={"A payment is about to become due."}
-          content={
-            <Box>
+        {checkMakeAnOrder && (
+          <Alert
+            title={"Thanks for making an order!"}
+            content={
               <ParagraphBody $colorName={"--eerie-black"}>
-                You have a pending payment that is about to become overdue. You
-                must process the payment by December 25, 2022 to avoid being
-                terminated.
+                Fieldwork will start at the beginning of Jan 2023 if you make
+                the first payment by Nov 25, 2023. Subsequent payments will be
+                made every 3 months.
               </ParagraphBody>
+            }
+            type={AlerType.Success}
+          />
+        )}
+        {alertPaymentReminder && (
+          <Alert
+            title={"A payment is about to become due."}
+            content={
+              <Box>
+                <ParagraphBody $colorName={"--eerie-black"}>
+                  You have a pending payment that is about to become overdue.
+                  You must process the payment by{" "}
+                  {moment(alertPaymentReminder.dueDate)
+                    .lang(i18n.language)
+                    .format("MMMM DD, yyyy")}{" "}
+                  to avoid being terminated.
+                </ParagraphBody>
+                <ParagraphBody $colorName={"--eerie-black"}>
+                  If you have made the payment, please wait for Cimigo to
+                  process.
+                </ParagraphBody>
+              </Box>
+            }
+            type={AlerType.Warning}
+          />
+        )}
+        {project?.status == 4 && (
+          <Alert
+            title={"Your subscription canceled!"}
+            content={
               <ParagraphBody $colorName={"--eerie-black"}>
-                If you have made the payment, please wait for Cimigo to process.
+                You have canceled your subscription. The results are still
+                available to you.
               </ParagraphBody>
-            </Box>
-          }
-          type={AlerType.Warning}
-        />
-        <Alert
-          title={"Your subscription canceled!"}
-          content={
-            <ParagraphBody $colorName={"--eerie-black"}>
-              You have canceled your subscription. The results are still
-              available to you.
-            </ParagraphBody>
-          }
-          type={AlerType.Default}
-        />
+            }
+            type={AlerType.Default}
+          />
+        )}
+
         <Grid pt={4}>
           <Grid className={classes.yourNextPaymentHeader}>
             <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"}>
@@ -364,15 +422,15 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
               })}
             </Slider>
           </Box>
-          {listPaymentHistory?.data.length  ? (
-          <>
-            <Grid className={classes.paymentHistory} pt={6}>
-              <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"}>
-                Payment history
-              </Heading4>
-              
-              <Grid className={classes.listPayemnt} pt={2}>
-                {listPaymentHistory?.data.map((itemPaymentHistory) => {
+          {listPaymentHistory?.data.length ? (
+            <>
+              <Grid className={classes.paymentHistory} pt={6}>
+                <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"}>
+                  Payment history
+                </Heading4>
+
+                <Grid className={classes.listPayemnt} pt={2}>
+                  {listPaymentHistory?.data.map((itemPaymentHistory) => {
                     <Box
                       className={classes.itemPayment}
                       key={itemPaymentHistory.id}
@@ -383,7 +441,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                             {`${moment(itemPaymentHistory.schedule.start)
                               .lang(i18n.language)
                               .format("MMM yyyy")} - ${moment(
-                                itemPaymentHistory.schedule.end
+                              itemPaymentHistory.schedule.end
                             )
                               .lang(i18n.language)
                               .format("MMM yyyy")}`}
@@ -416,41 +474,47 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                       </Grid>
                     </Box>;
                   })}
+                </Grid>
+              </Grid>
+              <Grid className={classes.pagination} pt={4}>
+                <TablePagination
+                  labelRowsPerPage={t("common_row_per_page")}
+                  labelDisplayedRows={function defaultLabelDisplayedRows({
+                    from,
+                    to,
+                    count,
+                  }) {
+                    return t("common_row_of_page", {
+                      from: from,
+                      to: to,
+                      count: count,
+                    });
+                  }}
+                  component="div"
+                  count={listPaymentHistory?.meta?.itemCount || 0}
+                  rowsPerPage={listPaymentHistory?.meta?.take || 10}
+                  page={pageIndex}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </Grid>
+            </>
+          ) : (
+            <Grid className={classes.paymentHistory} pt={6}>
+              <Heading4 $fontWeight={"400"} $colorName={"--gray-black"}>
+                Payment history
+              </Heading4>
+              <Grid className={classes.listPayemnt} pt={2}>
+                <Heading4
+                  $fontWeight={"400"}
+                  textAlign={"center"}
+                  $colorName={"--gray-40"}
+                >
+                  List Payment History Not Found!
+                </Heading4>
               </Grid>
             </Grid>
-            <Grid className={classes.pagination} pt={4}>
-              <TablePagination
-                labelRowsPerPage={t("common_row_per_page")}
-                labelDisplayedRows={function defaultLabelDisplayedRows({
-                  from,
-                  to,
-                  count,
-                }) {
-                  return t("common_row_of_page", {
-                    from: from,
-                    to: to,
-                    count: count,
-                  });
-                }}
-                component="div"
-                count={listPaymentHistory?.meta?.itemCount || 0}
-                rowsPerPage={listPaymentHistory?.meta?.take || 10}
-                page={pageIndex}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-            </Grid>
-          </>):(
-            <Grid className={classes.paymentHistory} pt={6}>
-            <Heading4  $fontWeight={"400"} $colorName={"--gray-black"}>
-              Payment history
-            </Heading4>
-            <Grid className={classes.listPayemnt} pt={2}>
-              <Heading4 $fontWeight={"400"} textAlign={"center"} $colorName={"--gray-40"}>List Payment History Not Found!</Heading4>
-            </Grid>
-          </Grid>
-          )
-          }
+          )}
         </Grid>
       </Grid>
       <PopupConfirmCancelSubsription

@@ -13,10 +13,6 @@ export const authPreviewOrPayment = (project: Project, onRedirect: (route: strin
     case ProjectStatus.AWAIT_PAYMENT:
       onRedirect(routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder);
       break;
-    case ProjectStatus.IN_PROGRESS:
-    case ProjectStatus.COMPLETED:
-      onRedirect(routes.project.detail.paymentBilling.completed)
-      break;
   }
 }
 const ordinals: string[] = ['th', 'st', 'nd', 'rd'];
