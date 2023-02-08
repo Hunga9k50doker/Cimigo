@@ -27,33 +27,31 @@ interface ProjectReviewProps {}
 const ProjectReview = memo(({}: ProjectReviewProps) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  // const { configs } = useSelector((state: ReducerType) => state.user)
   const { project, cancelPayment } = useSelector((state: ReducerType) => state.project);
 
   const isValidBasic = useMemo(() => ProjectHelper.isValidBasic(project) || 0, [project]);
 
   const mainBrands = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.MAIN) || [], [project]);
-  const minMainBrand = useMemo(() => ProjectHelper.minMainBrand(project) || 0, [project]);
-  const isValidMainBrand = useMemo(() => mainBrands?.length >= minMainBrand, [project, mainBrands, minMainBrand]);
+  const mainBrandNeedMore = useMemo(() => ProjectHelper.mainBrandNeedMore(project) || 0, [project]);
+  const isValidMainBrand = useMemo(() => ProjectHelper.isValidMainBrand(project), [project]);
   
   const competingBrands = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING) || [], [project]);
-  const minCompetingBrand = useMemo(() => ProjectHelper.minCompetingBrand(project) || 0, [project]);
-  const isValidCompetingBrand = useMemo(() => competingBrands?.length >= minCompetingBrand, [project, competingBrands, minCompetingBrand]);
+  const competingBrandNeedMore = useMemo(() => ProjectHelper.competingBrandNeedMore(project) || 0, [project]);
+  const isValidCompetingBrand = useMemo(() => ProjectHelper.isValidCompetingBrand(project), [project]);
   
   const isValidBrandList = useMemo(() => ProjectHelper.isValidBrandList(project) || 0, [project]);
   
   const competitiveBrands = useMemo(() => project?.projectBrands || [], [project]);
-  const minCompetitiveBrand = useMemo(() => ProjectHelper.minCompetitiveBrand(project) || 0, [project]);
-  const isValidCompetitiveBrand = useMemo(() => competitiveBrands?.length >= minCompetitiveBrand, [project, competitiveBrands, minCompetitiveBrand]);
+  const competitiveBrandNeedMore = useMemo(() => ProjectHelper.competitiveBrandNeedMore(project) || 0, [project]);
+  const isValidCompetitiveBrand = useMemo(() => ProjectHelper.isValidCompetitiveBrand(project), [project]);
   
   const numberOfBrandEquityAttributes = useMemo(() => project?.projectAttributes?.length + project?.userAttributes?.length || 0, [project]);
-  const minEquityAttributes = useMemo(() => ProjectHelper.minEquityAttributes(project) || 0, [project]);
-  const isValidBrandEquityAttributes = useMemo(() => numberOfBrandEquityAttributes >= minEquityAttributes, [project, numberOfBrandEquityAttributes, minEquityAttributes]);
+  const brandEquityAttributesNeedMore = useMemo(() => ProjectHelper.brandEquityAttributesNeedMore(project) || 0, [project]);
+  const isValidBrandEquityAttributes = useMemo(() => ProjectHelper.isValidEquityAttributes(project), [project]);
   
   const isValidBrandDispositionAndEquity = useMemo(() => ProjectHelper.isValidBrandDispositionAndEquity(project) || 0, [project]);
   
-  const brandAssets = useMemo(() => project?.brandAssets || [], [project]);
-  const minBrandAssetRecognition = useMemo(() => ProjectHelper.minBrandAssetRecognition(project) || 0, [project]);
+  const brandAssetRecognitionNeedMore = useMemo(() => ProjectHelper.brandAssetRecognitionNeedMore(project) || 0, [project]);
   const isValidBrandAssetRecognition = useMemo(() => ProjectHelper.isValidBrandAssetRecognition(project) || 0, [project]);
 
   const gotoSetupSurvey = () => {
@@ -112,7 +110,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
         <Grid pt={4}>
           <Heading4 $colorName="--eerie-black">Review your project details</Heading4>
           {isValidCheckout ? (
-            <ParagraphBody>Please review your project setup. You can not edit these after making an order.</ParagraphBody>
+            <ParagraphBody $colorName="--eerie-black">Please review your project setup. You can not edit these after making an order.</ParagraphBody>
           ) : (
             <ParagraphBody
               className={clsx(classes.title, classes.titleDanger)}
@@ -130,18 +128,18 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                 <Grid item xs={12} md={6}>
                   <Box className={classes.leftContent}>
                     <Grid className={classes.solution}>
-                      <Heading5 $colorName={"--eerie-black"}>Solution</Heading5>
-                      <Box className={classes.solutionItem}>
+                      <Heading5 $colorName={"--eerie-black"} className={classes.leftContentItemTitle}>Solution</Heading5>
+                      <Box className={clsx(classes.solutionItem, classes.leftContentItemDescription)}>
                         <img
                           src={project?.solution?.image}
                           alt="solution"
                         />
-                        <ParagraphBody $colorName={"--eerie-black"} ml={0.5}>{project?.solution?.title}</ParagraphBody>
+                        <ParagraphBody $colorName={"--eerie-black"} ml={0.5} className={classes.solutionTitle}>{project?.solution?.title}</ParagraphBody>
                       </Box>
                     </Grid>
                     <Grid className={classes.delivery}>
-                      <Heading5 $colorName={"--eerie-black"}>Delivery results</Heading5>
-                      <ParagraphBody pl={8.6} $colorName={"--eerie-black"}>
+                      <Heading5 $colorName={"--eerie-black"} className={classes.leftContentItemTitle}>Delivery results</Heading5>
+                      <ParagraphBody $colorName={"--eerie-black"} className={classes.leftContentItemDescription}>
                         Monthly tracking
                       </ParagraphBody>
                     </Grid>
@@ -219,16 +217,16 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                               0 main brand
                             </ParagraphBody>
                             )}
-                          {isValidCompetingBrand && (
+                          {competingBrands?.length > 0 && (
                             <ParagraphBody $colorName={"--eerie-black-00"}>+ {competingBrands?.length} more</ParagraphBody>
                           )}
                           {!isValidBrandList && (
                             <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandList}>
                               {!isValidMainBrand && !isValidCompetingBrand
-                                ? `Required at least ${minMainBrand} main brand(s) and ${minCompetingBrand} competing brand(s)`
+                                ? `Required at least ${mainBrandNeedMore} more main brand(s) and at least  ${competingBrandNeedMore} more competing brand(s)`
                                 : !isValidMainBrand
-                                ? `Required at least ${minMainBrand} main brand(s)`
-                                : `Required at least ${minCompetingBrand} competing brand(s)`}
+                                ? `Required at least ${mainBrandNeedMore} more main brand(s)`
+                                : `Required at least ${competingBrandNeedMore} more competing brand(s)`}
                             </ParagraphSmall>
                           )}
                         </Grid>
@@ -248,10 +246,10 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                           {!isValidBrandDispositionAndEquity && (
                             <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandDispositionAndEquity}>
                               {!isValidCompetitiveBrand && !isValidBrandEquityAttributes
-                                ? `Required at least ${minCompetitiveBrand} competitive brand(s) and ${minEquityAttributes} equity attribute(s)`
+                                ? `Required at least ${competitiveBrandNeedMore} more competitive brand(s) and at least ${brandEquityAttributesNeedMore} more equity attribute(s)`
                                 : !isValidCompetitiveBrand
-                                ? `Required at least ${minCompetitiveBrand} competitive brand(s)`
-                                : `Required at least ${minEquityAttributes} equity attribute(s)`}
+                                ? `Required at least ${competitiveBrandNeedMore} more competitive brand(s)`
+                                : `Required at least ${brandEquityAttributesNeedMore} more equity attribute(s)`}
                             </ParagraphSmall>
                           )}
                         </Grid>
@@ -262,11 +260,11 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                         </Grid>
                         <Grid item xs={6}>
                           <ParagraphBody $colorName={"--eerie-black-00"}>
-                            <span className={classes.boldContent}>{brandAssets?.length}</span> asset(s)
+                            <span className={classes.boldContent}>{project?.brandAssets?.length}</span> asset(s)
                           </ParagraphBody>
                           {!isValidBrandAssetRecognition && (
                             <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandAssetRecognition}>
-                              Required at least {minBrandAssetRecognition} brand asset(s)
+                              Required at least {brandAssetRecognitionNeedMore} more brand asset(s)
                             </ParagraphSmall>
                           )}
                         </Grid>

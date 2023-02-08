@@ -47,9 +47,12 @@
     }
     .solutionItem{
       display: flex;
-      padding-left: 144px;
       @media only screen and (max-width: 767px) {
         padding-left: 50px;
+      }
+      .solutionTitle {
+        word-wrap: break-word;
+        white-space: pre-wrap;
       }
     } 
     img{
@@ -89,7 +92,18 @@
       border-bottom: 1px solid var(--gray-20);
     }
   }
-  
+
+  .leftContentItemTitle {
+    @media only screen and (min-width: 898px) {
+      width: 45%;
+    }
+  }
+  .leftContentItemDescription {
+    @media only screen and (min-width: 898px) {
+      width: 55%;
+      padding-right: 8px;
+    }
+  }
 }
 .rightContent{
   .survey{

@@ -215,17 +215,29 @@ export class ProjectHelper {
   static isValidBasic(project: Project) {
     return !!project?.category
   }
+  
+  static isValidMainBrand(project: Project): boolean {
+    return (project?.additionalBrands?.filter(item => item?.typeId === EBrandType.MAIN)?.length ?? 0) >= ProjectHelper.minMainBrand(project)
+  }
+  
+  static isValidCompetingBrand(project: Project): boolean {
+    return (project?.additionalBrands?.filter(item => item?.typeId === EBrandType.COMPETING)?.length ?? 0) >= ProjectHelper.minCompetingBrand(project)
+  }
 
   static isValidBrandList(project: Project): boolean {
-    const isValidMainBrand = (project?.additionalBrands?.filter(item => item?.typeId === EBrandType.MAIN)?.length ?? 0) >= ProjectHelper.minMainBrand(project)
-    const isValidCompetingBrand = (project?.additionalBrands?.filter(item => item?.typeId === EBrandType.COMPETING)?.length ?? 0) >= ProjectHelper.minCompetingBrand(project)
-    return isValidMainBrand && isValidCompetingBrand
+    return ProjectHelper.isValidMainBrand(project) && ProjectHelper.isValidCompetingBrand(project)
+  }
+  
+  static isValidCompetitiveBrand(project: Project): boolean {
+    return (project?.projectBrands?.length ?? 0) >= ProjectHelper.minCompetitiveBrand(project)
+  }
+  
+  static isValidEquityAttributes(project: Project): boolean {
+    return (project?.projectAttributes?.length + project?.userAttributes?.length ?? 0) >= ProjectHelper.minEquityAttributes(project)
   }
 
   static isValidBrandDispositionAndEquity(project: Project): boolean {
-    const isValidCompetitiveBrand = (project?.projectBrands?.length ?? 0) >= ProjectHelper.minCompetitiveBrand(project)
-    const isValidEquityAttributes = (project?.projectAttributes?.length + project?.userAttributes?.length ?? 0) >= ProjectHelper.minEquityAttributes(project)
-    return isValidCompetitiveBrand && isValidEquityAttributes
+    return ProjectHelper.isValidCompetitiveBrand(project) && ProjectHelper.isValidEquityAttributes(project)
   }
 
   static isValidBrandAssetRecognition(project: Project) {
