@@ -236,23 +236,6 @@
     color: var(--eerie-black-65);
   }
 }
-.cancelPayment {
-  padding: 24px 16px 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  > * {
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-      color: var(--cimigo-blue);
-      text-underline-position: under;
-    }
-  }
-  @media only screen and (max-width: 767px) {
-    border-top: 2px solid rgba(28, 28, 28, 0.05);
-  }
-}
 .paddingMobile {
   @media only screen and (max-width: 767px) {
     padding-left: 24px;
