@@ -203,7 +203,6 @@ const PopupPayNow = memo((props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentInfo, user]);
 
-
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
       switch (name) {
@@ -346,7 +345,8 @@ const PopupPayNow = memo((props: Props) => {
                         className={classes.titleSub}
                         translation-key="payment_billing_sub_tab_payment_method_bank_transfer_sub"
                       >
-                        {t("payment_billing_sub_tab_payment_method_bank_transfer_sub")}
+                        {/* {t("payment_billing_sub_tab_payment_method_bank_transfer_sub")} */}
+                        Our bank account details will be provided in the next step.
                       </ParagraphSmall>
                     </Grid>
                   </Box>
@@ -378,7 +378,8 @@ const PopupPayNow = memo((props: Props) => {
                         className={classes.titleSub}
                         translation-key="payment_billing_sub_tab_payment_method_onepay_sub"
                       >
-                        {t("payment_billing_sub_tab_payment_method_onepay_sub")}
+                        {/* {t("payment_billing_sub_tab_payment_method_onepay_sub")} */}
+                        Your payment will be processed securely by Onepay in VND.
                       </ParagraphSmall>
                     </Grid>
                   </Box>
@@ -403,7 +404,11 @@ const PopupPayNow = memo((props: Props) => {
                         className={classes.titleSub}
                         translation-key="payment_billing_sub_tab_payment_method_make_an_order_sub"
                       >
-                        {t("payment_billing_sub_tab_payment_method_make_an_order_sub")}
+                        {/* {t("payment_billing_sub_tab_payment_method_make_an_order_sub")} */}
+                        Have any trouble with your payment?
+                        <br />
+                        {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER &&
+                          "Please leave your contact information so that the Cimigo staff can assist you."}
                       </ParagraphSmall>
                       {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
                         <Box mb={4} mt={2} sx={{ maxWidth: "325px" }}>
