@@ -270,16 +270,10 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   useEffect(() => {
     const checkPaymentReminder = () => {
       var now = moment().add(14, "d").format("DD MMM yyyy");
-      console.log(now, "99999999999999999");
       slide?.data.map((item) => {
         var dueDate = moment(item.dueDate).format("DD MMM yyyy");
-        console.log(
-          `dueDate: ${dueDate} <=> Now: ${now}`,
-          "66666666666666666666"
-        );
         if (now >= dueDate && item.status === 0) {
           setAlertPaymentReminder(item);
-          console.log(item, "88888888888888888");
         }
       });
     };
