@@ -86,13 +86,6 @@ const paramsSlideDefault: CustomSlide = {
     </span>
   ),
 };
-const paramsListPaymentHistoryDefault: GetListPaymentScheduleHistory = {
-  take: 10,
-  page: 1,
-  sortedField: SortedField.updatedAt,
-  isDescending: true,
-  projectId: 0,
-};
 const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
@@ -105,8 +98,15 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   );
   const [slide, setSlide] =
     useState<DataPagination<SlidePaymentScheduleMakeAnOrder>>();
+  const paramsListPaymentHistoryDefault: GetListPaymentScheduleHistory = {
+    take: 10,
+    page: 1,
+    sortedField: SortedField.updatedAt,
+    isDescending: true,
+    projectId: projectId,
+  };
   const [params, setParams] = useState<GetListPaymentScheduleHistory>({
-    ...paramsListPaymentHistoryDefault,
+    ...paramsListPaymentHistoryDefault
   });
   const [listPaymentHistory, setListPaymentHistory] =
     useState<DataPagination<PaymentScheduleHistory>>();
@@ -157,7 +157,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const cancelSubscription = () => {
     setOnSubmitCancelSubsription(true);
   };
-  const goToPayNow = () => {};
+  const goToPayNow = () => { };
   const formatMoney = useCallback(
     (slide: SlidePaymentScheduleMakeAnOrder) => {
       switch (user?.currency) {
@@ -180,17 +180,6 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     },
     [user?.currency]
   );
-  const getPaymmentHistory = async () => {
-    PaymentScheduleService.getListPaymentScheduleHistory(params)
-      .then((res) => {
-        setListPaymentHistory({
-          data: res.data,
-          meta: res.meta,
-        });
-      })
-      .catch((e) => dispatch(setErrorMess(e)))
-      .finally(() => dispatch(setLoading(false)));
-  };
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
@@ -218,25 +207,20 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   }, [listPaymentHistory]);
   useEffect(() => {
     const getListSlide = async () => {
-      dispatch(setLoading(true));
       const data: GetSlidePaymentSchedule = {
         projectId: projectId,
       };
-      PaymentScheduleService.getSlideMakeAnOrderPaymentSchedule(data)
+      dispatch(setLoading(true));
+      await PaymentScheduleService.getSlideMakeAnOrderPaymentSchedule(data)
         .then((res) => {
-          setSlide({
-            data: res.data,
-            meta: res.meta,
-          });
+          setSlide(res);
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)));
     };
-    getListSlide();
-    setParams({ ...params, projectId: projectId });
-    getPaymmentHistory();
+    getListSlide()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectId]);
+  }, [dispatch, projectId]);
   useEffect(() => {
     var customReponsiveSlide = {
       navigator: true,
@@ -264,7 +248,16 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile]);
   useEffect(() => {
-    getPaymmentHistory();
+    const getPaymentHistory = async () => {
+      dispatch(setLoading(true))
+      await PaymentScheduleService.getListPaymentScheduleHistory(params)
+        .then((res) => {
+          setListPaymentHistory(res);
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)));
+    }
+    getPaymentHistory()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
   useEffect(() => {
@@ -348,7 +341,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
           </Grid>
           <Box className={classes.slidePayment} pt={4}>
             <Slider {...customSlide}>
-              {slide?.data.map((item) => {
+              {slide?.data.map((item, index) => {
                 return (
                   <Grid className={classes.customItemSilde} key={item.id}>
                     <div
@@ -377,8 +370,8 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                             {`${moment(item.start)
                               .lang(i18n.language)
                               .format("MMM yyyy")} - ${moment(item.end)
-                              .lang(i18n.language)
-                              .format("MMM yyyy")}`}
+                                .lang(i18n.language)
+                                .format("MMM yyyy")}`}
                           </Heading3>
                           <ParagraphBody $colorName={"--gray-80"}>
                             {item.solutionConfig.paymentMonthSchedule} months
@@ -392,16 +385,34 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                         </Grid>
                         <Box className={classes.contentRight}>
                           <Box>
-                            <Button
-                              btnType={BtnType.Raised}
-                              endIcon={<CreditCardIcon />}
-                              children={
-                                <TextBtnSmall $colorName={"--white"}>
-                                  Pay now
-                                </TextBtnSmall>
-                              }
-                              onClick={goToPayNow}
-                            />
+                            {
+                              item.status === StatusSlide.NOT_PAID &&
+                              <Button
+                                btnType={BtnType.Raised}
+                                endIcon={<CreditCardIcon />}
+                                children={
+                                  <TextBtnSmall $colorName={"--white"}>
+                                    Pay now
+                                  </TextBtnSmall>
+                                }
+                                onClick={goToPayNow}
+                                disabled={!!index}
+                              />
+                            }
+                            {
+                              item.status === StatusSlide.IN_PROGRESS &&
+                              <Button
+                                btnType={BtnType.Raised}
+                                startIcon={<CreditCardIcon />}
+                                children={
+                                  <TextBtnSmall $colorName={"--white"}>
+                                    Processing...
+                                  </TextBtnSmall>
+                                }
+                                onClick={goToPayNow}
+                              />
+                            }
+
                             <ParagraphSmall pt={0.5}>
                               {`Due ${moment(item.dueDate)
                                 .lang(i18n.language)
@@ -424,7 +435,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                 </Heading4>
 
                 <Grid className={classes.listPayemnt} pt={2}>
-                  {listPaymentHistory?.data.map((itemPaymentHistory) => {
+                  {listPaymentHistory?.data.map((itemPaymentHistory) => (
                     <Box
                       className={classes.itemPayment}
                       key={itemPaymentHistory.id}
@@ -435,10 +446,10 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                             {`${moment(itemPaymentHistory.schedule.start)
                               .lang(i18n.language)
                               .format("MMM yyyy")} - ${moment(
-                              itemPaymentHistory.schedule.end
-                            )
-                              .lang(i18n.language)
-                              .format("MMM yyyy")}`}
+                                itemPaymentHistory.schedule.end
+                              )
+                                .lang(i18n.language)
+                                .format("MMM yyyy")}`}
                           </Heading5>
                           <Grid className={classes.moneyAndDate} pt={1}>
                             <Grid className={classes.money} pr={2.5}>
@@ -466,8 +477,8 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                           </ParagraphSmallUnderline2>
                         </Grid>
                       </Grid>
-                    </Box>;
-                  })}
+                    </Box>
+                  ))}
                 </Grid>
               </Grid>
               <Grid className={classes.pagination} pt={4}>
