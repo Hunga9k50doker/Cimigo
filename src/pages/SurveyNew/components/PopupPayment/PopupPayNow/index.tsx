@@ -312,10 +312,18 @@ const PopupPayNow = memo((props: Props) => {
           <Divider className={classes.divider1} />
           <Grid classes={{ root: classes.left }}>
             <ButtonClose $backgroundColor="--eerie-black-5" className={classes.btnCloseMobile} $colorName="--eerie-black-40" onClick={onCancel} />
-            <Heading3 $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_payment_method">
-              Dec 2022 - Feb 2023 payment
+            <Heading3 $colorName="--cimigo-blue" translation-key="brand_track_paynow_popup_payment_title">
+              {t("brand_track_paynow_popup_payment_title", { duration: "Dec 2022 - Feb 2023" })}
             </Heading3>
-            <ParagraphSmall $colorName="--gray-80">C7938 On Demand (SaaS) - ID: 6</ParagraphSmall>
+            <ParagraphBody display={"flex"} alignItems="center">
+              <ParagraphSmall $colorName="--gray-80" translation-key="brand_track_paynow_popup_on_demand_title">
+                C7938 {t("brand_track_paynow_popup_on_demand_title")}
+              </ParagraphSmall>
+              &nbsp;
+              <ParagraphSmall $colorName="--gray-80" translation-key="common_id">
+                - {t("common_id")}: 6
+              </ParagraphSmall>
+            </ParagraphBody>
             <Heading5 mt={3} mb={2} $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_payment_method">
               {t("payment_billing_sub_tab_payment_method")}:
             </Heading5>
@@ -343,10 +351,9 @@ const PopupPayNow = memo((props: Props) => {
                       <ParagraphSmall
                         $colorName="--gray-80"
                         className={classes.titleSub}
-                        translation-key="payment_billing_sub_tab_payment_method_bank_transfer_sub"
+                        translation-key="brand_track_paynow_popup_sub_tab_payment_method_bank_transfer_sub"
                       >
-                        {/* {t("payment_billing_sub_tab_payment_method_bank_transfer_sub")} */}
-                        Our bank account details will be provided in the next step.
+                        {t("brand_track_paynow_popup_sub_tab_payment_method_bank_transfer_sub")}
                       </ParagraphSmall>
                     </Grid>
                   </Box>
@@ -376,10 +383,9 @@ const PopupPayNow = memo((props: Props) => {
                       <ParagraphSmall
                         $colorName="--gray-80"
                         className={classes.titleSub}
-                        translation-key="payment_billing_sub_tab_payment_method_onepay_sub"
+                        translation-key="brand_track_paynow_popup_sub_tab_payment_method_onepay_sub"
                       >
-                        {/* {t("payment_billing_sub_tab_payment_method_onepay_sub")} */}
-                        Your payment will be processed securely by Onepay in VND.
+                        {t("brand_track_paynow_popup_sub_tab_payment_method_onepay_sub")}
                       </ParagraphSmall>
                     </Grid>
                   </Box>
@@ -402,13 +408,18 @@ const PopupPayNow = memo((props: Props) => {
                       <ParagraphSmall
                         $colorName="--gray-80"
                         className={classes.titleSub}
-                        translation-key="payment_billing_sub_tab_payment_method_make_an_order_sub"
+                        translation-key="brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub"
                       >
-                        {/* {t("payment_billing_sub_tab_payment_method_make_an_order_sub")} */}
-                        Have any trouble with your payment?
-                        <br />
-                        {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER &&
-                          "Please leave your contact information so that the Cimigo staff can assist you."}
+                        {t("brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub")}
+                        {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
+                          <ParagraphSmall
+                            $colorName="--gray-80"
+                            className={classes.titleSub}
+                            translation-key="brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub_2"
+                          >
+                            {t("brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub_2")}
+                          </ParagraphSmall>
+                        )}
                       </ParagraphSmall>
                       {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
                         <Box mb={4} mt={2} sx={{ maxWidth: "325px" }}>
@@ -621,18 +632,22 @@ const PopupPayNow = memo((props: Props) => {
                 <Heading4 className={classes.sumaryTitle} $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_payment_summary">
                   {t("payment_billing_sub_tab_payment_summary")}
                 </Heading4>
-                <Heading5 mb={-1}>Items</Heading5>
+                <Heading5 mb={-1} translate-key="brand_track_paynow_popup_items_title">
+                  {t("brand_track_paynow_popup_items_title")}
+                </Heading5>
                 <Divider />
                 <div className={classes.flexOrder}>
-                  <ParagraphBody $colorName="--eerie-black" $fontWeight={500} translation-key="">
-                    Brand track (3 months)
+                  <ParagraphBody $colorName="--eerie-black" $fontWeight={500} translation-key="brand_track_paynow_popup_project_name">
+                    {t("brand_track_paynow_popup_project_name", { time: `3 months` })}
                   </ParagraphBody>
                   <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
                     150,000,000 đ
                   </ParagraphBody>
                 </div>
                 <ParagraphExtraSmall $colorName="--eerie-black">Dec 2022 - Feb 2023</ParagraphExtraSmall>
-                <ParagraphExtraSmall $colorName="--eerie-black">Project ID: 6</ParagraphExtraSmall>
+                <ParagraphExtraSmall $colorName="--eerie-black" translation-key="brand_track_paynow_popup_project_id">
+                  {t("brand_track_paynow_popup_project_id")}: 6
+                </ParagraphExtraSmall>
                 <Divider />
                 <div className={classes.flexOrder}>
                   <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
@@ -661,9 +676,8 @@ const PopupPayNow = memo((props: Props) => {
                 </div>
               </Grid>
               <Button fullWidth type="submit" className={classes.btn} btnType={BtnType.Primary} disabled={!Number(watch("paymentMethodId"))}>
-                <TextBtnSecondary translation-key="payment_billing_sub_tab_payment_summary_place_order">
-                  {/* {t("payment_billing_sub_tab_payment_summary_place_order")} */}
-                  Make payment
+                <TextBtnSecondary translation-key="brand_track_paynow_popup_make_payment">
+                  {t("brand_track_paynow_popup_make_payment")}
                 </TextBtnSecondary>
               </Button>
             </Grid>
@@ -678,9 +692,8 @@ const PopupPayNow = memo((props: Props) => {
               </Heading3>
             </Grid>
             <Button type="submit" sx={{ whiteSpace: "nowrap" }} btnType={BtnType.Primary} disabled={!Number(watch("paymentMethodId"))}>
-              <TextBtnSecondary translation-key="payment_billing_sub_tab_payment_summary_place_order">
-                {/* {t("payment_billing_sub_tab_payment_summary_place_order")} */}
-                Make payment
+              <TextBtnSecondary translation-key="brand_track_paynow_popup_make_payment">
+                {t("brand_track_paynow_popup_make_payment")}
               </TextBtnSecondary>
             </Button>
           </Grid>
@@ -690,5 +703,4 @@ const PopupPayNow = memo((props: Props) => {
     </PopupPayment>
   );
 });
-
 export default PopupPayNow;
