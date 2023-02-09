@@ -45,6 +45,7 @@ import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
 import { authPreviewOrPayment } from "../models";
 import { MakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule";
+import { usePrice } from "helpers/price";
 import { setMakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
 interface MakeAnOrderProp {
   projectId: number;
@@ -117,17 +118,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     setOnSubmitCancelSubsription(true);
   };
   const goToPayNow = () => { };
-  const formatMoney = useCallback(
-    (slide: SlidePaymentScheduleMakeAnOrder) => {
-      switch (user?.currency) {
-        case ECurrency.VND:
-          return `${fCurrencyVND(slide.totalAmount)}`;
-        case ECurrency.USD:
-          return `$${slide.totalAmountUSD}`;
-      }
-    },
-    [user?.currency]
-  );
+  const { getCostCurrency } = usePrice()
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
@@ -313,7 +304,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                             <span className={classes.iconDolar}>
                               <Dolar />
                             </span>
-                            {formatMoney(item)}
+                            {getCostCurrency(item.totalAmount)?.show}
                           </Heading3>
                         </Grid>
                         <Box className={classes.contentRight}>

@@ -16,15 +16,10 @@ import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnder
 import { PaymentScheduleService } from "services/payment_schedule";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { useDispatch } from "react-redux";
+import { usePrice } from "helpers/price";
 
 interface PaymentHistoryListProps {
     projectId: number;
-}
-
-enum SortedField {
-    name = "name",
-    createdAt = "createdAt",
-    updatedAt = "updatedAt",
 }
 
 const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
@@ -41,17 +36,7 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
     const [listPaymentHistory, setListPaymentHistory] =
         useState<DataPagination<PaymentScheduleHistory>>();
 
-    const formatMoneyHistory = useCallback(
-        (itemPaymentHistory: PaymentScheduleHistory) => {
-            switch (user?.currency) {
-                case ECurrency.VND:
-                    return `${fCurrencyVND(itemPaymentHistory.totalAmount)}`;
-                case ECurrency.USD:
-                    return `$${itemPaymentHistory.totalAmountUSD}`;
-            }
-        },
-        [user?.currency]
-    );
+    const { getCostCurrency } = usePrice()
 
     useEffect(() => {
         const getPaymentHistory = async () => {
@@ -141,7 +126,7 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
                                                         <span className={classes.iconDolar}>
                                                             <Dolar />
                                                         </span>
-                                                        {formatMoneyHistory(itemPaymentHistory)}
+                                                        {getCostCurrency(itemPaymentHistory.totalAmount)?.show}
                                                     </Grid>
                                                     <Grid className={classes.date}>
                                                         <DateRangeIcon
