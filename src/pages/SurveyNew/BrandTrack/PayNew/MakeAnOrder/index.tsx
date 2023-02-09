@@ -10,6 +10,7 @@ import "slick-carousel/slick/slick-theme.css";
 //end import slick
 import Heading5 from "components/common/text/Heading5";
 import Dolar from "components/icons/IconDolar";
+import IconHourGlass from "components/icons/IconHourGlass";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import Heading3 from "components/common/text/Heading3";
@@ -21,6 +22,7 @@ import Footer from "components/Footer";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Alert, { AlerType } from "../Alert";
 import { useTranslation } from "react-i18next";
+import ChipProjectStatus from "components/common/status/ChipProjectStatus";
 import {
   GetListPaymentScheduleHistory,
   GetSlidePaymentSchedule,
@@ -31,6 +33,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { DataPagination, ECurrency } from "models/general";
 import PopupConfirmCancelSubsription from "../components/PopupConfirmCancelSubsription";
+import PaymentHistoryList from "../components/PaymentHistoryList";
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
@@ -45,11 +48,6 @@ import { MakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule";
 import { setMakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
 interface MakeAnOrderProp {
   projectId: number;
-}
-enum SortedField {
-  name = "name",
-  createdAt = "createdAt",
-  updatedAt = "updatedAt",
 }
 enum StatusSlide {
   NOT_PAID,
@@ -98,18 +96,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   );
   const [slide, setSlide] =
     useState<DataPagination<SlidePaymentScheduleMakeAnOrder>>();
-  const paramsListPaymentHistoryDefault: GetListPaymentScheduleHistory = {
-    take: 10,
-    page: 1,
-    sortedField: SortedField.updatedAt,
-    isDescending: true,
-    projectId: projectId,
-  };
-  const [params, setParams] = useState<GetListPaymentScheduleHistory>({
-    ...paramsListPaymentHistoryDefault
-  });
-  const [listPaymentHistory, setListPaymentHistory] =
-    useState<DataPagination<PaymentScheduleHistory>>();
+
   const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
     useState(false);
   const [customSlide, setCustomSlide] = useState<CustomSlide>({
@@ -119,36 +106,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const [alertPaymentReminder, setAlertPaymentReminder] =
     useState<SlidePaymentScheduleMakeAnOrder>();
   const [dataPopupCancelSubsription, setDataPopupCancelSubsription] = useState<SlidePaymentScheduleMakeAnOrder>();
-  const handleChangePage = (
-    _: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    newPage: number
-  ) => {
-    setParams({ ...params, page: newPage + 1 });
-  };
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setParams({
-      ...params,
-      take: Number(event.target.value),
-      page: 1,
-    });
-  };
-  const inValidPage = () => {
-    if (!listPaymentHistory) return false;
-    return (
-      listPaymentHistory.meta.page > 1 &&
-      Math.ceil(
-        listPaymentHistory.meta.itemCount / listPaymentHistory.meta.take
-      ) < listPaymentHistory.meta.page
-    );
-  };
-  const pageIndex = useMemo(() => {
-    if (!listPaymentHistory) return 0;
-    if (inValidPage()) return listPaymentHistory.meta.page - 2;
-    return listPaymentHistory.meta.page - 1;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
   const onCloseSubmitCancelSubsription = () => {
     setOnSubmitCancelSubsription(false);
   };
@@ -166,17 +124,6 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
           return `${fCurrencyVND(slide.totalAmount)}`;
         case ECurrency.USD:
           return `$${slide.totalAmountUSD}`;
-      }
-    },
-    [user?.currency]
-  );
-  const formatMoneyHistory = useCallback(
-    (itemPaymentHistory: PaymentScheduleHistory) => {
-      switch (user?.currency) {
-        case ECurrency.VND:
-          return `${fCurrencyVND(itemPaymentHistory.totalAmount)}`;
-        case ECurrency.USD:
-          return `$${itemPaymentHistory.totalAmountUSD}`;
       }
     },
     [user?.currency]
@@ -200,12 +147,6 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
-  useEffect(() => {
-    if (inValidPage()) {
-      handleChangePage(null, listPaymentHistory.meta.page - 2);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listPaymentHistory]);
   useEffect(() => {
     const getListSlide = async () => {
       const data: GetSlidePaymentSchedule = {
@@ -249,19 +190,6 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile]);
   useEffect(() => {
-    const getPaymentHistory = async () => {
-      dispatch(setLoading(true))
-      await PaymentScheduleService.getListPaymentScheduleHistory(params)
-        .then((res) => {
-          setListPaymentHistory(res);
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)));
-    }
-    getPaymentHistory()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
-  useEffect(() => {
     const checkPaymentReminder = () => {
       var now = moment().add(14, "d").format("DD MMM yyyy");
       slide?.data.map((item, index) => {
@@ -269,7 +197,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
         if (now >= dueDate && item.status === 0) {
           setAlertPaymentReminder(item);
         }
-        if(item.status === StatusSlide.NOT_PAID && !index){
+        if (item.status === StatusSlide.NOT_PAID && !index) {
           setDataPopupCancelSubsription(item)
         }
       });
@@ -390,7 +318,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                         </Grid>
                         <Box className={classes.contentRight}>
                           <Box>
-                            {
+                          {
                               item.status === StatusSlide.NOT_PAID &&
                               <Button
                                 btnType={BtnType.Raised}
@@ -432,99 +360,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
               })}
             </Slider>
           </Box>
-          {listPaymentHistory?.data.length ? (
-            <>
-              <Grid className={classes.paymentHistory} pt={6}>
-                <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"}>
-                  Payment history
-                </Heading4>
-
-                <Grid className={classes.listPayemnt} pt={2}>
-                  {listPaymentHistory?.data.map((itemPaymentHistory) => (
-                    <Box
-                      className={classes.itemPayment}
-                      key={itemPaymentHistory.id}
-                    >
-                      <Grid container spacing={1}>
-                        <Grid item xs={12} sm={8}>
-                          <Heading5 $colorName={"--gray-90"}>
-                            {`${moment(itemPaymentHistory.schedule.start)
-                              .lang(i18n.language)
-                              .format("MMM yyyy")} - ${moment(
-                                itemPaymentHistory.schedule.end
-                              )
-                                .lang(i18n.language)
-                                .format("MMM yyyy")}`}
-                          </Heading5>
-                          <Grid className={classes.moneyAndDate} pt={1}>
-                            <Grid className={classes.money} pr={2.5}>
-                              <span className={classes.iconDolar}>
-                                <Dolar />
-                              </span>
-                              {formatMoneyHistory(itemPaymentHistory)}
-                            </Grid>
-                            <Grid className={classes.date}>
-                              <DateRangeIcon
-                                className={classes.iconCalendar}
-                                sx={{ marginRight: "10px" }}
-                              />
-                              {moment(itemPaymentHistory.completedDate)
-                                .lang(i18n.language)
-                                .format("MMM DD, yyyy")}
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                          <ParagraphSmallUnderline2
-                            className={classes.linkDownload}
-                          >
-                            Download invoice
-                          </ParagraphSmallUnderline2>
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  ))}
-                </Grid>
-              </Grid>
-              <Grid className={classes.pagination} pt={4}>
-                <TablePagination
-                  labelRowsPerPage={t("common_row_per_page")}
-                  labelDisplayedRows={function defaultLabelDisplayedRows({
-                    from,
-                    to,
-                    count,
-                  }) {
-                    return t("common_row_of_page", {
-                      from: from,
-                      to: to,
-                      count: count,
-                    });
-                  }}
-                  component="div"
-                  count={listPaymentHistory?.meta?.itemCount || 0}
-                  rowsPerPage={listPaymentHistory?.meta?.take || 10}
-                  page={pageIndex}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </Grid>
-            </>
-          ) : (
-            <Grid className={classes.paymentHistory} pt={6}>
-              <Heading4 $fontWeight={"400"} $colorName={"--gray-black"}>
-                Payment history
-              </Heading4>
-              <Grid className={classes.listPayemnt} pt={2}>
-                <Heading4
-                  $fontWeight={"400"}
-                  textAlign={"center"}
-                  $colorName={"--gray-40"}
-                >
-                  List Payment History Not Found!
-                </Heading4>
-              </Grid>
-            </Grid>
-          )}
+          <PaymentHistoryList projectId={projectId} />
         </Grid>
       </Grid>
       <PopupConfirmCancelSubsription

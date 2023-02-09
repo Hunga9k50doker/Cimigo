@@ -148,39 +148,6 @@
         min-height: 209px;
     }
 }
-.itemPayment{
-    border-bottom: 1px solid var(--gray-10);
-    padding: 16px 23px;
-    cursor: pointer;
-    .money,.date{
-        font-family: 'Montserrat';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 32px;
-    }
-    .iconCalendar{
-        position: relative;
-        top: 3px;
-    }
-    .moneyAndDate{
-        display: flex;
-        @media only screen and (max-width: 767px) {
-            display: block;
-        }
-    }
-    .linkDownload{
-        float: right;
-        padding-top: 16px;
-        @media only screen and (max-width: 768px) {
-            float: left;
-            padding-top:0px;
-        }
-    }
-}
-.itemPayment:hover{
-    background: var(--gray-2);
-}
 .iconDolar{
     position: relative;
     top: 5px;
