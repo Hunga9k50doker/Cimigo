@@ -638,7 +638,7 @@ const PopupPayNow = memo((props: Props) => {
                 <Divider />
                 <div className={classes.flexOrder}>
                   <ParagraphBody $colorName="--eerie-black" $fontWeight={500} translation-key="brand_track_paynow_popup_project_name">
-                    {t("brand_track_paynow_popup_project_name", { time: `3 months` })}
+                    {t("brand_track_paynow_popup_project_name", { time: `3 ${t("common_month", { s: 3 > 1 ? t("common_s") : "" })}` })}
                   </ParagraphBody>
                   <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
                     150,000,000 đ
