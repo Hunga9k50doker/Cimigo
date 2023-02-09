@@ -118,6 +118,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const [checkMakeAnOrder, setCheckMakeAnOrder] = useState<Boolean>(false);
   const [alertPaymentReminder, setAlertPaymentReminder] =
     useState<SlidePaymentScheduleMakeAnOrder>();
+  const [dataPopupCancelSubsription, setDataPopupCancelSubsription] = useState<SlidePaymentScheduleMakeAnOrder>();
   const handleChangePage = (
     _: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     newPage: number
@@ -263,16 +264,20 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   useEffect(() => {
     const checkPaymentReminder = () => {
       var now = moment().add(14, "d").format("DD MMM yyyy");
-      slide?.data.map((item) => {
+      slide?.data.map((item, index) => {
         var dueDate = moment(item.dueDate).format("DD MMM yyyy");
         if (now >= dueDate && item.status === 0) {
           setAlertPaymentReminder(item);
+        }
+        if(item.status === StatusSlide.NOT_PAID && !index){
+          setDataPopupCancelSubsription(item)
         }
       });
     };
     if (slide?.data) {
       checkPaymentReminder();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slide]);
   return (
     <>
@@ -523,6 +528,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
         </Grid>
       </Grid>
       <PopupConfirmCancelSubsription
+        payment={dataPopupCancelSubsription}
         isOpen={onSubmitCancelSubsription}
         onCancel={onCloseSubmitCancelSubsription}
         onSubmit={(reson) => submitCancelSubsription(reson)}

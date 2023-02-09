@@ -8,18 +8,21 @@ import { DialogActionsConfirm } from "components/common/dialogs/DialogActions";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
-import { memo, useMemo } from "react";
+import { memo, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Heading4 from "components/common/text/Heading4";
 import InputTextareaAutosize from "components/InputTextareaAutosize";
+import { SlidePaymentScheduleMakeAnOrder } from "models/payment_schedule";
+import moment from "moment";
 
 interface SubmitCancelSubsriptionFormData {
   reason: string;
 }
 interface PopupConfirmCancelSubsriptionProps {
   isOpen: boolean;
+  payment: SlidePaymentScheduleMakeAnOrder;
   onCancel: () => void;
   onSubmit: (reason: string) => void;
 }
@@ -28,7 +31,7 @@ const PopupConfirmCancelSubsription = memo(
   (props: PopupConfirmCancelSubsriptionProps) => {
     const { t, i18n } = useTranslation();
 
-    const { onCancel, onSubmit, isOpen } = props;
+    const { onCancel, onSubmit, isOpen, payment } = props;
     const schema = useMemo(() => {
       return yup.object().shape({
         name: yup.string().max(500, "Max 500 characters!"),
@@ -57,7 +60,6 @@ const PopupConfirmCancelSubsription = memo(
         reason: "",
       });
     };
-
     return (
       <Dialog
         scroll="paper"
@@ -80,16 +82,33 @@ const PopupConfirmCancelSubsription = memo(
           </DialogTitleConfirm>
           <DialogContentConfirm dividers>
             <Box sx={{ paddingTop: "24px" }}>
-              <ParagraphBody $colorName="--eerie-black" className={classes.description}>
-                Your subscription is paid until the end of <span>Mar 2023</span>. If you
-                would like to proceed with canceling your subscription, please
-                select “Stop my subscription” below.
+              <ParagraphBody
+                $colorName="--eerie-black"
+                className={classes.description}
+              >
+                Your subscription is paid until the end of{" "}
+                <span>
+                  {moment(payment?.dueDate).lang(i18n.language).format("MMM yyyy")}
+                </span>
+                . If you would like to proceed with canceling your subscription,
+                please select “Stop my subscription” below.
               </ParagraphBody>
-              <ParagraphBody $colorName="--eerie-black" pt={3} className={classes.description}>
-                After <span>Mar 2023</span>, your project will stop, but you can still access
-                your results dashboard.
+              <ParagraphBody
+                $colorName="--eerie-black"
+                pt={3}
+                className={classes.description}
+              >
+                After <span>
+                  {moment(payment?.dueDate).lang(i18n.language).format("MMM yyyy")}
+                </span>, your project will stop, but you can
+                still access your results dashboard.
               </ParagraphBody>
-              <ParagraphBody $colorName="--eerie-black" pt={3} pb={2} className={classes.description}>
+              <ParagraphBody
+                $colorName="--eerie-black"
+                pt={3}
+                pb={2}
+                className={classes.description}
+              >
                 Please let us know why you decided to cancel your subscription?
               </ParagraphBody>
               <InputTextareaAutosize
@@ -97,7 +116,7 @@ const PopupConfirmCancelSubsription = memo(
                 maxRows={10}
                 minRows={3}
                 placeholder={"Enter your reason here"}
-                inputRef={register('reason')}
+                inputRef={register("reason")}
                 errorMessage={errors.reason?.message}
               />
             </Box>
