@@ -46,6 +46,7 @@ export interface PaymentScheduleHistory {
   totalAmount: number;
   totalAmountUSD: number;
   completedDate?: Date;
+  currency?: string;
 }
 export interface GetListPaymentScheduleHistory {
   projectId: number;

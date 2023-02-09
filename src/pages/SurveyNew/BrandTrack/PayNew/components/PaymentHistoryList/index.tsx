@@ -126,7 +126,7 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
                                                         <span className={classes.iconDolar}>
                                                             <Dolar />
                                                         </span>
-                                                        {getCostCurrency(itemPaymentHistory.totalAmount)?.show}
+                                                        {getCostCurrency(itemPaymentHistory.totalAmount, itemPaymentHistory?.currency)?.show}
                                                     </Grid>
                                                     <Grid className={classes.date}>
                                                         <DateRangeIcon
