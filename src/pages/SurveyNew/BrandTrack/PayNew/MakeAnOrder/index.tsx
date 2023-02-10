@@ -1,4 +1,4 @@
-import { Box, TablePagination, useMediaQuery, useTheme } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Slider from "react-slick";
 import Heading4 from "components/common/text/Heading4";
@@ -8,30 +8,23 @@ import classes from "./styles.module.scss";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 //end import slick
-import Heading5 from "components/common/text/Heading5";
 import Dolar from "components/icons/IconDolar";
-import IconHourGlass from "components/icons/IconHourGlass";
-import DateRangeIcon from "@mui/icons-material/DateRange";
-import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import Heading3 from "components/common/text/Heading3";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Button, { BtnType } from "components/common/buttons/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Footer from "components/Footer";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Alert, { AlerType } from "../Alert";
 import { useTranslation } from "react-i18next";
-import ChipProjectStatus from "components/common/status/ChipProjectStatus";
 import {
-  GetListPaymentScheduleHistory,
   GetSlidePaymentSchedule,
-  PaymentScheduleHistory,
   SlidePaymentScheduleMakeAnOrder,
 } from "models/payment_schedule";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { DataPagination, ECurrency } from "models/general";
+import { DataPagination } from "models/general";
 import PopupConfirmCancelSubsription from "../components/PopupConfirmCancelSubsription";
 import PaymentHistoryList from "../components/PaymentHistoryList";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,14 +32,12 @@ import clsx from "clsx";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import moment from "moment";
 import { PaymentScheduleService } from "services/payment_schedule";
-import { fCurrencyVND } from "utils/formatNumber";
-import useAuth from "hooks/useAuth";
 import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
 import { authPreviewOrPayment } from "../models";
-import { MakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule";
+import { InfoMakeAnOrder } from "redux/reducers/MakeAnOrderPaymentSchedule";
 import { usePrice } from "helpers/price";
-import { setMakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
+import { setPaymentReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
 interface MakeAnOrderProp {
   projectId: number;
 }
@@ -88,12 +79,11 @@ const paramsSlideDefault: CustomSlide = {
 const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
-  const { user } = useAuth();
   const dispatch = useDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down(768));
   const { project } = useSelector((state: ReducerType) => state.project);
-  const { makeAnOrderPaymentSchedule } = useSelector(
-    (state: ReducerType) => state.makeAnOrder
+  const { isMakeAnOrder, infoMakeAnOrder } = useSelector(
+    (state: ReducerType) => state.payment
   );
   const [slide, setSlide] =
     useState<DataPagination<SlidePaymentScheduleMakeAnOrder>>();
@@ -123,16 +113,21 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
   const setDefaultMakeAnOrderReducer = () => {
-    const paramMakeAnOrder: MakeAnOrderReducer = {
+    const paramMakeAnOrder: InfoMakeAnOrder = {
       projectId: null,
       startDate: null,
     };
-    dispatch(setMakeAnOrderReducer(paramMakeAnOrder));
+    dispatch(
+      setPaymentReducer({
+        isMakeAnOrder: false,
+        infoMakeAnOrder: paramMakeAnOrder,
+      })
+    );
   };
 
   useEffect(() => {
     authPreviewOrPayment(project, onRedirect);
-    if (project && project?.id === makeAnOrderPaymentSchedule?.projectId) {
+    if (project && isMakeAnOrder && project?.id === infoMakeAnOrder?.projectId) {
       setCheckMakeAnOrder(true);
       setDefaultMakeAnOrderReducer();
     }
