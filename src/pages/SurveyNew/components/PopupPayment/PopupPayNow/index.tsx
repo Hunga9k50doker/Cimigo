@@ -11,10 +11,10 @@ import CountryService from "services/country";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import moment from "moment";
 import { PaymentService } from "services/payment";
 import { Payment } from "models/payment";
 import UserService from "services/user";
-import { PaymentInfo } from "models/payment_info";
 import { getProjectRequest } from "redux/reducers/Project/actionTypes";
 import { routes } from "routers/routes";
 import { useTranslation } from "react-i18next";
@@ -53,7 +53,19 @@ interface DataForm {
   companyAddress: string;
   taxCode: string;
 }
-
+interface SolutionConfig {
+  paymentMonthSchedule: string | number;
+}
+interface SystemConfig {
+  vat: string | number;
+}
+interface PaymentFeatureProps {
+  start: Date;
+  end: Date;
+  solutionConfig: SolutionConfig;
+  systemConfig: SystemConfig;
+  totalAmount: string | number;
+}
 interface Props {
   isOpen: boolean;
   onCancel: () => void;
@@ -159,16 +171,13 @@ const PopupPayNow = memo((props: Props) => {
   const { user, configs } = useSelector((state: ReducerType) => state.user);
 
   const [countries, setCountries] = useState<OptionItem[]>([]);
-  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>();
   const [showSkipInfor, setShowSkipInfor] = useState<DataForm>();
   const [isExpandedInfo, setIsExpandedInfo] = useState<boolean>(true);
-
   useEffect(() => {
     const fetchData = async () => {
       dispatch(setLoading(true));
       await Promise.all([CountryService.getCountries({ take: 9999 }), UserService.getPaymentInfo()]).then((res) => {
         setCountries(res[0].data);
-        setPaymentInfo(res[1]);
       });
       dispatch(setLoading(false));
     };
@@ -177,13 +186,10 @@ const PopupPayNow = memo((props: Props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!paymentInfo && !user) return;
+    if (!user) return;
     let countryId: OptionItem = undefined;
     if (user?.country) {
       countryId = { id: user.country.id, name: user.country.name };
-    }
-    if (paymentInfo?.country) {
-      countryId = { id: paymentInfo.country.id, name: paymentInfo.country.name };
     }
     reset({
       paymentMethodId: null,
@@ -191,17 +197,17 @@ const PopupPayNow = memo((props: Props) => {
       contactEmail: user?.email || "",
       contactPhone: user?.phone || "",
       saveForLater: true,
-      fullName: paymentInfo?.fullName || user?.fullName || "",
-      companyName: paymentInfo?.companyName || user?.company || "",
-      title: paymentInfo?.title || user?.title || "",
-      email: paymentInfo?.email || user?.email || "",
-      phone: paymentInfo?.phone || user?.phone || "",
+      fullName: user?.fullName || "",
+      companyName: user?.company || "",
+      title: user?.title || "",
+      email: user?.email || "",
+      phone: user?.phone || "",
       countryId: countryId,
-      companyAddress: paymentInfo?.companyAddress || "",
-      taxCode: paymentInfo?.taxCode || "",
+      companyAddress: "",
+      taxCode: "",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentInfo, user]);
+  }, [user]);
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -313,12 +319,10 @@ const PopupPayNow = memo((props: Props) => {
           <Grid classes={{ root: classes.left }}>
             <ButtonClose $backgroundColor="--eerie-black-5" className={classes.btnCloseMobile} $colorName="--eerie-black-40" onClick={onCancel} />
             <Heading3 $colorName="--cimigo-blue" translation-key="brand_track_paynow_popup_payment_title">
-              {t("brand_track_paynow_popup_payment_title", { duration: "Dec 2022 - Feb 2023" })}
+              {t("brand_track_paynow_popup_payment_title", { dueDate: `DEC 2022  - FEB 2023` })}
             </Heading3>
             <ParagraphBody display={"flex"} alignItems="center">
-              <ParagraphSmall $colorName="--gray-80" translation-key="brand_track_paynow_popup_on_demand_title">
-                C7938 {t("brand_track_paynow_popup_on_demand_title")}
-              </ParagraphSmall>
+              <ParagraphSmall $colorName="--gray-80">C7938 On Demand (SaaS)</ParagraphSmall>
               &nbsp;
               <ParagraphSmall $colorName="--gray-80" translation-key="common_id">
                 - {t("common_id")}: 6
@@ -471,157 +475,153 @@ const PopupPayNow = memo((props: Props) => {
               sx={{ cursor: isMobile && "pointer" }}
               onClick={() => isMobile && setIsExpandedInfo((pre) => !pre)}
             >
-              <Box>
-                <Heading5
-                  id="payment_invoice_and_contract_info"
-                  $colorName="--cimigo-blue"
-                  className={classes.titleInfo}
-                  translation-key="payment_billing_sub_tab_payment_invoice_and_contract_info"
-                >
-                  {t("payment_billing_sub_tab_payment_invoice_and_contract_info")}{" "}
-                </Heading5>
-              </Box>
+              <Heading5
+                id="payment_invoice_and_contract_info"
+                $colorName="--cimigo-blue"
+                className={classes.titleInfo}
+                translation-key="payment_billing_sub_tab_payment_invoice_and_contract_info"
+              >
+                {t("payment_billing_sub_tab_payment_invoice_and_contract_info")}{" "}
+              </Heading5>
               <IconButton sx={{ transform: isExpandedInfo ? "rotate(180deg)" : "unset" }} className={classes.isMobile}>
                 <ExpandMore sx={{ fontSize: 24, color: "var(--eerie-black-40)" }} />
               </IconButton>
             </Box>
             <Collapse in={isExpandedInfo || !isMobile} timeout="auto" unmountOnExit>
-              <div className={classes.informationBox}>
-                <Grid container rowSpacing={1} columnSpacing={3}>
-                  <Grid item xs={12} sm={6}>
-                    <InputTextField
-                      className={classes.customTextField}
-                      title={t("field_full_name")}
-                      translation-key="field_full_name"
-                      placeholder={t("field_full_name_placeholder")}
-                      translation-key-placeholder="field_full_name_placeholder"
-                      name="fullName"
-                      inputRef={register("fullName")}
-                      errorMessage={errors.fullName?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <InputTextField
-                      className={classes.customTextField}
-                      title={t("field_company")}
-                      translation-key="field_company"
-                      placeholder={t("field_company_placeholder")}
-                      translation-key-placeholder="field_company_placeholder"
-                      name="companyName"
-                      inputRef={register("companyName")}
-                      errorMessage={errors.companyName?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <InputTextField
-                      className={classes.customTextField}
-                      title={t("field_your_title")}
-                      translation-key="field_your_title"
-                      placeholder={t("field_your_title_placeholder")}
-                      translation-key-placeholder="field_your_title_placeholder"
-                      name="title"
-                      inputRef={register("title")}
-                      errorMessage={errors.title?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <InputTextField
-                      className={classes.customTextField}
-                      title={t("field_email")}
-                      translation-key="field_email"
-                      placeholder={t("field_email_placeholder")}
-                      translation-key-placeholder="field_email_placeholder"
-                      name="email"
-                      inputRef={register("email")}
-                      errorMessage={errors.email?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <InputTextField
-                      className={classes.customTextField}
-                      title={t("field_phone_number")}
-                      translation-key="field_phone_number"
-                      placeholder={t("field_phone_number_placeholder")}
-                      translation-key-placeholder="field_phone_number_placeholder"
-                      name="phone"
-                      inputRef={register("phone")}
-                      errorMessage={errors.phone?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <InputSelect
-                      fullWidth
-                      title={t("field_country")}
-                      name="countryId"
-                      control={control}
-                      errorMessage={(errors.countryId as any)?.message}
-                      selectProps={{
-                        options: countries,
-                        placeholder: t("field_country_placeholder"),
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <InputTextField
-                      className={classes.customTextField}
-                      title={t("field_company_address")}
-                      translation-key="field_company_address"
-                      placeholder={t("field_company_address_placeholder")}
-                      translation-key-placeholder="field_company_address_placeholder"
-                      name="companyAddress"
-                      inputRef={register("companyAddress")}
-                      errorMessage={errors.companyAddress?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <InputTextField
-                      className={classes.customTextField}
-                      optional
-                      title={t("field_tax_code_for_invoice")}
-                      translation-key="field_tax_code_for_invoice"
-                      placeholder={t("field_tax_code_for_invoice_placeholder")}
-                      translation-key-placeholder="field_tax_code_for_invoice_placeholder"
-                      name="taxCode"
-                      inputRef={register("taxCode")}
-                      errorMessage={errors.taxCode?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12} className={classes.tips}>
-                    <FormControlLabel
-                      control={
-                        <Controller
-                          name="saveForLater"
-                          control={control}
-                          render={({ field }) => <InputCheckbox checked={field.value} onChange={field.onChange} />}
-                        />
-                      }
-                      translation-key="payment_billing_sub_tab_payment_save_for_later"
-                      label={<>{t("payment_billing_sub_tab_payment_save_for_later")}</>}
-                    />
-                    <TooltipCustom
-                      popperClass={classes.popperClass}
-                      title={t("payment_billing_sub_tab_payment_save_for_later_tip")}
-                      translation-key="payment_billing_sub_tab_payment_save_for_later_tip"
-                    >
-                      <InfoOutlined sx={{ ml: 0.5, fontSize: 16, color: "var(--eerie-black-40)" }} />
-                    </TooltipCustom>
-                  </Grid>
-                  {!!configs?.viewContract && (
-                    <Grid item xs={12}>
-                      <ParagraphSmall mt={2} $colorName="--eerie-black-65" translation-key="payment_invoice_and_contract_info_bottom_1">
-                        {t("payment_invoice_and_contract_info_bottom_1")}{" "}
-                        <span
-                          onClick={onDownloadContract}
-                          className="underline cursor-pointer"
-                          translation-key="payment_invoice_and_contract_info_bottom_2"
-                        >
-                          {t("payment_invoice_and_contract_info_bottom_2")}
-                        </span>
-                      </ParagraphSmall>
-                    </Grid>
-                  )}
+              <Grid className={classes.informationBox} container rowSpacing={1} columnSpacing={3}>
+                <Grid item xs={12} sm={6}>
+                  <InputTextField
+                    className={classes.customTextField}
+                    title={t("field_full_name")}
+                    translation-key="field_full_name"
+                    placeholder={t("field_full_name_placeholder")}
+                    translation-key-placeholder="field_full_name_placeholder"
+                    name="fullName"
+                    inputRef={register("fullName")}
+                    errorMessage={errors.fullName?.message}
+                  />
                 </Grid>
-              </div>
+                <Grid item xs={12} sm={6}>
+                  <InputTextField
+                    className={classes.customTextField}
+                    title={t("field_company")}
+                    translation-key="field_company"
+                    placeholder={t("field_company_placeholder")}
+                    translation-key-placeholder="field_company_placeholder"
+                    name="companyName"
+                    inputRef={register("companyName")}
+                    errorMessage={errors.companyName?.message}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <InputTextField
+                    className={classes.customTextField}
+                    title={t("field_your_title")}
+                    translation-key="field_your_title"
+                    placeholder={t("field_your_title_placeholder")}
+                    translation-key-placeholder="field_your_title_placeholder"
+                    name="title"
+                    inputRef={register("title")}
+                    errorMessage={errors.title?.message}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <InputTextField
+                    className={classes.customTextField}
+                    title={t("field_email")}
+                    translation-key="field_email"
+                    placeholder={t("field_email_placeholder")}
+                    translation-key-placeholder="field_email_placeholder"
+                    name="email"
+                    inputRef={register("email")}
+                    errorMessage={errors.email?.message}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <InputTextField
+                    className={classes.customTextField}
+                    title={t("field_phone_number")}
+                    translation-key="field_phone_number"
+                    placeholder={t("field_phone_number_placeholder")}
+                    translation-key-placeholder="field_phone_number_placeholder"
+                    name="phone"
+                    inputRef={register("phone")}
+                    errorMessage={errors.phone?.message}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <InputSelect
+                    fullWidth
+                    title={t("field_country")}
+                    name="countryId"
+                    control={control}
+                    errorMessage={(errors.countryId as any)?.message}
+                    selectProps={{
+                      options: countries,
+                      placeholder: t("field_country_placeholder"),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <InputTextField
+                    className={classes.customTextField}
+                    title={t("field_company_address")}
+                    translation-key="field_company_address"
+                    placeholder={t("field_company_address_placeholder")}
+                    translation-key-placeholder="field_company_address_placeholder"
+                    name="companyAddress"
+                    inputRef={register("companyAddress")}
+                    errorMessage={errors.companyAddress?.message}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <InputTextField
+                    className={classes.customTextField}
+                    optional
+                    title={t("field_tax_code_for_invoice")}
+                    translation-key="field_tax_code_for_invoice"
+                    placeholder={t("field_tax_code_for_invoice_placeholder")}
+                    translation-key-placeholder="field_tax_code_for_invoice_placeholder"
+                    name="taxCode"
+                    inputRef={register("taxCode")}
+                    errorMessage={errors.taxCode?.message}
+                  />
+                </Grid>
+                <Grid item xs={12} className={classes.tips}>
+                  <FormControlLabel
+                    control={
+                      <Controller
+                        name="saveForLater"
+                        control={control}
+                        render={({ field }) => <InputCheckbox checked={field.value} onChange={field.onChange} />}
+                      />
+                    }
+                    translation-key="payment_billing_sub_tab_payment_save_for_later"
+                    label={<>{t("payment_billing_sub_tab_payment_save_for_later")}</>}
+                  />
+                  <TooltipCustom
+                    popperClass={classes.popperClass}
+                    title={t("payment_billing_sub_tab_payment_save_for_later_tip")}
+                    translation-key="payment_billing_sub_tab_payment_save_for_later_tip"
+                  >
+                    <InfoOutlined sx={{ ml: 0.5, fontSize: 16, color: "var(--eerie-black-40)" }} />
+                  </TooltipCustom>
+                </Grid>
+                {!!configs?.viewContract && (
+                  <Grid item xs={12}>
+                    <ParagraphSmall mt={2} $colorName="--eerie-black-65" translation-key="payment_invoice_and_contract_info_bottom_1">
+                      {t("payment_invoice_and_contract_info_bottom_1")}{" "}
+                      <span
+                        onClick={onDownloadContract}
+                        className="underline cursor-pointer"
+                        translation-key="payment_invoice_and_contract_info_bottom_2"
+                      >
+                        {t("payment_invoice_and_contract_info_bottom_2")}
+                      </span>
+                    </ParagraphSmall>
+                  </Grid>
+                )}
+              </Grid>
             </Collapse>
             <Divider className={classes.divider1} />
           </Grid>
