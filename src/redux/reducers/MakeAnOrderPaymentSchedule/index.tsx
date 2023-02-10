@@ -1,17 +1,19 @@
 import produce from "immer";
 import _ from "lodash";
 import * as types from "./actionTypes";
-export interface MakeAnOrderReducer {
+export interface InfoMakeAnOrder {
   projectId?: number;
   startDate?: Date;
 }
-export interface MakeAnOrderPaymentScheduleState {
-  makeAnOrderPaymentSchedule: MakeAnOrderReducer;
+export interface PaymentState {
+  isMakeAnOrder: boolean;
+  infoMakeAnOrder: InfoMakeAnOrder;
 }
-const initial: MakeAnOrderPaymentScheduleState = {
-  makeAnOrderPaymentSchedule: null,
+const initial: PaymentState = {
+  isMakeAnOrder: false,
+  infoMakeAnOrder: null,
 };
-export const makeAnOrderPaymentScheduleReducer = (
+export const paymentReducer = (
   state = initial,
   action: any
 ) =>
@@ -19,11 +21,13 @@ export const makeAnOrderPaymentScheduleReducer = (
     switch (action.type) {
       case types.SET_MAKE_AN_ORDER:
         if (action.data && !_.isEmpty(action.data)) {
-          draft.makeAnOrderPaymentSchedule = {
-            ...action.data,
-          };
+          draft.isMakeAnOrder = action.data.isMakeAnOrder;
+          draft.infoMakeAnOrder = {
+            ...action.data.infoMakeAnOrder,
+          }
         } else {
-          draft.makeAnOrderPaymentSchedule = null;
+          draft.isMakeAnOrder = false;
+          draft.infoMakeAnOrder = null;
         }
         break;
     }

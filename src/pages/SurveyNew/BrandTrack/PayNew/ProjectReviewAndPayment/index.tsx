@@ -1,42 +1,21 @@
 import { Box } from "@mui/material";
 import WarningBox from "components/WarningBox";
 import { Content, LeftContent, PageRoot } from "pages/SurveyNew/components";
-import { memo, useMemo } from "react"
+import { memo } from "react"
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { matchPath, Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { ReducerType } from "redux/reducers";
 import { routes } from "routers/routes";
 import ProjectReview from "../ProjectReview";
 import classes from './styles.module.scss';
 
 interface Props {
-  projectId: number;
 }
 
-const ProjectReviewAndPayment = memo(({projectId }: Props) => {
-  const { t, i18n } = useTranslation()
+const ProjectReviewAndPayment = memo(({ }: Props) => {
+  const { t } = useTranslation()
   const { cancelPayment } = useSelector((state: ReducerType) => state.project)
-
-  const steps = useMemo(() => {
-    return [
-      { name: t('payment_billing_sub_tab_preview'), path: routes.project.detail.paymentBilling.previewAndPayment.preview },
-      { name: t('payment_billing_sub_tab_payment'), path: routes.project.detail.paymentBilling.previewAndPayment.payment }
-    ]
-  }, [i18n.language])
-
-  const activeStep = useMemo(() => {
-    const activeRoute = (routeName: string, exact: boolean = false) => {
-      const match = matchPath(window.location.pathname, {
-        path: routeName,
-        exact: exact
-      })
-      return !!match
-    };
-    const index = steps.findIndex(it => activeRoute(it.path))
-    return index === -1 ? 0 : index
-  }, [window.location.pathname])
-
   return (
     <PageRoot>
       <LeftContent>

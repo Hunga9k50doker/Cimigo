@@ -16,7 +16,7 @@ const PayTab = memo(({projectId}: Props) => {
         <Route exact path={routes.project.detail.paymentBilling.previewAndPayment.preview} render={(routeProps) => <ProjectReview {...routeProps} />} />
         <Route exact path={routes.project.detail.paymentBilling.previewAndPayment.selectDate} render={(routeProps) => <SelectDate {...routeProps} projectId={Number(projectId)}/>} />
         <Route exact path={routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder} render={(routeProps) => <MakeAnOrder {...routeProps} projectId={Number(projectId)}/>} />
-        <Route path={routes.project.detail.paymentBilling.previewAndPayment.root} render={(routeProps) => <ProjectReviewAndPayment {...routeProps} projectId={Number(projectId)}/>} />
+        <Route path={routes.project.detail.paymentBilling.previewAndPayment.root} render={(routeProps) => <ProjectReviewAndPayment {...routeProps} />} />
         <Redirect from={routes.project.detail.paymentBilling.root} to={routes.project.detail.paymentBilling.previewAndPayment.preview} />
       </Switch>
     </>

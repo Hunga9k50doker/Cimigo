@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import classes from "./styles.module.scss";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CloseIcon from "@mui/icons-material/Close";
@@ -22,20 +22,6 @@ interface AlertProp {
 const Alert = memo((props: AlertProp) => {
   const { type, content, title, ...rest } = props;
   const [closeAlert, setCloseAlert] = useState("");
-  const [borderLeft, setBorderLeft] = useState("");
-  // useEffect(() => {
-  //   switch (type) {
-  //     case "A":
-  //       setBorderLeft("4px solid var(--cimigo-green-dark) !important");
-  //       break;
-  //     case "B":
-  //       setBorderLeft("4px solid var(--warning-dark) !important");
-  //       break;
-  //     default:
-  //       setBorderLeft("4px solid var(--cimigo-blue) !important");
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
   return (
     <Box
     
@@ -50,7 +36,7 @@ const Alert = memo((props: AlertProp) => {
           [classes.borderLeft]: type === AlerType.Default
         }
       )}
-      sx={{ display: closeAlert, borderLeft: borderLeft }}
+      sx={{ display: closeAlert}}
       {...rest}
     >
       <Box className={classes.left}>

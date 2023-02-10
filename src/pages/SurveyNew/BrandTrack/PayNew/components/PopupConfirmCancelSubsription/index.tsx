@@ -8,7 +8,7 @@ import { DialogActionsConfirm } from "components/common/dialogs/DialogActions";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
-import { memo, useEffect, useMemo } from "react";
+import { memo, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";

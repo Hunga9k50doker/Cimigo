@@ -2,7 +2,7 @@ import { Box, Grid } from "@mui/material";
 import Heading4 from "components/common/text/Heading4";
 import Heading5 from "components/common/text/Heading5";
 import ParagraphBody from "components/common/text/ParagraphBody";
-import { memo, useEffect, useState, useCallback } from "react";
+import { memo, useEffect, useState } from "react";
 import classes from "./styles.module.scss";
 import DoneIcon from "@mui/icons-material/Done";
 import ParagraphBodyUnderline from "components/common/text/ParagraphBodyUnderline";
@@ -21,16 +21,16 @@ import Footer from "components/Footer";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 
 import { PaymentScheduleService } from "services/payment_schedule";
-import { DataPagination, ECurrency } from "models/general";
+import { DataPagination } from "models/general";
 import moment from "moment";
-import useAuth from "hooks/useAuth";
-import { fCurrencyVND } from "utils/formatNumber";
 import PopupConfirmMakeAnOrder from "../components/PopupConfirmMakeAnOrder";
 import { authPreviewOrPayment, formatOrdinalumbers } from "../models";
 import { GetPaymentSchedulePreview, PaymentSchedulePreview } from "models/payment_schedule";
 import clsx from "clsx";
-import {setMakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
-import { MakeAnOrderReducer } from "redux/reducers/MakeAnOrderPaymentSchedule";
+import {setPaymentReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
+import { InfoMakeAnOrder } from "redux/reducers/MakeAnOrderPaymentSchedule";
+import { usePrice } from "helpers/price";
+
 export interface DateItem {
   id: number;
   date?: string;
@@ -42,7 +42,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const dispatch = useDispatch();
   const { project } = useSelector((state: ReducerType) => state.project);
   const { i18n } = useTranslation();
-  const { user } = useAuth();
+  const { getCostCurrency } = usePrice();
   const [listDate, setListDate] = useState<DateItem[]>([]);
   const [viewPS, setViewPS] = useState<Boolean>(false);
   const [selectedDate, setSelectedDate] = useState<DateItem>();
@@ -68,21 +68,27 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const goToMakeAnOrder = () => {
     seOnSubmitMakeAnOrder(true);
   };
-  const formatMoney = useCallback(
-    (schedule: PaymentSchedulePreview) => {
-      switch (user?.currency) {
-        case ECurrency.VND:
-          return `${fCurrencyVND(schedule.totalAmount)}`;
-        case ECurrency.USD:
-          return `$${schedule.totalAmountUSD}`;
-      }
-    },
-    [user?.currency]
-  );
   const onConfirmMakeAnOrder = () => {
     seOnSubmitMakeAnOrder(false);
   };
   const submitMakeAnOrder = () => {
+    const paramMakeAnOrder: InfoMakeAnOrder = {
+      projectId,
+      startDate: new Date(moment(selectedDate.date).format('YYYY-MM-DD')),
+    }
+    dispatch(setPaymentReducer({
+      isMakeAnOrder: true,
+      infoMakeAnOrder :paramMakeAnOrder,
+    }));
+    dispatch(
+      push(
+        routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder.replace(
+          ":id",
+          `${project.id}`
+        )
+      )
+    );
+    return;
     if (!selectedDate) return;
     dispatch(setLoading(true));
     PaymentScheduleService.paymentScheduleMakeAnOrder({
@@ -91,11 +97,14 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
     })
       .then(() => {
         seOnSubmitMakeAnOrder(false)
-        const paramMakeAnOrder: MakeAnOrderReducer = {
+        const paramMakeAnOrder: InfoMakeAnOrder = {
           projectId,
           startDate: new Date(moment(selectedDate.date).format('YYYY-MM-DD')),
         }
-        dispatch(setMakeAnOrderReducer(paramMakeAnOrder));
+        dispatch(setPaymentReducer({
+          isMakeAnOrder: true,
+          infoMakeAnOrder :paramMakeAnOrder,
+        }));
         dispatch(
           push(
             routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder.replace(
@@ -247,7 +256,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
                                   <span className={classes.iconDolar}>
                                     <Dolar />
                                   </span>
-                                  {formatMoney(schedulePreview)}
+                                  {getCostCurrency(schedulePreview.totalAmount)?.show}
                                 </Heading3>
                                 <ParagraphSmall $colorName={"--gray-80"} pt={2}>
                                   {`Due date: ${moment(schedulePreview.dueDate)
