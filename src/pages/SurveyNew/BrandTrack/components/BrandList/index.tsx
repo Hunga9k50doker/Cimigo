@@ -236,7 +236,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
             disabled={!editable || competingBrandDatas?.length >= maxCompetingBrand}
             className={classes.btnAddBrand}
             btnType={BtnType.Outlined}
-            children={<TextBtnSmall translation-key="setup_brand_track_brand_list_competing_brand_add_btn">{t("setup_brand_track_brand_list_competing_brand_add_btn")}</TextBtnSmall>}
+            children={<TextBtnSmall translation-key="setup_brand_track_brand_list_competing_brand_btn_add">{t("setup_brand_track_brand_list_competing_brand_btn_add")}</TextBtnSmall>}
             startIcon={<IconNewLabelFilled sx={{ fontSize: "16px !important" }} />}
             onClick={onAddCompetingBrand}
             sx={{ width: { xs: "100%", sm: "auto" } }}

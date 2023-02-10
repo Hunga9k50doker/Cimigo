@@ -29,6 +29,7 @@ import { OptionItem } from "models/general";
 import { MusicNote, Error, Title } from "@mui/icons-material";
 import IconImagesMode from "components/icons/IconImagesMode";
 import { convertFileToBase64 } from "utils/file";
+import ErrorMessage from "components/Inputs/components/ErrorMessage";
 
 const MAX_CHARACTER_OF_SLOGAN = 100;
 const MAX_CHARACTER_OF_DESCRIPTION = 200;
@@ -69,12 +70,12 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
       description: yup.string(),
       typeId: yup.object().required(t("field_brand_asset_type_vali_required")),
       slogan: yup.string().when("typeId", {
-        is: (value: OptionItem) => value.id === EBRAND_ASSET_TYPE.IMAGE,
+        is: (value: OptionItem) => value.id === EBRAND_ASSET_TYPE.SLOGAN,
         then: yup.string().required(t("field_brand_asset_type_slogan_vali_require")),
         otherwise: yup.string()
       }),
       asset: yup.mixed().when("typeId", {
-        is: (value: OptionItem) => value.id !== EBRAND_ASSET_TYPE.IMAGE,
+        is: (value: OptionItem) => value.id !== EBRAND_ASSET_TYPE.SLOGAN,
         then: yup.mixed().required(t("field_brand_asset_vali_require")),
         otherwise: yup.mixed()
       }),
@@ -165,6 +166,13 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [brandAsset])
 
+  useEffect(() => {
+    setValue('asset', null)
+    setImageReview(null)
+    setSoundReview(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchBrandAssetTypeId])
+
   const getDuration = async (file: File) => {
     const duration = await VideoService.getVideoDuration(file)
       .catch(err => {
@@ -209,6 +217,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
         setIsError('');
         setSoundReview(URL.createObjectURL(file))
         setValue('asset', file)
+        clearErrors("asset")
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -300,7 +309,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                 {isError && (
                   <ParagraphSmall mt={1} $colorName="--red-error" sx={{display: "flex", alignItems: "center", gap: "8px"}}><Error sx={{fontSize: "20px"}}/>{isError}</ParagraphSmall>
                 )}
-
+                {errors.asset?.message && <ErrorMessage>{errors.asset?.message}</ErrorMessage>}
               </Grid>
             )}
             {/* ========slogan======= */}
@@ -357,6 +366,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                 {isError && (
                   <ParagraphSmall mt={1} $colorName="--red-error" sx={{display: "flex", alignItems: "center", gap: "8px"}}><Error sx={{fontSize: "20px"}}/>{isError}</ParagraphSmall>
                 )}
+                {errors.asset?.message && <ErrorMessage>{errors.asset?.message}</ErrorMessage>}
               </Grid>
             )}
             <Grid item xs={12}>
