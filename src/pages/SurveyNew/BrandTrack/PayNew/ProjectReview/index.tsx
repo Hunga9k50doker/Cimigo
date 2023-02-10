@@ -220,13 +220,14 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                           {competingBrands?.length > 0 && (
                             <ParagraphBody $colorName={"--eerie-black-00"}>+ {competingBrands?.length} more</ParagraphBody>
                           )}
-                          {!isValidBrandList && (
+                          {!isValidMainBrand && (
                             <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandList}>
-                              {!isValidMainBrand && !isValidCompetingBrand
-                                ? `Required at least ${mainBrandNeedMore} more main brand(s) and at least  ${competingBrandNeedMore} more competing brand(s)`
-                                : !isValidMainBrand
-                                ? `Required at least ${mainBrandNeedMore} more main brand(s)`
-                                : `Required at least ${competingBrandNeedMore} more competing brand(s)`}
+                              Required at least {mainBrandNeedMore} more main brand(s)
+                            </ParagraphSmall>
+                          )}
+                          {!isValidCompetingBrand && (
+                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandList}>
+                              Required at least {competingBrandNeedMore} more competing brand(s)
                             </ParagraphSmall>
                           )}
                         </Grid>
@@ -243,13 +244,14 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                           <ParagraphBody $colorName={"--eerie-black-00"}>
                             <span className={classes.boldContent}>{numberOfBrandEquityAttributes}</span> equity attribute(s)
                           </ParagraphBody>
-                          {!isValidBrandDispositionAndEquity && (
+                          {!isValidCompetitiveBrand && (
                             <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandDispositionAndEquity}>
-                              {!isValidCompetitiveBrand && !isValidBrandEquityAttributes
-                                ? `Required at least ${competitiveBrandNeedMore} more competitive brand(s) and at least ${brandEquityAttributesNeedMore} more equity attribute(s)`
-                                : !isValidCompetitiveBrand
-                                ? `Required at least ${competitiveBrandNeedMore} more competitive brand(s)`
-                                : `Required at least ${brandEquityAttributesNeedMore} more equity attribute(s)`}
+                              Required at least {competitiveBrandNeedMore} more competitive brand(s)
+                            </ParagraphSmall>
+                          )}
+                          {!isValidBrandEquityAttributes && (
+                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandDispositionAndEquity}>
+                              Required at least {brandEquityAttributesNeedMore} more equity attribute(s)
                             </ParagraphSmall>
                           )}
                         </Grid>
