@@ -40,10 +40,13 @@ const DowloadInvoice = memo(() => {
           onClick={getInvoice}
           ml={1}
           $textDecoration="none"
-          dangerouslySetInnerHTML={{ __html: "Download proforma invoice" }}
+          translation-key="pay_order_download_invoice"
+          dangerouslySetInnerHTML={{ __html: t("pay_order_download_invoice") }}
         />
       </Box>
-      <Typography color={"var(--gray-60)"}>Red invoice will be issued when we receive your payment.</Typography>
+      <Typography color={"var(--gray-60)"} translation-key="popup_paynow_red_invoice_title">
+        {t("popup_paynow_red_invoice_title")}
+      </Typography>
     </>
   );
 });

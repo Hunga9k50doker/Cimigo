@@ -20,7 +20,9 @@ const Ordersummary = memo(() => {
     <Box mb={2}>
       <Accordion $accordionOrderSummary={true}>
         <AccordionSummary aria-controls="panel1a-content">
-          <Heading4 $colorName={"--cimigo-blue"}>Order summary</Heading4>
+          <Heading4 $colorName={"--cimigo-blue"} translation-key="payment_billing_sub_tab_payment_summary">
+            {t("payment_billing_sub_tab_payment_summary")}
+          </Heading4>
         </AccordionSummary>
         <AccordionDetails>
           <BoxCustom py={2} mt={1} $borderTop={true}>
