@@ -79,14 +79,16 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
 
   return (
     <Grid component="form" autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)} id={SETUP_SURVEY_SECTION.basic_information}>
-      <Heading4 $fontSizeMobile={"16px"} mb={1} $colorName="--eerie-black">STEP 1: Select your brand category</Heading4>
-      <ParagraphBody $colorName="--gray-80" mb={{ xs: 1, sm: 2 }}>Please specify the category in which the brand you want to perform performance tracking is active in. The category you write in will be used to ask consumers some brand-use questions.</ParagraphBody>
+      <Heading4 $fontSizeMobile={"16px"} mb={1} $colorName="--eerie-black" translation-key="setup_brand_track_basic_infor_title">{t('setup_brand_track_basic_infor_title', { step: 1 })}</Heading4>
+      <ParagraphBody $colorName="--gray-80" mb={{ xs: 1, sm: 2 }} translation-key={"setup_brand_track_basic_infor_sub_title"}>{t("setup_brand_track_basic_infor_sub_title")}</ParagraphBody>
       <Grid container sx={{display: "block"}}>
         <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-category`} className={classes.categoryInputWrapper}>
           <InputTextfield
+            translation-key="field_project_category"
             readOnly={!editable}
             name="category"
-            placeholder={"Enter your brand category"}
+            placeholder={t('field_brand_track_project_category_placeholder')}
+            translation-key-placeholder="field_brand_track_project_category_placeholder"
             inputRef={register('category')}
             startAdornment={
               <InputAdornment position="start">
@@ -106,7 +108,10 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
             sx={{ mt: 2, width: { xs: "100%", sm: "auto" }, height: "39px" }}
           />
         )}
-        <ParagraphSmall sx={{marginTop: "8px"}} $colorName="--gray-80">Example question: Which ___________ (your category) brands did you use recently?</ParagraphSmall>
+        <ParagraphSmall sx={{marginTop: "8px"}} $colorName="--gray-80"
+          translation-key="setup_brand_track_basic_infor_example_question">
+            {t("setup_brand_track_basic_infor_example_question")}
+        </ParagraphSmall>
       </Grid>
       <Grid sx={{marginLeft: "16px"}}>
         <div className={classes.selectPremiseWrapper}>
@@ -121,19 +126,21 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
                 onChange={(_, checked) => onTogglePremise(checked)}
               />
             }
-            label="On vs Off premise"
+            translation-key="setup_brand_track_basic_infor_toggle_premise_title"
+            label={t("setup_brand_track_basic_infor_toggle_premise_title") as string}
           />
           <TooltipWrapper
             className={classes.tooltip}
             tooltipPopper={classes.tooltipPopper}
-            title="On vs Off premise"
-            caption="If your category exhibits different brand dynamics when used at home as opposed to on premise in outlets (e.g. drinks, tobacco) then please select this option."
+            translation-key="setup_brand_track_basic_infor_toggle_premise_title_tooltip"
+            title={t("setup_brand_track_basic_infor_toggle_premise_title")}
+            caption={t("setup_brand_track_basic_infor_toggle_premise_sub_title")}
           >
             <HelpIcon sx={{ fontSize: "16px", color: "var(--gray-60)" }} className={classes.helpIcon} />
           </TooltipWrapper>
         </div>
-        <ParagraphSmall ml={4.5} $colorName="--gray-80">
-          If your category exhibits different brand dynamics when used at home as opposed to on premise in outlets (e.g. drinks, tobacco) then please select this option.
+        <ParagraphSmall ml={4.5} $colorName="--gray-80" translation-key="setup_brand_track_basic_infor_toggle_premise_sub_title">
+          {t("setup_brand_track_basic_infor_toggle_premise_sub_title")}
         </ParagraphSmall>
       </Grid>
     </Grid>

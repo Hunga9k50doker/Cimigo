@@ -20,9 +20,9 @@ export interface BrandAsset {
 }
 
 export const brandAssetTypes: OptionItem[] = [
-  { id: EBRAND_ASSET_TYPE.IMAGE, name: 'Unbranded image', icon: IconImagesMode },
-  { id: EBRAND_ASSET_TYPE.SLOGAN, name: 'Slogan or tagline', icon: Title },
-  { id: EBRAND_ASSET_TYPE.SOUND, name: 'Song or sound', icon: MusicNote }
+  { id: EBRAND_ASSET_TYPE.IMAGE, name: 'Unbranded image', icon: IconImagesMode, translation: "field_brand_asset_type_image_title" },
+  { id: EBRAND_ASSET_TYPE.SLOGAN, name: 'Slogan or tagline', icon: Title, translation: "field_brand_asset_type_slogan_title" },
+  { id: EBRAND_ASSET_TYPE.SOUND, name: 'Song or sound', icon: MusicNote, translation: "field_brand_asset_type_song_title" }
 ]
 
 export interface GetBrandAssetParams {

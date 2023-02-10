@@ -25,23 +25,37 @@ const CostSummaryBrandTrack = memo(({ project, price }: CostSummaryBrandTrackPro
 
   return (
     <>
-      <Heading4 $colorName="--eerie-black" $fontWeight={"500"} mb={1} sx={{display: "flex", alignItems: "center", gap: "8px"}}>
-        Monthly cost
+      <Heading4 $colorName="--eerie-black" $fontWeight={"500"} mb={1} sx={{display: "flex", alignItems: "center", gap: "8px"}} translation-key="project_right_panel_cost_summary_monthly_cost">
+        {t("project_right_panel_cost_summary_monthly_cost")}
         <ArrowDropDown/>
       </Heading4>
       <Divider sx={{ mb: 2, borderColor: 'var(--gray-20)' }} />
       <Box display="flex" justifyContent="space-between" mb={2}>
         <Box>
-          <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"}>Brand track</ParagraphSmall>
-          <ParagraphExtraSmall $colorName="--gray-60" className={classes.itemSubTitle}>Sample size: <span>{project?.sampleSize}</span></ParagraphExtraSmall>
+          <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"} translation-key="project_brand_track">{t("project_brand_track")}</ParagraphSmall>
+          <ParagraphExtraSmall 
+            $colorName="--gray-60" 
+            className={classes.itemSubTitle}
+            translation-key="project_right_panel_cost_summary_sample_size"
+            dangerouslySetInnerHTML={{
+              __html: t("project_right_panel_cost_summary_sample_size", {number: project?.sampleSize}),
+            }}
+          ></ParagraphExtraSmall>
         </Box>
         <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"}>{price?.sampleSizeCost?.show}</ParagraphSmall>
       </Box>
       {project?.enableCustomQuestion && (
         <Box display="flex" justifyContent="space-between" mb={2}>
           <Box>
-            <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"}>Custom questions</ParagraphSmall>
-            <ParagraphExtraSmall $colorName="--gray-60" className={classes.itemSubTitle}>Question(s): <span>{project?.customQuestions?.length || 0}</span></ParagraphExtraSmall>
+            <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"} translation-key="common_custom_question">{t("common_custom_question")}</ParagraphSmall>
+            <ParagraphExtraSmall 
+              $colorName="--gray-60" 
+              className={classes.itemSubTitle}
+              translation-key="project_right_panel_cost_summary_question"
+              dangerouslySetInnerHTML={{
+                __html: t("project_right_panel_cost_summary_question", {number: project?.customQuestions?.length || 0}),
+              }}
+            ></ParagraphExtraSmall>
           </Box>
           <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"}>{price?.customQuestionCost?.show}</ParagraphSmall>
         </Box>
@@ -60,7 +74,14 @@ const CostSummaryBrandTrack = memo(({ project, price }: CostSummaryBrandTrackPro
         <Heading3 $fontWeight={500} $colorName="--eerie-black" align="right">{price?.totalAmountCost?.show}</Heading3>
       </Box>
       <Box display="flex" justifyContent="flex-end">
-        <ParagraphSmall $colorName="--gray-80" align="right">*{project?.solution?.paymentMonthSchedule} months billing cycles</ParagraphSmall>
+        <ParagraphSmall 
+          $colorName="--gray-80" 
+          align="right"
+          translation-key="project_right_panel_cost_summary_billing_cycle"
+          dangerouslySetInnerHTML={{
+            __html: t("project_right_panel_cost_summary_billing_cycle", {number: project?.solution?.paymentMonthSchedule}),
+          }}
+        ></ParagraphSmall>
       </Box>
     </>
   )

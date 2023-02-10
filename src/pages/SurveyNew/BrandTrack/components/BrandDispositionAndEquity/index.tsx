@@ -298,8 +298,9 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
             $fontSizeMobile={"16px"}
             $colorName="--eerie-black"
             sx={{ display: "inline-block", verticalAlign: "middle" }}
+            translation-key="setup_brand_track_brand_disposition_and_equity_title"
           >
-            STEP 3: Brand disposition and equity
+            {t("setup_brand_track_brand_disposition_and_equity_title", {step: 3})}
           </Heading4>
           <Tooltip
             placement="right"
@@ -307,33 +308,52 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
             classes={{ popper: clsx(classes.tooltipPopper) }}
             title={(
               <Grid>
-                <ParagraphExtraSmall $colorName={"var(--eerie-black)"} className={classes.tooltipContent}>
-                  <span>Brand disposition</span> measures consumer attitudes to a repertoire of brands to understand the level of familiarity, consideration, preference or rejection towards brands.
-                </ParagraphExtraSmall>
-                <ParagraphExtraSmall $colorName={"var(--eerie-black)"} className={classes.tooltipContent} mt={2}>
-                  <span>Brand equity</span> measures different associations (or equities) that consumers hold towards a repertoire of brands to understand the comparative positioning consumers hold towards brands.
-                </ParagraphExtraSmall>
+                <ParagraphExtraSmall 
+                  $colorName={"var(--eerie-black)"} 
+                  className={classes.tooltipContent}
+                  translation-key="setup_brand_track_brand_disposition_and_equity_tooltip_content_1"
+                  dangerouslySetInnerHTML={{
+                    __html: t("setup_brand_track_brand_disposition_and_equity_tooltip_content_1"),
+                  }}
+                ></ParagraphExtraSmall>
+                <ParagraphExtraSmall 
+                  $colorName={"var(--eerie-black)"} 
+                  className={classes.tooltipContent} 
+                  mt={2}
+                  translation-key="setup_brand_track_brand_disposition_and_equity_tooltip_content_2"
+                  dangerouslySetInnerHTML={{
+                    __html: t("setup_brand_track_brand_disposition_and_equity_tooltip_content_2"),
+                  }}
+                ></ParagraphExtraSmall>
               </Grid>
             )}
           >
             <Help sx={{ fontSize: "16px", color: "var(--gray-60)" }} className={classes.helpIcon} />
           </Tooltip>
         </Grid>
-        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 }>Performance on brand disposition and brand equity is very important for any brand. Tracking this will help your determine the value of your brand.</ParagraphBody>
+        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 } translation-key="setup_brand_track_brand_disposition_and_equity_sub_title">
+          {t("setup_brand_track_brand_disposition_and_equity_sub_title")}
+        </ParagraphBody>
         <Grid>
           <div className={classes.competitiveBrandTitle}>
             <PlayArrow sx={{height: "18px"}}/>
-            <ParagraphBody $fontWeight={600} $colorName="--eerie-black">
-              Choose competitive brands
+            <ParagraphBody $fontWeight={600} $colorName="--eerie-black" translation-key="setup_brand_track_brand_disposition_and_equity_competitive_brand_title">
+              {t("setup_brand_track_brand_disposition_and_equity_competitive_brand_title")}
             </ParagraphBody>
           </div>
-          <ParagraphBody $colorName="--eerie-black" ml={ 3 }>Please select the key competitive brands in your category that will be used to compare your brands' performance on brand disposition and brand equity.  </ParagraphBody>
-          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 }>Your brand and these competitive brands are compared.</ParagraphBody> 
+          <ParagraphBody $colorName="--eerie-black" ml={ 3 } translation-key="setup_brand_track_brand_disposition_and_equity_competitive_brand_sub_title_1">
+            {t("setup_brand_track_brand_disposition_and_equity_competitive_brand_sub_title_1")}
+          </ParagraphBody>
+          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } translation-key="setup_brand_track_brand_disposition_and_equity_competitive_brand_sub_title_2">
+            {t("setup_brand_track_brand_disposition_and_equity_competitive_brand_sub_title_2")}
+          </ParagraphBody> 
           {displaySelectBrandButton ? (
             <>
               {!!competitiveBrandNeedMore && (
                 <NoteWarning mb={ 3 } ml={ 3 }>
-                  <ParagraphSmall $colorName="--warning-dark" className={classes.warning}>Select at least {competitiveBrandNeedMore} more brands.</ParagraphSmall>
+                  <ParagraphSmall $colorName="--warning-dark" className={classes.warning} translation-key="setup_brand_track_brand_disposition_and_equity_competitive_brand_need_more">
+                    {t("setup_brand_track_brand_disposition_and_equity_competitive_brand_need_more", {number: competitiveBrandNeedMore})}
+                  </ParagraphSmall>
                 </NoteWarning>
                 )}
               <Grid className={classes.competingBrandListWrapper}>
@@ -351,14 +371,22 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
                   onClick={handleClickMenuChooseBrand}
                   disabled={!enableAdditionalAttributes || !editable}
                   btnType={BtnType.Outlined}
-                  children={<TextBtnSmall>Select brand</TextBtnSmall>}
+                  children={<TextBtnSmall translation-key="setup_brand_track_brand_disposition_and_equity_competitive_brand_btn_select">{t("setup_brand_track_brand_disposition_and_equity_competitive_brand_btn_select")}</TextBtnSmall>}
                   endIcon={<KeyboardArrowDown sx={{ fontSize: "16px !important" }} />}
                   />
               </Grid>
             </>
           ) : (
             <NoteWarning mb={ 3 } ml={ 3 }>
-              <ParagraphSmall $colorName="--warning-dark" className={classes.warning}>There are no brands in the brand list to choose from.<span onClick={onDisplaySelectBrandButton}>Add new brand +</span></ParagraphSmall>
+              <ParagraphSmall $colorName="--warning-dark" className={classes.warning} translation-key="setup_brand_track_brand_disposition_and_equity_competitive_brand_no_brand_chose">
+                {t("setup_brand_track_brand_disposition_and_equity_competitive_brand_no_brand_chose")}
+                <span 
+                  onClick={onDisplaySelectBrandButton}
+                  translation-key="setup_brand_track_brand_disposition_and_equity_competitive_brand_btn_add"
+                >
+                  {t("setup_brand_track_brand_disposition_and_equity_competitive_brand_btn_add")} +
+                </span>
+              </ParagraphSmall>
             </NoteWarning>
           )}
           <Menu
@@ -404,28 +432,46 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
               />
               <Button
                 btnType={BtnType.Raised}
-                children={<TextBtnSmall>Done</TextBtnSmall>}
+                translation-key="common_done"
+                children={<TextBtnSmall>{t("common_done")}</TextBtnSmall>}
                 className={classes.btnSave}
                 onClick={onSubmitChooseProjectBrand}
               />
             </Grid>
           </Menu>
           {project?.projectBrands?.length >= maxCompetitiveBrand && (
-            <ParagraphSmall $colorName="--gray-60" sx={{mt: 1, ml: 3}}>You have reached the limit of {maxCompetitiveBrand} competitive brands.</ParagraphSmall>
+            <ParagraphSmall $colorName="--gray-60" sx={{mt: 1, ml: 3}} translation-key="setup_brand_track_brand_disposition_and_equity_competitive_brand_reach_limit">
+              {t("setup_brand_track_brand_disposition_and_equity_competitive_brand_reach_limit", {number: maxCompetitiveBrand})}
+            </ParagraphSmall>
           )}
-          <ParagraphBody $colorName="--gray-80" className={classes.note}><span>Note:</span> In the survey design, Cimigo will add the consumers' brand used most often if it is not already your nor amongst your selected competitive brands.</ParagraphBody>
+          <ParagraphBody 
+            $colorName="--gray-80" 
+            className={classes.note}
+            translation-key="setup_brand_track_brand_disposition_and_equity_competitive_brand_note"
+            dangerouslySetInnerHTML={{
+              __html: t("setup_brand_track_brand_disposition_and_equity_competitive_brand_note"),
+            }}
+          ></ParagraphBody>
         </Grid>
         <Grid>
           <div className={classes.brandEquity}>
             <PlayArrow sx={{height: "18px"}}/>
-            <ParagraphBody $fontWeight={600} $colorName="--eerie-black">
-              Choose brand equity attributes
+            <ParagraphBody $fontWeight={600} $colorName="--eerie-black" translation-key="setup_brand_track_brand_disposition_and_equity_attributes_title">
+              {t("setup_brand_track_brand_disposition_and_equity_attributes_title")}
             </ParagraphBody>
           </div>
-          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } className={classes.brandEquitySubTitle}>In additional to <span onClick={() => setOpenPopupMandatory(true)}>7 mandatory attributes.</span> You may add up to 7 more attributes for the brand equity sections.</ParagraphBody>
+          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } className={classes.brandEquitySubTitle} translation-key="setup_brand_track_brand_disposition_and_equity_attributes_sub_title_1">
+            {t("setup_brand_track_brand_disposition_and_equity_attributes_sub_title_1")}{" "}
+            <span onClick={() => setOpenPopupMandatory(true)} translation-key="setup_brand_track_brand_disposition_and_equity_attributes_sub_title_2">
+              {t("setup_brand_track_brand_disposition_and_equity_attributes_sub_title_2")}
+            </span>{" "}
+            {t("setup_brand_track_brand_disposition_and_equity_attributes_sub_title_3")}
+          </ParagraphBody>
           {!!brandEquityAttributesNeedMore && (
             <NoteWarning mt={0} mb={2}>
-              <ParagraphSmall $colorName="--warning-dark">Require at least {brandEquityAttributesNeedMore} more brand equity attributes</ParagraphSmall>
+              <ParagraphSmall $colorName="--warning-dark" translation-key="setup_brand_track_brand_disposition_and_equity_attributes_need_more">
+                {t("setup_brand_track_brand_disposition_and_equity_attributes_need_more", {number: brandEquityAttributesNeedMore})}
+              </ParagraphSmall>
             </NoteWarning>
           )}
           {/* =======start desktop===== */}
@@ -490,9 +536,14 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
               </ListItem>
             ))}
             {attributes.length > 5 && (
-              <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes}>
-                {showMoreAttributes ? `- ${attributes.length - 5} less attribute` : `+ ${attributes.length - 5} more attribute`}
-              </ParagraphBodyUnderline>
+              showMoreAttributes ? (
+                <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes} translation-key="common_less_attributes_text">
+                  {t("common_less_attributes_text", {number: attributes.length - 5})}
+                </ParagraphBodyUnderline>
+                ) : (
+                <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes} translation-key="common_more_attributes_text">
+                  {t("common_more_attributes_text", {number: attributes.length - 5})}
+                </ParagraphBodyUnderline>)
             )}
           </Grid>
           {/* =======end desktop===== */}
@@ -550,9 +601,14 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
               </Accordion>
             ))}
             {attributes.length > 5 && (
-              <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes}>
-                {showMoreAttributes ? "- 1 less attribute" : "+ 1 more attribute"}
-              </ParagraphBodyUnderline>
+              showMoreAttributes ? (
+                <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes} translation-key="common_less_attributes_text">
+                  {t("common_less_attributes_text", {number: attributes.length - 5})}
+                </ParagraphBodyUnderline>
+                ) : (
+                <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreAttributes} translation-key="common_more_attributes_text">
+                  {t("common_more_attributes_text", {number: attributes.length - 5})}
+                </ParagraphBodyUnderline>)
             )}
           </Grid>
           {/* =======end mobile===== */}
