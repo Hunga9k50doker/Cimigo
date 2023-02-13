@@ -107,7 +107,7 @@ export const API = {
   PAYMENT_SCHEDULE: {
     PREVIEW: 'v1.0/payment-schedule/preview',
     MAKE_AN_ORDER: 'v1.0/payment-schedule/make-order',
-    SLIDE: 'v1.0/payment-schedule/next-payment',
+    PAYMENT: 'v1.0/payment-schedule/next-payment',
     PAYMENT_SCHEDULE_HISTORY: 'v1.0/payment/history/brand-track'
   },
   ATTACHMENT: {
