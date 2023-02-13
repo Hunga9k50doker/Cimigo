@@ -108,17 +108,17 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
     <>
       <Grid classes={{ root: classes.root }}>
         <Grid pt={4}>
-          <Heading4 $colorName="--eerie-black">Review your project details</Heading4>
+          <Heading4 $colorName="--eerie-black" translation-key="brand_track_payment_billing_preview_title">{t("brand_track_payment_billing_preview_title")}</Heading4>
           {isValidCheckout ? (
-            <ParagraphBody $colorName="--eerie-black">Please review your project setup. You can not edit these after making an order.</ParagraphBody>
+            <ParagraphBody $colorName="--eerie-black" translation-key="brand_track_payment_billing_preview_sub_title_success">{t("brand_track_payment_billing_preview_sub_title_success")}</ParagraphBody>
           ) : (
             <ParagraphBody
               className={clsx(classes.title, classes.titleDanger)}
               $colorName="--eerie-black"
               dangerouslySetInnerHTML={{
-                __html: t("payment_billing_sub_tab_preview_sub_title_error"),
+                __html: t("brand_track_payment_billing_preview_sub_title_error"),
               }}
-              translation-key="payment_billing_sub_tab_preview_sub_title_error"
+              translation-key="brand_track_payment_billing_preview_sub_title_error"
             />
           )}
 
@@ -128,7 +128,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                 <Grid item xs={12} md={6}>
                   <Box className={classes.leftContent}>
                     <Grid className={classes.solution}>
-                      <Heading5 $colorName={"--eerie-black"} className={classes.leftContentItemTitle}>Solution</Heading5>
+                      <Heading5 $colorName={"--eerie-black"} className={classes.leftContentItemTitle} translation-key="brand_track_payment_billing_preview_solution">{t("brand_track_payment_billing_preview_solution")}</Heading5>
                       <Box className={clsx(classes.solutionItem, classes.leftContentItemDescription)}>
                         <img
                           src={project?.solution?.image}
@@ -138,17 +138,17 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                       </Box>
                     </Grid>
                     <Grid className={classes.delivery}>
-                      <Heading5 $colorName={"--eerie-black"} className={classes.leftContentItemTitle}>Delivery results</Heading5>
-                      <ParagraphBody $colorName={"--eerie-black"} className={classes.leftContentItemDescription}>
-                        Monthly tracking
+                      <Heading5 $colorName={"--eerie-black"} className={classes.leftContentItemTitle} translation-key="brand_track_payment_billing_preview_delivery_results">{t("brand_track_payment_billing_preview_delivery_results")}</Heading5>
+                      <ParagraphBody $colorName={"--eerie-black"} className={classes.leftContentItemDescription} translation-key="brand_track_payment_billing_preview_delivery_results_detail">
+                        {t("brand_track_payment_billing_preview_delivery_results_detail")}
                       </ParagraphBody>
                     </Grid>
                     <Grid className={classes.contentSampleAndTarget}>
                       <Grid className={classes.sampleTarget}>
-                        <Heading5 $colorName={"--eerie-black"}>Sample and target</Heading5>
+                        <Heading5 $colorName={"--eerie-black"} translation-key="brand_track_payment_billing_preview_sample_and_target">{t("brand_track_payment_billing_preview_sample_and_target")}</Heading5>
                         <Button
                           className={classes.customBtnContentPayment}
-                          children={<span className={classes.titleBtn}>Edit setup</span>}
+                          children={<span className={classes.titleBtn} translation-key="brand_track_payment_billing_preview_edit_setup">{t("brand_track_payment_billing_preview_edit_setup")}</span>}
                           endIcon={<KeyboardArrowRightIcon />}
                           onClick={gotoTarget}
                         />
@@ -157,18 +157,18 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                         <Box className={classes.value} pt={2}>
                           <Grid container spacing={2}>
                             <Grid item xs={6} className={classes.customGridItem} pl={3}>
-                              <ParagraphBody $colorName={"--eerie-black"}>Sample size</ParagraphBody>
+                              <ParagraphBody $colorName={"--eerie-black"} translation-key="brand_track_payment_billing_preview_sample_size">{t("brand_track_payment_billing_preview_sample_size")}</ParagraphBody>
                             </Grid>
                             <Grid item xs={6} className={classes.customGridItem}>
-                              <ParagraphBody $colorName={"--eerie-black"}>{project?.sampleSize} / month</ParagraphBody>
+                              <ParagraphBody $colorName={"--eerie-black"} translation-key="brand_track_payment_billing_preview_sample_size_detail">{t("brand_track_payment_billing_preview_sample_size_detail", {number: project?.sampleSize})}</ParagraphBody>
                             </Grid>
                           </Grid>
                           <Grid container spacing={2} pt={2}>
                             <Grid item xs={6} pl={3}>
-                              <ParagraphBody $colorName={"--eerie-black"}>Target criteria</ParagraphBody>
+                              <ParagraphBody $colorName={"--eerie-black"} translation-key="brand_track_payment_billing_preview_target_criteria">{t("brand_track_payment_billing_preview_target_criteria")}</ParagraphBody>
                             </Grid>
                             <Grid item xs={6}>
-                              <ParagraphSmallUnderline2 $colorName={"--cimigo-blue"} onClick={gotoTarget}>View detail</ParagraphSmallUnderline2>
+                              <ParagraphSmallUnderline2 $colorName={"--cimigo-blue"} onClick={gotoTarget} translation-key="common_view_detail">{t("common_view_detail")}</ParagraphSmallUnderline2>
                             </Grid>
                           </Grid>
                         </Box>
@@ -179,10 +179,10 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                 <Grid item xs={12} md={6}>
                   <Box className={classes.rightContent}>
                     <Grid className={classes.survey}>
-                      <Heading5 $colorName={"--eerie-black"}>Survey detail</Heading5>
+                      <Heading5 $colorName={"--eerie-black"} translation-key="brand_track_payment_billing_preview_survey_detail">{t("brand_track_payment_billing_preview_survey_detail")}</Heading5>
                       <Button
                         className={classes.customBtnContentPayment}
-                        children={<span className={classes.titleBtn}>Edit setup</span>}
+                        children={<span className={classes.titleBtn} translation-key="brand_track_payment_billing_preview_edit_setup">{t("brand_track_payment_billing_preview_edit_setup")}</span>}
                         endIcon={<KeyboardArrowRightIcon />}
                         onClick={gotoSetupSurvey}
                       />
@@ -190,21 +190,31 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                     <Grid container spacing={2} className={classes.rightContent2}>
                       <Grid item container className={classes.customGridItem}>
                         <Grid item xs={6}>
-                          <ParagraphBody $colorName={"--eerie-black-00"}>Brand category</ParagraphBody>
+                          <ParagraphBody $colorName={"--eerie-black-00"} translation-key="brand_track_payment_billing_preview_brand_category">{t("brand_track_payment_billing_preview_brand_category")}</ParagraphBody>
                         </Grid>
                         <Grid item xs={6}>
-                          <ParagraphBody 
-                            $colorName={"--eerie-black-00"} 
-                            className={clsx({[classes.dangerText]: !isValidBasic})}
-                            onClick={() => onGotoBasicInfor("category")}
-                          >
-                            {project?.category || "Undefined"}
-                          </ParagraphBody>
+                          {project?.category ? (
+                            <ParagraphBody 
+                              $colorName={"--eerie-black-00"} 
+                              className={clsx({[classes.dangerText]: !isValidBasic})}
+                            >
+                              {project?.category}
+                            </ParagraphBody>
+                          ) : (
+                            <ParagraphBody 
+                              $colorName={"--eerie-black-00"} 
+                              className={clsx({[classes.dangerText]: !isValidBasic})}
+                              onClick={() => onGotoBasicInfor("category")}
+                              translation-key="common_undefined"
+                            >
+                              {t("common_undefined")}
+                            </ParagraphBody>
+                          )}
                         </Grid>
                       </Grid>
                       <Grid item container>
                         <Grid item xs={6}>
-                          <ParagraphBody $colorName={"--eerie-black-00"}>Brand list</ParagraphBody>
+                          <ParagraphBody $colorName={"--eerie-black-00"} translation-key="brand_track_payment_billing_preview_brand_list">{t("brand_track_payment_billing_preview_brand_list")}</ParagraphBody>
                         </Grid>
                         <Grid item xs={6}>
                           {mainBrands?.map((item) => (
@@ -213,72 +223,96 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                             </ParagraphBody>
                           ))}
                           {mainBrands?.length === 0 && (
-                            <ParagraphBody $colorName={"--eerie-black-00"}>
-                              0 main brand
-                            </ParagraphBody>
+                            <ParagraphBody 
+                              $colorName={"--eerie-black-00"} 
+                              className={classes.numberOfItem}
+                              translation-key="brand_track_payment_billing_preview_number_main_brand"
+                              dangerouslySetInnerHTML={{
+                                __html: t("brand_track_payment_billing_preview_number_main_brand", {number: 0}),
+                              }}
+                            ></ParagraphBody>
                             )}
                           {competingBrands?.length > 0 && (
-                            <ParagraphBody $colorName={"--eerie-black-00"}>+ {competingBrands?.length} more</ParagraphBody>
+                            <ParagraphBody $colorName={"--eerie-black-00"} translation-key="common_more">+ {t("common_more", {number: competingBrands?.length})}</ParagraphBody>
                           )}
                           {!isValidMainBrand && (
-                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandList}>
-                              Required at least {mainBrandNeedMore} more main brand(s)
+                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandList} translation-key="brand_track_payment_billing_preview_main_brand_need_more">
+                              {t("brand_track_payment_billing_preview_main_brand_need_more", {number: mainBrandNeedMore})}
                             </ParagraphSmall>
                           )}
                           {!isValidCompetingBrand && (
-                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandList}>
-                              Required at least {competingBrandNeedMore} more competing brand(s)
+                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandList} translation-key="brand_track_payment_billing_preview_competing_brand_need_more">
+                              {t("brand_track_payment_billing_preview_competing_brand_need_more", {number: competingBrandNeedMore})}
                             </ParagraphSmall>
                           )}
                         </Grid>
                       </Grid>
                       <Grid item container>
                         <Grid item xs={6}>
-                          <ParagraphBody $colorName={"--eerie-black-00"}>Brand disposition &</ParagraphBody>
-                          <ParagraphBody $colorName={"--eerie-black-00"}>equity</ParagraphBody>
+                          <ParagraphBody $colorName={"--eerie-black-00"} translation-key="brand_track_payment_billing_preview_brand_disposition_and_equity">{t("brand_track_payment_billing_preview_brand_disposition_and_equity")}</ParagraphBody>
                         </Grid>
                         <Grid item xs={6}>
-                          <ParagraphBody $colorName={"--eerie-black-00"}>
-                            <span className={classes.boldContent}>{competitiveBrands?.length}</span> competitive brand(s)
-                          </ParagraphBody>
-                          <ParagraphBody $colorName={"--eerie-black-00"}>
-                            <span className={classes.boldContent}>{numberOfBrandEquityAttributes}</span> equity attribute(s)
-                          </ParagraphBody>
+                          <ParagraphBody 
+                            $colorName={"--eerie-black-00"} 
+                            className={classes.numberOfItem}
+                            translation-key="brand_track_payment_billing_preview_number_competitive_brand"
+                            dangerouslySetInnerHTML={{
+                              __html: t("brand_track_payment_billing_preview_number_competitive_brand", {number: competitiveBrands?.length}),
+                            }}
+                          ></ParagraphBody>
+                          <ParagraphBody 
+                            $colorName={"--eerie-black-00"} 
+                            className={classes.numberOfItem}
+                            translation-key="brand_track_payment_billing_preview_number_equity_attribute"
+                            dangerouslySetInnerHTML={{
+                              __html: t("brand_track_payment_billing_preview_number_equity_attribute", {number: numberOfBrandEquityAttributes}),
+                            }}
+                          ></ParagraphBody>
                           {!isValidCompetitiveBrand && (
-                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandDispositionAndEquity}>
-                              Required at least {competitiveBrandNeedMore} more competitive brand(s)
+                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandDispositionAndEquity} translation-key="brand_track_payment_billing_preview_competitive_need_more">
+                              {t("brand_track_payment_billing_preview_competitive_need_more", {number: competitiveBrandNeedMore})}
                             </ParagraphSmall>
                           )}
                           {!isValidBrandEquityAttributes && (
-                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandDispositionAndEquity}>
-                              Required at least {brandEquityAttributesNeedMore} more equity attribute(s)
+                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandDispositionAndEquity} translation-key="brand_track_payment_billing_preview_equity_attribute_need_more">
+                              {t("brand_track_payment_billing_preview_equity_attribute_need_more", {number: brandEquityAttributesNeedMore})}
                             </ParagraphSmall>
                           )}
                         </Grid>
                       </Grid>
                       <Grid item container>
                         <Grid item xs={6}>
-                          <ParagraphBody $colorName={"--eerie-black-00"}>Brand assets</ParagraphBody>
+                          <ParagraphBody $colorName={"--eerie-black-00"} translation-key="brand_track_payment_billing_preview_brand_assets">{t("brand_track_payment_billing_preview_brand_assets")}</ParagraphBody>
                         </Grid>
                         <Grid item xs={6}>
-                          <ParagraphBody $colorName={"--eerie-black-00"}>
-                            <span className={classes.boldContent}>{project?.brandAssets?.length}</span> asset(s)
-                          </ParagraphBody>
+                          <ParagraphBody 
+                            $colorName={"--eerie-black-00"} 
+                            className={classes.numberOfItem}
+                            translation-key="brand_track_payment_billing_preview_number_brand_asset"
+                            dangerouslySetInnerHTML={{
+                              __html: t("brand_track_payment_billing_preview_number_brand_asset", {number: project?.brandAssets?.length}),
+                            }}
+                          ></ParagraphBody>
                           {!isValidBrandAssetRecognition && (
-                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandAssetRecognition}>
-                              Required at least {brandAssetRecognitionNeedMore} more brand asset(s)
+                            <ParagraphSmall className={classes.dangerText} onClick={onGotoBrandAssetRecognition} translation-key="brand_track_payment_billing_preview_brand_asset_need_more">
+                              {t("brand_track_payment_billing_preview_brand_asset_need_more", {number: brandAssetRecognitionNeedMore})}
                             </ParagraphSmall>
                           )}
                         </Grid>
                       </Grid>
                       <Grid item container>
                         <Grid item xs={6}>
-                          <ParagraphBody $colorName={"--eerie-black-00"}>Custom question</ParagraphBody>
+                          <ParagraphBody $colorName={"--eerie-black-00"} translation-key="brand_track_payment_billing_preview_custom_question">{t("brand_track_payment_billing_preview_custom_question")}</ParagraphBody>
                         </Grid>
                         <Grid item xs={6}>
-                          <ParagraphBody $colorName={"--eerie-black-00"}>
-                            <span className={classes.boldContent}>{project?.customQuestions?.length}</span> question(s)
-                          </ParagraphBody>
+                          <ParagraphBody 
+                            $colorName={"--eerie-black-00"} 
+                            className={classes.numberOfItem}
+                            translation-key="brand_track_payment_billing_preview_number_custom_question"
+                            dangerouslySetInnerHTML={{
+                              __html: t("brand_track_payment_billing_preview_number_custom_question", {number: project?.customQuestions?.length}),
+                            }}
+                          ></ParagraphBody>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -291,12 +325,12 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
             <Button
               disabled={!isValidCheckout}
               btnType={BtnType.Raised}
-              children={<TextBtnSecondary>Next</TextBtnSecondary>}
+              children={<TextBtnSecondary translation-key="common_next">{t("common_next")}</TextBtnSecondary>}
               onClick={onNextPayment}
             />
           </Grid>
-          <ParagraphSmall className={classes.disBtn} $colorName={"--gray-60"}>
-            Next: select start time
+          <ParagraphSmall className={classes.disBtn} $colorName={"--gray-60"} translation-key="brand_track_payment_billing_preview_next">
+            {t("brand_track_payment_billing_preview_next")}
           </ParagraphSmall>
         </Grid>
       </Grid>
