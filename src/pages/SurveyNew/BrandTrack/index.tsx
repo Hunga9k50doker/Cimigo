@@ -133,7 +133,7 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
       <LeftContent>
         <PageTitle className={classes.pageTitle}>
           <PageTitleLeft>
-            <PageTitleText translation-key="setup_brand_track_title">{t("setup_brand_track_title")}</PageTitleText>
+            <PageTitleText translation-key="brand_track_setup_title">{t("brand_track_setup_title")}</PageTitleText>
             {!editable && <LockIcon status={project?.status} />}
           </PageTitleLeft>
           {project?.solution?.enableHowToSetUpSurvey && (
@@ -201,12 +201,12 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.basic_information)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}>1</RPStepIconBox>}
                     >
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_brand_category">{t("project_right_panel_step_brand_category")}</Heading5>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="brand_track_right_panel_step_brand_category">{t("brand_track_right_panel_step_brand_category")}</Heading5>
                     </RPStepLabel>
 
                     <RPStepContent>
-                      <ParagraphExtraSmall $colorName="--eerie-black" translation-key="project_right_panel_step_brand_category_sub_title">
-                        {t("project_right_panel_step_brand_category_sub_title")}
+                      <ParagraphExtraSmall $colorName="--eerie-black" translation-key="brand_track_right_panel_step_brand_category_sub_title">
+                        {t("brand_track_right_panel_step_brand_category_sub_title")}
                       </ParagraphExtraSmall>
                     </RPStepContent>
                   </Step>
@@ -216,17 +216,17 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.brand_list)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}>2</RPStepIconBox>}
                     >
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_brand_list">{t("project_right_panel_step_brand_list")}</Heading5>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="brand_track_right_panel_step_brand_list">{t("brand_track_right_panel_step_brand_list")}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphExtraSmall $colorName="--eerie-black" mb={1} translation-key="project_right_panel_step_brand_list_sub_title"> 
-                        {t("project_right_panel_step_brand_list_sub_title")}
+                      <ParagraphExtraSmall $colorName="--eerie-black" mb={1} translation-key="brand_track_right_panel_step_brand_list_sub_title"> 
+                        {t("brand_track_right_panel_step_brand_list_sub_title")}
                       </ParagraphExtraSmall>
                       {mainBrands?.map(item => (
                         <ParagraphSmall $colorName="--eerie-black" $fontWeight={500}>{item?.brand}</ParagraphSmall>
                       ))}
                       {competingBrands?.length > 0 && (
-                        <ParagraphSmall $colorName="--eerie-black" translation-key="project_right_panel_step_brand_list_detail">{t("project_right_panel_step_brand_list_detail", {number: competingBrands?.length})}</ParagraphSmall>
+                        <ParagraphSmall $colorName="--eerie-black" translation-key="brand_track_right_panel_step_brand_list_detail">{t("brand_track_right_panel_step_brand_list_detail", {number: competingBrands?.length})}</ParagraphSmall>
                       )}
                     </RPStepContent>
                   </Step>
@@ -236,29 +236,29 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.brand_disposition_and_equity)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}>3</RPStepIconBox>}
                     >
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_brand_disposition_and_equity">{t("project_right_panel_step_brand_disposition_and_equity")}</Heading5>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="brand_track_right_panel_step_brand_disposition_and_equity">{t("brand_track_right_panel_step_brand_disposition_and_equity")}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
-                      <ParagraphExtraSmall $colorName="--eerie-black" mb={1} translation-key="project_right_panel_step_brand_disposition_and_equity_sub_title">
-                        {t("project_right_panel_step_brand_disposition_and_equity_sub_title")}
+                      <ParagraphExtraSmall $colorName="--eerie-black" mb={1} translation-key="brand_track_right_panel_step_brand_disposition_and_equity_sub_title">
+                        {t("brand_track_right_panel_step_brand_disposition_and_equity_sub_title")}
                       </ParagraphExtraSmall>
                       {competitiveBrands?.length > 0 && (
                         <ParagraphSmall 
                           $colorName="--eerie-black" 
                           className={classes.outlineSectionDescription}
-                          translation-key="project_right_panel_step_brand_disposition_and_equity_detail_1"
+                          translation-key="brand_track_right_panel_step_brand_disposition_and_equity_detail_1"
                           dangerouslySetInnerHTML={{
-                            __html: t("project_right_panel_step_brand_disposition_and_equity_detail_1", {number: competitiveBrands?.length}),
+                            __html: t("brand_track_right_panel_step_brand_disposition_and_equity_detail_1", {number: competitiveBrands?.length}),
                           }}
                         ></ParagraphSmall>
                       )}
                       {numberOfBrandEquityAttributes > 0 && (
                         <ParagraphSmall 
                           $colorName="--eerie-black" 
-                          translation-key="project_right_panel_step_brand_disposition_and_equity_detail_2"
+                          translation-key="brand_track_right_panel_step_brand_disposition_and_equity_detail_2"
                           className={classes.outlineSectionDescription}
                           dangerouslySetInnerHTML={{
-                            __html: t("project_right_panel_step_brand_disposition_and_equity_detail_2", {number: numberOfBrandEquityAttributes}),
+                            __html: t("brand_track_right_panel_step_brand_disposition_and_equity_detail_2", {number: numberOfBrandEquityAttributes}),
                           }}
                         ></ParagraphSmall>
                       )}
@@ -270,7 +270,7 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       onClick={() => scrollToElement(SETUP_SURVEY_SECTION.brand_asset_recognition)}
                       StepIconComponent={({ active }) => <RPStepIconBox $active={active}>4</RPStepIconBox>}
                     >
-                      <Heading5 className="title" $colorName="--gray-60" translation-key="project_right_panel_step_brand_assets">{t("project_right_panel_step_brand_assets")}</Heading5>
+                      <Heading5 className="title" $colorName="--gray-60" translation-key="brand_track_right_panel_step_brand_assets">{t("brand_track_right_panel_step_brand_assets")}</Heading5>
                     </RPStepLabel>
                     <RPStepContent>
                       {minBrandAssetRecognition < 1 && (
@@ -281,10 +281,10 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                       {brandAssets?.length > 0 && (
                         <ParagraphSmall 
                           $colorName="--eerie-black" 
-                          translation-key="project_right_panel_step_brand_assets_detail"
+                          translation-key="brand_track_right_panel_step_brand_assets_detail"
                           className={classes.outlineSectionDescription}
                           dangerouslySetInnerHTML={{
-                            __html: t("project_right_panel_step_brand_assets_detail", {number: brandAssets?.length}),
+                            __html: t("brand_track_right_panel_step_brand_assets_detail", {number: brandAssets?.length}),
                           }}
                         ></ParagraphSmall>
                       )}
@@ -299,8 +299,8 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                         <Heading5 className="title" $colorName="--gray-60" translation-key="common_custom_question">{t("common_custom_question")}</Heading5>
                       </RPStepLabel>
                       <RPStepContent>
-                        <ParagraphExtraSmall $colorName="--eerie-black" translation-key="project_right_panel_step_custom_question_sub_title">
-                          {t("project_right_panel_step_custom_question_sub_title")} 
+                        <ParagraphExtraSmall $colorName="--eerie-black" translation-key="brand_track_right_panel_step_custom_question_sub_title">
+                          {t("brand_track_right_panel_step_custom_question_sub_title")} 
                         </ParagraphExtraSmall>
                         <div className={classes.questionsPriceWrapper}>
                           <Chip
@@ -309,7 +309,7 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
                             label={<ParagraphExtraSmall $colorName="--ghost-white">{price?.customQuestionCost?.show}</ParagraphExtraSmall>}
                             color="secondary"
                           />
-                          <ParagraphExtraSmall $colorName={"var(--eerie-black)"} translation-key="project_right_panel_step_custom_question_detail">{t("project_right_panel_step_custom_question_detail", {number: project?.customQuestions?.length})}</ParagraphExtraSmall>
+                          <ParagraphExtraSmall $colorName={"var(--eerie-black)"} translation-key="brand_track_right_panel_step_custom_question_detail">{t("brand_track_right_panel_step_custom_question_detail", {number: project?.customQuestions?.length})}</ParagraphExtraSmall>
                         </div>
                       </RPStepContent>
                     </Step>

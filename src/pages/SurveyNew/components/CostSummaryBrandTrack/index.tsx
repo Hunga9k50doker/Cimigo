@@ -25,20 +25,20 @@ const CostSummaryBrandTrack = memo(({ project, price }: CostSummaryBrandTrackPro
 
   return (
     <>
-      <Heading4 $colorName="--eerie-black" $fontWeight={"500"} mb={1} sx={{display: "flex", alignItems: "center", gap: "8px"}} translation-key="project_right_panel_cost_summary_monthly_cost">
-        {t("project_right_panel_cost_summary_monthly_cost")}
+      <Heading4 $colorName="--eerie-black" $fontWeight={"500"} mb={1} sx={{display: "flex", alignItems: "center", gap: "8px"}} translation-key="brand_track_right_panel_cost_summary_monthly_cost">
+        {t("brand_track_right_panel_cost_summary_monthly_cost")}
         <ArrowDropDown/>
       </Heading4>
       <Divider sx={{ mb: 2, borderColor: 'var(--gray-20)' }} />
       <Box display="flex" justifyContent="space-between" mb={2}>
         <Box>
-          <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"} translation-key="project_brand_track">{t("project_brand_track")}</ParagraphSmall>
+          <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"} translation-key="brand_track_right_panel_cost_summary_brand_track">{t("brand_track_right_panel_cost_summary_brand_track")}</ParagraphSmall>
           <ParagraphExtraSmall 
             $colorName="--gray-60" 
             className={classes.itemSubTitle}
-            translation-key="project_right_panel_cost_summary_sample_size"
+            translation-key="brand_track_right_panel_cost_summary_sample_size"
             dangerouslySetInnerHTML={{
-              __html: t("project_right_panel_cost_summary_sample_size", {number: project?.sampleSize}),
+              __html: t("brand_track_right_panel_cost_summary_sample_size", {number: project?.sampleSize}),
             }}
           ></ParagraphExtraSmall>
         </Box>
@@ -51,9 +51,9 @@ const CostSummaryBrandTrack = memo(({ project, price }: CostSummaryBrandTrackPro
             <ParagraphExtraSmall 
               $colorName="--gray-60" 
               className={classes.itemSubTitle}
-              translation-key="project_right_panel_cost_summary_question"
+              translation-key="brand_track_right_panel_cost_summary_question"
               dangerouslySetInnerHTML={{
-                __html: t("project_right_panel_cost_summary_question", {number: project?.customQuestions?.length || 0}),
+                __html: t("brand_track_right_panel_cost_summary_question", {number: project?.customQuestions?.length || 0}),
               }}
             ></ParagraphExtraSmall>
           </Box>
@@ -77,9 +77,9 @@ const CostSummaryBrandTrack = memo(({ project, price }: CostSummaryBrandTrackPro
         <ParagraphSmall 
           $colorName="--gray-80" 
           align="right"
-          translation-key="project_right_panel_cost_summary_billing_cycle"
+          translation-key="brand_track_right_panel_cost_summary_billing_cycle"
           dangerouslySetInnerHTML={{
-            __html: t("project_right_panel_cost_summary_billing_cycle", {number: project?.solution?.paymentMonthSchedule}),
+            __html: t("brand_track_right_panel_cost_summary_billing_cycle", {number: project?.solution?.paymentMonthSchedule}),
           }}
         ></ParagraphSmall>
       </Box>

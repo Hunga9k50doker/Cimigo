@@ -79,16 +79,16 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
 
   return (
     <Grid component="form" autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)} id={SETUP_SURVEY_SECTION.basic_information}>
-      <Heading4 $fontSizeMobile={"16px"} mb={1} $colorName="--eerie-black" translation-key="setup_brand_track_basic_infor_title">{t('setup_brand_track_basic_infor_title', { step: 1 })}</Heading4>
-      <ParagraphBody $colorName="--gray-80" mb={{ xs: 1, sm: 2 }} translation-key={"setup_brand_track_basic_infor_sub_title"}>{t("setup_brand_track_basic_infor_sub_title")}</ParagraphBody>
+      <Heading4 $fontSizeMobile={"16px"} mb={1} $colorName="--eerie-black" translation-key="brand_track_setup_basic_infor_title">{t('brand_track_setup_basic_infor_title', { step: 1 })}</Heading4>
+      <ParagraphBody $colorName="--gray-80" mb={{ xs: 1, sm: 2 }} translation-key={"brand_track_setup_basic_infor_sub_title"}>{t("brand_track_setup_basic_infor_sub_title")}</ParagraphBody>
       <Grid container sx={{display: "block"}}>
         <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-category`} className={classes.categoryInputWrapper}>
           <InputTextfield
-            translation-key="field_project_category"
+            translation-key="brand_track_field_project_category"
             readOnly={!editable}
             name="category"
-            placeholder={t('field_brand_track_project_category_placeholder')}
-            translation-key-placeholder="field_brand_track_project_category_placeholder"
+            placeholder={t('brand_track_field_project_category_placeholder')}
+            translation-key-placeholder="brand_track_field_project_category_placeholder"
             inputRef={register('category')}
             startAdornment={
               <InputAdornment position="start">
@@ -109,8 +109,8 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
           />
         )}
         <ParagraphSmall sx={{marginTop: "8px"}} $colorName="--gray-80"
-          translation-key="setup_brand_track_basic_infor_example_question">
-            {t("setup_brand_track_basic_infor_example_question")}
+          translation-key="brand_track_setup_basic_infor_example_question">
+            {t("brand_track_setup_basic_infor_example_question")}
         </ParagraphSmall>
       </Grid>
       <Grid sx={{marginLeft: "16px"}}>
@@ -126,21 +126,21 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
                 onChange={(_, checked) => onTogglePremise(checked)}
               />
             }
-            translation-key="setup_brand_track_basic_infor_toggle_premise_title"
-            label={t("setup_brand_track_basic_infor_toggle_premise_title") as string}
+            translation-key="brand_track_setup_basic_infor_toggle_premise_title"
+            label={t("brand_track_setup_basic_infor_toggle_premise_title") as string}
           />
           <TooltipWrapper
             className={classes.tooltip}
             tooltipPopper={classes.tooltipPopper}
-            translation-key="setup_brand_track_basic_infor_toggle_premise_title_tooltip"
-            title={t("setup_brand_track_basic_infor_toggle_premise_title")}
-            caption={t("setup_brand_track_basic_infor_toggle_premise_sub_title")}
+            translation-key="brand_track_setup_basic_infor_toggle_premise_title_tooltip"
+            title={t("brand_track_setup_basic_infor_toggle_premise_title")}
+            caption={t("brand_track_setup_basic_infor_toggle_premise_sub_title")}
           >
             <HelpIcon sx={{ fontSize: "16px", color: "var(--gray-60)" }} className={classes.helpIcon} />
           </TooltipWrapper>
         </div>
-        <ParagraphSmall ml={4.5} $colorName="--gray-80" translation-key="setup_brand_track_basic_infor_toggle_premise_sub_title">
-          {t("setup_brand_track_basic_infor_toggle_premise_sub_title")}
+        <ParagraphSmall ml={4.5} $colorName="--gray-80" translation-key="brand_track_setup_basic_infor_toggle_premise_sub_title">
+          {t("brand_track_setup_basic_infor_toggle_premise_sub_title")}
         </ParagraphSmall>
       </Grid>
     </Grid>

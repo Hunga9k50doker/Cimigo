@@ -97,29 +97,29 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
             $fontSizeMobile={"16px"}
             $colorName="--eerie-black"
             sx={{ display: "inline-block", verticalAlign: "middle" }}
-            translation-key="setup_brand_track_brand_asset_recognition_title"
+            translation-key="brand_track_setup_brand_asset_recognition_title"
           >
-            {t("setup_brand_track_brand_asset_recognition_title", {step: 4})}
+            {t("brand_track_setup_brand_asset_recognition_title", {step: 4})}
           </Heading4>
           ) : (
           <Heading4
             $fontSizeMobile={"16px"}
             $colorName="--eerie-black"
             sx={{ display: "inline-block", verticalAlign: "middle" }}
-            translation-key="setup_brand_track_brand_asset_recognition_title_optional"
+            translation-key="brand_track_setup_brand_asset_recognition_title_optional"
           >
-            {t("setup_brand_track_brand_asset_recognition_title_optional", {step: 4})}
+            {t("brand_track_setup_brand_asset_recognition_title_optional", {step: 4})}
           </Heading4>
         )}
         <MaxChip
           sx={{ ml: 1 }}
           label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxBrandAssetRecognition}</ParagraphSmall>}
         />
-        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 } translation-key="setup_brand_track_brand_asset_recognition_sub_title_1">{t("setup_brand_track_brand_asset_recognition_sub_title_1")}</ParagraphBody>
-        <ParagraphBody $colorName="--eerie-black" translation-key="setup_brand_track_brand_asset_recognition_sub_title_2">{t("setup_brand_track_brand_asset_recognition_sub_title_2")}</ParagraphBody>
+        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 } translation-key="brand_track_setup_brand_asset_recognition_sub_title_1">{t("brand_track_setup_brand_asset_recognition_sub_title_1")}</ParagraphBody>
+        <ParagraphBody $colorName="--eerie-black" translation-key="brand_track_setup_brand_asset_recognition_sub_title_2">{t("brand_track_setup_brand_asset_recognition_sub_title_2")}</ParagraphBody>
         {!!brandAssetRecognitionNeedMore && (
             <NoteWarning>
-              <ParagraphSmall $colorName="--warning-dark" translation-key="setup_brand_track_brand_asset_recognition_need_more">{t("setup_brand_track_brand_asset_recognition_need_more", {number: brandAssetRecognitionNeedMore})}</ParagraphSmall>
+              <ParagraphSmall $colorName="--warning-dark" translation-key="brand_track_setup_brand_asset_recognition_need_more">{t("brand_track_setup_brand_asset_recognition_need_more", {number: brandAssetRecognitionNeedMore})}</ParagraphSmall>
             </NoteWarning>
           )}
         <Grid className={clsx({[classes.brandAssetsWrapper]: project?.brandAssets?.length > 0})}>
@@ -139,14 +139,14 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
           disabled={!editable || project?.brandAssets?.length >= maxBrandAssetRecognition}
           className={classes.btnAddBrand}
           btnType={BtnType.Outlined}
-          children={<TextBtnSmall translation-key="setup_brand_track_brand_asset_recognition_btn_add">{t("setup_brand_track_brand_asset_recognition_btn_add")}</TextBtnSmall>}
+          children={<TextBtnSmall translation-key="brand_track_setup_brand_asset_recognition_btn_add">{t("brand_track_setup_brand_asset_recognition_btn_add")}</TextBtnSmall>}
           startIcon={<HeartPlus sx={{ fontSize: "14px !important" }} />}
           onClick={onOpenPopupAddOrEdit}
           sx={{  width: { xs: "100%", sm: "auto" } }}
         />
         {project?.brandAssets?.length >= maxBrandAssetRecognition && (
-            <ParagraphSmall $colorName="--gray-60" sx={{mt: 1}} translation-key="setup_brand_track_brand_asset_recognition_reach_limit">
-              {t("setup_brand_track_brand_asset_recognition_reach_limit", {number: maxBrandAssetRecognition})}
+            <ParagraphSmall $colorName="--gray-60" sx={{mt: 1}} translation-key="brand_track_setup_brand_asset_recognition_reach_limit">
+              {t("brand_track_setup_brand_asset_recognition_reach_limit", {number: maxBrandAssetRecognition})}
             </ParagraphSmall>
           )}
       </Grid>
@@ -159,10 +159,10 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
       />
       <PopupConfirmDeleteCommon
         isOpen={openPopupConfirmDelete}
-        title={t("setup_brand_track_popup_delete_btn_cancel")}
-        description={t("setup_brand_track_popup_delete_description")}
-        cancelText={t("setup_brand_track_popup_delete_btn_cancel")}
-        deleteText={t("setup_brand_track_popup_delete_btn_delete")}
+        title={t("brand_track_setup_popup_delete_btn_cancel")}
+        description={t("brand_track_setup_popup_delete_description")}
+        cancelText={t("brand_track_setup_popup_delete_btn_cancel")}
+        deleteText={t("brand_track_setup_popup_delete_btn_delete")}
         onCancel={onClosePopupConfirmDelete}
         onDelete={handleDelete}
       />

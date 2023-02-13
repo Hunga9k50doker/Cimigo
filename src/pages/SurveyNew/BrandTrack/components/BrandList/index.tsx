@@ -132,22 +132,22 @@ const BrandList = memo(({ project }: BrandListProps) => {
           $fontSizeMobile={"16px"}
           $colorName="--eerie-black"
           sx={{ display: "inline-block", verticalAlign: "middle" }}
-          translation-key="setup_brand_track_brand_list_title"
+          translation-key="brand_track_setup_brand_list_title"
         >
-          {t('setup_brand_track_brand_list_title', { step: 2 })}
+          {t('brand_track_setup_brand_list_title', { step: 2 })}
         </Heading4>
-        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 } translation-key="setup_brand_track_brand_list_sub_title">{t("setup_brand_track_brand_list_sub_title")}</ParagraphBody>
+        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 } translation-key="brand_track_setup_brand_list_sub_title">{t("brand_track_setup_brand_list_sub_title")}</ParagraphBody>
         <Grid mb={3}>
           <div className={classes.mainBrandTitle}>
             <PlayArrow sx={{height: "18px"}}/>
-            <ParagraphBody $fontWeight={600} $colorName="--eerie-black" translation-key="setup_brand_track_brand_list_main_brand_title">
-              {t("setup_brand_track_brand_list_main_brand_title")}
+            <ParagraphBody $fontWeight={600} $colorName="--eerie-black" translation-key="brand_track_setup_brand_list_main_brand_title">
+              {t("brand_track_setup_brand_list_main_brand_title")}
             </ParagraphBody>
           </div>
-          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } translation-key="setup_brand_track_brand_list_main_brand_sub_title">{t("setup_brand_track_brand_list_main_brand_sub_title")}</ParagraphBody>
+          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } translation-key="brand_track_setup_brand_list_main_brand_sub_title">{t("brand_track_setup_brand_list_main_brand_sub_title")}</ParagraphBody>
           {!!mainBrandNeedMore && (
             <NoteWarning ml={ 3 } mb = { 2 }>
-              <ParagraphSmall $colorName="--warning-dark" translation-key="setup_brand_track_brand_list_main_brand_need_more">{t("setup_brand_track_brand_list_main_brand_need_more", { number: mainBrandNeedMore })}</ParagraphSmall>
+              <ParagraphSmall $colorName="--warning-dark" translation-key="brand_track_setup_brand_list_main_brand_need_more">{t("brand_track_setup_brand_list_main_brand_need_more", { number: mainBrandNeedMore })}</ParagraphSmall>
             </NoteWarning>
           )}
           {mainBrandDatas?.map(mainItem => (
@@ -171,7 +171,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
             <Button
               className={classes.btnAddMainBrand}
               btnType={BtnType.Outlined}
-              children={<TextBtnSmall translation-key="setup_brand_track_brand_list_main_brand_add_btn">{t("setup_brand_track_brand_list_main_brand_add_btn")}</TextBtnSmall>}
+              children={<TextBtnSmall translation-key="brand_track_setup_brand_list_main_brand_add_btn">{t("brand_track_setup_brand_list_main_brand_add_btn")}</TextBtnSmall>}
               startIcon={<AddIcon sx={{ fontSize: "16px !important" }} />}
               onClick={onAddMainBrand}
             />
@@ -180,16 +180,16 @@ const BrandList = memo(({ project }: BrandListProps) => {
         <Grid>
           <div className={classes.competingBrandTitle}>
             <PlayArrow sx={{height: "18px"}}/>
-            <ParagraphBody $fontWeight={600} $colorName="--eerie-black" translation-key="setup_brand_track_brand_list_competing_brand_title">
-              {t("setup_brand_track_brand_list_competing_brand_title")}
+            <ParagraphBody $fontWeight={600} $colorName="--eerie-black" translation-key="brand_track_setup_brand_list_competing_brand_title">
+              {t("brand_track_setup_brand_list_competing_brand_title")}
             </ParagraphBody>
           </div>
-          <ParagraphBody $colorName="--eerie-black" mb={ 4 } ml={ 3 } translation-key="setup_brand_track_brand_list_competing_brand_sub_title_1">{t("setup_brand_track_brand_list_competing_brand_sub_title_1")}</ParagraphBody>
-          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } translation-key="setup_brand_track_brand_list_competing_brand_sub_title_2">{t("setup_brand_track_brand_list_competing_brand_sub_title_2")}</ParagraphBody> 
+          <ParagraphBody $colorName="--eerie-black" mb={ 4 } ml={ 3 } translation-key="brand_track_setup_brand_list_competing_brand_sub_title_1">{t("brand_track_setup_brand_list_competing_brand_sub_title_1")}</ParagraphBody>
+          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } translation-key="brand_track_setup_brand_list_competing_brand_sub_title_2">{t("brand_track_setup_brand_list_competing_brand_sub_title_2")}</ParagraphBody> 
           {!!competingBrandNeedMore && (
             <NoteWarning ml={ 3 }>
-              <ParagraphSmall $colorName="--warning-dark" translation-key="setup_brand_track_brand_list_competing_brand_need_more">
-                {t("setup_brand_track_brand_list_competing_brand_need_more", {number: competingBrandNeedMore})}
+              <ParagraphSmall $colorName="--warning-dark" translation-key="brand_track_setup_brand_list_competing_brand_need_more">
+                {t("brand_track_setup_brand_list_competing_brand_need_more", {number: competingBrandNeedMore})}
               </ParagraphSmall>
             </NoteWarning>
           )}
@@ -236,14 +236,14 @@ const BrandList = memo(({ project }: BrandListProps) => {
             disabled={!editable || competingBrandDatas?.length >= maxCompetingBrand}
             className={classes.btnAddBrand}
             btnType={BtnType.Outlined}
-            children={<TextBtnSmall translation-key="setup_brand_track_brand_list_competing_brand_btn_add">{t("setup_brand_track_brand_list_competing_brand_btn_add")}</TextBtnSmall>}
+            children={<TextBtnSmall translation-key="brand_track_setup_brand_list_competing_brand_btn_add">{t("brand_track_setup_brand_list_competing_brand_btn_add")}</TextBtnSmall>}
             startIcon={<IconNewLabelFilled sx={{ fontSize: "16px !important" }} />}
             onClick={onAddCompetingBrand}
             sx={{ width: { xs: "100%", sm: "auto" } }}
           />
           {competingBrandDatas?.length >= maxCompetingBrand && (
-            <ParagraphSmall $colorName="--gray-60" mt={1} ml={3} translation-key="setup_brand_track_brand_list_competing_brand_reach_limit">
-              {t("setup_brand_track_brand_list_competing_brand_reach_limit", {number: maxCompetingBrand})}
+            <ParagraphSmall $colorName="--gray-60" mt={1} ml={3} translation-key="brand_track_setup_brand_list_competing_brand_reach_limit">
+              {t("brand_track_setup_brand_list_competing_brand_reach_limit", {number: maxCompetingBrand})}
             </ParagraphSmall>
           )}
         </Grid>

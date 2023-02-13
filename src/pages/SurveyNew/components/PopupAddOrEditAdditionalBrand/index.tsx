@@ -42,8 +42,8 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
 
   const schema = useMemo(() => {
     return yup.object().shape({
-      brand: yup.string().required(t("field_brand_name_vali_required")),
-      variant: yup.string().required(t("field_brand_variant_vali_required")),
+      brand: yup.string().required(t("brand_track_field_brand_name_vali_required")),
+      variant: yup.string().required(t("brand_track_field_brand_variant_vali_required")),
       manufacturer: yup.string().nullable(),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -106,16 +106,16 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
       <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle $backgroundColor="--white">
           {brandType === EBrandType.MAIN ? (
-            <Heading3 $colorName="--gray-90" translation-key="setup_brand_track_popup_additional_brand_main_brand">
-              {t("setup_brand_track_popup_additional_brand_main_brand")} 
+            <Heading3 $colorName="--gray-90" translation-key="brand_track_setup_popup_additional_brand_main_brand">
+              {t("brand_track_setup_popup_additional_brand_main_brand")} 
             </Heading3>
           ) : brand ? (
-            <Heading3 $colorName="--gray-90" translation-key="setup_brand_track_popup_additional_brand_edit_competing_brand_title">
-              {t("setup_brand_track_popup_additional_brand_edit_competing_brand_title")}
+            <Heading3 $colorName="--gray-90" translation-key="brand_track_setup_popup_additional_brand_edit_competing_brand_title">
+              {t("brand_track_setup_popup_additional_brand_edit_competing_brand_title")}
             </Heading3>
           ) : (
-            <Heading3 $colorName="--gray-90" translation-key="setup_brand_track_popup_additional_brand_add_competing_brand_title">
-              {t("setup_brand_track_popup_additional_brand_add_competing_brand_title")}
+            <Heading3 $colorName="--gray-90" translation-key="brand_track_setup_popup_additional_brand_add_competing_brand_title">
+              {t("brand_track_setup_popup_additional_brand_add_competing_brand_title")}
             </Heading3>
           )}
           <ButtonCLose
@@ -126,23 +126,23 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
         </DialogTitle>
         <DialogContent dividers sx={{marginBottom: "8px"}}>
           {brandType === EBrandType.MAIN ? (
-            <ParagraphBody $colorName="--eerie-black" mb={3} translation-key="setup_brand_track_popup_additional_brand_main_brand_title">
-              {t("setup_brand_track_popup_additional_brand_main_brand_title")}
+            <ParagraphBody $colorName="--eerie-black" mb={3} translation-key="brand_track_setup_popup_additional_brand_main_brand_title">
+              {t("brand_track_setup_popup_additional_brand_main_brand_title")}
             </ParagraphBody>
           ) : (
-            <ParagraphBody $colorName="--eerie-black" mb={3} translation-key="setup_brand_track_popup_additional_brand_competing_brand_title">
-              {t("setup_brand_track_popup_additional_brand_competing_brand_title")}
+            <ParagraphBody $colorName="--eerie-black" mb={3} translation-key="brand_track_setup_popup_additional_brand_competing_brand_title">
+              {t("brand_track_setup_popup_additional_brand_competing_brand_title")}
             </ParagraphBody>
           )}
           <Grid container rowSpacing={2} columnSpacing={3}>
             <Grid item xs={12} md={6}>
-              <ParagraphSmall $colorName="--gray-80" translation-key="field_brand_name">
-                {t("field_brand_name")}
+              <ParagraphSmall $colorName="--gray-80" translation-key="brand_track_field_brand_name">
+                {t("brand_track_field_brand_name")}
               </ParagraphSmall>
               <InputTextfield
-                translation-key="field_brand_name_placeholder"
+                translation-key="brand_track_field_brand_name_placeholder"
                 className={classes.inputField}
-                placeholder={t("field_brand_name_placeholder")}
+                placeholder={t("brand_track_field_brand_name_placeholder")}
                 type="text"
                 autoComplete="off"
                 inputRef={register("brand")}
@@ -150,13 +150,13 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
               />
             </Grid>
             <Grid item xs={12} md={6} pt={{xs: 2, md: 0}}>
-              <ParagraphSmall $colorName="--gray-80" translation-key="field_brand_variant">
-                {t("field_brand_variant")}
+              <ParagraphSmall $colorName="--gray-80" translation-key="brand_track_field_brand_variant">
+                {t("brand_track_field_brand_variant")}
               </ParagraphSmall>
               <InputTextfield
-                translation-key="field_brand_variant_placeholder"
+                translation-key="brand_track_field_brand_variant_placeholder"
                 className={classes.inputField}
-                placeholder={t("field_brand_variant_placeholder")}
+                placeholder={t("brand_track_field_brand_variant_placeholder")}
                 type="text"
                 autoComplete="off"
                 inputRef={register("variant")}
@@ -164,13 +164,13 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
               />
             </Grid>
             <Grid item xs={12} pt={{xs: 2}}>
-              <ParagraphSmall $colorName="--gray-80" translation-key="field_brand_manufacturer">
-                {t("field_brand_manufacturer")}
+              <ParagraphSmall $colorName="--gray-80" translation-key="brand_track_field_brand_manufacturer">
+                {t("brand_track_field_brand_manufacturer")}
               </ParagraphSmall>
               <InputTextfield
-                translation-key="field_brand_manufacturer_placeholder"
+                translation-key="brand_track_field_brand_manufacturer_placeholder"
                 className={classes.inputField}
-                placeholder={t("field_brand_manufacturer_placeholder")}
+                placeholder={t("brand_track_field_brand_manufacturer_placeholder")}
                 type="text"
                 autoComplete="off"
                 inputRef={register("manufacturer")}
