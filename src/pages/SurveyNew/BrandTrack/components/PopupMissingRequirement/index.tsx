@@ -63,18 +63,18 @@ const PopupMissingRequirement = ({ isOpen, isValidBasic, isValidBrandList, isVal
             </ParagraphBody>
           )}
           {!isValidBrandList && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_list)} className="cursor-pointer underline">Building your brand list</span> minimum of {minMainBrand} main brand(s) and {minCompetingBrand} competing brand(s) are required
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80' translation-key="setup_survey_popup_missing_required_brand_list_min">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_list)} className="cursor-pointer underline" translation-key="setup_survey_popup_missing_required_brand_list">{t("setup_survey_popup_missing_required_brand_list")}</span> {t("setup_survey_popup_missing_required_brand_list_min", {minMainBrand: minMainBrand, minCompetingBrand: minCompetingBrand})}
             </ParagraphBody>
           )}
           {!isValidBrandDispositionAndEquity && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_disposition_and_equity)} className="cursor-pointer underline">Brand disposition and equity</span> minimum of {minCompetitiveBrand} competing brand(s) and {minEquityAttributes} equity attribute(s) are required
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80' translation-key="setup_survey_popup_missing_required_brand_disposition_and_equity_min">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_disposition_and_equity)} className="cursor-pointer underline" translation-key="setup_survey_popup_missing_required_brand_disposition_and_equity">{t("setup_survey_popup_missing_required_brand_disposition_and_equity")}</span> {t("setup_survey_popup_missing_required_brand_disposition_and_equity_min", {minCompetitiveBrand: minCompetitiveBrand, minEquityAttributes: minEquityAttributes})}
             </ParagraphBody>
           )}
           {!isValidBrandAssetRecognition && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_asset_recognition)} className="cursor-pointer underline">Brand asset recognition</span> minimum of {minBrandAssetRecognition} brand asset(s) are required
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80' translation-key="setup_survey_popup_missing_required_brand_asset_recognition_min">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_asset_recognition)} className="cursor-pointer underline" translation-key="setup_survey_popup_missing_required_brand_asset_recognition">{t("setup_survey_popup_missing_required_brand_asset_recognition")}</span> {t("setup_survey_popup_missing_required_brand_asset_recognition_min", {minBrandAssetRecognition: minBrandAssetRecognition})}
             </ParagraphBody>
           )}
         </ul>
