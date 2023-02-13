@@ -42,15 +42,14 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
 
   const schema = useMemo(() => {
     return yup.object().shape({
-      brand: yup.string().required("Brand name is required"),
-      variant: yup.string().required("Brand variant is required"),
+      brand: yup.string().required(t("brand_track_field_brand_name_vali_required")),
+      variant: yup.string().required(t("brand_track_field_brand_variant_vali_required")),
       manufacturer: yup.string().nullable(),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -90,6 +89,7 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   const _onClose = () => {
@@ -105,10 +105,19 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
     >
       <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle $backgroundColor="--white">
-          <Heading3 $colorName="--gray-90">
-            {brandType === EBrandType.MAIN ? "Your main brand" : brand ? "Edit brand" : "Add new brand"}
-            
-          </Heading3>
+          {brandType === EBrandType.MAIN ? (
+            <Heading3 $colorName="--gray-90" translation-key="brand_track_setup_popup_additional_brand_main_brand">
+              {t("brand_track_setup_popup_additional_brand_main_brand")} 
+            </Heading3>
+          ) : brand ? (
+            <Heading3 $colorName="--gray-90" translation-key="brand_track_setup_popup_additional_brand_edit_competing_brand_title">
+              {t("brand_track_setup_popup_additional_brand_edit_competing_brand_title")}
+            </Heading3>
+          ) : (
+            <Heading3 $colorName="--gray-90" translation-key="brand_track_setup_popup_additional_brand_add_competing_brand_title">
+              {t("brand_track_setup_popup_additional_brand_add_competing_brand_title")}
+            </Heading3>
+          )}
           <ButtonCLose
             $backgroundColor="--eerie-black-5"
             $colorName="--eerie-black-40"
@@ -116,17 +125,24 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
           </ButtonCLose>
         </DialogTitle>
         <DialogContent dividers sx={{marginBottom: "8px"}}>
-          <ParagraphBody $colorName="--eerie-black" mb={3}>
-            {brandType === EBrandType.MAIN ? "What is your main brand to track?" : "Please enter some information below to add a new brand."}
-          </ParagraphBody>
+          {brandType === EBrandType.MAIN ? (
+            <ParagraphBody $colorName="--eerie-black" mb={3} translation-key="brand_track_setup_popup_additional_brand_main_brand_title">
+              {t("brand_track_setup_popup_additional_brand_main_brand_title")}
+            </ParagraphBody>
+          ) : (
+            <ParagraphBody $colorName="--eerie-black" mb={3} translation-key="brand_track_setup_popup_additional_brand_competing_brand_title">
+              {t("brand_track_setup_popup_additional_brand_competing_brand_title")}
+            </ParagraphBody>
+          )}
           <Grid container rowSpacing={2} columnSpacing={3}>
             <Grid item xs={12} md={6}>
-              <ParagraphSmall $colorName="--gray-80">
-                Brand name
+              <ParagraphSmall $colorName="--gray-80" translation-key="brand_track_field_brand_name">
+                {t("brand_track_field_brand_name")}
               </ParagraphSmall>
               <InputTextfield
+                translation-key="brand_track_field_brand_name_placeholder"
                 className={classes.inputField}
-                placeholder="e.g. Coca-Cola"
+                placeholder={t("brand_track_field_brand_name_placeholder")}
                 type="text"
                 autoComplete="off"
                 inputRef={register("brand")}
@@ -134,12 +150,13 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
               />
             </Grid>
             <Grid item xs={12} md={6} pt={{xs: 2, md: 0}}>
-              <ParagraphSmall $colorName="--gray-80">
-                Brand variant
+              <ParagraphSmall $colorName="--gray-80" translation-key="brand_track_field_brand_variant">
+                {t("brand_track_field_brand_variant")}
               </ParagraphSmall>
               <InputTextfield
+                translation-key="brand_track_field_brand_variant_placeholder"
                 className={classes.inputField}
-                placeholder="e.g. Light"
+                placeholder={t("brand_track_field_brand_variant_placeholder")}
                 type="text"
                 autoComplete="off"
                 inputRef={register("variant")}
@@ -147,12 +164,13 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
               />
             </Grid>
             <Grid item xs={12} pt={{xs: 2}}>
-              <ParagraphSmall $colorName="--gray-80">
-                Manufacturer (optional)
+              <ParagraphSmall $colorName="--gray-80" translation-key="brand_track_field_brand_manufacturer">
+                {t("brand_track_field_brand_manufacturer")}
               </ParagraphSmall>
               <InputTextfield
+                translation-key="brand_track_field_brand_manufacturer_placeholder"
                 className={classes.inputField}
-                placeholder="e.g. The Coca-cola company"
+                placeholder={t("brand_track_field_brand_manufacturer_placeholder")}
                 type="text"
                 autoComplete="off"
                 inputRef={register("manufacturer")}
@@ -179,7 +197,8 @@ const PopupAddOrEditAdditionalBrand = (props: Props) => {
           {brandType === EBrandType.COMPETING && numberOfCompetingBrandCanBeAdd > 1 && (
             <Button
               btnType={BtnType.Raised}
-              children={<TextBtnSmall>Save & Add another</TextBtnSmall>}
+              translation-key="common_save_and_add_another"
+              children={<TextBtnSmall>{t("common_save_and_add_another")}</TextBtnSmall>}
               className={classes.btnSave}
               onClick={handleSubmit(onSaveAndAddAnother)}
               />

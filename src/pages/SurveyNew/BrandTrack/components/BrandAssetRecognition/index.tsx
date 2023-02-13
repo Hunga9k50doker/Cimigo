@@ -92,22 +92,34 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
   return (
     <>
       <Grid id={SETUP_SURVEY_SECTION.brand_asset_recognition} mt={4}>
-        <Heading4
-          $fontSizeMobile={"16px"}
-          $colorName="--eerie-black"
-          sx={{ display: "inline-block", verticalAlign: "middle" }}
-        >
-          STEP 4{!!minBrandAssetRecognition ? "" : " (OPTIONAL)"}: Brand asset recognition
-        </Heading4>
+        {!!minBrandAssetRecognition ? (
+          <Heading4
+            $fontSizeMobile={"16px"}
+            $colorName="--eerie-black"
+            sx={{ display: "inline-block", verticalAlign: "middle" }}
+            translation-key="brand_track_setup_brand_asset_recognition_title"
+          >
+            {t("brand_track_setup_brand_asset_recognition_title", {step: 4})}
+          </Heading4>
+          ) : (
+          <Heading4
+            $fontSizeMobile={"16px"}
+            $colorName="--eerie-black"
+            sx={{ display: "inline-block", verticalAlign: "middle" }}
+            translation-key="brand_track_setup_brand_asset_recognition_title_optional"
+          >
+            {t("brand_track_setup_brand_asset_recognition_title_optional", {step: 4})}
+          </Heading4>
+        )}
         <MaxChip
           sx={{ ml: 1 }}
           label={<ParagraphSmall $colorName="--eerie-black">{t('common_max')} {maxBrandAssetRecognition}</ParagraphSmall>}
         />
-        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 }>Brand assets are recognisable elements that embody a brand's identity. From logos and typography to taglines, brand assets make it easy to identify a brand, help it stand out from competitors and cue brand associations.</ParagraphBody>
-        <ParagraphBody $colorName="--eerie-black">Cimigo recommend measuring brand asset recognition for your brand and a key competitor brand (as a comparison).</ParagraphBody>
+        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 } translation-key="brand_track_setup_brand_asset_recognition_sub_title_1">{t("brand_track_setup_brand_asset_recognition_sub_title_1")}</ParagraphBody>
+        <ParagraphBody $colorName="--eerie-black" translation-key="brand_track_setup_brand_asset_recognition_sub_title_2">{t("brand_track_setup_brand_asset_recognition_sub_title_2")}</ParagraphBody>
         {!!brandAssetRecognitionNeedMore && (
             <NoteWarning>
-              <ParagraphSmall $colorName="--warning-dark">Require at least {brandAssetRecognitionNeedMore} more brand assets</ParagraphSmall>
+              <ParagraphSmall $colorName="--warning-dark" translation-key="brand_track_setup_brand_asset_recognition_need_more">{t("brand_track_setup_brand_asset_recognition_need_more", {number: brandAssetRecognitionNeedMore})}</ParagraphSmall>
             </NoteWarning>
           )}
         <Grid className={clsx({[classes.brandAssetsWrapper]: project?.brandAssets?.length > 0})}>
@@ -127,13 +139,15 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
           disabled={!editable || project?.brandAssets?.length >= maxBrandAssetRecognition}
           className={classes.btnAddBrand}
           btnType={BtnType.Outlined}
-          children={<TextBtnSmall>Add brand asset</TextBtnSmall>}
+          children={<TextBtnSmall translation-key="brand_track_setup_brand_asset_recognition_btn_add">{t("brand_track_setup_brand_asset_recognition_btn_add")}</TextBtnSmall>}
           startIcon={<HeartPlus sx={{ fontSize: "14px !important" }} />}
           onClick={onOpenPopupAddOrEdit}
           sx={{  width: { xs: "100%", sm: "auto" } }}
         />
         {project?.brandAssets?.length >= maxBrandAssetRecognition && (
-            <ParagraphSmall $colorName="--gray-60" sx={{mt: 1}}>You have reached the limit of {maxBrandAssetRecognition} brand assets.</ParagraphSmall>
+            <ParagraphSmall $colorName="--gray-60" sx={{mt: 1}} translation-key="brand_track_setup_brand_asset_recognition_reach_limit">
+              {t("brand_track_setup_brand_asset_recognition_reach_limit", {number: maxBrandAssetRecognition})}
+            </ParagraphSmall>
           )}
       </Grid>
       <PopupAddOrEditBrandAsset
@@ -145,10 +159,10 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
       />
       <PopupConfirmDeleteCommon
         isOpen={openPopupConfirmDelete}
-        title={"Delete this asset?"}
-        description={"Deleting this asset will remove it from asset list."}
-        cancelText={"NO, KEEP ASSET"}
-        deleteText={"YES, DELETE ASSET"}
+        title={t("brand_track_setup_popup_delete_btn_cancel")}
+        description={t("brand_track_setup_popup_delete_description")}
+        cancelText={t("brand_track_setup_popup_delete_btn_cancel")}
+        deleteText={t("brand_track_setup_popup_delete_btn_delete")}
         onCancel={onClosePopupConfirmDelete}
         onDelete={handleDelete}
       />
