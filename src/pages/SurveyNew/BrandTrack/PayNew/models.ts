@@ -1,17 +1,15 @@
-import { EPaymentStatus, Payment } from "models/payment";
 import { Project, ProjectStatus } from "models/project";
 import { routes } from "routers/routes";
 
-export const getPayment = (payments: Payment[]) => {
-  const _payments = (payments || []).filter(f => f.status !== EPaymentStatus.CANCEL)
-  return [..._payments].sort((a, b) => b.id - a.id)[0]
-}
 
 export const authPreviewOrPayment = (project: Project, onRedirect: (route: string) => void) => {
   if (!project) return
   switch (project.status) {
     case ProjectStatus.AWAIT_PAYMENT:
       onRedirect(routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder);
+      break;
+    case ProjectStatus.DRAFT:
+      onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview);
       break;
   }
 }

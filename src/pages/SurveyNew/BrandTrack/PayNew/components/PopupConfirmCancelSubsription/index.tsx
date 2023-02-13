@@ -14,15 +14,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Heading4 from "components/common/text/Heading4";
 import InputTextareaAutosize from "components/InputTextareaAutosize";
-import { SlidePaymentScheduleMakeAnOrder } from "models/payment_schedule";
 import moment from "moment";
+import { PaymentSchedule } from "models/payment_schedule";
 
 interface SubmitCancelSubsriptionFormData {
   reason: string;
 }
 interface PopupConfirmCancelSubsriptionProps {
   isOpen: boolean;
-  payment: SlidePaymentScheduleMakeAnOrder;
+  payment: PaymentSchedule;
   onCancel: () => void;
   onSubmit: (reason: string) => void;
 }

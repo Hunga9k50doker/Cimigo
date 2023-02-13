@@ -11,7 +11,7 @@ export interface PaymentSchedulePreview{
     endDate: Date;
     dueDate: Date;
 }
-export interface GetSlidePaymentSchedule{
+export interface GetPaymentSchedule{
   projectId: number;
 }
 interface SolutionConfig{
@@ -19,7 +19,7 @@ interface SolutionConfig{
   daysOfDueDateType: number;
   paymentMonthSchedule: number;
 }
-export interface SlidePaymentScheduleMakeAnOrder{
+export interface PaymentSchedule{
   id: number;
   solutionConfig: SolutionConfig;
   start: Date;

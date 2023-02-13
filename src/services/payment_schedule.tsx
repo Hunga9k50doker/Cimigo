@@ -1,8 +1,8 @@
 import { API } from "config/constans";
 import {
   GetListPaymentScheduleHistory,
+  GetPaymentSchedule,
   GetPaymentSchedulePreview,
-  GetSlidePaymentSchedule,
   PaymentScheduleMakeAnOrder,
 } from "models/payment_schedule";
 import api from "services/configApi";
@@ -32,11 +32,11 @@ export class PaymentScheduleService {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async getSlideMakeAnOrderPaymentSchedule(
-    data: GetSlidePaymentSchedule
+  static async getPaymentSchedule(
+    data: GetPaymentSchedule
   ): Promise<any> {
     return await api
-      .get(API.PAYMENT_SCHEDULE.SLIDE, { params: data })
+      .get(API.PAYMENT_SCHEDULE.PAYMENT, { params: data })
       .then((res) => {
         return Promise.resolve(res.data);
       })

@@ -1,13 +1,8 @@
-import { Box, useMediaQuery, useTheme } from "@mui/material";
+import { Box} from "@mui/material";
 import Grid from "@mui/material/Grid";
-import Slider from "react-slick";
 import Heading4 from "components/common/text/Heading4";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import classes from "./styles.module.scss";
-//slick
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-//end import slick
 import Dolar from "components/icons/IconDolar";
 import Heading3 from "components/common/text/Heading3";
 import ParagraphBody from "components/common/text/ParagraphBody";
@@ -15,12 +10,12 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Footer from "components/Footer";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Alert, { AlerType } from "../Alert";
 import { useTranslation } from "react-i18next";
 import {
-  GetSlidePaymentSchedule,
-  SlidePaymentScheduleMakeAnOrder,
+  GetPaymentSchedule,
+  PaymentSchedule,
 } from "models/payment_schedule";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -35,68 +30,45 @@ import { PaymentScheduleService } from "services/payment_schedule";
 import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
 import { authPreviewOrPayment } from "../models";
-import { InfoMakeAnOrder } from "redux/reducers/MakeAnOrderPaymentSchedule";
 import { usePrice } from "helpers/price";
 import { setPaymentReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
+import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+// Import Swiper styles
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { ProjectStatus } from "models/project";
+
 interface MakeAnOrderProp {
   projectId: number;
 }
-enum StatusSlide {
+enum PaymentScheduleStatus {
   NOT_PAID,
   IN_PROGRESS,
   PAID,
   OVERDUE,
 }
-interface CustomSlide {
-  navigator: boolean;
-  dots: boolean;
-  infinite: boolean;
-  speed: number;
-  slidesToShow: number;
-  slidesToScroll: number;
-  prevArrow: React.ReactNode;
-  nextArrow: React.ReactNode;
-}
-
-const paramsSlideDefault: CustomSlide = {
-  navigator: true,
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 2,
-  slidesToScroll: 2,
-  prevArrow: (
-    <span className="customIcon">
-      <KeyboardArrowLeftIcon />
-    </span>
-  ),
-  nextArrow: (
-    <span className="customIcon">
-      <KeyboardArrowRightIcon />
-    </span>
-  ),
-};
 const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
-  const { t, i18n } = useTranslation();
-  const theme = useTheme();
+  const { i18n } = useTranslation();
   const dispatch = useDispatch();
-  const isMobile = useMediaQuery(theme.breakpoints.down(768));
   const { project } = useSelector((state: ReducerType) => state.project);
-  const { isMakeAnOrder, infoMakeAnOrder } = useSelector(
+  const { isMakeAnOrder } = useSelector(
     (state: ReducerType) => state.payment
   );
-  const [slide, setSlide] =
-    useState<DataPagination<SlidePaymentScheduleMakeAnOrder>>();
+  const [paymentSchedule, setPaymentSchedule] =
+    useState<DataPagination<PaymentSchedule>>();
 
   const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
     useState(false);
-  const [customSlide, setCustomSlide] = useState<CustomSlide>({
-    ...paramsSlideDefault,
-  });
   const [checkMakeAnOrder, setCheckMakeAnOrder] = useState<Boolean>(false);
   const [alertPaymentReminder, setAlertPaymentReminder] =
-    useState<SlidePaymentScheduleMakeAnOrder>();
-  const [dataPopupCancelSubsription, setDataPopupCancelSubsription] = useState<SlidePaymentScheduleMakeAnOrder>();
+    useState<PaymentSchedule>();
+  const [dataPopupCancelSubsription, setDataPopupCancelSubsription] =
+    useState<PaymentSchedule>();
 
   const onCloseSubmitCancelSubsription = () => {
     setOnSubmitCancelSubsription(false);
@@ -107,27 +79,41 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const cancelSubscription = () => {
     setOnSubmitCancelSubsription(true);
   };
-  const goToPayNow = () => { };
-  const { getCostCurrency } = usePrice()
+  const goToPayNow = () => {};
+  const { getCostCurrency } = usePrice();
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
   const setDefaultMakeAnOrderReducer = () => {
-    const paramMakeAnOrder: InfoMakeAnOrder = {
-      projectId: null,
-      startDate: null,
-    };
     dispatch(
       setPaymentReducer({
         isMakeAnOrder: false,
-        infoMakeAnOrder: paramMakeAnOrder,
       })
     );
   };
-
+  const swiperRef = useRef<any>();
+  const sliderSettings = {
+    440: {
+      slidesPerView: 1,
+      spaceBetween: 30,
+    },
+    680: {
+      slidesPerView: 2,
+      spaceBetween: 30,
+    },
+    1024: {
+      slidesPerView: 2,
+      spaceBetween: 30,
+    },
+  };
+  useEffect(()=>{
+    moment.locale(i18n.language)
+  },[i18n])
   useEffect(() => {
     authPreviewOrPayment(project, onRedirect);
-    if (project && isMakeAnOrder && project?.id === infoMakeAnOrder?.projectId) {
+    if (
+      project?.startPaymentSchedule && isMakeAnOrder 
+    ) {
       setCheckMakeAnOrder(true);
       setDefaultMakeAnOrderReducer();
     }
@@ -135,64 +121,37 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   }, [project]);
   useEffect(() => {
     const getListSlide = async () => {
-      const data: GetSlidePaymentSchedule = {
+      const data: GetPaymentSchedule = {
         projectId: projectId,
       };
       dispatch(setLoading(true));
-      await PaymentScheduleService.getSlideMakeAnOrderPaymentSchedule(data)
+      await PaymentScheduleService.getPaymentSchedule(data)
         .then((res) => {
-          setSlide(res);
+          setPaymentSchedule(res);
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)));
     };
-    getListSlide()
+    getListSlide();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, projectId]);
   useEffect(() => {
-    var customReponsiveSlide = {
-      navigator: true,
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 2,
-      slidesToScroll: 2,
-      prevArrow: (
-        <span className="customIcon">
-          <KeyboardArrowLeftIcon />
-        </span>
-      ),
-      nextArrow: (
-        <span className="customIcon">
-          <KeyboardArrowRightIcon />
-        </span>
-      ),
-    };
-    if (isMobile) {
-      customReponsiveSlide.slidesToScroll = 1;
-      customReponsiveSlide.slidesToShow = 1;
-    }
-    setCustomSlide(customReponsiveSlide);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile]);
-  useEffect(() => {
     const checkPaymentReminder = () => {
+      var paymentFirst = paymentSchedule?.data[0];
       var now = moment().add(14, "d").format("DD MMM yyyy");
-      slide?.data.map((item, index) => {
-        var dueDate = moment(item.dueDate).format("DD MMM yyyy");
-        if (now >= dueDate && item.status === 0) {
-          setAlertPaymentReminder(item);
+      var dueDate = moment(paymentFirst?.dueDate).format("DD MMM yyyy");
+      if (now >= dueDate && paymentFirst?.status === PaymentScheduleStatus.NOT_PAID) {
+          setAlertPaymentReminder(paymentFirst);
+      }
+      if (paymentFirst?.status === PaymentScheduleStatus.NOT_PAID ) {
+          setDataPopupCancelSubsription(paymentFirst);
         }
-        if (item.status === StatusSlide.NOT_PAID && !index) {
-          setDataPopupCancelSubsription(item)
-        }
-      });
     };
-    if (slide?.data) {
+    if (paymentSchedule?.data) {
       checkPaymentReminder();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slide]);
+  }, [paymentSchedule]);
   return (
     <>
       <Grid classes={{ root: classes.root }}>
@@ -218,7 +177,6 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                   You have a pending payment that is about to become overdue.
                   You must process the payment by{" "}
                   {moment(alertPaymentReminder.dueDate)
-                    .lang(i18n.language)
                     .format("MMMM DD, yyyy")}{" "}
                   to avoid being terminated.
                 </ParagraphBody>
@@ -231,7 +189,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
             type={AlerType.Warning}
           />
         )}
-        {project?.status == 4 && (
+        {project?.status === ProjectStatus.IN_PROGRESS && (
           <Alert
             title={"Your subscription canceled!"}
             content={
@@ -259,92 +217,161 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
             </TextBtnSmall>
           </Grid>
           <Box className={classes.slidePayment} pt={4}>
-            <Slider {...customSlide}>
-              {slide?.data.map((item, index) => {
-                return (
-                  <Grid className={classes.customItemSilde} key={item.id}>
-                    <div
-                      className={clsx(
-                        {
-                          [classes.itemSlide]:
-                            item.status === StatusSlide.NOT_PAID,
-                        },
-                        {
-                          [classes.itemSlideProcessing]:
-                            item.status === StatusSlide.IN_PROGRESS,
-                        },
-                        {
-                          [classes.itemSlideDisabled]:
-                            item.status === StatusSlide.OVERDUE,
-                        },
-                        {
-                          [classes.itemSlideCompleted]:
-                            item.status === StatusSlide.PAID,
-                        }
-                      )}
-                    >
-                      <Box className={classes.contentSlide}>
-                        <Grid className={classes.contentLeft}>
-                          <Heading3 $colorName={"--gray-80"}>
-                            {`${moment(item.start)
-                              .lang(i18n.language)
-                              .format("MMM yyyy")} - ${moment(item.end)
-                                .lang(i18n.language)
-                                .format("MMM yyyy")}`}
-                          </Heading3>
-                          <ParagraphBody $colorName={"--gray-80"}>
-                            {item.solutionConfig.paymentMonthSchedule} months
-                          </ParagraphBody>
-                          <Heading3 $colorName={"--gray-80"} $fontWeight={400}>
-                            <span className={classes.iconDolar}>
-                              <Dolar />
-                            </span>
-                            {getCostCurrency(item.totalAmount)?.show}
-                          </Heading3>
-                        </Grid>
-                        <Box className={classes.contentRight}>
-                          <Box>
-                          {
-                              item.status === StatusSlide.NOT_PAID &&
-                              <Button
-                                btnType={BtnType.Raised}
-                                endIcon={<CreditCardIcon />}
-                                children={
-                                  <TextBtnSmall $colorName={"--white"}>
-                                    Pay now
-                                  </TextBtnSmall>
-                                }
-                                onClick={goToPayNow}
-                                disabled={!!index}
-                              />
-                            }
-                            {
-                              item.status === StatusSlide.IN_PROGRESS &&
-                              <Button
-                                btnType={BtnType.Raised}
-                                startIcon={<CreditCardIcon />}
-                                children={
-                                  <TextBtnSmall $colorName={"--white"}>
-                                    Processing...
-                                  </TextBtnSmall>
-                                }
-                                onClick={goToPayNow}
-                              />
-                            }
+            <Grid className={classes.slidePaymentSwiper}>
+              <Box
+                className={clsx(classes.iconSlide, classes.iconSlideLeft)}
+                onClick={() => swiperRef.current?.slidePrev()}
+              >
+                <KeyboardArrowLeftIcon />
+              </Box>
 
-                            <ParagraphSmall pt={0.5}>
-                              {`Due ${moment(item.dueDate)
-                                .lang(i18n.language)
-                                .format("MMM DD, yyyy")}`}
-                            </ParagraphSmall>
+              <Swiper
+                slidesPerView={2}
+                breakpoints={sliderSettings}
+                onBeforeInit={(swiper) => {
+                  swiperRef.current = swiper;
+                }}
+              >
+                {paymentSchedule?.data.map((item, index) => {
+                  return (
+                    <SwiperSlide key={item.id}>
+                      <Box
+                        className={clsx(
+                          classes.customSlide,
+                          {
+                            [classes.slideDefault]:
+                              item.status === PaymentScheduleStatus.NOT_PAID,
+                          },
+                          {
+                            [classes.slideProcessing]:
+                              item.status === PaymentScheduleStatus.IN_PROGRESS,
+                          },
+                          {
+                            [classes.slideDisabled]:
+                              item.status === PaymentScheduleStatus.OVERDUE,
+                          },
+                          {
+                            [classes.slideCompleted]:
+                              item.status === PaymentScheduleStatus.PAID,
+                          }
+                        )}
+                      >
+                        <Box className={classes.contentSlideSwiper}>
+                          <Grid className={classes.contentLeftSwiper}>
+                            <Heading3 $colorName={"--gray-80"}>
+                              {`${moment(item.start)
+                                .format("MMM yyyy")} - ${moment(item.end)
+                                .format("MMM yyyy")}`}
+                            </Heading3>
+                            <ParagraphBody $colorName={"--gray-80"}>
+                              {item.solutionConfig.paymentMonthSchedule} months
+                            </ParagraphBody>
+                            <Heading3
+                              $colorName={"--gray-80"}
+                              $fontWeight={400}
+                            >
+                              <span className={classes.iconDolar}>
+                                <Dolar />
+                              </span>
+                              {getCostCurrency(item.totalAmount)?.show}
+                            </Heading3>
+                          </Grid>
+                          <Box className={classes.contentRightSwiper}>
+                            {item.status === PaymentScheduleStatus.NOT_PAID && (
+                              <Box>
+                                <Button
+                                  btnType={BtnType.Raised}
+                                  endIcon={<CreditCardIcon />}
+                                  children={
+                                    <TextBtnSmall $colorName={"--white"}>
+                                      Pay now
+                                    </TextBtnSmall>
+                                  }
+                                  onClick={goToPayNow}
+                                  disabled={!!index}
+                                />
+
+                                <ParagraphSmall pt={0.5}>{`Due ${moment(
+                                  item.dueDate
+                                )
+                                  .format("MMM DD, yyyy")}`}</ParagraphSmall>
+                              </Box>
+                            )}
+                            {item.status === PaymentScheduleStatus.IN_PROGRESS && (
+                              <Box>
+                                <Box className={classes.statusPayment}>
+                                  <HourglassBottomIcon />
+                                  <ParagraphSmall
+                                    $colorName={"--warning-dark"}
+                                    pl={1}
+                                  >
+                                    Processing...
+                                  </ParagraphSmall>
+                                </Box>
+                                <ParagraphSmallUnderline2
+                                  $colorName={"--gray-90"}
+                                  className={classes.urlViewDetail}
+                                  pt={0.5}
+                                >
+                                  View details
+                                </ParagraphSmallUnderline2>
+                              </Box>
+                            )}
+                            {item.status === PaymentScheduleStatus.OVERDUE && (
+                              <Box>
+                                <Button
+                                  className={classes.btnWaiting}
+                                  btnType={BtnType.Raised}
+                                  endIcon={<CreditCardIcon />}
+                                  disabled={true}
+                                  children={
+                                    <TextBtnSmall $colorName={"--gray-20"}>
+                                      Waiting
+                                    </TextBtnSmall>
+                                  }
+                                />
+                                <ParagraphSmall
+                                  pt={0.5}
+                                  $colorName={"--gray-40"}
+                                >
+                                  Due Dec 25, 2022
+                                </ParagraphSmall>
+                              </Box>
+                            )}
+                            {item.status === PaymentScheduleStatus.PAID && (
+                              <Box>
+                                <Box className={classes.icon}>
+                                  <CheckCircleIcon />
+                                </Box>
+                                <ParagraphSmall
+                                  $colorName={"--cimigo-green-dark-2"}
+                                >
+                                  Payment completed
+                                </ParagraphSmall>
+                                <ParagraphSmallUnderline2
+                                  $colorName={"--gray-90"}
+                                  className={classes.urlViewDetail}
+                                  pt={0.5}
+                                >
+                                  Download invoice
+                                </ParagraphSmallUnderline2>
+                              </Box>
+                            )}
                           </Box>
                         </Box>
                       </Box>
-                    </div>
-                  </Grid>
-                );
-              })}
-            </Slider>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+
+              <Box
+                className={clsx(classes.iconSlide, classes.iconSlideRight)}
+                onClick={() => swiperRef.current?.slideNext()}
+              >
+                <KeyboardArrowRightIcon />
+              </Box>
+            </Grid>
           </Box>
           <PaymentHistoryList projectId={projectId} />
         </Grid>

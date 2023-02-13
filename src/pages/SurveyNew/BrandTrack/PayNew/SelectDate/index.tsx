@@ -24,12 +24,13 @@ import { PaymentScheduleService } from "services/payment_schedule";
 import { DataPagination } from "models/general";
 import moment from "moment";
 import PopupConfirmMakeAnOrder from "../components/PopupConfirmMakeAnOrder";
-import { authPreviewOrPayment, formatOrdinalumbers } from "../models";
+import { formatOrdinalumbers } from "../models";
 import { GetPaymentSchedulePreview, PaymentSchedulePreview } from "models/payment_schedule";
 import clsx from "clsx";
 import {setPaymentReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
-import { InfoMakeAnOrder } from "redux/reducers/MakeAnOrderPaymentSchedule";
 import { usePrice } from "helpers/price";
+import { setProjectReducer } from "redux/reducers/Project/actionTypes";
+import { ProjectStatus } from "models/project";
 
 export interface DateItem {
   id: number;
@@ -65,6 +66,19 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
       )
     );
   };
+  const checkAuthProductPreview = () => {
+    if (!project) return
+    if(project.status === ProjectStatus.AWAIT_PAYMENT){
+      dispatch(
+        push(
+          routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder.replace(
+            ":id",
+            `${projectId}`
+          )
+        )
+      );
+    }
+  }
   const goToMakeAnOrder = () => {
     seOnSubmitMakeAnOrder(true);
   };
@@ -72,23 +86,6 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
     seOnSubmitMakeAnOrder(false);
   };
   const submitMakeAnOrder = () => {
-    const paramMakeAnOrder: InfoMakeAnOrder = {
-      projectId,
-      startDate: new Date(moment(selectedDate.date).format('YYYY-MM-DD')),
-    }
-    dispatch(setPaymentReducer({
-      isMakeAnOrder: true,
-      infoMakeAnOrder :paramMakeAnOrder,
-    }));
-    dispatch(
-      push(
-        routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder.replace(
-          ":id",
-          `${project.id}`
-        )
-      )
-    );
-    return;
     if (!selectedDate) return;
     dispatch(setLoading(true));
     PaymentScheduleService.paymentScheduleMakeAnOrder({
@@ -97,14 +94,13 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
     })
       .then(() => {
         seOnSubmitMakeAnOrder(false)
-        const paramMakeAnOrder: InfoMakeAnOrder = {
-          projectId,
-          startDate: new Date(moment(selectedDate.date).format('YYYY-MM-DD')),
-        }
         dispatch(setPaymentReducer({
-          isMakeAnOrder: true,
-          infoMakeAnOrder :paramMakeAnOrder,
+          isMakeAnOrder: true
         }));
+        dispatch(setProjectReducer({
+          ...project,
+          startPaymentSchedule: new Date(moment(selectedDate.date).format('YYYY-MM-DD'))
+        }))
         dispatch(
           push(
             routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder.replace(
@@ -117,11 +113,8 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
   };
-  const onRedirect = (route: string) => {
-    dispatch(push(route.replace(":id", `${project.id}`)));
-  };
   useEffect(() => {
-    authPreviewOrPayment(project, onRedirect);
+    checkAuthProductPreview();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
   useEffect(() => {
