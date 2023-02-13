@@ -50,35 +50,35 @@ const PopupMissingRequirement = ({ isOpen, isValidBasic, isValidBrandList, isVal
       <DialogTitleConfirm>
         <Box display="flex">
           <WarningIcon sx={{ fontSize: 32, color: "var(--warning)", mr: 2 }} />
-          <Heading3 $colorName='--cimigo-blue-dark-3' translation-key="setup_survey_popup_missing_required_title">{t("setup_survey_popup_missing_required_title")}</Heading3>
+          <Heading3 $colorName='--cimigo-blue-dark-3' translation-key="brand_track_setup_popup_missing_required_title">{t("brand_track_setup_popup_missing_required_title")}</Heading3>
         </Box>
         <ButtonClose $backgroundColor='--eerie-black-5' $colorName='--eerie-black-40' onClick={onClose} />
       </DialogTitleConfirm>
       <DialogContentConfirm dividers>
-        <ParagraphBody $colorName='--gray-80' translation-key="setup_survey_popup_missing_required_subtitle">{t("setup_survey_popup_missing_required_subtitle")}</ParagraphBody>
+        <ParagraphBody $colorName='--gray-80' translation-key="brand_track_setup_popup_missing_required_subtitle">{t("brand_track_setup_popup_missing_required_subtitle")}</ParagraphBody>
         <ul className={classes.list}>
           {!isValidBasic && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'translation-key="setup_survey_popup_missing_required_basic_information_required">
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.basic_information)} className="cursor-pointer underline" translation-key="setup_survey_popup_missing_required_basic_information">{t("setup_survey_popup_missing_required_basic_information")}</span> {t("setup_survey_popup_missing_required_basic_information_required")}
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'translation-key="brand_track_setup_popup_missing_required_basic_information_required">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.basic_information)} className="cursor-pointer underline" translation-key="brand_track_setup_popup_missing_required_basic_information">{t("brand_track_setup_popup_missing_required_basic_information")}</span> {t("brand_track_setup_popup_missing_required_basic_information_required")}
             </ParagraphBody>
           )}
           {!isValidBrandList && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_list)} className="cursor-pointer underline">Building your brand list</span> minimum of {minMainBrand} main brand(s) and {minCompetingBrand} competing brand(s) are required
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80' translation-key="brand_track_setup_popup_missing_required_brand_list_min">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_list)} className="cursor-pointer underline" translation-key="brand_track_setup_popup_missing_required_brand_list">{t("brand_track_setup_popup_missing_required_brand_list")}</span> {t("brand_track_setup_popup_missing_required_brand_list_min", {minMainBrand: minMainBrand, minCompetingBrand: minCompetingBrand})}
             </ParagraphBody>
           )}
           {!isValidBrandDispositionAndEquity && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_disposition_and_equity)} className="cursor-pointer underline">Brand disposition and equity</span> minimum of {minCompetitiveBrand} competing brand(s) and {minEquityAttributes} equity attribute(s) are required
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80' translation-key="brand_track_setup_popup_missing_required_brand_disposition_and_equity_min">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_disposition_and_equity)} className="cursor-pointer underline" translation-key="brand_track_setup_popup_missing_required_brand_disposition_and_equity">{t("brand_track_setup_popup_missing_required_brand_disposition_and_equity")}</span> {t("brand_track_setup_popup_missing_required_brand_disposition_and_equity_min", {minCompetitiveBrand: minCompetitiveBrand, minEquityAttributes: minEquityAttributes})}
             </ParagraphBody>
           )}
           {!isValidBrandAssetRecognition && (
-            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80'>
-              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_asset_recognition)} className="cursor-pointer underline">Brand asset recognition</span> minimum of {minBrandAssetRecognition} brand asset(s) are required
+            <ParagraphBody variant="body2" variantMapping={{ body2: "li" }} className={classes.itemText} $colorName='--gray-80' translation-key="brand_track_setup_popup_missing_required_brand_asset_recognition_min">
+              <span onClick={() => onScrollSection(SETUP_SURVEY_SECTION.brand_asset_recognition)} className="cursor-pointer underline" translation-key="brand_track_setup_popup_missing_required_brand_asset_recognition">{t("brand_track_setup_popup_missing_required_brand_asset_recognition")}</span> {t("brand_track_setup_popup_missing_required_brand_asset_recognition_min", {minBrandAssetRecognition: minBrandAssetRecognition})}
             </ParagraphBody>
           )}
         </ul>
-        <ParagraphBody mt={4} $colorName='--gray-80' translation-key="setup_survey_popup_missing_required_remind">{t("setup_survey_popup_missing_required_remind")}</ParagraphBody>
+        <ParagraphBody mt={4} $colorName='--gray-80' translation-key="brand_track_setup_popup_missing_required_remind">{t("brand_track_setup_popup_missing_required_remind")}</ParagraphBody>
       </DialogContentConfirm>
       <DialogActionsConfirm>
         <Button

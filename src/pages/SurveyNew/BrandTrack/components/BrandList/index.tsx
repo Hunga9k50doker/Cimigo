@@ -132,21 +132,22 @@ const BrandList = memo(({ project }: BrandListProps) => {
           $fontSizeMobile={"16px"}
           $colorName="--eerie-black"
           sx={{ display: "inline-block", verticalAlign: "middle" }}
+          translation-key="brand_track_setup_brand_list_title"
         >
-          STEP 2: Building your brand list
+          {t('brand_track_setup_brand_list_title', { step: 2 })}
         </Heading4>
-        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 }>The first step to tracking brand performance is to identify the main brand you want to track and a list of competing brands in the same category.</ParagraphBody>
+        <ParagraphBody $colorName="--eerie-black" mb={ 3 } mt={ 1 } translation-key="brand_track_setup_brand_list_sub_title">{t("brand_track_setup_brand_list_sub_title")}</ParagraphBody>
         <Grid mb={3}>
           <div className={classes.mainBrandTitle}>
             <PlayArrow sx={{height: "18px"}}/>
-            <ParagraphBody $fontWeight={600} $colorName="--eerie-black">
-              Main brand to track
+            <ParagraphBody $fontWeight={600} $colorName="--eerie-black" translation-key="brand_track_setup_brand_list_main_brand_title">
+              {t("brand_track_setup_brand_list_main_brand_title")}
             </ParagraphBody>
           </div>
-          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 }>Which is the brand, variant and manufacturer you are performance tracking?</ParagraphBody>
+          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } translation-key="brand_track_setup_brand_list_main_brand_sub_title">{t("brand_track_setup_brand_list_main_brand_sub_title")}</ParagraphBody>
           {!!mainBrandNeedMore && (
             <NoteWarning ml={ 3 } mb = { 2 }>
-              <ParagraphSmall $colorName="--warning-dark">Require at least {mainBrandNeedMore} more main brands</ParagraphSmall>
+              <ParagraphSmall $colorName="--warning-dark" translation-key="brand_track_setup_brand_list_main_brand_need_more">{t("brand_track_setup_brand_list_main_brand_need_more", { number: mainBrandNeedMore })}</ParagraphSmall>
             </NoteWarning>
           )}
           {mainBrandDatas?.map(mainItem => (
@@ -157,7 +158,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
               {editable && (
                 <Button
                   btnType={BtnType.Text}
-                  children={<TextBtnSmall sx={{ color: "var(--cimigo-blue-dark-1) !important" }}>Edit</TextBtnSmall>}
+                  children={<TextBtnSmall sx={{ color: "var(--cimigo-blue-dark-1) !important" }} translation-key="common_edit">{t("common_edit")}</TextBtnSmall>}
                   startIcon={<Edit sx={{ color: "var(--cimigo-blue-dark-1)", fontSize: "16px !important" }} />}
                   onClick={() => {
                     onEditMainBrand(mainItem)
@@ -170,7 +171,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
             <Button
               className={classes.btnAddMainBrand}
               btnType={BtnType.Outlined}
-              children={<TextBtnSmall>Add main brand</TextBtnSmall>}
+              children={<TextBtnSmall translation-key="brand_track_setup_brand_list_main_brand_add_btn">{t("brand_track_setup_brand_list_main_brand_add_btn")}</TextBtnSmall>}
               startIcon={<AddIcon sx={{ fontSize: "16px !important" }} />}
               onClick={onAddMainBrand}
             />
@@ -179,15 +180,17 @@ const BrandList = memo(({ project }: BrandListProps) => {
         <Grid>
           <div className={classes.competingBrandTitle}>
             <PlayArrow sx={{height: "18px"}}/>
-            <ParagraphBody $fontWeight={600} $colorName="--eerie-black">
-              Competing brand list
+            <ParagraphBody $fontWeight={600} $colorName="--eerie-black" translation-key="brand_track_setup_brand_list_competing_brand_title">
+              {t("brand_track_setup_brand_list_competing_brand_title")}
             </ParagraphBody>
           </div>
-          <ParagraphBody $colorName="--eerie-black" mb={ 4 } ml={ 3 }>Please add other brands in your category. To understand awareness and use, we ask that you add all brands and variants that make up your category.</ParagraphBody>
-          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 }>You should aim to cover 80% of or more of market share or sales in the market.</ParagraphBody> 
+          <ParagraphBody $colorName="--eerie-black" mb={ 4 } ml={ 3 } translation-key="brand_track_setup_brand_list_competing_brand_sub_title_1">{t("brand_track_setup_brand_list_competing_brand_sub_title_1")}</ParagraphBody>
+          <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } translation-key="brand_track_setup_brand_list_competing_brand_sub_title_2">{t("brand_track_setup_brand_list_competing_brand_sub_title_2")}</ParagraphBody> 
           {!!competingBrandNeedMore && (
             <NoteWarning ml={ 3 }>
-              <ParagraphSmall $colorName="--warning-dark">Require at least {competingBrandNeedMore} more brands</ParagraphSmall>
+              <ParagraphSmall $colorName="--warning-dark" translation-key="brand_track_setup_brand_list_competing_brand_need_more">
+                {t("brand_track_setup_brand_list_competing_brand_need_more", {number: competingBrandNeedMore})}
+              </ParagraphSmall>
             </NoteWarning>
           )}
           <Grid className={classes.rootList} ml={3}>
@@ -219,22 +222,29 @@ const BrandList = memo(({ project }: BrandListProps) => {
               </ListItem>
             ))}
             {competingBrandDatas?.length > 3 && (
-              <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreCompetingBrand}>
-                {showMoreCompetingBrand ? `- ${competingBrandDatas?.length - 3} more brands` : `+ ${competingBrandDatas?.length - 3} more brands`}
-              </ParagraphBodyUnderline>
+              showMoreCompetingBrand ? (
+                <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreCompetingBrand} translation-key="common_less_brands_text">
+                  {t("common_less_brands_text", {number: competingBrandDatas?.length - 3})}
+                </ParagraphBodyUnderline>
+                ) : (
+                <ParagraphBodyUnderline sx={{ margin: "8px 0 0 16px" }} onClick={onShowMoreCompetingBrand} translation-key="common_more_brands_text">
+                  {t("common_more_brands_text", {number: competingBrandDatas?.length - 3})}
+                </ParagraphBodyUnderline>)
             )}
           </Grid>
           <Button
             disabled={!editable || competingBrandDatas?.length >= maxCompetingBrand}
             className={classes.btnAddBrand}
             btnType={BtnType.Outlined}
-            children={<TextBtnSmall>Add new brand</TextBtnSmall>}
+            children={<TextBtnSmall translation-key="brand_track_setup_brand_list_competing_brand_btn_add">{t("brand_track_setup_brand_list_competing_brand_btn_add")}</TextBtnSmall>}
             startIcon={<IconNewLabelFilled sx={{ fontSize: "16px !important" }} />}
             onClick={onAddCompetingBrand}
             sx={{ width: { xs: "100%", sm: "auto" } }}
           />
           {competingBrandDatas?.length >= maxCompetingBrand && (
-            <ParagraphSmall $colorName="--gray-60" mt={1} ml={3}>You have reached the limit of {maxCompetingBrand} brands</ParagraphSmall>
+            <ParagraphSmall $colorName="--gray-60" mt={1} ml={3} translation-key="brand_track_setup_brand_list_competing_brand_reach_limit">
+              {t("brand_track_setup_brand_list_competing_brand_reach_limit", {number: maxCompetingBrand})}
+            </ParagraphSmall>
           )}
         </Grid>
       </Grid>
