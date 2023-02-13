@@ -7,6 +7,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import { Edit as EditIcon, DeleteForever as DeleteForeverIcon, MoreVert, Title, MusicNote } from "@mui/icons-material";
 import { Menu } from "components/common/memu/Menu";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   brandAsset: BrandAsset;
@@ -17,6 +18,7 @@ interface Props {
 
 const BrandAssetItem = (props: Props) => {
   const { brandAsset, editable, onPopupEditBrandAsset, onOpenPopupConfirmDelete } = props;
+  const { t } = useTranslation()
 
   const [anchorElMenuAction, setAnchorElMenuAction] = useState<null | HTMLElement>(null);
   
@@ -63,7 +65,7 @@ const BrandAssetItem = (props: Props) => {
           }}
         >
           <EditIcon sx={{ fontSize: "20px" }} />
-          <ParagraphBody className={classes.itemAddAttribute}>Edit</ParagraphBody>
+          <ParagraphBody className={classes.itemAddAttribute} translation-key="common_edit">{t("common_edit")}</ParagraphBody>
         </MenuItem>
         <MenuItem 
           className={classes.menuActionItem} 
@@ -73,7 +75,7 @@ const BrandAssetItem = (props: Props) => {
           }}
         >
           <DeleteForeverIcon sx={{ fontSize: "20px", color: "var(--red-error)" }} />
-          <ParagraphBody className={classes.itemAddAttribute}>Delete</ParagraphBody>
+          <ParagraphBody className={classes.itemAddAttribute} translation-key="common_delete">{t("common_delete")}</ParagraphBody>
         </MenuItem>
       </Menu>
     </Box>
