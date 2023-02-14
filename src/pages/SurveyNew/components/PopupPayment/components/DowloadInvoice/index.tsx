@@ -44,8 +44,8 @@ const DowloadInvoice = memo(() => {
           dangerouslySetInnerHTML={{ __html: t("pay_order_download_invoice") }}
         />
       </Box>
-      <Typography color={"var(--gray-60)"} translation-key="popup_paynow_red_invoice_title">
-        {t("popup_paynow_red_invoice_title")}
+      <Typography color={"var(--gray-60)"} translation-key="brand_track_popup_paynow_red_invoice_title">
+        {t("brand_track_popup_paynow_red_invoice_title")}
       </Typography>
     </>
   );

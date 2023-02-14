@@ -34,11 +34,11 @@ const PopupOnlinePayment = memo((props: Props) => {
         <Box display="flex" alignItems={{ sm: "flex-end", xs: "flex-start" }} mt={3}>
           <ImageMain src={images.imgPaymentError1} alt="" />
           <Box ml={{ sm: 3 }}>
-            <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="popup_paynow_online_payment_title">
-              {t("popup_paynow_online_payment_title")}
+            <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_online_payment_title">
+              {t("brand_track_popup_paynow_online_payment_title")}
             </Heading1>
-            <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="">
-              Dec 2022 - Feb 2023 payment
+            <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="brand_track_paynow_popup_payment_title">
+              {t("brand_track_paynow_popup_payment_title", { dueDate: "Dec 2022 - Feb 2023" })}
             </Heading3>
             <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
               <Box display="flex" mt={1}>
@@ -56,20 +56,21 @@ const PopupOnlinePayment = memo((props: Props) => {
         <ParagraphBody
           paddingTop={2}
           $colorName="--gray-80"
-          translation-key="popup_paynow_online_payment_subtitle"
+          translation-key="brand_track_popup_paynow_online_payment_subtitle"
           dangerouslySetInnerHTML={{
-            __html: `${t("popup_paynow_online_payment_subtitle")}`,
+            __html: `${t("brand_track_popup_paynow_online_payment_subtitle")}`,
           }}
         />
 
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
           <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
-          <ParagraphBody my={2} ml={1} $colorName={"--gray-80"} translation-key="popup_paynow_due_date_title">
-            {t("popup_paynow_due_date_title")}: Nov 25, 2022
+          <ParagraphBody my={2} ml={1} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_due_date_title">
+            {t("brand_track_popup_paynow_due_date_title")}: Nov 25, 2022
           </ParagraphBody>
         </Box>
-        <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="popup_paynow_online_payment_subtitle_2">
-          {t("popup_paynow_online_payment_subtitle_2")} <Span translation-key="popup_paynow_action_3">{t("popup_paynow_action_3")}</Span>
+        <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_online_payment_subtitle_2">
+          {t("brand_track_popup_paynow_online_payment_subtitle_2")}{" "}
+          <Span translation-key="brand_track_popup_paynow_action_3">{t("brand_track_popup_paynow_action_3")}</Span>
         </ParagraphBody>
         <DowloadInvoice />
         <Ordersummary />
@@ -81,8 +82,9 @@ const PopupOnlinePayment = memo((props: Props) => {
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
-        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" translation-key="popup_paynow_change_payment_method">
-          {t("popup_paynow_change_payment_method")} <Span translation-key="popup_paynow_action_1">{t("popup_paynow_action_1")}</Span>
+        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" translation-key="brand_track_popup_paynow_change_payment_method">
+          {t("brand_track_popup_paynow_change_payment_method")}{" "}
+          <Span translation-key="brand_track_popup_paynow_action_1">{t("brand_track_popup_paynow_action_1")}</Span>
         </Typography>
       </DialogContentConfirm>
     </PopupPayment>

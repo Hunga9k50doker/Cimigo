@@ -41,11 +41,11 @@ const PopupBankTransfer = memo((props: Props) => {
         <Box display="flex" alignItems={{ sm: "flex-end", xs: "flex-start" }} mt={3}>
           <ImageMain src={images.imgPaymentError1} alt="" />
           <Box ml={{ sm: 3 }}>
-            <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="popup_paynow_bank_transfer_title">
-              {t("popup_paynow_bank_transfer_title")}
+            <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_bank_transfer_title">
+              {t("brand_track_popup_paynow_bank_transfer_title")}
             </Heading1>
-            <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="">
-              Dec 2022 - Feb 2023 payment
+            <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="brand_track_paynow_popup_payment_title">
+              {t("brand_track_paynow_popup_payment_title", { dueDate: "Dec 2022 - Feb 2023" })}
             </Heading3>
             <BoxCustom $flexBox={true}>
               <Box display="flex">
@@ -63,9 +63,9 @@ const PopupBankTransfer = memo((props: Props) => {
         <ParagraphBody
           paddingTop={2}
           $colorName="--gray-80"
-          translation-key="popup_paynow_bank_transfer_subtitle"
+          translation-key="brand_track_popup_paynow_bank_transfer_subtitle"
           dangerouslySetInnerHTML={{
-            __html: `${t("popup_paynow_bank_transfer_subtitle", { dueDate: "Nov 25, 2022" })}`,
+            __html: `${t("brand_track_popup_paynow_bank_transfer_subtitle", { dueDate: "Nov 25, 2022" })}`,
           }}
         />
         <Grid>
@@ -75,9 +75,9 @@ const PopupBankTransfer = memo((props: Props) => {
                 $colorName={"--cimigo-blue"}
                 display={"flex"}
                 alignItems={"center"}
-                translation-key="popup_paynow_bank_transfer_title_transfer"
+                translation-key="brand_track_popup_paynow_bank_transfer_title_transfer"
               >
-                {t("popup_paynow_bank_transfer_title_transfer", { currency: "VND" })}
+                {t("brand_track_popup_paynow_bank_transfer_title_transfer", { currency: "VND" })}
               </Heading4>
             </AccordionSummary>
             <AccordionDetails>
@@ -109,8 +109,8 @@ const PopupBankTransfer = memo((props: Props) => {
               </Grid>
               <Grid paddingBottom={2}>
                 <BoxCustom $flexBox={true} py={0.5} pt={2} $borderTop={true}>
-                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="popup_paynow_bank_transfer_transfer_amount">
-                    {t("popup_paynow_bank_transfer_transfer_amount")}
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_bank_transfer_transfer_amount">
+                    {t("brand_track_popup_paynow_bank_transfer_transfer_amount")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     165,000,000 đ
@@ -133,9 +133,9 @@ const PopupBankTransfer = memo((props: Props) => {
                 $colorName={"--cimigo-blue"}
                 display={"flex"}
                 alignItems={"center"}
-                translation-key="popup_paynow_bank_transfer_title_transfer"
+                translation-key="brand_track_popup_paynow_bank_transfer_title_transfer"
               >
-                {t("popup_paynow_bank_transfer_title_transfer", { currency: "USD" })}
+                {t("brand_track_popup_paynow_bank_transfer_title_transfer", { currency: "USD" })}
               </Heading4>
             </AccordionSummary>
             <AccordionDetails>
@@ -173,8 +173,8 @@ const PopupBankTransfer = memo((props: Props) => {
               </Grid>
               <Grid paddingBottom={2}>
                 <BoxCustom $flexBox={true} py={0.5} pt={2} $borderTop={true}>
-                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="popup_paynow_bank_transfer_transfer_amount">
-                    {t("popup_paynow_bank_transfer_transfer_amount")}
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_bank_transfer_transfer_amount">
+                    {t("brand_track_popup_paynow_bank_transfer_transfer_amount")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
                     $1,000
@@ -194,26 +194,27 @@ const PopupBankTransfer = memo((props: Props) => {
         </Grid>
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
           <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
-          <ParagraphBody my={2} ml={1} $colorName={"--gray-80"} translation-key="popup_paynow_due_date_title">
-            {t("popup_paynow_due_date_title")}: Nov 25, 2022
+          <ParagraphBody my={2} ml={1} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_due_date_title">
+            {t("brand_track_popup_paynow_due_date_title")}: Nov 25, 2022
           </ParagraphBody>
         </Box>
-        <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="popup_paynow_bank_transfer_subtitle_3">
-          {t("popup_paynow_bank_transfer_subtitle_3")} <Span translation-key="popup_paynow_action_2">{t("popup_paynow_action_2")}</Span>
+        <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_3">
+          {t("brand_track_popup_paynow_bank_transfer_subtitle_3")}{" "}
+          <Span translation-key="brand_track_popup_paynow_action_2">{t("brand_track_popup_paynow_action_2")}</Span>
         </ParagraphBody>
         {/* <ParagraphBody
           textAlign={"center"}
           $colorName={"--gray-80"}
           sx={{ background: "#f9f9f9", padding: "4px", bordeRadius: "4px" }}
           className={classes.subtitle}
-          translation-key="popup_paynow_bank_transfer_subtitle_4"
+          translation-key="brand_track_popup_paynow_bank_transfer_subtitle_4"
         >
-          {t("popup_paynow_bank_transfer_subtitle_4")}
+          {t("brand_track_popup_paynow_bank_transfer_subtitle_4")}
         </ParagraphBody> */}
         <DowloadInvoice />
         <Ordersummary />
-        <ParagraphBody $colorName={"--eerie-black-00"} translation-key="popup_paynow_bank_transfer_subtitle_2">
-          {t("popup_paynow_bank_transfer_subtitle_2")}
+        <ParagraphBody $colorName={"--eerie-black-00"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_2">
+          {t("brand_track_popup_paynow_bank_transfer_subtitle_2")}
         </ParagraphBody>
         <Box mt={2}>
           <ParagraphBody
@@ -223,8 +224,9 @@ const PopupBankTransfer = memo((props: Props) => {
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
-        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" translation-key="popup_paynow_change_payment_method">
-          {t("popup_paynow_change_payment_method")} <Span translation-key="popup_paynow_action_1">{t("popup_paynow_action_1")}</Span>
+        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" translation-key="brand_track_popup_paynow_change_payment_method">
+          {t("brand_track_popup_paynow_change_payment_method")}{" "}
+          <Span translation-key="brand_track_popup_paynow_action_1">{t("brand_track_popup_paynow_action_1")}</Span>
         </Typography>
       </DialogContentConfirm>
     </PopupPayment>

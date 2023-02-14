@@ -27,15 +27,17 @@ const Ordersummary = memo(() => {
         <AccordionDetails>
           <BoxCustom py={2} mt={1} $borderTop={true}>
             <BoxCustom $flexBox={true}>
-              <Heading6 $fontWeight={500} $colorName={"--eerie-black"} translation-key="">
-                Brand track (3 months)
+              <Heading6 $fontWeight={500} $colorName={"--eerie-black"} translation-key="brand_track_paynow_popup_project_name">
+                {t("brand_track_paynow_popup_project_name", { time: `3 ${t("common_month", { s: 3 > 1 ? t("common_s") : "" })}` })}
               </Heading6>
-              <Heading6 $fontWeight={500} $colorName={"--eerie-black"} translation-key="">
+              <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
                 150,000,000 đ
               </Heading6>
             </BoxCustom>
             <ParagraphExtraSmall $colorName={"--gray-60"}>Dec 2022 - Feb 2023</ParagraphExtraSmall>
-            <ParagraphExtraSmall $colorName={"--gray-60"}>Project ID: 6</ParagraphExtraSmall>
+            <ParagraphExtraSmall $colorName={"--gray-60"} translation-key="brand_track_paynow_popup_project_id">
+              {t("brand_track_paynow_popup_project_id")}: 6
+            </ParagraphExtraSmall>
           </BoxCustom>
           <BoxCustom $borderTop={true} pt={2}>
             <BoxCustom $flexBox={true}>
