@@ -19,6 +19,12 @@ interface SolutionConfig{
   daysOfDueDateType: number;
   paymentMonthSchedule: number;
 }
+export enum PaymentScheduleStatus {
+  NOT_PAID,
+  IN_PROGRESS,
+  PAID,
+  OVERDUE,
+}
 export interface PaymentSchedule{
   id: number;
   solutionConfig: SolutionConfig;

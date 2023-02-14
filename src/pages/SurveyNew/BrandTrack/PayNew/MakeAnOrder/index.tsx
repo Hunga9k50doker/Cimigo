@@ -12,7 +12,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Footer from "components/Footer";
 import { useEffect, useRef, useState } from "react";
 import Alert, { AlerType } from "../Alert";
-import { GetPaymentSchedule, PaymentSchedule } from "models/payment_schedule";
+import { GetPaymentSchedule, PaymentSchedule, PaymentScheduleStatus } from "models/payment_schedule";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { DataPagination } from "models/general";
@@ -40,12 +40,6 @@ import "swiper/css/navigation";
 
 interface MakeAnOrderProp {
   projectId: number;
-}
-enum PaymentScheduleStatus {
-  NOT_PAID,
-  IN_PROGRESS,
-  PAID,
-  OVERDUE,
 }
 const sliderSettings = {
   440: {
