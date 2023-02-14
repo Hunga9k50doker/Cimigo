@@ -21,20 +21,16 @@
     display: none;
   }
 }
+
 .itemDateActive{
-  border: 1px solid var(--cimigo-blue);
-  max-width: 120px;
-  max-width: 104px;
-  text-align: center;
-  border-radius: 5px;
-  padding: 0px 36px 16px 36px;
-  cursor: pointer;
-  margin-bottom: 24px;
+  border: 1px solid var(--cimigo-blue) !important;
+  padding: 0px 36px 16px 36px !important;
   .titleMonth{
-    margin-top: -5px;
+    margin-top: -5px !important;
   }
   .iconActive{
-    position: relative;
+    display: block !important;
+    position: relative !important;
     left: 35px;
     top: 10px;
     svg{

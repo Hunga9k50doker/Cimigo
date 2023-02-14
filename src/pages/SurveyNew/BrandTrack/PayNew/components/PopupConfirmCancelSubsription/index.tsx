@@ -15,14 +15,12 @@ import * as yup from "yup";
 import Heading4 from "components/common/text/Heading4";
 import InputTextareaAutosize from "components/InputTextareaAutosize";
 import moment from "moment";
-import { PaymentSchedule } from "models/payment_schedule";
 
 interface SubmitCancelSubsriptionFormData {
   reason: string;
 }
 interface PopupConfirmCancelSubsriptionProps {
   isOpen: boolean;
-  payment: PaymentSchedule;
   onCancel: () => void;
   onSubmit: (reason: string) => void;
 }
@@ -31,7 +29,7 @@ const PopupConfirmCancelSubsription = memo(
   (props: PopupConfirmCancelSubsriptionProps) => {
     const { t, i18n } = useTranslation();
 
-    const { onCancel, onSubmit, isOpen, payment } = props;
+    const { onCancel, onSubmit, isOpen } = props;
     const schema = useMemo(() => {
       return yup.object().shape({
         name: yup.string().max(500, "Max 500 characters!"),
@@ -88,7 +86,7 @@ const PopupConfirmCancelSubsription = memo(
               >
                 Your subscription is paid until the end of{" "}
                 <span>
-                  {moment(payment?.dueDate).lang(i18n.language).format("MMM yyyy")}
+                  {moment().format("MMM yyyy")}
                 </span>
                 . If you would like to proceed with canceling your subscription,
                 please select “Stop my subscription” below.
@@ -99,7 +97,7 @@ const PopupConfirmCancelSubsription = memo(
                 className={classes.description}
               >
                 After <span>
-                  {moment(payment?.dueDate).lang(i18n.language).format("MMM yyyy")}
+                  {moment().format("MMM yyyy")}
                 </span>, your project will stop, but you can
                 still access your results dashboard.
               </ParagraphBody>

@@ -1,9 +1,9 @@
 import { PaymentState } from ".";
 
-export const SET_MAKE_AN_ORDER = 'SET_MAKE_AN_ORDER';
+export const SET_PAYMENT_REDUCER = 'SET_PAYMENT_REDUCER';
 export const setPaymentReducer = (data: PaymentState) => {
     return {
-      type: SET_MAKE_AN_ORDER,
+      type: SET_PAYMENT_REDUCER,
       data: data
     }
   }

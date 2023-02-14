@@ -1,4 +1,4 @@
-import { Box} from "@mui/material";
+import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Heading4 from "components/common/text/Heading4";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
@@ -12,11 +12,7 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Footer from "components/Footer";
 import { useEffect, useRef, useState } from "react";
 import Alert, { AlerType } from "../Alert";
-import { useTranslation } from "react-i18next";
-import {
-  GetPaymentSchedule,
-  PaymentSchedule,
-} from "models/payment_schedule";
+import { GetPaymentSchedule, PaymentSchedule } from "models/payment_schedule";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { DataPagination } from "models/general";
@@ -29,7 +25,7 @@ import moment from "moment";
 import { PaymentScheduleService } from "services/payment_schedule";
 import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
-import { authPreviewOrPayment } from "../models";
+import { authProjectPreview } from "../models";
 import { usePrice } from "helpers/price";
 import { setPaymentReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
@@ -52,24 +48,31 @@ enum PaymentScheduleStatus {
   PAID,
   OVERDUE,
 }
+const sliderSettings = {
+  440: {
+    slidesPerView: 1,
+    spaceBetween: 30,
+  },
+  680: {
+    slidesPerView: 2,
+    spaceBetween: 30,
+  },
+  1024: {
+    slidesPerView: 2,
+    spaceBetween: 30,
+  },
+};
 const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
-  const { i18n } = useTranslation();
   const dispatch = useDispatch();
   const { project } = useSelector((state: ReducerType) => state.project);
-  const { isMakeAnOrder } = useSelector(
-    (state: ReducerType) => state.payment
-  );
+  const { isMakeAnOrder } = useSelector((state: ReducerType) => state.payment);
   const [paymentSchedule, setPaymentSchedule] =
     useState<DataPagination<PaymentSchedule>>();
-
+  const [alertPaymentSuccess,setAlertPaymentSuccess] = useState<boolean>(false);
   const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
     useState(false);
-  const [checkMakeAnOrder, setCheckMakeAnOrder] = useState<Boolean>(false);
   const [alertPaymentReminder, setAlertPaymentReminder] =
     useState<PaymentSchedule>();
-  const [dataPopupCancelSubsription, setDataPopupCancelSubsription] =
-    useState<PaymentSchedule>();
-
   const onCloseSubmitCancelSubsription = () => {
     setOnSubmitCancelSubsription(false);
   };
@@ -92,35 +95,13 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     );
   };
   const swiperRef = useRef<any>();
-  const sliderSettings = {
-    440: {
-      slidesPerView: 1,
-      spaceBetween: 30,
-    },
-    680: {
-      slidesPerView: 2,
-      spaceBetween: 30,
-    },
-    1024: {
-      slidesPerView: 2,
-      spaceBetween: 30,
-    },
-  };
-  useEffect(()=>{
-    moment.locale(i18n.language)
-  },[i18n])
   useEffect(() => {
-    authPreviewOrPayment(project, onRedirect);
-    if (
-      project?.startPaymentSchedule && isMakeAnOrder 
-    ) {
-      setCheckMakeAnOrder(true);
-      setDefaultMakeAnOrderReducer();
-    }
+    authProjectPreview(project, onRedirect);
+    setDefaultMakeAnOrderReducer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
   useEffect(() => {
-    const getListSlide = async () => {
+    const getListPaymentSchedule = async () => {
       const data: GetPaymentSchedule = {
         projectId: projectId,
       };
@@ -132,7 +113,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)));
     };
-    getListSlide();
+    getListPaymentSchedule();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, projectId]);
   useEffect(() => {
@@ -140,29 +121,34 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
       var paymentFirst = paymentSchedule?.data[0];
       var now = moment().add(14, "d").format("DD MMM yyyy");
       var dueDate = moment(paymentFirst?.dueDate).format("DD MMM yyyy");
-      if (now >= dueDate && paymentFirst?.status === PaymentScheduleStatus.NOT_PAID) {
-          setAlertPaymentReminder(paymentFirst);
+      if (
+        now >= dueDate &&
+        paymentFirst?.status === PaymentScheduleStatus.NOT_PAID
+      ) {
+        setAlertPaymentReminder(paymentFirst);
       }
-      if (paymentFirst?.status === PaymentScheduleStatus.NOT_PAID ) {
-          setDataPopupCancelSubsription(paymentFirst);
-        }
     };
     if (paymentSchedule?.data) {
       checkPaymentReminder();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentSchedule]);
+  useEffect(()=>{
+    if(isMakeAnOrder){
+      setAlertPaymentSuccess(isMakeAnOrder)
+    }
+  },[isMakeAnOrder])
   return (
     <>
       <Grid classes={{ root: classes.root }}>
-        {checkMakeAnOrder && (
+        {alertPaymentSuccess && (
           <Alert
             title={"Thanks for making an order!"}
             content={
               <ParagraphBody $colorName={"--eerie-black"}>
-                Fieldwork will start at the beginning of Jan 2023 if you make
-                the first payment by Nov 25, 2023. Subsequent payments will be
-                made every 3 months.
+                Fieldwork will start at the beginning of {moment(project?.startPaymentSchedule).format("MMMM yyyy")} if you make
+                the first payment by {moment(paymentSchedule?.data[0]?.dueDate).format("MMMM DD, yyyy")}. Subsequent payments will be
+                made every {paymentSchedule?.data[0]?.solutionConfig?.paymentMonthSchedule} months.
               </ParagraphBody>
             }
             type={AlerType.Success}
@@ -176,8 +162,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                 <ParagraphBody $colorName={"--eerie-black"}>
                   You have a pending payment that is about to become overdue.
                   You must process the payment by{" "}
-                  {moment(alertPaymentReminder.dueDate)
-                    .format("MMMM DD, yyyy")}{" "}
+                  {moment(alertPaymentReminder.dueDate).format("MMMM DD, yyyy")}{" "}
                   to avoid being terminated.
                 </ParagraphBody>
                 <ParagraphBody $colorName={"--eerie-black"}>
@@ -189,7 +174,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
             type={AlerType.Warning}
           />
         )}
-        {project?.status === ProjectStatus.IN_PROGRESS && (
+        {!project?.status && (
           <Alert
             title={"Your subscription canceled!"}
             content={
@@ -259,9 +244,9 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                         <Box className={classes.contentSlideSwiper}>
                           <Grid className={classes.contentLeftSwiper}>
                             <Heading3 $colorName={"--gray-80"}>
-                              {`${moment(item.start)
-                                .format("MMM yyyy")} - ${moment(item.end)
-                                .format("MMM yyyy")}`}
+                              {`${moment(item.start).format(
+                                "MMM yyyy"
+                              )} - ${moment(item.end).format("MMM yyyy")}`}
                             </Heading3>
                             <ParagraphBody $colorName={"--gray-80"}>
                               {item.solutionConfig.paymentMonthSchedule} months
@@ -293,11 +278,11 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
 
                                 <ParagraphSmall pt={0.5}>{`Due ${moment(
                                   item.dueDate
-                                )
-                                  .format("MMM DD, yyyy")}`}</ParagraphSmall>
+                                ).format("MMM DD, yyyy")}`}</ParagraphSmall>
                               </Box>
                             )}
-                            {item.status === PaymentScheduleStatus.IN_PROGRESS && (
+                            {item.status ===
+                              PaymentScheduleStatus.IN_PROGRESS && (
                               <Box>
                                 <Box className={classes.statusPayment}>
                                   <HourglassBottomIcon />
@@ -364,7 +349,6 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                   );
                 })}
               </Swiper>
-
               <Box
                 className={clsx(classes.iconSlide, classes.iconSlideRight)}
                 onClick={() => swiperRef.current?.slideNext()}
@@ -377,7 +361,6 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
         </Grid>
       </Grid>
       <PopupConfirmCancelSubsription
-        payment={dataPopupCancelSubsription}
         isOpen={onSubmitCancelSubsription}
         onCancel={onCloseSubmitCancelSubsription}
         onSubmit={(reson) => submitCancelSubsription(reson)}

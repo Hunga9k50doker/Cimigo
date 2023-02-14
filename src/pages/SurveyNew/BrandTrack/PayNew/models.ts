@@ -2,7 +2,7 @@ import { Project, ProjectStatus } from "models/project";
 import { routes } from "routers/routes";
 
 
-export const authPreviewOrPayment = (project: Project, onRedirect: (route: string) => void) => {
+export const authProjectPreview = (project: Project, onRedirect: (route: string) => void) => {
   if (!project) return
   switch (project.status) {
     case ProjectStatus.AWAIT_PAYMENT:
@@ -11,6 +11,12 @@ export const authPreviewOrPayment = (project: Project, onRedirect: (route: strin
     case ProjectStatus.DRAFT:
       onRedirect(routes.project.detail.paymentBilling.previewAndPayment.preview);
       break;
+  }
+}
+export const authProjectSelectDate = (project: Project, onRedirect: (route: string) => void) => {
+  if (!project) return
+  if(project.status === ProjectStatus.AWAIT_PAYMENT){
+    onRedirect(routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder);
   }
 }
 const ordinals: string[] = ['th', 'st', 'nd', 'rd'];
