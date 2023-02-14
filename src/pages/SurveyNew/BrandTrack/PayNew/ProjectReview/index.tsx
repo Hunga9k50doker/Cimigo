@@ -6,7 +6,7 @@ import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import { ReducerType } from "redux/reducers";
 import { authPreviewOrPayment } from "../models";
-import { setCancelPayment, setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
+import { setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Heading5 from "components/common/text/Heading5";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
@@ -27,7 +27,7 @@ interface ProjectReviewProps {}
 const ProjectReview = memo(({}: ProjectReviewProps) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { project, cancelPayment } = useSelector((state: ReducerType) => state.project);
+  const { project } = useSelector((state: ReducerType) => state.project);
 
   const isValidBasic = useMemo(() => ProjectHelper.isValidBasic(project) || 0, [project]);
 
@@ -94,12 +94,6 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
 
-  useEffect(() => {
-    return () => {
-      if (cancelPayment) dispatch(setCancelPayment(false));
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const onNextPayment = () => {
     if(!isValidCheckout) return;
     dispatch(push(routes.project.detail.paymentBilling.previewAndPayment.selectDate.replace(":id", `${project.id}`)));
