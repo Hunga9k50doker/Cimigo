@@ -37,7 +37,6 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { ProjectStatus } from "models/project";
 
 interface MakeAnOrderProp {
   projectId: number;
@@ -68,7 +67,8 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const { isMakeAnOrder } = useSelector((state: ReducerType) => state.payment);
   const [paymentSchedule, setPaymentSchedule] =
     useState<DataPagination<PaymentSchedule>>();
-  const [alertPaymentSuccess,setAlertPaymentSuccess] = useState<boolean>(false);
+  const [alertPaymentSuccess, setAlertPaymentSuccess] =
+    useState<boolean>(false);
   const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
     useState(false);
   const [alertPaymentReminder, setAlertPaymentReminder] =
@@ -133,11 +133,11 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentSchedule]);
-  useEffect(()=>{
-    if(isMakeAnOrder){
-      setAlertPaymentSuccess(isMakeAnOrder)
+  useEffect(() => {
+    if (isMakeAnOrder) {
+      setAlertPaymentSuccess(isMakeAnOrder);
     }
-  },[isMakeAnOrder])
+  }, [isMakeAnOrder]);
   return (
     <>
       <Grid classes={{ root: classes.root }}>
@@ -146,9 +146,15 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
             title={"Thanks for making an order!"}
             content={
               <ParagraphBody $colorName={"--eerie-black"}>
-                Fieldwork will start at the beginning of {moment(project?.startPaymentSchedule).format("MMMM yyyy")} if you make
-                the first payment by {moment(paymentSchedule?.data[0]?.dueDate).format("MMMM DD, yyyy")}. Subsequent payments will be
-                made every {paymentSchedule?.data[0]?.solutionConfig?.paymentMonthSchedule} months.
+                Fieldwork will start at the beginning of{" "}
+                {moment(project?.startPaymentSchedule).format("MMMM yyyy")} if
+                you make the first payment by{" "}
+                {moment(paymentSchedule?.data[0]?.dueDate).format(
+                  "MMMM DD, yyyy"
+                )}
+                . Subsequent payments will be made every{" "}
+                {paymentSchedule?.data[0]?.solutionConfig?.paymentMonthSchedule}{" "}
+                months.
               </ParagraphBody>
             }
             type={AlerType.Success}
@@ -319,7 +325,9 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                                   pt={0.5}
                                   $colorName={"--gray-40"}
                                 >
-                                  Due Dec 25, 2022
+                                  {`Due ${moment(item.dueDate).format(
+                                    "MMM DD, yyyy"
+                                  )}`}
                                 </ParagraphSmall>
                               </Box>
                             )}
