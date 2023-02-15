@@ -88,7 +88,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const selectedDatePayment = (dateItem: DateItem) => {
     setSelectedDate(dateItem);
   };
-  const onToggleisOpenListPaymentSchedule = () => {
+  const onToggleListPaymentSchedule = () => {
     setIsOpenListPaymentSchedule(!isOpenListPaymentSchedule);
   };
   const goToPayment = () => {
@@ -196,7 +196,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
                 <ArrowRightIcon className={clsx({[classes.rotateIcon]: isOpenListPaymentSchedule})}/>
                 <ParagraphBodyUnderline
                   $colorName={"--cimigo-blue"}
-                  onClick={onToggleisOpenListPaymentSchedule}
+                  onClick={onToggleListPaymentSchedule}
                 >
                   View payment schedules
                 </ParagraphBodyUnderline>
