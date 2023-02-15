@@ -37,6 +37,8 @@ import FileSaver from "file-saver";
 import { DialogContentConfirm } from "components/common/dialogs/DialogContent";
 import ButtonClose from "components/common/buttons/ButtonClose";
 import PopupPayment from "../components/PopupPayment";
+import { PaymentSchedule } from "models/payment_schedule";
+import { usePrice } from "helpers/price";
 
 interface DataForm {
   paymentMethodId: number;
@@ -53,26 +55,16 @@ interface DataForm {
   companyAddress: string;
   taxCode: string;
 }
-interface SolutionConfig {
-  paymentMonthSchedule: string | number;
-}
-interface SystemConfig {
-  vat: string | number;
-}
-interface PaymentFeatureProps {
-  start: Date;
-  end: Date;
-  solutionConfig: SolutionConfig;
-  systemConfig: SystemConfig;
-  totalAmount: string | number;
-}
 interface Props {
   isOpen: boolean;
-  onCancel: () => void;
+  dataPaymentSchedule: PaymentSchedule;
+  onClose: () => void;
+  onOpenModal?: (item: number) => void;
 }
 
 const PopupPayNow = memo((props: Props) => {
-  const { isOpen, onCancel } = props;
+  const { isOpen, dataPaymentSchedule, onClose, onOpenModal } = props;
+  const { price, getCostCurrency } = usePrice();
   const { t, i18n } = useTranslation();
 
   const schema = useMemo(() => {
@@ -228,13 +220,6 @@ const PopupPayNow = memo((props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watch]);
 
-  const checkHaveShowSkipInfor = (data: DataForm) => {
-    if ([EPaymentMethod.ONEPAY_GENERAL].includes(data.paymentMethodId)) {
-      return !data.fullName || !data.companyName || !data.email || !data.phone || !data.countryId || !data.companyAddress;
-    }
-    return false;
-  };
-
   const onCheckout = (data: DataForm) => {
     dispatch(setLoading(true));
     PaymentService.checkout({
@@ -268,11 +253,7 @@ const PopupPayNow = memo((props: Props) => {
 
   const onConfirm = (data: DataForm) => {
     if (!project) return;
-    if (checkHaveShowSkipInfor(data)) {
-      setShowSkipInfor(data);
-      return;
-    }
-    onCheckout(data);
+    onOpenModal(watch("paymentMethodId"));
   };
 
   const onSkipUpdateInfo = () => {
@@ -312,394 +293,405 @@ const PopupPayNow = memo((props: Props) => {
   };
 
   return (
-    <PopupPayment scroll="paper" open={isOpen} onClose={onCancel} $maxWithUnset={true}>
-      <DialogContentConfirm dividers $padding="0">
-        <Grid component={"form"} classes={{ root: classes.root }} onSubmit={handleSubmit(onConfirm)} noValidate autoComplete="off">
-          <Divider className={classes.divider1} />
-          <Grid classes={{ root: classes.left }}>
-            <ButtonClose $backgroundColor="--eerie-black-5" className={classes.btnCloseMobile} $colorName="--eerie-black-40" onClick={onCancel} />
-            <Heading3 $colorName="--cimigo-blue" translation-key="brand_track_paynow_popup_payment_title">
-              {t("brand_track_paynow_popup_payment_title", { dueDate: `DEC 2022  - FEB 2023` })}
-            </Heading3>
-            <ParagraphBody display={"flex"} alignItems="center">
-              <ParagraphSmall $colorName="--gray-80">C7938 On Demand (SaaS)</ParagraphSmall>
-              &nbsp;
-              <ParagraphSmall $colorName="--gray-80" translation-key="common_id">
-                - {t("common_id")}: 6
-              </ParagraphSmall>
-            </ParagraphBody>
-            <Heading5 mt={3} mb={2} $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_payment_method">
-              {t("payment_billing_sub_tab_payment_method")}:
-            </Heading5>
-            <Controller
-              name="paymentMethodId"
-              control={control}
-              render={({ field }) => (
-                <RadioGroup name={field.name} value={field.value} ref={field.ref} onBlur={field.onBlur} classes={{ root: classes.radioGroup }}>
-                  <Box className={classes.lable}>
-                    <Radio
-                      checked={field.value === EPaymentMethod.BANK_TRANSFER}
-                      onChange={() => setValue("paymentMethodId", EPaymentMethod.BANK_TRANSFER)}
-                      classes={{ root: classes.rootRadio, checked: classes.checkRadio }}
-                    />
-                    <Grid classes={{ root: classes.order }}>
-                      <ParagraphBody
-                        $colorName="--cimigo-blue"
-                        className={classes.title}
-                        onClick={() => setValue("paymentMethodId", EPaymentMethod.BANK_TRANSFER)}
-                        translation-key="payment_billing_sub_tab_payment_method_bank_transfer"
-                      >
-                        <img src={images.icBank} alt="" />
-                        {t("payment_billing_sub_tab_payment_method_bank_transfer")}
-                      </ParagraphBody>
-                      <ParagraphSmall
-                        $colorName="--gray-80"
-                        className={classes.titleSub}
-                        translation-key="brand_track_paynow_popup_sub_tab_payment_method_bank_transfer_sub"
-                      >
-                        {t("brand_track_paynow_popup_sub_tab_payment_method_bank_transfer_sub")}
-                      </ParagraphSmall>
-                    </Grid>
-                  </Box>
-                  <Box className={classes.lable} my={2}>
-                    <Radio
-                      checked={field.value === EPaymentMethod.ONEPAY_GENERAL}
-                      onChange={() => setValue("paymentMethodId", EPaymentMethod.ONEPAY_GENERAL)}
-                      classes={{ root: classes.rootRadio, checked: classes.checkRadio }}
-                    />
-                    <Grid classes={{ root: classes.order }}>
-                      <ParagraphBody
-                        $colorName="--cimigo-blue"
-                        className={classes.title}
-                        onClick={() => setValue("paymentMethodId", EPaymentMethod.ONEPAY_GENERAL)}
-                        translation-key="payment_billing_sub_tab_payment_method_onepay"
-                      >
-                        <img src={images.icInternetBanking} alt="" />
-                        {t("payment_billing_sub_tab_payment_method_onepay")}
-                      </ParagraphBody>
-                      <Grid className={classes.methodImg}>
-                        <img src={images.imgVisa} alt="" />
-                        <img src={images.imgMastercard} alt="" />
-                        <img src={images.imgAmericanExpress} alt="" />
-                        <img src={images.imgJCB} alt="" />
-                        <img src={images.imgUnionpay} alt="" />
-                      </Grid>
-                      <ParagraphSmall
-                        $colorName="--gray-80"
-                        className={classes.titleSub}
-                        translation-key="brand_track_paynow_popup_sub_tab_payment_method_onepay_sub"
-                      >
-                        {t("brand_track_paynow_popup_sub_tab_payment_method_onepay_sub")}
-                      </ParagraphSmall>
-                    </Grid>
-                  </Box>
-                  <Box className={classes.lable}>
-                    <Radio
-                      checked={field.value === EPaymentMethod.MAKE_AN_ORDER}
-                      onChange={() => setValue("paymentMethodId", EPaymentMethod.MAKE_AN_ORDER)}
-                      classes={{ root: classes.rootRadio, checked: classes.checkRadio }}
-                    />
-                    <Grid classes={{ root: classes.order }}>
-                      <ParagraphBody
-                        $colorName="--cimigo-blue"
-                        className={classes.title}
-                        translation-key="payment_billing_sub_tab_payment_method_make_an_order"
-                        onClick={() => setValue("paymentMethodId", EPaymentMethod.MAKE_AN_ORDER)}
-                      >
-                        <img src={images.icOrder} alt="" />
-                        {t("payment_billing_sub_tab_payment_method_make_an_order")}
-                      </ParagraphBody>
-                      <ParagraphSmall
-                        $colorName="--gray-80"
-                        className={classes.titleSub}
-                        translation-key="brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub"
-                      >
-                        {t("brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub")}
-                        {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
-                          <ParagraphSmall
-                            $colorName="--gray-80"
-                            className={classes.titleSub}
-                            translation-key="brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub_2"
-                          >
-                            {t("brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub_2")}
-                          </ParagraphSmall>
-                        )}
-                      </ParagraphSmall>
-                      {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
-                        <Box mb={4} mt={2} sx={{ maxWidth: "325px" }}>
-                          <InputTextField
-                            className={classes.customTextField}
-                            title={t("field_contact_name")}
-                            translation-key="field_contact_name"
-                            name="contactName"
-                            placeholder={t("field_contact_name_placeholder")}
-                            translation-key-placeholder="field_contact_name_placeholder"
-                            inputRef={register("contactName")}
-                            errorMessage={errors.contactName?.message}
-                            rootProps={{ sx: { mb: 1 } }}
-                          />
-                          <InputTextField
-                            className={classes.customTextField}
-                            title={t("field_contact_email")}
-                            translation-key="field_contact_email"
-                            name="contactEmail"
-                            placeholder={t("field_contact_email_placeholder")}
-                            translation-key-placeholder="field_contact_email_placeholder"
-                            inputRef={register("contactEmail")}
-                            errorMessage={errors.contactEmail?.message}
-                            rootProps={{ sx: { mb: 1 } }}
-                          />
-                          <InputTextField
-                            className={classes.customTextField}
-                            title={t("field_contact_phone")}
-                            translation-key="field_contact_phone"
-                            name="contactPhone"
-                            placeholder={t("field_contact_phone_placeholder")}
-                            translation-key-placeholder="field_contact_phone_placeholder"
-                            inputRef={register("contactPhone")}
-                            errorMessage={errors.contactPhone?.message}
-                          />
-                        </Box>
-                      )}
-                    </Grid>
-                  </Box>
-                  <Divider />
-                </RadioGroup>
-              )}
-            />
-            <Box
-              className={classes.paddingMobile}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              sx={{ cursor: isMobile && "pointer" }}
-              onClick={() => isMobile && setIsExpandedInfo((pre) => !pre)}
-            >
-              <Heading5
-                id="payment_invoice_and_contract_info"
-                $colorName="--cimigo-blue"
-                className={classes.titleInfo}
-                translation-key="payment_billing_sub_tab_payment_invoice_and_contract_info"
-              >
-                {t("payment_billing_sub_tab_payment_invoice_and_contract_info")}{" "}
-              </Heading5>
-              <IconButton sx={{ transform: isExpandedInfo ? "rotate(180deg)" : "unset" }} className={classes.isMobile}>
-                <ExpandMore sx={{ fontSize: 24, color: "var(--eerie-black-40)" }} />
-              </IconButton>
-            </Box>
-            <Collapse in={isExpandedInfo || !isMobile} timeout="auto" unmountOnExit>
-              <Grid className={classes.informationBox} container rowSpacing={1} columnSpacing={3}>
-                <Grid item xs={12} sm={6}>
-                  <InputTextField
-                    className={classes.customTextField}
-                    title={t("field_full_name")}
-                    translation-key="field_full_name"
-                    placeholder={t("field_full_name_placeholder")}
-                    translation-key-placeholder="field_full_name_placeholder"
-                    name="fullName"
-                    inputRef={register("fullName")}
-                    errorMessage={errors.fullName?.message}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <InputTextField
-                    className={classes.customTextField}
-                    title={t("field_company")}
-                    translation-key="field_company"
-                    placeholder={t("field_company_placeholder")}
-                    translation-key-placeholder="field_company_placeholder"
-                    name="companyName"
-                    inputRef={register("companyName")}
-                    errorMessage={errors.companyName?.message}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <InputTextField
-                    className={classes.customTextField}
-                    title={t("field_your_title")}
-                    translation-key="field_your_title"
-                    placeholder={t("field_your_title_placeholder")}
-                    translation-key-placeholder="field_your_title_placeholder"
-                    name="title"
-                    inputRef={register("title")}
-                    errorMessage={errors.title?.message}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <InputTextField
-                    className={classes.customTextField}
-                    title={t("field_email")}
-                    translation-key="field_email"
-                    placeholder={t("field_email_placeholder")}
-                    translation-key-placeholder="field_email_placeholder"
-                    name="email"
-                    inputRef={register("email")}
-                    errorMessage={errors.email?.message}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <InputTextField
-                    className={classes.customTextField}
-                    title={t("field_phone_number")}
-                    translation-key="field_phone_number"
-                    placeholder={t("field_phone_number_placeholder")}
-                    translation-key-placeholder="field_phone_number_placeholder"
-                    name="phone"
-                    inputRef={register("phone")}
-                    errorMessage={errors.phone?.message}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <InputSelect
-                    fullWidth
-                    title={t("field_country")}
-                    name="countryId"
-                    control={control}
-                    errorMessage={(errors.countryId as any)?.message}
-                    selectProps={{
-                      options: countries,
-                      placeholder: t("field_country_placeholder"),
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <InputTextField
-                    className={classes.customTextField}
-                    title={t("field_company_address")}
-                    translation-key="field_company_address"
-                    placeholder={t("field_company_address_placeholder")}
-                    translation-key-placeholder="field_company_address_placeholder"
-                    name="companyAddress"
-                    inputRef={register("companyAddress")}
-                    errorMessage={errors.companyAddress?.message}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <InputTextField
-                    className={classes.customTextField}
-                    optional
-                    title={t("field_tax_code_for_invoice")}
-                    translation-key="field_tax_code_for_invoice"
-                    placeholder={t("field_tax_code_for_invoice_placeholder")}
-                    translation-key-placeholder="field_tax_code_for_invoice_placeholder"
-                    name="taxCode"
-                    inputRef={register("taxCode")}
-                    errorMessage={errors.taxCode?.message}
-                  />
-                </Grid>
-                <Grid item xs={12} className={classes.tips}>
-                  <FormControlLabel
-                    control={
-                      <Controller
-                        name="saveForLater"
-                        control={control}
-                        render={({ field }) => <InputCheckbox checked={field.value} onChange={field.onChange} />}
-                      />
-                    }
-                    translation-key="payment_billing_sub_tab_payment_save_for_later"
-                    label={<>{t("payment_billing_sub_tab_payment_save_for_later")}</>}
-                  />
-                  <TooltipCustom
-                    popperClass={classes.popperClass}
-                    title={t("payment_billing_sub_tab_payment_save_for_later_tip")}
-                    translation-key="payment_billing_sub_tab_payment_save_for_later_tip"
-                  >
-                    <InfoOutlined sx={{ ml: 0.5, fontSize: 16, color: "var(--eerie-black-40)" }} />
-                  </TooltipCustom>
-                </Grid>
-                {!!configs?.viewContract && (
-                  <Grid item xs={12}>
-                    <ParagraphSmall mt={2} $colorName="--eerie-black-65" translation-key="payment_invoice_and_contract_info_bottom_1">
-                      {t("payment_invoice_and_contract_info_bottom_1")}{" "}
-                      <span
-                        onClick={onDownloadContract}
-                        className="underline cursor-pointer"
-                        translation-key="payment_invoice_and_contract_info_bottom_2"
-                      >
-                        {t("payment_invoice_and_contract_info_bottom_2")}
-                      </span>
-                    </ParagraphSmall>
-                  </Grid>
-                )}
-              </Grid>
-            </Collapse>
+    <PopupPayment scroll="paper" open={isOpen} onClose={onClose} $maxWithUnset={true}>
+      {dataPaymentSchedule?.id && (
+        <DialogContentConfirm dividers $padding="0">
+          <Grid component={"form"} classes={{ root: classes.root }} onSubmit={handleSubmit(onConfirm)} noValidate autoComplete="off">
             <Divider className={classes.divider1} />
-          </Grid>
-          <Grid classes={{ root: classes.right }}>
-            <ButtonClose $backgroundColor="--eerie-black-5" className={classes.btnClose} $colorName="--eerie-black-40" onClick={onCancel} />
-            <Grid classes={{ root: classes.sumaryBox }}>
-              <Grid classes={{ root: classes.bodyOrder }}>
-                <Heading4 className={classes.sumaryTitle} $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_payment_summary">
-                  {t("payment_billing_sub_tab_payment_summary")}
-                </Heading4>
-                <Heading5 mb={-1} translate-key="brand_track_paynow_popup_items_title">
-                  {t("brand_track_paynow_popup_items_title")}
+            <Grid classes={{ root: classes.left }}>
+              <ButtonClose $backgroundColor="--eerie-black-5" className={classes.btnCloseMobile} $colorName="--eerie-black-40" onClick={onClose} />
+              <Heading3 $colorName="--cimigo-blue" translation-key="brand_track_paynow_popup_payment_title">
+                {t("brand_track_paynow_popup_payment_title", {
+                  start: moment(dataPaymentSchedule.start).format("MMM yyyy"),
+                  end: moment(dataPaymentSchedule.end).format("MMM yyyy"),
+                })}
+              </Heading3>
+              <ParagraphBody display={"flex"} alignItems="center">
+                <ParagraphSmall $colorName="--gray-80">{dataPaymentSchedule.project.name}</ParagraphSmall>
+                &nbsp;
+                <ParagraphSmall $colorName="--gray-80" translation-key="common_id">
+                  - {t("common_id", { id: dataPaymentSchedule.id })}
+                </ParagraphSmall>
+              </ParagraphBody>
+              <Heading5 mt={3} mb={2} $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_payment_method">
+                {t("payment_billing_sub_tab_payment_method")}:
+              </Heading5>
+              <Controller
+                name="paymentMethodId"
+                control={control}
+                render={({ field }) => (
+                  <RadioGroup name={field.name} value={field.value} ref={field.ref} onBlur={field.onBlur} classes={{ root: classes.radioGroup }}>
+                    <Box className={classes.lable}>
+                      <Radio
+                        checked={field.value === EPaymentMethod.BANK_TRANSFER}
+                        onChange={() => setValue("paymentMethodId", EPaymentMethod.BANK_TRANSFER)}
+                        classes={{ root: classes.rootRadio, checked: classes.checkRadio }}
+                      />
+                      <Grid classes={{ root: classes.order }}>
+                        <ParagraphBody
+                          $colorName="--cimigo-blue"
+                          className={classes.title}
+                          onClick={() => setValue("paymentMethodId", EPaymentMethod.BANK_TRANSFER)}
+                          translation-key="payment_billing_sub_tab_payment_method_bank_transfer"
+                        >
+                          <img src={images.icBank} alt="" />
+                          {t("payment_billing_sub_tab_payment_method_bank_transfer")}
+                        </ParagraphBody>
+                        <ParagraphSmall
+                          $colorName="--gray-80"
+                          className={classes.titleSub}
+                          translation-key="brand_track_paynow_popup_sub_tab_payment_method_bank_transfer_sub"
+                        >
+                          {t("brand_track_paynow_popup_sub_tab_payment_method_bank_transfer_sub")}
+                        </ParagraphSmall>
+                      </Grid>
+                    </Box>
+                    <Box className={classes.lable} my={2}>
+                      <Radio
+                        checked={field.value === EPaymentMethod.ONEPAY_GENERAL}
+                        onChange={() => setValue("paymentMethodId", EPaymentMethod.ONEPAY_GENERAL)}
+                        classes={{ root: classes.rootRadio, checked: classes.checkRadio }}
+                      />
+                      <Grid classes={{ root: classes.order }}>
+                        <ParagraphBody
+                          $colorName="--cimigo-blue"
+                          className={classes.title}
+                          onClick={() => setValue("paymentMethodId", EPaymentMethod.ONEPAY_GENERAL)}
+                          translation-key="payment_billing_sub_tab_payment_method_onepay"
+                        >
+                          <img src={images.icInternetBanking} alt="" />
+                          {t("payment_billing_sub_tab_payment_method_onepay")}
+                        </ParagraphBody>
+                        <Grid className={classes.methodImg}>
+                          <img src={images.imgVisa} alt="" />
+                          <img src={images.imgMastercard} alt="" />
+                          <img src={images.imgAmericanExpress} alt="" />
+                          <img src={images.imgJCB} alt="" />
+                          <img src={images.imgUnionpay} alt="" />
+                        </Grid>
+                        <ParagraphSmall
+                          $colorName="--gray-80"
+                          className={classes.titleSub}
+                          translation-key="brand_track_paynow_popup_sub_tab_payment_method_onepay_sub"
+                        >
+                          {t("brand_track_paynow_popup_sub_tab_payment_method_onepay_sub")}
+                        </ParagraphSmall>
+                      </Grid>
+                    </Box>
+                    <Box className={classes.lable}>
+                      <Radio
+                        checked={field.value === EPaymentMethod.MAKE_AN_ORDER}
+                        onChange={() => setValue("paymentMethodId", EPaymentMethod.MAKE_AN_ORDER)}
+                        classes={{ root: classes.rootRadio, checked: classes.checkRadio }}
+                      />
+                      <Grid classes={{ root: classes.order }}>
+                        <ParagraphBody
+                          $colorName="--cimigo-blue"
+                          className={classes.title}
+                          translation-key="payment_billing_sub_tab_payment_method_make_an_order"
+                          onClick={() => setValue("paymentMethodId", EPaymentMethod.MAKE_AN_ORDER)}
+                        >
+                          <img src={images.icOrder} alt="" />
+                          {t("payment_billing_sub_tab_payment_method_make_an_order")}
+                        </ParagraphBody>
+                        <ParagraphSmall
+                          $colorName="--gray-80"
+                          className={classes.titleSub}
+                          translation-key="brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub"
+                        >
+                          {t("brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub")}
+                          {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
+                            <ParagraphSmall
+                              $colorName="--gray-80"
+                              className={classes.titleSub}
+                              translation-key="brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub_2"
+                            >
+                              {t("brand_track_paynow_popup_sub_tab_payment_method_make_an_order_sub_2")}
+                            </ParagraphSmall>
+                          )}
+                        </ParagraphSmall>
+                        {Number(watch("paymentMethodId")) === EPaymentMethod.MAKE_AN_ORDER && (
+                          <Box mb={4} mt={2} sx={{ maxWidth: "325px" }}>
+                            <InputTextField
+                              className={classes.customTextField}
+                              title={t("field_contact_name")}
+                              translation-key="field_contact_name"
+                              name="contactName"
+                              placeholder={t("field_contact_name_placeholder")}
+                              translation-key-placeholder="field_contact_name_placeholder"
+                              inputRef={register("contactName")}
+                              errorMessage={errors.contactName?.message}
+                              rootProps={{ sx: { mb: 1 } }}
+                            />
+                            <InputTextField
+                              className={classes.customTextField}
+                              title={t("field_contact_email")}
+                              translation-key="field_contact_email"
+                              name="contactEmail"
+                              placeholder={t("field_contact_email_placeholder")}
+                              translation-key-placeholder="field_contact_email_placeholder"
+                              inputRef={register("contactEmail")}
+                              errorMessage={errors.contactEmail?.message}
+                              rootProps={{ sx: { mb: 1 } }}
+                            />
+                            <InputTextField
+                              className={classes.customTextField}
+                              title={t("field_contact_phone")}
+                              translation-key="field_contact_phone"
+                              name="contactPhone"
+                              placeholder={t("field_contact_phone_placeholder")}
+                              translation-key-placeholder="field_contact_phone_placeholder"
+                              inputRef={register("contactPhone")}
+                              errorMessage={errors.contactPhone?.message}
+                            />
+                          </Box>
+                        )}
+                      </Grid>
+                    </Box>
+                    <Divider />
+                  </RadioGroup>
+                )}
+              />
+              <Box
+                className={classes.paddingMobile}
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{ cursor: isMobile && "pointer" }}
+                onClick={() => isMobile && setIsExpandedInfo((pre) => !pre)}
+              >
+                <Heading5
+                  id="payment_invoice_and_contract_info"
+                  $colorName="--cimigo-blue"
+                  className={classes.titleInfo}
+                  translation-key="payment_billing_sub_tab_payment_invoice_and_contract_info"
+                >
+                  {t("payment_billing_sub_tab_payment_invoice_and_contract_info")}{" "}
                 </Heading5>
-                <Divider />
-                <div className={classes.flexOrder}>
-                  <ParagraphBody $colorName="--eerie-black" $fontWeight={500} translation-key="brand_track_paynow_popup_project_name">
-                    {t("brand_track_paynow_popup_project_name", { time: `3 ${t("common_month", { s: 3 > 1 ? t("common_s") : "" })}` })}
-                  </ParagraphBody>
-                  <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
-                    150,000,000 đ
-                  </ParagraphBody>
-                </div>
-                <ParagraphExtraSmall $colorName="--eerie-black">Dec 2022 - Feb 2023</ParagraphExtraSmall>
-                <ParagraphExtraSmall $colorName="--eerie-black" translation-key="brand_track_paynow_popup_project_id">
-                  {t("brand_track_paynow_popup_project_id")}: 6
-                </ParagraphExtraSmall>
-                <Divider />
-                <div className={classes.flexOrder}>
-                  <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
-                    {t("common_sub_total")}
-                  </ParagraphBody>
-                  <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
-                    150,000,000 đ
-                  </ParagraphBody>
-                </div>
-                <div className={classes.flexOrder}>
-                  <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
-                    {t("common_vat", { percent: (configs?.vat || 0) * 100 })}
-                  </ParagraphBody>
-                  <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
-                    15,000,000 đ
-                  </ParagraphBody>
-                </div>
-                <Divider />
-                <div className={classes.flexTotal}>
-                  <Heading4 $colorName="--eerie-black" $fontWeight={500} translation-key="common_total">
-                    {t("common_total")}
+                <IconButton sx={{ transform: isExpandedInfo ? "rotate(180deg)" : "unset" }} className={classes.isMobile}>
+                  <ExpandMore sx={{ fontSize: 24, color: "var(--eerie-black-40)" }} />
+                </IconButton>
+              </Box>
+              <Collapse in={isExpandedInfo || !isMobile} timeout="auto" unmountOnExit>
+                <Grid className={classes.informationBox} container rowSpacing={1} columnSpacing={3}>
+                  <Grid item xs={12} sm={6}>
+                    <InputTextField
+                      className={classes.customTextField}
+                      title={t("field_full_name")}
+                      translation-key="field_full_name"
+                      placeholder={t("field_full_name_placeholder")}
+                      translation-key-placeholder="field_full_name_placeholder"
+                      name="fullName"
+                      inputRef={register("fullName")}
+                      errorMessage={errors.fullName?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <InputTextField
+                      className={classes.customTextField}
+                      title={t("field_company")}
+                      translation-key="field_company"
+                      placeholder={t("field_company_placeholder")}
+                      translation-key-placeholder="field_company_placeholder"
+                      name="companyName"
+                      inputRef={register("companyName")}
+                      errorMessage={errors.companyName?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <InputTextField
+                      className={classes.customTextField}
+                      title={t("field_your_title")}
+                      translation-key="field_your_title"
+                      placeholder={t("field_your_title_placeholder")}
+                      translation-key-placeholder="field_your_title_placeholder"
+                      name="title"
+                      inputRef={register("title")}
+                      errorMessage={errors.title?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <InputTextField
+                      className={classes.customTextField}
+                      title={t("field_email")}
+                      translation-key="field_email"
+                      placeholder={t("field_email_placeholder")}
+                      translation-key-placeholder="field_email_placeholder"
+                      name="email"
+                      inputRef={register("email")}
+                      errorMessage={errors.email?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <InputTextField
+                      className={classes.customTextField}
+                      title={t("field_phone_number")}
+                      translation-key="field_phone_number"
+                      placeholder={t("field_phone_number_placeholder")}
+                      translation-key-placeholder="field_phone_number_placeholder"
+                      name="phone"
+                      inputRef={register("phone")}
+                      errorMessage={errors.phone?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <InputSelect
+                      fullWidth
+                      title={t("field_country")}
+                      name="countryId"
+                      control={control}
+                      errorMessage={(errors.countryId as any)?.message}
+                      selectProps={{
+                        options: countries,
+                        placeholder: t("field_country_placeholder"),
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <InputTextField
+                      className={classes.customTextField}
+                      title={t("field_company_address")}
+                      translation-key="field_company_address"
+                      placeholder={t("field_company_address_placeholder")}
+                      translation-key-placeholder="field_company_address_placeholder"
+                      name="companyAddress"
+                      inputRef={register("companyAddress")}
+                      errorMessage={errors.companyAddress?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <InputTextField
+                      className={classes.customTextField}
+                      optional
+                      title={t("field_tax_code_for_invoice")}
+                      translation-key="field_tax_code_for_invoice"
+                      placeholder={t("field_tax_code_for_invoice_placeholder")}
+                      translation-key-placeholder="field_tax_code_for_invoice_placeholder"
+                      name="taxCode"
+                      inputRef={register("taxCode")}
+                      errorMessage={errors.taxCode?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} className={classes.tips}>
+                    <FormControlLabel
+                      control={
+                        <Controller
+                          name="saveForLater"
+                          control={control}
+                          render={({ field }) => <InputCheckbox checked={field.value} onChange={field.onChange} />}
+                        />
+                      }
+                      translation-key="payment_billing_sub_tab_payment_save_for_later"
+                      label={<>{t("payment_billing_sub_tab_payment_save_for_later")}</>}
+                    />
+                    <TooltipCustom
+                      popperClass={classes.popperClass}
+                      title={t("payment_billing_sub_tab_payment_save_for_later_tip")}
+                      translation-key="payment_billing_sub_tab_payment_save_for_later_tip"
+                    >
+                      <InfoOutlined sx={{ ml: 0.5, fontSize: 16, color: "var(--eerie-black-40)" }} />
+                    </TooltipCustom>
+                  </Grid>
+                  {!!configs?.viewContract && (
+                    <Grid item xs={12}>
+                      <ParagraphSmall mt={2} $colorName="--eerie-black-65" translation-key="payment_invoice_and_contract_info_bottom_1">
+                        {t("payment_invoice_and_contract_info_bottom_1")}{" "}
+                        <span
+                          onClick={onDownloadContract}
+                          className="underline cursor-pointer"
+                          translation-key="payment_invoice_and_contract_info_bottom_2"
+                        >
+                          {t("payment_invoice_and_contract_info_bottom_2")}
+                        </span>
+                      </ParagraphSmall>
+                    </Grid>
+                  )}
+                </Grid>
+              </Collapse>
+              <Divider className={classes.divider1} />
+            </Grid>
+            <Grid classes={{ root: classes.right }}>
+              <ButtonClose $backgroundColor="--eerie-black-5" className={classes.btnClose} $colorName="--eerie-black-40" onClick={onClose} />
+              <Grid classes={{ root: classes.sumaryBox }}>
+                <Grid classes={{ root: classes.bodyOrder }}>
+                  <Heading4 className={classes.sumaryTitle} $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_payment_summary">
+                    {t("payment_billing_sub_tab_payment_summary")}
                   </Heading4>
-                  <Heading4 $colorName="--eerie-black" $fontWeight={500}>
-                    165,000,000 đ
-                  </Heading4>
-                </div>
+                  <Heading5 mb={-1} translate-key="brand_track_paynow_popup_items_title">
+                    {t("brand_track_paynow_popup_items_title")}
+                  </Heading5>
+                  <Divider />
+                  <div className={classes.flexOrder}>
+                    <ParagraphBody $colorName="--eerie-black" $fontWeight={500} translation-key="brand_track_paynow_popup_project_name">
+                      {t("brand_track_paynow_popup_project_name", {
+                        time: `${dataPaymentSchedule.solutionConfig.paymentMonthSchedule} ${t("common_month", {
+                          s: dataPaymentSchedule.solutionConfig.paymentMonthSchedule > 1 ? t("common_s") : "",
+                        })}`,
+                      })}
+                    </ParagraphBody>
+                    <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
+                      {getCostCurrency(dataPaymentSchedule.totalAmount)?.show}
+                    </ParagraphBody>
+                  </div>
+                  <ParagraphExtraSmall $colorName="--eerie-black">
+                    {moment(dataPaymentSchedule.start).format("MMM yyyy")} - {moment(dataPaymentSchedule.end).format("MMM yyyy")}
+                  </ParagraphExtraSmall>
+                  <ParagraphExtraSmall $colorName="--eerie-black" translation-key="brand_track_paynow_popup_project_id">
+                    {t("brand_track_paynow_popup_project_id", { id: dataPaymentSchedule.id })}
+                  </ParagraphExtraSmall>
+                  <Divider />
+                  <div className={classes.flexOrder}>
+                    <ParagraphBody $colorName="--eerie-black" translation-key="common_sub_total">
+                      {t("common_sub_total")}
+                    </ParagraphBody>
+                    <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
+                      {price?.amountCost?.show}
+                    </ParagraphBody>
+                  </div>
+                  <div className={classes.flexOrder}>
+                    <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
+                      {t("common_vat", { percent: (configs?.vat || 0) * 100 })}
+                    </ParagraphBody>
+                    <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
+                      {price?.vatCost?.show}
+                    </ParagraphBody>
+                  </div>
+                  <Divider />
+                  <div className={classes.flexTotal}>
+                    <Heading4 $colorName="--eerie-black" $fontWeight={500} translation-key="common_total">
+                      {t("common_total")}
+                    </Heading4>
+                    <Heading4 $colorName="--eerie-black" $fontWeight={500}>
+                      {getCostCurrency(dataPaymentSchedule.totalAmount)?.show}
+                    </Heading4>
+                  </div>
+                </Grid>
+                <Button fullWidth type="submit" className={classes.btn} btnType={BtnType.Primary} disabled={!Number(watch("paymentMethodId"))}>
+                  <TextBtnSecondary translation-key="brand_track_paynow_popup_make_payment">
+                    {t("brand_track_paynow_popup_make_payment")}
+                  </TextBtnSecondary>
+                </Button>
               </Grid>
-              <Button fullWidth type="submit" className={classes.btn} btnType={BtnType.Primary} disabled={!Number(watch("paymentMethodId"))}>
+            </Grid>
+            <Grid className={classes.flexTotalMobile}>
+              <Grid>
+                <Heading3 mb={1} $colorName="--eerie-black" $fontWeight={500} translation-key="common_total">
+                  {t("common_total")}
+                </Heading3>
+                <Heading3 $colorName="--eerie-black" $fontWeight={500}>
+                  {getCostCurrency(dataPaymentSchedule.totalAmount)?.show}
+                </Heading3>
+              </Grid>
+              <Button type="submit" sx={{ whiteSpace: "nowrap" }} btnType={BtnType.Primary} disabled={!Number(watch("paymentMethodId"))}>
                 <TextBtnSecondary translation-key="brand_track_paynow_popup_make_payment">
                   {t("brand_track_paynow_popup_make_payment")}
                 </TextBtnSecondary>
               </Button>
             </Grid>
+            <PopupConfirmInvoiceInfo isOpen={!!showSkipInfor} onClose={onUpdateInfo} onYes={onSkipUpdateInfo} />
           </Grid>
-          <Grid className={classes.flexTotalMobile}>
-            <Grid>
-              <Heading3 mb={1} $colorName="--eerie-black" $fontWeight={500} translation-key="common_total">
-                {t("common_total")}
-              </Heading3>
-              <Heading3 $colorName="--eerie-black" $fontWeight={500}>
-                165,000,000 đ
-              </Heading3>
-            </Grid>
-            <Button type="submit" sx={{ whiteSpace: "nowrap" }} btnType={BtnType.Primary} disabled={!Number(watch("paymentMethodId"))}>
-              <TextBtnSecondary translation-key="brand_track_paynow_popup_make_payment">
-                {t("brand_track_paynow_popup_make_payment")}
-              </TextBtnSecondary>
-            </Button>
-          </Grid>
-          <PopupConfirmInvoiceInfo isOpen={!!showSkipInfor} onClose={onUpdateInfo} onYes={onSkipUpdateInfo} />
-        </Grid>
-      </DialogContentConfirm>
+        </DialogContentConfirm>
+      )}
     </PopupPayment>
   );
 });

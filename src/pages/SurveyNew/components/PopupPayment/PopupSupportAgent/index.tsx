@@ -28,10 +28,11 @@ import BoxCustom from "../components/BoxCustom";
 interface Props {
   isOpen: boolean;
   onCancel: () => void;
+  onGoBackMakePayment: () => void;
 }
 
 const PopupSupportAgent = memo((props: Props) => {
-  const { isOpen, onCancel } = props;
+  const { isOpen, onCancel, onGoBackMakePayment } = props;
   const { t } = useTranslation();
 
   return (
@@ -119,7 +120,7 @@ const PopupSupportAgent = memo((props: Props) => {
           />
         </Box>
         <Typography my={3} color={"var(--eerie-black)"} textAlign="center">
-          Change payment method? <Span>Click here</Span>
+          Change payment method? <Span onClick={onGoBackMakePayment}>Click here</Span>
         </Typography>
       </DialogContentConfirm>
     </PopupPayment>

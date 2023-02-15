@@ -25,6 +25,9 @@ export enum PaymentScheduleStatus {
   PAID,
   OVERDUE,
 }
+interface ProjectSchedule {
+  name: string;
+}
 export interface PaymentSchedule{
   id: number;
   solutionConfig: SolutionConfig;
@@ -34,6 +37,7 @@ export interface PaymentSchedule{
   totalAmount: number;
   totalAmountUSD: number;
   status: number;
+  project: ProjectSchedule;
 
 }
 export interface PaymentScheduleMakeAnOrder{
