@@ -71,6 +71,7 @@ export interface Project {
   user?: User;
   plan?: Plan;
   planPricePerMonth?: number;
+  startPaymentSchedule?: Date;
 }
 
 export enum ProjectStatus {

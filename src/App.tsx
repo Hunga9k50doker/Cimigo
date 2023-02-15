@@ -17,6 +17,7 @@ import { langSupports } from 'models/general';
 import { Helmet } from 'react-helmet';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import moment from 'moment';
 
 interface AppProps {
   history: History;
@@ -41,6 +42,7 @@ const App = ({ history, dispatch }: AppProps) => {
     if (!langSupports.find(lang => lang.key === i18n.language)) {
       i18n.changeLanguage(langSupports[0].key)
     }
+    moment.locale(i18n.language)
   }, [i18n.language])
 
   return (
