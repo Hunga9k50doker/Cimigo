@@ -19,7 +19,6 @@ import { useTranslation } from "react-i18next";
 import Dolar from "components/icons/IconDolar";
 import Footer from "components/Footer";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
-
 import { PaymentScheduleService } from "services/payment_schedule";
 import { DataPagination } from "models/general";
 import moment from "moment";
@@ -44,17 +43,54 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const { project } = useSelector((state: ReducerType) => state.project);
   const { i18n } = useTranslation();
   const { getCostCurrency } = usePrice();
+  
   const [listDate, setListDate] = useState<DateItem[]>([]);
-  const [viewPS, setViewPS] = useState<Boolean>(false);
+  const [listPaymentSchedule, setListPaymentSchedule] = useState<Boolean>(false);
   const [selectedDate, setSelectedDate] = useState<DateItem>();
   const [onSubmitMakeAnOrder, seOnSubmitMakeAnOrder] = useState(false);
-  const [listSchedulePreview, setListSchedulePreview] =
-    useState<DataPagination<PaymentSchedulePreview>>();
+  const [listSchedulePreview, setListSchedulePreview] = useState<DataPagination<PaymentSchedulePreview>>();
+
+  useEffect(() => {
+    authProjectSelectDate(project, onRedirect);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project]);
+
+  useEffect(() => {
+    let days = [];
+    var today = moment().startOf('month').format('YYYY-MM-DD');
+    for (var i = 0; i < 6; i++) {
+      days[i] = {
+        id: i,
+        date: moment(today).add(i+1, 'M'),
+      };
+    }
+    setSelectedDate(days[0]);
+    setListDate([...days]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (selectedDate) {
+      dispatch(setLoading(true));
+      const params: GetPaymentSchedulePreview = {
+        projectId: projectId,
+        startDate: moment(selectedDate.date).toDate(),
+      };
+      PaymentScheduleService.getPaymentSchedulePreview(params)
+        .then((res) => {
+          setListSchedulePreview(res);
+        })
+        .catch((e) => dispatch(setErrorMess(e)))
+        .finally(() => dispatch(setLoading(false)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDate]);
+
   const selectedDatePayment = (dateItem: DateItem) => {
     setSelectedDate(dateItem);
   };
-  const viewListPS = () => {
-    setViewPS(!viewPS);
+  const onToggleListPaymentSchedule = () => {
+    setListPaymentSchedule(!listPaymentSchedule);
   };
   const goToPayment = () => {
     dispatch(
@@ -79,13 +115,13 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
       projectId: projectId,
       startDate: moment(selectedDate.date).toDate(),
     })
-      .then(() => {
+      .then((res) => {
         seOnSubmitMakeAnOrder(false)
         dispatch(setPaymentReducer({
           isMakeAnOrder: true
         }));
         dispatch(setProjectReducer({
-          ...project,
+          ...res,
           status: ProjectStatus.AWAIT_PAYMENT,
           startPaymentSchedule: moment(selectedDate.date).toDate(),
         }))
@@ -104,42 +140,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
-  useEffect(() => {
-    authProjectSelectDate(project, onRedirect);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [project]);
-  useEffect(() => {
-    let days = [];
-    var today = moment().startOf('month').format('YYYY-MM-DD');
-    for (var i = 0; i < 6; i++) {
-      days[i] = {
-        id: i,
-        date: moment(today).add(i+1, 'M'),
-      };
-    }
-    setSelectedDate(days[0]);
-    setListDate([...days]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
-    const getSchedulePreview = async () => {
-      dispatch(setLoading(true));
-      const params: GetPaymentSchedulePreview = {
-        projectId: projectId,
-        startDate: new Date(moment(selectedDate.date).format('YYYY-MM-DD')),
-      };
-      await PaymentScheduleService.getPaymentSchedulePreview(params)
-        .then((res) => {
-          setListSchedulePreview(res);
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)));
-    };
-    if (selectedDate) {
-      getSchedulePreview();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate]);
+
   return (
     <>
       <Grid classes={{ root: classes.root }}>
@@ -180,7 +181,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
             </Grid>
           </Grid>
           {selectedDate && (
-            <Grid pb={4} className={classes.noteSelectDate}>
+            <Grid pb={4}>
               <ParagraphBody $colorName={"--eerie-black"}>
                 {" "}
                 <span className={classes.bold}>Note:</span> For the project to
@@ -192,17 +193,17 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
           )}
           {listSchedulePreview && (
             <>
-              <Grid className={classes.linkViewPS} pl={1}>
-                <ArrowRightIcon />
+              <Grid className={classes.viewPaymentScheduleTextWrapper} pl={1}>
+                <ArrowRightIcon className={clsx({[classes.rotateIcon]: listPaymentSchedule})}/>
                 <ParagraphBodyUnderline
                   $colorName={"--cimigo-blue"}
-                  onClick={viewListPS}
+                  onClick={onToggleListPaymentSchedule}
                 >
                   View payment schedules
                 </ParagraphBodyUnderline>
               </Grid>
-              {viewPS && (
-                <Grid className={classes.contentPS} pt={2}>
+              {listPaymentSchedule && (
+                <Grid pt={2}>
                   <ParagraphBody $colorName={"--eerie-black"}>
                     The following is the schedule for the next 4 payments:
                   </ParagraphBody>

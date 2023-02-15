@@ -216,7 +216,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                               {item?.brand}
                             </ParagraphBody>
                           ))}
-                          {mainBrands?.length === 0 && (
+                          {!mainBrands?.length && (
                             <ParagraphBody 
                               $colorName={"--eerie-black-00"} 
                               className={classes.numberOfItem}
