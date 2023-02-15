@@ -22,13 +22,13 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { PaymentScheduleService } from "services/payment_schedule";
 import moment from "moment";
 import PopupConfirmMakeAnOrder from "../components/PopupConfirmMakeAnOrder";
-import { authProjectSelectDate, formatOrdinalumbers } from "../models";
+import { authProjectPreviewOrSelectDatePayment } from "../models";
 import { GetPaymentSchedulePreview, PaymentSchedulePreview } from "models/payment_schedule";
 import clsx from "clsx";
-import {setPaymentReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
+import {setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
 import { usePrice } from "helpers/price";
 import { setProjectReducer } from "redux/reducers/Project/actionTypes";
-import { ProjectStatus } from "models/project";
+import { formatOrdinalumbers } from "utils/formatNumber";
 
 export interface DateItem {
   id: number;
@@ -50,7 +50,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const [listSchedulePreview, setListSchedulePreview] = useState<PaymentSchedulePreview[]>();
 
   useEffect(() => {
-    authProjectSelectDate(project, onRedirect);
+    authProjectPreviewOrSelectDatePayment(project, onRedirect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
 
@@ -116,9 +116,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
     })
       .then((res) => {
         seOnSubmitMakeAnOrder(false)
-        dispatch(setPaymentReducer({
-          isMakeAnOrder: true
-        }));
+        dispatch(setPaymentIsMakeAnOrderSuccessReducer(true));
         dispatch(setProjectReducer({
           ...project,
           status: res?.status,
