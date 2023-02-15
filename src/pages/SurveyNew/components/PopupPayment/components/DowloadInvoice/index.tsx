@@ -40,8 +40,8 @@ const DowloadInvoice = memo(() => {
           onClick={getInvoice}
           ml={1}
           $textDecoration="none"
-          translation-key="pay_order_download_invoice"
-          dangerouslySetInnerHTML={{ __html: t("pay_order_download_invoice") }}
+          translation-key="brand_track_popup_paynow_pay_order_download_invoice"
+          dangerouslySetInnerHTML={{ __html: t("brand_track_popup_paynow_pay_order_download_invoice") }}
         />
       </Box>
       <Typography color={"var(--gray-60)"} translation-key="brand_track_popup_paynow_red_invoice_title">
