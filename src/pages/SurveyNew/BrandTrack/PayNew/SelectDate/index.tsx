@@ -120,9 +120,9 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
           isMakeAnOrder: true
         }));
         dispatch(setProjectReducer({
-          ...res,
-          status: ProjectStatus.AWAIT_PAYMENT,
-          startPaymentSchedule: moment(selectedDate.date).toDate(),
+          ...project,
+          status: res?.status,
+          startPaymentSchedule: res?.startPaymentSchedule
         }))
       })
       .catch((e) => dispatch(setErrorMess(e)))
