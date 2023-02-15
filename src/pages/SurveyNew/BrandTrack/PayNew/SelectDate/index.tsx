@@ -124,14 +124,6 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
           status: ProjectStatus.AWAIT_PAYMENT,
           startPaymentSchedule: moment(selectedDate.date).toDate(),
         }))
-        dispatch(
-          push(
-            routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder.replace(
-              ":id",
-              `${project.id}`
-            )
-          )
-        );
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
