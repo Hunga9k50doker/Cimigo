@@ -5,6 +5,7 @@ import { AuthState, authReducer } from './Auth';
 import { StatusState, statusReducer } from './Status';
 import { userReducer, UserState } from './User';
 import { projectReducer, ProjectState } from './Project';
+import {  paymentReducer, PaymentState } from './MakeAnOrderPaymentSchedule';
 
 
 const createRootReducer = (history: History) => {
@@ -13,6 +14,7 @@ const createRootReducer = (history: History) => {
     user: userReducer,
     status: statusReducer,
     project: projectReducer,
+    payment: paymentReducer,
     router: connectRouter(history),
   });
   return reducers;
@@ -31,6 +33,7 @@ export interface ReducerType {
     };
     action: string;
   };
+  payment:PaymentState;
 }
 
 export default createRootReducer;
