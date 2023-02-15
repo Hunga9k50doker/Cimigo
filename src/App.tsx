@@ -18,7 +18,11 @@ import { Helmet } from 'react-helmet';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import moment from 'moment';
-
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 interface AppProps {
   history: History;
   dispatch: Dispatch<AnyAction>;
