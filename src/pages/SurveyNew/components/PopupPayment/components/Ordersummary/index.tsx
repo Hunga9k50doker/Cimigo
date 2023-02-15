@@ -20,8 +20,8 @@ const Ordersummary = memo(() => {
     <Box mb={2}>
       <Accordion $accordionOrderSummary={true}>
         <AccordionSummary aria-controls="panel1a-content">
-          <Heading4 $colorName={"--cimigo-blue"} translation-key="payment_billing_sub_tab_payment_summary">
-            {t("payment_billing_sub_tab_payment_summary")}
+          <Heading4 $colorName={"--cimigo-blue"} translation-key="brand_track_paynow_popup_payment_billing_sub_tab_payment_summary">
+            {t("brand_track_paynow_popup_payment_billing_sub_tab_payment_summary")}
           </Heading4>
         </AccordionSummary>
         <AccordionDetails>
@@ -36,7 +36,7 @@ const Ordersummary = memo(() => {
             </BoxCustom>
             <ParagraphExtraSmall $colorName={"--gray-60"}>Dec 2022 - Feb 2023</ParagraphExtraSmall>
             <ParagraphExtraSmall $colorName={"--gray-60"} translation-key="brand_track_paynow_popup_project_id">
-              {t("brand_track_paynow_popup_project_id")}: 6
+              {t("brand_track_paynow_popup_project_id", { id: 6 })}
             </ParagraphExtraSmall>
           </BoxCustom>
           <BoxCustom $borderTop={true} pt={2}>

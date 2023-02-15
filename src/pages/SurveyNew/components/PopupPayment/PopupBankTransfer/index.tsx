@@ -45,7 +45,7 @@ const PopupBankTransfer = memo((props: Props) => {
               {t("brand_track_popup_paynow_bank_transfer_title")}
             </Heading1>
             <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="brand_track_paynow_popup_payment_title">
-              {t("brand_track_paynow_popup_payment_title", { dueDate: "Dec 2022 - Feb 2023" })}
+              {t("brand_track_paynow_popup_payment_title", { start: "Dec 2022", end: "Feb 2023" })}
             </Heading3>
             <BoxCustom $flexBox={true}>
               <Box display="flex">
@@ -195,7 +195,7 @@ const PopupBankTransfer = memo((props: Props) => {
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
           <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
           <ParagraphBody my={2} ml={1} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_due_date_title">
-            {t("brand_track_popup_paynow_due_date_title")}: Nov 25, 2022
+            {t("brand_track_popup_paynow_due_date_title", { dueDate: " Nov 25, 2022" })}
           </ParagraphBody>
         </Box>
         <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_3">
