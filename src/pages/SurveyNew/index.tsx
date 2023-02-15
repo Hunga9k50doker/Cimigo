@@ -27,6 +27,7 @@ import SetupSurvey from "./SetupSurvey";
 import VideoChoice from "./VideoChoice";
 import Quotas from "./Quotas";
 import Pay from "./Pay";
+import BrandTrackPay from "./BrandTrack/PayNew";
 import ProjectHelper from "helpers/project";
 import Report from "./Report";
 import { ETabRightPanel } from "models/project";
@@ -34,6 +35,7 @@ import { useChangePrice } from "hooks/useChangePrice";
 import { Helmet } from "react-helmet";
 import { ESOLUTION_TYPE } from "models";
 import BrandTrack from "./BrandTrack";
+import BrandTrackTarget from "./BrandTrack/Target";
 import Target from "./Target";
 
 export const Survey = () => {
@@ -283,15 +285,35 @@ export const Survey = () => {
           <Route
             exact
             path={routes.project.detail.target}
-            render={(routeProps) => <Target
-              {...routeProps}
-              projectId={Number(id)}
-              isHaveChangePrice={isHaveChangePrice}
-              tabRightPanel={tabRightPanel}
-              toggleOutlineMobile={toggleOutlineMobile}
-              onToggleViewOutlineMobile={onToggleViewOutlineMobile}
-              onChangeTabRightPanel={onChangeTabRightPanel}
-            />}
+            render={(routeProps) => {
+              switch(project?.solution?.typeId) {
+                case ESOLUTION_TYPE.VIDEO_CHOICE:
+                case ESOLUTION_TYPE.PACK:
+                  return (
+                    <Target
+                      {...routeProps}
+                      projectId={Number(id)}
+                      isHaveChangePrice={isHaveChangePrice}
+                      tabRightPanel={tabRightPanel}
+                      toggleOutlineMobile={toggleOutlineMobile}
+                      onToggleViewOutlineMobile={onToggleViewOutlineMobile}
+                      onChangeTabRightPanel={onChangeTabRightPanel}
+                    />
+                  )
+                case ESOLUTION_TYPE.BRAND_TRACKING:
+                  return (
+                    <BrandTrackTarget
+                      {...routeProps}
+                      projectId={Number(id)}
+                      isHaveChangePrice={isHaveChangePrice}
+                      tabRightPanel={tabRightPanel}
+                      toggleOutlineMobile={toggleOutlineMobile}
+                      onToggleViewOutlineMobile={onToggleViewOutlineMobile}
+                      onChangeTabRightPanel={onChangeTabRightPanel}
+                    />
+                  )
+              }
+            }}
           />
           <Route
             exact
@@ -306,7 +328,28 @@ export const Survey = () => {
               onChangeTabRightPanel={onChangeTabRightPanel}
             />}
           />
-          <Route path={routes.project.detail.paymentBilling.root} render={(routeProps) => <Pay {...routeProps} projectId={Number(id)} />} />
+          <Route 
+            path={routes.project.detail.paymentBilling.root} 
+            render={(routeProps) => {
+              switch(project?.solution?.typeId) {
+                case ESOLUTION_TYPE.VIDEO_CHOICE:
+                case ESOLUTION_TYPE.PACK:
+                  return (
+                    <Pay
+                      {...routeProps} 
+                      projectId={Number(id)} 
+                    />
+                  )
+                case ESOLUTION_TYPE.BRAND_TRACKING:
+                  return (
+                    <BrandTrackPay 
+                      {...routeProps} 
+                      projectId={Number(id)} 
+                    />
+                  )
+              }
+            }} 
+          />
           <Route exact path={routes.project.detail.report} render={(routeProps) => <Report {...routeProps} projectId={Number(id)} />} />
 
           <Redirect from={routes.project.detail.root} to={routes.project.detail.setupSurvey} />

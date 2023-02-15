@@ -29,6 +29,7 @@ import { OptionItem } from "models/general";
 import { MusicNote, Error, Title } from "@mui/icons-material";
 import IconImagesMode from "components/icons/IconImagesMode";
 import { convertFileToBase64 } from "utils/file";
+import ErrorMessage from "components/Inputs/components/ErrorMessage";
 
 const MAX_CHARACTER_OF_SLOGAN = 100;
 const MAX_CHARACTER_OF_DESCRIPTION = 200;
@@ -65,11 +66,19 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
 
   const schema = useMemo(() => {
     return yup.object().shape({
-      brand: yup.string().required("Brand name is required"),
+      brand: yup.string().required(t("brand_track_field_brand_asset_name_vali_required")),
       description: yup.string(),
-      typeId: yup.object().required("Brand asset type is required"),
-      slogan: yup.string().nullable(),
-      asset: yup.mixed().nullable(),
+      typeId: yup.object().required(t("brand_track_field_brand_asset_type_vali_required")),
+      slogan: yup.string().when("typeId", {
+        is: (value: OptionItem) => value.id === EBRAND_ASSET_TYPE.SLOGAN,
+        then: yup.string().required(t("brand_track_field_brand_asset_type_slogan_vali_require")),
+        otherwise: yup.string()
+      }),
+      asset: yup.mixed().when("typeId", {
+        is: (value: OptionItem) => value.id !== EBRAND_ASSET_TYPE.SLOGAN,
+        then: yup.mixed().required(t("brand_track_field_brand_asset_vali_require")),
+        otherwise: yup.mixed()
+      }),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
@@ -157,6 +166,14 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [brandAsset])
 
+  useEffect(() => {
+    setValue('asset', null)
+    setImageReview(null)
+    setSoundReview(null)
+    setIsError(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchBrandAssetTypeId])
+
   const getDuration = async (file: File) => {
     const duration = await VideoService.getVideoDuration(file)
       .catch(err => {
@@ -172,12 +189,12 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
         const checkSize = file.size < IMAGE_SIZE;
         const checkType = IMAGE_FORMATS.includes(file.type);
         if (!checkSize) {
-          setIsError('Exceeded the maximum size of 5MB')
+          setIsError(t("brand_track_field_brand_asset_type_image_size_error"))
           setValue('asset', null)
           return
         }
         if (!checkType) {
-          setIsError('Invalid image file format')
+          setIsError(t("brand_track_field_brand_asset_type_image_type_error"))
           setValue('asset', null)
           return
         }
@@ -187,22 +204,24 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
         let file = acceptedFiles[0] as File
         const checkType = SOUND_FORMAT.includes(file.type);
         if (!checkType) {
-          setIsError('Invalid audio file format');
+          setIsError(t("brand_track_field_brand_asset_type_song_type_error"));
           setValue('asset', null)
           return
         }
         const duration = await getDuration(file)
         const isValidDuration = duration <= SOUND_DURATION
         if (!isValidDuration) {
-          setIsError('Exceeded the maximum length of 30s');
+          setIsError(t("brand_track_field_brand_asset_type_song_duration_error"));
           setValue('asset', null)
           return
         }
         setIsError('');
         setSoundReview(URL.createObjectURL(file))
         setValue('asset', file)
+        clearErrors("asset")
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isMountedRef, watchBrandAssetTypeId]
   );
   const {
@@ -222,9 +241,15 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
     >
       <form className={classes.form} onSubmit={handleSubmit(_onSubmit)}>
         <DialogTitle $backgroundColor="--white">
-          <Heading3 $colorName="--gray-90">
-            Add brand asset
-          </Heading3>
+          {brandAsset ? (
+            <Heading3 $colorName="--gray-90" translation-key="brand_track_setup_popup_edit_brand_asset">
+              {t("brand_track_setup_popup_edit_brand_asset")}
+            </Heading3>
+          ) : (
+            <Heading3 $colorName="--gray-90" translation-key="brand_track_setup_popup_add_brand_asset">
+              {t("brand_track_setup_popup_add_brand_asset")}
+            </Heading3>
+          )}
           <ButtonCLose
             $backgroundColor="--eerie-black-5"
             $colorName="--eerie-black-40"
@@ -232,18 +257,20 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
           </ButtonCLose>
         </DialogTitle>
         <DialogContent dividers>
-          <ParagraphBody $colorName="--eerie-black" $fontWeight={600}>
-            Brand asset
+          <ParagraphBody $colorName="--eerie-black" $fontWeight={600} translation-key="brand_track_setup_popup_brand_asset_title">
+            {t("brand_track_setup_popup_brand_asset_title")}
           </ParagraphBody>
-          <ParagraphSmall $colorName="--eerie-black" mb={1}>
-            What is your asset?
+          <ParagraphSmall $colorName="--eerie-black" mb={1} translation-key="brand_track_setup_popup_brand_asset_sub_title">
+            {t("brand_track_setup_popup_brand_asset_sub_title")}
           </ParagraphSmall>
           <Grid container rowSpacing={3} columnSpacing={3}>
             <Grid item xs={12}>
-              <ParagraphSmall $colorName="--gray-80">
-                Choose asset type
+              <ParagraphSmall $colorName="--gray-80" translation-key="brand_track_field_brand_asset_type">
+                {t("brand_track_field_brand_asset_type")}
               </ParagraphSmall>
               <InputSelect
+                translation-key="brand_track_field_brand_asset_type_placeholder"
+                bindLabel="translation"
                 className={classes.assetTypeSelect}
                 fullWidth
                 name="typeId"
@@ -251,19 +278,19 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                 errorMessage={(errors.typeId as any)?.message}
                 selectProps={{
                   options: brandAssetTypes,
-                  placeholder: "Select"
+                  placeholder: t("brand_track_field_brand_asset_type_placeholder")
                 }}
               />
             </Grid>
             {/* ========image======= */}
             {watchBrandAssetTypeId?.id === EBRAND_ASSET_TYPE.IMAGE && (
               <Grid item xs={12} className={classes.assetContentWrapper}>
-                <ParagraphBody $colorName="--eerie-black" $fontWeight={600} className={classes.assetContentTitle}>
+                <ParagraphBody $colorName="--eerie-black" $fontWeight={600} className={classes.assetContentTitle} translation-key="brand_track_field_brand_asset_type_image_title">
                   <IconImagesMode sx={{fontSize: "16px", color: "var(--gray-80)"}}/>
-                  Unbranded image
+                  {t("brand_track_field_brand_asset_type_image_title")}
                 </ParagraphBody>
-                <ParagraphSmall $colorName="--eerie-black">
-                  This can be a logo, pack shape, or key icon,... without brand name.
+                <ParagraphSmall $colorName="--eerie-black" translation-key="brand_track_field_brand_asset_type_image_sub_title">
+                  {t("brand_track_field_brand_asset_type_image_sub_title")}
                 </ParagraphSmall>
                 <input {...getInputProps()} />
                 {imageReview && !isError && (
@@ -272,35 +299,36 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                 <Grid className={classes.btnUploadWrapper}>
                   <Button
                     btnType={BtnType.Outlined}
-                    children={<TextBtnSmall sx={{display: "flex", alignItems: "center", gap: "8px"}}><BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />{imageReview ? "Change asset" : "Upload asset"}</TextBtnSmall>}
+                    children={<TextBtnSmall sx={{display: "flex", alignItems: "center", gap: "8px"}} translation-key="common_upload_asset"><BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />{imageReview ? t("common_change_asset") : t("common_upload_asset")}</TextBtnSmall>}
                     className={classes.btnSave}
                     {...getRootProps()}
                   />
-                  <ParagraphSmall $colorName="--cimigo-theme-light-on-surface">
-                    Max file size: 5MB
+                  <ParagraphSmall $colorName="--cimigo-theme-light-on-surface" translation-key="brand_track_field_brand_asset_type_image_condition">
+                    {t("brand_track_field_brand_asset_type_image_condition")}
                   </ParagraphSmall>
                 </Grid>
                 {isError && (
                   <ParagraphSmall mt={1} $colorName="--red-error" sx={{display: "flex", alignItems: "center", gap: "8px"}}><Error sx={{fontSize: "20px"}}/>{isError}</ParagraphSmall>
                 )}
-
+                {errors.asset?.message && <ErrorMessage>{errors.asset?.message}</ErrorMessage>}
               </Grid>
             )}
             {/* ========slogan======= */}
             {watchBrandAssetTypeId?.id === EBRAND_ASSET_TYPE.SLOGAN && (
               <Grid item xs={12} className={classes.assetContentWrapper}>
-                <ParagraphBody $colorName="--eerie-black" $fontWeight={600} className={classes.assetContentTitle}>
+                <ParagraphBody $colorName="--eerie-black" $fontWeight={600} className={classes.assetContentTitle} translation-key="brand_track_field_brand_asset_type_slogan_title">
                   <Title sx={{fontSize: "20px", color: "var(--gray-80)"}}/>
-                  Slogan or tagline
+                  {t("brand_track_field_brand_asset_type_slogan_title")}
                 </ParagraphBody>
-                <ParagraphSmall $colorName="--eerie-black">
-                  Specify your unbranded slogan or tagline in the box below. If your brand name is part of your slogan, please leave it blank. 
+                <ParagraphSmall $colorName="--eerie-black" translation-key="brand_track_field_brand_asset_type_slogan_sub_title">
+                  {t("brand_track_field_brand_asset_type_slogan_sub_title")} 
                 </ParagraphSmall>
                 <InputTextareaAutosize
+                  translation-key="brand_track_field_brand_asset_type_slogan_placeholder"
                   className={classes.inputField}
                   id="slogan"
                   name="slogan"
-                  placeholder="e.g. Things go better with (blank)"
+                  placeholder={t("brand_track_field_brand_asset_type_slogan_placeholder")}
                   autoComplete="off"
                   inputRef={register("slogan")}
                   errorMessage={errors.slogan?.message}
@@ -312,12 +340,12 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
             {/* ========song========= */}
             {watchBrandAssetTypeId?.id === EBRAND_ASSET_TYPE.SOUND && (
               <Grid item xs={12} className={classes.assetContentWrapper}>
-                <ParagraphBody $colorName="--eerie-black" $fontWeight={600} className={classes.assetContentTitle}>
+                <ParagraphBody $colorName="--eerie-black" $fontWeight={600} className={classes.assetContentTitle} translation-key="brand_track_field_brand_asset_type_song_title">
                   <MusicNote sx={{fontSize: "19px", color: "var(--gray-80)"}}/>
-                  Song or sound
+                  {t("brand_track_field_brand_asset_type_song_title")}
                 </ParagraphBody>
-                <ParagraphSmall $colorName="--eerie-black">
-                  A jingle or short piece of music that reminds customers of your brand.
+                <ParagraphSmall $colorName="--eerie-black" translation-key="brand_track_field_brand_asset_type_song_sub_title">
+                  {t("brand_track_field_brand_asset_type_song_sub_title")}
                 </ParagraphSmall>
                 <input {...getInputProps()} />
                 {soundReview && !isError && (
@@ -328,29 +356,31 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                 <Grid className={classes.btnUploadWrapper}>
                   <Button
                     btnType={BtnType.Outlined}
-                    children={<TextBtnSmall sx={{display: "flex", alignItems: "center", gap: "8px"}}><BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />{soundReview ? "Change asset" : "Upload asset"}</TextBtnSmall>}
+                    children={<TextBtnSmall sx={{display: "flex", alignItems: "center", gap: "8px"}} translation-key="common_upload_asset"><BackupOutlinedIcon sx={{ color: 'var(--cimigo-blue-light-1)' }} />{soundReview ? t("common_change_asset") : t("common_upload_asset")}</TextBtnSmall>}
                     className={classes.btnSave}
                     {...getRootProps()}
                   />
-                  <ParagraphSmall $colorName="--cimigo-theme-light-on-surface">
-                    Maximum duration: 30s
+                  <ParagraphSmall $colorName="--cimigo-theme-light-on-surface" translation-key="brand_track_field_brand_asset_type_song_condition">
+                    {t("brand_track_field_brand_asset_type_song_condition")}
                   </ParagraphSmall>
                 </Grid>
                 {isError && (
                   <ParagraphSmall mt={1} $colorName="--red-error" sx={{display: "flex", alignItems: "center", gap: "8px"}}><Error sx={{fontSize: "20px"}}/>{isError}</ParagraphSmall>
                 )}
+                {errors.asset?.message && <ErrorMessage>{errors.asset?.message}</ErrorMessage>}
               </Grid>
             )}
             <Grid item xs={12}>
-              <ParagraphBody $colorName="--eerie-black" $fontWeight={600}>
-                Correct brand name
+              <ParagraphBody $colorName="--eerie-black" $fontWeight={600} translation-key="brand_track_field_brand_asset_name_title">
+                {t("brand_track_field_brand_asset_name_title")}
               </ParagraphBody>
-              <ParagraphSmall $colorName="--eerie-black" mb={1}>
-                What is the correct brand name associated with this asset?
+              <ParagraphSmall $colorName="--eerie-black" mb={1} translation-key="brand_track_field_brand_asset_name_sub_title">
+                {t("brand_track_field_brand_asset_name_sub_title")}
               </ParagraphSmall>
               <InputTextfield
+                translation-key="brand_track_field_brand_asset_name_placeholder"
                 className={classes.inputField}
-                placeholder="e.g. Coca-Cola"
+                placeholder={t("brand_track_field_brand_asset_name_placeholder")}
                 type="text"
                 autoComplete="off"
                 inputRef={register("brand")}
@@ -358,17 +388,18 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <ParagraphBody $colorName="--eerie-black" $fontWeight={600}>
-                Short description (optional)
+              <ParagraphBody $colorName="--eerie-black" $fontWeight={600} translation-key="brand_track_field_brand_asset_description_sub_title">
+                {t("brand_track_field_brand_asset_description_title")}
               </ParagraphBody>
-              <ParagraphSmall $colorName="--eerie-black" mb={1}>
-                How would you describe this asset?
+              <ParagraphSmall $colorName="--eerie-black" mb={1} translation-key="brand_track_field_brand_asset_description_sub_title">
+                {t("brand_track_field_brand_asset_description_sub_title")}
               </ParagraphSmall>
               <InputTextareaAutosize
+                translation-key="brand_track_field_brand_asset_description_placeholder"
                 className={classes.inputField}
                 id="description"
                 name="description"
-                placeholder="e.g. Coca-Cola bottle"
+                placeholder={t("brand_track_field_brand_asset_description_placeholder")}
                 autoComplete="off"
                 inputRef={register("description")}
                 errorMessage={errors.description?.message}
