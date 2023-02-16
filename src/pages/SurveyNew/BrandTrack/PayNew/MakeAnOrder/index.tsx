@@ -407,9 +407,9 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
         onSubmit={(reson) => submitCancelSubsription(reson)}
       />
       <PopupPayNow isOpen={isOpen} onClose={onClose} dataPaymentSchedule={dataPaymentSchedule} onOpenModal={onOpenModal}/>
-      <PopupBankTransfer isOpen={isOpenBankTransfer} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment}/>
-      <PopupOnlinePayment isOpen={isOpenOnlinePayment} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment} />
-      <PopupSupportAgent isOpen={isOpenSuportAgent} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment}/>
+      <PopupBankTransfer isOpen={isOpenBankTransfer} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment} dataPaymentSchedule={dataPaymentSchedule}/>
+      <PopupOnlinePayment isOpen={isOpenOnlinePayment} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment} dataPaymentSchedule={dataPaymentSchedule}/>
+      <PopupSupportAgent isOpen={isOpenSuportAgent} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment} dataPaymentSchedule={dataPaymentSchedule}/>
       <Footer />
     </>
   );
