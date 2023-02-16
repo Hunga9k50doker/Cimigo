@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import { ReducerType } from "redux/reducers";
-import { authProjectPreview } from "../models";
+import { authProjectPreviewOrSelectDatePayment } from "../models";
 import { setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Heading5 from "components/common/text/Heading5";
@@ -90,7 +90,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
   }, [project]);
 
   useEffect(() => {
-    authProjectPreview(project, onRedirect);
+    authProjectPreviewOrSelectDatePayment(project, onRedirect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
 
@@ -216,7 +216,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                               {item?.brand}
                             </ParagraphBody>
                           ))}
-                          {mainBrands?.length === 0 && (
+                          {!mainBrands?.length && (
                             <ParagraphBody 
                               $colorName={"--eerie-black-00"} 
                               className={classes.numberOfItem}
