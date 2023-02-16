@@ -56,11 +56,11 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
 
   useEffect(() => {
     let days = [];
-    var today = moment().startOf('month').format('YYYY-MM-DD');
+    var today = moment().startOf('month');
     for (var i = 0; i < 6; i++) {
       days[i] = {
         id: i,
-        date: moment(today).add(i+1, 'M'),
+        date: today.clone().add(i+1, 'M'),
       };
     }
     setSelectedDate(days[0]);
