@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import { ReducerType } from "redux/reducers";
-import { authProjectPreviewOrSelectDatePayment } from "../models";
+import { authPreviewOrSelectDate } from "../models";
 import { setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Heading5 from "components/common/text/Heading5";
@@ -90,7 +90,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
   }, [project]);
 
   useEffect(() => {
-    authProjectPreviewOrSelectDatePayment(project, onRedirect);
+    authPreviewOrSelectDate(project, onRedirect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
 
@@ -226,7 +226,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                               }}
                             ></ParagraphBody>
                             )}
-                          {competingBrands?.length > 0 && (
+                          {!!competingBrands?.length && (
                             <ParagraphBody $colorName={"--eerie-black-00"} translation-key="common_more">+ {t("common_more", {number: competingBrands?.length})}</ParagraphBody>
                           )}
                           {!isValidMainBrand && (

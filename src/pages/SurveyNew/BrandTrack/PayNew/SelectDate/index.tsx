@@ -22,7 +22,7 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { PaymentScheduleService } from "services/payment_schedule";
 import moment from "moment";
 import PopupConfirmMakeAnOrder from "../components/PopupConfirmMakeAnOrder";
-import { authProjectPreviewOrSelectDatePayment } from "../models";
+import { authPreviewOrSelectDate } from "../models";
 import { GetPaymentSchedulePreview, PaymentSchedulePreview } from "models/payment_schedule";
 import clsx from "clsx";
 import {setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
@@ -50,17 +50,17 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const [listSchedulePreview, setListSchedulePreview] = useState<PaymentSchedulePreview[]>();
 
   useEffect(() => {
-    authProjectPreviewOrSelectDatePayment(project, onRedirect);
+    authPreviewOrSelectDate(project, onRedirect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
 
   useEffect(() => {
     let days = [];
-    var today = moment().startOf('month').format('YYYY-MM-DD');
+    var today = moment().startOf('month');
     for (var i = 0; i < 6; i++) {
       days[i] = {
         id: i,
-        date: moment(today).add(i+1, 'M'),
+        date: today.clone().add(i+1, 'M'),
       };
     }
     setSelectedDate(days[0]);
