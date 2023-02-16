@@ -3,13 +3,13 @@
   margin: auto;
   display: flex;
   padding: 0px;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     display: grid;
   }
 }
 .divider1 {
   display: none;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     display: flex;
     margin-bottom: 25px;
   }
@@ -19,7 +19,7 @@
   border-radius: 4px;
   padding: 24px 32px 96px 32px;
   width: 70%;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     width: 100%;
     border: unset;
     border-radius: 0px;
@@ -37,7 +37,7 @@
   .sumaryBox {
     border-radius: 4px;
     height: fit-content;
-    @media only screen and (max-width: 767px) {
+    @media only screen and (max-width: 845px) {
       border: unset;
       border-radius: 0px;
       margin-right: 0px;
@@ -46,7 +46,7 @@
     }
   }
 
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     width: 100%;
     margin-right: 0px;
     padding: 0px 16px;
@@ -56,7 +56,7 @@
   border: 1px solid var(--gray-40) !important;
 }
 .informationBox {
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     padding: 0px 24px 16px;
   }
 }
@@ -100,7 +100,7 @@
 }
 .radioGroup {
   margin-bottom: 32px;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     margin-bottom: 16px;
     padding: 0px;
   }
@@ -116,13 +116,13 @@
   background: transparent;
 }
 .btnClose {
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     display: none;
   }
 }
 .btnCloseMobile {
   display: none;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     display: block;
   }
 }
@@ -144,7 +144,7 @@
   margin-bottom: 32px;
   .sumaryTitle {
     margin-bottom: 24px;
-    @media only screen and (max-width: 767px) {
+    @media only screen and (max-width: 845px) {
       display: none;
     }
   }
@@ -154,13 +154,13 @@
 }
 .isMobile {
   display: none !important;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     display: flex !important;
   }
 }
 .btn {
   border-radius: 4px;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     display: none;
   }
 }
@@ -170,7 +170,7 @@
   padding: 2px 0px;
   flex-wrap: wrap;
   > * {
-    @media only screen and (max-width: 767px) {
+    @media only screen and (max-width: 845px) {
       font-size: 14px;
     }
     &:last-child {
@@ -189,7 +189,7 @@
 }
 .flexTotalMobile {
   display: none;
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     display: flex;
     justify-content: space-between;
     background: #ffffff;
@@ -237,7 +237,7 @@
   }
 }
 .paddingMobile {
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 845px) {
     padding-left: 24px;
     padding-right: 24px;
   }

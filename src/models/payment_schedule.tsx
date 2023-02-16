@@ -28,7 +28,10 @@ export enum PaymentScheduleStatus {
 interface ProjectSchedule {
   name: string;
 }
-export interface PaymentSchedule{
+interface SystemConfig {
+  vat: number,
+}
+export interface PaymentSchedule {
   id: number;
   solutionConfig: SolutionConfig;
   start: Date;
@@ -38,7 +41,9 @@ export interface PaymentSchedule{
   totalAmountUSD: number;
   status: number;
   project: ProjectSchedule;
-
+  sampleSizeCostPerMonth: number;
+  vat: number;
+  systemConfig: SystemConfig;
 }
 export interface PaymentScheduleMakeAnOrder{
   projectId: number;

@@ -64,9 +64,8 @@ interface Props {
 
 const PopupPayNow = memo((props: Props) => {
   const { isOpen, dataPaymentSchedule, onClose, onOpenModal } = props;
-  const { price, getCostCurrency } = usePrice();
+  const { getCostCurrency } = usePrice();
   const { t, i18n } = useTranslation();
-
   const schema = useMemo(() => {
     return yup.object().shape({
       paymentMethodId: yup.number(),
@@ -645,15 +644,15 @@ const PopupPayNow = memo((props: Props) => {
                       {t("common_sub_total")}
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
-                      {price?.amountCost?.show}
+                      {getCostCurrency(dataPaymentSchedule.sampleSizeCostPerMonth)?.show}
                     </ParagraphBody>
                   </div>
                   <div className={classes.flexOrder}>
                     <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
-                      {t("common_vat", { percent: (configs?.vat || 0) * 100 })}
+                      {t("common_vat", { percent: (dataPaymentSchedule.systemConfig?.vat || 0) * 100 })}
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
-                      {price?.vatCost?.show}
+                      {getCostCurrency(dataPaymentSchedule.vat)?.show}
                     </ParagraphBody>
                   </div>
                   <Divider />
