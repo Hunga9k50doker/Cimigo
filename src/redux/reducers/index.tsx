@@ -5,7 +5,7 @@ import { AuthState, authReducer } from './Auth';
 import { StatusState, statusReducer } from './Status';
 import { userReducer, UserState } from './User';
 import { projectReducer, ProjectState } from './Project';
-import {  paymentIsMakeAnOrderReducer, PaymentIsMakeAnOrderState } from './MakeAnOrderPaymentSchedule';
+import {  paymentIsMakeAnOrderReducer, PaymentState } from './MakeAnOrderPaymentSchedule';
 
 
 const createRootReducer = (history: History) => {
@@ -33,7 +33,7 @@ export interface ReducerType {
     };
     action: string;
   };
-  payment:PaymentIsMakeAnOrderState;
+  payment:PaymentState;
 }
 
 export default createRootReducer;

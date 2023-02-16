@@ -18,11 +18,10 @@ interface AlertProp {
   type?: AlerType;
   content?: React.ReactNode;
   title?: string;
-  btnClose?: boolean;
   onClose?: () => void;
 }
 const Alert = memo((props: AlertProp) => {
-  const { type, content, title, btnClose, onClose, ...rest } = props;
+  const { type, content, title, onClose, ...rest } = props;
   return (
     <Box
       className={clsx(
@@ -60,7 +59,7 @@ const Alert = memo((props: AlertProp) => {
           {content}
         </Box>
       </Box>
-      {btnClose && (
+      {onClose && (
         <Box className={classes.right}>
           <Box className={classes.btnClose}>
             <Button

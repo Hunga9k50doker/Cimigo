@@ -19,7 +19,6 @@ import {
 } from "models/payment_schedule";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { DataPagination } from "models/general";
 import PopupConfirmCancelSubsription from "../components/PopupConfirmCancelSubsription";
 import PaymentHistoryList from "../components/PaymentHistoryList";
 import { useDispatch, useSelector } from "react-redux";
@@ -62,13 +61,10 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   const dispatch = useDispatch();
   const { project } = useSelector((state: ReducerType) => state.project);
   const { isMakeAnOrder } = useSelector((state: ReducerType) => state.payment);
-  const [paymentSchedule, setPaymentSchedule] =
-    useState<DataPagination<PaymentSchedule>>();
+  const [paymentSchedule, setPaymentSchedule] = useState<PaymentSchedule[]>([]);
   const [alertMakeAnOrderSuccess, setAlertMakeAnOrderSuccess] =
     useState<boolean>(false);
-  const [alertPaymentReminder, setalertPaymentReminder] =
-    useState<boolean>(false);
-  const [dataAlertPaymentReminder, setDataAlertPaymentReminder] =
+  const [alertPaymentReminder, setAlertPaymentReminder] =
     useState<PaymentSchedule>();
   const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
     useState(false);
@@ -102,37 +98,33 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
       dispatch(setLoading(true));
       await PaymentScheduleService.getPaymentSchedule(data)
         .then((res) => {
-          setPaymentSchedule(res);
+          setPaymentSchedule(res.data);
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)));
     };
     getListPaymentSchedule();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, projectId]);
   useEffect(() => {
-    if (paymentSchedule?.data) {
-      var paymentFirst = paymentSchedule?.data[0];
+    if (paymentSchedule.length) {
+      var paymentFirst = paymentSchedule[0];
       var now = moment().add(14, "d");
       if (
         moment(paymentFirst?.dueDate).isBefore(now) &&
         paymentFirst?.status === PaymentScheduleStatus.NOT_PAID
       ) {
-        setDataAlertPaymentReminder(paymentFirst);
-        setalertPaymentReminder(true);
-      }else{
-        setalertPaymentReminder(false);
+        setAlertPaymentReminder(paymentFirst);
+      } else {
+        setAlertPaymentReminder(null);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentSchedule]);
   useEffect(() => {
     if (isMakeAnOrder) {
       setAlertMakeAnOrderSuccess(isMakeAnOrder);
-      dispatch(
-        setPaymentIsMakeAnOrderSuccessReducer(false)
-      );
+      dispatch(setPaymentIsMakeAnOrderSuccessReducer(false));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMakeAnOrder]);
   return (
     <>
@@ -140,18 +132,15 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
         {alertMakeAnOrderSuccess && (
           <Alert
             title={"Thanks for making an order!"}
-            btnClose={true}
             onClose={onCloseMakeAnOrderSuccess}
             content={
               <ParagraphBody $colorName={"--eerie-black"}>
                 Fieldwork will start at the beginning of{" "}
                 {moment(project?.startPaymentSchedule).format("MMMM yyyy")} if
                 you make the first payment by{" "}
-                {moment(paymentSchedule?.data[0]?.dueDate).format(
-                  "MMMM DD, yyyy"
-                )}
-                . Subsequent payments will be made every{" "}
-                {paymentSchedule?.data[0]?.solutionConfig?.paymentMonthSchedule}{" "}
+                {moment(paymentSchedule[0]?.dueDate).format("MMMM DD, yyyy")}.
+                Subsequent payments will be made every{" "}
+                {paymentSchedule[0]?.solutionConfig?.paymentMonthSchedule}{" "}
                 months.
               </ParagraphBody>
             }
@@ -166,7 +155,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                 <ParagraphBody $colorName={"--eerie-black"}>
                   You have a pending payment that is about to become overdue.
                   You must process the payment by{" "}
-                  {moment(dataAlertPaymentReminder?.dueDate).format(
+                  {moment(alertPaymentReminder?.dueDate).format(
                     "MMMM DD, yyyy"
                   )}{" "}
                   to avoid being terminated.
@@ -219,11 +208,12 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
               <Swiper
                 slidesPerView={2}
                 breakpoints={sliderSettings}
+                direction={"horizontal"}
                 onBeforeInit={(swiper) => {
                   swiperRef.current = swiper;
                 }}
               >
-                {paymentSchedule?.data.map((item, index) => {
+                {paymentSchedule?.map((item, index) => {
                   return (
                     <SwiperSlide key={item.id}>
                       <Box

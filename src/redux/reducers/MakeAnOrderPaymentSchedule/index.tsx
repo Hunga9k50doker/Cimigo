@@ -1,9 +1,9 @@
 import produce from "immer";
 import * as types from "./actionTypes";
-export interface PaymentIsMakeAnOrderState {
+export interface PaymentState {
   isMakeAnOrder: boolean;
 }
-const initial: PaymentIsMakeAnOrderState = {
+const initial: PaymentState = {
   isMakeAnOrder: false,
 };
 export const paymentIsMakeAnOrderReducer = (state = initial, action: any) =>

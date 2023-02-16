@@ -11,6 +11,6 @@ export const authYourNextPayment = (project: Project, onRedirect: (route: string
 export const authPreviewOrSelectDate = (project: Project, onRedirect: (route: string) => void) => {
   if (!project) return
   if(project.status !== ProjectStatus.DRAFT){
-    onRedirect(routes.project.detail.paymentBilling.previewAndPayment.makeAnOrder);
+    onRedirect(routes.project.detail.paymentBilling.yourNextPayment);
   }
 }
