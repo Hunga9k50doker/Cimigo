@@ -29,10 +29,11 @@ import BoxCustom from "../components/BoxCustom";
 interface Props {
   isOpen: boolean;
   onCancel: () => void;
+  onGoBackMakePayment: () => void;
 }
 
 const PopupBankTransfer = memo((props: Props) => {
-  const { isOpen, onCancel } = props;
+  const { isOpen, onCancel, onGoBackMakePayment } = props;
   const { t } = useTranslation();
 
   return (
@@ -226,7 +227,9 @@ const PopupBankTransfer = memo((props: Props) => {
         </Box>
         <Typography my={3} color={"var(--eerie-black)"} textAlign="center" translation-key="brand_track_popup_paynow_change_payment_method">
           {t("brand_track_popup_paynow_change_payment_method")}{" "}
-          <Span translation-key="brand_track_popup_paynow_action_1">{t("brand_track_popup_paynow_action_1")}</Span>
+          <Span translation-key="brand_track_popup_paynow_action_1" onClick={onGoBackMakePayment}>
+            {t("brand_track_popup_paynow_action_1")}
+          </Span>
         </Typography>
       </DialogContentConfirm>
     </PopupPayment>

@@ -31,12 +31,17 @@ import { setPaymentReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/act
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PopupPayNow from "pages/SurveyNew/components/PopupPayment/PopupPayNow";
+import { EPaymentMethod, OptionItem } from "models/general";
 // Import Swiper styles
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import PopupBankTransfer from "pages/SurveyNew/components/PopupPayment/PopupBankTransfer";
+import PopupOnlinePayment from "pages/SurveyNew/components/PopupPayment/PopupOnlinePayment";
+import PopupSupportAgent from "pages/SurveyNew/components/PopupPayment/PopupSupportAgent";
 
 interface MakeAnOrderProp {
   projectId: number;
@@ -59,6 +64,11 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const dispatch = useDispatch();
   const { project } = useSelector((state: ReducerType) => state.project);
   const { isMakeAnOrder } = useSelector((state: ReducerType) => state.payment);
+  const [isOpen, setIsOpen] = useState(false)
+  const [isOpenBankTransfer, setIsOpenBankTransfer] = useState(false);
+  const [isOpenOnlinePayment, setIsOpenOnlinePayment] = useState(false)
+  const [isOpenSuportAgent, setIsOpenSupportAgent] = useState(false);
+  const [dataPaymentSchedule, setDataPaymentSchedule] = useState <PaymentSchedule>();
   const [paymentSchedule, setPaymentSchedule] =
     useState<DataPagination<PaymentSchedule>>();
   const [alertPaymentSuccess, setAlertPaymentSuccess] =
@@ -76,7 +86,36 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const cancelSubscription = () => {
     setOnSubmitCancelSubsription(true);
   };
-  const goToPayNow = () => {};
+  const goToPayNow = (item: PaymentSchedule) => {
+    setDataPaymentSchedule(item);
+    setIsOpen(true);
+  };
+  const onGoBackMakePayment = () => {
+    onClose();
+    setIsOpen(true);
+  }
+  const onOpenModal = (item: number) => {
+    setIsOpen(false);
+    switch (item) {
+      case EPaymentMethod.BANK_TRANSFER:
+        setIsOpenBankTransfer(true);
+        break;
+      case EPaymentMethod.ONEPAY_GENERAL:
+        setIsOpenOnlinePayment(true);
+        break;
+      case EPaymentMethod.MAKE_AN_ORDER:
+        setIsOpenSupportAgent(true);
+        break;
+      default:
+        break;
+    }
+  };
+  const onClose = () => {
+    setIsOpen(false)
+    setIsOpenBankTransfer(false);
+    setIsOpenOnlinePayment(false);
+    setIsOpenSupportAgent(false);
+  }
   const { getCostCurrency } = usePrice();
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
@@ -272,7 +311,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                                       Pay now
                                     </TextBtnSmall>
                                   }
-                                  onClick={goToPayNow}
+                                  onClick={()=>goToPayNow(item)}
                                   disabled={!!index}
                                 />
 
@@ -367,6 +406,10 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
         onCancel={onCloseSubmitCancelSubsription}
         onSubmit={(reson) => submitCancelSubsription(reson)}
       />
+      <PopupPayNow isOpen={isOpen} onClose={onClose} dataPaymentSchedule={dataPaymentSchedule} onOpenModal={onOpenModal}/>
+      <PopupBankTransfer isOpen={isOpenBankTransfer} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment}/>
+      <PopupOnlinePayment isOpen={isOpenOnlinePayment} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment} />
+      <PopupSupportAgent isOpen={isOpenSuportAgent} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment}/>
       <Footer />
     </>
   );
