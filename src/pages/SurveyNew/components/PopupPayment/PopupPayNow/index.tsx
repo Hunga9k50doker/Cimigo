@@ -57,13 +57,13 @@ interface DataForm {
 }
 interface Props {
   isOpen: boolean;
-  dataPaymentSchedule: PaymentSchedule;
+  paymentScheduleForPay: PaymentSchedule;
   onClose: () => void;
   onOpenModal?: (item: number) => void;
 }
 
 const PopupPayNow = memo((props: Props) => {
-  const { isOpen, dataPaymentSchedule, onClose, onOpenModal } = props;
+  const { isOpen, paymentScheduleForPay, onClose, onOpenModal } = props;
   const { getCostCurrency } = usePrice();
   const { t, i18n } = useTranslation();
   const schema = useMemo(() => {
@@ -293,7 +293,7 @@ const PopupPayNow = memo((props: Props) => {
 
   return (
     <PopupPayment scroll="paper" open={isOpen} onClose={onClose} $maxWithUnset={true}>
-      {dataPaymentSchedule?.id && (
+      {paymentScheduleForPay?.id && (
         <DialogContentConfirm dividers $padding="0">
           <Grid component={"form"} classes={{ root: classes.root }} onSubmit={handleSubmit(onConfirm)} noValidate autoComplete="off">
             <Divider className={classes.divider1} />
@@ -301,15 +301,15 @@ const PopupPayNow = memo((props: Props) => {
               <ButtonClose $backgroundColor="--eerie-black-5" className={classes.btnCloseMobile} $colorName="--eerie-black-40" onClick={onClose} />
               <Heading3 $colorName="--cimigo-blue" translation-key="brand_track_paynow_popup_payment_title">
                 {t("brand_track_paynow_popup_payment_title", {
-                  start: moment(dataPaymentSchedule.start).format("MMM yyyy"),
-                  end: moment(dataPaymentSchedule.end).format("MMM yyyy"),
+                  start: moment(paymentScheduleForPay.start).format("MMM yyyy"),
+                  end: moment(paymentScheduleForPay.end).format("MMM yyyy"),
                 })}
               </Heading3>
               <ParagraphBody display={"flex"} alignItems="center">
-                <ParagraphSmall $colorName="--gray-80">{dataPaymentSchedule.project.name}</ParagraphSmall>
+                <ParagraphSmall $colorName="--gray-80">{paymentScheduleForPay.project.name}</ParagraphSmall>
                 &nbsp;
                 <ParagraphSmall $colorName="--gray-80" translation-key="common_id">
-                  - {t("common_id", { id: dataPaymentSchedule.id })}
+                  - {t("common_id", { id: paymentScheduleForPay.id })}
                 </ParagraphSmall>
               </ParagraphBody>
               <Heading5 mt={3} mb={2} $colorName="--cimigo-blue" translation-key="payment_billing_sub_tab_payment_method">
@@ -623,20 +623,20 @@ const PopupPayNow = memo((props: Props) => {
                   <div className={classes.flexOrder}>
                     <ParagraphBody $colorName="--eerie-black" $fontWeight={500} translation-key="brand_track_paynow_popup_project_name">
                       {t("brand_track_paynow_popup_project_name", {
-                        time: `${dataPaymentSchedule.solutionConfig.paymentMonthSchedule} ${t("common_month", {
-                          s: dataPaymentSchedule.solutionConfig.paymentMonthSchedule > 1 ? t("common_s") : "",
+                        time: `${paymentScheduleForPay.solutionConfig.paymentMonthSchedule} ${t("common_month", {
+                          s: paymentScheduleForPay.solutionConfig.paymentMonthSchedule > 1 ? t("common_s") : "",
                         })}`,
                       })}
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
-                      {getCostCurrency(dataPaymentSchedule.totalAmount)?.show}
+                      {getCostCurrency(paymentScheduleForPay.totalAmount)?.show}
                     </ParagraphBody>
                   </div>
                   <ParagraphExtraSmall $colorName="--eerie-black">
-                    {moment(dataPaymentSchedule.start).format("MMM yyyy")} - {moment(dataPaymentSchedule.end).format("MMM yyyy")}
+                    {moment(paymentScheduleForPay.start).format("MMM yyyy")} - {moment(paymentScheduleForPay.end).format("MMM yyyy")}
                   </ParagraphExtraSmall>
                   <ParagraphExtraSmall $colorName="--eerie-black" translation-key="brand_track_paynow_popup_project_id">
-                    {t("brand_track_paynow_popup_project_id", { id: dataPaymentSchedule.id })}
+                    {t("brand_track_paynow_popup_project_id", { id: paymentScheduleForPay.id })}
                   </ParagraphExtraSmall>
                   <Divider />
                   <div className={classes.flexOrder}>
@@ -644,15 +644,15 @@ const PopupPayNow = memo((props: Props) => {
                       {t("common_sub_total")}
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
-                      {getCostCurrency(dataPaymentSchedule.sampleSizeCostPerMonth)?.show}
+                      {getCostCurrency(paymentScheduleForPay.sampleSizeCostPerMonth)?.show}
                     </ParagraphBody>
                   </div>
                   <div className={classes.flexOrder}>
                     <ParagraphBody $colorName="--eerie-black" translation-key="common_vat">
-                      {t("common_vat", { percent: (dataPaymentSchedule.systemConfig?.vat || 0) * 100 })}
+                      {t("common_vat", { percent: (paymentScheduleForPay.systemConfig?.vat || 0) * 100 })}
                     </ParagraphBody>
                     <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
-                      {getCostCurrency(dataPaymentSchedule.vat)?.show}
+                      {getCostCurrency(paymentScheduleForPay.vat)?.show}
                     </ParagraphBody>
                   </div>
                   <Divider />
@@ -661,7 +661,7 @@ const PopupPayNow = memo((props: Props) => {
                       {t("common_total")}
                     </Heading4>
                     <Heading4 $colorName="--eerie-black" $fontWeight={500}>
-                      {getCostCurrency(dataPaymentSchedule.totalAmount)?.show}
+                      {getCostCurrency(paymentScheduleForPay.totalAmount)?.show}
                     </Heading4>
                   </div>
                 </Grid>
@@ -678,7 +678,7 @@ const PopupPayNow = memo((props: Props) => {
                   {t("common_total")}
                 </Heading3>
                 <Heading3 $colorName="--eerie-black" $fontWeight={500}>
-                  {getCostCurrency(dataPaymentSchedule.totalAmount)?.show}
+                  {getCostCurrency(paymentScheduleForPay.totalAmount)?.show}
                 </Heading3>
               </Grid>
               <Button type="submit" sx={{ whiteSpace: "nowrap" }} btnType={BtnType.Primary} disabled={!Number(watch("paymentMethodId"))}>

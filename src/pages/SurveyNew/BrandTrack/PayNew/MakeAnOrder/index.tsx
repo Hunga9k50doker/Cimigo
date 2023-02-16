@@ -64,11 +64,11 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   const dispatch = useDispatch();
   const { project } = useSelector((state: ReducerType) => state.project);
   const { isMakeAnOrder } = useSelector((state: ReducerType) => state.payment);
-  const [isOpen, setIsOpen] = useState(false)
-  const [isOpenBankTransfer, setIsOpenBankTransfer] = useState(false);
-  const [isOpenOnlinePayment, setIsOpenOnlinePayment] = useState(false)
-  const [isOpenSuportAgent, setIsOpenSupportAgent] = useState(false);
-  const [dataPaymentSchedule, setDataPaymentSchedule] = useState <PaymentSchedule>();
+  const [isOpenPopupPaynow, setIsOpenPopupPaynow] = useState(false);
+  const [isOpenPopupBankTransfer, setIsOpenPopupBankTransfer] = useState(false);
+  const [isOpenPopupOnlinePayment, setIsOpenPopupOnlinePayment] = useState(false)
+  const [isOpenPopupSuportAgent, setIsOpenPopupSupportAgent] = useState(false);
+  const [paymentScheduleForPay, setDataPaymentSchedule] = useState <PaymentSchedule>();
   const [paymentSchedule, setPaymentSchedule] =
     useState<DataPagination<PaymentSchedule>>();
   const [alertPaymentSuccess, setAlertPaymentSuccess] =
@@ -88,33 +88,33 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
   };
   const goToPayNow = (item: PaymentSchedule) => {
     setDataPaymentSchedule(item);
-    setIsOpen(true);
+    setIsOpenPopupPaynow(true);
   };
-  const onGoBackMakePayment = () => {
+  const onCancelPayment = () => {
     onClose();
-    setIsOpen(true);
+    setIsOpenPopupPaynow(true);
   }
   const onOpenModal = (item: number) => {
-    setIsOpen(false);
+    setIsOpenPopupPaynow(false);
     switch (item) {
       case EPaymentMethod.BANK_TRANSFER:
-        setIsOpenBankTransfer(true);
+        setIsOpenPopupBankTransfer(true);
         break;
       case EPaymentMethod.ONEPAY_GENERAL:
-        setIsOpenOnlinePayment(true);
+        setIsOpenPopupOnlinePayment(true);
         break;
       case EPaymentMethod.MAKE_AN_ORDER:
-        setIsOpenSupportAgent(true);
+        setIsOpenPopupSupportAgent(true);
         break;
       default:
         break;
     }
   };
   const onClose = () => {
-    setIsOpen(false)
-    setIsOpenBankTransfer(false);
-    setIsOpenOnlinePayment(false);
-    setIsOpenSupportAgent(false);
+    setIsOpenPopupPaynow(false);
+    setIsOpenPopupBankTransfer(false);
+    setIsOpenPopupOnlinePayment(false);
+    setIsOpenPopupSupportAgent(false);
   }
   const { getCostCurrency } = usePrice();
   const onRedirect = (route: string) => {
@@ -406,10 +406,36 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
         onCancel={onCloseSubmitCancelSubsription}
         onSubmit={(reson) => submitCancelSubsription(reson)}
       />
-      <PopupPayNow isOpen={isOpen} onClose={onClose} dataPaymentSchedule={dataPaymentSchedule} onOpenModal={onOpenModal}/>
-      <PopupBankTransfer isOpen={isOpenBankTransfer} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment} dataPaymentSchedule={dataPaymentSchedule}/>
-      <PopupOnlinePayment isOpen={isOpenOnlinePayment} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment} dataPaymentSchedule={dataPaymentSchedule}/>
-      <PopupSupportAgent isOpen={isOpenSuportAgent} onCancel={onClose} onGoBackMakePayment={onGoBackMakePayment} dataPaymentSchedule={dataPaymentSchedule}/>
+      <PopupPayNow
+        isOpen={isOpenPopupPaynow}
+        onClose={onClose}
+        paymentScheduleForPay={paymentScheduleForPay}
+        onOpenModal={onOpenModal}
+      />
+      {paymentScheduleForPay && isOpenPopupBankTransfer && (
+          <PopupBankTransfer
+            isOpen={isOpenPopupBankTransfer}
+            onCancel={onClose}
+            onCancelPayment={onCancelPayment}
+            paymentScheduleForPay={paymentScheduleForPay}
+          />
+        )}
+      {paymentScheduleForPay && isOpenPopupOnlinePayment && (
+        <PopupOnlinePayment
+          isOpen={isOpenPopupOnlinePayment}
+          onCancel={onClose}
+          onCancelPayment={onCancelPayment}
+          paymentScheduleForPay={paymentScheduleForPay}
+        />
+      )}
+      {paymentScheduleForPay && isOpenPopupSuportAgent && (
+        <PopupSupportAgent
+          isOpen={isOpenPopupSuportAgent}
+          onCancel={onClose}
+          onCancelPayment={onCancelPayment}
+          paymentScheduleForPay={paymentScheduleForPay}
+        />
+      )}
       <Footer />
     </>
   );

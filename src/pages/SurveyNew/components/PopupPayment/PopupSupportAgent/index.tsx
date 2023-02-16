@@ -29,125 +29,121 @@ import moment from "moment";
 import { usePrice } from "helpers/price";
 interface Props {
   isOpen: boolean;
-  dataPaymentSchedule: PaymentSchedule;
+  paymentScheduleForPay: PaymentSchedule;
   onCancel: () => void;
-  onGoBackMakePayment: () => void;
+  onCancelPayment: () => void;
 }
 
 const PopupSupportAgent = memo((props: Props) => {
-  const { isOpen, dataPaymentSchedule, onCancel, onGoBackMakePayment } = props;
+  const { isOpen, paymentScheduleForPay, onCancel, onCancelPayment } = props;
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
 
   return (
-    <>
-      {dataPaymentSchedule?.id && (
-        <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
-          <DialogTitleConfirm $padding="24px 24px 8px 24px">
-            <Box display="flex" alignItems={{ sm: "flex-end", xs: "flex-start" }} mt={3}>
-              <ImageMain src={images.imgSupportAgent} alt="" />
-              <Box ml={{ sm: 3 }}>
-                <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_support_agent_title">
-                  {t("brand_track_popup_paynow_support_agent_title")}
-                </Heading1>
-                <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="brand_track_paynow_popup_payment_title">
-                  {t("brand_track_paynow_popup_payment_title", {
-                    start: moment(dataPaymentSchedule.start).format("MMM yyyy"),
-                    end: moment(dataPaymentSchedule.end).format("MMM yyyy"),
-                  })}
-                </Heading3>
-                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
-                  <Box display="flex">
-                    <IconMoneyCash />
-                    <Heading4 ml={1} mr={3} $fontWeight={400} translation-key="">
-                      {getCostCurrency(dataPaymentSchedule.totalAmount)?.show}
-                    </Heading4>
-                  </Box>
-                  <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                    <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
-                    <Heading4 $fontWeight={400} ml={1} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_due_date_title">
-                      {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(dataPaymentSchedule.dueDate).format("MMM yyyy") })}
-                    </Heading4>
-                  </Box>
-                </Grid>
+    <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
+      <DialogTitleConfirm $padding="24px 24px 8px 24px">
+        <Box display="flex" alignItems={{ sm: "flex-end", xs: "flex-start" }} mt={3}>
+          <ImageMain src={images.imgSupportAgent} alt="" />
+          <Box ml={{ sm: 3 }}>
+            <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_support_agent_title">
+              {t("brand_track_popup_paynow_support_agent_title")}
+            </Heading1>
+            <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="brand_track_paynow_popup_payment_title">
+              {t("brand_track_paynow_popup_payment_title", {
+                start: moment(paymentScheduleForPay.start).format("MMM yyyy"),
+                end: moment(paymentScheduleForPay.end).format("MMM yyyy"),
+              })}
+            </Heading3>
+            <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
+              <Box display="flex">
+                <IconMoneyCash />
+                <Heading4 ml={1} mr={3} $fontWeight={400} translation-key="">
+                  {getCostCurrency(paymentScheduleForPay.totalAmount)?.show}
+                </Heading4>
               </Box>
-            </Box>
-            <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onCancel} />
-          </DialogTitleConfirm>
-          <DialogContentConfirm dividers>
-            <ParagraphBody
-              paddingTop={2}
-              $colorName="--gray-80"
-              translation-key="brand_track_popup_paynow_support_agent_subtitle"
-              dangerouslySetInnerHTML={{
-                __html: `${t("brand_track_popup_paynow_support_agent_subtitle")}`,
-              }}
-            />
-            <Grid>
-              <Accordion $accordionOrderSummary={true}>
-                <AccordionSummary aria-controls="panel1a-content">
-                  <Heading4
-                    $colorName={"--cimigo-blue"}
-                    display={"flex"}
-                    alignItems={"center"}
-                    translation-key="brand_track_popup_paynow_contact_information"
-                  >
-                    {t("brand_track_popup_paynow_contact_information")}
-                  </Heading4>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Grid display={"flex"} flexDirection="column" gap={1}>
-                    <BoxCustom mt={1} pt={2} $borderTop={true} $flexBox={true}>
-                      <ParagraphSmall translation-key="brand_track_popup_paynow_contact_name">
-                        {t("brand_track_popup_paynow_contact_name")}
-                      </ParagraphSmall>
-                      <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_name_value">
-                        {t("brand_track_popup_paynow_contact_name_value")}
-                      </Heading6>
-                    </BoxCustom>
-                    <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
-                      <ParagraphSmall translation-key="brand_track_popup_paynow_contact_email">
-                        {t("brand_track_popup_paynow_contact_email")}
-                      </ParagraphSmall>
-                      <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_email_value">
-                        {t("brand_track_popup_paynow_contact_email_value")}
-                      </Heading6>
-                    </Grid>
-                    <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
-                      <ParagraphSmall translation-key="brand_track_popup_paynow_contact_phone">
-                        {t("brand_track_popup_paynow_contact_phone")}
-                      </ParagraphSmall>
-                      <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_phone_value">
-                        {t("brand_track_popup_paynow_contact_phone_value")}
-                      </Heading6>
-                    </Grid>
-                  </Grid>
-                </AccordionDetails>
-              </Accordion>
-              <ParagraphBody $colorName="--eerie-black" mt={3} translation-key="brand_track_popup_paynow_support_agent_subtitle_2">
-                {t("brand_track_popup_paynow_support_agent_subtitle_2")}
-              </ParagraphBody>
+              <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
+                <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
+                <Heading4 $fontWeight={400} ml={1} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_due_date_title">
+                  {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentScheduleForPay.dueDate).format("MMM yyyy") })}
+                </Heading4>
+              </Box>
             </Grid>
-            <DowloadInvoice />
-            <Ordersummary dataPaymentSchedule={dataPaymentSchedule} />
-            <Box mt={2}>
-              <ParagraphBody
-                className="nestedLink"
-                $colorName="--eerie-black"
-                translation-key="payment_billing_order_bank_transfer_sub_6"
-                dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
-              />
-            </Box>
-            <Typography my={3} color={"var(--eerie-black)"} textAlign="center" translation-key="brand_track_popup_paynow_change_payment_method">
-              {t("brand_track_popup_paynow_change_payment_method")}{" "}
-              <Span translation-key="brand_track_popup_paynow_action_1" onClick={onGoBackMakePayment}>
-                {t("brand_track_popup_paynow_action_1")}
-              </Span>
-            </Typography>
-          </DialogContentConfirm>
-        </PopupPayment>
-      )}
-    </>
+          </Box>
+        </Box>
+        <ButtonClose $backgroundColor="--eerie-black-5" $colorName="--eerie-black-40" onClick={onCancel} />
+      </DialogTitleConfirm>
+      <DialogContentConfirm dividers>
+        <ParagraphBody
+          paddingTop={2}
+          $colorName="--gray-80"
+          translation-key="brand_track_popup_paynow_support_agent_subtitle"
+          dangerouslySetInnerHTML={{
+            __html: `${t("brand_track_popup_paynow_support_agent_subtitle")}`,
+          }}
+        />
+        <Grid>
+          <Accordion $accordionOrderSummary={true}>
+            <AccordionSummary aria-controls="panel1a-content">
+              <Heading4
+                $colorName={"--cimigo-blue"}
+                display={"flex"}
+                alignItems={"center"}
+                translation-key="brand_track_popup_paynow_contact_information"
+              >
+                {t("brand_track_popup_paynow_contact_information")}
+              </Heading4>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid display={"flex"} flexDirection="column" gap={1}>
+                <BoxCustom mt={1} pt={2} $borderTop={true} $flexBox={true}>
+                  <ParagraphSmall translation-key="brand_track_popup_paynow_contact_name">
+                    {t("brand_track_popup_paynow_contact_name")}
+                  </ParagraphSmall>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_name_value">
+                    {t("brand_track_popup_paynow_contact_name_value")}
+                  </Heading6>
+                </BoxCustom>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
+                  <ParagraphSmall translation-key="brand_track_popup_paynow_contact_email">
+                    {t("brand_track_popup_paynow_contact_email")}
+                  </ParagraphSmall>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_email_value">
+                    {t("brand_track_popup_paynow_contact_email_value")}
+                  </Heading6>
+                </Grid>
+                <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
+                  <ParagraphSmall translation-key="brand_track_popup_paynow_contact_phone">
+                    {t("brand_track_popup_paynow_contact_phone")}
+                  </ParagraphSmall>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_phone_value">
+                    {t("brand_track_popup_paynow_contact_phone_value")}
+                  </Heading6>
+                </Grid>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+          <ParagraphBody $colorName="--eerie-black" mt={3} translation-key="brand_track_popup_paynow_support_agent_subtitle_2">
+            {t("brand_track_popup_paynow_support_agent_subtitle_2")}
+          </ParagraphBody>
+        </Grid>
+        <DowloadInvoice />
+        {paymentScheduleForPay?.id && <Ordersummary paymentScheduleForPay={paymentScheduleForPay} />}
+        <Box mt={2}>
+          <ParagraphBody
+            className="nestedLink"
+            $colorName="--eerie-black"
+            translation-key="payment_billing_order_bank_transfer_sub_6"
+            dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
+          />
+        </Box>
+        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" translation-key="brand_track_popup_paynow_change_payment_method">
+          {t("brand_track_popup_paynow_change_payment_method")}{" "}
+          <Span translation-key="brand_track_popup_paynow_action_1" onClick={onCancelPayment}>
+            {t("brand_track_popup_paynow_action_1")}
+          </Span>
+        </Typography>
+      </DialogContentConfirm>
+    </PopupPayment>
   );
 });
 

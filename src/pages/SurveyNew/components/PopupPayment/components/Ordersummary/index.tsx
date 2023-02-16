@@ -15,15 +15,15 @@ import moment from "moment";
 import { usePrice } from "helpers/price";
 
 interface PropsType {
-  dataPaymentSchedule: PaymentSchedule;
+  paymentScheduleForPay: PaymentSchedule;
 }
-const Ordersummary = memo(({ dataPaymentSchedule }: PropsType) => {
+const Ordersummary = memo(({ paymentScheduleForPay }: PropsType) => {
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
 
   return (
     <Box mb={2}>
-      {dataPaymentSchedule?.id && (
+      {paymentScheduleForPay?.id && (
         <Accordion $accordionOrderSummary={true}>
           <AccordionSummary aria-controls="panel1a-content">
             <Heading4 $colorName={"--cimigo-blue"} translation-key="brand_track_paynow_popup_payment_billing_sub_tab_payment_summary">
@@ -35,20 +35,20 @@ const Ordersummary = memo(({ dataPaymentSchedule }: PropsType) => {
               <BoxCustom $flexBox={true}>
                 <Heading6 $fontWeight={500} $colorName={"--eerie-black"} translation-key="brand_track_paynow_popup_project_name">
                   {t("brand_track_paynow_popup_project_name", {
-                    time: `${dataPaymentSchedule.solutionConfig.paymentMonthSchedule} ${t("common_month", {
-                      s: dataPaymentSchedule.solutionConfig.paymentMonthSchedule > 1 ? t("common_s") : "",
+                    time: `${paymentScheduleForPay.solutionConfig.paymentMonthSchedule} ${t("common_month", {
+                      s: paymentScheduleForPay.solutionConfig.paymentMonthSchedule > 1 ? t("common_s") : "",
                     })}`,
                   })}
                 </Heading6>
                 <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
-                  {getCostCurrency(dataPaymentSchedule.sampleSizeCostPerMonth)?.show}
+                  {getCostCurrency(paymentScheduleForPay.sampleSizeCostPerMonth)?.show}
                 </Heading6>
               </BoxCustom>
               <ParagraphExtraSmall $colorName={"--gray-60"}>
-                {moment(dataPaymentSchedule.start).format("MMM yyyy")} - {moment(dataPaymentSchedule.end).format("MMM yyyy")}
+                {moment(paymentScheduleForPay.start).format("MMM yyyy")} - {moment(paymentScheduleForPay.end).format("MMM yyyy")}
               </ParagraphExtraSmall>
               <ParagraphExtraSmall $colorName={"--gray-60"} translation-key="brand_track_paynow_popup_project_id">
-                {t("brand_track_paynow_popup_project_id", { id: dataPaymentSchedule.id })}
+                {t("brand_track_paynow_popup_project_id", { id: paymentScheduleForPay.id })}
               </ParagraphExtraSmall>
             </BoxCustom>
             <BoxCustom $borderTop={true} pt={2}>
@@ -57,15 +57,15 @@ const Ordersummary = memo(({ dataPaymentSchedule }: PropsType) => {
                   {t("common_sub_total")}
                 </ParagraphSmall>
                 <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
-                  {getCostCurrency(dataPaymentSchedule.sampleSizeCostPerMonth)?.show}
+                  {getCostCurrency(paymentScheduleForPay.sampleSizeCostPerMonth)?.show}
                 </Heading6>
               </BoxCustom>
               <BoxCustom $flexBox={true}>
                 <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
-                  {t("common_vat", { percent: (dataPaymentSchedule.systemConfig?.vat || 0) * 100 })}
+                  {t("common_vat", { percent: (paymentScheduleForPay.systemConfig?.vat || 0) * 100 })}
                 </ParagraphSmall>
                 <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
-                  {getCostCurrency(dataPaymentSchedule.vat)?.show}
+                  {getCostCurrency(paymentScheduleForPay.vat)?.show}
                 </Heading6>
               </BoxCustom>
             </BoxCustom>
@@ -74,7 +74,7 @@ const Ordersummary = memo(({ dataPaymentSchedule }: PropsType) => {
                 {t("common_total")}
               </Heading4>
               <Heading4 $fontWeight={500} $colorName={"--eerie-black"}>
-                {getCostCurrency(dataPaymentSchedule.totalAmount)?.show}
+                {getCostCurrency(paymentScheduleForPay.totalAmount)?.show}
               </Heading4>
             </BoxCustom>
           </AccordionDetails>
