@@ -29,7 +29,7 @@ import moment from "moment";
 import { PaymentScheduleService } from "services/payment_schedule";
 import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
-import { authProjectYourNextPayment } from "../models";
+import { authYourNextPayment } from "../models";
 import { usePrice } from "helpers/price";
 import { setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
@@ -87,7 +87,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   };
   const swiperRef = useRef<any>();
   useEffect(() => {
-    authProjectYourNextPayment(project, onRedirect);
+    authYourNextPayment(project, onRedirect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
   useEffect(() => {
