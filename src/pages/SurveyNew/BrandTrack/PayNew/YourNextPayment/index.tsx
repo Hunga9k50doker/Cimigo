@@ -41,6 +41,10 @@ interface MakeAnOrderProp {
   projectId: number;
 }
 const sliderSettings = {
+  50: {
+    slidesPerView: 1,
+    spaceBetween: 30,
+  },
   440: {
     slidesPerView: 1,
     spaceBetween: 30,
