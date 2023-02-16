@@ -25,7 +25,7 @@ import PopupConfirmMakeAnOrder from "../components/PopupConfirmMakeAnOrder";
 import { authPreviewOrSelectDate } from "../models";
 import { GetPaymentSchedulePreview, PaymentSchedulePreview } from "models/payment_schedule";
 import clsx from "clsx";
-import {setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
+import {setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/Payment/actionTypes";
 import { usePrice } from "helpers/price";
 import { setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { formatOrdinalumbers } from "utils/formatNumber";

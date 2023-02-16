@@ -6,7 +6,7 @@ export interface PaymentState {
 const initial: PaymentState = {
   isMakeAnOrder: false,
 };
-export const paymentIsMakeAnOrderReducer = (state = initial, action: any) =>
+export const paymentReducer = (state = initial, action: any) =>
   produce(state, (draft) => {
     switch (action.type) {
       case types.SET_PAYMENT_IS_MAKE_AN_ORDER_SUCCESS_REDUCER:

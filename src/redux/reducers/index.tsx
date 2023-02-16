@@ -5,7 +5,7 @@ import { AuthState, authReducer } from './Auth';
 import { StatusState, statusReducer } from './Status';
 import { userReducer, UserState } from './User';
 import { projectReducer, ProjectState } from './Project';
-import {  paymentIsMakeAnOrderReducer, PaymentState } from './MakeAnOrderPaymentSchedule';
+import {  paymentReducer, PaymentState } from './Payment';
 
 
 const createRootReducer = (history: History) => {
@@ -14,7 +14,7 @@ const createRootReducer = (history: History) => {
     user: userReducer,
     status: statusReducer,
     project: projectReducer,
-    payment: paymentIsMakeAnOrderReducer,
+    payment: paymentReducer,
     router: connectRouter(history),
   });
   return reducers;

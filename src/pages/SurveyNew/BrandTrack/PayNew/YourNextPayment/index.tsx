@@ -30,7 +30,7 @@ import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
 import { authYourNextPayment } from "../models";
 import { usePrice } from "helpers/price";
-import { setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
+import { setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/Payment/actionTypes";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
