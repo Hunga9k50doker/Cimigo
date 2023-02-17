@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useTranslation } from "react-i18next";
@@ -38,9 +38,13 @@ interface Props {
 
 const PopupBankTransfer = memo((props: Props) => {
   const { isOpen, paymentSchedule, onCancel, onCancelPayment } = props;
+  const [isComfirmPayment, setIsComfirmPayment] = useState(false);
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
 
+  const comfirmPayment = () => {
+    setIsComfirmPayment(true);
+  };
   return (
     <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
       <DialogTitleConfirm $padding={"24px 24px 8px 24px"}>
@@ -209,19 +213,22 @@ const PopupBankTransfer = memo((props: Props) => {
             {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentSchedule.dueDate).format("MMM yyyy") })}
           </ParagraphBody>
         </Box>
-        <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_3">
-          {t("brand_track_popup_paynow_bank_transfer_subtitle_3")}{" "}
-          <Span translation-key="brand_track_popup_paynow_action_2">{t("brand_track_popup_paynow_action_2")}</Span>
-        </ParagraphBody>
-        {/* <ParagraphBody
-          textAlign={"center"}
-          $colorName={"--gray-80"}
-          sx={{ background: "#f9f9f9", padding: "4px", bordeRadius: "4px" }}
-          className={classes.subtitle}
-          translation-key="brand_track_popup_paynow_bank_transfer_subtitle_4"
-        >
-          {t("brand_track_popup_paynow_bank_transfer_subtitle_4")}
-        </ParagraphBody> */}
+        {!isComfirmPayment ? (
+          <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_3">
+            {t("brand_track_popup_paynow_bank_transfer_subtitle_3")}{" "}
+            <Span onClick={comfirmPayment} translation-key="brand_track_popup_paynow_action_2">
+              {t("brand_track_popup_paynow_action_2")}
+            </Span>
+          </ParagraphBody>
+        ) : (
+          <ParagraphBody
+            textAlign={"center"}
+            $colorName={"--gray-80"}
+            sx={{ background: "#f9f9f9", padding: "4px", bordeRadius: "4px" }}
+            translation-key="brand_track_popup_paynow_bank_transfer_subtitle_4"
+            dangerouslySetInnerHTML={{ __html: t("brand_track_popup_paynow_bank_transfer_subtitle_4") }}
+          />
+        )}
         <DowloadInvoice />
         <Ordersummary paymentSchedule={paymentSchedule} />
         <ParagraphBody $colorName={"--eerie-black-00"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_2">
