@@ -34,7 +34,6 @@ import { setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/Payment/ac
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import PopupPayNow from "pages/SurveyNew/components/PopupPayment/PopupPayNow";
 import { EPaymentMethod, OptionItem } from "models/general";
 // Import Swiper styles
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -42,6 +41,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import PopupPayNow from "pages/SurveyNew/components/PopupPayment/PopupPayNow";
 import PopupBankTransfer from "pages/SurveyNew/components/PopupPayment/PopupBankTransfer";
 import PopupOnlinePayment from "pages/SurveyNew/components/PopupPayment/PopupOnlinePayment";
 import PopupSupportAgent from "pages/SurveyNew/components/PopupPayment/PopupSupportAgent";
