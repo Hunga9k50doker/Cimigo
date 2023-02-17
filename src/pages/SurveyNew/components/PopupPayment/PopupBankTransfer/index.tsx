@@ -31,13 +31,13 @@ import { usePrice } from "helpers/price";
 
 interface Props {
   isOpen: boolean;
-  paymentScheduleForPay: PaymentSchedule;
+  paymentSchedule: PaymentSchedule;
   onCancel: () => void;
   onCancelPayment: () => void;
 }
 
 const PopupBankTransfer = memo((props: Props) => {
-  const { isOpen, paymentScheduleForPay, onCancel, onCancelPayment } = props;
+  const { isOpen, paymentSchedule, onCancel, onCancelPayment } = props;
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
 
@@ -52,15 +52,15 @@ const PopupBankTransfer = memo((props: Props) => {
             </Heading1>
             <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="brand_track_paynow_popup_payment_title">
               {t("brand_track_paynow_popup_payment_title", {
-                start: moment(paymentScheduleForPay.start).format("MMM yyyy"),
-                end: moment(paymentScheduleForPay.end).format("MMM yyyy"),
+                start: moment(paymentSchedule.start).format("MMM yyyy"),
+                end: moment(paymentSchedule.end).format("MMM yyyy"),
               })}
             </Heading3>
             <BoxCustom $flexBox={true}>
               <Box display="flex">
                 <IconMoneyCash />
                 <Heading4 ml={1} $fontWeight={400}>
-                  {getCostCurrency(paymentScheduleForPay.totalAmount)?.show}
+                  {getCostCurrency(paymentSchedule.totalAmount)?.show}
                 </Heading4>
               </Box>
             </BoxCustom>
@@ -75,7 +75,7 @@ const PopupBankTransfer = memo((props: Props) => {
           translation-key="brand_track_popup_paynow_bank_transfer_subtitle"
           dangerouslySetInnerHTML={{
             __html: `${t("brand_track_popup_paynow_bank_transfer_subtitle", {
-              dueDate: moment(paymentScheduleForPay.dueDate).format("MMM yyyy"),
+              dueDate: moment(paymentSchedule.dueDate).format("MMM yyyy"),
             })}`,
           }}
         />
@@ -124,7 +124,7 @@ const PopupBankTransfer = memo((props: Props) => {
                     {t("brand_track_popup_paynow_bank_transfer_transfer_amount")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    {getCostCurrency(paymentScheduleForPay.totalAmount)?.VNDShow}
+                    {getCostCurrency(paymentSchedule.totalAmount)?.VNDShow}
                   </Heading6>
                 </BoxCustom>
                 <BoxCustom $flexBox={true} py={0.5}>
@@ -188,7 +188,7 @@ const PopupBankTransfer = memo((props: Props) => {
                     {t("brand_track_popup_paynow_bank_transfer_transfer_amount")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    {getCostCurrency(paymentScheduleForPay.totalAmountUSD)?.USDShow}
+                    {getCostCurrency(paymentSchedule.totalAmountUSD)?.USDShow}
                   </Heading6>
                 </BoxCustom>
                 <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5}>
@@ -206,7 +206,7 @@ const PopupBankTransfer = memo((props: Props) => {
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
           <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
           <ParagraphBody my={2} ml={1} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_due_date_title">
-            {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentScheduleForPay.dueDate).format("MMM yyyy") })}
+            {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentSchedule.dueDate).format("MMM yyyy") })}
           </ParagraphBody>
         </Box>
         <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_3">
@@ -223,7 +223,7 @@ const PopupBankTransfer = memo((props: Props) => {
           {t("brand_track_popup_paynow_bank_transfer_subtitle_4")}
         </ParagraphBody> */}
         <DowloadInvoice />
-        {paymentScheduleForPay?.id && <Ordersummary paymentScheduleForPay={paymentScheduleForPay} />}
+        <Ordersummary paymentSchedule={paymentSchedule} />
         <ParagraphBody $colorName={"--eerie-black-00"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_2">
           {t("brand_track_popup_paynow_bank_transfer_subtitle_2")}
         </ParagraphBody>

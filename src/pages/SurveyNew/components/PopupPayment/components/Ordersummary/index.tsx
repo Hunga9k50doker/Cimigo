@@ -15,71 +15,69 @@ import moment from "moment";
 import { usePrice } from "helpers/price";
 
 interface PropsType {
-  paymentScheduleForPay: PaymentSchedule;
+  paymentSchedule: PaymentSchedule;
 }
-const Ordersummary = memo(({ paymentScheduleForPay }: PropsType) => {
+const Ordersummary = memo(({ paymentSchedule }: PropsType) => {
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
 
   return (
     <Box mb={2}>
-      {paymentScheduleForPay?.id && (
-        <Accordion $accordionOrderSummary={true}>
-          <AccordionSummary aria-controls="panel1a-content">
-            <Heading4 $colorName={"--cimigo-blue"} translation-key="brand_track_paynow_popup_payment_billing_sub_tab_payment_summary">
-              {t("brand_track_paynow_popup_payment_billing_sub_tab_payment_summary")}
+      <Accordion $accordionOrderSummary={true}>
+        <AccordionSummary aria-controls="panel1a-content">
+          <Heading4 $colorName={"--cimigo-blue"} translation-key="brand_track_paynow_popup_payment_billing_sub_tab_payment_summary">
+            {t("brand_track_paynow_popup_payment_billing_sub_tab_payment_summary")}
+          </Heading4>
+        </AccordionSummary>
+        <AccordionDetails>
+          <BoxCustom py={2} mt={1} $borderTop={true}>
+            <BoxCustom $flexBox={true}>
+              <Heading6 $fontWeight={500} $colorName={"--eerie-black"} translation-key="brand_track_paynow_popup_project_name">
+                {t("brand_track_paynow_popup_project_name", {
+                  time: `${paymentSchedule.solutionConfig.paymentMonthSchedule} ${t("common_month", {
+                    s: paymentSchedule.solutionConfig.paymentMonthSchedule > 1 ? t("common_s") : "",
+                  })}`,
+                })}
+              </Heading6>
+              <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
+                {getCostCurrency(paymentSchedule.sampleSizeCostPerMonth)?.show}
+              </Heading6>
+            </BoxCustom>
+            <ParagraphExtraSmall $colorName={"--gray-60"}>
+              {moment(paymentSchedule.start).format("MMM yyyy")} - {moment(paymentSchedule.end).format("MMM yyyy")}
+            </ParagraphExtraSmall>
+            <ParagraphExtraSmall $colorName={"--gray-60"} translation-key="brand_track_paynow_popup_project_id">
+              {t("brand_track_paynow_popup_project_id", { id: paymentSchedule.id })}
+            </ParagraphExtraSmall>
+          </BoxCustom>
+          <BoxCustom $borderTop={true} pt={2}>
+            <BoxCustom $flexBox={true}>
+              <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
+                {t("common_sub_total")}
+              </ParagraphSmall>
+              <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
+                {getCostCurrency(paymentSchedule.sampleSizeCostPerMonth)?.show}
+              </Heading6>
+            </BoxCustom>
+            <BoxCustom $flexBox={true}>
+              <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
+                {t("common_vat", { percent: (paymentSchedule.systemConfig?.vat || 0) * 100 })}
+              </ParagraphSmall>
+              <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
+                {getCostCurrency(paymentSchedule.vat)?.show}
+              </Heading6>
+            </BoxCustom>
+          </BoxCustom>
+          <BoxCustom $flexBox={true} pt={3}>
+            <Heading4 $fontWeight={500} $colorName={"--eerie-black"} translation-key="common_total">
+              {t("common_total")}
             </Heading4>
-          </AccordionSummary>
-          <AccordionDetails>
-            <BoxCustom py={2} mt={1} $borderTop={true}>
-              <BoxCustom $flexBox={true}>
-                <Heading6 $fontWeight={500} $colorName={"--eerie-black"} translation-key="brand_track_paynow_popup_project_name">
-                  {t("brand_track_paynow_popup_project_name", {
-                    time: `${paymentScheduleForPay.solutionConfig.paymentMonthSchedule} ${t("common_month", {
-                      s: paymentScheduleForPay.solutionConfig.paymentMonthSchedule > 1 ? t("common_s") : "",
-                    })}`,
-                  })}
-                </Heading6>
-                <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
-                  {getCostCurrency(paymentScheduleForPay.sampleSizeCostPerMonth)?.show}
-                </Heading6>
-              </BoxCustom>
-              <ParagraphExtraSmall $colorName={"--gray-60"}>
-                {moment(paymentScheduleForPay.start).format("MMM yyyy")} - {moment(paymentScheduleForPay.end).format("MMM yyyy")}
-              </ParagraphExtraSmall>
-              <ParagraphExtraSmall $colorName={"--gray-60"} translation-key="brand_track_paynow_popup_project_id">
-                {t("brand_track_paynow_popup_project_id", { id: paymentScheduleForPay.id })}
-              </ParagraphExtraSmall>
-            </BoxCustom>
-            <BoxCustom $borderTop={true} pt={2}>
-              <BoxCustom $flexBox={true}>
-                <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
-                  {t("common_sub_total")}
-                </ParagraphSmall>
-                <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
-                  {getCostCurrency(paymentScheduleForPay.sampleSizeCostPerMonth)?.show}
-                </Heading6>
-              </BoxCustom>
-              <BoxCustom $flexBox={true}>
-                <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
-                  {t("common_vat", { percent: (paymentScheduleForPay.systemConfig?.vat || 0) * 100 })}
-                </ParagraphSmall>
-                <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
-                  {getCostCurrency(paymentScheduleForPay.vat)?.show}
-                </Heading6>
-              </BoxCustom>
-            </BoxCustom>
-            <BoxCustom $flexBox={true} pt={3}>
-              <Heading4 $fontWeight={500} $colorName={"--eerie-black"} translation-key="common_total">
-                {t("common_total")}
-              </Heading4>
-              <Heading4 $fontWeight={500} $colorName={"--eerie-black"}>
-                {getCostCurrency(paymentScheduleForPay.totalAmount)?.show}
-              </Heading4>
-            </BoxCustom>
-          </AccordionDetails>
-        </Accordion>
-      )}
+            <Heading4 $fontWeight={500} $colorName={"--eerie-black"}>
+              {getCostCurrency(paymentSchedule.totalAmount)?.show}
+            </Heading4>
+          </BoxCustom>
+        </AccordionDetails>
+      </Accordion>
     </Box>
   );
 });

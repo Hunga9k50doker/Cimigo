@@ -24,13 +24,13 @@ import { usePrice } from "helpers/price";
 
 interface Props {
   isOpen: boolean;
-  paymentScheduleForPay: PaymentSchedule;
+  paymentSchedule: PaymentSchedule;
   onCancel: () => void;
   onCancelPayment: () => void;
 }
 
 const PopupOnlinePayment = memo((props: Props) => {
-  const { isOpen, paymentScheduleForPay, onCancel, onCancelPayment } = props;
+  const { isOpen, paymentSchedule, onCancel, onCancelPayment } = props;
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
 
@@ -45,15 +45,15 @@ const PopupOnlinePayment = memo((props: Props) => {
             </Heading1>
             <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="brand_track_paynow_popup_payment_title">
               {t("brand_track_paynow_popup_payment_title", {
-                start: moment(paymentScheduleForPay.start).format("MMM yyyy"),
-                end: moment(paymentScheduleForPay.end).format("MMM yyyy"),
+                start: moment(paymentSchedule.start).format("MMM yyyy"),
+                end: moment(paymentSchedule.end).format("MMM yyyy"),
               })}
             </Heading3>
             <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
               <Box display="flex" mt={1}>
                 <IconMoneyCash />
                 <Heading4 ml={1} $fontWeight={400} translation-key="">
-                  {getCostCurrency(paymentScheduleForPay.totalAmount)?.show}
+                  {getCostCurrency(paymentSchedule.totalAmount)?.show}
                 </Heading4>
               </Box>
             </Grid>
@@ -74,7 +74,7 @@ const PopupOnlinePayment = memo((props: Props) => {
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
           <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
           <ParagraphBody my={2} ml={1} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_due_date_title">
-            {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentScheduleForPay.dueDate).format("MMM yyyy") })}
+            {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentSchedule.dueDate).format("MMM yyyy") })}
           </ParagraphBody>
         </Box>
         <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_online_payment_subtitle_2">
@@ -84,7 +84,7 @@ const PopupOnlinePayment = memo((props: Props) => {
           </Span>
         </ParagraphBody>
         <DowloadInvoice />
-        {paymentScheduleForPay?.id && <Ordersummary paymentScheduleForPay={paymentScheduleForPay} />}
+        <Ordersummary paymentSchedule={paymentSchedule} />
         <Box mt={2}>
           <ParagraphBody
             className="nestedLink"

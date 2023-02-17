@@ -406,18 +406,20 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
         onCancel={onCloseSubmitCancelSubsription}
         onSubmit={(reson) => submitCancelSubsription(reson)}
       />
-      <PopupPayNow
-        isOpen={isOpenPopupPaynow}
-        onClose={onClose}
-        paymentScheduleForPay={paymentScheduleForPay}
-        onOpenModal={onOpenModal}
-      />
+      {paymentScheduleForPay && isOpenPopupPaynow && (
+        <PopupPayNow
+          isOpen={isOpenPopupPaynow}
+          onClose={onClose}
+          paymentSchedule={paymentScheduleForPay}
+          onOpenModal={onOpenModal}
+        />
+      )}
       {paymentScheduleForPay && isOpenPopupBankTransfer && (
           <PopupBankTransfer
             isOpen={isOpenPopupBankTransfer}
             onCancel={onClose}
             onCancelPayment={onCancelPayment}
-            paymentScheduleForPay={paymentScheduleForPay}
+            paymentSchedule={paymentScheduleForPay}
           />
         )}
       {paymentScheduleForPay && isOpenPopupOnlinePayment && (
@@ -425,7 +427,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
           isOpen={isOpenPopupOnlinePayment}
           onCancel={onClose}
           onCancelPayment={onCancelPayment}
-          paymentScheduleForPay={paymentScheduleForPay}
+          paymentSchedule={paymentScheduleForPay}
         />
       )}
       {paymentScheduleForPay && isOpenPopupSuportAgent && (
@@ -433,7 +435,7 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
           isOpen={isOpenPopupSuportAgent}
           onCancel={onClose}
           onCancelPayment={onCancelPayment}
-          paymentScheduleForPay={paymentScheduleForPay}
+          paymentSchedule={paymentScheduleForPay}
         />
       )}
       <Footer />
