@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import { routes } from "routers/routes";
 import { ReducerType } from "redux/reducers";
-import { authProjectPreview } from "../models";
+import { authPreviewOrSelectDate } from "../models";
 import { setScrollToSectionReducer } from "redux/reducers/Project/actionTypes";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Heading5 from "components/common/text/Heading5";
@@ -26,55 +26,71 @@ interface ProjectReviewProps {}
 // eslint-disable-next-line
 const ProjectReview = memo(({}: ProjectReviewProps) => {
   const dispatch = useDispatch();
+
   const { t } = useTranslation();
+
   const { project } = useSelector((state: ReducerType) => state.project);
-
+  
   const isValidBasic = useMemo(() => ProjectHelper.isValidBasic(project) || 0, [project]);
-
+  
   const mainBrands = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.MAIN) || [], [project]);
+  
   const mainBrandNeedMore = useMemo(() => ProjectHelper.mainBrandNeedMore(project) || 0, [project]);
+  
   const isValidMainBrand = useMemo(() => ProjectHelper.isValidMainBrand(project), [project]);
   
   const competingBrands = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING) || [], [project]);
+  
   const competingBrandNeedMore = useMemo(() => ProjectHelper.competingBrandNeedMore(project) || 0, [project]);
+  
   const isValidCompetingBrand = useMemo(() => ProjectHelper.isValidCompetingBrand(project), [project]);
   
   const isValidBrandList = useMemo(() => ProjectHelper.isValidBrandList(project) || 0, [project]);
   
   const competitiveBrands = useMemo(() => project?.projectBrands || [], [project]);
+  
   const competitiveBrandNeedMore = useMemo(() => ProjectHelper.competitiveBrandNeedMore(project) || 0, [project]);
+  
   const isValidCompetitiveBrand = useMemo(() => ProjectHelper.isValidCompetitiveBrand(project), [project]);
   
   const numberOfBrandEquityAttributes = useMemo(() => project?.projectAttributes?.length + project?.userAttributes?.length || 0, [project]);
+  
   const brandEquityAttributesNeedMore = useMemo(() => ProjectHelper.brandEquityAttributesNeedMore(project) || 0, [project]);
+  
   const isValidBrandEquityAttributes = useMemo(() => ProjectHelper.isValidEquityAttributes(project), [project]);
   
   const isValidBrandDispositionAndEquity = useMemo(() => ProjectHelper.isValidBrandDispositionAndEquity(project) || 0, [project]);
   
   const brandAssetRecognitionNeedMore = useMemo(() => ProjectHelper.brandAssetRecognitionNeedMore(project) || 0, [project]);
+  
   const isValidBrandAssetRecognition = useMemo(() => ProjectHelper.isValidBrandAssetRecognition(project) || 0, [project]);
 
   const gotoSetupSurvey = () => {
     dispatch(push(routes.project.detail.setupSurvey.replace(":id", `${project.id}`)));
   };
+
   const gotoTarget = () => {
     dispatch(push(routes.project.detail.target.replace(":id", `${project.id}`)));
   };
+
   const onGotoBasicInfor = (field?: keyof Project) => {
     if (isValidBasic) return
     dispatch(setScrollToSectionReducer(`${SETUP_SURVEY_SECTION.basic_information}-${field || ''}`))
     onRedirect(routes.project.detail.setupSurvey)
   }
+
   const onGotoBrandList = () => {
     if (isValidBrandList) return
     dispatch(setScrollToSectionReducer(SETUP_SURVEY_SECTION.brand_list))
     onRedirect(routes.project.detail.setupSurvey)
   }
+
   const onGotoBrandDispositionAndEquity = () => {
     if (isValidBrandDispositionAndEquity) return
     dispatch(setScrollToSectionReducer(SETUP_SURVEY_SECTION.brand_disposition_and_equity))
     onRedirect(routes.project.detail.setupSurvey)
   }
+
   const onGotoBrandAssetRecognition = () => {
     if (isValidBrandAssetRecognition) return
     dispatch(setScrollToSectionReducer(SETUP_SURVEY_SECTION.brand_asset_recognition))
@@ -90,7 +106,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
   }, [project]);
 
   useEffect(() => {
-    authProjectPreview(project, onRedirect);
+    authPreviewOrSelectDate(project, onRedirect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
 
@@ -98,6 +114,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
     if(!isValidCheckout) return;
     dispatch(push(routes.project.detail.paymentBilling.previewAndPayment.selectDate.replace(":id", `${project.id}`)));
   };
+  
   return (
     <>
       <Grid classes={{ root: classes.root }}>
@@ -216,7 +233,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                               {item?.brand}
                             </ParagraphBody>
                           ))}
-                          {mainBrands?.length === 0 && (
+                          {!mainBrands?.length && (
                             <ParagraphBody 
                               $colorName={"--eerie-black-00"} 
                               className={classes.numberOfItem}
@@ -226,7 +243,7 @@ const ProjectReview = memo(({}: ProjectReviewProps) => {
                               }}
                             ></ParagraphBody>
                             )}
-                          {competingBrands?.length > 0 && (
+                          {!!competingBrands?.length && (
                             <ParagraphBody $colorName={"--eerie-black-00"} translation-key="common_more">+ {t("common_more", {number: competingBrands?.length})}</ParagraphBody>
                           )}
                           {!isValidMainBrand && (

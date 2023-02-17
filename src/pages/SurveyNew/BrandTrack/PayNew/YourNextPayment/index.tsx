@@ -11,11 +11,14 @@ import CreditCardIcon from "@mui/icons-material/CreditCard";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Footer from "components/Footer";
 import { useEffect, useRef, useState } from "react";
-import Alert, { AlerType } from "../Alert";
-import { GetPaymentSchedule, PaymentSchedule, PaymentScheduleStatus } from "models/payment_schedule";
+import Alert, { AlerType } from "../../../../../components/Alert";
+import {
+  GetPaymentSchedule,
+  PaymentSchedule,
+  PaymentScheduleStatus,
+} from "models/payment_schedule";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { DataPagination } from "models/general";
 import PopupConfirmCancelSubsription from "../components/PopupConfirmCancelSubsription";
 import PaymentHistoryList from "../components/PaymentHistoryList";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,23 +28,23 @@ import moment from "moment";
 import { PaymentScheduleService } from "services/payment_schedule";
 import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
-import { authProjectPreview } from "../models";
+import { authYourNextPayment } from "../models";
 import { usePrice } from "helpers/price";
-import { setPaymentReducer } from "redux/reducers/MakeAnOrderPaymentSchedule/actionTypes";
+import { setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/Payment/actionTypes";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-// Import Swiper styles
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/free-mode";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
 
 interface MakeAnOrderProp {
   projectId: number;
 }
+
 const sliderSettings = {
+  50: {
+    slidesPerView: 1,
+    spaceBetween: 30,
+  },
   440: {
     slidesPerView: 1,
     spaceBetween: 30,
@@ -55,45 +58,57 @@ const sliderSettings = {
     spaceBetween: 30,
   },
 };
-const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
+
+const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
+
   const dispatch = useDispatch();
+
   const { project } = useSelector((state: ReducerType) => state.project);
+
   const { isMakeAnOrder } = useSelector((state: ReducerType) => state.payment);
-  const [paymentSchedule, setPaymentSchedule] =
-    useState<DataPagination<PaymentSchedule>>();
-  const [alertPaymentSuccess, setAlertPaymentSuccess] =
+  
+  const [paymentSchedules, setPaymentSchedules] = useState<PaymentSchedule[]>([]);
+
+  const [alertMakeAnOrderSuccess, setAlertMakeAnOrderSuccess] =
     useState<boolean>(false);
-  const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
-    useState(false);
+
   const [alertPaymentReminder, setAlertPaymentReminder] =
     useState<PaymentSchedule>();
+
+  const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
+    useState(false);
+
   const onCloseSubmitCancelSubsription = () => {
     setOnSubmitCancelSubsription(false);
   };
+
   const submitCancelSubsription = (reson: string) => {
     setOnSubmitCancelSubsription(false);
   };
+
   const cancelSubscription = () => {
     setOnSubmitCancelSubsription(true);
   };
+
   const goToPayNow = () => {};
+
   const { getCostCurrency } = usePrice();
+
+  const onCloseMakeAnOrderSuccess = () => {
+    setAlertMakeAnOrderSuccess(false);
+  };
+
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
-  const setDefaultMakeAnOrderReducer = () => {
-    dispatch(
-      setPaymentReducer({
-        isMakeAnOrder: false,
-      })
-    );
-  };
+
   const swiperRef = useRef<any>();
+
   useEffect(() => {
-    authProjectPreview(project, onRedirect);
-    setDefaultMakeAnOrderReducer();
+    authYourNextPayment(project, onRedirect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
+
   useEffect(() => {
     const getListPaymentSchedule = async () => {
       const data: GetPaymentSchedule = {
@@ -102,52 +117,52 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
       dispatch(setLoading(true));
       await PaymentScheduleService.getPaymentSchedule(data)
         .then((res) => {
-          setPaymentSchedule(res);
+          setPaymentSchedules(res.data);
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)));
     };
     getListPaymentSchedule();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, projectId]);
+
   useEffect(() => {
-    const checkPaymentReminder = () => {
-      var paymentFirst = paymentSchedule?.data[0];
-      var now = moment().add(14, "d").format("DD MMM yyyy");
-      var dueDate = moment(paymentFirst?.dueDate).format("DD MMM yyyy");
+    if (paymentSchedules.length) {
+      var paymentFirst = paymentSchedules[0];
+      var now = moment().add(14, "d");
       if (
-        now >= dueDate &&
+        moment(paymentFirst?.dueDate).isBefore(now) &&
         paymentFirst?.status === PaymentScheduleStatus.NOT_PAID
       ) {
         setAlertPaymentReminder(paymentFirst);
+      } else {
+        setAlertPaymentReminder(null);
       }
-    };
-    if (paymentSchedule?.data) {
-      checkPaymentReminder();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentSchedule]);
+  }, [paymentSchedules]);
+
   useEffect(() => {
     if (isMakeAnOrder) {
-      setAlertPaymentSuccess(isMakeAnOrder);
+      setAlertMakeAnOrderSuccess(isMakeAnOrder);
+      dispatch(setPaymentIsMakeAnOrderSuccessReducer(false));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMakeAnOrder]);
+
   return (
     <>
       <Grid classes={{ root: classes.root }}>
-        {alertPaymentSuccess && (
+        {alertMakeAnOrderSuccess && (
           <Alert
             title={"Thanks for making an order!"}
+            onClose={onCloseMakeAnOrderSuccess}
             content={
               <ParagraphBody $colorName={"--eerie-black"}>
                 Fieldwork will start at the beginning of{" "}
                 {moment(project?.startPaymentSchedule).format("MMMM yyyy")} if
                 you make the first payment by{" "}
-                {moment(paymentSchedule?.data[0]?.dueDate).format(
-                  "MMMM DD, yyyy"
-                )}
-                . Subsequent payments will be made every{" "}
-                {paymentSchedule?.data[0]?.solutionConfig?.paymentMonthSchedule}{" "}
+                {moment(paymentSchedules[0]?.dueDate).format("MMMM DD, yyyy")}.
+                Subsequent payments will be made every{" "}
+                {paymentSchedules[0]?.solutionConfig?.paymentMonthSchedule}{" "}
                 months.
               </ParagraphBody>
             }
@@ -162,7 +177,9 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
                 <ParagraphBody $colorName={"--eerie-black"}>
                   You have a pending payment that is about to become overdue.
                   You must process the payment by{" "}
-                  {moment(alertPaymentReminder.dueDate).format("MMMM DD, yyyy")}{" "}
+                  {moment(alertPaymentReminder?.dueDate).format(
+                    "MMMM DD, yyyy"
+                  )}{" "}
                   to avoid being terminated.
                 </ParagraphBody>
                 <ParagraphBody $colorName={"--eerie-black"}>
@@ -213,11 +230,12 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
               <Swiper
                 slidesPerView={2}
                 breakpoints={sliderSettings}
+                direction={"horizontal"}
                 onBeforeInit={(swiper) => {
                   swiperRef.current = swiper;
                 }}
               >
-                {paymentSchedule?.data.map((item, index) => {
+                {paymentSchedules?.map((item, index) => {
                   return (
                     <SwiperSlide key={item.id}>
                       <Box
@@ -371,4 +389,4 @@ const MakeAnOrder = ({ projectId }: MakeAnOrderProp) => {
     </>
   );
 };
-export default MakeAnOrder;
+export default YourNextPayment;

@@ -30,12 +30,14 @@ const PopupConfirmCancelSubsription = memo(
     const { t, i18n } = useTranslation();
 
     const { onCancel, onSubmit, isOpen } = props;
+
     const schema = useMemo(() => {
       return yup.object().shape({
         name: yup.string().max(500, "Max 500 characters!"),
       });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
+
     const {
       register,
       formState: { errors },
@@ -45,12 +47,14 @@ const PopupConfirmCancelSubsription = memo(
       resolver: yupResolver(schema),
       mode: "onChange",
     });
+
     const _onCancel = () => {
       reset({
         reason: "",
       });
       onCancel();
     };
+
     const _onSubmit = (data: SubmitCancelSubsriptionFormData) => {
       if (!data) return;
       onSubmit(data.reason);
@@ -58,6 +62,7 @@ const PopupConfirmCancelSubsription = memo(
         reason: "",
       });
     };
+    
     return (
       <Dialog
         scroll="paper"

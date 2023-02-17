@@ -5,7 +5,7 @@ import { AuthState, authReducer } from './Auth';
 import { StatusState, statusReducer } from './Status';
 import { userReducer, UserState } from './User';
 import { projectReducer, ProjectState } from './Project';
-import {  paymentReducer, PaymentState } from './MakeAnOrderPaymentSchedule';
+import {  paymentReducer, PaymentState } from './Payment';
 
 
 const createRootReducer = (history: History) => {
