@@ -355,6 +355,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   $colorName={"--gray-90"}
                                   className={classes.urlViewDetail}
                                   pt={0.5}
+                                  onClick={()=>onOpenModal(item.id)}
                                 >
                                   View details
                                 </ParagraphSmallUnderline2>
