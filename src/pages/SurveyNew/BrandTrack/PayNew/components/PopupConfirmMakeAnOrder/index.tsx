@@ -32,9 +32,11 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
   const _onCancel = () => {
     onCancel();
   };
+
   const _onSubmit = () => {
     onSubmit();
   };
+  
   return (
     <Dialog
       scroll="paper"

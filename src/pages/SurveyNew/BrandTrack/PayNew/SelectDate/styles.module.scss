@@ -71,6 +71,14 @@
 .disTermsOfServices{
   text-align: right;
 }
+
+.viewPaymentScheduleTextWrapper {
+  display: flex;
+  align-items: center;
+  .rotateIcon {
+    transform: rotate(90deg);
+  }
+}
 .listPayment{
   .payment{
     width: 100%;
