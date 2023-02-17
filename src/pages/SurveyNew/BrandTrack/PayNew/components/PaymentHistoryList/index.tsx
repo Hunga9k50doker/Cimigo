@@ -24,15 +24,20 @@ interface PaymentHistoryListProps {
 
 const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
     const dispatch = useDispatch();
+
     const { t, i18n } = useTranslation();
+
     const { user } = useAuth();
+
     const { projectId } = props;
+
     const [params, setParams] = useState<GetListPaymentScheduleHistory>({
         take: 10,
         page: 1,
         isDescending: true,
         projectId: projectId,
     });
+
     const [listPaymentHistory, setListPaymentHistory] =
         useState<DataPagination<PaymentScheduleHistory>>();
 
@@ -92,7 +97,6 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
         return listPaymentHistory.meta.page - 1;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
 
     return (
         <>

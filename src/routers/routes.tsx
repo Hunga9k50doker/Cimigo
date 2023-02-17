@@ -36,7 +36,7 @@ export const routes = {
           payment: '/project/:id/payment/steps/payment',
           selectDate: '/project/:id/payment/steps/select-date',
         },
-        yourNextPayment: '/project/:id/payment/steps/make-an-order',
+        yourNextPayment: '/project/:id/payment/steps/your-next-payment',
         order: '/project/:id/payment/order',
         waiting: '/project/:id/payment/waiting',
         completed: '/project/:id/payment/completed',

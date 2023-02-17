@@ -39,6 +39,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 interface MakeAnOrderProp {
   projectId: number;
 }
+
 const sliderSettings = {
   50: {
     slidesPerView: 1,
@@ -57,39 +58,57 @@ const sliderSettings = {
     spaceBetween: 30,
   },
 };
+
 const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
+
   const dispatch = useDispatch();
+
   const { project } = useSelector((state: ReducerType) => state.project);
+
   const { isMakeAnOrder } = useSelector((state: ReducerType) => state.payment);
-  const [paymentSchedule, setPaymentSchedule] = useState<PaymentSchedule[]>([]);
+  
+  const [paymentSchedules, setPaymentSchedules] = useState<PaymentSchedule[]>([]);
+
   const [alertMakeAnOrderSuccess, setAlertMakeAnOrderSuccess] =
     useState<boolean>(false);
+
   const [alertPaymentReminder, setAlertPaymentReminder] =
     useState<PaymentSchedule>();
+
   const [onSubmitCancelSubsription, setOnSubmitCancelSubsription] =
     useState(false);
+
   const onCloseSubmitCancelSubsription = () => {
     setOnSubmitCancelSubsription(false);
   };
+
   const submitCancelSubsription = (reson: string) => {
     setOnSubmitCancelSubsription(false);
   };
+
   const cancelSubscription = () => {
     setOnSubmitCancelSubsription(true);
   };
+
   const goToPayNow = () => {};
+
   const { getCostCurrency } = usePrice();
+
   const onCloseMakeAnOrderSuccess = () => {
     setAlertMakeAnOrderSuccess(false);
   };
+
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
+
   const swiperRef = useRef<any>();
+
   useEffect(() => {
     authYourNextPayment(project, onRedirect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
+
   useEffect(() => {
     const getListPaymentSchedule = async () => {
       const data: GetPaymentSchedule = {
@@ -98,16 +117,17 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
       dispatch(setLoading(true));
       await PaymentScheduleService.getPaymentSchedule(data)
         .then((res) => {
-          setPaymentSchedule(res.data);
+          setPaymentSchedules(res.data);
         })
         .catch((e) => dispatch(setErrorMess(e)))
         .finally(() => dispatch(setLoading(false)));
     };
     getListPaymentSchedule();
   }, [dispatch, projectId]);
+
   useEffect(() => {
-    if (paymentSchedule.length) {
-      var paymentFirst = paymentSchedule[0];
+    if (paymentSchedules.length) {
+      var paymentFirst = paymentSchedules[0];
       var now = moment().add(14, "d");
       if (
         moment(paymentFirst?.dueDate).isBefore(now) &&
@@ -118,7 +138,8 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
         setAlertPaymentReminder(null);
       }
     }
-  }, [paymentSchedule]);
+  }, [paymentSchedules]);
+
   useEffect(() => {
     if (isMakeAnOrder) {
       setAlertMakeAnOrderSuccess(isMakeAnOrder);
@@ -126,6 +147,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMakeAnOrder]);
+
   return (
     <>
       <Grid classes={{ root: classes.root }}>
@@ -138,9 +160,9 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                 Fieldwork will start at the beginning of{" "}
                 {moment(project?.startPaymentSchedule).format("MMMM yyyy")} if
                 you make the first payment by{" "}
-                {moment(paymentSchedule[0]?.dueDate).format("MMMM DD, yyyy")}.
+                {moment(paymentSchedules[0]?.dueDate).format("MMMM DD, yyyy")}.
                 Subsequent payments will be made every{" "}
-                {paymentSchedule[0]?.solutionConfig?.paymentMonthSchedule}{" "}
+                {paymentSchedules[0]?.solutionConfig?.paymentMonthSchedule}{" "}
                 months.
               </ParagraphBody>
             }
@@ -213,7 +235,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                   swiperRef.current = swiper;
                 }}
               >
-                {paymentSchedule?.map((item, index) => {
+                {paymentSchedules?.map((item, index) => {
                   return (
                     <SwiperSlide key={item.id}>
                       <Box

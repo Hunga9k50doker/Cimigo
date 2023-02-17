@@ -39,14 +39,21 @@ interface SelectDateProps {
 }
 const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const dispatch = useDispatch();
+
   const { project } = useSelector((state: ReducerType) => state.project);
+
   const { i18n } = useTranslation();
+
   const { getCostCurrency } = usePrice();
-  
+
   const [listDate, setListDate] = useState<DateItem[]>([]);
+
   const [isOpenListPaymentSchedule, setIsOpenListPaymentSchedule] = useState<Boolean>(false);
+
   const [selectedDate, setSelectedDate] = useState<DateItem>();
+
   const [onSubmitMakeAnOrder, seOnSubmitMakeAnOrder] = useState(false);
+
   const [listSchedulePreview, setListSchedulePreview] = useState<PaymentSchedulePreview[]>();
 
   useEffect(() => {
@@ -88,9 +95,11 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   const selectedDatePayment = (dateItem: DateItem) => {
     setSelectedDate(dateItem);
   };
+
   const onToggleListPaymentSchedule = () => {
     setIsOpenListPaymentSchedule(!isOpenListPaymentSchedule);
   };
+
   const goToPayment = () => {
     dispatch(
       push(
@@ -101,12 +110,15 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
       )
     );
   };
+
   const goToMakeAnOrder = () => {
     seOnSubmitMakeAnOrder(true);
   };
+
   const onConfirmMakeAnOrder = () => {
     seOnSubmitMakeAnOrder(false);
   };
+
   const submitMakeAnOrder = () => {
     if (!selectedDate) return;
     dispatch(setLoading(true));
@@ -126,6 +138,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
   };
+  
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
