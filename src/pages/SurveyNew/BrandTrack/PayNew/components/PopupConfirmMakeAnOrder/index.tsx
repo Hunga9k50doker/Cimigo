@@ -36,7 +36,7 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
   const _onSubmit = () => {
     onSubmit();
   };
-  
+
   return (
     <Dialog
       scroll="paper"
@@ -81,7 +81,7 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
               __html: t(
                 "brand_track_select_start_date_content_modal_make_an_order_des_2",
                 {
-                  date: moment(selectedDate?.date).format("MMM yyyy"),
+                  date: moment(paymentSchedule?.startDate).format("MMM yyyy"),
                 }
               ),
             }}

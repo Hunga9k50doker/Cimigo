@@ -8,7 +8,7 @@ import { DialogActionsConfirm } from "components/common/dialogs/DialogActions";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -30,6 +30,9 @@ const PopupConfirmCancelSubsription = memo(
     const { t, i18n } = useTranslation();
 
     const { onCancel, onSubmit, isOpen } = props;
+
+    const [exitsPaymentProject, setExitsPaymentProject] =
+      useState<boolean>(false);
 
     const schema = useMemo(() => {
       return yup.object().shape({
@@ -62,7 +65,7 @@ const PopupConfirmCancelSubsription = memo(
         reason: "",
       });
     };
-    
+
     return (
       <Dialog
         scroll="paper"
@@ -73,8 +76,13 @@ const PopupConfirmCancelSubsription = memo(
         <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
           <DialogTitleConfirm className={classes.headerDialog}>
             <Box display="flex">
-              <Heading4 $colorName="--cimigo-blue-dark-3" translation-key="brand_track_your_next_payment_title_modal_cancel_subscription">
-                {t("brand_track_your_next_payment_title_modal_cancel_subscription")}
+              <Heading4
+                $colorName="--cimigo-blue-dark-3"
+                translation-key="brand_track_your_next_payment_title_modal_cancel_subscription"
+              >
+                {t(
+                  "brand_track_your_next_payment_title_modal_cancel_subscription"
+                )}
               </Heading4>
             </Box>
             <ButtonClose
@@ -84,65 +92,75 @@ const PopupConfirmCancelSubsription = memo(
             />
           </DialogTitleConfirm>
           <DialogContentConfirm dividers>
-            <Box sx={{ paddingTop: "24px" }}>
-              <ParagraphBody
-                $colorName="--eerie-black"
-                className={classes.description}
-                translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_des_1"
-                dangerouslySetInnerHTML={{
-                  __html: t(
-                    "brand_track_your_next_payment_content_modal_cancel_subscription_des_1",
-                    {
-                      date: moment().format("MMM yyyy"),
-                    }
-                  ),
-                }}
-              >
-              </ParagraphBody>
-              <ParagraphBody
-                $colorName="--eerie-black"
-                pt={3}
-                className={classes.description}
-                translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_des_2"
-                dangerouslySetInnerHTML={{
-                  __html: t(
-                    "brand_track_your_next_payment_content_modal_cancel_subscription_des_2",
-                    {
-                      date: moment().format("MMM yyyy"),
-                    }
-                  ),
-                }}
-              >
-              </ParagraphBody>
-              <ParagraphBody
-                $colorName="--eerie-black"
-                pt={3}
-                pb={2}
-                className={classes.description}
-                translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_des_3"
-              >
-                {t("brand_track_your_next_payment_content_modal_cancel_subscription_des_3")}
-              </ParagraphBody>
+            <Box >
+              {exitsPaymentProject ? (
+                <>
+                  <ParagraphBody
+                    pt={3}
+                    className={classes.description}
+                    $colorName="--eerie-black"
+                    translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_have_payment_des"
+                    dangerouslySetInnerHTML={{
+                      __html: t(
+                        "brand_track_your_next_payment_content_modal_cancel_subscription_have_payment_des",
+                        {
+                          endDate: moment().format("MMM yyyy"),
+                        }
+                      ),
+                    }}
+                  ></ParagraphBody>
+                </>
+              ) : (
+                <ParagraphBody
+                  $colorName="--eerie-black"
+                  pt={3}
+                  className={classes.description}
+                  translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_not_have_payment_des"
+                >
+                  {t("brand_track_your_next_payment_content_modal_cancel_subscription_not_have_payment_des")}
+                </ParagraphBody>
+              )}
               <InputTextareaAutosize
                 name="reason"
                 maxRows={10}
                 minRows={3}
                 translation-key="brand_track_your_next_payment_placeholder_input_reason"
-                placeholder={t("brand_track_your_next_payment_placeholder_input_reason")}
+                placeholder={t(
+                  "brand_track_your_next_payment_placeholder_input_reason"
+                )}
                 inputRef={register("reason")}
                 errorMessage={errors.reason?.message}
               />
             </Box>
           </DialogContentConfirm>
           <DialogActionsConfirm>
-            <Button 
-              btnType={BtnType.Secondary} 
+            <Button
+              btnType={BtnType.Secondary}
               onClick={_onCancel}
-              children={<TextBtnSmall $colorName={"--cimigo-blue"} translation-key="brand_track_your_next_payment_title_button_keep_my_subscription">{t("brand_track_your_next_payment_title_button_keep_my_subscription")}</TextBtnSmall>}
+              children={
+                <TextBtnSmall
+                  $colorName={"--cimigo-blue"}
+                  translation-key="brand_track_your_next_payment_title_button_keep_my_subscription"
+                >
+                  {t(
+                    "brand_track_your_next_payment_title_button_keep_my_subscription"
+                  )}
+                </TextBtnSmall>
+              }
             />
             <Button
               className={classes.btnStopMySubscription}
-              children={<TextBtnSmall $colorName={"--gray-10"} translation-key="brand_track_your_next_payment_title_button_stop_my_subscription"> {t("brand_track_your_next_payment_title_button_stop_my_subscription")}</TextBtnSmall>}
+              children={
+                <TextBtnSmall
+                  $colorName={"--gray-10"}
+                  translation-key="brand_track_your_next_payment_title_button_stop_my_subscription"
+                >
+                  {" "}
+                  {t(
+                    "brand_track_your_next_payment_title_button_stop_my_subscription"
+                  )}
+                </TextBtnSmall>
+              }
               type="submit"
             />
           </DialogActionsConfirm>
