@@ -183,7 +183,7 @@ const schema = yup.object().shape({
       is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
       then: yup.number()
         .typeError('Min Equity Attributes is required.')
-        .positive('Min Equity Attributes must be a positive number')
+        .min(0, 'Min Equity Attributes must be greater than or equal to 0')
         .required('Min Equity Attributes is required.'),
       otherwise: yup.number().empty().notRequired().nullable()
     }),
@@ -201,7 +201,7 @@ const schema = yup.object().shape({
       is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
       then: yup.number()
         .typeError('Min Brand Asset Recognition is required.')
-        .positive('Min Brand Asset Recognition must be a positive number')
+        .min(0, 'Min Brand Asset Recognition must be must be greater than or equal to 0')
         .required('Min Brand Asset Recognition is required.'),
       otherwise: yup.number().empty().notRequired().nullable()
     }),
