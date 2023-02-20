@@ -372,7 +372,6 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
         isOpen={onSubmitMakeAnOrder}
         project={project}
         paymentSchedule={listSchedulePreview?.[0]}
-        selectedDate={selectedDate}
         onCancel={onConfirmMakeAnOrder}
         onSubmit={() => submitMakeAnOrder()}
       />

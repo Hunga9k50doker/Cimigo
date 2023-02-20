@@ -11,15 +11,13 @@ import TextBtnSmall from "components/common/text/TextBtnSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { memo } from "react";
 import { Project } from "models/project";
-import { DateItem } from "../../SelectDate";
 import moment from "moment";
 import { PaymentSchedulePreview } from "models/payment_schedule";
 
 interface PopupConfirmMakeAnOrderProps {
   project?: Project;
   isOpen: boolean;
-  paymentSchedule:PaymentSchedulePreview;
-  selectedDate: DateItem;
+  paymentSchedule: PaymentSchedulePreview;
   onCancel: () => void;
   onSubmit: () => void;
 }
@@ -27,7 +25,7 @@ interface PopupConfirmMakeAnOrderProps {
 const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
   const { t } = useTranslation();
 
-  const { onCancel, onSubmit, isOpen, project, selectedDate, paymentSchedule } = props;
+  const { onCancel, onSubmit, isOpen, project, paymentSchedule } = props;
 
   const _onCancel = () => {
     onCancel();
@@ -46,8 +44,11 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
     >
       <DialogTitleConfirm className={classes.headerDialog}>
         <Box display="flex">
-          <Heading3 $colorName="--gray-90"  translation-key="brand_track_select_start_date_title_modal_make_an_order">
-           {t("brand_track_select_start_date_title_modal_make_an_order")}
+          <Heading3
+            $colorName="--gray-90"
+            translation-key="brand_track_select_start_date_title_modal_make_an_order"
+          >
+            {t("brand_track_select_start_date_title_modal_make_an_order")}
           </Heading3>
         </Box>
         <ButtonClose
@@ -58,8 +59,8 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
       </DialogTitleConfirm>
       <DialogContentConfirm sx={{ paddingTop: "24px" }} dividers>
         <Box sx={{ paddingTop: "24px" }}>
-          <ParagraphBody 
-            $colorName="--eerie-black" 
+          <ParagraphBody
+            $colorName="--eerie-black"
             className={classes.description}
             translation-key="brand_track_select_start_date_content_modal_make_an_order_des_1"
             dangerouslySetInnerHTML={{
@@ -70,11 +71,10 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
                 }
               ),
             }}
-          >
-          </ParagraphBody>
-          <ParagraphBody 
-            pt={3} 
-            $colorName="--eerie-black" 
+          ></ParagraphBody>
+          <ParagraphBody
+            pt={3}
+            $colorName="--eerie-black"
             className={classes.description}
             translation-key="brand_track_select_start_date_content_modal_make_an_order_des_2"
             dangerouslySetInnerHTML={{
@@ -85,24 +85,19 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
                 }
               ),
             }}
-          >
-          </ParagraphBody>
-          <ParagraphBody 
-          pt={3} 
-          $colorName="--eerie-black" 
-          className={classes.description}
-          translation-key="brand_track_select_start_date_content_modal_make_an_order_des_3"
-          dangerouslySetInnerHTML={{
-            __html: t(
-              "brand_track_select_start_date_note_selected_date",
-              {
+          ></ParagraphBody>
+          <ParagraphBody
+            pt={3}
+            $colorName="--eerie-black"
+            className={classes.description}
+            translation-key="brand_track_select_start_date_content_modal_make_an_order_des_3"
+            dangerouslySetInnerHTML={{
+              __html: t("brand_track_select_start_date_note_selected_date", {
                 date: moment(paymentSchedule?.dueDate).format("MMM DD, yyyy"),
-                scheduledMonths:paymentSchedule?.scheduledMonths,
-              }
-            ),
-          }}
-          >
-          </ParagraphBody>
+                scheduledMonths: paymentSchedule?.scheduledMonths,
+              }),
+            }}
+          ></ParagraphBody>
         </Box>
       </DialogContentConfirm>
       <DialogActionsConfirm>

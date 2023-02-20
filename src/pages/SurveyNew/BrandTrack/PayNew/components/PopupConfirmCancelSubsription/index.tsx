@@ -31,7 +31,7 @@ const PopupConfirmCancelSubsription = memo(
 
     const { onCancel, onSubmit, isOpen } = props;
 
-    const [exitsPaymentProject, setExitsPaymentProject] =
+    const [paymentSchedule, setpaymentSchedule] =
       useState<boolean>(false);
 
     const schema = useMemo(() => {
@@ -92,46 +92,44 @@ const PopupConfirmCancelSubsription = memo(
             />
           </DialogTitleConfirm>
           <DialogContentConfirm dividers>
-            <Box >
-              {exitsPaymentProject ? (
-                <>
-                  <ParagraphBody
-                    pt={3}
-                    className={classes.description}
-                    $colorName="--eerie-black"
-                    translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_have_payment_des"
-                    dangerouslySetInnerHTML={{
-                      __html: t(
-                        "brand_track_your_next_payment_content_modal_cancel_subscription_have_payment_des",
-                        {
-                          endDate: moment().format("MMM yyyy"),
-                        }
-                      ),
-                    }}
-                  ></ParagraphBody>
-                </>
-              ) : (
-                <ParagraphBody
-                  $colorName="--eerie-black"
-                  pt={3}
-                  className={classes.description}
-                  translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_not_have_payment_des"
-                >
-                  {t("brand_track_your_next_payment_content_modal_cancel_subscription_not_have_payment_des")}
-                </ParagraphBody>
-              )}
-              <InputTextareaAutosize
-                name="reason"
-                maxRows={10}
-                minRows={3}
-                translation-key="brand_track_your_next_payment_placeholder_input_reason"
-                placeholder={t(
-                  "brand_track_your_next_payment_placeholder_input_reason"
+            {paymentSchedule ? (
+              <ParagraphBody
+                pt={3}
+                className={classes.description}
+                $colorName="--eerie-black"
+                translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_have_payment_des"
+                dangerouslySetInnerHTML={{
+                  __html: t(
+                    "brand_track_your_next_payment_content_modal_cancel_subscription_have_payment_des",
+                    {
+                      endDate: moment().format("MMM yyyy"),
+                    }
+                  ),
+                }}
+              ></ParagraphBody>
+            ) : (
+              <ParagraphBody
+                $colorName="--eerie-black"
+                pt={3}
+                className={classes.description}
+                translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_not_have_payment_des"
+              >
+                {t(
+                  "brand_track_your_next_payment_content_modal_cancel_subscription_not_have_payment_des"
                 )}
-                inputRef={register("reason")}
-                errorMessage={errors.reason?.message}
-              />
-            </Box>
+              </ParagraphBody>
+            )}
+            <InputTextareaAutosize
+              name="reason"
+              maxRows={10}
+              minRows={3}
+              translation-key="brand_track_your_next_payment_placeholder_input_reason"
+              placeholder={t(
+                "brand_track_your_next_payment_placeholder_input_reason"
+              )}
+              inputRef={register("reason")}
+              errorMessage={errors.reason?.message}
+            />
           </DialogContentConfirm>
           <DialogActionsConfirm>
             <Button
@@ -155,7 +153,6 @@ const PopupConfirmCancelSubsription = memo(
                   $colorName={"--gray-10"}
                   translation-key="brand_track_your_next_payment_title_button_stop_my_subscription"
                 >
-                  {" "}
                   {t(
                     "brand_track_your_next_payment_title_button_stop_my_subscription"
                   )}
