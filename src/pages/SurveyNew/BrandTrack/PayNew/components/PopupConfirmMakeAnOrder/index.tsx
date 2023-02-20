@@ -25,7 +25,7 @@ interface PopupConfirmMakeAnOrderProps {
 }
 
 const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const { onCancel, onSubmit, isOpen, project, selectedDate, paymentSchedule } = props;
 
