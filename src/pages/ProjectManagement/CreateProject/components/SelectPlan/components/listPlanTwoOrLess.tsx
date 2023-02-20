@@ -64,8 +64,8 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
               )}
               <Card sx={{ minWidth: 362 }} className={classes.cardPlan}>
                 <CardContent className={classes.cardCustom}>
-                  <Grid container px={1}>
-                    <Grid xs={6} item>
+                  <Grid container px={{xs:1, lg: 3}} columnGap={{xs:1, sm:0}} >
+                    <Grid xs item>
                       <Typography>
                         <Heading3
                           $fontWeight={"500"}
