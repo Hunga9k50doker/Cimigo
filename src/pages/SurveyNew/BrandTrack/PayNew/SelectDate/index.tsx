@@ -212,11 +212,6 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
                   ),
                 }}
               >
-                {/* {" "}
-                <span>Note:</span> For the project to
-                start, you would need to make the first payment by{" "}
-                <span> {moment(listSchedulePreview?.[0]?.dueDate).format("MMM DD, yyyy")} </span>. Subsequent
-                payments will be made every {listSchedulePreview?.[0]?.scheduledMonths} months. */}
               </ParagraphBody>
             </Grid>
           )}
