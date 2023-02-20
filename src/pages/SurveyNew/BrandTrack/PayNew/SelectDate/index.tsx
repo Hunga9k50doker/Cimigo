@@ -23,12 +23,16 @@ import { PaymentScheduleService } from "services/payment_schedule";
 import moment from "moment";
 import PopupConfirmMakeAnOrder from "../components/PopupConfirmMakeAnOrder";
 import { authPreviewOrSelectDate } from "../models";
-import { GetPaymentSchedulePreview, PaymentSchedulePreview } from "models/payment_schedule";
+import {
+  GetPaymentSchedulePreview,
+  PaymentSchedulePreview,
+} from "models/payment_schedule";
 import clsx from "clsx";
-import {setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/Payment/actionTypes";
+import { setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/Payment/actionTypes";
 import { usePrice } from "helpers/price";
 import { setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { formatOrdinalumbers } from "utils/formatNumber";
+import { common } from "@mui/material/colors";
 
 export interface DateItem {
   id: number;
@@ -42,19 +46,21 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
 
   const { project } = useSelector((state: ReducerType) => state.project);
 
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { getCostCurrency } = usePrice();
 
   const [listDate, setListDate] = useState<DateItem[]>([]);
 
-  const [isOpenListPaymentSchedule, setIsOpenListPaymentSchedule] = useState<Boolean>(false);
+  const [isOpenListPaymentSchedule, setIsOpenListPaymentSchedule] =
+    useState<Boolean>(false);
 
   const [selectedDate, setSelectedDate] = useState<DateItem>();
 
   const [onSubmitMakeAnOrder, seOnSubmitMakeAnOrder] = useState(false);
 
-  const [listSchedulePreview, setListSchedulePreview] = useState<PaymentSchedulePreview[]>();
+  const [listSchedulePreview, setListSchedulePreview] =
+    useState<PaymentSchedulePreview[]>();
 
   useEffect(() => {
     authPreviewOrSelectDate(project, onRedirect);
@@ -63,11 +69,11 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
 
   useEffect(() => {
     let days = [];
-    var today = moment().startOf('month');
+    var today = moment().startOf("month");
     for (var i = 0; i < 6; i++) {
       days[i] = {
         id: i,
-        date: today.clone().add(i+1, 'M'),
+        date: today.clone().add(i + 1, "M"),
       };
     }
     setSelectedDate(days[0]);
@@ -127,18 +133,20 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
       startDate: moment(selectedDate.date).toDate(),
     })
       .then((res) => {
-        seOnSubmitMakeAnOrder(false)
+        seOnSubmitMakeAnOrder(false);
         dispatch(setPaymentIsMakeAnOrderSuccessReducer(true));
-        dispatch(setProjectReducer({
-          ...project,
-          status: res?.status,
-          startPaymentSchedule: res?.startPaymentSchedule
-        }))
+        dispatch(
+          setProjectReducer({
+            ...project,
+            status: res?.status,
+            startPaymentSchedule: res?.startPaymentSchedule,
+          })
+        );
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
   };
-  
+
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
@@ -147,13 +155,17 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
     <>
       <Grid classes={{ root: classes.root }}>
         <Grid pt={4}>
-          <Heading4 $colorName={"--eerie-black"}>
-            Select the date to begin tracking
+          <Heading4
+            $colorName={"--eerie-black"}
+            translation-key="brand_track_select_start_date_title"
+          >
+            {t("brand_track_select_start_date_title")}
           </Heading4>
-          <ParagraphBody $colorName={"--eerie-black"}>
-            Please choose the date when you want us to start tracking your brand
-            performance. The fieldwork will be kicked off at beginning of the
-            every month.
+          <ParagraphBody
+            $colorName={"--eerie-black"}
+            translation-key="brand_track_select_start_date_description"
+          >
+            {t("brand_track_select_start_date_description")}
           </ParagraphBody>
           <Grid className={classes.listDate}>
             <Grid ml={3} className={classes.contentListDate}>
@@ -161,12 +173,9 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
                 <Box
                   mr={2}
                   key={index}
-                  className={
-                    clsx(
-                      classes.itemDate,
-                      {[classes.itemDateActive]: index === selectedDate.id }
-                      )
-                  }
+                  className={clsx(classes.itemDate, {
+                    [classes.itemDateActive]: index === selectedDate.id,
+                  })}
                   onClick={() => {
                     selectedDatePayment(item);
                   }}
@@ -177,37 +186,63 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
                   <Heading5 className={classes.titleMonth} pb={2}>
                     {moment(item.date).format("MMM").toUpperCase()}
                   </Heading5>
-                  <ParagraphBody>{+moment(item.date).format("yyyy")}</ParagraphBody>
+                  <ParagraphBody>
+                    {+moment(item.date).format("yyyy")}
+                  </ParagraphBody>
                 </Box>
               ))}
             </Grid>
           </Grid>
           {selectedDate && (
             <Grid pb={4}>
-              <ParagraphBody $colorName={"--eerie-black"}>
-                {" "}
-                <span className={classes.bold}>Note:</span> For the project to
+              <ParagraphBody
+                $colorName={"--eerie-black"}
+                className={classes.note}
+                translation-key="brand_track_select_start_date_note_selected_date"
+                dangerouslySetInnerHTML={{
+                  __html: t(
+                    "brand_track_select_start_date_note_selected_date",
+                    {
+                      date: moment(listSchedulePreview?.[0]?.dueDate).format(
+                        "MMM DD, yyyy"
+                      ),
+                      scheduledMonths:
+                        listSchedulePreview?.[0]?.scheduledMonths,
+                    }
+                  ),
+                }}
+              >
+                {/* {" "}
+                <span>Note:</span> For the project to
                 start, you would need to make the first payment by{" "}
-                <span className={classes.bold}> {moment(listSchedulePreview?.[0]?.dueDate).format("MMM DD, yyyy")} </span>. Subsequent
-                payments will be made every {listSchedulePreview?.[0]?.scheduledMonths} months.
+                <span> {moment(listSchedulePreview?.[0]?.dueDate).format("MMM DD, yyyy")} </span>. Subsequent
+                payments will be made every {listSchedulePreview?.[0]?.scheduledMonths} months. */}
               </ParagraphBody>
             </Grid>
           )}
           {listSchedulePreview && (
             <>
               <Grid className={classes.viewPaymentScheduleTextWrapper} pl={1}>
-                <ArrowRightIcon className={clsx({[classes.rotateIcon]: isOpenListPaymentSchedule})}/>
+                <ArrowRightIcon
+                  className={clsx({
+                    [classes.rotateIcon]: isOpenListPaymentSchedule,
+                  })}
+                />
                 <ParagraphBodyUnderline
                   $colorName={"--cimigo-blue"}
                   onClick={onToggleListPaymentSchedule}
+                  translation-key="brand_track_select_start_date_view_payment_schedules"
                 >
-                  View payment schedules
+                  {t("brand_track_select_start_date_view_payment_schedules")}
                 </ParagraphBodyUnderline>
               </Grid>
               {isOpenListPaymentSchedule && (
                 <Grid pt={2}>
-                  <ParagraphBody $colorName={"--eerie-black"}>
-                    The following is the schedule for the next 4 payments:
+                  <ParagraphBody
+                    $colorName={"--eerie-black"}
+                    translation-key="brand_track_select_start_date_title_payment_schedule"
+                  >
+                    {t("brand_track_select_start_date_title_payment_schedule")}
                   </ParagraphBody>
                   <Grid className={classes.listPayment} pt={2}>
                     <Grid container spacing={2}>
@@ -216,11 +251,39 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
                           <Grid item xs={12} md={5} key={schedulePreview.order}>
                             <Box className={classes.payment}>
                               <Grid className={classes.contentPayment}>
-                                <Heading3 $colorName={"--gray-80"}>
-                                  {formatOrdinalumbers(schedulePreview.order,i18n.language)} payment
-                                </Heading3>
-                                <ParagraphBody $colorName={"--gray-80"}>
-                                  {schedulePreview.scheduledMonths} months ({`${moment(schedulePreview.startDate).format("MMM yyyy")} - ${moment(schedulePreview.endDate).format("MMM yyyy")}`})
+                                <Heading3
+                                  $colorName={"--gray-80"}
+                                  translation-key="brand_track_select_start_date_payment"
+                                  dangerouslySetInnerHTML={{
+                                    __html: t(
+                                      "brand_track_select_start_date_payment",
+                                      {
+                                        ordinal: formatOrdinalumbers(
+                                          schedulePreview.order,
+                                          i18n.language
+                                        ),
+                                      }
+                                    ),
+                                  }}
+                                ></Heading3>
+                                <ParagraphBody
+                                  $colorName={"--gray-80"}
+                                  translation-key={"common_month"}
+                                >
+                                  {schedulePreview.scheduledMonths}{" "}
+                                  {t("common_month", {
+                                    s:
+                                      schedulePreview.scheduledMonths === 1
+                                        ? ""
+                                        : t("common_s"),
+                                  })}{" "}
+                                  (
+                                  {`${moment(schedulePreview.startDate).format(
+                                    "MMM yyyy"
+                                  )} - ${moment(schedulePreview.endDate).format(
+                                    "MMM yyyy"
+                                  )}`}
+                                  )
                                 </ParagraphBody>
                                 <Heading3
                                   $colorName={"--gray-80"}
@@ -230,10 +293,19 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
                                   <span className={classes.iconDolar}>
                                     <Dolar />
                                   </span>
-                                  {getCostCurrency(schedulePreview.totalAmount)?.show}
+                                  {
+                                    getCostCurrency(schedulePreview.totalAmount)
+                                      ?.show
+                                  }
                                 </Heading3>
-                                <ParagraphSmall $colorName={"--gray-80"} pt={2}>
-                                  {`Due date: ${moment(schedulePreview.dueDate).format("MMM DD, yyyy")}`}
+                                <ParagraphSmall
+                                  $colorName={"--gray-80"}
+                                  pt={2}
+                                  translation-key={"brand_track_due_date"}
+                                >
+                                  {`${t("brand_track_due_date")} ${moment(
+                                    schedulePreview.dueDate
+                                  ).format("MMM DD, yyyy")}`}
                                 </ParagraphSmall>
                               </Grid>
                             </Box>
@@ -252,8 +324,11 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
               className={classes.btnBack}
               btnType={BtnType.Outlined}
               children={
-                <TextBtnSecondary $colorName={"--cimigi-blue"}>
-                  Back
+                <TextBtnSecondary
+                  $colorName={"--cimigi-blue"}
+                  translation-key={"common_back"}
+                >
+                  {t("common_back")}
                 </TextBtnSecondary>
               }
               onClick={goToPayment}
@@ -261,21 +336,41 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
             <Button
               className={classes.btnBack}
               btnType={BtnType.Raised}
-              children={<TextBtnSecondary>Make an order</TextBtnSecondary>}
+              children={
+                <TextBtnSecondary
+                  translation-key={
+                    "brand_track_select_start_date_button_make_an_order"
+                  }
+                >
+                  {t("brand_track_select_start_date_button_make_an_order")}
+                </TextBtnSecondary>
+              }
               onClick={goToMakeAnOrder}
             />
           </Grid>
           <Grid className={classes.disTermsOfServices} pt={1}>
             <ParagraphSmall $colorName={"--gray-60"}>
-              By click “make an order”, you agree to our &nbsp;
+              <span translation-key="brand_track_select_start_date_sub_tab_make_an_order_confirm_des_1">
+                {t(
+                  "brand_track_select_start_date_sub_tab_make_an_order_confirm_des_1"
+                )}
+              </span>{" "}
               <a
                 className={classes.linkTermOfService}
                 target="_blank"
                 rel="noopener noreferrer"
                 href={routesOutside(i18n.language)?.rapidsurveyTermsOfService}
+                translation-key="brand_track_select_start_date_sub_tab_make_an_order_confirm_des_2"
               >
-                terms of services.
-              </a>
+                {t(
+                  "brand_track_select_start_date_sub_tab_make_an_order_confirm_des_2"
+                )}
+              </a>{" "}
+              <span translation-key="brand_track_select_start_date_sub_tab_make_an_order_confirm_des_3">
+                {t(
+                  "brand_track_select_start_date_sub_tab_make_an_order_confirm_des_3"
+                )}
+              </span>
             </ParagraphSmall>
           </Grid>
         </Grid>

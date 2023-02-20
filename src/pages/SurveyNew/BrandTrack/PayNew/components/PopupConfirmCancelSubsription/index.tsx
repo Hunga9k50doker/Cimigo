@@ -73,8 +73,8 @@ const PopupConfirmCancelSubsription = memo(
         <form autoComplete="off" noValidate onSubmit={handleSubmit(_onSubmit)}>
           <DialogTitleConfirm className={classes.headerDialog}>
             <Box display="flex">
-              <Heading4 $colorName="--cimigo-blue-dark-3">
-                We are sorry to see you go!
+              <Heading4 $colorName="--cimigo-blue-dark-3" translation-key="brand_track_your_next_payment_title_modal_cancel_subscription">
+                {t("brand_track_your_next_payment_title_modal_cancel_subscription")}
               </Heading4>
             </Box>
             <ButtonClose
@@ -88,49 +88,61 @@ const PopupConfirmCancelSubsription = memo(
               <ParagraphBody
                 $colorName="--eerie-black"
                 className={classes.description}
+                translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_des_1"
+                dangerouslySetInnerHTML={{
+                  __html: t(
+                    "brand_track_your_next_payment_content_modal_cancel_subscription_des_1",
+                    {
+                      date: moment().format("MMM yyyy"),
+                    }
+                  ),
+                }}
               >
-                Your subscription is paid until the end of{" "}
-                <span>
-                  {moment().format("MMM yyyy")}
-                </span>
-                . If you would like to proceed with canceling your subscription,
-                please select “Stop my subscription” below.
               </ParagraphBody>
               <ParagraphBody
                 $colorName="--eerie-black"
                 pt={3}
                 className={classes.description}
+                translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_des_2"
+                dangerouslySetInnerHTML={{
+                  __html: t(
+                    "brand_track_your_next_payment_content_modal_cancel_subscription_des_2",
+                    {
+                      date: moment().format("MMM yyyy"),
+                    }
+                  ),
+                }}
               >
-                After <span>
-                  {moment().format("MMM yyyy")}
-                </span>, your project will stop, but you can
-                still access your results dashboard.
               </ParagraphBody>
               <ParagraphBody
                 $colorName="--eerie-black"
                 pt={3}
                 pb={2}
                 className={classes.description}
+                translation-key="brand_track_your_next_payment_content_modal_cancel_subscription_des_3"
               >
-                Please let us know why you decided to cancel your subscription?
+                {t("brand_track_your_next_payment_content_modal_cancel_subscription_des_3")}
               </ParagraphBody>
               <InputTextareaAutosize
                 name="reason"
                 maxRows={10}
                 minRows={3}
-                placeholder={"Enter your reason here"}
+                translation-key="brand_track_your_next_payment_placeholder_input_reason"
+                placeholder={t("brand_track_your_next_payment_placeholder_input_reason")}
                 inputRef={register("reason")}
                 errorMessage={errors.reason?.message}
               />
             </Box>
           </DialogContentConfirm>
           <DialogActionsConfirm>
-            <Button btnType={BtnType.Secondary} onClick={_onCancel}>
-              Keep my subscription
-            </Button>
+            <Button 
+              btnType={BtnType.Secondary} 
+              onClick={_onCancel}
+              children={<TextBtnSmall $colorName={"--cimigo-blue"} translation-key="brand_track_your_next_payment_title_button_keep_my_subscription">{t("brand_track_your_next_payment_title_button_keep_my_subscription")}</TextBtnSmall>}
+            />
             <Button
               className={classes.btnStopMySubscription}
-              children={<TextBtnSmall>Stop my subscription</TextBtnSmall>}
+              children={<TextBtnSmall $colorName={"--gray-10"} translation-key="brand_track_your_next_payment_title_button_stop_my_subscription"> {t("brand_track_your_next_payment_title_button_stop_my_subscription")}</TextBtnSmall>}
               type="submit"
             />
           </DialogActionsConfirm>

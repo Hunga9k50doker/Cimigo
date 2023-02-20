@@ -104,8 +104,8 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
                 listPaymentHistory?.data?.length ? (
                     <>
                         <Grid className={classes.paymentHistory} pt={6}>
-                            <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"}>
-                                Payment history
+                            <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"} translation-key="brand_track_your_next_payment_title_list_payment_history">
+                                {t("brand_track_your_next_payment_title_list_payment_history")}
                             </Heading4>
 
                             <Grid className={classes.listPayemnt} pt={2}>
@@ -146,8 +146,9 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
                                             <Grid item xs={12} sm={4}>
                                                 <ParagraphSmallUnderline2
                                                     className={classes.linkDownload}
+                                                    translation-key="brand_track_your_next_payment_download_invoice"
                                                 >
-                                                    Download invoice
+                                                   {t("brand_track_your_next_payment_download_invoice")}
                                                 </ParagraphSmallUnderline2>
                                             </Grid>
                                         </Grid>
@@ -180,16 +181,17 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
                     </>
                 ) : (
                     <Grid className={classes.paymentHistory} pt={6}>
-                        <Heading4 $fontWeight={"400"} $colorName={"--gray-black"}>
-                            Payment history
+                        <Heading4 $fontWeight={"400"} $colorName={"--gray-black"} translation-key="brand_track_your_next_payment_title_list_payment_history">
+                            {t("brand_track_your_next_payment_title_list_payment_history")}
                         </Heading4>
                         <Grid className={classes.listPayemnt} pt={2}>
                             <Heading4
                                 $fontWeight={"400"}
                                 textAlign={"center"}
                                 $colorName={"--gray-40"}
+                                translation-key="brand_track_your_next_payment_list_payment_history_not_found"
                             >
-                                List Payment History Not Found!
+                                {t("brand_track_your_next_payment_list_payment_history_not_found")}
                             </Heading4>
                         </Grid>
                     </Grid>
