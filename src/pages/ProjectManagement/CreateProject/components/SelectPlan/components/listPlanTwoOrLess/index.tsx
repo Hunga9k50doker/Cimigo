@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Grid";
 import { memo } from "react";
-import classes from "../styles.module.scss";
+import classes from "./styles.module.scss";
 import { Plan } from "models/Admin/plan";
 import Heading1 from "components/common/text/Heading1";
 import { DataPagination } from "models/general";
@@ -27,19 +27,11 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
   const { t } = useTranslation();
 
   return (
-    <Grid
-      container
-      className={clsx(classes.body,classes.bodyListPlanTwoOrLess)}
-      justifyContent="center"
-      alignItems={"flex-start"}
-      columnSpacing={{xs: 0, sm:4}}
-      rowSpacing={{xs: 4, sm: 5}}
-    >
+    <Grid container className={classes.body} justifyContent="center" columnSpacing={{ xs: 0, sm: 4 }} rowSpacing={{ xs: 4, sm: 5 }}>
       {plan?.data.map((plan) => {
         return (
           <Grid
             key={plan.id}
-            pt={!plan?.isMostPopular ? "0px" : "auto"}
             className={clsx(classes.card, {
               [classes.cardPopular]: plan?.isMostPopular,
             })}
@@ -48,31 +40,29 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
             md={8}
             lg={7}
           >
-            <Card
-              className={clsx(classes.cardPlan, {
-                [classes.cardPlanPopular]: plan?.isMostPopular,
-              })}>
+            <Grid
+              item
+              className={clsx(classes.layoutCard, {
+                [classes.layoutCardPopular]: plan?.isMostPopular,
+              })}
+            >
               {plan?.isMostPopular && (
                 <div className={classes.headerCart}>
-                  <ParagraphBody
-                    className={classes.title}
-                    $colorName={"--cimigo-green-dark-3"}
-                    translation-key="common_most_pupular"
-                  >
+                  <ParagraphBody className={classes.title} $colorName={"--cimigo-green-dark-3"} translation-key="common_most_pupular">
                     {t("common_most_pupular")}
                   </ParagraphBody>
                 </div>
               )}
+              <Card
+                className={clsx(classes.cardPlan, {
+                  [classes.cardPlanPopular]: plan?.isMostPopular,
+                })}
+              >
                 <CardContent className={classes.cardCustom}>
-                  <Grid container px={{xs:1, lg: 3}} columnGap={{xs:1, sm:0}} >
+                  <Grid container px={{ xs: 1, lg: 3 }} columnGap={{ xs: 1, sm: 0 }}>
                     <Grid xs item>
                       <Typography>
-                        <Heading3
-                          $fontWeight={"500"}
-                          $colorName={"--eerie-black-00"}
-                          variant="body2"
-                          variantMapping={{ body2: "span" }}
-                        >
+                        <Heading3 $fontWeight={"500"} $colorName={"--eerie-black-00"} variant="body2" variantMapping={{ body2: "span" }}>
                           {plan.title}
                         </Heading3>
                       </Typography>
@@ -112,13 +102,7 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                         </ParagraphExtraSmall>
                       </Typography>
                     </Grid>
-                    <Grid
-                      xs
-                      item
-                      display="flex"
-                      justifyContent={{ xs: "center", sm: "end" }}
-                      alignItems="center"
-                    >
+                    <Grid xs item display="flex" justifyContent={{ xs: "center", sm: "end" }} alignItems="center">
                       <CardActions className={classes.itemCenter}>
                         <Button
                           fullWidth
@@ -149,8 +133,7 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                         variantMapping={{ body2: "span" }}
                         translation-key="project_create_tab_plan_interviews"
                       >
-                        <span className={classes.sampleSize}>{plan.sampleSize}</span>{" "}
-                        {t("project_create_tab_plan_interviews")}{" "}
+                        <span className={classes.sampleSize}>{plan.sampleSize}</span> {t("project_create_tab_plan_interviews")}{" "}
                         {plan.month && (
                           <ParagraphBody
                             className={classes.expTime}
@@ -159,9 +142,9 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                             variant="body2"
                             variantMapping={{ body2: "span" }}
                           >
-                            / {plan.month}{" "}
+                            /{" "}
                             {t("common_month", {
-                              s: plan.month === 1 ? "" : t("common_s"),
+                              s: "",
                             })}
                           </ParagraphBody>
                         )}
@@ -179,7 +162,8 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                     })}
                   </Grid>
                 </CardContent>
-            </Card>
+              </Card>
+            </Grid>
           </Grid>
         );
       })}

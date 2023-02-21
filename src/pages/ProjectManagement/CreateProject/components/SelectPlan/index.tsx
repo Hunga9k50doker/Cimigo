@@ -44,6 +44,7 @@ const SelectPlan = memo(({onChangePlanSelected, plan }: SelectPlanProps) => {
         </Heading1>
         <Grid className={classes.titleSelectPlan}>
           <ParagraphBody
+            mb={4}
             $colorName={"--eerie-black"}
             translation-key="project_create_tab_plan_description_plan"
             dangerouslySetInnerHTML={{
