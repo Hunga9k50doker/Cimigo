@@ -29,15 +29,17 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
   return (
     <Grid
       container
-      gap={4}
-      className={classes.body}
+      className={clsx(classes.body,classes.bodyListPlanTwoOrLess)}
       justifyContent="center"
       alignItems={"flex-start"}
+      columnSpacing={{xs: 0, sm:4}}
+      rowSpacing={{xs: 4, sm: 5}}
     >
       {plan?.data.map((plan) => {
         return (
           <Grid
             key={plan.id}
+            pt={!plan?.isMostPopular ? "0px" : "auto"}
             className={clsx(classes.card, {
               [classes.cardPopular]: plan?.isMostPopular,
             })}
@@ -46,11 +48,10 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
             md={8}
             lg={7}
           >
-            <Grid
-              className={clsx(classes.layoutCard, {
-                [classes.layoutCardPopular]: plan?.isMostPopular,
-              })}
-            >
+            <Card
+              className={clsx(classes.cardPlan, {
+                [classes.cardPlanPopular]: plan?.isMostPopular,
+              })}>
               {plan?.isMostPopular && (
                 <div className={classes.headerCart}>
                   <ParagraphBody
@@ -62,7 +63,6 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                   </ParagraphBody>
                 </div>
               )}
-              <Card sx={{ minWidth: 362 }} className={classes.cardPlan}>
                 <CardContent className={classes.cardCustom}>
                   <Grid container px={{xs:1, lg: 3}} columnGap={{xs:1, sm:0}} >
                     <Grid xs item>
@@ -179,8 +179,7 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                     })}
                   </Grid>
                 </CardContent>
-              </Card>
-            </Grid>
+            </Card>
           </Grid>
         );
       })}

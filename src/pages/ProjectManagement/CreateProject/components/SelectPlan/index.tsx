@@ -35,6 +35,7 @@ const SelectPlan = memo(({onChangePlanSelected, plan }: SelectPlanProps) => {
     <>
       <Grid justifyContent="center" className={classes.titleSelectPlan}>
         <Heading1
+          mb={3}
           className={classes.title}
           $colorName={"--cimigo-blue"}
           translation-key="project_create_tab_plan_select_plan_title"
@@ -51,7 +52,6 @@ const SelectPlan = memo(({onChangePlanSelected, plan }: SelectPlanProps) => {
           ></ParagraphBody>
         </Grid>
       </Grid>
-      <div className={classes.selectTypePrice}></div>
         {
           plan?.data?.length > 2
             ? <ListPlanGreaterTwo

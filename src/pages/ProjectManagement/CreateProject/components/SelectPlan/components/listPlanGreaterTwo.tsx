@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { memo } from "react";
+import React,{ memo } from "react";
 import classes from "../styles.module.scss";
 import { Plan } from "models/Admin/plan";
 import Heading1 from "components/common/text/Heading1";
@@ -24,15 +24,25 @@ interface SelectPlanProps {
 // style plan have >= 3 options
 const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: SelectPlanProps) => {
   const { t } = useTranslation();
+  const [isMostPopular,setIsMostPopular] = React.useState(false)
+  const checkHasMostPopular = () => {
+    let res = plan?.data.find(item => item?.isMostPopular)
+    if (res) {
+      setIsMostPopular(true)
+    }
+  }
 
+  React.useEffect(() => {
+    checkHasMostPopular()
+  },[])
   return (
     <Grid
       container
       className={classes.body}
-      flexWrap={{ lg: "nowrap" }}
-      gap={4}
       justifyContent="center"
-      alignItems="flex-end"
+      alignItems="stretch"
+      columnSpacing={{xs: 0, sm:4}}
+      rowSpacing={{xs: 4, sm: 5}}
     >
       {plan?.data.map((plan) => {
         return (
@@ -42,15 +52,14 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
               [classes.cardPopular]: plan?.isMostPopular,
             })}
             item
-            xs={12}
+            xs
             sm={6}
-            md={4}
+            lg={4}
+            sx={{height: "auto"}}
           >
-            <Grid
-              className={clsx(classes.layoutCard, {
-                [classes.layoutCardPopular]: plan?.isMostPopular,
-              })}
-            >
+              <Card className={clsx(classes.cardPlan, {
+                [classes.cardPlanPopular]: plan?.isMostPopular,
+              })}>
               {plan?.isMostPopular && (
                 <div className={classes.headerCart}>
                   <ParagraphBody
@@ -62,7 +71,6 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                   </ParagraphBody>
                 </div>
               )}
-              <Card sx={{ minWidth: 362 }} className={classes.cardPlan}>
                 <CardContent className={classes.cardCustom}>
                   <Grid container px={{ sm: 2, xs: 1 }}>
                     <Grid xs={12} item>
@@ -172,7 +180,6 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                   />
                 </CardActions>
               </Card>
-            </Grid>
           </Grid>
         );
       })}
