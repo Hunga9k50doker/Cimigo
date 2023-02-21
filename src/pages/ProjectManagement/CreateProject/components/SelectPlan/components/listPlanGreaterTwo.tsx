@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import React,{ memo } from "react";
+import { memo } from "react";
 import classes from "../styles.module.scss";
 import { Plan } from "models/Admin/plan";
 import Heading1 from "components/common/text/Heading1";
@@ -24,17 +24,7 @@ interface SelectPlanProps {
 // style plan have >= 3 options
 const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: SelectPlanProps) => {
   const { t } = useTranslation();
-  const [isMostPopular,setIsMostPopular] = React.useState(false)
-  const checkHasMostPopular = () => {
-    let res = plan?.data.find(item => item?.isMostPopular)
-    if (res) {
-      setIsMostPopular(true)
-    }
-  }
-
-  React.useEffect(() => {
-    checkHasMostPopular()
-  },[])
+  
   return (
     <Grid
       container
