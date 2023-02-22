@@ -17,8 +17,11 @@
         color: var(--warning-dark);
     }
 }
-.description > span {
-  font-weight: 800;
+.description {
+    white-space: pre-wrap;
+    span {
+        font-weight: 800;
+    }
 }
 .btnStopMySubscription{
     color: var(--gray-10);

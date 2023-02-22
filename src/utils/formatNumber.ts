@@ -42,5 +42,5 @@ export function round(number: number) {
 const ordinals: string[] = ['th', 'st', 'nd', 'rd'];
 export const formatOrdinalumbers = (n: number, language?: string) => {
   let v = n % 100;
-  return (language === 'en' ? n : '') + (ordinals[(v - 20) % 10]||ordinals[v]||ordinals[0]);
+  return (language === 'en' ? n + (ordinals[(v - 20) % 10]||ordinals[v]||ordinals[0]) : n);
 }

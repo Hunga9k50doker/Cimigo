@@ -45,7 +45,7 @@ import PopupPayNow from "pages/SurveyNew/components/PopupPayment/PopupPayNow";
 import PopupBankTransfer from "pages/SurveyNew/components/PopupPayment/PopupBankTransfer";
 import PopupOnlinePayment from "pages/SurveyNew/components/PopupPayment/PopupOnlinePayment";
 import PopupSupportAgent from "pages/SurveyNew/components/PopupPayment/PopupSupportAgent";
-
+import { useTranslation } from "react-i18next";
 interface MakeAnOrderProp {
   projectId: number;
 }
@@ -70,8 +70,9 @@ const sliderSettings = {
 };
 
 const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
-
   const dispatch = useDispatch();
+
+  const { t, i18n } = useTranslation();
 
   const { project } = useSelector((state: ReducerType) => state.project);
 
@@ -82,6 +83,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   const [isOpenPopupSuportAgent, setIsOpenPopupSupportAgent] = useState(false);
   const [paymentScheduleForPay, setDataPaymentSchedule] = useState <PaymentSchedule>();
   const [paymentSchedules, setPaymentSchedules] = useState<PaymentSchedule[]>([]);
+
   const [alertMakeAnOrderSuccess, setAlertMakeAnOrderSuccess] =
     useState<boolean>(false);
 
@@ -193,38 +195,61 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
       <Grid classes={{ root: classes.root }}>
         {alertMakeAnOrderSuccess && (
           <Alert
-            title={"Thanks for making an order!"}
+            title={t(
+              "brand_track_your_next_payment_title_alert_make_an_order_success"
+            )}
             onClose={onCloseMakeAnOrderSuccess}
             content={
-              <ParagraphBody $colorName={"--eerie-black"}>
-                Fieldwork will start at the beginning of{" "}
-                {moment(project?.startPaymentSchedule).format("MMMM yyyy")} if
-                you make the first payment by{" "}
-                {moment(paymentSchedules[0]?.dueDate).format("MMMM DD, yyyy")}.
-                Subsequent payments will be made every{" "}
-                {paymentSchedules[0]?.solutionConfig?.paymentMonthSchedule}{" "}
-                months.
-              </ParagraphBody>
+              <ParagraphBody
+                $colorName={"--eerie-black"}
+                translation-key="brand_track_your_next_payment_content_alert_make_an_order_success_des"
+                dangerouslySetInnerHTML={{
+                  __html: t(
+                    "brand_track_your_next_payment_content_alert_make_an_order_success_des",
+                    {
+                      startPayment: moment(
+                        project?.startPaymentSchedule
+                      ).format("MMMM yyyy"),
+                      dueDate: moment(paymentSchedules[0]?.dueDate).format(
+                        "MMMM DD, yyyy"
+                      ),
+                      scheduledMonths:
+                        paymentSchedules[0]?.solutionConfig
+                          ?.paymentMonthSchedule,
+                    }
+                  ),
+                }}
+              ></ParagraphBody>
             }
             type={AlerType.Success}
           />
         )}
         {alertPaymentReminder && (
           <Alert
-            title={"A payment is about to become due."}
+            title={t("brand_track_your_next_payment_title_alert_warring")}
             content={
               <Box>
-                <ParagraphBody $colorName={"--eerie-black"}>
-                  You have a pending payment that is about to become overdue.
-                  You must process the payment by{" "}
-                  {moment(alertPaymentReminder?.dueDate).format(
-                    "MMMM DD, yyyy"
-                  )}{" "}
-                  to avoid being terminated.
-                </ParagraphBody>
-                <ParagraphBody $colorName={"--eerie-black"}>
-                  If you have made the payment, please wait for Cimigo to
-                  process.
+                <ParagraphBody
+                  $colorName={"--eerie-black"}
+                  translation-key="brand_track_your_next_payment_content_alert_warring_des_1"
+                  dangerouslySetInnerHTML={{
+                    __html: t(
+                      "brand_track_your_next_payment_content_alert_warring_des_1",
+                      {
+                        date: moment(alertPaymentReminder?.dueDate).format(
+                          "MMMM DD, yyyy"
+                        ),
+                      }
+                    ),
+                  }}
+                ></ParagraphBody>
+                <ParagraphBody
+                  $colorName={"--eerie-black"}
+                  translation-key="brand_track_your_next_payment_content_alert_warring_des_2"
+                >
+                  {t(
+                    "brand_track_your_next_payment_content_alert_warring_des_2"
+                  )}
                 </ParagraphBody>
               </Box>
             }
@@ -233,11 +258,17 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
         )}
         {!project?.status && (
           <Alert
-            title={"Your subscription canceled!"}
+            title={t(
+              "brand_track_your_next_payment_title_alert_subscription_canceled"
+            )}
             content={
-              <ParagraphBody $colorName={"--eerie-black"}>
-                You have canceled your subscription. The results are still
-                available to you.
+              <ParagraphBody
+                $colorName={"--eerie-black"}
+                translation-key="brand_track_your_next_payment_content_alert_subscription_canceled_des"
+              >
+                {t(
+                  "brand_track_your_next_payment_content_alert_subscription_canceled_des"
+                )}
               </ParagraphBody>
             }
             type={AlerType.Default}
@@ -246,16 +277,21 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
 
         <Grid pt={4}>
           <Grid className={classes.yourNextPaymentHeader}>
-            <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"}>
-              Your next payments
+            <Heading4
+              $fontWeight={"400"}
+              $colorName={"--eerie-black"}
+              translation-key="brand_track_your_next_payment_title"
+            >
+              {t("brand_track_your_next_payment_title")}
             </Heading4>
             <TextBtnSmall
               className={classes.cancelSub}
               $colorName={"--gray-80"}
               pr={1}
               onClick={cancelSubscription}
+              translation-key="brand_track_your_next_payment_title_cancel_subscription"
             >
-              Cancel subscription
+              {t("brand_track_your_next_payment_title_cancel_subscription")}
             </TextBtnSmall>
           </Grid>
           <Box className={classes.slidePayment} pt={4}>
@@ -306,8 +342,17 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                 "MMM yyyy"
                               )} - ${moment(item.end).format("MMM yyyy")}`}
                             </Heading3>
-                            <ParagraphBody $colorName={"--gray-80"}>
-                              {item.solutionConfig.paymentMonthSchedule} months
+                            <ParagraphBody
+                              $colorName={"--gray-80"}
+                              translation-key="common_month"
+                            >
+                              {item.solutionConfig.paymentMonthSchedule}{" "}
+                              {t("common_month", {
+                                s:
+                                  item.solutionConfig.paymentMonthSchedule === 1
+                                    ? ""
+                                    : t("common_s"),
+                              })}
                             </ParagraphBody>
                             <Heading3
                               $colorName={"--gray-80"}
@@ -326,15 +371,15 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   btnType={BtnType.Raised}
                                   endIcon={<CreditCardIcon />}
                                   children={
-                                    <TextBtnSmall $colorName={"--white"}>
-                                      Pay now
+                                    <TextBtnSmall $colorName={"--white"} translation-key="brand_track_your_next_payment_title_button_pay_now" >
+                                      {t("brand_track_your_next_payment_title_button_pay_now")}
                                     </TextBtnSmall>
                                   }
                                   onClick={()=>goToPayNow(item)}
                                   disabled={!!index}
                                 />
 
-                                <ParagraphSmall pt={0.5}>{`Due ${moment(
+                                <ParagraphSmall pt={0.5} translation-key="brand_track_your_next_payment_sub_due">{`${t("brand_track_your_next_payment_sub_due")} ${moment(
                                   item.dueDate
                                 ).format("MMM DD, yyyy")}`}</ParagraphSmall>
                               </Box>
@@ -347,8 +392,9 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   <ParagraphSmall
                                     $colorName={"--warning-dark"}
                                     pl={1}
+                                    translation-key="brand_track_your_next_payment_title_button_processing"
                                   >
-                                    Processing...
+                                    {t("brand_track_your_next_payment_title_button_processing")}
                                   </ParagraphSmall>
                                 </Box>
                                 <ParagraphSmallUnderline2
@@ -356,8 +402,9 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   className={classes.urlViewDetail}
                                   pt={0.5}
                                   onClick={()=>onOpenModal(item.id)}
+                                  translation-key="brand_track_your_next_payment_sub_view_detail"
                                 >
-                                  View details
+                                  {t("brand_track_your_next_payment_sub_view_detail")}
                                 </ParagraphSmallUnderline2>
                               </Box>
                             )}
@@ -369,16 +416,17 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   endIcon={<CreditCardIcon />}
                                   disabled={true}
                                   children={
-                                    <TextBtnSmall $colorName={"--gray-20"}>
-                                      Waiting
+                                    <TextBtnSmall $colorName={"--gray-20"} translation-key="brand_track_your_next_payment_title_button_waiting">
+                                      {t("brand_track_your_next_payment_title_button_waiting")}
                                     </TextBtnSmall>
                                   }
                                 />
                                 <ParagraphSmall
                                   pt={0.5}
                                   $colorName={"--gray-40"}
+                                  translation-key="brand_track_your_next_payment_sub_due"
                                 >
-                                  {`Due ${moment(item.dueDate).format(
+                                  {`${t("brand_track_your_next_payment_sub_due")} ${moment(item.dueDate).format(
                                     "MMM DD, yyyy"
                                   )}`}
                                 </ParagraphSmall>
@@ -391,15 +439,17 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                 </Box>
                                 <ParagraphSmall
                                   $colorName={"--cimigo-green-dark-2"}
+                                  translation-key="brand_track_your_next_payment_title_button_payment_completed"
                                 >
-                                  Payment completed
+                                  {t("brand_track_your_next_payment_title_button_payment_completed")}
                                 </ParagraphSmall>
                                 <ParagraphSmallUnderline2
                                   $colorName={"--gray-90"}
                                   className={classes.urlViewDetail}
                                   pt={0.5}
+                                  translation-key="brand_track_your_next_payment_download_invoice"
                                 >
-                                  Download invoice
+                                  {t("brand_track_your_next_payment_download_invoice")}
                                 </ParagraphSmallUnderline2>
                               </Box>
                             )}
