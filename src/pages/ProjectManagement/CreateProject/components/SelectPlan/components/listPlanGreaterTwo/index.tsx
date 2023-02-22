@@ -33,13 +33,13 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
       columnSpacing={{xs: 0, sm:4}}
       rowSpacing={{xs: 4, sm: 5}}
     >
-      {plan?.data.map((plan,id) => {
+      {plan?.data.map((planItem,index) => {
         return (
           <Grid
-            key={plan.id}
-            className={clsx(classes.card, {
-              [classes.cardPopular]: plan?.isMostPopular,
-              [classes.cardPopularHasMargin]: plan?.isMostPopular && id < 3,
+            key={planItem.id}
+            className={clsx(classes.card, classes.cardClearPadding, {
+              [classes.cardPopular]: planItem?.isMostPopular,
+              [classes.cardPopularHasMargin]: planItem?.isMostPopular && index < 3,
             })}
             item
             xs={12}
@@ -49,10 +49,10 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
             <Grid
               item
               className={clsx(classes.layoutCard, {
-                [classes.layoutCardPopular]: plan?.isMostPopular,
+                [classes.layoutCardPopular]: planItem?.isMostPopular,
               })}
             >
-              {plan?.isMostPopular && (
+              {planItem?.isMostPopular && (
                 <div className={classes.headerCart}>
                   <ParagraphBody className={classes.title} $colorName={"--cimigo-green-dark-3"} translation-key="common_most_pupular">
                     {t("common_most_pupular")}
@@ -65,7 +65,7 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                     <Grid xs={12} item>
                       <Typography>
                         <Heading3 $fontWeight={"500"} $colorName={"--eerie-black-00"} variant="body2" variantMapping={{ body2: "span" }}>
-                          {plan.title}
+                          {planItem.title}
                         </Heading3>
                       </Typography>
                       <Typography display={"flex"} alignItems={"center"}>
@@ -76,9 +76,9 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                           variant="body2"
                           variantMapping={{ body2: "span" }}
                         >
-                          {formatMoney(plan)}
+                          {formatMoney(planItem)}
                         </Heading1>
-                        {plan.month && (
+                        {planItem.month && (
                           <ParagraphBody
                             className={classes.expTime}
                             $colorName={"--gray-80"}
@@ -86,9 +86,9 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                             variant="body2"
                             variantMapping={{ body2: "span" }}
                           >
-                            / {plan.month}{" "}
+                            / {planItem.month}{" "}
                             {t("common_month", {
-                              s: plan.month === 1 ? "" : t("common_s"),
+                              s: planItem.month === 1 ? "" : t("common_s"),
                             })}
                           </ParagraphBody>
                         )}
@@ -118,8 +118,8 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                         variantMapping={{ body2: "span" }}
                         translation-key="project_create_tab_plan_interviews"
                       >
-                        <span className={classes.sampleSize}>{plan.sampleSize}</span> {t("project_create_tab_plan_interviews")}{" "}
-                        {plan.month && (
+                        <span className={classes.sampleSize}>{planItem.sampleSize}</span> {t("project_create_tab_plan_interviews")}{" "}
+                        {planItem.month && (
                           <ParagraphBody
                             className={classes.expTime}
                             $colorName={"--gray-80"}
@@ -132,11 +132,11 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                         )}
                       </ParagraphBody>
                     </Grid>
-                    {plan?.content.map((item, index) => {
+                    {planItem?.content.map((item, index) => {
                       return (
                         <Grid className={classes.contentPlan} key={index} xs={12} item>
                           <DoneIcon className={classes.iconContentPlan} />
-                          <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"}>
+                          <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"} className = {classes.contentPlanDescription}>
                             {item}
                           </ParagraphBody>
                         </Grid>
@@ -152,7 +152,7 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                     translation-key="setup_survey_popup_save_question_title"
                     children={<TextBtnSecondary translation-key="common_select">{t("common_select")}</TextBtnSecondary>}
                     className={classes.btnSave}
-                    onClick={() => onChangePlanSelected(plan)}
+                    onClick={() => onChangePlanSelected(planItem)}
                   />
                 </CardActions>
               </Card>

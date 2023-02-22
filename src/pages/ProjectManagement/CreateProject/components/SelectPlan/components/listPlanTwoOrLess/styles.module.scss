@@ -20,6 +20,7 @@
   }
   &:first-child:not(.cardPopular) {
     padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
   &:last-child.cardPopular {
     margin-top: 40 !important;
@@ -128,6 +129,9 @@
 }
 .iconContentPlan {
   color: var(--cimigo-blue);
+}
+.contentPlanDescription {
+  word-break: break-all;
 }
 //==================================endcard============================//
 .customSelect {
