@@ -34,9 +34,18 @@ import { setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/Payment/ac
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { EPaymentMethod, OptionItem } from "models/general";
+// Import Swiper styles
 import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import PopupPayNow from "pages/SurveyNew/components/PopupPayment/PopupPayNow";
+import PopupBankTransfer from "pages/SurveyNew/components/PopupPayment/PopupBankTransfer";
+import PopupOnlinePayment from "pages/SurveyNew/components/PopupPayment/PopupOnlinePayment";
+import PopupSupportAgent from "pages/SurveyNew/components/PopupPayment/PopupSupportAgent";
 import { useTranslation } from "react-i18next";
-
 interface MakeAnOrderProp {
   projectId: number;
 }
@@ -68,10 +77,12 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   const { project } = useSelector((state: ReducerType) => state.project);
 
   const { isMakeAnOrder } = useSelector((state: ReducerType) => state.payment);
-
-  const [paymentSchedules, setPaymentSchedules] = useState<PaymentSchedule[]>(
-    []
-  );
+  const [isOpenPopupPaynow, setIsOpenPopupPaynow] = useState(false);
+  const [isOpenPopupBankTransfer, setIsOpenPopupBankTransfer] = useState(false);
+  const [isOpenPopupOnlinePayment, setIsOpenPopupOnlinePayment] = useState(false)
+  const [isOpenPopupSuportAgent, setIsOpenPopupSupportAgent] = useState(false);
+  const [paymentScheduleForPay, setDataPaymentSchedule] = useState <PaymentSchedule>();
+  const [paymentSchedules, setPaymentSchedules] = useState<PaymentSchedule[]>([]);
 
   const [alertMakeAnOrderSuccess, setAlertMakeAnOrderSuccess] =
     useState<boolean>(false);
@@ -93,9 +104,36 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   const cancelSubscription = () => {
     setOnSubmitCancelSubsription(true);
   };
-
-  const goToPayNow = () => {};
-
+  const goToPayNow = (item: PaymentSchedule) => {
+    setDataPaymentSchedule(item);
+    setIsOpenPopupPaynow(true);
+  };
+  const onCancelPayment = () => {
+    onClose();
+    setIsOpenPopupPaynow(true);
+  }
+  const onOpenModal = (item: number) => {
+    setIsOpenPopupPaynow(false);
+    switch (item) {
+      case EPaymentMethod.BANK_TRANSFER:
+        setIsOpenPopupBankTransfer(true);
+        break;
+      case EPaymentMethod.ONEPAY_GENERAL:
+        setIsOpenPopupOnlinePayment(true);
+        break;
+      case EPaymentMethod.MAKE_AN_ORDER:
+        setIsOpenPopupSupportAgent(true);
+        break;
+      default:
+        break;
+    }
+  };
+  const onClose = () => {
+    setIsOpenPopupPaynow(false);
+    setIsOpenPopupBankTransfer(false);
+    setIsOpenPopupOnlinePayment(false);
+    setIsOpenPopupSupportAgent(false);
+  }
   const { getCostCurrency } = usePrice();
 
   const onCloseMakeAnOrderSuccess = () => {
@@ -337,7 +375,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                       {t("brand_track_your_next_payment_title_button_pay_now")}
                                     </TextBtnSmall>
                                   }
-                                  onClick={goToPayNow}
+                                  onClick={()=>goToPayNow(item)}
                                   disabled={!!index}
                                 />
 
@@ -363,6 +401,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   $colorName={"--gray-90"}
                                   className={classes.urlViewDetail}
                                   pt={0.5}
+                                  onClick={()=>onOpenModal(item.id)}
                                   translation-key="brand_track_your_next_payment_sub_view_detail"
                                 >
                                   {t("brand_track_your_next_payment_sub_view_detail")}
@@ -437,6 +476,38 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
         onCancel={onCloseSubmitCancelSubsription}
         onSubmit={(reson) => submitCancelSubsription(reson)}
       />
+      {paymentScheduleForPay && isOpenPopupPaynow && (
+        <PopupPayNow
+          isOpen={isOpenPopupPaynow}
+          onClose={onClose}
+          paymentSchedule={paymentScheduleForPay}
+          onOpenModal={onOpenModal}
+        />
+      )}
+      {paymentScheduleForPay && isOpenPopupBankTransfer && (
+          <PopupBankTransfer
+            isOpen={isOpenPopupBankTransfer}
+            onCancel={onClose}
+            onCancelPayment={onCancelPayment}
+            paymentSchedule={paymentScheduleForPay}
+          />
+        )}
+      {paymentScheduleForPay && isOpenPopupOnlinePayment && (
+        <PopupOnlinePayment
+          isOpen={isOpenPopupOnlinePayment}
+          onCancel={onClose}
+          onCancelPayment={onCancelPayment}
+          paymentSchedule={paymentScheduleForPay}
+        />
+      )}
+      {paymentScheduleForPay && isOpenPopupSuportAgent && (
+        <PopupSupportAgent
+          isOpen={isOpenPopupSuportAgent}
+          onCancel={onClose}
+          onCancelPayment={onCancelPayment}
+          paymentSchedule={paymentScheduleForPay}
+        />
+      )}
       <Footer />
     </>
   );
