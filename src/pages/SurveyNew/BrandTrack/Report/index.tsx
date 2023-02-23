@@ -24,6 +24,7 @@ import moment, { Moment } from "moment";
 import { IconDownload } from "components/icons";
 import Dashboard from "./components/Dashboard";
 import { Attachment } from "models/attachment";
+import { compareDateAndYear } from "utils/time";
 
 export enum ETimelineType {
   NOT_STARTED_YET = 1,
@@ -136,11 +137,6 @@ const Report = memo(({ projectId }: Props) => {
       .finally(() => dispatch(setLoading(false)));
   };
 
-  const compareDateAndYear = (firstDate: Moment, secondDate: Moment) => {
-    if (firstDate && secondDate && firstDate.month() === secondDate.month() && firstDate.year() === secondDate.year()) return true;
-    return false;
-  };
-
   // const getTimeLine = (date: Moment) => {
   //   const currentDate = moment();
   //   const reportOfTimeline = project?.reports.filter((itemReport) => compareDateAndYear(date, moment(itemReport?.updatedAt)));
@@ -197,6 +193,8 @@ const Report = memo(({ projectId }: Props) => {
               <TimeLineItem
                 key={index}
                 timeLineItem={item}
+                isFirstWave={!index && compareDateAndYear(listTimeline?.[index]?.date, startPaymentScheduleDate)}
+                isLastWave={false}
                 onSelect={() => {
                   setTimelineSelected(item);
                 }}

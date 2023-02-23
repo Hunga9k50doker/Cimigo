@@ -6,14 +6,16 @@ import clsx from "clsx";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import moment from "moment";
 import ParagraphBody from "components/common/text/ParagraphBody";
-import { ETimelineType } from "../..";
+import { ETimelineType, ITimeLineItem } from "../..";
 
 interface Props {
-  timeLineItem: any;
+  timeLineItem: ITimeLineItem;
+  isFirstWave: boolean;
+  isLastWave: boolean;
   onSelect?: () => void;
 }
 
-const TimeLineItem = memo(({ timeLineItem, onSelect }: Props) => {
+const TimeLineItem = memo(({ timeLineItem, isFirstWave, isLastWave, onSelect }: Props) => {
   return (
     <Box className={classes.root}>
       {timeLineItem.state === ETimelineType.DELIVERED ? (
@@ -34,12 +36,12 @@ const TimeLineItem = memo(({ timeLineItem, onSelect }: Props) => {
           <ParagraphExtraSmall $colorName="--cimigo-blue" $fontWeight={600}>
             {moment(timeLineItem.date).year()}
           </ParagraphExtraSmall>
-          {timeLineItem?.isFirstWave && (
+          {isFirstWave && (
             <ParagraphExtraSmall $colorName="--cimigo-blue" $fontWeight={600}>
               (First wave)
             </ParagraphExtraSmall>
           )}
-          {timeLineItem?.isLastWave && (
+          {isLastWave && (
             <ParagraphExtraSmall $colorName="--cimigo-blue" $fontWeight={600}>
               (Last wave)
             </ParagraphExtraSmall>
@@ -63,12 +65,12 @@ const TimeLineItem = memo(({ timeLineItem, onSelect }: Props) => {
           <ParagraphExtraSmall $colorName="--warning-dark" $fontWeight={600}>
             {moment(timeLineItem.date).year()}
           </ParagraphExtraSmall>
-          {timeLineItem?.isFirstWave && (
+          {isFirstWave && (
             <ParagraphExtraSmall $colorName="--warning-dark" $fontWeight={600}>
               (First wave)
             </ParagraphExtraSmall>
           )}
-          {timeLineItem?.isLastWave && (
+          {isLastWave && (
             <ParagraphExtraSmall $colorName="--warning-dark" $fontWeight={600}>
               (Last wave)
             </ParagraphExtraSmall>
@@ -88,12 +90,12 @@ const TimeLineItem = memo(({ timeLineItem, onSelect }: Props) => {
           <ParagraphExtraSmall $colorName="--gray-40" $fontWeight={600}>
             {moment(timeLineItem.date).year()}
           </ParagraphExtraSmall>
-          {timeLineItem?.isFirstWave && (
+          {isFirstWave && (
             <ParagraphExtraSmall $colorName="--gray-40" $fontWeight={600}>
               (First wave)
             </ParagraphExtraSmall>
           )}
-          {timeLineItem?.isLastWave && (
+          {isLastWave && (
             <ParagraphExtraSmall $colorName="--gray-40" $fontWeight={600}>
               (Last wave)
             </ParagraphExtraSmall>
