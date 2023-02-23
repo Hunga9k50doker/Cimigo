@@ -192,7 +192,7 @@ const PopupBankTransfer = memo((props: Props) => {
                     {t("brand_track_popup_paynow_bank_transfer_transfer_amount")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    {getCostCurrency(paymentSchedule.totalAmountUSD)?.USDShow}
+                    {getCostCurrency(paymentSchedule.totalAmount)?.USDShow}
                   </Heading6>
                 </BoxCustom>
                 <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5}>
