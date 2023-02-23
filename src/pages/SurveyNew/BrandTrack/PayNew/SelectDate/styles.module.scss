@@ -10,8 +10,6 @@
 }
 .itemDate{
   border: 1px solid var(--gray-20);
-  max-width: 120px;
-  max-width: 104px;
   padding: 16px 36px;
   text-align: center;
   border-radius: 5px;
@@ -50,8 +48,10 @@
     flex-wrap: wrap;
   }
 }
-.bold{
-  font-weight: 600;
+.note{
+  span {
+    font-weight: 600;
+  }
 }
 .linkViewPS{
   display: flex;
@@ -70,6 +70,14 @@
 }
 .disTermsOfServices{
   text-align: right;
+}
+
+.viewPaymentScheduleTextWrapper {
+  display: flex;
+  align-items: center;
+  .rotateIcon {
+    transform: rotate(90deg);
+  }
 }
 .listPayment{
   .payment{

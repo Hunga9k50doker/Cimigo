@@ -24,15 +24,20 @@ import PopupPayment from "../components/PopupPayment";
 import Accordion from "../components/Accordion";
 import Span from "../components/Span";
 import BoxCustom from "../components/BoxCustom";
-
+import { PaymentSchedule } from "models/payment_schedule";
+import moment from "moment";
+import { usePrice } from "helpers/price";
 interface Props {
   isOpen: boolean;
+  paymentSchedule: PaymentSchedule;
   onCancel: () => void;
+  onCancelPayment: () => void;
 }
 
 const PopupSupportAgent = memo((props: Props) => {
-  const { isOpen, onCancel } = props;
+  const { isOpen, paymentSchedule, onCancel, onCancelPayment } = props;
   const { t } = useTranslation();
+  const { getCostCurrency } = usePrice();
 
   return (
     <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
@@ -40,23 +45,26 @@ const PopupSupportAgent = memo((props: Props) => {
         <Box display="flex" alignItems={{ sm: "flex-end", xs: "flex-start" }} mt={3}>
           <ImageMain src={images.imgSupportAgent} alt="" />
           <Box ml={{ sm: 3 }}>
-            <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="">
-              Support on payment
+            <Heading1 whiteSpace={{ lg: "nowrap" }} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_support_agent_title">
+              {t("brand_track_popup_paynow_support_agent_title")}
             </Heading1>
-            <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="">
-              Dec 2022 - Feb 2023 payment
+            <Heading3 $fontWeight={500} $colorName="--gray-80" my={1} translation-key="brand_track_paynow_popup_payment_title">
+              {t("brand_track_paynow_popup_payment_title", {
+                start: moment(paymentSchedule.start).format("MMM yyyy"),
+                end: moment(paymentSchedule.end).format("MMM yyyy"),
+              })}
             </Heading3>
             <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
               <Box display="flex">
                 <IconMoneyCash />
                 <Heading4 ml={1} mr={3} $fontWeight={400} translation-key="">
-                  165,000,000 đ
+                  {getCostCurrency(paymentSchedule.totalAmount)?.show}
                 </Heading4>
               </Box>
               <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
                 <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
-                <Heading4 $fontWeight={400} ml={1} $colorName={"--gray-80"}>
-                  Due date: Nov 25, 2022
+                <Heading4 $fontWeight={400} ml={1} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_due_date_title">
+                  {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentSchedule.dueDate).format("MMM yyyy") })}
                 </Heading4>
               </Box>
             </Grid>
@@ -68,48 +76,58 @@ const PopupSupportAgent = memo((props: Props) => {
         <ParagraphBody
           paddingTop={2}
           $colorName="--gray-80"
-          translation-key="quotas_invalid_popup_subtitle"
+          translation-key="brand_track_popup_paynow_support_agent_subtitle"
           dangerouslySetInnerHTML={{
-            __html:
-              "You have chosen <strong>another payment method</strong> and provided us with your contact information below so that we can assist you.",
+            __html: `${t("brand_track_popup_paynow_support_agent_subtitle")}`,
           }}
         />
         <Grid>
           <Accordion $accordionOrderSummary={true}>
             <AccordionSummary aria-controls="panel1a-content">
-              <Heading4 $colorName={"--cimigo-blue"} display={"flex"} alignItems={"center"}>
-                Contact information
+              <Heading4
+                $colorName={"--cimigo-blue"}
+                display={"flex"}
+                alignItems={"center"}
+                translation-key="brand_track_popup_paynow_contact_information"
+              >
+                {t("brand_track_popup_paynow_contact_information")}
               </Heading4>
             </AccordionSummary>
             <AccordionDetails>
               <Grid display={"flex"} flexDirection="column" gap={1}>
                 <BoxCustom mt={1} pt={2} $borderTop={true} $flexBox={true}>
-                  <ParagraphSmall>Contact name</ParagraphSmall>
-                  <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    Nguyen Thanh Son
+                  <ParagraphSmall translation-key="brand_track_popup_paynow_contact_name">
+                    {t("brand_track_popup_paynow_contact_name")}
+                  </ParagraphSmall>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_name_value">
+                    {t("brand_track_popup_paynow_contact_name_value")}
                   </Heading6>
                 </BoxCustom>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
-                  <ParagraphSmall>Contact email</ParagraphSmall>
-                  <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    sondeptrai@cimigo.com
+                  <ParagraphSmall translation-key="brand_track_popup_paynow_contact_email">
+                    {t("brand_track_popup_paynow_contact_email")}
+                  </ParagraphSmall>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_email_value">
+                    {t("brand_track_popup_paynow_contact_email_value")}
                   </Heading6>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
-                  <ParagraphSmall>Contact phone</ParagraphSmall>
-                  <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    +840932123321
+                  <ParagraphSmall translation-key="brand_track_popup_paynow_contact_phone">
+                    {t("brand_track_popup_paynow_contact_phone")}
+                  </ParagraphSmall>
+                  <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_phone_value">
+                    {t("brand_track_popup_paynow_contact_phone_value")}
                   </Heading6>
                 </Grid>
               </Grid>
             </AccordionDetails>
           </Accordion>
-          <ParagraphBody $colorName="--eerie-black" mt={3}>
-            Our consultants will contact you within the next 2 working days.
+          <ParagraphBody $colorName="--eerie-black" mt={3} translation-key="brand_track_popup_paynow_support_agent_subtitle_2">
+            {t("brand_track_popup_paynow_support_agent_subtitle_2")}
           </ParagraphBody>
         </Grid>
         <DowloadInvoice />
-        <Ordersummary />
+        <Ordersummary paymentSchedule={paymentSchedule} />
         <Box mt={2}>
           <ParagraphBody
             className="nestedLink"
@@ -118,8 +136,11 @@ const PopupSupportAgent = memo((props: Props) => {
             dangerouslySetInnerHTML={{ __html: t("payment_billing_order_bank_transfer_sub_6") }}
           />
         </Box>
-        <Typography my={3} color={"var(--eerie-black)"} textAlign="center">
-          Change payment method? <Span>Click here</Span>
+        <Typography my={3} color={"var(--eerie-black)"} textAlign="center" translation-key="brand_track_popup_paynow_change_payment_method">
+          {t("brand_track_popup_paynow_change_payment_method")}{" "}
+          <Span translation-key="brand_track_popup_paynow_action_1" onClick={onCancelPayment}>
+            {t("brand_track_popup_paynow_action_1")}
+          </Span>
         </Typography>
       </DialogContentConfirm>
     </PopupPayment>

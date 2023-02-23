@@ -114,9 +114,6 @@
         }
         .urlViewDetail{
             text-align: center;
-            @media only screen and (max-width: 980px) {
-                text-align: left;
-            }
         }
     }
 }
@@ -125,16 +122,28 @@
     display: flex;
     justify-content: space-between;
     .contentRightSwiper{
+        width: 35%;
         display: flex;
         align-items: center;
+    }
+    .contentLeftSwiper{
+        width: 65%;
     }
 }
 .slidePaymentSwiper{
     display: flex;
     margin: 0px -33px;
-    [class~=swiper-slide]
+    @media only screen and (max-width: 785px) {
+        margin: 0px 0px;
+    }
+    [class~=swiper] {
+        height: 100%;
+    }
+    [class~=swiper-slide]{
+        height: auto !important;
+    }
     [class~=swiper]{
-        padding-top: 50px;
+        padding-top: 0px;
     }
     [class~=mySwiper]:hover{
         cursor: pointer;
@@ -188,7 +197,19 @@
 }
 .iconSlideLeft{
     right: 24px;
+    @media only screen and (max-width: 785px) {
+        display: none;
+    }
 }
 .iconSlideRight{
     left: 24px;
+    @media only screen and (max-width: 785px) {
+        display: none;
+    }
+}
+.subPaymentCompleted{
+    text-align: center;
+}
+.swiperContentt{
+    height: 100% !important;
 }

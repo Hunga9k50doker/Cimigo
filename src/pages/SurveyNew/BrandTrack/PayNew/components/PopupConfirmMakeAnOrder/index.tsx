@@ -11,30 +11,30 @@ import TextBtnSmall from "components/common/text/TextBtnSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { memo } from "react";
 import { Project } from "models/project";
-import { DateItem } from "../../SelectDate";
 import moment from "moment";
 import { PaymentSchedulePreview } from "models/payment_schedule";
 
 interface PopupConfirmMakeAnOrderProps {
   project?: Project;
   isOpen: boolean;
-  paymentSchedule:PaymentSchedulePreview;
-  selectedDate: DateItem;
+  paymentSchedule: PaymentSchedulePreview;
   onCancel: () => void;
   onSubmit: () => void;
 }
 
 const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
-  const { onCancel, onSubmit, isOpen, project, selectedDate, paymentSchedule } = props;
+  const { onCancel, onSubmit, isOpen, project, paymentSchedule } = props;
 
   const _onCancel = () => {
     onCancel();
   };
+
   const _onSubmit = () => {
     onSubmit();
   };
+
   return (
     <Dialog
       scroll="paper"
@@ -44,8 +44,11 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
     >
       <DialogTitleConfirm className={classes.headerDialog}>
         <Box display="flex">
-          <Heading3 $colorName="--gray-90">
-            Confirm making an order
+          <Heading3
+            $colorName="--gray-90"
+            translation-key="brand_track_select_start_date_title_modal_make_an_order"
+          >
+            {t("brand_track_select_start_date_title_modal_make_an_order")}
           </Heading3>
         </Box>
         <ButtonClose
@@ -56,17 +59,45 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
       </DialogTitleConfirm>
       <DialogContentConfirm sx={{ paddingTop: "24px" }} dividers>
         <Box sx={{ paddingTop: "24px" }}>
-          <ParagraphBody $colorName="--eerie-black" className={classes.description}>
-            Please confirm to make an order for <span>{project?.name}</span> project.
-          </ParagraphBody>
-          <ParagraphBody pt={3} $colorName="--eerie-black" className={classes.description}>
-            The fieldwork will be kicked off at beginning of <span>{moment(selectedDate?.date).format("MMM yyyy")}</span>.
-          </ParagraphBody>
-          <ParagraphBody pt={3} $colorName="--eerie-black" className={classes.description}>
-            <span>Note:</span> For the project to start, you will need to make the first
-            payment by <span>{moment(paymentSchedule?.dueDate).format("MMM DD, yyyy")}</span>. Subsequent payments will be made every {paymentSchedule?.scheduledMonths}{" "}
-            months.
-          </ParagraphBody>
+          <ParagraphBody
+            $colorName="--eerie-black"
+            className={classes.description}
+            translation-key="brand_track_select_start_date_content_modal_make_an_order_des_1"
+            dangerouslySetInnerHTML={{
+              __html: t(
+                "brand_track_select_start_date_content_modal_make_an_order_des_1",
+                {
+                  project: project?.name,
+                }
+              ),
+            }}
+          ></ParagraphBody>
+          <ParagraphBody
+            pt={3}
+            $colorName="--eerie-black"
+            className={classes.description}
+            translation-key="brand_track_select_start_date_content_modal_make_an_order_des_2"
+            dangerouslySetInnerHTML={{
+              __html: t(
+                "brand_track_select_start_date_content_modal_make_an_order_des_2",
+                {
+                  date: moment(paymentSchedule?.startDate).format("MMM yyyy"),
+                }
+              ),
+            }}
+          ></ParagraphBody>
+          <ParagraphBody
+            pt={3}
+            $colorName="--eerie-black"
+            className={classes.description}
+            translation-key="brand_track_select_start_date_content_modal_make_an_order_des_3"
+            dangerouslySetInnerHTML={{
+              __html: t("brand_track_select_start_date_note_selected_date", {
+                date: moment(paymentSchedule?.dueDate).format("MMM DD, yyyy"),
+                scheduledMonths: paymentSchedule?.scheduledMonths,
+              }),
+            }}
+          ></ParagraphBody>
         </Box>
       </DialogContentConfirm>
       <DialogActionsConfirm>
@@ -80,8 +111,8 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
         <Button
           btnType={BtnType.Raised}
           children={
-            <TextBtnSmall>
-              Make an order
+            <TextBtnSmall translation-key="brand_track_select_start_date_button_make_an_order">
+              {t("brand_track_select_start_date_button_make_an_order")}
             </TextBtnSmall>
           }
           type="submit"

@@ -18,25 +18,24 @@ interface AlertProp {
   type?: AlerType;
   content?: React.ReactNode;
   title?: string;
+  onClose?: () => void;
 }
 const Alert = memo((props: AlertProp) => {
-  const { type, content, title, ...rest } = props;
-  const [closeAlert, setCloseAlert] = useState("");
+  const { type, content, title, onClose, ...rest } = props;
   return (
     <Box
-    
-      className={clsx(classes.alert, 
+      className={clsx(
+        classes.alert,
         {
-          [classes.borderLeftSuccess]: type === AlerType.Success
+          [classes.borderLeftSuccess]: type === AlerType.Success,
         },
         {
-          [classes.borderLeftWarning]: type === AlerType.Warning
+          [classes.borderLeftWarning]: type === AlerType.Warning,
         },
         {
-          [classes.borderLeft]: type === AlerType.Default
+          [classes.borderLeft]: type === AlerType.Default,
         }
       )}
-      sx={{ display: closeAlert}}
       {...rest}
     >
       <Box className={classes.left}>
@@ -60,17 +59,17 @@ const Alert = memo((props: AlertProp) => {
           {content}
         </Box>
       </Box>
-      <Box className={classes.right}>
-        <Box className={classes.btnClose}>
-          <Button
-            startIcon={<CloseIcon />}
-            btnType={BtnType.Text}
-            onClick={() => {
-              setCloseAlert("none !important");
-            }}
-          />
+      {onClose && (
+        <Box className={classes.right}>
+          <Box className={classes.btnClose}>
+            <Button
+              startIcon={<CloseIcon />}
+              btnType={BtnType.Text}
+              onClick={onClose}
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 });

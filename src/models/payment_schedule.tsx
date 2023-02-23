@@ -1,3 +1,5 @@
+import { ConfigData } from "./config";
+import { Project } from "./project";
 export interface GetPaymentSchedulePreview {
   projectId: number;
   startDate: Date;
@@ -25,7 +27,7 @@ export enum PaymentScheduleStatus {
   PAID,
   OVERDUE,
 }
-export interface PaymentSchedule{
+export interface PaymentSchedule {
   id: number;
   solutionConfig: SolutionConfig;
   start: Date;
@@ -34,7 +36,10 @@ export interface PaymentSchedule{
   totalAmount: number;
   totalAmountUSD: number;
   status: number;
-
+  project: Project;
+  sampleSizeCostPerMonth: number;
+  vat: number;
+  systemConfig: ConfigData;
 }
 export interface PaymentScheduleMakeAnOrder{
   projectId: number;
