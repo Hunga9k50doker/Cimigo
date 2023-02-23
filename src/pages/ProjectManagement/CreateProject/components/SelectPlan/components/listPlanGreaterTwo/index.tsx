@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { memo } from "react";
+import React,{ memo } from "react";
 import classes from "./styles.module.scss";
 import { Plan } from "models/Admin/plan";
 import Heading1 from "components/common/text/Heading1";
@@ -24,7 +24,17 @@ interface SelectPlanProps {
 // style plan have >= 3 options
 const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: SelectPlanProps) => {
   const { t } = useTranslation();
-
+  const [isNotPopular, setIsNotPopular] = React.useState(false);
+  
+  React.useEffect(() => {
+    const checkAllMostPopular = () => {
+      if (plan?.data) {
+        const res = plan.data.slice(0,3).every((item) => !item.isMostPopular);
+        setIsNotPopular(res);
+      }
+    };
+    checkAllMostPopular();
+  }, [plan?.data]);
   return (
     <Grid
       container
@@ -37,9 +47,10 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
         return (
           <Grid
             key={planItem.id}
-            className={clsx(classes.card, classes.cardClearPadding, {
+            className={clsx(classes.card, {
               [classes.cardPopular]: planItem?.isMostPopular,
               [classes.cardPopularHasMargin]: planItem?.isMostPopular && index < 3,
+              [classes.cardClearPadding]: isNotPopular && index < 3,
             })}
             item
             xs={12}
@@ -136,7 +147,7 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                       return (
                         <Grid className={classes.contentPlan} key={index} xs={12} item>
                           <DoneIcon className={classes.iconContentPlan} />
-                          <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"} className = {classes.contentPlanDescription}>
+                          <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"} className={classes.contentPlanDescription}>
                             {item}
                           </ParagraphBody>
                         </Grid>
