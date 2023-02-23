@@ -1,0 +1,22 @@
+.root {
+  position: absolute;
+  top: 0;
+  background-color: var(--white);
+  width: 100%;
+  padding: 0 24px;
+}
+
+.hidden {
+  display: none;
+}
+
+.actionWrapper {
+  display: flex;
+  @media only screen and (max-width: 575px) {
+    flex-direction: column;
+  }
+}
+
+.iframe {
+  border: none;
+}

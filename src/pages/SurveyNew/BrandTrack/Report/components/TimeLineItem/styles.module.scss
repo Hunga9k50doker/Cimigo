@@ -1,0 +1,70 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lineWrapper {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  margin: 10px 0;
+}
+
+.line {
+  width: 110px;
+  height: 2px;
+  background-color: var(--gray-40);
+  @media only screen and (max-width: 1199px) {
+    width: 100px;
+  }
+  @media only screen and (max-width: 991px) {
+    width: 70px;
+  }
+  @media only screen and (max-width: 767px) {
+    width: 60px;
+  }
+}
+
+.deliveredLine {
+  background-color: var(--cimigo-blue);
+}
+
+.inProgressLine {
+  background-color: var(--warning-dark);
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-40);
+}
+.circleInProgress {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px dashed var(--warning-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .circle {
+    width: 16.5px;
+    height: 16.5px;
+    background-color: var(--warning-dark);
+    border: unset;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+.circleDelivered {
+  background-color: var(--cimigo-blue);
+  border: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    cursor: pointer;
+  }
+}

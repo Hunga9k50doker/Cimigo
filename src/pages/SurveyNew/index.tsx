@@ -30,6 +30,7 @@ import Pay from "./Pay";
 import BrandTrackPay from "./BrandTrack/PayNew";
 import ProjectHelper from "helpers/project";
 import Report from "./Report";
+import BrandTrackReport from "./BrandTrack/Report";
 import { ETabRightPanel } from "models/project";
 import { useChangePrice } from "hooks/useChangePrice";
 import { Helmet } from "react-helmet";
@@ -350,7 +351,29 @@ export const Survey = () => {
               }
             }} 
           />
-          <Route exact path={routes.project.detail.report} render={(routeProps) => <Report {...routeProps} projectId={Number(id)} />} />
+          <Route 
+            exact 
+            path={routes.project.detail.report} 
+            render={(routeProps) => {
+              switch(project?.solution?.typeId) {
+                case ESOLUTION_TYPE.VIDEO_CHOICE:
+                case ESOLUTION_TYPE.PACK:
+                  return (
+                    <Report 
+                      {...routeProps} 
+                      projectId={Number(id)} 
+                    />
+                  )
+                case ESOLUTION_TYPE.BRAND_TRACKING:
+                  return (
+                    <BrandTrackReport
+                      {...routeProps} 
+                      projectId={Number(id)} 
+                    />
+                  )
+              }
+            }} 
+          />
 
           <Redirect from={routes.project.detail.root} to={routes.project.detail.setupSurvey} />
         </Switch>
