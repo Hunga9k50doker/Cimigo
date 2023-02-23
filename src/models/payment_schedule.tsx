@@ -33,6 +33,7 @@ export interface PaymentSchedule {
   start: Date;
   end: Date;
   dueDate: Date;
+  amount: number;
   totalAmount: number;
   totalAmountUSD: number;
   status: number;

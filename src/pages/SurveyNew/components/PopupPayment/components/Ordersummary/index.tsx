@@ -40,7 +40,7 @@ const Ordersummary = memo(({ paymentSchedule }: PropsType) => {
                 })}
               </Heading6>
               <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
-                {getCostCurrency(paymentSchedule.sampleSizeCostPerMonth * (paymentSchedule.solutionConfig.paymentMonthSchedule ?? 1))?.show}
+                {getCostCurrency(paymentSchedule.amount)?.show}
               </Heading6>
             </BoxCustom>
             <ParagraphExtraSmall $colorName={"--gray-60"}>
@@ -56,7 +56,7 @@ const Ordersummary = memo(({ paymentSchedule }: PropsType) => {
                 {t("common_sub_total")}
               </ParagraphSmall>
               <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
-                {getCostCurrency(paymentSchedule.sampleSizeCostPerMonth * (paymentSchedule.solutionConfig.paymentMonthSchedule ?? 1))?.show}
+                {getCostCurrency(paymentSchedule.amount)?.show}
               </Heading6>
             </BoxCustom>
             <BoxCustom $flexBox={true}>
