@@ -24,7 +24,7 @@ import moment, { Moment } from "moment";
 import { IconDownload } from "components/icons";
 import Dashboard from "./components/Dashboard";
 import { Attachment } from "models/attachment";
-import { compareDateAndYear } from "utils/time";
+import { Dot } from "components/common/dot/Dot";
 
 export enum ETimelineType {
   NOT_STARTED_YET = 1,
@@ -77,7 +77,7 @@ const Report = memo(({ projectId }: Props) => {
     if (currentDate < startPaymentScheduleDate) {
       for (let i = 0; i <= 3; i++) {
         _listTimeline.push({
-          date: moment(startPaymentScheduleDate).add(i, "month"),
+          date: moment(startPaymentScheduleDate).add(i, "month").startOf('month'),
           state: ETimelineType.NOT_STARTED_YET,
           report: null,
         });
@@ -90,21 +90,21 @@ const Report = memo(({ projectId }: Props) => {
 
       // if (monthDiff <= 2) {
       //   for (let i = monthDiff; i >= 0; i--) {
-      //     _listTimeline.push(getTimeLine(moment(currentDate).subtract(i, "month")));
+      //     _listTimeline.push(getTimeLine(moment(currentDate).subtract(i, "month").startOf('month')));
       //   }
       //   for (let i = 1; _listTimeline.length <= 3; i++) {
       //     _listTimeline.push({
-      //       date: moment(currentDate).add(i, "month"),
+      //       date: moment(currentDate).add(i, "month").startOf('month'),
       //       state: ETimelineType.NOT_STARTED_YET,
       //       report: null,
       //     });
       //   }
       // } else {
       //   for (let i = 2; i >= 0; i--) {
-      //     _listTimeline.push(getTimeLine(moment(currentDate).subtract(i, "month")));
+      //     _listTimeline.push(getTimeLine(moment(currentDate).subtract(i, "month").startOf('month')));
       //   }
       //   _listTimeline.push({
-      //     date: moment(currentDate).add(1, "month"),
+      //     date: moment(currentDate).add(1, "month").startOf('month'),
       //     state: ETimelineType.NOT_STARTED_YET,
       //     report: null,
       //   });
@@ -113,7 +113,7 @@ const Report = memo(({ projectId }: Props) => {
       // Fake data
       for (let i = 0; i <= 3; i++) {
         _listTimeline.push({
-          date: moment(startPaymentScheduleDate).add(i, "month"),
+          date: moment(startPaymentScheduleDate).add(i, "month").startOf('month'),
           state: i === 0 ?  ETimelineType.DELIVERED : i === 1 ? ETimelineType.IN_PROGRESS : ETimelineType.NOT_STARTED_YET,
           report: null,
         });
@@ -124,7 +124,7 @@ const Report = memo(({ projectId }: Props) => {
   }, [dispatch, project]);
 
   useEffect(() => {
-    setTimelineSelected(listTimeline?.filter((item) => compareDateAndYear(moment(), item?.date))[0] || null);
+    setTimelineSelected(listTimeline?.filter((item) => moment().isSame(item?.date, "month"))[0] || null);
   }, [listTimeline]);
 
   const onDownLoad = () => {
@@ -139,7 +139,7 @@ const Report = memo(({ projectId }: Props) => {
 
   // const getTimeLine = (date: Moment) => {
   //   const currentDate = moment();
-  //   const reportOfTimeline = project?.reports.filter((itemReport) => compareDateAndYear(date, moment(itemReport?.updatedAt)));
+  //   const reportOfTimeline = project?.reports.filter((itemReport) => moment(date).isSame(itemReport?.updatedAt, "month"));
   //   if (!!reportOfTimeline.length) {
   //     return {
   //       date: date,
@@ -149,7 +149,7 @@ const Report = memo(({ projectId }: Props) => {
   //   } else {
   //     return {
   //       date: date,
-  //       state: compareDateAndYear(date, currentDate) ? ETimelineType.IN_PROGRESS : ETimelineType.NOT_STARTED_YET,
+  //       state: moment(date).isSame(currentDate, "month") ? ETimelineType.IN_PROGRESS : ETimelineType.NOT_STARTED_YET,
   //       report: null,
   //     };
   //   }
@@ -168,7 +168,7 @@ const Report = memo(({ projectId }: Props) => {
       {isReportReady ? (
         <Grid className={classes.content}>
           <Grid className={classes.timelineWrapper}>
-            {compareDateAndYear(listTimeline?.[0]?.date, startPaymentScheduleDate) ? (
+            {moment(listTimeline?.[0]?.date).isSame(startPaymentScheduleDate, "month") ? (
               <Box
                 className={clsx(classes.headPoint, {
                   [classes.deliveredHeadPoint]: listTimeline?.[0]?.state === ETimelineType.DELIVERED,
@@ -183,9 +183,9 @@ const Report = memo(({ projectId }: Props) => {
                     [classes.inProgressPoint]: listTimeline?.[0]?.state === ETimelineType.IN_PROGRESS,
                   })}
                 >
-                  <Box sx={{ height: "4px", width: "4px", borderRadius: "50%", backgroundColor: "var(--gray-40)" }}></Box>
-                  <Box sx={{ height: "8px", width: "8px", borderRadius: "50%", backgroundColor: "var(--gray-40)" }}></Box>
-                  <Box sx={{ height: "12px", width: "12px", borderRadius: "50%", backgroundColor: "var(--gray-40)" }}></Box>
+                  <Dot/>
+                  <Dot $height={"8px"} $width={"8px"}/>
+                  <Dot $height={"12px"} $width={"12px"}/>
                 </Box>
               </Box>
             )}
@@ -193,7 +193,7 @@ const Report = memo(({ projectId }: Props) => {
               <TimeLineItem
                 key={index}
                 timeLineItem={item}
-                isFirstWave={!index && compareDateAndYear(listTimeline?.[index]?.date, startPaymentScheduleDate)}
+                isFirstWave={!index && moment(listTimeline?.[index]?.date).isSame(startPaymentScheduleDate, "month")}
                 isLastWave={false}
                 onSelect={() => {
                   setTimelineSelected(item);
@@ -215,9 +215,9 @@ const Report = memo(({ projectId }: Props) => {
                     [classes.inProgressPoint]: listTimeline?.[listTimeline?.length - 1]?.state === ETimelineType.IN_PROGRESS,
                   })}
                 >
-                  <Box sx={{ height: "12px", width: "12px", borderRadius: "50%", backgroundColor: "var(--gray-40)" }}></Box>
-                  <Box sx={{ height: "8px", width: "8px", borderRadius: "50%", backgroundColor: "var(--gray-40)" }}></Box>
-                  <Box sx={{ height: "4px", width: "4px", borderRadius: "50%", backgroundColor: "var(--gray-40)" }}></Box>
+                  <Dot $height={"12px"} $width={"12px"}/>
+                  <Dot $height={"8px"} $width={"8px"}/>
+                  <Dot/>
                 </Box>
               </Box>
             )}
