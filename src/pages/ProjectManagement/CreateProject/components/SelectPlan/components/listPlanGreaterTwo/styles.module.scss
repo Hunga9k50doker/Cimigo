@@ -20,6 +20,12 @@
       padding-top: 0;
     }
   }
+  &:first-child:not(.cardPopular),
+  &:nth-child(2):not(.cardPopular) {
+    @media (min-width: 768px) and (max-width: 1199px) {
+      padding-top: 0px;
+    }
+  }
 }
 .cardPopular {
   &:first-child {
