@@ -10,11 +10,9 @@ import { AttachmentService } from "services/attachment";
 import FileSaver from "file-saver";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import Button, { BtnType } from "components/common/buttons/Button";
-import ProjectHelper from "helpers/project";
 import Heading1 from "components/common/text/Heading1";
 import Heading2 from "components/common/text/Heading2";
 import Heading4 from "components/common/text/Heading4";
-import Heading3 from "components/common/text/Heading3";
 import { useTranslation } from "react-i18next";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import clsx from "clsx";
@@ -56,14 +54,6 @@ const Report = memo(({ projectId }: Props) => {
   const { project } = useSelector((state: ReducerType) => state.project);
 
   const startPaymentScheduleDate = useMemo(() => moment(project?.startPaymentSchedule), [project]);
-
-  const isPaymentPaid = useMemo(() => ProjectHelper.isPaymentPaid(project), [project]);
-
-  const isReportReady = useMemo(() => ProjectHelper.isReportReady(project), [project]);
-
-  const reportReadyDate = useMemo(() => {
-    return ProjectHelper.getReportReadyDate(project, i18n.language).format("DD MMMM, YYYY");
-  }, [i18n.language, project]);
 
   const [listTimeline, setListTimeline] = useState<ITimeLineItem[]>([]);
   const [timelineSelected, setTimelineSelected] = useState<ITimeLineItem>(null);
@@ -165,7 +155,7 @@ const Report = memo(({ projectId }: Props) => {
 
   return (
     <Grid className={classes.root}>
-      {isReportReady ? (
+      {project?.status === ProjectStatus.IN_PROGRESS || project?.status === ProjectStatus.COMPLETED ? (
         <Grid className={classes.content}>
           <Grid className={classes.timelineWrapper}>
             {moment(listTimeline?.[0]?.date).isSame(startPaymentScheduleDate, "month") ? (
@@ -312,27 +302,13 @@ const Report = memo(({ projectId }: Props) => {
         </Grid>
       ) : (
         <Grid className={classes.noSetup}>
-          {isPaymentPaid ? <img src={Images.imgNoResultPaid} alt="" /> : <img src={Images.imgNoResultNotPay} alt="" />}
+          <img src={Images.imgNoResultNotPay} alt="" />
           <Heading1 align="center" mb={2} $colorName="--gray-80" translation-key="report_coming_soon">
             {t("report_coming_soon")}
           </Heading1>
-          {isPaymentPaid ? (
-            <Heading4
-              align="center"
-              sx={{ fontWeight: "400 !important" }}
-              $colorName="--gray-80"
-              translation-key="report_coming_soon_des_paid"
-            >
-              {t("report_coming_soon_des_paid")}{" "}
-              <Heading3 align="center" variant="body2" variantMapping={{ body2: "span" }} $colorName="--cimigo-blue">
-                {reportReadyDate}.
-              </Heading3>
-            </Heading4>
-          ) : (
-            <Heading4 align="center" sx={{ fontWeight: "400 !important" }} $colorName="--gray-80" translation-key="">
-              You have not completed your project setup and payment. Please finish these first.
-            </Heading4>
-          )}
+          <Heading4 align="center" sx={{ fontWeight: "400 !important" }} $colorName="--gray-80" translation-key="">
+            You have not completed your project setup and payment. Please finish these first.
+          </Heading4>
         </Grid>
       )}
 
