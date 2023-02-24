@@ -5,24 +5,21 @@ import Images from "config/images";
 import { useDispatch, useSelector } from "react-redux";
 import { ReducerType } from "redux/reducers";
 import { ProjectStatus } from "models/project";
-import { DashboardOutlined } from "@mui/icons-material";
 import { AttachmentService } from "services/attachment";
 import FileSaver from "file-saver";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
-import Button, { BtnType } from "components/common/buttons/Button";
 import Heading1 from "components/common/text/Heading1";
-import Heading2 from "components/common/text/Heading2";
 import Heading4 from "components/common/text/Heading4";
 import { useTranslation } from "react-i18next";
-import ParagraphBody from "components/common/text/ParagraphBody";
 import clsx from "clsx";
-import images from "config/images";
 import TimeLineItem from "./components/TimeLineItem";
 import moment, { Moment } from "moment";
-import { IconDownload } from "components/icons";
 import Dashboard from "./components/Dashboard";
 import { Attachment } from "models/attachment";
 import { Dot } from "components/common/dot/Dot";
+import ReportNotStarted from "./components/ReportNotStarted";
+import ReportInProgress from "./components/ReportInProgress";
+import ReportDelivered from "./components/ReportDelivered";
 
 export enum ETimelineType {
   NOT_STARTED_YET = 1,
@@ -67,7 +64,7 @@ const Report = memo(({ projectId }: Props) => {
     if (currentDate < startPaymentScheduleDate) {
       for (let i = 0; i <= 3; i++) {
         _listTimeline.push({
-          date: moment(startPaymentScheduleDate).add(i, "month").startOf('month'),
+          date: moment(startPaymentScheduleDate).add(i, "month").startOf("month"),
           state: ETimelineType.NOT_STARTED_YET,
           report: null,
         });
@@ -80,21 +77,21 @@ const Report = memo(({ projectId }: Props) => {
 
       // if (monthDiff <= 2) {
       //   for (let i = monthDiff; i >= 0; i--) {
-      //     _listTimeline.push(getTimeLine(moment(currentDate).subtract(i, "month").startOf('month')));
+      //     _listTimeline.push(getTimeLine(moment(currentDate).subtract(i, "month").startOf("month")));
       //   }
       //   for (let i = 1; _listTimeline.length <= 3; i++) {
       //     _listTimeline.push({
-      //       date: moment(currentDate).add(i, "month").startOf('month'),
+      //       date: moment(currentDate).add(i, "month").startOf("month"),
       //       state: ETimelineType.NOT_STARTED_YET,
       //       report: null,
       //     });
       //   }
       // } else {
       //   for (let i = 2; i >= 0; i--) {
-      //     _listTimeline.push(getTimeLine(moment(currentDate).subtract(i, "month").startOf('month')));
+      //     _listTimeline.push(getTimeLine(moment(currentDate).subtract(i, "month").startOf("month")));
       //   }
       //   _listTimeline.push({
-      //     date: moment(currentDate).add(1, "month").startOf('month'),
+      //     date: moment(currentDate).add(1, "month").startOf("month"),
       //     state: ETimelineType.NOT_STARTED_YET,
       //     report: null,
       //   });
@@ -103,8 +100,8 @@ const Report = memo(({ projectId }: Props) => {
       // Fake data
       for (let i = 0; i <= 3; i++) {
         _listTimeline.push({
-          date: moment(startPaymentScheduleDate).add(i, "month").startOf('month'),
-          state: i === 0 ?  ETimelineType.DELIVERED : i === 1 ? ETimelineType.IN_PROGRESS : ETimelineType.NOT_STARTED_YET,
+          date: moment(startPaymentScheduleDate).add(i, "month").startOf("month"),
+          state: i === 0 ? ETimelineType.DELIVERED : i === 1 ? ETimelineType.IN_PROGRESS : ETimelineType.NOT_STARTED_YET,
           report: null,
         });
       }
@@ -134,7 +131,7 @@ const Report = memo(({ projectId }: Props) => {
   //     return {
   //       date: date,
   //       state: ETimelineType.DELIVERED,
-  //       report: reportOfTimeline[0],
+  //       report: { attachment: reportOfTimeline[0] },
   //     };
   //   } else {
   //     return {
@@ -173,9 +170,9 @@ const Report = memo(({ projectId }: Props) => {
                     [classes.inProgressPoint]: listTimeline?.[0]?.state === ETimelineType.IN_PROGRESS,
                   })}
                 >
-                  <Dot/>
-                  <Dot $height={"8px"} $width={"8px"}/>
-                  <Dot $height={"12px"} $width={"12px"}/>
+                  <Dot />
+                  <Dot $height={"8px"} $width={"8px"} />
+                  <Dot $height={"12px"} $width={"12px"} />
                 </Box>
               </Box>
             )}
@@ -205,99 +202,17 @@ const Report = memo(({ projectId }: Props) => {
                     [classes.inProgressPoint]: listTimeline?.[listTimeline?.length - 1]?.state === ETimelineType.IN_PROGRESS,
                   })}
                 >
-                  <Dot $height={"12px"} $width={"12px"}/>
-                  <Dot $height={"8px"} $width={"8px"}/>
-                  <Dot/>
+                  <Dot $height={"12px"} $width={"12px"} />
+                  <Dot $height={"8px"} $width={"8px"} />
+                  <Dot />
                 </Box>
               </Box>
             )}
           </Grid>
-          {(!timelineSelected || timelineSelected?.state === ETimelineType.NOT_STARTED_YET) && (
-            <Grid className={classes.descriptionWrapper}>
-              <Box className={classes.imageDescription}>
-                <img src={images.imgProjectScheduled} alt="" />
-              </Box>
-              <Box className={classes.description}>
-                <Heading2 mb={1}>Project scheduled</Heading2>
-                <ParagraphBody $colorName="--eerie-black" mb={4} className={classes.descriptionSubTitle}>
-                  Your project has been scheduled, the fieldwork will begin in early <span>December 2022.</span>
-                </ParagraphBody>
-                <Button
-                  btnType={BtnType.Primary}
-                  disabled
-                  children={
-                    <Heading4 $colorName="--gray-80" $fontWeight={500} translation-key="">
-                      Results not ready
-                    </Heading4>
-                  }
-                  startIcon={<DashboardOutlined sx={{ fontSize: "22px !important" }} />}
-                  sx={{ width: { xs: "100%", sm: "auto" } }}
-                />
-              </Box>
-            </Grid>
-          )}
-          {timelineSelected?.state === ETimelineType.IN_PROGRESS && (
-            <Grid className={classes.descriptionWrapper}>
-              <Box className={classes.imageDescription}>
-                <img src={images.imgFieldworkInProgress} alt="" />
-              </Box>
-              <Box className={classes.description}>
-                <Heading2 mb={1}>Fieldwork in progress</Heading2>
-                <ParagraphBody $colorName="--eerie-black">Fieldwork of the first month of your project is in progress</ParagraphBody>
-                <ParagraphBody $colorName="--eerie-black" mb={4} className={classes.descriptionSubTitle}>
-                  The results will be delivered by <span>December 30, 2022.</span>
-                </ParagraphBody>
-                <Button
-                  btnType={BtnType.Primary}
-                  disabled
-                  children={
-                    <Heading4 $colorName="--gray-80" $fontWeight={500} translation-key="">
-                      Results not ready
-                    </Heading4>
-                  }
-                  sx={{ width: { xs: "100%", sm: "auto" } }}
-                />
-              </Box>
-            </Grid>
-          )}
+          {(!timelineSelected || timelineSelected?.state === ETimelineType.NOT_STARTED_YET) && <ReportNotStarted />}
+          {timelineSelected?.state === ETimelineType.IN_PROGRESS && <ReportInProgress />}
           {timelineSelected?.state === ETimelineType.DELIVERED && (
-            <Grid className={classes.descriptionWrapper}>
-              <Box className={classes.imageDescription}>
-                <img src={images.imgDashboardReady} alt="" />
-              </Box>
-              <Box className={classes.description}>
-                <Heading2 mb={1}>Dashboard ready!</Heading2>
-                <ParagraphBody $colorName="--eerie-black" mb={4}>
-                  Access your results dashboard anywhere, intuitively and interactively.
-                </ParagraphBody>
-                <Box className={classes.actionWrapper}>
-                  <Button
-                    btnType={BtnType.Primary}
-                    children={
-                      <Heading4 $colorName="--white" $fontWeight={500} translation-key="">
-                        Access dashboard
-                      </Heading4>
-                    }
-                    startIcon={<DashboardOutlined sx={{ fontSize: "22.5px !important" }} />}
-                    sx={{ width: { xs: "100%", sm: "auto" } }}
-                    onClick={onOpenDashboard}
-                  />
-                  {timelineSelected?.report && (
-                    <Button
-                      btnType={BtnType.Outlined}
-                      children={
-                        <Heading4 $colorName="--cimigo-blue" $fontWeight={500} translation-key="">
-                          Download results
-                        </Heading4>
-                      }
-                      startIcon={<IconDownload sx={{ fontSize: "16.5px !important" }} />}
-                      sx={{ width: { xs: "100%", sm: "auto" } }}
-                      onClick={onDownLoad}
-                    />
-                  )}
-                </Box>
-              </Box>
-            </Grid>
+            <ReportDelivered onOpenDashboard={onOpenDashboard} onDownLoad={timelineSelected?.report ? onDownLoad : null} />
           )}
         </Grid>
       ) : (
