@@ -175,6 +175,9 @@ export const API = {
     EMAIL_TEMPLATE: {
       DEFAULT: '/v1.0/admin/email-template'
     },
+    EMAIL_REMINDER: {
+      DEFAULT: '/v1.0/admin/email-reminder'
+    },
     CONFIG: {
       DEFAULT: '/v1.0/admin/config',
     },

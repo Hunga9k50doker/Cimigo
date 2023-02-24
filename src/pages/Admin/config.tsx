@@ -2,7 +2,7 @@ import {
   NavItem, 
   routes 
 } from "routers/routes";
-import { Category, FactCheck, FormatListBulleted, GTranslate, HelpOutline, Lightbulb, LiveHelp, Mail, Paid, Person, Settings, TableView, Work } from '@mui/icons-material';
+import { Category, FactCheck, FormatListBulleted, GTranslate, HelpOutline, Lightbulb, LiveHelp, Mail, Paid, Person, Settings, TableView, Work, NotificationsActive } from '@mui/icons-material';
 import SolutionCategory from "./SolutionCategory";
 import Solution from "./Solution";
 import SolutionCategoryHome from "./SolutionCategoryHome";
@@ -11,6 +11,7 @@ import Translation from "./Translation";
 import Target from "./Target";
 import QuotaTable from "./QuotaTable";
 import EmailTemplate from "./EmailTemplate";
+import EmailReminder from "./EmailReminder";
 import ConfigPage from "./ConfigPage";
 import Project from "./Project";
 import User from "./User";
@@ -101,6 +102,13 @@ export const adminRouter: NavItem[] = [
     name: 'Email template',
     icon: Mail,
     component: EmailTemplate,
+    layout: "/admin"
+  },
+  {
+    path: routes.admin.emailReminder.root,
+    name: 'Email reminder',
+    icon: NotificationsActive,
+    component: EmailReminder,
     layout: "/admin"
   },
   {
