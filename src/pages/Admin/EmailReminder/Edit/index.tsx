@@ -9,10 +9,6 @@ import EmailReminderForm, { EmailReminderFormData } from "../components/EmailRem
 import { EmailReminderService } from "services/admin/email_reminder";
 import { EmailReminder, UpdateEmailReminder } from "models/Admin/email_reminder";
 
-interface IQueryString {
-  lang?: string;
-}
-
 interface Props {
 
 }
@@ -22,7 +18,6 @@ const EditEmailReminder = memo((props: Props) => {
   const dispatch = useDispatch()
   const { id } = useParams<{ id: string }>();
   const [itemEdit, setItemEdit] = useState<EmailReminder>(null);
-  const { lang }: IQueryString = QueryString.parse(window.location.search);
 
   useEffect(() => {
     if (id && !isNaN(Number(id))) {
@@ -37,7 +32,7 @@ const EditEmailReminder = memo((props: Props) => {
       }
       fetchData()
     }
-  }, [id, lang, dispatch])
+  }, [id, dispatch])
 
   const onSubmit = (data: EmailReminderFormData) => {
     dispatch(setLoading(true))
