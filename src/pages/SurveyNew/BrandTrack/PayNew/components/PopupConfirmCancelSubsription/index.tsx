@@ -15,7 +15,7 @@ import * as yup from "yup";
 import Heading4 from "components/common/text/Heading4";
 import InputTextareaAutosize from "components/InputTextareaAutosize";
 import moment from "moment";
-import { GetLatestPaidPaymentSchedule, LatestPaidPaymetSchedule } from "models/payment_schedule";
+import { PaymentSchedule } from "models/payment_schedule";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { PaymentScheduleService } from "services/payment_schedule";
 import { useDispatch } from "react-redux";
@@ -40,7 +40,7 @@ const PopupConfirmCancelSubsription = memo(
     const { onCancel, onSubmit, isOpen, projectId } = props;
 
     const [dataLatestPaid, setDataLatestPaid] =
-      useState<LatestPaidPaymetSchedule>();
+      useState<PaymentSchedule>();
 
     const schema = useMemo(() => {
       return yup.object().shape({
@@ -77,13 +77,9 @@ const PopupConfirmCancelSubsription = memo(
     useEffect(() => {
       const getLatestPaid = async () => {
 
-        const data: GetLatestPaidPaymentSchedule = {
-          projectId: projectId,
-        };
-
         dispatch(setLoading(true));
 
-        await PaymentScheduleService.getLatestPaidPaymentSchedule(data)
+        await PaymentScheduleService.getLatestPaidPaymentSchedule(projectId)
           .then((res) => {
             setDataLatestPaid(res.data);
           })

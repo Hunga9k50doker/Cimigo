@@ -32,7 +32,7 @@ export interface PaymentSchedule {
   solutionConfig: SolutionConfig;
   start: Date;
   end: Date;
-  dueDate: Date;
+  dueDate?: Date;
   totalAmount: number;
   totalAmountUSD: number;
   status: number;
@@ -68,16 +68,4 @@ export interface GetListPaymentScheduleHistory {
   keyword?: string;
   take?: number;
   page?: number;
-}
-export interface LatestPaidPaymetSchedule{
-  id: number;
-  start: Date;
-  end: Date;
-  dueDate: Date;
-  totalAmount: number;
-  totalAmountmountUSD: number;
-  status: number;
-}
-export interface GetLatestPaidPaymentSchedule{
-  projectId: number;
 }
