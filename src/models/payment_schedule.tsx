@@ -32,7 +32,7 @@ export interface PaymentSchedule {
   solutionConfig: SolutionConfig;
   start: Date;
   end: Date;
-  dueDate?: Date;
+  dueDate: Date;
   totalAmount: number;
   totalAmountUSD: number;
   status: number;
