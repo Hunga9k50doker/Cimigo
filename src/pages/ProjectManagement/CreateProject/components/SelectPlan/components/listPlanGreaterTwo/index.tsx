@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import React,{ memo } from "react";
+import { memo } from "react";
 import classes from "./styles.module.scss";
 import { Plan } from "models/Admin/plan";
 import Heading1 from "components/common/text/Heading1";
@@ -24,17 +24,6 @@ interface SelectPlanProps {
 // style plan have >= 3 options
 const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: SelectPlanProps) => {
   const { t } = useTranslation();
-  const [isNotPopular, setIsNotPopular] = React.useState(false);
-  
-  React.useEffect(() => {
-    const checkAllMostPopular = () => {
-      if (plan?.data) {
-        const res = plan.data.slice(0,3).every((item) => !item.isMostPopular);
-        setIsNotPopular(res);
-      }
-    };
-    checkAllMostPopular();
-  }, [plan?.data]);
   return (
     <Grid
       container
@@ -43,14 +32,12 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
       columnSpacing={{xs: 0, sm:4}}
       rowSpacing={{xs: 4, sm: 5}}
     >
-      {plan?.data.map((planItem,index) => {
+      {plan?.data.map((planItem) => {
         return (
           <Grid
             key={planItem.id}
             className={clsx(classes.card, {
               [classes.cardPopular]: planItem?.isMostPopular,
-              [classes.cardPopularHasMargin]: planItem?.isMostPopular && index < 3,
-              [classes.cardClearPadding]: isNotPopular && index < 3,
             })}
             item
             xs={12}
@@ -74,7 +61,7 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                 <CardContent className={classes.cardCustom}>
                   <Grid container px={{ sm: 2, xs: 1 }}>
                     <Grid xs={12} item>
-                      <Typography>
+                      <Typography mb={2}>
                         <Heading3 $fontWeight={"500"} $colorName={"--eerie-black-00"} variant="body2" variantMapping={{ body2: "span" }}>
                           {planItem.title}
                         </Heading3>
@@ -116,6 +103,17 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                       </Typography>
                     </Grid>
                   </Grid>
+                  <CardActions className={classes.itemCenter}>
+                    <Button
+                      fullWidth
+                      sx={{ mx: 2}}
+                      btnType={BtnType.Raised}
+                      translation-key="setup_survey_popup_save_question_title"
+                      children={<TextBtnSecondary translation-key="common_select">{t("common_select")}</TextBtnSecondary>}
+                      className={classes.btnSave}
+                      onClick={() => onChangePlanSelected(planItem)}
+                    />
+                  </CardActions>
                   <Typography variant="body2" variantMapping={{ body2: "div" }}>
                     <div className={classes.line}></div>
                   </Typography>
@@ -155,17 +153,6 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                     })}
                   </Grid>
                 </CardContent>
-                <CardActions className={classes.itemCenter}>
-                  <Button
-                    fullWidth
-                    sx={{ mx: 7.25 }}
-                    btnType={BtnType.Raised}
-                    translation-key="setup_survey_popup_save_question_title"
-                    children={<TextBtnSecondary translation-key="common_select">{t("common_select")}</TextBtnSecondary>}
-                    className={classes.btnSave}
-                    onClick={() => onChangePlanSelected(planItem)}
-                  />
-                </CardActions>
               </Card>
             </Grid>
           </Grid>
