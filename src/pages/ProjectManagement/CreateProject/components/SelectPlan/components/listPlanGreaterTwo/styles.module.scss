@@ -15,10 +15,6 @@
 }
 .card {
   min-width: 300px;
-  @media only screen and (max-width: 767px) {
-  }
-}
-.cardPopular {
   @media only screen and (min-width: 897px) {
     margin-bottom: 40px;
   }
@@ -28,35 +24,12 @@
     padding-bottom: 43px;
   }
 }
-.cardPopularHasMargin {
-  @media only screen and (min-width: 897px) {
-    margin-top: -40px;
-  }
-}
-.cardClearPadding {
-  &:nth-child(1):not(.cardPopular),
-  &:nth-child(2):not(.cardPopular),
-  &:nth-child(3):not(.cardPopular) {
-    @media only screen and (min-width: 1200px) {
-      padding-top: 0 !important;
-    }
-  }
-  @media only screen and (max-width: 767px) {
-    &:first-child {
-      padding-top: 0 !important;
-    }
-  }
-  @media (min-width: 768px) and (max-width: 1200px) {
-    &:nth-child(1),
-    &:nth-child(2) {
-      padding-top: 0 !important;
-    }
-  }
-}
-.contentPlanDescription{
+
+.contentPlanDescription {
   word-break: break-all;
 }
 .layoutCard {
+  position: relative;
   height: 100%;
 }
 .itemCenter {
@@ -108,6 +81,11 @@
   border-radius: 8px 8px 0px 0px;
   border-bottom: none;
   min-width: 300px;
+  position: absolute;
+  transform: translateY(-100%);
+  top: 0;
+  left: 0;
+  width: 100%;
   .title {
     text-align: center;
     padding: 8px;
