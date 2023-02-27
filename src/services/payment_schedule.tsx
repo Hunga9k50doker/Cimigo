@@ -1,5 +1,6 @@
 import { API } from "config/constans";
 import {
+  GetLatestPaidPaymentSchedule,
   GetListPaymentScheduleHistory,
   GetPaymentSchedule,
   GetPaymentSchedulePreview,
@@ -55,5 +56,15 @@ export class PaymentScheduleService {
       .catch((e) => {
         return Promise.reject(e?.response?.data);
       });
+  }
+  static async getLatestPaidPaymentSchedule( data: GetLatestPaidPaymentSchedule): Promise<any> {
+    return await api
+    .get(API.PAYMENT_SCHEDULE.LATEST_PAID, { params: data })
+    .then((res) => {
+      return Promise.resolve(res.data);
+    })
+    .catch((e) => {
+      return Promise.reject(e?.response?.data);
+    });
   }
 }

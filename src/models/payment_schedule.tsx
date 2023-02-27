@@ -69,3 +69,15 @@ export interface GetListPaymentScheduleHistory {
   take?: number;
   page?: number;
 }
+export interface LatestPaidPaymetSchedule{
+  id: number;
+  start: Date;
+  end: Date;
+  dueDate: Date;
+  totalAmount: number;
+  totalAmountmountUSD: number;
+  status: number;
+}
+export interface GetLatestPaidPaymentSchedule{
+  projectId: number;
+}

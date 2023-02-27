@@ -8,18 +8,23 @@ import { DialogActionsConfirm } from "components/common/dialogs/DialogActions";
 import Button, { BtnType } from "components/common/buttons/Button";
 import TextBtnSmall from "components/common/text/TextBtnSmall";
 import ParagraphBody from "components/common/text/ParagraphBody";
-import { memo, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Heading4 from "components/common/text/Heading4";
 import InputTextareaAutosize from "components/InputTextareaAutosize";
 import moment from "moment";
+import { GetLatestPaidPaymentSchedule, LatestPaidPaymetSchedule } from "models/payment_schedule";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { PaymentScheduleService } from "services/payment_schedule";
+import { useDispatch } from "react-redux";
 
 interface SubmitCancelSubsriptionFormData {
   reason: string;
 }
 interface PopupConfirmCancelSubsriptionProps {
+  projectId: number;
   isOpen: boolean;
   onCancel: () => void;
   onSubmit: (reason: string) => void;
@@ -27,12 +32,15 @@ interface PopupConfirmCancelSubsriptionProps {
 
 const PopupConfirmCancelSubsription = memo(
   (props: PopupConfirmCancelSubsriptionProps) => {
+
+    const dispatch = useDispatch();
+
     const { t, i18n } = useTranslation();
 
-    const { onCancel, onSubmit, isOpen } = props;
+    const { onCancel, onSubmit, isOpen, projectId } = props;
 
-    const [paymentSchedule, setpaymentSchedule] =
-      useState<boolean>(false);
+    const [dataLatestPaid, setDataLatestPaid] =
+      useState<LatestPaidPaymetSchedule>();
 
     const schema = useMemo(() => {
       return yup.object().shape({
@@ -66,6 +74,26 @@ const PopupConfirmCancelSubsription = memo(
       });
     };
 
+    useEffect(() => {
+      const getLatestPaid = async () => {
+
+        const data: GetLatestPaidPaymentSchedule = {
+          projectId: projectId,
+        };
+
+        dispatch(setLoading(true));
+
+        await PaymentScheduleService.getLatestPaidPaymentSchedule(data)
+          .then((res) => {
+            setDataLatestPaid(res.data);
+          })
+          .catch((e) => dispatch(setErrorMess(e)))
+          .finally(() => dispatch(setLoading(false)));
+      };
+      getLatestPaid();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [projectId]);
+
     return (
       <Dialog
         scroll="paper"
@@ -92,7 +120,7 @@ const PopupConfirmCancelSubsription = memo(
             />
           </DialogTitleConfirm>
           <DialogContentConfirm dividers>
-            {paymentSchedule ? (
+            {dataLatestPaid ? (
               <ParagraphBody
                 pt={3}
                 className={classes.description}
@@ -102,7 +130,7 @@ const PopupConfirmCancelSubsription = memo(
                   __html: t(
                     "brand_track_your_next_payment_content_modal_cancel_subscription_have_payment_des",
                     {
-                      endDate: moment().format("MMM yyyy"),
+                      endDate: moment(dataLatestPaid?.end).format("MMM yyyy"),
                     }
                   ),
                 }}
