@@ -72,12 +72,12 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
       slogan: yup.string().when("typeId", {
         is: (value: OptionItem) => value.id === EBRAND_ASSET_TYPE.SLOGAN,
         then: yup.string().required(t("brand_track_field_brand_asset_type_slogan_vali_require")),
-        otherwise: yup.string()
+        otherwise: yup.string().nullable()
       }),
       asset: yup.mixed().when("typeId", {
         is: (value: OptionItem) => value.id !== EBRAND_ASSET_TYPE.SLOGAN,
         then: yup.mixed().required(t("brand_track_field_brand_asset_vali_require")),
-        otherwise: yup.mixed()
+        otherwise: yup.mixed().nullable()
       }),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,11 +107,15 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
     form.append('brand', data.brand)
     form.append('description', data?.description)
     form.append('typeId', data?.typeId?.id.toString())
-    form.append('slogan', data?.slogan)
+    form.append('slogan', data?.typeId?.id === EBRAND_ASSET_TYPE.SLOGAN ? data?.slogan : "")
     if (data.asset && typeof data.asset === 'object') form.append('asset', data.asset)
     if (data?.typeId?.id === EBRAND_ASSET_TYPE.SOUND) {
-      const duration = await getDuration(data.asset as File)
-      form.append('duration', Math.floor(duration).toString())
+      if(typeof data.asset === 'object') {
+        const duration = await getDuration(data.asset as File)
+        form.append('duration', Math.floor(duration).toString())
+      } else {
+        form.append('duration', brandAsset?.duration.toString())
+      }
     }
     onSubmit(form)
   };
@@ -131,15 +135,24 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
   };
   
   useEffect(()=>{
-    if(watchAsset && watchBrandAssetTypeId?.id === EBRAND_ASSET_TYPE.IMAGE) {
-      if (typeof watchAsset === "object") {
-        convertFileToBase64(watchAsset).then((res) => {
-          setImageReview(res as string)
-        })
-      } else {
-        setImageReview(watchAsset as string)
+    if(watchAsset) {
+      if(watchBrandAssetTypeId?.id === EBRAND_ASSET_TYPE.IMAGE) {
+        if (typeof watchAsset === "object") {
+          convertFileToBase64(watchAsset).then((res) => {
+            setImageReview(res as string)
+          })
+        } else {
+          setImageReview(watchAsset as string)
+        }
+        clearErrors("asset")
+      } else if(watchBrandAssetTypeId?.id === EBRAND_ASSET_TYPE.SOUND) {
+        if (typeof watchAsset === "object") {
+          setSoundReview(URL.createObjectURL(watchAsset))
+        } else {
+          setSoundReview(watchAsset as string)
+        }
+        clearErrors("asset")
       }
-      clearErrors("asset")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchAsset])
@@ -149,6 +162,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
       clearForm()
       setImageReview(null)
       setSoundReview(null)
+      setIsError(null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, project])
@@ -167,10 +181,12 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
   }, [brandAsset])
 
   useEffect(() => {
-    setValue('asset', null)
-    setImageReview(null)
-    setSoundReview(null)
-    setIsError(null)
+    if(imageReview || soundReview) {
+      setValue('asset', null)
+      setImageReview(null)
+      setSoundReview(null)
+      setIsError(null)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchBrandAssetTypeId])
 
@@ -216,7 +232,6 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
           return
         }
         setIsError('');
-        setSoundReview(URL.createObjectURL(file))
         setValue('asset', file)
         clearErrors("asset")
       }
