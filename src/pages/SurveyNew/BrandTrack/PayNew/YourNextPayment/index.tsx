@@ -228,7 +228,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
             type={AlerType.Success}
           />
         )}
-        {alertPaymentReminder && (
+        {alertPaymentReminder && !alertMakeAnOrderSuccess && (
           <Alert
             title={t("brand_track_your_next_payment_title_alert_warring")}
             content={
