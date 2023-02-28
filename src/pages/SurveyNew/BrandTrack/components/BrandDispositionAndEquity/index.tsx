@@ -33,6 +33,7 @@ import ArrowBreak from "components/icons/IconArrowBreak"
 import PopupConfirmDelete from "components/PopupConfirmDelete"
 import PopupManatoryAttributes from "pages/SurveyNew/components/PopupManatoryAttributes"
 import IconTagLoyalty from "components/icons/IconTagLoyalty"
+import WarningIcon from "@mui/icons-material/Warning"
 
 interface BrandDispositionAndEquityProps {
   project: Project
@@ -382,7 +383,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
               </Grid>
             </>
           ) : (
-            <NoteWarning isWarningFilledIcon className={classes.warningWrapper}>
+            <NoteWarning Icon={WarningIcon} className={classes.warningWrapper}>
               <ParagraphBody $colorName="--gray-80" className={classes.warning} translation-key="brand_track_setup_brand_disposition_and_equity_competitive_brand_no_brand_chose">
                 {t("brand_track_setup_brand_disposition_and_equity_competitive_brand_no_brand_chose")}
                 <span 
@@ -473,7 +474,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
             {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_3")}
           </ParagraphBody>
           {!!brandEquityAttributesNeedMore && (
-            <NoteWarning mt={0} mb={2}>
+            <NoteWarning mt={0} mb={2} ml={3}>
               <ParagraphSmall $colorName="--warning-dark" translation-key="brand_track_setup_brand_disposition_and_equity_attributes_need_more">
                 {t("brand_track_setup_brand_disposition_and_equity_attributes_need_more", {number: brandEquityAttributesNeedMore})}
               </ParagraphSmall>

@@ -71,7 +71,7 @@ export class ProjectHelper {
         return project
       case ESOLUTION_TYPE.BRAND_TRACKING:
         const paymentSchedules = project?.paymentSchedules
-        if (!!paymentSchedules?.length && !_.isEmpty(paymentSchedules[0]?.projectData)) {
+        if (paymentSchedules?.[0]?.projectData?.id) {
           return paymentSchedules[0].projectData
         }
         return project

@@ -123,16 +123,6 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
   const _onClose = () => {
     onClose()
   }
-
-  const clearForm = () => {
-    reset({
-      brand: "",
-      description: "",
-      typeId: null,
-      slogan: "",
-      asset: null,
-    });
-  };
   
   useEffect(()=>{
     if(watchAsset) {
@@ -158,17 +148,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
   }, [watchAsset])
 
   useEffect(() => {
-    if (!isOpen) {
-      clearForm()
-      setImageReview(null)
-      setSoundReview(null)
-      setIsError(null)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, project])
-
-  useEffect(() => {
-    if(isOpen && brandAsset) {
+    if(brandAsset) {
       reset({
         brand: brandAsset.brand,
         description: brandAsset.description,
