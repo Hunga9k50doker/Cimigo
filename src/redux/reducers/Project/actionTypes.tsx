@@ -2,6 +2,7 @@ import { AdditionalBrand } from "models/additional_brand";
 import { BrandAsset } from "models/brand_asset";
 import { CustomQuestion } from "models/custom_question";
 import { Pack } from "models/pack";
+import { PaymentSchedule } from "models/payment_schedule";
 import { CreateProjectRedirect, Project, ProjectTarget } from "models/project";
 import { ProjectAttribute } from "models/project_attribute";
 import { ProjectBrand } from "models/project_brand";
@@ -56,6 +57,9 @@ export const SET_PROJECT_BRANDS_REDUCER = 'SET_PROJECT_BRANDS_REDUCER';
 
 export const GET_BRAND_ASSETS_REQUEST = 'GET_BRAND_ASSETS_REQUEST';
 export const SET_BRAND_ASSETS_REDUCER = 'SET_BRAND_ASSETS_REDUCER';
+
+export const GET_PAYMENT_SCHEDULES_REQUEST = 'GET_PAYMENT_SCHEDULES_REQUEST';
+export const SET_PAYMENT_SCHEDULES_REDUCER = 'SET_PAYMENT_SCHEDULES_REDUCER';
 
 export const getProjectRequest = (id: number, callback?: () => void, getFull: boolean = false) => {
   return {
@@ -238,6 +242,20 @@ export const getBrandAssetsRequest = (projectId: number) => {
 export const setBrandAssetsReducer = (data: BrandAsset[]) => {
   return {
     type: SET_BRAND_ASSETS_REDUCER,
+    data
+  }
+}
+
+export const getPaymentSchedulesRequest = (projectId: number) => {
+  return {
+    type: GET_PAYMENT_SCHEDULES_REQUEST,
+    projectId
+  }
+}
+
+export const setPaymentSchedulesReducer = (data: PaymentSchedule[]) => {
+  return {
+    type: SET_PAYMENT_SCHEDULES_REDUCER,
     data
   }
 }
