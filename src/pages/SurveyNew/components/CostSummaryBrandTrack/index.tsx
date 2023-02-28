@@ -5,12 +5,13 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import ParagraphSmall from "components/common/text/ParagraphSmall"
 import { TotalPrice } from "helpers/price"
 import { Project } from "models/project"
-import { memo } from "react"
+import { memo, useMemo } from "react"
 import { useSelector } from "react-redux"
 import { ReducerType } from "redux/reducers"
 import { useTranslation } from "react-i18next"
 import Heading4 from "components/common/text/Heading4"
 import { ArrowDropDown } from "@mui/icons-material"
+import ProjectHelper from "helpers/project";
 
 interface CostSummaryBrandTrackProps {
   price: TotalPrice,
@@ -22,6 +23,8 @@ const CostSummaryBrandTrack = memo(({ project, price }: CostSummaryBrandTrackPro
   const { t } = useTranslation()
 
   const { configs } = useSelector((state: ReducerType) => state.user)
+
+  const _project = useMemo(() => ProjectHelper.getProject(project), [project])
 
   return (
     <>
@@ -79,7 +82,7 @@ const CostSummaryBrandTrack = memo(({ project, price }: CostSummaryBrandTrackPro
           align="right"
           translation-key="brand_track_right_panel_cost_summary_billing_cycle"
           dangerouslySetInnerHTML={{
-            __html: t("brand_track_right_panel_cost_summary_billing_cycle", {number: project?.solution?.paymentMonthSchedule}),
+            __html: t("brand_track_right_panel_cost_summary_billing_cycle", {number: _project?.solution?.paymentMonthSchedule}),
           }}
         ></ParagraphSmall>
       </Box>
