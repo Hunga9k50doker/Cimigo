@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Grid";
 import { memo } from "react";
-import classes from "../styles.module.scss";
+import classes from "./styles.module.scss";
 import { Plan } from "models/Admin/plan";
 import Heading1 from "components/common/text/Heading1";
 import { DataPagination } from "models/general";
@@ -27,13 +27,7 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
   const { t } = useTranslation();
 
   return (
-    <Grid
-      container
-      gap={4}
-      className={classes.body}
-      justifyContent="center"
-      alignItems={"flex-start"}
-    >
+    <Grid container className={classes.body} justifyContent="center" columnSpacing={{ xs: 0, sm: 4 }} rowSpacing={{ xs: 4, sm: 5 }}>
       {plan?.data.map((plan) => {
         return (
           <Grid
@@ -47,32 +41,28 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
             lg={7}
           >
             <Grid
+              item
               className={clsx(classes.layoutCard, {
                 [classes.layoutCardPopular]: plan?.isMostPopular,
               })}
             >
               {plan?.isMostPopular && (
                 <div className={classes.headerCart}>
-                  <ParagraphBody
-                    className={classes.title}
-                    $colorName={"--cimigo-green-dark-3"}
-                    translation-key="common_most_pupular"
-                  >
+                  <ParagraphBody className={classes.title} $colorName={"--cimigo-green-dark-3"} translation-key="common_most_pupular">
                     {t("common_most_pupular")}
                   </ParagraphBody>
                 </div>
               )}
-              <Card sx={{ minWidth: 362 }} className={classes.cardPlan}>
+              <Card
+                className={clsx(classes.cardPlan, {
+                  [classes.cardPlanPopular]: plan?.isMostPopular,
+                })}
+              >
                 <CardContent className={classes.cardCustom}>
-                  <Grid container px={1}>
-                    <Grid xs={6} item>
-                      <Typography>
-                        <Heading3
-                          $fontWeight={"500"}
-                          $colorName={"--eerie-black-00"}
-                          variant="body2"
-                          variantMapping={{ body2: "span" }}
-                        >
+                  <Grid container px={{ xs: 1, lg: 3 }} columnGap={{ xs: 1, sm: 0 }}>
+                    <Grid xs item>
+                      <Typography mb={2}>
+                        <Heading3 $fontWeight={"500"} mb={2} $colorName={"--eerie-black-00"} variant="body2" variantMapping={{ body2: "span" }}>
                           {plan.title}
                         </Heading3>
                       </Typography>
@@ -112,13 +102,7 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                         </ParagraphExtraSmall>
                       </Typography>
                     </Grid>
-                    <Grid
-                      xs
-                      item
-                      display="flex"
-                      justifyContent={{ xs: "center", sm: "end" }}
-                      alignItems="center"
-                    >
+                    <Grid xs item display="flex" justifyContent={{ xs: "center", sm: "end" }} alignItems="center">
                       <CardActions className={classes.itemCenter}>
                         <Button
                           fullWidth
@@ -139,8 +123,8 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                   <Typography variant="body2" variantMapping={{ body2: "div" }}>
                     <div className={classes.line}></div>
                   </Typography>
-                  <Grid className={classes.contentInPlan} container px={2}>
-                    <Grid className={classes.contentPlan} xs={12} sm={6} item>
+                  <Grid className={classes.contentInPlan} container px={2} columnSpacing={2}>
+                    <Grid className={classes.contentPlan} xs={12} md={6} item>
                       <DoneIcon className={classes.iconContentPlan} />
                       <ParagraphBody
                         ml={1.5}
@@ -149,8 +133,7 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                         variantMapping={{ body2: "span" }}
                         translation-key="project_create_tab_plan_interviews"
                       >
-                        <span className={classes.sampleSize}>{plan.sampleSize}</span>{" "}
-                        {t("project_create_tab_plan_interviews")}{" "}
+                        <span className={classes.sampleSize}>{plan.sampleSize}</span> {t("project_create_tab_plan_interviews")}{" "}
                         {plan.month && (
                           <ParagraphBody
                             className={classes.expTime}
@@ -159,9 +142,9 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                             variant="body2"
                             variantMapping={{ body2: "span" }}
                           >
-                            / {plan.month}{" "}
+                            /{" "}
                             {t("common_month", {
-                              s: plan.month === 1 ? "" : t("common_s"),
+                              s: "",
                             })}
                           </ParagraphBody>
                         )}
@@ -169,9 +152,13 @@ const listPlanTwoOrLess = memo(({ formatMoney, onChangePlanSelected, plan }: Sel
                     </Grid>
                     {plan?.content.map((item, index) => {
                       return (
-                        <Grid className={classes.contentPlan} key={index} xs sm={6} item>
+                        <Grid className={classes.contentPlan} key={index} xs={12} md={6} item>
                           <DoneIcon className={classes.iconContentPlan} />
-                          <ParagraphBody ml={1.5} $colorName={"--eerie-black-00"}>
+                          <ParagraphBody
+                            ml={1.5}
+                            $colorName={"--eerie-black-00"}
+                            className={classes.contentPlanDescription}
+                          >
                             {item}
                           </ParagraphBody>
                         </Grid>

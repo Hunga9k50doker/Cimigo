@@ -41,6 +41,7 @@ export interface PaymentSchedule {
   sampleSizeCostPerMonth: number;
   vat: number;
   systemConfig: ConfigData;
+  projectData: Project;
 }
 export interface PaymentScheduleMakeAnOrder{
   projectId: number;

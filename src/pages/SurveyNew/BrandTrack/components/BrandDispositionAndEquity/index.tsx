@@ -32,6 +32,8 @@ import EditSquare from "components/icons/IconEditSquare"
 import ArrowBreak from "components/icons/IconArrowBreak"
 import PopupConfirmDelete from "components/PopupConfirmDelete"
 import PopupManatoryAttributes from "pages/SurveyNew/components/PopupManatoryAttributes"
+import IconTagLoyalty from "components/icons/IconTagLoyalty"
+import WarningIcon from "@mui/icons-material/Warning"
 
 interface BrandDispositionAndEquityProps {
   project: Project
@@ -69,10 +71,13 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
   const editable = useMemo(() => editableProject(project), [project])
   const competingBrandDatas = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING) || [], [project])
   const maxCompetitiveBrand = useMemo(() => project?.solution?.maxCompetitiveBrand || 0, [project])
-  const maxAdditionalAttribute = useMemo(() => project?.solution?.maxAdditionalAttribute || 0, [project])
+  const maxEquityAttributes = useMemo(() => project?.solution?.maxEquityAttributes || 0, [project])
+  const enableAddCompetitiveBrand = useMemo(() => {
+    return maxCompetitiveBrand > (project?.projectBrands?.length || 0)
+  }, [maxCompetitiveBrand, project])
   const enableAdditionalAttributes = useMemo(() => {
-    return maxAdditionalAttribute > ((project?.projectAttributes?.length || 0) + (project?.userAttributes?.length || 0))
-  }, [maxAdditionalAttribute, project])
+    return maxEquityAttributes > ((project?.projectAttributes?.length || 0) + (project?.userAttributes?.length || 0))
+  }, [maxEquityAttributes, project])
   const attributes: AttributeShow[] = useMemo(() => {
     return [
       ...(project?.projectAttributes?.map(it => ({
@@ -368,17 +373,18 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
                 ))}
                 <Button
                   sx={{ width: { xs: "100%", sm: "auto" }, maxHeight: "36px" }}
+                  className={classes.selectBrandBtn}
                   onClick={handleClickMenuChooseBrand}
-                  disabled={!enableAdditionalAttributes || !editable}
-                  btnType={BtnType.Outlined}
-                  children={<TextBtnSmall translation-key="brand_track_setup_brand_disposition_and_equity_competitive_brand_btn_select">{t("brand_track_setup_brand_disposition_and_equity_competitive_brand_btn_select")}</TextBtnSmall>}
-                  endIcon={<KeyboardArrowDown sx={{ fontSize: "16px !important" }} />}
+                  disabled={!enableAddCompetitiveBrand || !editable}
+                  children={<TextBtnSmall $colorName="--gray-80" translation-key="brand_track_setup_brand_disposition_and_equity_competitive_brand_btn_select">{t("brand_track_setup_brand_disposition_and_equity_competitive_brand_btn_select")}</TextBtnSmall>}
+                  startIcon={<IconTagLoyalty sx={{ fontSize: "16px !important", color: "var(--gray-80)" }} />}
+                  endIcon={<KeyboardArrowDown sx={{ fontSize: "16px !important", color: "var(--gray-80)" }} />}
                   />
               </Grid>
             </>
           ) : (
-            <NoteWarning mb={ 3 } ml={ 3 }>
-              <ParagraphSmall $colorName="--warning-dark" className={classes.warning} translation-key="brand_track_setup_brand_disposition_and_equity_competitive_brand_no_brand_chose">
+            <NoteWarning Icon={WarningIcon} className={classes.warningWrapper}>
+              <ParagraphBody $colorName="--gray-80" className={classes.warning} translation-key="brand_track_setup_brand_disposition_and_equity_competitive_brand_no_brand_chose">
                 {t("brand_track_setup_brand_disposition_and_equity_competitive_brand_no_brand_chose")}
                 <span 
                   onClick={onDisplaySelectBrandButton}
@@ -386,7 +392,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
                 >
                   {t("brand_track_setup_brand_disposition_and_equity_competitive_brand_btn_add")} +
                 </span>
-              </ParagraphSmall>
+              </ParagraphBody>
             </NoteWarning>
           )}
           <Menu
@@ -468,7 +474,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
             {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_3")}
           </ParagraphBody>
           {!!brandEquityAttributesNeedMore && (
-            <NoteWarning mt={0} mb={2}>
+            <NoteWarning mt={0} mb={2} ml={3}>
               <ParagraphSmall $colorName="--warning-dark" translation-key="brand_track_setup_brand_disposition_and_equity_attributes_need_more">
                 {t("brand_track_setup_brand_disposition_and_equity_attributes_need_more", {number: brandEquityAttributesNeedMore})}
               </ParagraphSmall>
@@ -613,12 +619,12 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
           </Grid>
           {/* =======end mobile===== */}
           <Button
-            sx={{ mt: attributes?.length > 0 ? 3 : 1, width: { xs: "100%", sm: "auto" } }}
+            sx={{ mt: attributes?.length > 0 ? 3 : 1, ml: 3, width: { xs: "calc(100% - 24px)", sm: "auto" } }}
             onClick={handleClickMenuAttributes}
             disabled={!enableAdditionalAttributes || !editable}
             btnType={BtnType.Outlined}
-            translation-key="setup_survey_add_att_menu_action_placeholder"
-            children={<TextBtnSmall>{t('setup_survey_add_att_menu_action_placeholder')}</TextBtnSmall>}
+            translation-key="brand_track_setup_brand_disposition_and_equity_attributes_btn_add"
+            children={<TextBtnSmall>{t('brand_track_setup_brand_disposition_and_equity_attributes_btn_add')}</TextBtnSmall>}
             endIcon={<KeyboardArrowDown sx={{ fontSize: "16px !important" }} />}
           />
           <Menu
@@ -634,6 +640,11 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
               <ParagraphBody translation-key="setup_survey_add_att_menu_action_your_own_attribute" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_your_own_attribute')}</ParagraphBody>
             </MenuItem>
           </Menu>
+          {attributes?.length >= maxEquityAttributes && (
+            <ParagraphSmall $colorName="--gray-60" mt={1} ml={3} translation-key="brand_track_setup_brand_disposition_and_equity_attributes_reach_limit">
+              {t("brand_track_setup_brand_disposition_and_equity_attributes_reach_limit", {number: maxEquityAttributes})}
+            </ParagraphSmall>
+          )}
         </Grid>
       </Grid >
       <PopupManatoryAttributes
@@ -645,7 +656,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
         isOpen={openPopupPreDefined}
         project={project}
         projectAttributes={project?.projectAttributes}
-        maxSelect={(project?.solution?.maxAdditionalAttribute || 0) - ((project?.projectAttributes?.length || 0) + (project?.userAttributes?.length || 0))}
+        maxSelect={(project?.solution?.maxEquityAttributes || 0) - ((project?.projectAttributes?.length || 0) + (project?.userAttributes?.length || 0))}
         onClose={() => setOpenPopupPreDefined(false)}
         onSubmit={onAddProjectAttribute}
       />

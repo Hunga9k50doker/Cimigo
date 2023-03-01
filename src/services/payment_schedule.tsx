@@ -56,4 +56,14 @@ export class PaymentScheduleService {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async getLatestPaidPaymentSchedule( projectId: number): Promise<any> {
+    return await api
+    .get(API.PAYMENT_SCHEDULE.LATEST_PAID, { params: {projectId: projectId} })
+    .then((res) => {
+      return Promise.resolve(res.data);
+    })
+    .catch((e) => {
+      return Promise.reject(e?.response?.data);
+    });
+  }
 }

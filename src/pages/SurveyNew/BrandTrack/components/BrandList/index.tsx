@@ -235,6 +235,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
           <Button
             disabled={!editable || competingBrandDatas?.length >= maxCompetingBrand}
             className={classes.btnAddBrand}
+            disableRipple
             btnType={BtnType.Outlined}
             children={<TextBtnSmall translation-key="brand_track_setup_brand_list_competing_brand_btn_add">{t("brand_track_setup_brand_list_competing_brand_btn_add")}</TextBtnSmall>}
             startIcon={<IconNewLabelFilled sx={{ fontSize: "16px !important" }} />}

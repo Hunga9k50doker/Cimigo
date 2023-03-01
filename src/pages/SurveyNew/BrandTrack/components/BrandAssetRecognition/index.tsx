@@ -150,13 +150,15 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
             </ParagraphSmall>
           )}
       </Grid>
-      <PopupAddOrEditBrandAsset
-        isOpen={openPopupAddOrEdit}
-        onClose={onClosePopupAddOrEdit}
-        project={project}
-        onSubmit={handleAddOrEdit}
-        brandAsset={brandAssetEdit}
-      />
+      {openPopupAddOrEdit && (
+        <PopupAddOrEditBrandAsset
+          isOpen={true}
+          onClose={onClosePopupAddOrEdit}
+          project={project}
+          onSubmit={handleAddOrEdit}
+          brandAsset={brandAssetEdit}
+        />
+      )}
       <PopupConfirmDeleteCommon
         isOpen={openPopupConfirmDelete}
         title={t("brand_track_setup_popup_delete_btn_cancel")}

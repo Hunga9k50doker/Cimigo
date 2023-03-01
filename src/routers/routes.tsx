@@ -132,6 +132,11 @@ export const routes = {
       root: '/admin/email-template',
       edit: '/admin/email-template/:id/edit',
     },
+    emailReminder: {
+      root: '/admin/email-reminder',
+      create: '/admin/email-reminder/create',
+      edit: '/admin/email-reminder/:id/edit',
+    },
     config: {
       root: '/admin/config',
       edit: '/admin/config/:id/edit',

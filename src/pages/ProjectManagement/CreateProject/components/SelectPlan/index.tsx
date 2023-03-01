@@ -35,6 +35,7 @@ const SelectPlan = memo(({onChangePlanSelected, plan }: SelectPlanProps) => {
     <>
       <Grid justifyContent="center" className={classes.titleSelectPlan}>
         <Heading1
+          mb={3}
           className={classes.title}
           $colorName={"--cimigo-blue"}
           translation-key="project_create_tab_plan_select_plan_title"
@@ -43,6 +44,7 @@ const SelectPlan = memo(({onChangePlanSelected, plan }: SelectPlanProps) => {
         </Heading1>
         <Grid className={classes.titleSelectPlan}>
           <ParagraphBody
+            mb={4}
             $colorName={"--eerie-black"}
             translation-key="project_create_tab_plan_description_plan"
             dangerouslySetInnerHTML={{
@@ -51,7 +53,6 @@ const SelectPlan = memo(({onChangePlanSelected, plan }: SelectPlanProps) => {
           ></ParagraphBody>
         </Grid>
       </Grid>
-      <div className={classes.selectTypePrice}></div>
         {
           plan?.data?.length > 2
             ? <ListPlanGreaterTwo
