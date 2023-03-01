@@ -41,10 +41,10 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import PopupPayNow from "pages/SurveyNew/components/PopupPayment/PopupPayNow";
-import PopupBankTransfer from "pages/SurveyNew/components/PopupPayment/PopupBankTransfer";
-import PopupOnlinePayment from "pages/SurveyNew/components/PopupPayment/PopupOnlinePayment";
-import PopupSupportAgent from "pages/SurveyNew/components/PopupPayment/PopupSupportAgent";
+import PopupPayNow from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupPayNow";
+import PopupBankTransfer from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupBankTransfer";
+import PopupOnlinePayment from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupOnlinePayment";
+import PopupSupportAgent from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupSupportAgent";
 import { useTranslation } from "react-i18next";
 interface MakeAnOrderProp {
   projectId: number;

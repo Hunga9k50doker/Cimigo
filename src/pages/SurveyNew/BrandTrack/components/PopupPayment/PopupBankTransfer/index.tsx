@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useState, useMemo } from "react";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useTranslation } from "react-i18next";
@@ -28,7 +28,9 @@ import BoxCustom from "../components/BoxCustom";
 import { PaymentSchedule } from "models/payment_schedule";
 import moment from "moment";
 import { usePrice } from "helpers/price";
-
+import { getPayment } from "pages/SurveyNew/Pay/models";
+import { useSelector } from "react-redux";
+import { ReducerType } from "redux/reducers";
 interface Props {
   isOpen: boolean;
   paymentSchedule: PaymentSchedule;
@@ -39,6 +41,8 @@ interface Props {
 const PopupBankTransfer = memo((props: Props) => {
   const { isOpen, paymentSchedule, onCancel, onCancelPayment } = props;
   const [isComfirmPayment, setIsComfirmPayment] = useState(false);
+  const { project } = useSelector((state: ReducerType) => state.project);
+  const payment = useMemo(() => getPayment(project?.payments), [project]);
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
 
@@ -79,7 +83,7 @@ const PopupBankTransfer = memo((props: Props) => {
           translation-key="brand_track_popup_paynow_bank_transfer_subtitle"
           dangerouslySetInnerHTML={{
             __html: `${t("brand_track_popup_paynow_bank_transfer_subtitle", {
-              dueDate: moment(paymentSchedule.dueDate).format("MMM yyyy"),
+              dueDate: moment(paymentSchedule.dueDate).format("MMM DD, yyyy"),
             })}`,
           }}
         />
@@ -136,7 +140,7 @@ const PopupBankTransfer = memo((props: Props) => {
                     {t("payment_billing_payment_reference")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    RP1234
+                    {payment?.orderId}
                   </Heading6>
                 </BoxCustom>
               </Grid>
@@ -200,7 +204,7 @@ const PopupBankTransfer = memo((props: Props) => {
                     {t("payment_billing_payment_reference")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    RP1234
+                   {payment?.orderId}
                   </Heading6>
                 </Box>
               </Grid>
@@ -210,7 +214,7 @@ const PopupBankTransfer = memo((props: Props) => {
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
           <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
           <ParagraphBody my={2} ml={1} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_due_date_title">
-            {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentSchedule.dueDate).format("MMM yyyy") })}
+            {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentSchedule.dueDate).format("MMM DD, yyyy") })}
           </ParagraphBody>
         </Box>
         {!isComfirmPayment ? (

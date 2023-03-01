@@ -12,11 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import moment from "moment";
-import { PaymentService } from "services/payment";
-import { Payment } from "models/payment";
 import UserService from "services/user";
-import { getProjectRequest } from "redux/reducers/Project/actionTypes";
-import { routes } from "routers/routes";
 import { useTranslation } from "react-i18next";
 import { VALIDATION } from "config/constans";
 import { ExpandMore, InfoOutlined } from "@mui/icons-material";
@@ -39,6 +35,7 @@ import ButtonClose from "components/common/buttons/ButtonClose";
 import PopupPayment from "../components/PopupPayment";
 import { PaymentSchedule } from "models/payment_schedule";
 import { usePrice } from "helpers/price";
+import { PaymentInfo } from "models/payment_info";
 
 interface DataForm {
   paymentMethodId: number;
@@ -164,11 +161,17 @@ const PopupPayNow = memo((props: Props) => {
   const [countries, setCountries] = useState<OptionItem[]>([]);
   const [showSkipInfor, setShowSkipInfor] = useState<DataForm>();
   const [isExpandedInfo, setIsExpandedInfo] = useState<boolean>(true);
+  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>();
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch(setLoading(true));
-      await Promise.all([CountryService.getCountries({ take: 9999 }), UserService.getPaymentInfo()]).then((res) => {
+      await Promise.all([
+        CountryService.getCountries({ take: 9999 }),
+        UserService.getPaymentInfo()
+      ]).then((res) => {
         setCountries(res[0].data);
+        setPaymentInfo(res[1]);
       });
       dispatch(setLoading(false));
     };
@@ -177,28 +180,31 @@ const PopupPayNow = memo((props: Props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!user) return;
-    let countryId: OptionItem = undefined;
-    if (user?.country) {
-      countryId = { id: user.country.id, name: user.country.name };
-    }
+   if (!paymentInfo && !user) return;
+   let countryId: OptionItem = undefined;
+   if (user?.country) {
+     countryId = { id: user.country.id, name: user.country.name };
+   }
+   if (paymentInfo?.country) {
+     countryId = { id: paymentInfo.country.id, name: paymentInfo.country.name };
+   }
     reset({
       paymentMethodId: null,
       contactName: user?.fullName || "",
       contactEmail: user?.email || "",
       contactPhone: user?.phone || "",
       saveForLater: true,
-      fullName: user?.fullName || "",
-      companyName: user?.company || "",
-      title: user?.title || "",
-      email: user?.email || "",
-      phone: user?.phone || "",
+      fullName: paymentInfo?.fullName || user?.fullName || "",
+      companyName: paymentInfo?.companyName || user?.company || "",
+      title: paymentInfo?.title || user?.title || "",
+      email: paymentInfo?.email || user?.email || "",
+      phone: paymentInfo?.phone || user?.phone || "",
       countryId: countryId,
-      companyAddress: "",
-      taxCode: "",
+      companyAddress: paymentInfo?.companyAddress || "",
+      taxCode: paymentInfo?.taxCode || "",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [paymentInfo, user]);
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -628,7 +634,7 @@ const PopupPayNow = memo((props: Props) => {
                     })}
                   </ParagraphBody>
                   <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
-                    {getCostCurrency(paymentSchedule.totalAmount)?.show}
+                    {getCostCurrency(paymentSchedule.amount)?.show}
                   </ParagraphBody>
                 </div>
                 <ParagraphExtraSmall $colorName="--eerie-black">
