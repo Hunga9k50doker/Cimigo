@@ -1,4 +1,4 @@
-import { memo, useState, useMemo } from "react";
+import { memo, useState } from "react";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useTranslation } from "react-i18next";
@@ -28,9 +28,6 @@ import BoxCustom from "../components/BoxCustom";
 import { PaymentSchedule } from "models/payment_schedule";
 import moment from "moment";
 import { usePrice } from "helpers/price";
-import { getPayment } from "pages/SurveyNew/Pay/models";
-import { useSelector } from "react-redux";
-import { ReducerType } from "redux/reducers";
 interface Props {
   isOpen: boolean;
   paymentSchedule: PaymentSchedule;
@@ -41,8 +38,6 @@ interface Props {
 const PopupBankTransfer = memo((props: Props) => {
   const { isOpen, paymentSchedule, onCancel, onCancelPayment } = props;
   const [isComfirmPayment, setIsComfirmPayment] = useState(false);
-  const { project } = useSelector((state: ReducerType) => state.project);
-  const payment = useMemo(() => getPayment(project?.payments), [project]);
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
 
@@ -140,7 +135,7 @@ const PopupBankTransfer = memo((props: Props) => {
                     {t("payment_billing_payment_reference")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    {payment?.orderId}
+                    RP1234
                   </Heading6>
                 </BoxCustom>
               </Grid>
@@ -204,7 +199,7 @@ const PopupBankTransfer = memo((props: Props) => {
                     {t("payment_billing_payment_reference")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                   {payment?.orderId}
+                   RP1234
                   </Heading6>
                 </Box>
               </Grid>
