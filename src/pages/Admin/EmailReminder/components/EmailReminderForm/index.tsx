@@ -1,23 +1,29 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowBackOutlined, Save } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Grid, Typography, FormControlLabel } from "@mui/material";
 import Inputs from "components/Inputs";
 import { push } from "connected-react-router";
 import { memo, useEffect } from "react"
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { routes } from "routers/routes";
 import * as yup from 'yup';
 import { EmailReminder } from "models/Admin/email_reminder";
+import InputCheckbox from "components/common/inputs/InputCheckbox"
+import ParagraphSmall from "components/common/text/ParagraphSmall";
 
 const schema = yup.object().shape({
   title: yup.string().required('Title is required.'),
   numberOfDays: yup.number().integer('Number of days is an integer').min(0, 'Number of days must be greater or equal 0').required('Number of days is required.').typeError('Number of days is required.'),
+  isSendUser: yup.bool(),
+  isSendAdmin: yup.bool()
 })
 
 export interface EmailReminderFormData {
   title: string;
   numberOfDays: number;
+  isSendUser: boolean;
+  isSendAdmin: boolean;
 }
 
 interface Props {
@@ -31,7 +37,11 @@ const EmailReminderForm = memo(({ title, itemEdit, onSubmit }: Props) => {
   const dispatch = useDispatch();
   const { register, handleSubmit, formState: { errors }, reset, control } = useForm<EmailReminderFormData>({
     resolver: yupResolver(schema),
-    mode: 'onChange'
+    mode: 'onChange',
+    defaultValues: {
+      isSendAdmin: true,
+      isSendUser: true,
+    }
   });
 
   const handleBack = () => {
@@ -47,6 +57,8 @@ const EmailReminderForm = memo(({ title, itemEdit, onSubmit }: Props) => {
       reset({
         title: itemEdit.title,
         numberOfDays: itemEdit.numberOfDays,
+        isSendAdmin: itemEdit.isSendAdmin,
+        isSendUser: itemEdit.isSendUser
       })
     }
   }, [reset, itemEdit])
@@ -91,6 +103,42 @@ const EmailReminderForm = memo(({ title, itemEdit, onSubmit }: Props) => {
                       type="text"
                       inputRef={register('numberOfDays')}
                       errorMessage={errors.numberOfDays?.message}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <FormControlLabel
+                      // classes={{
+                      //   root: classes.checkbox,
+                      // }}
+                      control={
+                        <Controller
+                          name="isSendUser"
+                          control={control}
+                          render={({ field }) => <InputCheckbox
+                            checkboxColorType={"blue"}
+                            checked={field.value}
+                            onChange={field.onChange}
+                          />}
+                        />
+                      }
+                      label={<ParagraphSmall>Send email for user</ParagraphSmall>}
+                    />
+                    <FormControlLabel
+                      // classes={{
+                      //   root: classes.checkbox,
+                      // }}
+                      control={
+                        <Controller
+                          name="isSendAdmin"
+                          control={control}
+                          render={({ field }) => <InputCheckbox
+                            checkboxColorType={"blue"}
+                            checked={field.value}
+                            onChange={field.onChange}
+                          />}
+                        />
+                      }
+                      label={<ParagraphSmall>Send email for admin</ParagraphSmall>}
                     />
                   </Grid>
                 </Grid>
