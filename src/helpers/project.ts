@@ -131,6 +131,10 @@ export class ProjectHelper {
     const _project = ProjectHelper.getProject(project)
     return _project?.solution?.minMainBrand ?? 0
   }
+  static maxMainBrand(project: Project) {
+    const _project = ProjectHelper.getProject(project)
+    return _project?.solution?.maxMainBrand ?? 0
+  }
 
   static minCompetingBrand(project: Project) {
     const _project = ProjectHelper.getProject(project)
@@ -145,15 +149,27 @@ export class ProjectHelper {
     const _project = ProjectHelper.getProject(project)
     return _project?.solution?.minCompetitiveBrand ?? 0
   }
+  static maxCompetitiveBrand(project: Project) {
+    const _project = ProjectHelper.getProject(project)
+    return _project?.solution?.maxCompetitiveBrand ?? 0
+  }
 
   static minEquityAttributes(project: Project) {
     const _project = ProjectHelper.getProject(project)
     return _project?.solution?.minEquityAttributes ?? 0
   }
+  static maxEquityAttributes(project: Project) {
+    const _project = ProjectHelper.getProject(project)
+    return _project?.solution?.maxEquityAttributes ?? 0
+  }
 
   static minBrandAssetRecognition(project: Project) {
     const _project = ProjectHelper.getProject(project)
     return _project?.solution?.minBrandAssetRecognition ?? 0
+  }
+  static maxBrandAssetRecognition(project: Project) {
+    const _project = ProjectHelper.getProject(project)
+    return _project?.solution?.maxBrandAssetRecognition ?? 0
   }
 
   static minEyeTrackingPack(project: Project) {

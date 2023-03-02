@@ -70,8 +70,8 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
   
   const editable = useMemo(() => editableProject(project), [project])
   const competingBrandDatas = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING) || [], [project])
-  const maxCompetitiveBrand = useMemo(() => project?.solution?.maxCompetitiveBrand || 0, [project])
-  const maxEquityAttributes = useMemo(() => project?.solution?.maxEquityAttributes || 0, [project])
+  const maxCompetitiveBrand = useMemo(() => ProjectHelper.maxCompetitiveBrand(project) || 0, [project])
+  const maxEquityAttributes = useMemo(() => ProjectHelper.maxEquityAttributes(project) || 0, [project])
   const enableAddCompetitiveBrand = useMemo(() => {
     return maxCompetitiveBrand > (project?.projectBrands?.length || 0)
   }, [maxCompetitiveBrand, project])
