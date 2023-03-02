@@ -13,6 +13,7 @@ export enum AlerType {
   Success = "Success",
   Default = "Default",
   Warning = "Warning",
+  Error = "Error",
 }
 interface AlertProp {
   type?: AlerType;
@@ -33,6 +34,9 @@ const Alert = memo((props: AlertProp) => {
           [classes.borderLeftWarning]: type === AlerType.Warning,
         },
         {
+          [classes.borderLeftError]: type === AlerType.Error,
+        },
+        {
           [classes.borderLeft]: type === AlerType.Default,
         }
       )}
@@ -47,6 +51,11 @@ const Alert = memo((props: AlertProp) => {
         {type === AlerType.Warning && (
           <Box className={classes.iconWarning}>
             <WarningIcon />
+          </Box>
+        )}
+        {type === AlerType.Error && (
+          <Box className={classes.iconError}>
+            <InfoIcon />
           </Box>
         )}
         {type === AlerType.Default && (

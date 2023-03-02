@@ -10,10 +10,9 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Footer from "components/Footer";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Alert, { AlerType } from "../../../../../components/Alert";
 import {
-  GetPaymentSchedule,
   PaymentSchedule,
   PaymentScheduleStatus,
 } from "models/payment_schedule";
@@ -23,18 +22,16 @@ import PopupConfirmCancelSubsription from "../components/PopupConfirmCancelSubsr
 import PaymentHistoryList from "../components/PaymentHistoryList";
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
-import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import moment from "moment";
-import { PaymentScheduleService } from "services/payment_schedule";
 import { ReducerType } from "redux/reducers";
 import { push } from "connected-react-router";
 import { authYourNextPayment } from "../models";
 import { usePrice } from "helpers/price";
-import { setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/Payment/actionTypes";
+import { setPaymentIsMakeAnOrderSuccessReducer, setPaymentScheduleResultReducer } from "redux/reducers/Payment/actionTypes";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { EPaymentMethod, OptionItem } from "models/general";
+import { EPaymentMethod } from "models/general";
 // Import Swiper styles
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -76,7 +73,10 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
 
   const { project } = useSelector((state: ReducerType) => state.project);
 
-  const { isMakeAnOrder } = useSelector((state: ReducerType) => state.payment);
+  const { isMakeAnOrder, paymentScheduleResult } = useSelector((state: ReducerType) => state.payment);
+
+  const paymentSchedules = useMemo(() => project?.paymentSchedules || [], [project])
+
   const [isOpenPopupPaynow, setIsOpenPopupPaynow] = useState(false);
   const [isOpenPopupBankTransfer, setIsOpenPopupBankTransfer] = useState(false);
   const [isOpenPopupOnlinePayment, setIsOpenPopupOnlinePayment] =
@@ -84,9 +84,6 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   const [isOpenPopupSuportAgent, setIsOpenPopupSupportAgent] = useState(false);
   const [paymentScheduleForPay, setDataPaymentSchedule] =
     useState<PaymentSchedule>();
-  const [paymentSchedules, setPaymentSchedules] = useState<PaymentSchedule[]>(
-    []
-  );
 
   const [alertMakeAnOrderSuccess, setAlertMakeAnOrderSuccess] =
     useState<boolean>(false);
@@ -116,9 +113,10 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
     onClose();
     setIsOpenPopupPaynow(true);
   };
-  const onOpenModal = (item: number) => {
+  const onOpenModal = (item: PaymentSchedule) => {
     setIsOpenPopupPaynow(false);
-    switch (item) {
+    setDataPaymentSchedule(item)
+    switch (item?.payments?.[0]?.paymentMethodId) {
       case EPaymentMethod.BANK_TRANSFER:
         setIsOpenPopupBankTransfer(true);
         break;
@@ -143,6 +141,10 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   const onCloseMakeAnOrderSuccess = () => {
     setAlertMakeAnOrderSuccess(false);
   };
+  
+  const onCloseAlertPaymentScheduleResult = () => {
+    dispatch(setPaymentScheduleResultReducer(null))
+  };
 
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
@@ -154,22 +156,6 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
     authYourNextPayment(project, onRedirect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
-
-  useEffect(() => {
-    const getListPaymentSchedule = async () => {
-      const data: GetPaymentSchedule = {
-        projectId: projectId,
-      };
-      dispatch(setLoading(true));
-      await PaymentScheduleService.getPaymentSchedule(data)
-        .then((res) => {
-          setPaymentSchedules(res.data);
-        })
-        .catch((e) => dispatch(setErrorMess(e)))
-        .finally(() => dispatch(setLoading(false)));
-    };
-    getListPaymentSchedule();
-  }, [dispatch, projectId]);
 
   useEffect(() => {
     if (paymentSchedules.length) {
@@ -197,6 +183,54 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   return (
     <>
       <Grid classes={{ root: classes.root }}>
+        {paymentScheduleResult && paymentScheduleResult?.isSuccess && (
+          <Alert
+            title={t(
+              "Thanks for your payment!"
+            )}
+            onClose={onCloseAlertPaymentScheduleResult}
+            content={
+              <ParagraphBody
+                $colorName={"--eerie-black"}
+                className={classes.contentAlert}
+                translation-key="brand_track_your_next_payment_content_alert_payment_success"
+                dangerouslySetInnerHTML={{
+                  __html: t(
+                    "brand_track_your_next_payment_content_alert_payment_success",
+                    {
+                      dateRange: `${moment(paymentScheduleResult?.paymentSchedule?.start).format("MMM yyyy").toUpperCase()} - ${moment(paymentScheduleResult?.paymentSchedule?.end).format("MMM yyyy").toUpperCase()}`,
+                    }
+                  ),
+                }}
+              ></ParagraphBody>
+            }
+            type={AlerType.Success}
+          />
+        )}
+        {paymentScheduleResult && !paymentScheduleResult?.isSuccess && (
+          <Alert
+            title={t(
+              "Payment failed!"
+            )}
+            onClose={onCloseAlertPaymentScheduleResult}
+            content={
+              <ParagraphBody
+                $colorName={"--eerie-black"}
+                className={classes.contentAlert}
+                translation-key="brand_track_your_next_payment_content_alert_payment_fail"
+                dangerouslySetInnerHTML={{
+                  __html: t(
+                    "brand_track_your_next_payment_content_alert_payment_fail",
+                    {
+                      dateRange: `${moment(paymentScheduleResult?.paymentSchedule?.start).format("MMM yyyy").toUpperCase()} - ${moment(paymentScheduleResult?.paymentSchedule?.end).format("MMM yyyy").toUpperCase()}`,
+                    }
+                  ),
+                }}
+              ></ParagraphBody>
+            }
+            type={AlerType.Error}
+          />
+        )}
         {alertMakeAnOrderSuccess && (
           <Alert
             title={t(
@@ -417,7 +451,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   $colorName={"--gray-90"}
                                   className={classes.urlViewDetail}
                                   pt={0.5}
-                                  onClick={() => onOpenModal(item.id)}
+                                  onClick={() => onOpenModal(item)}
                                   translation-key="brand_track_your_next_payment_sub_view_detail"
                                 >
                                   {t(

@@ -11,7 +11,9 @@ export const routes = {
       invoice: '/callback/project/:id/invoice',
       create: '/callback/project/create',
       onePay: '/callback/project/onepay',
+      onePayPaymentSchedule: '/callback/project/onepay/payment-schedule',
       onePayAgainLink: '/cb/:id/onepay',
+      onePayPaymentScheduleAgainLink: '/cb/:id/onepay/payment-schedule',
     }
   },
   homePage: '/',

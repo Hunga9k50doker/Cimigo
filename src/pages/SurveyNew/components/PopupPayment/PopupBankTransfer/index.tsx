@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useTranslation } from "react-i18next";
@@ -41,6 +41,8 @@ const PopupBankTransfer = memo((props: Props) => {
   const [isComfirmPayment, setIsComfirmPayment] = useState(false);
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
+
+  const payment = useMemo(() => paymentSchedule?.payments?.[0] || null, [paymentSchedule])
 
   const comfirmPayment = () => {
     setIsComfirmPayment(true);
@@ -136,7 +138,7 @@ const PopupBankTransfer = memo((props: Props) => {
                     {t("payment_billing_payment_reference")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    RP1234
+                    {payment?.orderId}
                   </Heading6>
                 </BoxCustom>
               </Grid>
@@ -192,7 +194,7 @@ const PopupBankTransfer = memo((props: Props) => {
                     {t("brand_track_popup_paynow_bank_transfer_transfer_amount")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    {getCostCurrency(paymentSchedule.totalAmountUSD)?.USDShow}
+                    {getCostCurrency(paymentSchedule.totalAmount)?.USDShow}
                   </Heading6>
                 </BoxCustom>
                 <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} py={0.5}>
@@ -200,7 +202,7 @@ const PopupBankTransfer = memo((props: Props) => {
                     {t("payment_billing_payment_reference")}
                   </Heading6>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black">
-                    RP1234
+                    {payment?.orderId}
                   </Heading6>
                 </Box>
               </Grid>
