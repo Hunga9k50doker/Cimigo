@@ -107,9 +107,6 @@ const EmailReminderForm = memo(({ title, itemEdit, onSubmit }: Props) => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <FormControlLabel
-                      // classes={{
-                      //   root: classes.checkbox,
-                      // }}
                       control={
                         <Controller
                           name="isSendUser"
@@ -124,9 +121,6 @@ const EmailReminderForm = memo(({ title, itemEdit, onSubmit }: Props) => {
                       label={<ParagraphSmall>Send email for user</ParagraphSmall>}
                     />
                     <FormControlLabel
-                      // classes={{
-                      //   root: classes.checkbox,
-                      // }}
                       control={
                         <Controller
                           name="isSendAdmin"
