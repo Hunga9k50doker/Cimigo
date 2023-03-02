@@ -185,8 +185,9 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
       <Grid classes={{ root: classes.root }}>
         {paymentScheduleResult && paymentScheduleResult?.isSuccess && (
           <Alert
+            translation-key="brand_track_your_next_payment_title_alert_payment_success"
             title={t(
-              "Thanks for your payment!"
+              "brand_track_your_next_payment_title_alert_payment_success"
             )}
             onClose={onCloseAlertPaymentScheduleResult}
             content={
@@ -209,8 +210,9 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
         )}
         {paymentScheduleResult && !paymentScheduleResult?.isSuccess && (
           <Alert
+            translation-key="brand_track_your_next_payment_title_alert_payment_fail"
             title={t(
-              "Payment failed!"
+              "brand_track_your_next_payment_title_alert_payment_fail"
             )}
             onClose={onCloseAlertPaymentScheduleResult}
             content={
