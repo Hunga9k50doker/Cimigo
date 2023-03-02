@@ -61,11 +61,21 @@ export class ProjectHelper {
   }
 
   static getProject(project: Project) {
-    const payment = ProjectHelper.getPayment(project)
-    if (payment && !_.isEmpty(payment?.projectData)) {
-      return payment.projectData
+    switch (project?.solution?.typeId) {
+      case ESOLUTION_TYPE.PACK:
+      case ESOLUTION_TYPE.VIDEO_CHOICE:
+        const payment = ProjectHelper.getPayment(project)
+        if (payment && !_.isEmpty(payment?.projectData)) {
+          return payment.projectData
+        }
+        return project
+      case ESOLUTION_TYPE.BRAND_TRACKING:
+        const paymentSchedules = project?.paymentSchedules
+        if (paymentSchedules?.[0]?.projectData?.id) {
+          return paymentSchedules[0].projectData
+        }
+        return project
     }
-    return project
   }
 
   static getCustomQuestionPriceConfig(project: Project, customQuestionType: CustomQuestionType) {
@@ -125,6 +135,10 @@ export class ProjectHelper {
   static minCompetingBrand(project: Project) {
     const _project = ProjectHelper.getProject(project)
     return _project?.solution?.minCompetingBrand ?? 0
+  }
+  static maxCompetingBrand(project: Project) {
+    const _project = ProjectHelper.getProject(project)
+    return _project?.solution?.maxCompetingBrand ?? 0
   }
 
   static minCompetitiveBrand(project: Project) {
@@ -285,37 +299,37 @@ export class ProjectHelper {
   
   static mainBrandNeedMore(project: Project) {
     const totalMainBrand = project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.MAIN)?.length || 0
-    const minMainBrand = project?.solution?.minMainBrand
+    const minMainBrand = ProjectHelper.minMainBrand(project)
     return totalMainBrand >= minMainBrand ? 0 : minMainBrand - totalMainBrand
   }
   
   static competingBrandNeedMore(project: Project) {
     const totalCompetingBrand = project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING)?.length || 0
-    const minCompetingBrand = project?.solution?.minCompetingBrand
+    const minCompetingBrand = ProjectHelper.minCompetingBrand(project)
     return totalCompetingBrand >= minCompetingBrand ? 0 : minCompetingBrand - totalCompetingBrand
   }
 
   static numberOfCompetingBrandCanBeAdd(project: Project) {
     const totalCompetingBrand = project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING)?.length || 0
-    const maxCompetingBrand = project?.solution?.maxCompetingBrand
+    const maxCompetingBrand = ProjectHelper.maxCompetingBrand(project)
     return maxCompetingBrand > totalCompetingBrand ? maxCompetingBrand - totalCompetingBrand : 0
   }
   
   static competitiveBrandNeedMore(project: Project) {
     const totalCompetitiveBrand = project?.projectBrands?.length || 0
-    const minCompetitiveBrand = project?.solution?.minCompetitiveBrand
+    const minCompetitiveBrand = ProjectHelper.minCompetitiveBrand(project)
     return totalCompetitiveBrand >= minCompetitiveBrand ? 0 : minCompetitiveBrand - totalCompetitiveBrand
   }
   
   static brandEquityAttributesNeedMore(project: Project) {
     const totalBrandEquityAttributes = project?.projectAttributes?.length + project?.userAttributes?.length || 0
-    const minBrandEquityAttributes = project?.solution?.minEquityAttributes
+    const minBrandEquityAttributes = ProjectHelper.minEquityAttributes(project)
     return totalBrandEquityAttributes >= minBrandEquityAttributes ? 0 : minBrandEquityAttributes - totalBrandEquityAttributes
   }
   
   static brandAssetRecognitionNeedMore(project: Project) {
     const totalBrandAssetRecognition = project?.brandAssets?.length || 0
-    const minBrandAssetRecognition = project?.solution?.minBrandAssetRecognition
+    const minBrandAssetRecognition = ProjectHelper.minBrandAssetRecognition(project)
     return totalBrandAssetRecognition >= minBrandAssetRecognition ? 0 : minBrandAssetRecognition - totalBrandAssetRecognition
   }
 }

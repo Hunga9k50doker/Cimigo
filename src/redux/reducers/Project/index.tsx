@@ -104,6 +104,12 @@ export const projectReducer = (state = initial, action: any) =>
           brandAssets: action.data
         };
         break;
+      case types.SET_PAYMENT_SCHEDULES_REDUCER:
+        draft.project = {
+          ...draft.project,
+          paymentSchedules: action.data
+        };
+        break;
       default:
         return state;
     }

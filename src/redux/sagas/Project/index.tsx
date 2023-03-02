@@ -4,6 +4,7 @@ import getBrandAssets from './getBrandAssets';
 import getCustomQuestions from './getCustomQuestions';
 import getEyeTrackingPacks from './getEyeTrackingPacks';
 import getPacks from './getPacks';
+import getPaymentSchedules from './getPaymentSchedules';
 import getProject from './getProject';
 import getProjectAttributes from './getProjectAttributes';
 import getProjectBrands from './getProjectBrands';
@@ -24,5 +25,6 @@ export const projectSagas = function* root() {
     getVideos(),
     getProjectBrands(),
     getBrandAssets(),
+    getPaymentSchedules(),
   ]);
 };
