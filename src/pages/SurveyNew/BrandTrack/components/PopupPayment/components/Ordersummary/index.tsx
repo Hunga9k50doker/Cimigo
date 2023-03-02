@@ -20,7 +20,6 @@ interface PropsType {
 const Ordersummary = memo(({ paymentSchedule }: PropsType) => {
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
- console.log(paymentSchedule);
   return (
     <Box mb={2}>
       <Accordion $accordionOrderSummary={true}>
