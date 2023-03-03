@@ -31,8 +31,8 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
   const dispatch = useDispatch()
   
   const editable = useMemo(() => editableProject(project), [project])
-  const maxBrandAssetRecognition = useMemo(() => project?.solution?.maxBrandAssetRecognition || 0, [project])
-  const minBrandAssetRecognition = useMemo(() => project?.solution?.minBrandAssetRecognition || 0, [project])
+  const maxBrandAssetRecognition = useMemo(() => ProjectHelper.maxBrandAssetRecognition(project) || 0, [project])
+  const minBrandAssetRecognition = useMemo(() => ProjectHelper.minBrandAssetRecognition(project) || 0, [project])
   const brandAssetRecognitionNeedMore = useMemo(() => ProjectHelper.brandAssetRecognitionNeedMore(project) || 0, [project])
   
   const [openPopupAddOrEdit, setOpenPopupAddOrEdit] = useState<boolean>(false)

@@ -52,7 +52,7 @@ const BrandTrack = memo(({ projectId, isHaveChangePrice, tabRightPanel, toggleOu
   const competingBrands = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING) || [], [project])
   const competitiveBrands = useMemo(() => project?.projectBrands || [], [project])
   const numberOfBrandEquityAttributes = useMemo(() => project?.projectAttributes?.length + project?.userAttributes?.length || 0, [project])
-  const minBrandAssetRecognition = useMemo(() => project?.solution?.minBrandAssetRecognition || 0, [project])
+  const minBrandAssetRecognition = useMemo(() => ProjectHelper.minBrandAssetRecognition(project) || 0, [project])
   const brandAssets = useMemo(() => project?.brandAssets || [], [project])
 
   const [openMissingRequirement, setOpenMissingRequirement] = useState(false);
