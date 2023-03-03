@@ -7,7 +7,10 @@ import classes from "./styles.module.scss";
 import Button, { BtnType } from "components/common/buttons/Button";
 import Span from "../Span";
 
-function TooltipCancelPayment({ onCancelPayment }) {
+interface PropsType {
+  onCancelPayment?: () => void;
+}
+function TooltipCancelPayment({ onCancelPayment }: PropsType) {
   const [openTooltip, setOpenTooltip] = React.useState(false);
   const { t } = useTranslation();
 
@@ -34,18 +37,25 @@ function TooltipCancelPayment({ onCancelPayment }) {
         disableTouchListener
         title={
           <Grid className={classes.boxTooltipTitle}>
-            <Heading5 mb={3} $colorName="--gray-02">
-              Change payment method?
+            <Heading5 mb={3} $colorName="--gray-02" translation-key="brand_track_popup_paynow_change_payment_method">
+              {t("brand_track_popup_paynow_change_payment_method")}
             </Heading5>
             <Box display={"flex"}>
               <Button
+                translation-key="brand_track_popup_paynow_tooltip_action_1"
+                sx={{ marginRight: "16px" }}
                 btnType={BtnType.Secondary}
                 width={"150px"}
-                margin={"0 16px 0 0"}
-                children={"No, keep it"}
+                children={t("brand_track_popup_paynow_tooltip_action_1")}
                 onClick={handleTooltipClose}
               ></Button>
-              <Button btnType={BtnType.Primary} width={"150px"} children={" Yes, Change it"} onClick={onCancelPayment}></Button>
+              <Button
+                translation-key="brand_track_popup_paynow_tooltip_action_2"
+                btnType={BtnType.Primary}
+                width={"150px"}
+                children={t("brand_track_popup_paynow_tooltip_action_2")}
+                onClick={onCancelPayment}
+              ></Button>
             </Box>
           </Grid>
         }
