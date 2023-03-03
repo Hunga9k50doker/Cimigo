@@ -97,10 +97,7 @@ export class ProjectHelper {
         }
         return config
       case ESOLUTION_TYPE.BRAND_TRACKING:
-        if(!!project?.paymentSchedules?.length) {
-          return project.paymentSchedules[0]?.systemConfig
-        }
-        return config
+        return project?.paymentSchedules?.[0]?.systemConfig || config;
     }
   }
 
