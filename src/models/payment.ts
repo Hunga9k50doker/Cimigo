@@ -136,3 +136,22 @@ export const paymentStatuses: OptionItem[] = [
   { id: EPaymentStatus.CANCEL, name: 'Cancel' },
   { id: EPaymentStatus.FAILED, name: 'Failed' },
 ]
+
+export interface CheckoutPaymentScheduleParams {
+  paymentScheduleId: number,
+  returnUrl?: string,
+  againLink?: string,
+  paymentMethodId: number,
+  contactName: string,
+  contactEmail: string,
+  contactPhone: string,
+  saveForLater: boolean,
+  fullName: string,
+  companyName: string,
+  title: string,
+  email: string,
+  phone: string,
+  countryId: number,
+  companyAddress: string,
+  taxCode: string
+}

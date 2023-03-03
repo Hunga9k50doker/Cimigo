@@ -15,6 +15,8 @@ import { PaymentScheduleService } from "services/payment_schedule";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { useDispatch } from "react-redux";
 import { usePrice } from "helpers/price";
+import { PaymentService } from "services/payment";
+import FileSaver from "file-saver";
 
 interface PaymentHistoryListProps {
     projectId: number;
@@ -94,6 +96,16 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const handleDownloadInvoice = (payment) => {
+        dispatch(setLoading(true));
+        PaymentService.getInvoiceDemo(projectId, payment.id)
+            .then((res) => {
+                FileSaver.saveAs(res.data, `invoice-${moment().format("MM-DD-YYYY-hh-mm-ss")}.pdf`);
+            })
+            .catch((e) => dispatch(setErrorMess(e)))
+            .finally(() => dispatch(setLoading(false)));
+    }
+
     return (
         <>
             {
@@ -143,6 +155,7 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
                                                 <ParagraphSmallUnderline2
                                                     className={classes.linkDownload}
                                                     translation-key="brand_track_your_next_payment_download_invoice"
+                                                    onClick={() => handleDownloadInvoice(itemPaymentHistory)}
                                                 >
                                                    {t("brand_track_your_next_payment_download_invoice")}
                                                 </ParagraphSmallUnderline2>

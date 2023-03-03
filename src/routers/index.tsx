@@ -24,6 +24,8 @@ import AccountPage from 'pages/Account';
 import PaymentHistory from 'pages/PaymentHistory';
 import OnePayCallback from 'pages/Callback/Project/OnePay';
 import OnePayAgainLinkCallback from 'pages/Callback/Project/OnePayAgainLink';
+import OnePayCallbackPaymentSchedule from 'pages/Callback/Project/OnePayPaymentSchedule';
+import OnePayPaymentScheduleAgainLinkCallback from 'pages/Callback/Project/OnePayPaymentScheduleAgainLink';
 
 const Routers = () => {
 
@@ -43,6 +45,8 @@ const Routers = () => {
         
         <PrivateRoute exact path={routes.callback.project.onePay} component={OnePayCallback}/>
         <PrivateRoute exact path={routes.callback.project.onePayAgainLink} component={OnePayAgainLinkCallback}/>
+        <PrivateRoute exact path={routes.callback.project.onePayPaymentSchedule} component={OnePayCallbackPaymentSchedule}/>
+        <PrivateRoute exact path={routes.callback.project.onePayPaymentScheduleAgainLink} component={OnePayPaymentScheduleAgainLinkCallback}/>
         <PrivateRoute exact path={routes.callback.project.invoice} component={CallbackInvoice}/>
         <PrivateRoute path={routes.account.root} component={AccountPage}/>
         <PrivateRoute path={routes.paymentHistory} component={PaymentHistory}/>

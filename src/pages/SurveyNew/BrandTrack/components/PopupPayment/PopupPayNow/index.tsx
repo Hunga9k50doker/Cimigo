@@ -13,6 +13,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import moment from "moment";
 import UserService from "services/user";
+import { getPaymentSchedulesRequest } from "redux/reducers/Project/actionTypes";
+import { routes } from "routers/routes";
 import { useTranslation } from "react-i18next";
 import { VALIDATION } from "config/constans";
 import { ExpandMore, InfoOutlined } from "@mui/icons-material";
@@ -36,6 +38,8 @@ import PopupPayment from "../components/PopupPayment";
 import { PaymentSchedule } from "models/payment_schedule";
 import { usePrice } from "helpers/price";
 import { PaymentInfo } from "models/payment_info";
+import { PaymentService } from "services/payment";
+import { Payment } from "models/payment";
 
 interface DataForm {
   paymentMethodId: number;
@@ -56,7 +60,7 @@ interface Props {
   isOpen: boolean;
   paymentSchedule: PaymentSchedule;
   onClose: () => void;
-  onOpenModal?: (item: number) => void;
+  onOpenModal?: (item: PaymentSchedule) => void;
 }
 
 const PopupPayNow = memo((props: Props) => {
@@ -226,39 +230,43 @@ const PopupPayNow = memo((props: Props) => {
   }, [watch]);
 
   const onCheckout = (data: DataForm) => {
-    // dispatch(setLoading(true));
-    // PaymentService.checkout({
-    //   projectId: project.id,
-    //   paymentMethodId: data.paymentMethodId,
-    //   contactName: data.contactName,
-    //   contactEmail: data.contactEmail,
-    //   contactPhone: data.contactPhone,
-    //   saveForLater: data.saveForLater,
-    //   fullName: data.fullName,
-    //   companyName: data.companyName,
-    //   title: data.title,
-    //   email: data.email,
-    //   phone: data.phone,
-    //   countryId: data.countryId?.id,
-    //   companyAddress: data.companyAddress,
-    //   taxCode: data.taxCode,
-    //   returnUrl: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePay}?projectId=${project.id}`,
-    //   againLink: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePayAgainLink.replace(":id", `${project.id}`)}`,
-    // })
-    //   .then((res: { payment: Payment; checkoutUrl: string }) => {
-    //     if (res.checkoutUrl) {
-    //       window.location.href = res.checkoutUrl;
-    //     } else {
-    //       dispatch(getProjectRequest(project.id));
-    //     }
-    //   })
-    //   .catch((e) => dispatch(setErrorMess(e)))
-    //   .finally(() => dispatch(setLoading(false)));
+    dispatch(setLoading(true));
+    PaymentService.checkoutPaymentSchedule({
+      paymentScheduleId: paymentSchedule.id,
+      paymentMethodId: data.paymentMethodId,
+      contactName: data.contactName,
+      contactEmail: data.contactEmail,
+      contactPhone: data.contactPhone,
+      saveForLater: data.saveForLater,
+      fullName: data.fullName,
+      companyName: data.companyName,
+      title: data.title,
+      email: data.email,
+      phone: data.phone,
+      countryId: data.countryId?.id,
+      companyAddress: data.companyAddress,
+      taxCode: data.taxCode,
+      returnUrl: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePayPaymentSchedule}?projectId=${project.id}&paymentScheduleId=${paymentSchedule.id}`,
+      againLink: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePayPaymentScheduleAgainLink.replace(":id", `${project.id}`)}`,
+    })
+      .then((res: { payment: Payment; checkoutUrl: string }) => {
+        if (res.checkoutUrl) {
+          window.location.href = res.checkoutUrl;
+        } else {
+          dispatch(getPaymentSchedulesRequest(project.id));
+          onOpenModal({
+            ...paymentSchedule,
+            payments: [{...res.payment}]
+          });
+        }
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
   };
 
   const onConfirm = (data: DataForm) => {
     if (!project) return;
-    onOpenModal(watch("paymentMethodId"));
+    onCheckout(data)
   };
 
   const onSkipUpdateInfo = () => {

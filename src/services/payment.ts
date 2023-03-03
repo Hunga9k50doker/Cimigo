@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { ChangePaymentMethodParams, CheckoutParams, TryAgain, UpdateConfirmPayment, UpdateInvoiceInfo, GetMyPaymentHistory } from 'models/payment';
+import { ChangePaymentMethodParams, CheckoutParams, TryAgain, UpdateConfirmPayment, UpdateInvoiceInfo, GetMyPaymentHistory, CheckoutPaymentScheduleParams } from 'models/payment';
 import api from 'services/configApi';
 
 export class PaymentService {
@@ -121,4 +121,23 @@ export class PaymentService {
       })
   }
 
+  static async checkoutPaymentSchedule(data: CheckoutPaymentScheduleParams): Promise<any> {
+    return await api.post(`${API.PAYMENT.CHECKOUT_PAYMENT_SCHEDULE}`, data)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async onePayCallbackPaymentSchedule(data: any): Promise<any> {
+    return await api.post(`${API.PAYMENT.ONEPAY_CALLBACK_PAYMENT_SCHEDULE}`, data)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
 }
