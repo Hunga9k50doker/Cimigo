@@ -32,12 +32,13 @@ import { usePrice } from "helpers/price";
 interface Props {
   isOpen: boolean;
   paymentSchedule: PaymentSchedule;
+  onDownloadInvoice: () => void;
   onCancel: () => void;
   onCancelPayment: () => void;
 }
 
 const PopupBankTransfer = memo((props: Props) => {
-  const { isOpen, paymentSchedule, onCancel, onCancelPayment } = props;
+  const { isOpen, paymentSchedule, onDownloadInvoice, onCancel, onCancelPayment } = props;
   const [isComfirmPayment, setIsComfirmPayment] = useState(false);
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
@@ -231,7 +232,7 @@ const PopupBankTransfer = memo((props: Props) => {
             dangerouslySetInnerHTML={{ __html: t("brand_track_popup_paynow_bank_transfer_subtitle_4") }}
           />
         )}
-        <DowloadInvoice />
+        <DowloadInvoice onDownloadInvoice={onDownloadInvoice} />
         <Ordersummary paymentSchedule={paymentSchedule} />
         <ParagraphBody $colorName={"--eerie-black-00"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_2">
           {t("brand_track_popup_paynow_bank_transfer_subtitle_2")}

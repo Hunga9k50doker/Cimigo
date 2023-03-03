@@ -13,7 +13,7 @@ export const OnePayPaymentScheduleAgainLinkCallback = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(push(routes.project.detail.paymentBilling.root.replace(":id", id)))
+      dispatch(push(routes.project.detail.paymentBilling.yourNextPayment.replace(":id", id)))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])

@@ -43,6 +43,9 @@ import PopupBankTransfer from "pages/SurveyNew/components/PopupPayment/PopupBank
 import PopupOnlinePayment from "pages/SurveyNew/components/PopupPayment/PopupOnlinePayment";
 import PopupSupportAgent from "pages/SurveyNew/components/PopupPayment/PopupSupportAgent";
 import { useTranslation } from "react-i18next";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { PaymentService } from "services/payment";
+import FileSaver from "file-saver";
 interface MakeAnOrderProp {
   projectId: number;
 }
@@ -68,12 +71,13 @@ const sliderSettings = {
 
 const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   const dispatch = useDispatch();
-
+  
   const { t, i18n } = useTranslation();
-
+  
   const { project } = useSelector((state: ReducerType) => state.project);
-
   const { isMakeAnOrder, paymentScheduleResult } = useSelector((state: ReducerType) => state.payment);
+
+  const swiperRef = useRef<any>();
 
   const paymentSchedules = useMemo(() => project?.paymentSchedules || [], [project])
 
@@ -149,8 +153,16 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   const onRedirect = (route: string) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
-
-  const swiperRef = useRef<any>();
+  
+  const handleDownloadInvoice = (payment) => {
+    dispatch(setLoading(true));
+    PaymentService.getInvoiceDemo(projectId, payment.id)
+      .then((res) => {
+        FileSaver.saveAs(res.data, `invoice-${moment().format("MM-DD-YYYY-hh-mm-ss")}.pdf`);
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
+}
 
   useEffect(() => {
     authYourNextPayment(project, onRedirect);
@@ -554,6 +566,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
         <PopupBankTransfer
           isOpen={isOpenPopupBankTransfer}
           onCancel={onClose}
+          onDownloadInvoice={() => handleDownloadInvoice(paymentScheduleForPay?.payments?.[0])}
           onCancelPayment={onCancelPayment}
           paymentSchedule={paymentScheduleForPay}
         />
@@ -562,6 +575,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
         <PopupOnlinePayment
           isOpen={isOpenPopupOnlinePayment}
           onCancel={onClose}
+          onDownloadInvoice={() => handleDownloadInvoice(paymentScheduleForPay?.payments?.[0])}
           onCancelPayment={onCancelPayment}
           paymentSchedule={paymentScheduleForPay}
         />
@@ -570,6 +584,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
         <PopupSupportAgent
           isOpen={isOpenPopupSuportAgent}
           onCancel={onClose}
+          onDownloadInvoice={() => handleDownloadInvoice(paymentScheduleForPay?.payments?.[0])}
           onCancelPayment={onCancelPayment}
           paymentSchedule={paymentScheduleForPay}
         />

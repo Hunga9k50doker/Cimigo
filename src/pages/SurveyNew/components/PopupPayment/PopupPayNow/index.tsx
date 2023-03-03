@@ -244,12 +244,11 @@ const PopupPayNow = memo((props: Props) => {
           window.location.href = res.checkoutUrl;
         } else {
           dispatch(getPaymentSchedulesRequest(project.id));
+          onOpenModal({
+            ...paymentSchedule,
+            payments: [{...res.payment}]
+          });
         }
-        
-        onOpenModal({
-          ...paymentSchedule,
-          payments: [{...res.payment}]
-        });
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));

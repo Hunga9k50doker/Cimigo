@@ -112,7 +112,7 @@ export const API = {
     PAYMENT: 'v1.0/payment-schedule/next-payment',
     PAYMENT_SCHEDULE_HISTORY: 'v1.0/payment/history/brand-track',
     LATEST_PAID: 'v1.0/payment-schedule/latest-paid',
-    DETAIL: 'v1.0/payment-schedule/:id/get-detail',
+    DETAIL: 'v1.0/payment-schedule/:id',
   },
   ATTACHMENT: {
     DEFAULT: '/v1.0/attachment/',
