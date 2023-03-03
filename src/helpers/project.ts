@@ -88,11 +88,17 @@ export class ProjectHelper {
   }
 
   static getConfig(project: Project, config: ConfigData) {
-    const payment = ProjectHelper.getPayment(project)
-    if (payment && !_.isEmpty(payment.config)) {
-      return payment.config
+    switch (project?.solution?.typeId) {
+      case ESOLUTION_TYPE.PACK:
+      case ESOLUTION_TYPE.VIDEO_CHOICE:
+        const payment = ProjectHelper.getPayment(project)
+        if (payment && !_.isEmpty(payment.config)) {
+          return payment.config
+        }
+        return config
+      case ESOLUTION_TYPE.BRAND_TRACKING:
+        return project?.paymentSchedules?.[0]?.systemConfig || config;
     }
-    return config
   }
 
   static isValidQuotas(project: Project) {

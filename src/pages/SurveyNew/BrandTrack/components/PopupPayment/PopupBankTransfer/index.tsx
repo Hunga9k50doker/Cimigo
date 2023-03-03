@@ -1,4 +1,4 @@
-import { memo, useState, useMemo } from "react";
+import { memo, useMemo } from "react";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useTranslation } from "react-i18next";
@@ -32,15 +32,18 @@ import TooltipCancelPayment from "../components/Tooltip";
 interface Props {
   isOpen: boolean;
   paymentSchedule: PaymentSchedule;
+  onDownloadInvoice: () => void;
   onCancel: () => void;
   onCancelPayment: () => void;
 }
 
 const PopupBankTransfer = memo((props: Props) => {
-  const { isOpen, paymentSchedule, onCancel, onCancelPayment } = props;
+  const { isOpen, paymentSchedule, onDownloadInvoice, onCancel, onCancelPayment } = props;
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
-  const payment = useMemo(() => paymentSchedule?.payments?.[0] || null, [paymentSchedule]);
+
+  const payment = useMemo(() => paymentSchedule?.payments?.[0] || null, [paymentSchedule])
+
   const comfirmPayment = () => {
     //cal API
   };
@@ -228,7 +231,7 @@ const PopupBankTransfer = memo((props: Props) => {
             dangerouslySetInnerHTML={{ __html: t("brand_track_popup_paynow_bank_transfer_subtitle_4") }}
           />
         )}
-        <DowloadInvoice />
+        <DowloadInvoice onDownloadInvoice={onDownloadInvoice} />
         <Ordersummary paymentSchedule={paymentSchedule} />
         <ParagraphBody $colorName={"--eerie-black-00"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_2">
           {t("brand_track_popup_paynow_bank_transfer_subtitle_2")}

@@ -14,7 +14,11 @@ import ParagraphBodyUnderline from "components/common/text/ParagraphBodyUnderlin
 import images from "config/images";
 import { ImageSecond } from "../PopupImage";
 
-const DowloadInvoice = memo(() => {
+interface Props {
+  onDownloadInvoice?: () => void;
+}
+
+const DowloadInvoice = memo(({onDownloadInvoice} : Props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -22,6 +26,10 @@ const DowloadInvoice = memo(() => {
   const payment = useMemo(() => getPayment(project?.payments), [project]);
 
   const getInvoice = () => {
+    if (onDownloadInvoice) {
+      onDownloadInvoice();
+      return;
+    }
     if (!project || !payment) return;
     dispatch(setLoading(true));
     PaymentService.getInvoiceDemo(project.id, payment.id)

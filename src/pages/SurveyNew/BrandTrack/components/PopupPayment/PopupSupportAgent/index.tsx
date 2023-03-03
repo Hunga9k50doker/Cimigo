@@ -32,12 +32,13 @@ import TooltipCancelPayment from "../components/Tooltip";
 interface Props {
   isOpen: boolean;
   paymentSchedule: PaymentSchedule;
+  onDownloadInvoice: () => void;
   onCancel: () => void;
   onCancelPayment: () => void;
 }
 
 const PopupSupportAgent = memo((props: Props) => {
-  const { isOpen, paymentSchedule, onCancel, onCancelPayment } = props;
+  const { isOpen, paymentSchedule, onDownloadInvoice, onCancel, onCancelPayment } = props;
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
 
@@ -128,7 +129,7 @@ const PopupSupportAgent = memo((props: Props) => {
             {t("brand_track_popup_paynow_support_agent_subtitle_2")}
           </ParagraphBody>
         </Grid>
-        <DowloadInvoice />
+        <DowloadInvoice onDownloadInvoice={onDownloadInvoice} />
         <Ordersummary paymentSchedule={paymentSchedule} />
         <Box mt={2}>
           <ParagraphBody
