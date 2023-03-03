@@ -20,7 +20,9 @@ const CreateEmailReminder = memo((props: Props) => {
     dispatch(setLoading(true))
     const form: UpdateEmailReminder = {
       title: data.title,
-      numberOfDays: data.numberOfDays
+      numberOfDays: data.numberOfDays,
+      isSendUser: data.isSendUser,
+      isSendAdmin: data.isSendAdmin
     }
     EmailReminderService.create(form)
       .then(() => {
