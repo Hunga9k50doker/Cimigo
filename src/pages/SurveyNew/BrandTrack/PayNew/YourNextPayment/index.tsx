@@ -41,10 +41,10 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import PopupPayNow from "pages/SurveyNew/components/PopupPayment/PopupPayNow";
-import PopupBankTransfer from "pages/SurveyNew/components/PopupPayment/PopupBankTransfer";
-import PopupOnlinePayment from "pages/SurveyNew/components/PopupPayment/PopupOnlinePayment";
-import PopupSupportAgent from "pages/SurveyNew/components/PopupPayment/PopupSupportAgent";
+import PopupPayNow from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupPayNow";
+import PopupBankTransfer from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupBankTransfer";
+import PopupOnlinePayment from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupOnlinePayment";
+import PopupSupportAgent from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupSupportAgent";
 import { useTranslation } from "react-i18next";
 interface MakeAnOrderProp {
   projectId: number;
@@ -79,10 +79,14 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   const { isMakeAnOrder } = useSelector((state: ReducerType) => state.payment);
   const [isOpenPopupPaynow, setIsOpenPopupPaynow] = useState(false);
   const [isOpenPopupBankTransfer, setIsOpenPopupBankTransfer] = useState(false);
-  const [isOpenPopupOnlinePayment, setIsOpenPopupOnlinePayment] = useState(false)
+  const [isOpenPopupOnlinePayment, setIsOpenPopupOnlinePayment] =
+    useState(false);
   const [isOpenPopupSuportAgent, setIsOpenPopupSupportAgent] = useState(false);
-  const [paymentScheduleForPay, setDataPaymentSchedule] = useState <PaymentSchedule>();
-  const [paymentSchedules, setPaymentSchedules] = useState<PaymentSchedule[]>([]);
+  const [paymentScheduleForPay, setDataPaymentSchedule] =
+    useState<PaymentSchedule>();
+  const [paymentSchedules, setPaymentSchedules] = useState<PaymentSchedule[]>(
+    []
+  );
 
   const [alertMakeAnOrderSuccess, setAlertMakeAnOrderSuccess] =
     useState<boolean>(false);
@@ -111,7 +115,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   const onCancelPayment = () => {
     onClose();
     setIsOpenPopupPaynow(true);
-  }
+  };
   const onOpenModal = (item: number) => {
     setIsOpenPopupPaynow(false);
     switch (item) {
@@ -133,7 +137,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
     setIsOpenPopupBankTransfer(false);
     setIsOpenPopupOnlinePayment(false);
     setIsOpenPopupSupportAgent(false);
-  }
+  };
   const { getCostCurrency } = usePrice();
 
   const onCloseMakeAnOrderSuccess = () => {
@@ -224,7 +228,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
             type={AlerType.Success}
           />
         )}
-        {alertPaymentReminder && (
+        {alertPaymentReminder && !alertMakeAnOrderSuccess && (
           <Alert
             title={t("brand_track_your_next_payment_title_alert_warring")}
             content={
@@ -371,17 +375,27 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   btnType={BtnType.Raised}
                                   endIcon={<CreditCardIcon />}
                                   children={
-                                    <TextBtnSmall $colorName={"--white"} translation-key="brand_track_your_next_payment_title_button_pay_now" >
-                                      {t("brand_track_your_next_payment_title_button_pay_now")}
+                                    <TextBtnSmall
+                                      $colorName={"--white"}
+                                      translation-key="brand_track_your_next_payment_title_button_pay_now"
+                                    >
+                                      {t(
+                                        "brand_track_your_next_payment_title_button_pay_now"
+                                      )}
                                     </TextBtnSmall>
                                   }
-                                  onClick={()=>goToPayNow(item)}
+                                  onClick={() => goToPayNow(item)}
                                   disabled={!!index}
                                 />
 
-                                <ParagraphSmall pt={0.5} translation-key="brand_track_your_next_payment_sub_due">{`${t("brand_track_your_next_payment_sub_due")} ${moment(
-                                  item.dueDate
-                                ).format("MMM DD, yyyy")}`}</ParagraphSmall>
+                                <ParagraphSmall
+                                  pt={0.5}
+                                  translation-key="brand_track_your_next_payment_sub_due"
+                                >{`${t(
+                                  "brand_track_your_next_payment_sub_due"
+                                )} ${moment(item.dueDate).format(
+                                  "MMM DD, yyyy"
+                                )}`}</ParagraphSmall>
                               </Box>
                             )}
                             {item.status ===
@@ -394,17 +408,21 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                     pl={1}
                                     translation-key="brand_track_your_next_payment_title_button_processing"
                                   >
-                                    {t("brand_track_your_next_payment_title_button_processing")}
+                                    {t(
+                                      "brand_track_your_next_payment_title_button_processing"
+                                    )}
                                   </ParagraphSmall>
                                 </Box>
                                 <ParagraphSmallUnderline2
                                   $colorName={"--gray-90"}
                                   className={classes.urlViewDetail}
                                   pt={0.5}
-                                  onClick={()=>onOpenModal(item.id)}
+                                  onClick={() => onOpenModal(item.id)}
                                   translation-key="brand_track_your_next_payment_sub_view_detail"
                                 >
-                                  {t("brand_track_your_next_payment_sub_view_detail")}
+                                  {t(
+                                    "brand_track_your_next_payment_sub_view_detail"
+                                  )}
                                 </ParagraphSmallUnderline2>
                               </Box>
                             )}
@@ -416,8 +434,13 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   endIcon={<CreditCardIcon />}
                                   disabled={true}
                                   children={
-                                    <TextBtnSmall $colorName={"--gray-20"} translation-key="brand_track_your_next_payment_title_button_waiting">
-                                      {t("brand_track_your_next_payment_title_button_waiting")}
+                                    <TextBtnSmall
+                                      $colorName={"--gray-20"}
+                                      translation-key="brand_track_your_next_payment_title_button_waiting"
+                                    >
+                                      {t(
+                                        "brand_track_your_next_payment_title_button_waiting"
+                                      )}
                                     </TextBtnSmall>
                                   }
                                 />
@@ -426,7 +449,9 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   $colorName={"--gray-40"}
                                   translation-key="brand_track_your_next_payment_sub_due"
                                 >
-                                  {`${t("brand_track_your_next_payment_sub_due")} ${moment(item.dueDate).format(
+                                  {`${t(
+                                    "brand_track_your_next_payment_sub_due"
+                                  )} ${moment(item.dueDate).format(
                                     "MMM DD, yyyy"
                                   )}`}
                                 </ParagraphSmall>
@@ -441,7 +466,9 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   $colorName={"--cimigo-green-dark-2"}
                                   translation-key="brand_track_your_next_payment_title_button_payment_completed"
                                 >
-                                  {t("brand_track_your_next_payment_title_button_payment_completed")}
+                                  {t(
+                                    "brand_track_your_next_payment_title_button_payment_completed"
+                                  )}
                                 </ParagraphSmall>
                                 <ParagraphSmallUnderline2
                                   $colorName={"--gray-90"}
@@ -449,7 +476,9 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   pt={0.5}
                                   translation-key="brand_track_your_next_payment_download_invoice"
                                 >
-                                  {t("brand_track_your_next_payment_download_invoice")}
+                                  {t(
+                                    "brand_track_your_next_payment_download_invoice"
+                                  )}
                                 </ParagraphSmallUnderline2>
                               </Box>
                             )}
@@ -472,6 +501,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
         </Grid>
       </Grid>
       <PopupConfirmCancelSubsription
+        projectId={projectId}
         isOpen={onSubmitCancelSubsription}
         onCancel={onCloseSubmitCancelSubsription}
         onSubmit={(reson) => submitCancelSubsription(reson)}
@@ -485,13 +515,13 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
         />
       )}
       {paymentScheduleForPay && isOpenPopupBankTransfer && (
-          <PopupBankTransfer
-            isOpen={isOpenPopupBankTransfer}
-            onCancel={onClose}
-            onCancelPayment={onCancelPayment}
-            paymentSchedule={paymentScheduleForPay}
-          />
-        )}
+        <PopupBankTransfer
+          isOpen={isOpenPopupBankTransfer}
+          onCancel={onClose}
+          onCancelPayment={onCancelPayment}
+          paymentSchedule={paymentScheduleForPay}
+        />
+      )}
       {paymentScheduleForPay && isOpenPopupOnlinePayment && (
         <PopupOnlinePayment
           isOpen={isOpenPopupOnlinePayment}

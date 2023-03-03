@@ -45,8 +45,8 @@ const BrandList = memo(({ project }: BrandListProps) => {
   const mainBrandDatas = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.MAIN) || [], [project])
   const competingBrandDatas = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING) || [], [project])
 
-  const maxMainBrand = useMemo(() => project?.solution?.maxMainBrand || 0, [project])
-  const maxCompetingBrand = useMemo(() => project?.solution?.maxCompetingBrand || 0, [project])
+  const maxMainBrand = useMemo(() => ProjectHelper.maxMainBrand(project) || 0, [project])
+  const maxCompetingBrand = useMemo(() => ProjectHelper.maxCompetingBrand(project) || 0, [project])
   const mainBrandNeedMore = useMemo(() => ProjectHelper.mainBrandNeedMore(project) || 0, [project])
   const competingBrandNeedMore = useMemo(() => ProjectHelper.competingBrandNeedMore(project) || 0, [project])
   const editable = useMemo(() => editableProject(project), [project])
@@ -235,6 +235,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
           <Button
             disabled={!editable || competingBrandDatas?.length >= maxCompetingBrand}
             className={classes.btnAddBrand}
+            disableRipple
             btnType={BtnType.Outlined}
             children={<TextBtnSmall translation-key="brand_track_setup_brand_list_competing_brand_btn_add">{t("brand_track_setup_brand_list_competing_brand_btn_add")}</TextBtnSmall>}
             startIcon={<IconNewLabelFilled sx={{ fontSize: "16px !important" }} />}

@@ -81,8 +81,8 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
     <Grid component="form" autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit)} id={SETUP_SURVEY_SECTION.basic_information}>
       <Heading4 $fontSizeMobile={"16px"} mb={1} $colorName="--eerie-black" translation-key="brand_track_setup_basic_infor_title">{t('brand_track_setup_basic_infor_title', { step: 1 })}</Heading4>
       <ParagraphBody $colorName="--gray-80" mb={{ xs: 1, sm: 2 }} translation-key={"brand_track_setup_basic_infor_sub_title"}>{t("brand_track_setup_basic_infor_sub_title")}</ParagraphBody>
-      <Grid container sx={{display: "block"}}>
-        <Grid item xs={12} sm={6} id={`${SETUP_SURVEY_SECTION.basic_information}-category`} className={classes.categoryInputWrapper}>
+      <Grid container sx={{display: "block"}} className={classes.categoryWrapper}>
+        <Grid item id={`${SETUP_SURVEY_SECTION.basic_information}-category`} className={classes.categoryInputWrapper}>
           <InputTextfield
             translation-key="brand_track_field_project_category"
             readOnly={!editable}
@@ -105,14 +105,14 @@ const BasicInformation = memo(({ project }: BasicInformationProps) => {
             btnType={BtnType.Outlined}
             translation-key="common_save_changes"
             children={<TextBtnSmall>{t('common_save_changes')}</TextBtnSmall>}
-            sx={{ mt: 2, width: { xs: "100%", sm: "auto" }, height: "39px" }}
+            sx={{ width: { xs: "100%", sm: "auto" }, height: "39px" }}
           />
         )}
-        <ParagraphSmall sx={{marginTop: "8px"}} $colorName="--gray-80"
-          translation-key="brand_track_setup_basic_infor_example_question">
-            {t("brand_track_setup_basic_infor_example_question")}
-        </ParagraphSmall>
       </Grid>
+      <ParagraphSmall sx={{marginTop: "8px"}} $colorName="--gray-80"
+        translation-key="brand_track_setup_basic_infor_example_question">
+          {t("brand_track_setup_basic_infor_example_question")}
+      </ParagraphSmall>
       <Grid sx={{marginLeft: "16px"}}>
         <div className={classes.selectPremiseWrapper}>
           <ControlCheckbox

@@ -108,7 +108,8 @@ export const API = {
     PREVIEW: 'v1.0/payment-schedule/preview',
     MAKE_AN_ORDER: 'v1.0/payment-schedule/make-order',
     PAYMENT: 'v1.0/payment-schedule/next-payment',
-    PAYMENT_SCHEDULE_HISTORY: 'v1.0/payment/history/brand-track'
+    PAYMENT_SCHEDULE_HISTORY: 'v1.0/payment/history/brand-track',
+    LATEST_PAID: 'v1.0/payment-schedule/latest-paid'
   },
   ATTACHMENT: {
     DEFAULT: '/v1.0/attachment/',
@@ -174,6 +175,9 @@ export const API = {
     },
     EMAIL_TEMPLATE: {
       DEFAULT: '/v1.0/admin/email-template'
+    },
+    EMAIL_REMINDER: {
+      DEFAULT: '/v1.0/admin/email-reminder'
     },
     CONFIG: {
       DEFAULT: '/v1.0/admin/config',

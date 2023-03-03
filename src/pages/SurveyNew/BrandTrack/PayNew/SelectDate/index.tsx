@@ -30,7 +30,7 @@ import {
 import clsx from "clsx";
 import { setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/Payment/actionTypes";
 import { usePrice } from "helpers/price";
-import { setProjectReducer } from "redux/reducers/Project/actionTypes";
+import { getProjectRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { formatOrdinalumbers } from "utils/formatNumber";
 export interface DateItem {
   id: number;
@@ -140,6 +140,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
             startPaymentSchedule: res?.startPaymentSchedule,
           })
         );
+        dispatch(getProjectRequest(project.id));
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
