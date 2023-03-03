@@ -66,4 +66,14 @@ export class PaymentScheduleService {
       return Promise.reject(e?.response?.data);
     });
   }
+  static async getDetailPaymentSchedule(id: number): Promise<any> {
+    return await api
+      .get(`${API.PAYMENT_SCHEDULE.DETAIL.replace(':id', `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }

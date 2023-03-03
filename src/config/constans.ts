@@ -93,12 +93,14 @@ export const API = {
   },
   PAYMENT: {
     CHECKOUT: '/v1.0/payment/checkout',
+    CHECKOUT_PAYMENT_SCHEDULE: '/v1.0/payment/checkout/payment-schedule',
     CONFIRM: '/v1.0/payment/confirm-payment',
     INVOICE: '/v1.0/payment/invoice',
     PAYMENT_HISTORY: '/v1.0/payment/history',
     INVOICE_DEMO: '/v1.0/payment/invoice-demo',
     VALID_CONFIRM: '/v1.0/payment/valid-confirm',
     ONEPAY_CALLBACK: '/v1.0/payment/onepay/callback',
+    ONEPAY_CALLBACK_PAYMENT_SCHEDULE: '/v1.0/payment/onepay/callback/payment-schedule',
     CANCEL: '/v1.0/payment/:id/cancel',
     TRY_AGAIN: '/v1.0/payment/:id/try-again',
     UPDATE_INVOICE_INFO: '/v1.0/payment/:id/invoice-info',
@@ -109,7 +111,8 @@ export const API = {
     MAKE_AN_ORDER: 'v1.0/payment-schedule/make-order',
     PAYMENT: 'v1.0/payment-schedule/next-payment',
     PAYMENT_SCHEDULE_HISTORY: 'v1.0/payment/history/brand-track',
-    LATEST_PAID: 'v1.0/payment-schedule/latest-paid'
+    LATEST_PAID: 'v1.0/payment-schedule/latest-paid',
+    DETAIL: 'v1.0/payment-schedule/:id',
   },
   ATTACHMENT: {
     DEFAULT: '/v1.0/attachment/',
