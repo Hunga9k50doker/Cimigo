@@ -20,7 +20,6 @@ interface PropsType {
 const Ordersummary = memo(({ paymentSchedule }: PropsType) => {
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
-
   return (
     <Box mb={2}>
       <Accordion $accordionOrderSummary={true}>
@@ -40,7 +39,7 @@ const Ordersummary = memo(({ paymentSchedule }: PropsType) => {
                 })}
               </Heading6>
               <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
-                {getCostCurrency(paymentSchedule.sampleSizeCostPerMonth)?.show}
+                {getCostCurrency(paymentSchedule.amount)?.show}
               </Heading6>
             </BoxCustom>
             <ParagraphExtraSmall $colorName={"--gray-60"}>
@@ -56,7 +55,7 @@ const Ordersummary = memo(({ paymentSchedule }: PropsType) => {
                 {t("common_sub_total")}
               </ParagraphSmall>
               <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
-                {getCostCurrency(paymentSchedule.sampleSizeCostPerMonth)?.show}
+                {getCostCurrency(paymentSchedule.amount)?.show}
               </Heading6>
             </BoxCustom>
             <BoxCustom $flexBox={true}>
