@@ -112,6 +112,7 @@ const HouseholdIncomeTab = memo(({ project, questions, onNextStep }: Props) => {
                       $cleanPadding={true}
                       control={
                         <InputCheckbox
+                          disabled={!editable}
                           checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                           onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
                         />
@@ -131,6 +132,7 @@ const HouseholdIncomeTab = memo(({ project, questions, onNextStep }: Props) => {
                       $cleanPadding={true}
                       control={
                         <InputCheckbox
+                          disabled={!editable}
                           checked={isSelectAll(question.id, dataSelected, question.targetAnswers)}
                           onChange={(_, checked) => onSelectAll(question.id, question.targetAnswers, checked, dataSelected, setDataSelected)}
                         />
