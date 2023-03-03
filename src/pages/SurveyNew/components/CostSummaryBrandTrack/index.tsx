@@ -25,6 +25,7 @@ const CostSummaryBrandTrack = memo(({ project, price }: CostSummaryBrandTrackPro
   const { configs } = useSelector((state: ReducerType) => state.user)
 
   const _project = useMemo(() => ProjectHelper.getProject(project), [project])
+  const _configs = useMemo(() => ProjectHelper.getConfig(project, configs), [project, configs])
 
   return (
     <>
@@ -69,7 +70,7 @@ const CostSummaryBrandTrack = memo(({ project, price }: CostSummaryBrandTrackPro
         <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"}>{price?.amountCost?.show}</ParagraphSmall>
       </Box>
       <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
-        <ParagraphSmall $colorName="--eerie-black" translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</ParagraphSmall>
+        <ParagraphSmall $colorName="--eerie-black" translation-key="common_vat">{t('common_vat', { percent: (_configs?.vat || 0) * 100 })}</ParagraphSmall>
         <ParagraphSmall $colorName="--eerie-black" $fontWeight={"500"}>{price?.vatCost?.show}</ParagraphSmall>
       </Box>
       <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>

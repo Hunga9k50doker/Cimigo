@@ -4,11 +4,12 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall"
 import ParagraphSmall from "components/common/text/ParagraphSmall"
 import { TotalPrice } from "helpers/price"
 import { Project } from "models/project"
-import { memo } from "react"
+import { memo, useMemo } from "react"
 import { useSelector } from "react-redux"
 import { ReducerType } from "redux/reducers"
 import { useTranslation } from "react-i18next"
 import { ESOLUTION_TYPE } from "models/solution";
+import { ProjectHelper } from "helpers/project";
 
 interface CostSummaryProps {
   price: TotalPrice,
@@ -20,6 +21,7 @@ const CostSummary = memo(({ project, price }: CostSummaryProps) => {
   const { t } = useTranslation()
 
   const { configs } = useSelector((state: ReducerType) => state.user)
+  const _configs = useMemo(() => ProjectHelper.getConfig(project, configs), [project, configs])
 
   const renderETTranslateKey = () => {
     switch (project?.solution?.typeId) {
@@ -61,7 +63,7 @@ const CostSummary = memo(({ project, price }: CostSummaryProps) => {
         <ParagraphSmall $colorName="--eerie-black">{price?.amountCost?.show}</ParagraphSmall>
       </Box>
       <Box display="flex" alignItems="center" justifyContent="space-between" mt={0.5}>
-        <ParagraphSmall $colorName="--eerie-black" translation-key="common_vat">{t('common_vat', { percent: (configs?.vat || 0) * 100 })}</ParagraphSmall>
+        <ParagraphSmall $colorName="--eerie-black" translation-key="common_vat">{t('common_vat', { percent: (_configs?.vat || 0) * 100 })}</ParagraphSmall>
         <ParagraphSmall $colorName="--eerie-black">{price?.vatCost?.show}</ParagraphSmall>
       </Box>
       <Divider sx={{ my: 2, borderColor: 'var(--gray-20)' }} />

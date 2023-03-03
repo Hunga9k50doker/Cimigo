@@ -75,7 +75,7 @@ const PopupOnlinePayment = memo((props: Props) => {
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
           <CalendarMonthOutlinedIcon sx={{ color: "var(--gray-80)" }} />
           <ParagraphBody my={2} ml={1} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_due_date_title">
-            {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentSchedule.dueDate).format("MMM yyyy") })}
+            {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentSchedule.dueDate).format("MMM DD, yyyy") })}
           </ParagraphBody>
         </Box>
         <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_online_payment_subtitle_2">
