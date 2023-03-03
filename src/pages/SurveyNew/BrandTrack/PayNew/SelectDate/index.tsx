@@ -217,6 +217,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
             <>
               <Grid className={classes.viewPaymentScheduleTextWrapper} pl={1}>
                 <ArrowRightIcon
+                  sx={{color: "var(--cimigo-blue)"}}
                   className={clsx({
                     [classes.rotateIcon]: isOpenListPaymentSchedule,
                   })}
