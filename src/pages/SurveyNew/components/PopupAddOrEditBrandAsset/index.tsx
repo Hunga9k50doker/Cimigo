@@ -153,7 +153,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
         brand: brandAsset.brand,
         description: brandAsset.description,
         typeId: brandAssetTypes.filter(item => item?.id === brandAsset?.typeId)[0],
-        slogan: brandAsset.slogan,
+        slogan: brandAsset.slogan || "",
         asset: brandAsset.asset,
       });
     }
