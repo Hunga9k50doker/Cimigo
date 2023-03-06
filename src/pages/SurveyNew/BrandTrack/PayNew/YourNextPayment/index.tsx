@@ -46,6 +46,8 @@ import { useTranslation } from "react-i18next";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { PaymentService } from "services/payment";
 import FileSaver from "file-saver";
+import { ChangePaymentMethodFormData, Payment } from "models/payment";
+
 interface MakeAnOrderProp {
   projectId: number;
 }
@@ -113,7 +115,29 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
     setDataPaymentSchedule(item);
     setIsOpenPopupPaynow(true);
   };
+   const onChangePaymentMethod = (data: ChangePaymentMethodFormData) => {
+     dispatch(setLoading(true));
+     PaymentService.changePaymenScheduletMethod(paymentSchedules[0].id, {
+       projectId: project.id,
+       paymentMethodId: data.paymentMethodId,
+       contactName: data.contactName,
+       contactEmail: data.contactEmail,
+       contactPhone: data.contactPhone,
+       //  returnUrl: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePay}?projectId=${project.id}`,
+       //  againLink: `${process.env.REACT_APP_BASE_URL}${routes.callback.project.onePayAgainLink.replace(":id", `${project.id}`)}`,
+     })
+       .then((res: { payment: Payment; checkoutUrl: string }) => {
+         if (res.checkoutUrl) {
+           window.location.href = res.checkoutUrl;
+         } else {
+           //  dispatch(getProjectRequest(project.id));
+         }
+       })
+       .catch((e) => dispatch(setErrorMess(e)))
+       .finally(() => dispatch(setLoading(false)));
+   };
   const onCancelPayment = () => {
+    // onChangePaymentMethod();
     onClose();
     setIsOpenPopupPaynow(true);
   };
