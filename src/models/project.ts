@@ -14,7 +14,7 @@ import { Plan } from './Admin/plan';
 import { Video } from './video';
 import { ProjectBrand } from './project_brand';
 import { BrandAsset } from './brand_asset';
-import { EPaymentScheduleCancelType, PaymentSchedule } from './payment_schedule';
+import { PaymentSchedule } from './payment_schedule';
 export interface CreateProjectData {
   solutionId: number;
   planId: number;
@@ -74,7 +74,6 @@ export interface Project {
   planPricePerMonth?: number;
   startPaymentSchedule?: Date;
   paymentSchedules?: PaymentSchedule[];
-  cancelPaymentScheduleType: EPaymentScheduleCancelType;
 }
 
 export enum ProjectStatus {

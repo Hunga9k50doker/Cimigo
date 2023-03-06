@@ -73,9 +73,3 @@ export interface GetListPaymentScheduleHistory {
   take?: number;
   page?: number;
 }
-
-export enum EPaymentScheduleCancelType {
-  NOT_CANCEL = 0,
-  AUTO_CANCEL,
-  USER_CANCEL
-}
