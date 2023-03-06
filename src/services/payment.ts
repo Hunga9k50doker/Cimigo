@@ -47,20 +47,6 @@ export class PaymentService {
       })
   }
 
- static async validConfirmPaymentSchedule(projectId: number): Promise<any> {
-    return await api.get(`${API.PAYMENT.VALID_CONFIRM_PAYMENT_SCHEDULE}`, {
-      params: {
-        projectId
-      }
-    })
-      .then((res) => {
-        return Promise.resolve(res.data.data)
-      })
-      .catch((e) => {
-        return Promise.reject(e?.response?.data);
-      })
-  }
-
   static async cancel(id: number): Promise<any> {
     return await api.put(API.PAYMENT.CANCEL.replace(':id', `${id}`))
       .then((res) => {
@@ -99,15 +85,6 @@ export class PaymentService {
         return Promise.reject(e?.response?.data);
       })
   }
-  static async changePaymenScheduletMethod(id: number, data: ChangePaymentMethodParams): Promise<any> {
-      return await api.put(`${API.PAYMENT.CHANGE_PAYMENT_SCHEDULE_METHOD.replace(':id', `${id}`)}`, data)
-        .then((res) => {
-          return Promise.resolve(res.data.data)
-        })
-        .catch((e) => {
-          return Promise.reject(e?.response?.data);
-        })
-    }
 
   static async getInvoice(projectId: number) {
     return await api.get(API.PAYMENT.INVOICE, {
