@@ -150,7 +150,6 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
                         hastooltip={answer.description}
                         control={
                           <InputCheckbox
-                            disabled={!editable}
                             checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                             onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
                           />
@@ -163,7 +162,6 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
                     <ControlCheckbox
                       control={
                         <InputCheckbox
-                          disabled={!editable}
                           checked={isSelectAll(question.id, dataSelected, question.targetAnswers)}
                           onChange={(_, checked) => onSelectAll(question.id, question.targetAnswers, checked, dataSelected, setDataSelected)}
                         />
@@ -188,7 +186,6 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
                         <QuestionBoxSuggestList>
                           {question.targetAnswerSuggestions.map(suggestion => (
                             <ChipCustom
-                              disabled={!editable}
                               clickable
                               key={suggestion.id}
                               label={suggestion.name}
@@ -229,7 +226,6 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
                               </BasicTooltip>
                             )}
                             <Switch
-                              disabled={!editable}
                               sx={{ ml: 3 }}
                               checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                               onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
@@ -246,7 +242,7 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
                                     hastooltip={answer.description}
                                     control={
                                       <InputCheckbox
-                                        disabled={editable ? !!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === answer.groupId) : !editable}
+                                        disabled={!!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === answer.groupId)}
                                         checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                                         onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
                                       />
@@ -262,7 +258,7 @@ const LocationTab = memo(({ project, questions, onNextStep }: Props) => {
                                   $cleanPadding={true}
                                   control={
                                     <InputCheckbox
-                                      disabled={editable ? !!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === groupsSelected[question.id]?.id) : !editable}
+                                      disabled={!!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === groupsSelected[question.id]?.id)}
                                       checked={isSelectAll(question.id, dataSelected, groupsSelected[question.id]?.targetAnswers)}
                                       onChange={(_, checked) => onSelectAll(question.id, groupsSelected[question.id]?.targetAnswers, checked, dataSelected, setDataSelected, groupsSelected[question.id]?.id)}
                                     />

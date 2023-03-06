@@ -161,7 +161,6 @@ const PopupLocationMobile = memo(({ isOpen, project, questions, onCancel }: Prop
                           hastooltip={answer.description}
                           control={
                             <InputCheckbox
-                              disabled={!editable}
                               checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                               onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
                             />
@@ -175,7 +174,6 @@ const PopupLocationMobile = memo(({ isOpen, project, questions, onCancel }: Prop
                         $cleanPadding={true}
                         control={
                           <InputCheckbox
-                            disabled={!editable}
                             checked={isSelectAll(question.id, dataSelected, question.targetAnswers)}
                             onChange={(_, checked) => onSelectAll(question.id, question.targetAnswers, checked, dataSelected, setDataSelected)}
                           />
@@ -198,7 +196,6 @@ const PopupLocationMobile = memo(({ isOpen, project, questions, onCancel }: Prop
                           <Box className={classes.suggestionList}>
                             {question.targetAnswerSuggestions.map(suggestion => (
                               <ChipCustom
-                                disabled={!editable}
                                 clickable
                                 key={suggestion.id}
                                 label={suggestion.name}
@@ -236,7 +233,6 @@ const PopupLocationMobile = memo(({ isOpen, project, questions, onCancel }: Prop
                                     )}
                                   </Box>
                                   <Switch
-                                    disabled={!editable}
                                     sx={{ ml: 1 }}
                                     checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                                     onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
@@ -253,7 +249,7 @@ const PopupLocationMobile = memo(({ isOpen, project, questions, onCancel }: Prop
                                           hastooltip={answer.description}
                                           control={
                                             <InputCheckbox
-                                              disabled={editable ? !!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === answer.groupId) : !editable}
+                                              disabled={!!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === answer.groupId)}
                                               checked={!!dataSelected[question.id]?.find(it => it.id === answer.id)}
                                               onChange={(_, checked) => _onToggleAnswer(question.id, answer, checked)}
                                             />
@@ -269,7 +265,7 @@ const PopupLocationMobile = memo(({ isOpen, project, questions, onCancel }: Prop
                                         $cleanPadding={true}
                                         control={
                                           <InputCheckbox
-                                            disabled={editable ? !!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === group.id) : !editable}
+                                            disabled={!!dataSelected[question.id]?.find(it => it.exclusive && it.groupId === group.id)}
                                             checked={isSelectAll(question.id, dataSelected, group.targetAnswers)}
                                             onChange={(_, checked) => onSelectAll(question.id, group.targetAnswers, checked, dataSelected, setDataSelected, group.id)}
                                           />
