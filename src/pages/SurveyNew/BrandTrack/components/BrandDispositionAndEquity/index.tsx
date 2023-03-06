@@ -620,6 +620,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
           {/* =======end mobile===== */}
           <Button
             sx={{ mt: attributes?.length > 0 ? 3 : 1, ml: 3, width: { xs: "calc(100% - 24px)", sm: "auto" } }}
+            disableRipple
             onClick={handleClickMenuAttributes}
             disabled={!enableAdditionalAttributes || !editable}
             btnType={BtnType.Outlined}

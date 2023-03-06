@@ -308,7 +308,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
             type={AlerType.Warning}
           />
         )}
-        {!project?.status && (
+        {!project?.cancelPaymentScheduleType && (
           <Alert
             title={t(
               "brand_track_your_next_payment_title_alert_subscription_canceled"
