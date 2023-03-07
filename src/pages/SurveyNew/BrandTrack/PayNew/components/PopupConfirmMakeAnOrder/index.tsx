@@ -92,7 +92,7 @@ const PopupConfirmMakeAnOrder = memo((props: PopupConfirmMakeAnOrderProps) => {
             className={classes.description}
             translation-key="brand_track_select_start_date_content_modal_make_an_order_des_3"
             dangerouslySetInnerHTML={{
-              __html: t("brand_track_select_start_date_note_selected_date", {
+              __html: t("brand_track_select_start_date_content_modal_make_an_order_des_3", {
                 date: moment(paymentSchedule?.dueDate).format("MMM DD, yyyy"),
                 scheduledMonths: paymentSchedule?.scheduledMonths,
               }),
