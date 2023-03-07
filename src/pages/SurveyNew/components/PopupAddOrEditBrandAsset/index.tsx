@@ -30,6 +30,7 @@ import { MusicNote, Error, Title } from "@mui/icons-material";
 import IconImagesMode from "components/icons/IconImagesMode";
 import { convertFileToBase64 } from "utils/file";
 import ErrorMessage from "components/Inputs/components/ErrorMessage";
+import clsx from "clsx";
 
 const MAX_CHARACTER_OF_SLOGAN = 100;
 const MAX_CHARACTER_OF_DESCRIPTION = 200;
@@ -153,7 +154,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
         brand: brandAsset.brand,
         description: brandAsset.description,
         typeId: brandAssetTypes.filter(item => item?.id === brandAsset?.typeId)[0],
-        slogan: brandAsset.slogan,
+        slogan: brandAsset.slogan || "",
         asset: brandAsset.asset,
       });
     }
@@ -320,7 +321,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
                 </ParagraphSmall>
                 <InputTextareaAutosize
                   translation-key="brand_track_field_brand_asset_type_slogan_placeholder"
-                  className={classes.inputField}
+                  className={clsx(classes.inputField, classes.inputTextarea)}
                   id="slogan"
                   name="slogan"
                   placeholder={t("brand_track_field_brand_asset_type_slogan_placeholder")}
@@ -391,7 +392,7 @@ const PopupAddOrEditBrandAsset = (props: Props) => {
               </ParagraphSmall>
               <InputTextareaAutosize
                 translation-key="brand_track_field_brand_asset_description_placeholder"
-                className={classes.inputField}
+                className={clsx(classes.inputField, classes.inputTextarea)}
                 id="description"
                 name="description"
                 placeholder={t("brand_track_field_brand_asset_description_placeholder")}

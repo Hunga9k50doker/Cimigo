@@ -244,6 +244,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, project, questionsAgeGender, ques
                         $cleanPadding={true}
                         control={
                           <InputCheckbox
+                            disabled={!editable}
                             checked={!!dataSelectedGenderAge[question.id]?.find(it => it.id === answer.id)}
                             onChange={(_, checked) => _onToggleAnswerGenderAge(question.id, answer, checked)}
                           />
@@ -263,6 +264,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, project, questionsAgeGender, ques
                         $cleanPadding={true}
                         control={
                           <InputCheckbox
+                            disabled={!editable}
                             checked={isSelectAll(question.id, dataSelectedGenderAge, question.targetAnswers)}
                             onChange={(_, checked) => onSelectAll(question.id, question.targetAnswers, checked, dataSelectedGenderAge, setDataSelectedGenderAge)}
                           />
@@ -290,6 +292,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, project, questionsAgeGender, ques
                         $cleanPadding={true}
                         control={
                           <InputCheckbox
+                            disabled={!editable}
                             checked={!!dataSelectedMum[question.id]?.find(it => it.id === answer.id)}
                             onChange={(_, checked) => _onToggleAnswerMum(question.id, answer, checked)}
                           />
@@ -309,6 +312,7 @@ const PopupAgeCoverageMobile = memo(({ isOpen, project, questionsAgeGender, ques
                         $cleanPadding={true}
                         control={
                           <InputCheckbox
+                            disabled={!editable}
                             checked={isSelectAll(question.id, dataSelectedMum, question.targetAnswers)}
                             onChange={(_, checked) => onSelectAll(question.id, question.targetAnswers, checked, dataSelectedMum, setDataSelectedMum)}
                           />
