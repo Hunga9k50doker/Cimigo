@@ -76,16 +76,4 @@ export class PaymentScheduleService {
         return Promise.reject(e?.response?.data);
       });
   }
-   static async confirmPaymentSchedule(paymentScheduleId: number): Promise<any> {
-     return await api.post(API.PAYMENT_SCHEDULE.CONFIRM_PAYMENT, {
-       paymentScheduleId,
-       userConfirm: true
-    })
-      .then((res) => {
-        return Promise.resolve(res.data.data)
-      })
-      .catch((e) => {
-        return Promise.reject(e?.response?.data);
-      })
-  }
 }
