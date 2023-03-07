@@ -169,6 +169,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
           ))}
           {editable && mainBrandDatas.length < maxMainBrand && (
             <Button
+              disableRipple
               className={classes.btnAddMainBrand}
               btnType={BtnType.Outlined}
               children={<TextBtnSmall translation-key="brand_track_setup_brand_list_main_brand_add_btn">{t("brand_track_setup_brand_list_main_brand_add_btn")}</TextBtnSmall>}
