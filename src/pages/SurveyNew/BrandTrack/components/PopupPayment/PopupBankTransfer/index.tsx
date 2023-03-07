@@ -43,6 +43,7 @@ const PopupBankTransfer = memo((props: Props) => {
   const { getCostCurrency } = usePrice();
 
   const payment = useMemo(() => paymentSchedule?.payments?.[0] || null, [paymentSchedule])
+  
   const comfirmPayment = () => {
     //cal API
   };
