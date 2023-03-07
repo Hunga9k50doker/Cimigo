@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo,useState } from "react";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useTranslation } from "react-i18next";
@@ -29,6 +29,12 @@ import { PaymentSchedule } from "models/payment_schedule";
 import moment from "moment";
 import { usePrice } from "helpers/price";
 import TooltipCancelPayment from "../components/Tooltip";
+import { PaymentScheduleService } from "services/payment_schedule";
+import { useDispatch, useSelector } from "react-redux";
+import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
+import { ReducerType } from "redux/reducers";
+import { getPaymentSchedulesRequest } from "redux/reducers/Project/actionTypes";
+
 interface Props {
   isOpen: boolean;
   paymentSchedule: PaymentSchedule;
@@ -38,14 +44,22 @@ interface Props {
 }
 
 const PopupBankTransfer = memo((props: Props) => {
+  const dispatch = useDispatch();
   const { isOpen, paymentSchedule, onDownloadInvoice, onCancel, onCancelPayment } = props;
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
-
-  const payment = useMemo(() => paymentSchedule?.payments?.[0] || null, [paymentSchedule])
-
+  const { project } = useSelector((state: ReducerType) => state.project);
+  const payment = useMemo(() => paymentSchedule?.payments?.[0], [paymentSchedule]);
+  const [isConfirmPayment, setIsConfirmPayment] = useState(payment?.userConfirm)
   const comfirmPayment = () => {
-    //cal API
+    dispatch(setLoading(true));
+    PaymentScheduleService.confirmPaymentSchedule(paymentSchedule.id)
+      .then(() => {
+        setIsConfirmPayment(true)
+        dispatch(getPaymentSchedulesRequest(project.id));
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
   };
   return (
     <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
@@ -215,7 +229,7 @@ const PopupBankTransfer = memo((props: Props) => {
             {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentSchedule.dueDate).format("MMM DD, yyyy") })}
           </ParagraphBody>
         </Box>
-        {!payment?.userConfirm ? (
+        {!isConfirmPayment ? (
           <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_3">
             {t("brand_track_popup_paynow_bank_transfer_subtitle_3")}{" "}
             <Span onClick={comfirmPayment} translation-key="brand_track_popup_paynow_action_2">
