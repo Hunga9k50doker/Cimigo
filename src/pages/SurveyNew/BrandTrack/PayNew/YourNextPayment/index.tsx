@@ -46,6 +46,8 @@ import { useTranslation } from "react-i18next";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { PaymentService } from "services/payment";
 import FileSaver from "file-saver";
+import { PaymentScheduleService } from "services/payment_schedule";
+import { getPaymentSchedulesRequest } from "redux/reducers/Project/actionTypes";
 interface MakeAnOrderProp {
   projectId: number;
 }
@@ -114,8 +116,15 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
     setIsOpenPopupPaynow(true);
   };
   const onCancelPayment = () => {
-    onClose();
-    setIsOpenPopupPaynow(true);
+    dispatch(setLoading(true));
+    PaymentScheduleService.cancelPaymentSchedule(paymentScheduleForPay.id)
+      .then(() => {
+        onClose();
+        setIsOpenPopupPaynow(true);
+        dispatch(getPaymentSchedulesRequest(project.id));
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
   };
   const onOpenModal = (item: PaymentSchedule) => {
     setIsOpenPopupPaynow(false);
