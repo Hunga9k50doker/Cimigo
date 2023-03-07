@@ -28,6 +28,7 @@ import BoxCustom from "../components/BoxCustom";
 import { PaymentSchedule } from "models/payment_schedule";
 import moment from "moment";
 import { usePrice } from "helpers/price";
+import TooltipCancelPayment from "../components/TooltipCancelPayment";
 interface Props {
   isOpen: boolean;
   paymentSchedule: PaymentSchedule;
@@ -41,12 +42,10 @@ const PopupBankTransfer = memo((props: Props) => {
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
 
-  const payment = useMemo(() => paymentSchedule?.payments?.[0] || null, [paymentSchedule]);
-  
+  const payment = useMemo(() => paymentSchedule?.payments?.[0] || null, [paymentSchedule])
   const comfirmPayment = () => {
     //cal API
   };
-
   return (
     <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
       <DialogTitleConfirm $padding={"24px 24px 8px 24px"}>
@@ -245,10 +244,7 @@ const PopupBankTransfer = memo((props: Props) => {
           />
         </Box>
         <Typography my={3} color={"var(--eerie-black)"} textAlign="center" translation-key="brand_track_popup_paynow_change_payment_method">
-          {t("brand_track_popup_paynow_change_payment_method")}{" "}
-          <Span translation-key="brand_track_popup_paynow_action_1" onClick={onCancelPayment}>
-            {t("brand_track_popup_paynow_action_1")}
-          </Span>
+          {t("brand_track_popup_paynow_change_payment_method")} <TooltipCancelPayment onCancelPayment={onCancelPayment} />
         </Typography>
       </DialogContentConfirm>
     </PopupPayment>

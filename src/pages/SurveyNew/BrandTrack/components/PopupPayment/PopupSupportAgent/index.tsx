@@ -27,7 +27,7 @@ import BoxCustom from "../components/BoxCustom";
 import { PaymentSchedule } from "models/payment_schedule";
 import moment from "moment";
 import { usePrice } from "helpers/price";
-import TooltipCancelPayment from "../components/Tooltip";
+import TooltipCancelPayment from "../components/TooltipCancelPayment";
 
 interface Props {
   isOpen: boolean;
