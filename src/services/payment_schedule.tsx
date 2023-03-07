@@ -4,6 +4,7 @@ import {
   GetPaymentSchedule,
   GetPaymentSchedulePreview,
   PaymentScheduleMakeAnOrder,
+  CancelPayment,
 } from "models/payment_schedule";
 import api from "services/configApi";
 
@@ -76,7 +77,7 @@ export class PaymentScheduleService {
         return Promise.reject(e?.response?.data);
       });
   }
-   static async cancelPaymentSchedule(paymentScheduleId: number): Promise<any> {
+   static async cancelPaymentSchedule(paymentScheduleId: number): Promise<CancelPayment> {
      return await api.post(API.PAYMENT_SCHEDULE.CANCEL_PAYMENT, {
        paymentScheduleId,
     })

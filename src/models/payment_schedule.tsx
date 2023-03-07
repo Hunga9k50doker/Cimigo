@@ -73,3 +73,7 @@ export interface GetListPaymentScheduleHistory {
   take?: number;
   page?: number;
 }
+
+export interface CancelPayment {
+  paymentScheduleId: number;
+}
