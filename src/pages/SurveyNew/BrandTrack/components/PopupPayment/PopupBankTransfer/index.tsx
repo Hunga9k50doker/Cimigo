@@ -50,13 +50,13 @@ const PopupBankTransfer = memo((props: Props) => {
   const dispatch = useDispatch();
   const { project } = useSelector((state: ReducerType) => state.project);
   const payment = useMemo(() => ProjectHelper.getPaymentForBrandTrack(paymentSchedule), [paymentSchedule]);
-  const [isConfirmPayment, setIsConfirmPayment] = useState(false);
+  const [userConfirm, setUserConfirm] = useState(false);
 
   const comfirmPayment = () => {
     dispatch(setLoading(true));
     PaymentScheduleService.confirmPaymentSchedule(paymentSchedule.id, true)
       .then(() => {
-        setIsConfirmPayment(true);
+        setUserConfirm(true);
         dispatch(getPaymentSchedulesRequest(project.id));
       })
       .catch((e) => dispatch(setErrorMess(e)))
@@ -64,7 +64,7 @@ const PopupBankTransfer = memo((props: Props) => {
   };
 
   useEffect(() => {
-    setIsConfirmPayment(payment?.userConfirm);
+    setUserConfirm(payment?.userConfirm);
   }, [payment]);
 
   return (
@@ -235,7 +235,7 @@ const PopupBankTransfer = memo((props: Props) => {
             {t("brand_track_popup_paynow_due_date_title", { dueDate: moment(paymentSchedule.dueDate).format("MMM DD, yyyy") })}
           </ParagraphBody>
         </Box>
-        {!isConfirmPayment ? (
+        {!userConfirm ? (
           <ParagraphBody textAlign={"center"} $colorName={"--gray-80"} translation-key="brand_track_popup_paynow_bank_transfer_subtitle_3">
             {t("brand_track_popup_paynow_bank_transfer_subtitle_3")}{" "}
             <Span onClick={comfirmPayment} translation-key="brand_track_popup_paynow_action_2">
