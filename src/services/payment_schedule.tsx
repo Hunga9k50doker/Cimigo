@@ -4,6 +4,7 @@ import {
   GetPaymentSchedule,
   GetPaymentSchedulePreview,
   PaymentScheduleMakeAnOrder,
+  ConfirmPayment,
 } from "models/payment_schedule";
 import api from "services/configApi";
 
@@ -76,10 +77,10 @@ export class PaymentScheduleService {
         return Promise.reject(e?.response?.data);
       });
   }
-   static async confirmPaymentSchedule(paymentScheduleId: number): Promise<any> {
+   static async confirmPaymentSchedule(paymentScheduleId: number, userConfirm : boolean): Promise<ConfirmPayment> {
      return await api.post(API.PAYMENT_SCHEDULE.CONFIRM_PAYMENT, {
        paymentScheduleId,
-       userConfirm: true
+       userConfirm
     })
       .then((res) => {
         return Promise.resolve(res.data.data)

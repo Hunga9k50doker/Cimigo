@@ -73,3 +73,8 @@ export interface GetListPaymentScheduleHistory {
   take?: number;
   page?: number;
 }
+
+export interface ConfirmPayment {
+  paymentScheduleId: number;
+  userConfirm: boolean;
+}

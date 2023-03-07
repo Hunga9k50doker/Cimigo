@@ -54,7 +54,7 @@ const PopupBankTransfer = memo((props: Props) => {
 
   const comfirmPayment = () => {
     dispatch(setLoading(true));
-    PaymentScheduleService.confirmPaymentSchedule(paymentSchedule.id)
+    PaymentScheduleService.confirmPaymentSchedule(paymentSchedule.id, true)
       .then(() => {
         setIsConfirmPayment(true);
         dispatch(getPaymentSchedulesRequest(project.id));
