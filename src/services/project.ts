@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, ResetQuota, UpdateProjectBasicInformation, UpdateQuota, UpdateTarget, UpdateEnableCustomQuestion, UpdateEnableEyeTracking } from 'models/project';
+import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, ResetQuota, UpdateProjectBasicInformation, UpdateQuota, UpdateTarget, UpdateEnableCustomQuestion, UpdateEnableEyeTracking, CancelPaymentScheduleSubscriptionData } from 'models/project';
 import api from 'services/configApi';
 
 export class ProjectService {
@@ -184,6 +184,16 @@ export class ProjectService {
 
   static async updateAgreeQuota(id: number, agreeQuota: boolean) {
     return await api.post(API.PROJECT.UPDATE_AGREE_QUOTA.replace(":id", `${id}`), { agreeQuota })
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async cancelPaymentScheduleSubscription(data: CancelPaymentScheduleSubscriptionData): Promise<any> {
+    return await api.post(API.PROJECT.CANCEL_PAYMENT_SCHEDULE_SUBSCRIPTION, data)
       .then((res) => {
         return Promise.resolve(res.data.data)
       })

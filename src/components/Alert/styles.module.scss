@@ -43,7 +43,9 @@
         align-items: center;
         color: var(--cimigo-blue);
     }
-    
+    @media only screen and (min-width: 992px) {
+      min-width: 912px;
+    }
 }
 .borderLeftSuccess{
     border-left: 4px solid var(--cimigo-green-dark) !important;

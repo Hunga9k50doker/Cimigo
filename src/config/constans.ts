@@ -49,7 +49,8 @@ export const API = {
     UPDATE_AGREE_QUOTA: '/v1.0/project/:id/update-agree-quota',
     QUOTA: {
       DEFAULT: '/v1.0/project/:id/quota',
-    }
+    },
+    CANCEL_PAYMENT_SCHEDULE_SUBSCRIPTION: '/v1.0/project/cancel-subscription'
   },
   FOLDER: {
     DEFAULT: '/v1.0/folder',

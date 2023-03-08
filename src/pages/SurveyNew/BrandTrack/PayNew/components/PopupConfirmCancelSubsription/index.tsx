@@ -153,6 +153,7 @@ const PopupConfirmCancelSubsription = memo(
               )}
               inputRef={register("reason")}
               errorMessage={errors.reason?.message}
+              className={classes.inputTextarea}
             />
           </DialogContentConfirm>
           <DialogActionsConfirm>
