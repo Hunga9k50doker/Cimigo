@@ -8,6 +8,7 @@ import { PackType } from "models/pack";
 import { EPaymentStatus } from "models/payment";
 import { Project, ProjectStatus } from "models/project";
 import moment from "moment-timezone";
+import { PaymentSchedule } from "models/payment_schedule";
 
 export const editableProject = (project: Project) => {
   return project?.editable
@@ -49,8 +50,11 @@ export class ProjectHelper {
 
   static getPayment(project: Project) {
     return project?.payments?.filter(f => f.status !== EPaymentStatus.CANCEL)?.sort((a, b) => b.id - a.id)?.[0]
-  }
+  } 
 
+  static getPaymentForBrandTrack(paymentSchedule: PaymentSchedule) {
+    return paymentSchedule?.payments?.[0];
+  }
   static isPaymentPaid(project: Project) {
     const payment = ProjectHelper.getPayment(project)
     return payment?.status === EPaymentStatus.PAID
