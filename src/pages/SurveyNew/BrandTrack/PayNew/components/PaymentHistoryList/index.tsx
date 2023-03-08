@@ -96,7 +96,7 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleDownloadInvoice = (payment) => {
+    const handleDownloadInvoice = (payment: PaymentScheduleHistory) => {
         dispatch(setLoading(true));
         PaymentService.getPaymentScheduleInvoice(payment.id)
             .then((res) => {

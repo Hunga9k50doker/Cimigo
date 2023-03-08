@@ -179,7 +179,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
   
-  const handleDownloadInvoice = (paymentSchedule) => {
+  const handleDownloadInvoice = (paymentSchedule: PaymentSchedule) => {
     dispatch(setLoading(true));
     PaymentService.getPaymentScheduleInvoiceDemo(paymentSchedule.id)
       .then((res) => {
