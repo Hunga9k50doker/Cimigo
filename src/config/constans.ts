@@ -49,7 +49,8 @@ export const API = {
     UPDATE_AGREE_QUOTA: '/v1.0/project/:id/update-agree-quota',
     QUOTA: {
       DEFAULT: '/v1.0/project/:id/quota',
-    }
+    },
+    CANCEL_PAYMENT_SCHEDULE_SUBSCRIPTION: '/v1.0/project/cancel-subscription'
   },
   FOLDER: {
     DEFAULT: '/v1.0/folder',
@@ -114,6 +115,7 @@ export const API = {
     LATEST_PAID: 'v1.0/payment-schedule/latest-paid',
     DETAIL: 'v1.0/payment-schedule/:id',
     CANCEL_PAYMENT: 'v1.0/payment-schedule/cancel-payment',
+    CONFIRM_PAYMENT: 'v1.0/payment-schedule/confirm-payment',
   },
   ATTACHMENT: {
     DEFAULT: '/v1.0/attachment/',

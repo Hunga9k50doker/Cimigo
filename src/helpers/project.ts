@@ -50,7 +50,7 @@ export class ProjectHelper {
 
   static getPayment(project: Project) {
     return project?.payments?.filter(f => f.status !== EPaymentStatus.CANCEL)?.sort((a, b) => b.id - a.id)?.[0]
-  }
+  } 
 
   static getPaymentForBrandTrack(paymentSchedule: PaymentSchedule) {
     return paymentSchedule?.payments?.[0];
