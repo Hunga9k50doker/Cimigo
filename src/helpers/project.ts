@@ -55,6 +55,7 @@ export class ProjectHelper {
   static getPaymentForBrandTrack(paymentSchedule: PaymentSchedule) {
     return paymentSchedule?.payments?.[0];
   }
+
   static isPaymentPaid(project: Project) {
     const payment = ProjectHelper.getPayment(project)
     return payment?.status === EPaymentStatus.PAID

@@ -28,13 +28,13 @@ import BoxCustom from "../components/BoxCustom";
 import { PaymentSchedule } from "models/payment_schedule";
 import moment from "moment";
 import { usePrice } from "helpers/price";
+import TooltipCancelPayment from "../components/TooltipCancelPayment";
 import  ProjectHelper  from "helpers/project";
 import { PaymentScheduleService } from "services/payment_schedule";
 import { useDispatch, useSelector } from "react-redux";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { ReducerType } from "redux/reducers";
 import { getPaymentSchedulesRequest } from "redux/reducers/Project/actionTypes";
-import { Payment } from "models/payment";
 interface Props {
   isOpen: boolean;
   paymentSchedule: PaymentSchedule;
@@ -265,10 +265,7 @@ const PopupBankTransfer = memo((props: Props) => {
           />
         </Box>
         <Typography my={3} color={"var(--eerie-black)"} textAlign="center" translation-key="brand_track_popup_paynow_change_payment_method">
-          {t("brand_track_popup_paynow_change_payment_method")}{" "}
-          <Span translation-key="brand_track_popup_paynow_action_1" onClick={onCancelPayment}>
-            {t("brand_track_popup_paynow_action_1")}
-          </Span>
+          {t("brand_track_popup_paynow_change_payment_method")} <TooltipCancelPayment onCancelPayment={onCancelPayment} />
         </Typography>
       </DialogContentConfirm>
     </PopupPayment>

@@ -246,12 +246,13 @@ export const setBrandAssetsReducer = (data: BrandAsset[]) => {
   }
 }
 
-export const getPaymentSchedulesRequest = (projectId: number) => {
+export const getPaymentSchedulesRequest = (projectId: number, callback?: (data:PaymentSchedule[]) => void) => {
   return {
     type: GET_PAYMENT_SCHEDULES_REQUEST,
-    projectId
-  }
-}
+    projectId,
+    callback,
+  };
+};
 
 export const setPaymentSchedulesReducer = (data: PaymentSchedule[]) => {
   return {

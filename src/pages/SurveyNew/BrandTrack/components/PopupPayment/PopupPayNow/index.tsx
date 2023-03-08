@@ -657,7 +657,7 @@ const PopupPayNow = memo((props: Props) => {
                     {t("common_sub_total")}
                   </ParagraphBody>
                   <ParagraphBody $colorName="--eerie-black" $fontWeight={500}>
-                    {getCostCurrency(paymentSchedule.sampleSizeCostPerMonth)?.show}
+                    {getCostCurrency(paymentSchedule.amount)?.show}
                   </ParagraphBody>
                 </div>
                 <div className={classes.flexOrder}>

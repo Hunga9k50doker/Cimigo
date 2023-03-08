@@ -51,7 +51,7 @@ const Ordersummary = memo(({ paymentSchedule }: PropsType) => {
           </BoxCustom>
           <BoxCustom $borderTop={true} pt={2}>
             <BoxCustom $flexBox={true}>
-              <ParagraphSmall color={"var(--gray-60)"} translation-key="common_vat">
+              <ParagraphSmall color={"var(--gray-60)"} translation-key="common_sub_total">
                 {t("common_sub_total")}
               </ParagraphSmall>
               <Heading6 $fontWeight={500} $colorName={"--eerie-black"}>
