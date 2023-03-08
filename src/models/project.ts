@@ -154,7 +154,7 @@ export interface ResetQuota {
   quotaTableId: number
 }
 
-export interface CancelPaymentScheduleSubscriptionData {
+export interface CancelSubscriptionData {
   projectId: number;
   reason?: string;
 }

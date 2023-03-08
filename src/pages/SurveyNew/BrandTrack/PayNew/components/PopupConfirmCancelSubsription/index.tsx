@@ -116,7 +116,7 @@ const PopupConfirmCancelSubsription = memo(
             />
           </DialogTitleConfirm>
           <DialogContentConfirm dividers>
-            {dataLatestPaid ? (
+            {dataLatestPaid && moment(dataLatestPaid?.end).isAfter(moment()) ? (
               <ParagraphBody
                 pt={3}
                 className={classes.description}

@@ -1,5 +1,5 @@
 import { API } from 'config/constans';
-import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, ResetQuota, UpdateProjectBasicInformation, UpdateQuota, UpdateTarget, UpdateEnableCustomQuestion, UpdateEnableEyeTracking, CancelPaymentScheduleSubscriptionData } from 'models/project';
+import { CreateProjectData, GetMyProjects, MoveProject, RenameProject, ResetQuota, UpdateProjectBasicInformation, UpdateQuota, UpdateTarget, UpdateEnableCustomQuestion, UpdateEnableEyeTracking, CancelSubscriptionData } from 'models/project';
 import api from 'services/configApi';
 
 export class ProjectService {
@@ -192,7 +192,7 @@ export class ProjectService {
       })
   }
 
-  static async cancelPaymentScheduleSubscription(data: CancelPaymentScheduleSubscriptionData): Promise<any> {
+  static async cancelPaymentScheduleSubscription(data: CancelSubscriptionData): Promise<any> {
     return await api.post(API.PROJECT.CANCEL_PAYMENT_SCHEDULE_SUBSCRIPTION, data)
       .then((res) => {
         return Promise.resolve(res.data.data)
