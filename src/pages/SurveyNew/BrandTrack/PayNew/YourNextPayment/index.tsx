@@ -135,8 +135,8 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
         onClose();
         setIsOpenPopupPaynow(true);
         dispatch(getPaymentSchedulesRequest(project.id, (data) => {
-          const res = data.find(item => item.id === paymentScheduleForPay.id)
-          if(res) setDataPaymentSchedule(res);
+          const newPaymentScheduleForPay = data.find((item) => item.id === paymentScheduleForPay.id);
+          if (newPaymentScheduleForPay) setDataPaymentSchedule(newPaymentScheduleForPay);
         }));
       })
       .catch((e) => dispatch(setErrorMess(e)))
