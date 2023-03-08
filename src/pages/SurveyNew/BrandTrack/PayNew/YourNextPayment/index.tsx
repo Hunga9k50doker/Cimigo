@@ -121,7 +121,10 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
       .then(() => {
         onClose();
         setIsOpenPopupPaynow(true);
-        dispatch(getPaymentSchedulesRequest(project.id));
+        dispatch(getPaymentSchedulesRequest(project.id, (data) => {
+          const res = data.find(item => item.id === paymentScheduleForPay.id)
+          if(res) setDataPaymentSchedule(res);
+        }));
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
