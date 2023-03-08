@@ -29,6 +29,7 @@ import { PaymentSchedule } from "models/payment_schedule";
 import moment from "moment";
 import { usePrice } from "helpers/price";
 import TooltipCancelPayment from "../components/TooltipCancelPayment";
+import ProjectHelper from "helpers/project";
 interface Props {
   isOpen: boolean;
   paymentSchedule: PaymentSchedule;
@@ -42,7 +43,7 @@ const PopupBankTransfer = memo((props: Props) => {
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
 
-  const payment = useMemo(() => paymentSchedule?.payments?.[0] || null, [paymentSchedule])
+  const payment = useMemo(() => ProjectHelper.getPaymentForBrandTrack(paymentSchedule), [paymentSchedule]);
   
   const comfirmPayment = () => {
     //cal API
