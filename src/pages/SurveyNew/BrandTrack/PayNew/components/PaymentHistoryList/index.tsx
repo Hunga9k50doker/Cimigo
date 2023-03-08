@@ -98,7 +98,7 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
 
     const handleDownloadInvoice = (payment) => {
         dispatch(setLoading(true));
-        PaymentService.getInvoiceDemo(projectId, payment.id)
+        PaymentService.getPaymentScheduleInvoice(payment.id)
             .then((res) => {
                 FileSaver.saveAs(res.data, `invoice-${moment().format("MM-DD-YYYY-hh-mm-ss")}.pdf`);
             })
