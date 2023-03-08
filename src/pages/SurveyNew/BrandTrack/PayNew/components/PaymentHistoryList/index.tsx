@@ -96,9 +96,9 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleDownloadInvoice = (payment) => {
+    const handleDownloadInvoice = (payment: PaymentScheduleHistory) => {
         dispatch(setLoading(true));
-        PaymentService.getInvoiceDemo(projectId, payment.id)
+        PaymentService.getPaymentScheduleInvoice(payment.id)
             .then((res) => {
                 FileSaver.saveAs(res.data, `invoice-${moment().format("MM-DD-YYYY-hh-mm-ss")}.pdf`);
             })

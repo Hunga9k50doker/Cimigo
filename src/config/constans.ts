@@ -106,6 +106,8 @@ export const API = {
     TRY_AGAIN: '/v1.0/payment/:id/try-again',
     UPDATE_INVOICE_INFO: '/v1.0/payment/:id/invoice-info',
     CHANGE_PAYMENT_METHOD: '/v1.0/payment/:id/change-payment-method',
+    SCHEDULE_INVOICE: '/v1.0/payment/payment-schedule-invoice',
+    SCHEDULE_INVOICE_DEMO: '/v1.0/payment/payment-schedule-invoice-demo',
   },
   PAYMENT_SCHEDULE: {
     PREVIEW: 'v1.0/payment-schedule/preview',
