@@ -31,7 +31,6 @@ import { usePrice } from "helpers/price";
 import { setPaymentIsMakeAnOrderSuccessReducer, setPaymentScheduleResultReducer } from "redux/reducers/Payment/actionTypes";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { EPaymentMethod } from "models/general";
 // Import Swiper styles
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -177,7 +176,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
       .finally(() => dispatch(setLoading(false)));
   }
 
-  const getMainColor = (paymentSchedule: PaymentSchedule, index: number) => {
+  const setMainColorForPaymentSchedule = (paymentSchedule: PaymentSchedule, index: number) => {
     switch(paymentSchedule.status) {
       case PaymentScheduleStatus.IN_PROGRESS:
         return "--gray-80";
@@ -438,13 +437,13 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                           >
                             <Box className={classes.contentSlideSwiper}>
                               <Grid className={classes.contentLeftSwiper}>
-                                <Heading3 $colorName={getMainColor(item, index)}>
+                                <Heading3 $colorName={setMainColorForPaymentSchedule(item, index)}>
                                   {`${moment(item.start).format(
                                     "MMM yyyy"
                                   )} - ${moment(item.end).format("MMM yyyy")}`}
                                 </Heading3>
                                 <ParagraphBody
-                                  $colorName={getMainColor(item, index)}
+                                  $colorName={setMainColorForPaymentSchedule(item, index)}
                                   translation-key="common_month"
                                 >
                                   {item.solutionConfig.paymentMonthSchedule}{" "}
@@ -456,11 +455,11 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                   })}
                                 </ParagraphBody>
                                 <Heading3
-                                  $colorName={getMainColor(item, index)}
+                                  $colorName={setMainColorForPaymentSchedule(item, index)}
                                   $fontWeight={400}
                                   className={classes.priceWrapper}
                                 >
-                                  <Dolar sx={{color: `var(${getMainColor(item, index)})`}} />
+                                  <Dolar sx={{color: `var(${setMainColorForPaymentSchedule(item, index)})`}} />
                                   <span>{getCostCurrency(item.totalAmount)?.show}</span>
                                 </Heading3>
                               </Grid>
