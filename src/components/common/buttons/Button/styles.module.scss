@@ -76,6 +76,9 @@
 .btnText {
   background: transparent;
   border: 1px solid transparent;
+  span{
+    margin: 0;
+  }
   p {
     color: var(--cimigo-blue);
   }

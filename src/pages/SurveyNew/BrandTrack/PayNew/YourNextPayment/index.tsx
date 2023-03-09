@@ -10,7 +10,7 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Footer from "components/Footer";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Alert, { AlerType } from "../../../../../components/Alert";
 import {
   EPaymentScheduleCancelType,
@@ -34,10 +34,8 @@ import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import { EPaymentMethod } from "models/general";
 // Import Swiper styles
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper";
 import "swiper/css";
-import "swiper/css/free-mode";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
 import PopupPayNow from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupPayNow";
 import PopupBankTransfer from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupBankTransfer";
 import PopupOnlinePayment from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupOnlinePayment";
@@ -80,8 +78,6 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   
   const { project } = useSelector((state: ReducerType) => state.project);
   const { isMakeAnOrder, paymentScheduleResult } = useSelector((state: ReducerType) => state.payment);
-
-  const swiperRef = useRef<any>();
 
   const paymentSchedules = useMemo(() => project?.paymentSchedules || [], [project])
 
@@ -414,18 +410,19 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                 <Grid className={classes.slidePaymentSwiper}>
                   <Box
                     className={clsx(classes.iconSlide, classes.iconSlideLeft)}
-                    onClick={() => swiperRef.current?.slidePrev()}
                   >
                     <KeyboardArrowLeftIcon />
                   </Box>
-
                   <Swiper
+                    navigation={{
+                      nextEl: `.${classes.iconSlideRight}`,
+                      prevEl: `.${classes.iconSlideLeft}`,
+                      disabledClass: classes.iconDisabled,
+                    }}
+                    modules={[Navigation]}
                     slidesPerView={2}
                     breakpoints={sliderSettings}
                     direction={"horizontal"}
-                    onBeforeInit={(swiper) => {
-                      swiperRef.current = swiper;
-                    }}
                   >
                     {paymentSchedules?.map((item, index) => {
                       return (
@@ -590,7 +587,6 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                   </Swiper>
                   <Box
                     className={clsx(classes.iconSlide, classes.iconSlideRight)}
-                    onClick={() => swiperRef.current?.slideNext()}
                   >
                     <KeyboardArrowRightIcon />
                   </Box>
