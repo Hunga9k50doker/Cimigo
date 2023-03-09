@@ -109,6 +109,7 @@ const PopupBankTransfer = memo((props: Props) => {
           <Accordion $accordionMain={true} $accordionBankTransfer={true}>
             <AccordionSummary width={"100%"} expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />} aria-controls="panel1a-content">
               <Heading4
+                $fontWeight={400}
                 $colorName={"--cimigo-blue"}
                 display={"flex"}
                 alignItems={"center"}
@@ -167,6 +168,7 @@ const PopupBankTransfer = memo((props: Props) => {
           <Accordion $accordionMain={true} $accordionBankTransfer={true}>
             <AccordionSummary width={"100%"} expandIcon={<ArrowRightIcon sx={{ color: "var(--cimigo-blue)" }} />} aria-controls="panel1a-content">
               <Heading4
+                $fontWeight={400}
                 $colorName={"--cimigo-blue"}
                 display={"flex"}
                 alignItems={"center"}

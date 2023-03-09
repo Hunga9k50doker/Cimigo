@@ -12,6 +12,7 @@ const Heading6 = styled(Typography) <Props>`
     font-weight: ${props => props.$fontWeight || 600};
     font-size: 14px;
     line-height: 24px;
+    font-variant-numeric: tabular-nums;
     color: ${props => `var(${props.$colorName || '--gray-02'})`};
 `
 
