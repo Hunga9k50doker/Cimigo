@@ -650,7 +650,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
             onClose={handleCloseMenuAttributes}
           >
             <MenuItem onClick={onOpenPopupPreDefined}>
-              <ParagraphBody translation-key="setup_survey_add_att_menu_action_from_pre_defined_list" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_from_pre_defined_list')} sdgfdsgdsfg sdgsdfgds</ParagraphBody>
+              <ParagraphBody translation-key="setup_survey_add_att_menu_action_from_pre_defined_list" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_from_pre_defined_list')}</ParagraphBody>
             </MenuItem>
             <MenuItem onClick={onOpenPopupAddAttributes}>
               <ParagraphBody translation-key="setup_survey_add_att_menu_action_your_own_attribute" className={classes.itemAddAttribute}>{t('setup_survey_add_att_menu_action_your_own_attribute')}</ParagraphBody>
