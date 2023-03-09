@@ -36,16 +36,12 @@ import IconTagLoyalty from "components/icons/IconTagLoyalty"
 import WarningIcon from "@mui/icons-material/Warning"
 import PopupAddOrEditAdditionalBrand from "pages/SurveyNew/components/PopupAddOrEditAdditionalBrand"
 import { AdditionalBrandService } from "services/additional_brand"
-import { Attribute, AttributeType } from "models/Admin/attribute"
+import { AttributeType } from "models/Admin/attribute"
 import { AdditionalAttributeService } from "services/additional_attribute"
+import { BrandForm } from "../BrandList"
 
 interface BrandDispositionAndEquityProps {
   project: Project
-}
-interface BrandForm {
-  brand: string;
-  variant: string;
-  manufacturer: string;
 }
 enum AttributeShowType {
   Project = 1,
@@ -70,7 +66,8 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
   const [anchorElMenuAttributes, setAnchorElMenuAttributes] = useState<null | HTMLElement>(null);
   const [anchorElMenuChooseBrand, setAnchorElMenuChooseBrand] = useState<null | HTMLElement>(null);
 
-  const [mandatoryAttributes, setMandatoryAttributes] = useState<Attribute[]>([])
+  const [numberOfMandatoryAttributes, setNumberOfMandatoryAttributes] = useState<number>(0)
+  const [numberOfPreDefinedAttributes, setNumberOfPreDefinedAttributes] = useState<number>(0)
   const [openPopupMandatory, setOpenPopupMandatory] = useState(false)
   const [openPopupPreDefined, setOpenPopupPreDefined] = useState(false)
   const [openPopupAddAttributes, setOpenPopupAddAttributes] = useState(false)
@@ -124,9 +121,13 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
   
   useEffect(() => {
     if (project?.solutionId) {
-      AdditionalAttributeService.getAdditionalAttributes({ take: 9999, typeId: AttributeType.MANATORY, solutionId: project.solutionId })
-        .then((res) => {
-          setMandatoryAttributes(res.data)
+      Promise.all([
+        AdditionalAttributeService.getAdditionalAttributes({ take: 9999, typeId: AttributeType.MANATORY, solutionId: project.solutionId }),
+        AdditionalAttributeService.getAdditionalAttributes({ take: 9999, typeId: AttributeType.PRE_DEFINED, solutionId: project.solutionId })
+      ])
+        .then(([mandatoryRes, preDefinedRes]) => {
+          setNumberOfMandatoryAttributes(mandatoryRes.data?.length || 0)
+          setNumberOfPreDefinedAttributes(preDefinedRes.data?.length || 0)
         })
     }
   }, [project?.solutionId])
@@ -496,9 +497,9 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
           <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } className={classes.brandEquitySubTitle} translation-key="brand_track_setup_brand_disposition_and_equity_attributes_sub_title_1">
             {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_1")}{" "}
             <span onClick={() => setOpenPopupMandatory(true)} translation-key="brand_track_setup_brand_disposition_and_equity_attributes_sub_title_2">
-              {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_2", {number: mandatoryAttributes?.length})}
+              {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_2", {number: numberOfMandatoryAttributes})}
             </span>{" "}
-            {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_3", {number: mandatoryAttributes?.length})}
+            {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_3", {number: numberOfPreDefinedAttributes})}
           </ParagraphBody>
           {!!brandEquityAttributesNeedMore && (
             <NoteWarning mt={0} mb={2} ml={3}>

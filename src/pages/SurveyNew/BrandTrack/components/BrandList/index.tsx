@@ -15,7 +15,7 @@ import { AdditionalBrand, EBrandType } from "models/additional_brand"
 import { useDispatch } from "react-redux"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { AdditionalBrandService } from "services/additional_brand"
-import { getAdditionalBrandsRequest } from "redux/reducers/Project/actionTypes"
+import { getAdditionalBrandsRequest, getProjectBrandsRequest } from "redux/reducers/Project/actionTypes"
 import PopupAddOrEditAdditionalBrand from "pages/SurveyNew/components/PopupAddOrEditAdditionalBrand"
 import PopupConfirmDelete from "components/PopupConfirmDelete"
 import { useTranslation } from "react-i18next"
@@ -26,7 +26,7 @@ import clsx from "clsx"
 interface BrandListProps {
   project: Project
 }
-interface BrandForm {
+export interface BrandForm {
   brand: string;
   variant: string;
   manufacturer: string;
@@ -40,7 +40,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
   const [brandEdit, setBrandEdit] = useState<AdditionalBrand>(null)
   const [brandType, setBrandType] = useState<EBrandType>(EBrandType.MAIN)
   const [showMoreCompetingBrand, setShowMoreCompetingBrand] = useState<boolean>(false)
-  const [competingBrandDelete, setCompetingBrandDelete] = useState<AdditionalBrand>(null)
+  const [projectBrandDelete, setProjectBrandDelete] = useState<AdditionalBrand>(null)
 
   const mainBrandDatas = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.MAIN) || [], [project])
   const competingBrandDatas = useMemo(() => project?.additionalBrands?.filter((item) => item?.typeId === EBrandType.COMPETING) || [], [project])
@@ -56,6 +56,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
     setIsOpenAddOrEditBrandModal(true)
   }
   const onEditMainBrand = (mainBrand: AdditionalBrand) => {
+    if(!editable) return
     setBrandEdit(mainBrand)
     setBrandType(EBrandType.MAIN)
     setIsOpenAddOrEditBrandModal(true)
@@ -103,19 +104,22 @@ const BrandList = memo(({ project }: BrandListProps) => {
     }
   }
 
-  const onShowConfirmDeleteCompetingBrand = (competingBrand: AdditionalBrand) => {
-    setCompetingBrandDelete(competingBrand)
+  const onShowConfirmDeleteProjectBrand = (projectBrand: AdditionalBrand) => {
+    setProjectBrandDelete(projectBrand)
   }
-  const onCloseConfirmDeleteCompetingBrand = () => {
-    setCompetingBrandDelete(null)
+  const onCloseConfirmDeleteProjectBrand = () => {
+    setProjectBrandDelete(null)
   }
-  const onDeleteCompetingBrand = () => {
-    if (!competingBrandDelete) return
+  const onDeleteProjectBrand = () => {
+    if (!projectBrandDelete) return
     dispatch(setLoading(true))
-    AdditionalBrandService.delete(competingBrandDelete.id)
+    AdditionalBrandService.delete(projectBrandDelete.id)
       .then(() => {
         dispatch(getAdditionalBrandsRequest(project.id))
-        onCloseConfirmDeleteCompetingBrand()
+        if(projectBrandDelete.typeId === EBrandType.COMPETING) {
+          dispatch(getProjectBrandsRequest(project.id))
+        }
+        onCloseConfirmDeleteProjectBrand()
       })
       .catch(e => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)))
@@ -151,7 +155,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
             </NoteWarning>
           )}
           {mainBrandDatas?.map(mainItem => (
-            <div className={classes.mainBrand} onClick={() => onEditMainBrand(mainItem)}>
+            <div className={clsx(classes.mainBrand, {[classes.disabled]: !editable})} onClick={() => onEditMainBrand(mainItem)}>
               <ParagraphSmall $colorName="--cimigo-blue-dark-1" $fontWeight={500} sx={{display: "flex", alignItems: "center", gap: "8px"}}>
                 <Stars sx={{color: "var(--cimigo-blue-dark-1)", fontSize: "20px"}}/> {mainItem.brand} ({mainItem.variant})
               </ParagraphSmall>
@@ -159,7 +163,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
                 <IconButton 
                   onClick={(e) => {
                     e.stopPropagation()
-                    onShowConfirmDeleteCompetingBrand(mainItem)}
+                    onShowConfirmDeleteProjectBrand(mainItem)}
                   }
                   className={classes.btnDeleteMainBrand} 
                   edge="end" 
@@ -211,7 +215,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
                         <IconButton onClick={() => onEditCompetingBrand(item)} className={classes.iconAction} edge="end" aria-label="Edit">
                           <EditIcon sx={{ fontSize: "20px" }} />
                         </IconButton>
-                        <IconButton onClick={() => onShowConfirmDeleteCompetingBrand(item)} className={classes.iconAction} edge="end" aria-label="Delete">
+                        <IconButton onClick={() => onShowConfirmDeleteProjectBrand(item)} className={classes.iconAction} edge="end" aria-label="Delete">
                           <CloseIcon sx={{ fontSize: "20px", color: "var(--gray-60)" }} />
                         </IconButton>
                       </>
@@ -262,11 +266,11 @@ const BrandList = memo(({ project }: BrandListProps) => {
         brandType={brandType}
       />
       <PopupConfirmDelete
-        isOpen={!!competingBrandDelete}
+        isOpen={!!projectBrandDelete}
         title={t('setup_survey_add_brand_confirm_delete_title')}
         description={t('setup_survey_add_brand_confirm_delete_sub_title')}
-        onCancel={() => onCloseConfirmDeleteCompetingBrand()}
-        onDelete={onDeleteCompetingBrand}
+        onCancel={() => onCloseConfirmDeleteProjectBrand()}
+        onDelete={onDeleteProjectBrand}
       />
     </>
   )

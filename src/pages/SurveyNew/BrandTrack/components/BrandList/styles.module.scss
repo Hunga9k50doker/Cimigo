@@ -23,6 +23,14 @@
     width: 360px;
   }
 }
+.disabled {
+  &:hover {
+    cursor: unset;
+    p {
+      text-decoration: unset;
+    }
+  }
+}
 .btnDeleteMainBrand {
   border-radius: 8px;
   margin-right: 0;
