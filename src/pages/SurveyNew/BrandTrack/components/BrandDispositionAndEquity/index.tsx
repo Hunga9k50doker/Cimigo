@@ -36,6 +36,8 @@ import IconTagLoyalty from "components/icons/IconTagLoyalty"
 import WarningIcon from "@mui/icons-material/Warning"
 import PopupAddOrEditAdditionalBrand from "pages/SurveyNew/components/PopupAddOrEditAdditionalBrand"
 import { AdditionalBrandService } from "services/additional_brand"
+import { Attribute, AttributeType } from "models/Admin/attribute"
+import { AdditionalAttributeService } from "services/additional_attribute"
 
 interface BrandDispositionAndEquityProps {
   project: Project
@@ -68,6 +70,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
   const [anchorElMenuAttributes, setAnchorElMenuAttributes] = useState<null | HTMLElement>(null);
   const [anchorElMenuChooseBrand, setAnchorElMenuChooseBrand] = useState<null | HTMLElement>(null);
 
+  const [mandatoryAttributes, setMandatoryAttributes] = useState<Attribute[]>([])
   const [openPopupMandatory, setOpenPopupMandatory] = useState(false)
   const [openPopupPreDefined, setOpenPopupPreDefined] = useState(false)
   const [openPopupAddAttributes, setOpenPopupAddAttributes] = useState(false)
@@ -118,6 +121,15 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
     })
     setCompetingBrandsSelected(_competingBrandsSelected)
   }, [project, anchorElMenuChooseBrand])
+  
+  useEffect(() => {
+    if (project?.solutionId) {
+      AdditionalAttributeService.getAdditionalAttributes({ take: 9999, typeId: AttributeType.MANATORY, solutionId: project.solutionId })
+        .then((res) => {
+          setMandatoryAttributes(res.data)
+        })
+    }
+  }, [project?.solutionId])
 
   const handleClickMenuChooseBrand = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorElMenuChooseBrand(event.currentTarget)
@@ -484,9 +496,9 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
           <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } className={classes.brandEquitySubTitle} translation-key="brand_track_setup_brand_disposition_and_equity_attributes_sub_title_1">
             {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_1")}{" "}
             <span onClick={() => setOpenPopupMandatory(true)} translation-key="brand_track_setup_brand_disposition_and_equity_attributes_sub_title_2">
-              {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_2")}
+              {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_2", {number: mandatoryAttributes?.length})}
             </span>{" "}
-            {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_3")}
+            {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_3", {number: mandatoryAttributes?.length})}
           </ParagraphBody>
           {!!brandEquityAttributesNeedMore && (
             <NoteWarning mt={0} mb={2} ml={3}>
