@@ -151,19 +151,22 @@ const BrandList = memo(({ project }: BrandListProps) => {
             </NoteWarning>
           )}
           {mainBrandDatas?.map(mainItem => (
-            <div className={classes.mainBrand}>
+            <div className={classes.mainBrand} onClick={() => onEditMainBrand(mainItem)}>
               <ParagraphSmall $colorName="--cimigo-blue-dark-1" $fontWeight={500} sx={{display: "flex", alignItems: "center", gap: "8px"}}>
-                <Stars sx={{color: "var(--cimigo-blue-dark-1)", fontSize: "20px"}}/> {mainItem.brand}
+                <Stars sx={{color: "var(--cimigo-blue-dark-1)", fontSize: "20px"}}/> {mainItem.brand} ({mainItem.variant})
               </ParagraphSmall>
               {editable && (
-                <Button
-                  btnType={BtnType.Text}
-                  children={<TextBtnSmall sx={{ color: "var(--cimigo-blue-dark-1) !important" }} translation-key="common_edit">{t("common_edit")}</TextBtnSmall>}
-                  startIcon={<Edit sx={{ color: "var(--cimigo-blue-dark-1)", fontSize: "16px !important" }} />}
-                  onClick={() => {
-                    onEditMainBrand(mainItem)
-                  }}
-                />
+                <IconButton 
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onShowConfirmDeleteCompetingBrand(mainItem)}
+                  }
+                  className={classes.btnDeleteMainBrand} 
+                  edge="end" 
+                  aria-label="Delete"
+                >
+                  <CloseIcon sx={{ fontSize: "20px", color: "var(--cimigo-blue-dark-1)" }} />
+                </IconButton>
               )}
             </div>
           ))}
@@ -218,7 +221,7 @@ const BrandList = memo(({ project }: BrandListProps) => {
                 disablePadding
               >
                 <ListItemButton className={classes.listItem}>
-                  <ParagraphSmall $colorName="--eerie-black">{item.brand}</ParagraphSmall>
+                  <ParagraphSmall $colorName="--eerie-black">{item.brand} ({item.variant})</ParagraphSmall>
                 </ListItemButton>
               </ListItem>
             ))}
