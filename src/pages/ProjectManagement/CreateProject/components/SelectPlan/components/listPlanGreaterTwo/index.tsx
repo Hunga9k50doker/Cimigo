@@ -84,7 +84,7 @@ const listPlanGreaterTwo = memo(({ formatMoney, onChangePlanSelected, plan }: Se
                             variant="body2"
                             variantMapping={{ body2: "span" }}
                           >
-                            / {planItem.month}{" "}
+                            / {planItem.month > 1 ? planItem.month : ""}{" "}
                             {t("common_month", {
                               s: planItem.month === 1 ? "" : t("common_s"),
                             })}
