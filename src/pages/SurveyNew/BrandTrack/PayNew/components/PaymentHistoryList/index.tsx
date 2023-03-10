@@ -94,7 +94,7 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
         if (inValidPage()) return listPaymentHistory.meta.page - 2;
         return listPaymentHistory.meta.page - 1;
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [listPaymentHistory]);
 
     const handleDownloadInvoice = (payment: PaymentScheduleHistory) => {
         dispatch(setLoading(true));
@@ -110,8 +110,8 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
         <>
             {
                 listPaymentHistory?.data?.length ? (
-                    <>
-                        <Grid className={classes.paymentHistory} pt={6}>
+                    <Grid className={classes.paymentHistory}>
+                        <Grid pt={6}>
                             <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"} translation-key="brand_track_your_next_payment_title_list_payment_history">
                                 {t("brand_track_your_next_payment_title_list_payment_history")}
                             </Heading4>
@@ -187,7 +187,7 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
                                 onRowsPerPageChange={handleChangeRowsPerPage}
                             />
                         </Grid>
-                    </>
+                    </Grid>
                 ) : (
                     <Grid className={classes.paymentHistory} pt={6}>
                         <Heading4 $fontWeight={"400"} $colorName={"--gray-black"} translation-key="brand_track_your_next_payment_title_list_payment_history">
