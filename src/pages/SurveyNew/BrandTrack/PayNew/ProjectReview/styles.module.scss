@@ -1,3 +1,11 @@
+
+.rootContent{
+  flex: unset;
+  padding: 0;
+  @media only screen and (max-width: 767px) {
+    padding: 0;
+  }
+}
 .root {
   max-width: 1048px;
   margin: auto;

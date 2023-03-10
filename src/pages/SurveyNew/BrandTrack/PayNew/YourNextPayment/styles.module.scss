@@ -1,3 +1,11 @@
+
+.rootContent{
+  flex: unset;
+  padding: 0;
+  @media only screen and (max-width: 767px) {
+    padding: 0;
+  }
+}
 .root {
     max-width: 1048px;
     margin: auto;
@@ -62,6 +70,7 @@
     cursor: pointer;
 }
 .customSlide{
+    height: 100%;
     width: 100%;
     border-radius: 8px;
 }
@@ -110,6 +119,7 @@
     }
 }
 .contentSlideSwiper{
+    height: 100%;
     padding: 16px 24px;
     display: flex;
     justify-content: space-between;
@@ -117,9 +127,22 @@
         width: 35%;
         display: flex;
         align-items: center;
+        justify-content: flex-end;
+         .contentRightSwiperItem{
+            display: flex;
+            align-items: flex-end;
+            flex-direction: column;
+            button{
+                white-space: nowrap;
+            }
+        }
     }
     .contentLeftSwiper{
         width: 65%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-direction: column;
     }
 }
 .slidePaymentSwiper{
