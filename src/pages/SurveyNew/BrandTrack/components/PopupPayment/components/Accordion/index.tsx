@@ -46,6 +46,9 @@ const Accordion = styled(AccordionRoot)<Props>`
         [class~="Mui-expanded"] {
           border-bottom-left-radius: 0px;
           border-bottom-right-radius: 0px;
+          p{
+            font-weight: 600 !important;
+          }
         }
         .MuiAccordionDetails-root {
           padding: 0px 16px;
