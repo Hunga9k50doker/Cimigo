@@ -249,7 +249,7 @@ const Detail = memo(({ }: Props) => {
               <TabPanel value={activeTab} index={ETab.TARGET}>
                 <Box>
                   {
-                    !!project?.sampleSize && (
+                    (project?.solution?.typeId === ESOLUTION_TYPE.BRAND_TRACKING && !!project?.sampleSize) && (
                       <Grid container mb={2}>
                         <Grid item xs={12}>
                           <Paper elevation={3} sx={{ p: 2, height: '100%' }}>
