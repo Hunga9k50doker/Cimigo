@@ -25,6 +25,7 @@ import ProjectHelper from "helpers/project"
 import { ESOLUTION_TYPE } from "models"
 import DetailSurveySetupForPack from "../components/DetailSurveySetupForPack"
 import DetailSurveySetupForVideoChoice from "../components/DetailSurveySetupForVideoChoice"
+import DetailSurveySetupForBrandTrack from "../components/DetailSurveySetupForBrandTrack"
 
 
 enum ETab {
@@ -109,6 +110,31 @@ const Detail = memo(({ }: Props) => {
                   .catch((e) => dispatch(setErrorMess(e)))
                   .finally(() => dispatch(setLoading(false)))
                 break;
+              case ESOLUTION_TYPE.BRAND_TRACKING:
+                Promise.all([
+                  AdminProjectService.getQuotas(Number(id)),
+                  AdminProjectService.additionalBrands(Number(id)),
+                  AdminProjectService.getCompetitiveBrands(Number(id)),
+                  AdminProjectService.projectAttributes(Number(id)),
+                  AdminProjectService.userAttributes(Number(id)),
+                  AdminProjectService.getBrandAsset(Number(id)),
+                  AdminProjectService.getCustomQuestions(Number(id)),
+                ])
+                  .then(([quotas, additionalBrands, projectBrands, projectAttributes, userAttributes, brandAssets, customQuestions]) => {
+                    setProject({
+                      ...res,
+                      additionalBrands,
+                      projectBrands,
+                      projectAttributes,
+                      userAttributes,
+                      brandAssets,
+                      customQuestions
+                    })
+                    setQuotas(quotas)
+                  })
+                  .catch((e) => dispatch(setErrorMess(e)))
+                  .finally(() => dispatch(setLoading(false)))
+                break;
             }
           })
           .catch((e) => {
@@ -158,6 +184,8 @@ const Detail = memo(({ }: Props) => {
         return <DetailSurveySetupForPack project={project} />
       case ESOLUTION_TYPE.VIDEO_CHOICE:
         return <DetailSurveySetupForVideoChoice project={project} />
+      case ESOLUTION_TYPE.BRAND_TRACKING:
+        return <DetailSurveySetupForBrandTrack project={project} />
     }
   }
 
