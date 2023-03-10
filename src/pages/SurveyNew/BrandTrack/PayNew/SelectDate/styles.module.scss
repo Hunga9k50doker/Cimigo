@@ -30,15 +30,13 @@
 
 .itemDateActive{
   border: 1px solid var(--cimigo-blue) !important;
-  padding: 0px 36px 16px 36px !important;
-  .titleMonth{
-    margin-top: -5px !important;
-  }
+  padding: auto 36px 16px 36px !important;
+  position: relative;
   .iconActive{
     display: block !important;
-    position: relative !important;
-    left: 35px;
-    top: 10px;
+    position: absolute;
+    top: 10px ;
+    right: 10px;
     svg{
       border: 1px solid var(--white);
       width: 17px;
