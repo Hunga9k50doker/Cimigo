@@ -218,7 +218,7 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
               )}
               {listSchedulePreview && (
                 <>
-                  <Grid className={classes.viewPaymentScheduleTextWrapper} pl={1}>
+                  <Grid className={classes.viewPaymentScheduleTextWrapper}>
                     <ArrowRightIcon
                       sx={{color: "var(--cimigo-blue)"}}
                       className={clsx({

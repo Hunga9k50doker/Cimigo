@@ -17,7 +17,7 @@
   }
 }
 .itemDate{
-  border: 1px solid var(--gray-20);
+  border: 2px solid var(--gray-20);
   padding: 16px 36px;
   text-align: center;
   border-radius: 5px;
@@ -29,7 +29,7 @@
 }
 
 .itemDateActive{
-  border: 1px solid var(--cimigo-blue) !important;
+  border: 2px solid var(--cimigo-blue) !important;
   padding: auto 36px 16px 36px !important;
   position: relative;
   .iconActive{
