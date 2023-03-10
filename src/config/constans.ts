@@ -201,6 +201,10 @@ export const API = {
       USER_ATTRIBUTE: '/v1.0/admin/project/:id/user-attributes',
       CUSTOM_QUESTION: '/v1.0/admin/project/:id/custom-questions',
       TARGET: '/v1.0/admin/project/:id/targets',
+      MAIN_BRANDS: '/v1.0/admin/project/:id/main-brands',
+      COMPETING_BRANDS: '/v1.0/admin/project/:id/competing-brands',
+      COMPETITIVE_BRANDS: '/v1.0/admin/project/:id/competitive-brands',
+      BRAND_ASSET: '/v1.0/admin/project/:id/brand-asset'
     },
     USER: {
       DEFAULT: '/v1.0/admin/user',
