@@ -9,6 +9,8 @@ import { Quota } from 'models/quota';
 import { UserAttribute } from 'models/user_attribute';
 import { Video } from 'models/video';
 import api from 'services/configApi';
+import { ProjectBrand } from './../../models/project_brand';
+import { BrandAsset } from 'models/brand_asset';
 
 export class AdminProjectService {
   static async getProjects(data: AdminGetProjects): Promise<any> {
@@ -137,6 +139,46 @@ export class AdminProjectService {
 
   static async getTargets(id: number): Promise<ProjectTarget[]> {
     return await api.get(`${API.ADMIN.PROJECT.TARGET.replace(':id', `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+  
+  static async getMainBrands(id: number): Promise<AdditionalBrand[]> {
+    return await api.get(`${API.ADMIN.PROJECT.MAIN_BRANDS.replace(':id', `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async getCompetingBrands(id: number): Promise<AdditionalBrand[]> {
+    return await api.get(`${API.ADMIN.PROJECT.COMPETING_BRANDS.replace(':id', `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async getCompetitiveBrands(id: number): Promise<ProjectBrand[]> {
+    return await api.get(`${API.ADMIN.PROJECT.COMPETITIVE_BRANDS.replace(':id', `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async getBrandAsset(id: number): Promise<BrandAsset[]> {
+    return await api.get(`${API.ADMIN.PROJECT.BRAND_ASSET.replace(':id', `${id}`)}`)
       .then((res) => {
         return Promise.resolve(res.data.data)
       })

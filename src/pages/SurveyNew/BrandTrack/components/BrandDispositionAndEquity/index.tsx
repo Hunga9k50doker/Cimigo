@@ -12,7 +12,7 @@ import { AdditionalBrand, EBrandType } from "models/additional_brand"
 import { Project, SETUP_SURVEY_SECTION } from "models/project"
 import { memo, useEffect, useMemo, useState } from "react"
 import { useDispatch } from "react-redux"
-import { getProjectAttributesRequest, getProjectBrandsRequest, getUserAttributesRequest } from "redux/reducers/Project/actionTypes"
+import { getAdditionalBrandsRequest, getProjectAttributesRequest, getProjectBrandsRequest, getUserAttributesRequest } from "redux/reducers/Project/actionTypes"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { ProjectAttributeService } from "services/project_attribute"
 import { ProjectBrandService } from "services/project_brand"
@@ -34,6 +34,11 @@ import PopupConfirmDelete from "components/PopupConfirmDelete"
 import PopupManatoryAttributes from "pages/SurveyNew/components/PopupManatoryAttributes"
 import IconTagLoyalty from "components/icons/IconTagLoyalty"
 import WarningIcon from "@mui/icons-material/Warning"
+import PopupAddOrEditAdditionalBrand from "pages/SurveyNew/components/PopupAddOrEditAdditionalBrand"
+import { AdditionalBrandService } from "services/additional_brand"
+import { AttributeType } from "models/Admin/attribute"
+import { AdditionalAttributeService } from "services/additional_attribute"
+import { BrandForm } from "../BrandList"
 
 interface BrandDispositionAndEquityProps {
   project: Project
@@ -55,11 +60,14 @@ interface AttributeShow {
 const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityProps) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const [displaySelectBrandButton, setDisplaySelectBrandButton] = useState<boolean>(false)
+
+  const [isOpenAddOrEditBrandModal, setIsOpenAddOrEditBrandModal] = useState<boolean>(false)
   const [competingBrandsSelected, setCompetingBrandsSelected] = useState<number[]>([])
   const [anchorElMenuAttributes, setAnchorElMenuAttributes] = useState<null | HTMLElement>(null);
   const [anchorElMenuChooseBrand, setAnchorElMenuChooseBrand] = useState<null | HTMLElement>(null);
 
+  const [numberOfMandatoryAttributes, setNumberOfMandatoryAttributes] = useState<number>(0)
+  const [numberOfPreDefinedAttributes, setNumberOfPreDefinedAttributes] = useState<number>(0)
   const [openPopupMandatory, setOpenPopupMandatory] = useState(false)
   const [openPopupPreDefined, setOpenPopupPreDefined] = useState(false)
   const [openPopupAddAttributes, setOpenPopupAddAttributes] = useState(false)
@@ -109,15 +117,21 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
       _competingBrandsSelected.push(item.brandId)
     })
     setCompetingBrandsSelected(_competingBrandsSelected)
-
-    if(project?.projectBrands?.length > 0) {
-      setDisplaySelectBrandButton(true)
-    }
   }, [project, anchorElMenuChooseBrand])
+  
+  useEffect(() => {
+    if (project?.solutionId) {
+      Promise.all([
+        AdditionalAttributeService.getAdditionalAttributes({ take: 9999, typeId: AttributeType.MANATORY, solutionId: project.solutionId }),
+        AdditionalAttributeService.getAdditionalAttributes({ take: 9999, typeId: AttributeType.PRE_DEFINED, solutionId: project.solutionId })
+      ])
+        .then(([mandatoryRes, preDefinedRes]) => {
+          setNumberOfMandatoryAttributes(mandatoryRes.data?.length || 0)
+          setNumberOfPreDefinedAttributes(preDefinedRes.data?.length || 0)
+        })
+    }
+  }, [project?.solutionId])
 
-  const onDisplaySelectBrandButton = () => {
-    setDisplaySelectBrandButton(true)
-  }
   const handleClickMenuChooseBrand = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorElMenuChooseBrand(event.currentTarget)
   }
@@ -128,6 +142,28 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
   
   const isDisabled = (item: AdditionalBrand) => {
     return !competingBrandsSelected.includes(item.id) && maxCompetitiveBrand <= competingBrandsSelected.length
+  }
+  
+  const onOpenPopupAddOrEditBrand = () => {
+    setIsOpenAddOrEditBrandModal(true)
+  }
+  
+  const onClosePopupAddOrEditBrand = () => {
+    setIsOpenAddOrEditBrandModal(false)
+  }
+
+  const handleAddCompetingBrand = (data: BrandForm) => {
+    dispatch(setLoading(true))
+    AdditionalBrandService.create({
+      projectId: project.id,
+      typeId: EBrandType.COMPETING,
+      ...data
+    })
+      .then(() => {
+        dispatch(getAdditionalBrandsRequest(project.id))
+      })
+      .catch(e => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)))
   }
 
   const onChangeChooseCompetingBrand = (item: AdditionalBrand) => {
@@ -352,7 +388,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
           <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } translation-key="brand_track_setup_brand_disposition_and_equity_competitive_brand_sub_title_2">
             {t("brand_track_setup_brand_disposition_and_equity_competitive_brand_sub_title_2")}
           </ParagraphBody> 
-          {displaySelectBrandButton ? (
+          {!!competingBrandDatas?.length ? (
             <>
               {!!competitiveBrandNeedMore && (
                 <NoteWarning mb={ 3 } ml={ 3 }>
@@ -365,7 +401,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
                 {project?.projectBrands?.map(item => (
                   <Chip
                     classes={{ root: classes.rootChip }}
-                    label={item?.brand?.brand}
+                    label={`${item?.brand?.brand} (${item?.brand?.variant})`}
                     onDelete={()=>onDeleteProjectBrand(item?.id)}
                     deleteIcon={<div><CloseIcon sx={{ fontSize: "20px", color: "var(--cimigo-blue)" }} /></div>}
                     disabled={!editable}
@@ -387,7 +423,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
               <ParagraphBody $colorName="--gray-80" className={classes.warning} translation-key="brand_track_setup_brand_disposition_and_equity_competitive_brand_no_brand_chose">
                 {t("brand_track_setup_brand_disposition_and_equity_competitive_brand_no_brand_chose")}
                 <span 
-                  onClick={onDisplaySelectBrandButton}
+                  onClick={onOpenPopupAddOrEditBrand}
                   translation-key="brand_track_setup_brand_disposition_and_equity_competitive_brand_btn_add"
                 >
                   {t("brand_track_setup_brand_disposition_and_equity_competitive_brand_btn_add")} +
@@ -400,14 +436,6 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
             anchorEl={anchorElMenuChooseBrand}
             open={Boolean(anchorElMenuChooseBrand)}
             onClose={handleCloseMenuChooseBrand}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
             sx={{mt: 1}}
           >
             <Grid className={classes.menuChooseBrand}>
@@ -423,7 +451,7 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
                         />
                     </Grid>
                     <Grid item className={classes.listTextLeft}>
-                      <ParagraphBody $colorName="--gray-80">{item.brand}</ParagraphBody>
+                      <ParagraphBody $colorName="--gray-80">{item.brand} ({item.variant})</ParagraphBody>
                     </Grid>
                   </Grid>
                 </MenuItem>
@@ -469,9 +497,9 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
           <ParagraphBody $colorName="--eerie-black" mb={ 2 } ml={ 3 } className={classes.brandEquitySubTitle} translation-key="brand_track_setup_brand_disposition_and_equity_attributes_sub_title_1">
             {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_1")}{" "}
             <span onClick={() => setOpenPopupMandatory(true)} translation-key="brand_track_setup_brand_disposition_and_equity_attributes_sub_title_2">
-              {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_2")}
+              {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_2", {number: numberOfMandatoryAttributes})}
             </span>{" "}
-            {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_3")}
+            {t("brand_track_setup_brand_disposition_and_equity_attributes_sub_title_3", {number: numberOfPreDefinedAttributes})}
           </ParagraphBody>
           {!!brandEquityAttributesNeedMore && (
             <NoteWarning mt={0} mb={2} ml={3}>
@@ -648,6 +676,14 @@ const BrandDispositionAndEquity = memo(({ project }: BrandDispositionAndEquityPr
           )}
         </Grid>
       </Grid >
+      <PopupAddOrEditAdditionalBrand
+        isOpen={isOpenAddOrEditBrandModal}
+        onClose={onClosePopupAddOrEditBrand}
+        brand={null}
+        project={project}
+        onSubmit={handleAddCompetingBrand}
+        brandType={EBrandType.COMPETING}
+      />
       <PopupManatoryAttributes
         isOpen={openPopupMandatory}
         project={project}

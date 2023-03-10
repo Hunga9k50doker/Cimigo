@@ -13,8 +13,29 @@
   padding: 0 16px;
   justify-content: space-between;
   height: 80px;
+  &:hover {
+    cursor: pointer;
+    p {
+      text-decoration: underline;
+    }
+  }
   @media only screen and (min-width: 576px) {
     width: 360px;
+  }
+}
+.disabled {
+  &:hover {
+    cursor: unset;
+    p {
+      text-decoration: unset;
+    }
+  }
+}
+.btnDeleteMainBrand {
+  border-radius: 8px;
+  margin-right: 0;
+  &:hover {
+    background-color: rgba(31, 97, 169, 0.08);
   }
 }
 .btnAddMainBrand {
@@ -22,6 +43,13 @@
   width: -webkit-fill-available;
   height: 80px;
   border: dashed 1px var(--cimigo-blue-light-2);
+  &:hover {
+    border: dashed 1px var(--cimigo-blue-dark-1);
+    background-color: var(--cimigo-blue-light-3);
+    svg, p {
+      color: var(--cimigo-blue-dark-1);
+    }
+  }
   @media only screen and (min-width: 576px) {
     width: 360px;
   }
