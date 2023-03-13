@@ -30,14 +30,6 @@ export enum PaymentScheduleStatus {
   CANCEL
 }
 
-export const paymentScheduleStatusTypes = [
-  { id: PaymentScheduleStatus.NOT_PAID, name: "Not paid"},
-  { id: PaymentScheduleStatus.IN_PROGRESS, name: "In progress"},
-  { id: PaymentScheduleStatus.PAID, name: "Paid"},
-  { id: PaymentScheduleStatus.OVERDUE, name: "Overdue"},
-  { id: PaymentScheduleStatus.CANCEL, name: "Cancel"},
-]
-
 export interface PaymentSchedule {
   id: number;
   solutionConfig: SolutionConfig;
