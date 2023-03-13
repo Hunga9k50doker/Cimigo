@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
@@ -22,11 +22,13 @@ import AccordionSummary from "../components/AccordionSummary";
 import { ImageMain } from "../components/PopupImage";
 import PopupPayment from "../components/PopupPayment";
 import Accordion from "../components/Accordion";
-import Span from "../components/Span";
 import BoxCustom from "../components/BoxCustom";
 import { PaymentSchedule } from "models/payment_schedule";
 import moment from "moment";
 import { usePrice } from "helpers/price";
+import TooltipCancelPayment from "../components/TooltipCancelPayment";
+import ProjectHelper from "helpers/project";
+
 interface Props {
   isOpen: boolean;
   paymentSchedule: PaymentSchedule;
@@ -39,6 +41,7 @@ const PopupSupportAgent = memo((props: Props) => {
   const { isOpen, paymentSchedule, onDownloadInvoice, onCancel, onCancelPayment } = props;
   const { t } = useTranslation();
   const { getCostCurrency } = usePrice();
+  const payment = useMemo(() => ProjectHelper.getPaymentForBrandTrack(paymentSchedule), [paymentSchedule]);
 
   return (
     <PopupPayment scroll="paper" open={isOpen} onClose={onCancel}>
@@ -101,7 +104,7 @@ const PopupSupportAgent = memo((props: Props) => {
                     {t("brand_track_popup_paynow_contact_name")}
                   </ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_name_value">
-                    {t("brand_track_popup_paynow_contact_name_value")}
+                    {payment.contactName}
                   </Heading6>
                 </BoxCustom>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
@@ -109,7 +112,7 @@ const PopupSupportAgent = memo((props: Props) => {
                     {t("brand_track_popup_paynow_contact_email")}
                   </ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_email_value">
-                    {t("brand_track_popup_paynow_contact_email_value")}
+                    {payment.contactEmail}
                   </Heading6>
                 </Grid>
                 <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexWrap="wrap">
@@ -117,7 +120,7 @@ const PopupSupportAgent = memo((props: Props) => {
                     {t("brand_track_popup_paynow_contact_phone")}
                   </ParagraphSmall>
                   <Heading6 $fontWeight={500} $colorName="--eerie-black" translation-key="brand_track_popup_paynow_contact_phone_value">
-                    {t("brand_track_popup_paynow_contact_phone_value")}
+                    {payment.contactPhone}
                   </Heading6>
                 </Grid>
               </Grid>
@@ -138,10 +141,7 @@ const PopupSupportAgent = memo((props: Props) => {
           />
         </Box>
         <Typography my={3} color={"var(--eerie-black)"} textAlign="center" translation-key="brand_track_popup_paynow_change_payment_method">
-          {t("brand_track_popup_paynow_change_payment_method")}{" "}
-          <Span translation-key="brand_track_popup_paynow_action_1" onClick={onCancelPayment}>
-            {t("brand_track_popup_paynow_action_1")}
-          </Span>
+          {t("brand_track_popup_paynow_change_payment_method")} <TooltipCancelPayment onCancelPayment={onCancelPayment} />
         </Typography>
       </DialogContentConfirm>
     </PopupPayment>

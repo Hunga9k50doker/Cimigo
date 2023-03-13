@@ -10,9 +10,10 @@ import Button, { BtnType } from "components/common/buttons/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import Footer from "components/Footer";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Alert, { AlerType } from "../../../../../components/Alert";
 import {
+  EPaymentScheduleCancelType,
   PaymentSchedule,
   PaymentScheduleStatus,
 } from "models/payment_schedule";
@@ -30,14 +31,11 @@ import { usePrice } from "helpers/price";
 import { setPaymentIsMakeAnOrderSuccessReducer, setPaymentScheduleResultReducer } from "redux/reducers/Payment/actionTypes";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { EPaymentMethod } from "models/general";
 // Import Swiper styles
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper";
 import "swiper/css";
-import "swiper/css/free-mode";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
 import PopupPayNow from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupPayNow";
 import PopupBankTransfer from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupBankTransfer";
 import PopupOnlinePayment from "pages/SurveyNew/BrandTrack/components/PopupPayment/PopupOnlinePayment";
@@ -46,6 +44,12 @@ import { useTranslation } from "react-i18next";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { PaymentService } from "services/payment";
 import FileSaver from "file-saver";
+import { PaymentScheduleService } from "services/payment_schedule";
+import { getPaymentSchedulesRequest } from "redux/reducers/Project/actionTypes";
+import { ProjectService } from "services/project";
+import { getProjectRequest } from "redux/reducers/Project/actionTypes";
+import { Content, LeftContent, PageRoot } from "pages/SurveyNew/components";
+
 interface MakeAnOrderProp {
   projectId: number;
 }
@@ -77,8 +81,6 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   const { project } = useSelector((state: ReducerType) => state.project);
   const { isMakeAnOrder, paymentScheduleResult } = useSelector((state: ReducerType) => state.payment);
 
-  const swiperRef = useRef<any>();
-
   const paymentSchedules = useMemo(() => project?.paymentSchedules || [], [project])
 
   const [isOpenPopupPaynow, setIsOpenPopupPaynow] = useState(false);
@@ -103,7 +105,17 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   };
 
   const submitCancelSubsription = (reson: string) => {
-    setOnSubmitCancelSubsription(false);
+    dispatch(setLoading(true));
+    ProjectService.cancelPaymentScheduleSubscription({
+      projectId: projectId,
+      reason: reson
+    })
+      .then(() => {
+        dispatch(getProjectRequest(projectId))
+        onCloseSubmitCancelSubsription();
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
   };
 
   const cancelSubscription = () => {
@@ -114,8 +126,18 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
     setIsOpenPopupPaynow(true);
   };
   const onCancelPayment = () => {
-    onClose();
-    setIsOpenPopupPaynow(true);
+    dispatch(setLoading(true));
+    PaymentScheduleService.cancelPaymentSchedule(paymentScheduleForPay.id)
+      .then(() => {
+        onClose();
+        setIsOpenPopupPaynow(true);
+        dispatch(getPaymentSchedulesRequest(project.id, (data) => {
+          const newPaymentScheduleForPay = data.find((item) => item.id === paymentScheduleForPay.id);
+          if (newPaymentScheduleForPay) setDataPaymentSchedule(newPaymentScheduleForPay);
+        }));
+      })
+      .catch((e) => dispatch(setErrorMess(e)))
+      .finally(() => dispatch(setLoading(false)));
   };
   const onOpenModal = (item: PaymentSchedule) => {
     setIsOpenPopupPaynow(false);
@@ -154,15 +176,31 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
     dispatch(push(route.replace(":id", `${project.id}`)));
   };
   
-  const handleDownloadInvoice = (payment) => {
+  const handleDownloadInvoice = (paymentSchedule: PaymentSchedule) => {
     dispatch(setLoading(true));
-    PaymentService.getInvoiceDemo(projectId, payment.id)
+    PaymentService.getPaymentScheduleInvoiceDemo(paymentSchedule.id)
       .then((res) => {
         FileSaver.saveAs(res.data, `invoice-${moment().format("MM-DD-YYYY-hh-mm-ss")}.pdf`);
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
-}
+  }
+
+  const setMainColorForPaymentSchedule = (paymentSchedule: PaymentSchedule, index: number) => {
+    switch(paymentSchedule.status) {
+      case PaymentScheduleStatus.IN_PROGRESS:
+        return "--gray-80";
+      case PaymentScheduleStatus.OVERDUE:
+        return "--gray-20";
+      case PaymentScheduleStatus.NOT_PAID:
+        if(!index) {
+          return "--cimigo-blue-dark-1";
+        }
+        return "--gray-20";
+      default:
+        return "--gray-80";
+    }
+  }
 
   useEffect(() => {
     authYourNextPayment(project, onRedirect);
@@ -193,404 +231,421 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
   }, [isMakeAnOrder]);
 
   return (
-    <>
-      <Grid classes={{ root: classes.root }}>
-        {paymentScheduleResult && paymentScheduleResult?.isSuccess && (
-          <Alert
-            translation-key="brand_track_your_next_payment_title_alert_payment_success"
-            title={t(
-              "brand_track_your_next_payment_title_alert_payment_success"
-            )}
-            onClose={onCloseAlertPaymentScheduleResult}
-            content={
-              <ParagraphBody
-                $colorName={"--eerie-black"}
-                className={classes.contentAlert}
-                translation-key="brand_track_your_next_payment_content_alert_payment_success"
-                dangerouslySetInnerHTML={{
-                  __html: t(
-                    "brand_track_your_next_payment_content_alert_payment_success",
-                    {
-                      dateRange: `${moment(paymentScheduleResult?.paymentSchedule?.start).format("MMM yyyy").toUpperCase()} - ${moment(paymentScheduleResult?.paymentSchedule?.end).format("MMM yyyy").toUpperCase()}`,
-                    }
-                  ),
-                }}
-              ></ParagraphBody>
-            }
-            type={AlerType.Success}
-          />
-        )}
-        {paymentScheduleResult && !paymentScheduleResult?.isSuccess && (
-          <Alert
-            translation-key="brand_track_your_next_payment_title_alert_payment_fail"
-            title={t(
-              "brand_track_your_next_payment_title_alert_payment_fail"
-            )}
-            onClose={onCloseAlertPaymentScheduleResult}
-            content={
-              <ParagraphBody
-                $colorName={"--eerie-black"}
-                className={classes.contentAlert}
-                translation-key="brand_track_your_next_payment_content_alert_payment_fail"
-                dangerouslySetInnerHTML={{
-                  __html: t(
-                    "brand_track_your_next_payment_content_alert_payment_fail",
-                    {
-                      dateRange: `${moment(paymentScheduleResult?.paymentSchedule?.start).format("MMM yyyy").toUpperCase()} - ${moment(paymentScheduleResult?.paymentSchedule?.end).format("MMM yyyy").toUpperCase()}`,
-                    }
-                  ),
-                }}
-              ></ParagraphBody>
-            }
-            type={AlerType.Error}
-          />
-        )}
-        {alertMakeAnOrderSuccess && (
-          <Alert
-            title={t(
-              "brand_track_your_next_payment_title_alert_make_an_order_success"
-            )}
-            onClose={onCloseMakeAnOrderSuccess}
-            content={
-              <ParagraphBody
-                $colorName={"--eerie-black"}
-                translation-key="brand_track_your_next_payment_content_alert_make_an_order_success_des"
-                dangerouslySetInnerHTML={{
-                  __html: t(
-                    "brand_track_your_next_payment_content_alert_make_an_order_success_des",
-                    {
-                      startPayment: moment(
-                        project?.startPaymentSchedule
-                      ).format("MMMM yyyy"),
-                      dueDate: moment(paymentSchedules[0]?.dueDate).format(
-                        "MMMM DD, yyyy"
-                      ),
-                      scheduledMonths:
-                        paymentSchedules[0]?.solutionConfig
-                          ?.paymentMonthSchedule,
-                    }
-                  ),
-                }}
-              ></ParagraphBody>
-            }
-            type={AlerType.Success}
-          />
-        )}
-        {alertPaymentReminder && !alertMakeAnOrderSuccess && (
-          <Alert
-            title={t("brand_track_your_next_payment_title_alert_warring")}
-            content={
-              <Box>
-                <ParagraphBody
-                  $colorName={"--eerie-black"}
-                  translation-key="brand_track_your_next_payment_content_alert_warring_des_1"
-                  dangerouslySetInnerHTML={{
-                    __html: t(
-                      "brand_track_your_next_payment_content_alert_warring_des_1",
-                      {
-                        date: moment(alertPaymentReminder?.dueDate).format(
-                          "MMMM DD, yyyy"
-                        ),
-                      }
-                    ),
-                  }}
-                ></ParagraphBody>
-                <ParagraphBody
-                  $colorName={"--eerie-black"}
-                  translation-key="brand_track_your_next_payment_content_alert_warring_des_2"
-                >
-                  {t(
-                    "brand_track_your_next_payment_content_alert_warring_des_2"
-                  )}
-                </ParagraphBody>
-              </Box>
-            }
-            type={AlerType.Warning}
-          />
-        )}
-        {!project?.status && (
-          <Alert
-            title={t(
-              "brand_track_your_next_payment_title_alert_subscription_canceled"
-            )}
-            content={
-              <ParagraphBody
-                $colorName={"--eerie-black"}
-                translation-key="brand_track_your_next_payment_content_alert_subscription_canceled_des"
-              >
-                {t(
-                  "brand_track_your_next_payment_content_alert_subscription_canceled_des"
+    <PageRoot>
+      <LeftContent>
+        <Content classes={{root: classes.rootContent}}>
+          <Grid classes={{ root: classes.root }}>
+            {paymentScheduleResult && paymentScheduleResult?.isSuccess && (
+              <Alert
+                translation-key="brand_track_your_next_payment_title_alert_payment_success"
+                title={t(
+                  "brand_track_your_next_payment_title_alert_payment_success"
                 )}
-              </ParagraphBody>
-            }
-            type={AlerType.Default}
-          />
-        )}
-
-        <Grid pt={4}>
-          <Grid className={classes.yourNextPaymentHeader}>
-            <Heading4
-              $fontWeight={"400"}
-              $colorName={"--eerie-black"}
-              translation-key="brand_track_your_next_payment_title"
-            >
-              {t("brand_track_your_next_payment_title")}
-            </Heading4>
-            <TextBtnSmall
-              className={classes.cancelSub}
-              $colorName={"--gray-80"}
-              pr={1}
-              onClick={cancelSubscription}
-              translation-key="brand_track_your_next_payment_title_cancel_subscription"
-            >
-              {t("brand_track_your_next_payment_title_cancel_subscription")}
-            </TextBtnSmall>
-          </Grid>
-          <Box className={classes.slidePayment} pt={4}>
-            <Grid className={classes.slidePaymentSwiper}>
-              <Box
-                className={clsx(classes.iconSlide, classes.iconSlideLeft)}
-                onClick={() => swiperRef.current?.slidePrev()}
-              >
-                <KeyboardArrowLeftIcon />
-              </Box>
-
-              <Swiper
-                slidesPerView={2}
-                breakpoints={sliderSettings}
-                direction={"horizontal"}
-                onBeforeInit={(swiper) => {
-                  swiperRef.current = swiper;
-                }}
-              >
-                {paymentSchedules?.map((item, index) => {
-                  return (
-                    <SwiperSlide key={item.id}>
-                      <Box
-                        className={clsx(
-                          classes.customSlide,
+                onClose={onCloseAlertPaymentScheduleResult}
+                content={
+                  <ParagraphBody
+                    $colorName={"--eerie-black"}
+                    className={classes.contentAlert}
+                    translation-key="brand_track_your_next_payment_content_alert_payment_success"
+                    dangerouslySetInnerHTML={{
+                      __html: t(
+                        "brand_track_your_next_payment_content_alert_payment_success",
+                        {
+                          dateRange: `${moment(paymentScheduleResult?.paymentSchedule?.start).format("MMM yyyy").toUpperCase()} - ${moment(paymentScheduleResult?.paymentSchedule?.end).format("MMM yyyy").toUpperCase()}`,
+                        }
+                      ),
+                    }}
+                  ></ParagraphBody>
+                }
+                type={AlerType.Success}
+              />
+            )}
+            {paymentScheduleResult && !paymentScheduleResult?.isSuccess && (
+              <Alert
+                translation-key="brand_track_your_next_payment_title_alert_payment_fail"
+                title={t(
+                  "brand_track_your_next_payment_title_alert_payment_fail"
+                )}
+                onClose={onCloseAlertPaymentScheduleResult}
+                content={
+                  <ParagraphBody
+                    $colorName={"--eerie-black"}
+                    className={classes.contentAlert}
+                    translation-key="brand_track_your_next_payment_content_alert_payment_fail"
+                    dangerouslySetInnerHTML={{
+                      __html: t(
+                        "brand_track_your_next_payment_content_alert_payment_fail",
+                        {
+                          dateRange: `${moment(paymentScheduleResult?.paymentSchedule?.start).format("MMM yyyy").toUpperCase()} - ${moment(paymentScheduleResult?.paymentSchedule?.end).format("MMM yyyy").toUpperCase()}`,
+                        }
+                      ),
+                    }}
+                  ></ParagraphBody>
+                }
+                type={AlerType.Error}
+              />
+            )}
+            {alertMakeAnOrderSuccess && (
+              <Alert
+                title={t(
+                  "brand_track_your_next_payment_title_alert_make_an_order_success"
+                )}
+                onClose={onCloseMakeAnOrderSuccess}
+                content={
+                  <ParagraphBody
+                    $colorName={"--eerie-black"}
+                    className={classes.contentAlert}
+                    translation-key="brand_track_your_next_payment_content_alert_make_an_order_success_des"
+                    dangerouslySetInnerHTML={{
+                      __html: t(
+                        "brand_track_your_next_payment_content_alert_make_an_order_success_des",
+                        {
+                          startPayment: moment(
+                            project?.startPaymentSchedule
+                          ).format("MMMM yyyy"),
+                          dueDate: moment(paymentSchedules[0]?.dueDate).format(
+                            "MMMM DD, yyyy"
+                          ),
+                          scheduledMonths:
+                            paymentSchedules[0]?.solutionConfig
+                              ?.paymentMonthSchedule,
+                        }
+                      ),
+                    }}
+                  ></ParagraphBody>
+                }
+                type={AlerType.Success}
+              />
+            )}
+            {alertPaymentReminder && !alertMakeAnOrderSuccess && (
+              <Alert
+                title={t("brand_track_your_next_payment_title_alert_warring")}
+                content={
+                  <Box>
+                    <ParagraphBody
+                      $colorName={"--eerie-black"}
+                      className={classes.contentAlert}
+                      translation-key="brand_track_your_next_payment_content_alert_warring_des_1"
+                      dangerouslySetInnerHTML={{
+                        __html: t(
+                          "brand_track_your_next_payment_content_alert_warring_des_1",
                           {
-                            [classes.slideDefault]:
-                              item.status === PaymentScheduleStatus.NOT_PAID,
-                          },
-                          {
-                            [classes.slideProcessing]:
-                              item.status === PaymentScheduleStatus.IN_PROGRESS,
-                          },
-                          {
-                            [classes.slideDisabled]:
-                              item.status === PaymentScheduleStatus.OVERDUE,
-                          },
-                          {
-                            [classes.slideCompleted]:
-                              item.status === PaymentScheduleStatus.PAID,
+                            date: moment(alertPaymentReminder?.dueDate).format(
+                              "MMMM DD, yyyy"
+                            ),
                           }
-                        )}
-                      >
-                        <Box className={classes.contentSlideSwiper}>
-                          <Grid className={classes.contentLeftSwiper}>
-                            <Heading3 $colorName={"--gray-80"}>
-                              {`${moment(item.start).format(
-                                "MMM yyyy"
-                              )} - ${moment(item.end).format("MMM yyyy")}`}
-                            </Heading3>
-                            <ParagraphBody
-                              $colorName={"--gray-80"}
-                              translation-key="common_month"
-                            >
-                              {item.solutionConfig.paymentMonthSchedule}{" "}
-                              {t("common_month", {
-                                s:
-                                  item.solutionConfig.paymentMonthSchedule === 1
-                                    ? ""
-                                    : t("common_s"),
-                              })}
-                            </ParagraphBody>
-                            <Heading3
-                              $colorName={"--gray-80"}
-                              $fontWeight={400}
-                            >
-                              <span className={classes.iconDolar}>
-                                <Dolar />
-                              </span>
-                              {getCostCurrency(item.totalAmount)?.show}
-                            </Heading3>
-                          </Grid>
-                          <Box className={classes.contentRightSwiper}>
-                            {item.status === PaymentScheduleStatus.NOT_PAID && (
-                              <Box>
-                                <Button
-                                  btnType={BtnType.Raised}
-                                  endIcon={<CreditCardIcon />}
-                                  children={
-                                    <TextBtnSmall
-                                      $colorName={"--white"}
-                                      translation-key="brand_track_your_next_payment_title_button_pay_now"
-                                    >
-                                      {t(
-                                        "brand_track_your_next_payment_title_button_pay_now"
-                                      )}
-                                    </TextBtnSmall>
-                                  }
-                                  onClick={() => goToPayNow(item)}
-                                  disabled={!!index}
-                                />
+                        ),
+                      }}
+                    ></ParagraphBody>
+                    <ParagraphBody
+                      $colorName={"--eerie-black"}
+                      translation-key="brand_track_your_next_payment_content_alert_warring_des_2"
+                    >
+                      {t(
+                        "brand_track_your_next_payment_content_alert_warring_des_2"
+                      )}
+                    </ParagraphBody>
+                  </Box>
+                }
+                type={AlerType.Warning}
+              />
+            )}
+            {project?.cancelPaymentScheduleType === EPaymentScheduleCancelType.USER_CANCEL && (
+              <Alert
+                translation-key="brand_track_your_next_payment_title_alert_subscription_canceled"
+                title={t(
+                  "brand_track_your_next_payment_title_alert_subscription_canceled"
+                )}
+                content={
+                  <ParagraphBody
+                    $colorName={"--eerie-black"}
+                    translation-key="brand_track_your_next_payment_content_alert_subscription_canceled_des"
+                  >
+                    {t(
+                      "brand_track_your_next_payment_content_alert_subscription_canceled_des"
+                    )}
+                  </ParagraphBody>
+                }
+                type={AlerType.Default}
+              />
+            )}
+            {project?.cancelPaymentScheduleType === EPaymentScheduleCancelType.AUTO_CANCEL && (
+              <Alert
+                translation-key="brand_track_your_next_payment_title_alert_subscription_terminated"
+                title={t(
+                  "brand_track_your_next_payment_title_alert_subscription_terminated"
+                )}
+                content={
+                  <ParagraphBody
+                    $colorName={"--eerie-black"}
+                    translation-key="brand_track_your_next_payment_content_alert_subscription_terminated_des"
+                  >
+                    {t(
+                      "brand_track_your_next_payment_content_alert_subscription_terminated_des"
+                    )}
+                  </ParagraphBody>
+                }
+                type={AlerType.Default}
+              />
+            )}
 
-                                <ParagraphSmall
-                                  pt={0.5}
-                                  translation-key="brand_track_your_next_payment_sub_due"
-                                >{`${t(
-                                  "brand_track_your_next_payment_sub_due"
-                                )} ${moment(item.dueDate).format(
-                                  "MMM DD, yyyy"
-                                )}`}</ParagraphSmall>
-                              </Box>
-                            )}
-                            {item.status ===
-                              PaymentScheduleStatus.IN_PROGRESS && (
-                              <Box>
-                                <Box className={classes.statusPayment}>
-                                  <HourglassBottomIcon />
-                                  <ParagraphSmall
-                                    $colorName={"--warning-dark"}
-                                    pl={1}
-                                    translation-key="brand_track_your_next_payment_title_button_processing"
-                                  >
-                                    {t(
-                                      "brand_track_your_next_payment_title_button_processing"
-                                    )}
-                                  </ParagraphSmall>
-                                </Box>
-                                <ParagraphSmallUnderline2
-                                  $colorName={"--gray-90"}
-                                  className={classes.urlViewDetail}
-                                  pt={0.5}
-                                  onClick={() => onOpenModal(item)}
-                                  translation-key="brand_track_your_next_payment_sub_view_detail"
-                                >
-                                  {t(
-                                    "brand_track_your_next_payment_sub_view_detail"
-                                  )}
-                                </ParagraphSmallUnderline2>
-                              </Box>
-                            )}
-                            {item.status === PaymentScheduleStatus.OVERDUE && (
-                              <Box>
-                                <Button
-                                  className={classes.btnWaiting}
-                                  btnType={BtnType.Raised}
-                                  endIcon={<CreditCardIcon />}
-                                  disabled={true}
-                                  children={
-                                    <TextBtnSmall
-                                      $colorName={"--gray-20"}
-                                      translation-key="brand_track_your_next_payment_title_button_waiting"
-                                    >
-                                      {t(
-                                        "brand_track_your_next_payment_title_button_waiting"
-                                      )}
-                                    </TextBtnSmall>
-                                  }
-                                />
-                                <ParagraphSmall
-                                  pt={0.5}
-                                  $colorName={"--gray-40"}
-                                  translation-key="brand_track_your_next_payment_sub_due"
-                                >
-                                  {`${t(
-                                    "brand_track_your_next_payment_sub_due"
-                                  )} ${moment(item.dueDate).format(
-                                    "MMM DD, yyyy"
-                                  )}`}
-                                </ParagraphSmall>
-                              </Box>
-                            )}
-                            {item.status === PaymentScheduleStatus.PAID && (
-                              <Box>
-                                <Box className={classes.icon}>
-                                  <CheckCircleIcon />
-                                </Box>
-                                <ParagraphSmall
-                                  $colorName={"--cimigo-green-dark-2"}
-                                  translation-key="brand_track_your_next_payment_title_button_payment_completed"
-                                >
-                                  {t(
-                                    "brand_track_your_next_payment_title_button_payment_completed"
-                                  )}
-                                </ParagraphSmall>
-                                <ParagraphSmallUnderline2
-                                  $colorName={"--gray-90"}
-                                  className={classes.urlViewDetail}
-                                  pt={0.5}
-                                  translation-key="brand_track_your_next_payment_download_invoice"
-                                >
-                                  {t(
-                                    "brand_track_your_next_payment_download_invoice"
-                                  )}
-                                </ParagraphSmallUnderline2>
-                              </Box>
-                            )}
-                          </Box>
-                        </Box>
+            <Grid>
+              {!project?.cancelPaymentScheduleType && (
+                <Grid pt={4}>
+                  <Grid className={classes.yourNextPaymentHeader}>
+                    <Heading4
+                      $fontWeight={"400"}
+                      $colorName={"--eerie-black"}
+                      translation-key="brand_track_your_next_payment_title"
+                    >
+                      {t("brand_track_your_next_payment_title")}
+                    </Heading4>
+                    <TextBtnSmall
+                      className={classes.cancelSub}
+                      $colorName={"--gray-80"}
+                      pr={1}
+                      onClick={cancelSubscription}
+                      translation-key="brand_track_your_next_payment_title_cancel_subscription"
+                    >
+                      {t("brand_track_your_next_payment_title_cancel_subscription")}
+                    </TextBtnSmall>
+                  </Grid>
+                  <Box className={classes.slidePayment} pt={4}>
+                    <Grid className={classes.slidePaymentSwiper}>
+                      <Box
+                        className={clsx(classes.iconSlide, classes.iconSlideLeft)}
+                      >
+                        <KeyboardArrowLeftIcon />
                       </Box>
-                    </SwiperSlide>
-                  );
-                })}
-              </Swiper>
-              <Box
-                className={clsx(classes.iconSlide, classes.iconSlideRight)}
-                onClick={() => swiperRef.current?.slideNext()}
-              >
-                <KeyboardArrowRightIcon />
-              </Box>
+                      <Swiper
+                        navigation={{
+                          nextEl: `.${classes.iconSlideRight}`,
+                          prevEl: `.${classes.iconSlideLeft}`,
+                          disabledClass: classes.iconDisabled,
+                        }}
+                        modules={[Navigation]}
+                        slidesPerView={2}
+                        breakpoints={sliderSettings}
+                        direction={"horizontal"}
+                      >
+                        {paymentSchedules?.map((item, index) => {
+                          return (
+                            <SwiperSlide key={item.id}>
+                              <Box
+                                className={clsx(
+                                  classes.customSlide,
+                                  {
+                                [classes.slideDefault]:
+                                  item.status === PaymentScheduleStatus.NOT_PAID,
+                                  },
+                                  {
+                                [classes.slideProcessing]:
+                                  item.status === PaymentScheduleStatus.IN_PROGRESS,
+                                  },
+                                  {
+                                [classes.slideDisabled]:
+                                  item.status === PaymentScheduleStatus.OVERDUE || !!index,
+                                  }
+                                )}
+                              >
+                                <Box className={classes.contentSlideSwiper}>
+                                  <Grid className={classes.contentLeftSwiper}>
+                                      <Heading3 $colorName={setMainColorForPaymentSchedule(item, index)}>
+                                  {`${moment(item.start).format(
+                                    "MMM yyyy"
+                                  )} - ${moment(item.end).format("MMM yyyy")}`}
+                                      </Heading3>
+                                <ParagraphBody
+                                  $colorName={setMainColorForPaymentSchedule(item, index)}
+                                  translation-key="common_month"
+                                >
+                                        {item.solutionConfig.paymentMonthSchedule}{" "}
+                                        {t("common_month", {
+                                    s:
+                                      item.solutionConfig.paymentMonthSchedule === 1
+                                        ? ""
+                                        : t("common_s"),
+                                        })}
+                                      </ParagraphBody>
+                                    <Heading3
+                                      $colorName={setMainColorForPaymentSchedule(item, index)}
+                                      $fontWeight={400}
+                                      className={classes.priceWrapper}
+                                    >
+                                      <Dolar sx={{ color: `var(${setMainColorForPaymentSchedule(item, index)})` }} />
+                                      <span>{getCostCurrency(item.totalAmount)?.show}</span>
+                                    </Heading3>
+                                  </Grid>
+                                  <Box className={classes.contentRightSwiper}>
+                                    {item.status === PaymentScheduleStatus.NOT_PAID && (
+                                  <Box className={classes.contentRightSwiperItem}>
+                                        <Button
+                                          btnType={BtnType.Raised}
+                                          endIcon={<CreditCardIcon sx={{ fontSize: "15px !important" }} />}
+                                          children={
+                                            !index ? (
+                                              <TextBtnSmall
+                                                $colorName={"--white"}
+                                                translation-key="brand_track_your_next_payment_title_button_pay_now"
+                                              >
+                                            {t(
+                                              "brand_track_your_next_payment_title_button_pay_now"
+                                            )}
+                                              </TextBtnSmall>
+                                            ) : (
+                                              <TextBtnSmall
+                                                $colorName={"--gray-20"}
+                                                translation-key="brand_track_your_next_payment_title_button_waiting"
+                                              >
+                                            {t(
+                                              "brand_track_your_next_payment_title_button_waiting"
+                                            )}
+                                              </TextBtnSmall>
+                                            )
+                                          }
+                                          onClick={() => goToPayNow(item)}
+                                          disabled={!!index}
+                                          sx={{ boxShadow: "unset !important" }}
+                                        />
+
+                                        <ParagraphSmall
+                                          pt={0.5}
+                                          translation-key="brand_track_your_next_payment_sub_due"
+                                          $colorName={!index ? "--eerie-black" : "--gray-40"}
+                                    >{`${t(
+                                      "brand_track_your_next_payment_sub_due"
+                                    )} ${moment(item.dueDate).format(
+                                          "MMM DD, yyyy"
+                                        )}`}</ParagraphSmall>
+                                      </Box>
+                                    )}
+                                {item.status ===
+                                  PaymentScheduleStatus.IN_PROGRESS && (
+                                  <Box className={classes.contentRightSwiperItem}>
+                                        <Button
+                                          btnType={BtnType.Raised}
+                                          startIcon={<HourglassBottomIcon sx={{ fontSize: "19px !important" }} />}
+                                          children={
+                                            <TextBtnSmall
+                                              $colorName={"--warning-dark"}
+                                              translation-key="brand_track_your_next_payment_title_button_processing"
+                                            >
+                                          {t(
+                                            "brand_track_your_next_payment_title_button_processing"
+                                          )}
+                                            </TextBtnSmall>
+                                          }
+                                          onClick={() => onOpenModal(item)}
+                                          className={classes.processingBtn}
+                                        />
+                                        <ParagraphSmallUnderline2
+                                          $colorName={"--gray-90"}
+                                          className={classes.urlViewDetail}
+                                          pt={0.5}
+                                          onClick={() => onOpenModal(item)}
+                                          translation-key="brand_track_your_next_payment_sub_view_detail"
+                                        >
+                                      {t(
+                                        "brand_track_your_next_payment_sub_view_detail"
+                                      )}
+                                        </ParagraphSmallUnderline2>
+                                      </Box>
+                                    )}
+                                    {item.status === PaymentScheduleStatus.OVERDUE && (
+                                  <Box className={classes.contentRightSwiperItem}>
+                                        <Button
+                                          btnType={BtnType.Raised}
+                                          endIcon={<CreditCardIcon sx={{ fontSize: "15px !important" }} />}
+                                          disabled={true}
+                                          children={
+                                            <TextBtnSmall
+                                              $colorName={"--gray-20"}
+                                              translation-key="brand_track_your_next_payment_title_button_waiting"
+                                            >
+                                          {t(
+                                            "brand_track_your_next_payment_title_button_waiting"
+                                          )}
+                                            </TextBtnSmall>
+                                          }
+                                          sx={{ boxShadow: "unset !important" }}
+                                        />
+                                    <ParagraphSmall
+                                      pt={0.5}
+                                      $colorName={"--gray-40"}
+                                      translation-key="brand_track_your_next_payment_sub_due"
+                                    >
+                                      {`${t(
+                                        "brand_track_your_next_payment_sub_due"
+                                      )} ${moment(item.dueDate).format(
+                                        "MMM DD, yyyy"
+                                      )}`}
+                                        </ParagraphSmall>
+                                      </Box>
+                                    )}
+                                  </Box>
+                                </Box>
+                              </Box>
+                            </SwiperSlide>
+                          );
+                        })}
+                      </Swiper>
+                      <Box
+                        className={clsx(classes.iconSlide, classes.iconSlideRight)}
+                      >
+                        <KeyboardArrowRightIcon />
+                      </Box>
+                    </Grid>
+                  </Box>
+                </Grid>
+              )}
+              <PaymentHistoryList projectId={projectId} />
             </Grid>
-          </Box>
-          <PaymentHistoryList projectId={projectId} />
-        </Grid>
-      </Grid>
-      <PopupConfirmCancelSubsription
-        projectId={projectId}
-        isOpen={onSubmitCancelSubsription}
-        onCancel={onCloseSubmitCancelSubsription}
-        onSubmit={(reson) => submitCancelSubsription(reson)}
-      />
-      {paymentScheduleForPay && isOpenPopupPaynow && (
-        <PopupPayNow
-          isOpen={isOpenPopupPaynow}
-          onClose={onClose}
-          paymentSchedule={paymentScheduleForPay}
-          onOpenModal={onOpenModal}
-        />
-      )}
-      {paymentScheduleForPay && isOpenPopupBankTransfer && (
-        <PopupBankTransfer
-          isOpen={isOpenPopupBankTransfer}
-          onCancel={onClose}
-          onDownloadInvoice={() => handleDownloadInvoice(paymentScheduleForPay?.payments?.[0])}
-          onCancelPayment={onCancelPayment}
-          paymentSchedule={paymentScheduleForPay}
-        />
-      )}
-      {paymentScheduleForPay && isOpenPopupOnlinePayment && (
-        <PopupOnlinePayment
-          isOpen={isOpenPopupOnlinePayment}
-          onCancel={onClose}
-          onDownloadInvoice={() => handleDownloadInvoice(paymentScheduleForPay?.payments?.[0])}
-          onCancelPayment={onCancelPayment}
-          paymentSchedule={paymentScheduleForPay}
-        />
-      )}
-      {paymentScheduleForPay && isOpenPopupSuportAgent && (
-        <PopupSupportAgent
-          isOpen={isOpenPopupSuportAgent}
-          onCancel={onClose}
-          onDownloadInvoice={() => handleDownloadInvoice(paymentScheduleForPay?.payments?.[0])}
-          onCancelPayment={onCancelPayment}
-          paymentSchedule={paymentScheduleForPay}
-        />
-      )}
-      <Footer />
-    </>
+          </Grid>
+          <PopupConfirmCancelSubsription
+            projectId={projectId}
+            isOpen={onSubmitCancelSubsription}
+            onCancel={onCloseSubmitCancelSubsription}
+            onSubmit={(reson) => submitCancelSubsription(reson)}
+          />
+          {paymentScheduleForPay && isOpenPopupPaynow && (
+            <PopupPayNow
+              isOpen={isOpenPopupPaynow}
+              onClose={onClose}
+              paymentSchedule={paymentScheduleForPay}
+              onOpenModal={onOpenModal}
+            />
+          )}
+          {paymentScheduleForPay && isOpenPopupBankTransfer && (
+            <PopupBankTransfer
+              isOpen={isOpenPopupBankTransfer}
+              onCancel={onClose}
+              onDownloadInvoice={() => handleDownloadInvoice(paymentScheduleForPay)}
+              onCancelPayment={onCancelPayment}
+              paymentSchedule={paymentScheduleForPay}
+            />
+          )}
+          {paymentScheduleForPay && isOpenPopupOnlinePayment && (
+            <PopupOnlinePayment
+              isOpen={isOpenPopupOnlinePayment}
+              onCancel={onClose}
+              onDownloadInvoice={() => handleDownloadInvoice(paymentScheduleForPay)}
+              onCancelPayment={onCancelPayment}
+              paymentSchedule={paymentScheduleForPay}
+            />
+          )}
+          {paymentScheduleForPay && isOpenPopupSuportAgent && (
+            <PopupSupportAgent
+              isOpen={isOpenPopupSuportAgent}
+              onCancel={onClose}
+              onDownloadInvoice={() => handleDownloadInvoice(paymentScheduleForPay)}
+              onCancelPayment={onCancelPayment}
+              paymentSchedule={paymentScheduleForPay}
+            />
+          )}
+          <Footer />
+        </Content>
+      </LeftContent>
+    </PageRoot>
   );
 };
 export default YourNextPayment;

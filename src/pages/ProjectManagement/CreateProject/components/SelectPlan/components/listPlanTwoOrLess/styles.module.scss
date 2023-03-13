@@ -131,7 +131,7 @@
   color: var(--cimigo-blue);
 }
 .contentPlanDescription {
-  word-break: break-all;
+  word-break: break-word;
 }
 //==================================endcard============================//
 .customSelect {
@@ -158,6 +158,6 @@
 
 .expTime {
   position: relative;
-  transform: translate(6px, -12px);
+  transform: translate(6px, -10px);
   white-space: nowrap;
 }

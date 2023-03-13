@@ -140,4 +140,29 @@ export class PaymentService {
         return Promise.reject(e?.response?.data);
       })
   }
+
+  
+  static async getPaymentScheduleInvoice(paymentId: number) {
+    return await api.get(API.PAYMENT.SCHEDULE_INVOICE, {
+      params: {
+        paymentId
+      },
+      responseType: 'blob'
+    })
+      .catch(async (e) => {
+        return Promise.reject(JSON.parse(await e?.response?.data?.text() || '{}'));
+      })
+  }
+
+  static async getPaymentScheduleInvoiceDemo(paymentScheduleId: number) {
+    return await api.get(API.PAYMENT.SCHEDULE_INVOICE_DEMO, {
+      params: {
+        paymentScheduleId,
+      },
+      responseType: 'blob'
+    })
+      .catch(async (e) => {
+        return Promise.reject(JSON.parse(await e?.response?.data?.text() || '{}'));
+      })
+  }
 }

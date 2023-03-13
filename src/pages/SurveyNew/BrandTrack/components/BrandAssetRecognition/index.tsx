@@ -137,6 +137,7 @@ const BrandAssetRecognition = memo(({ project }: BrandAssetRecognitionProps) => 
         </Grid>
         <Button
           disabled={!editable || project?.brandAssets?.length >= maxBrandAssetRecognition}
+          disableRipple
           className={classes.btnAddBrand}
           btnType={BtnType.Outlined}
           children={<TextBtnSmall translation-key="brand_track_setup_brand_asset_recognition_btn_add">{t("brand_track_setup_brand_asset_recognition_btn_add")}</TextBtnSmall>}

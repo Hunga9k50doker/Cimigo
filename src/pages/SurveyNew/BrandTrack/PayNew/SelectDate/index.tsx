@@ -30,8 +30,9 @@ import {
 import clsx from "clsx";
 import { setPaymentIsMakeAnOrderSuccessReducer } from "redux/reducers/Payment/actionTypes";
 import { usePrice } from "helpers/price";
-import { getProjectRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
+import { getPaymentSchedulesRequest, setProjectReducer } from "redux/reducers/Project/actionTypes";
 import { formatOrdinalumbers } from "utils/formatNumber";
+import { Content, LeftContent, PageRoot } from "pages/SurveyNew/components";
 export interface DateItem {
   id: number;
   date?: string;
@@ -136,11 +137,10 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
         dispatch(
           setProjectReducer({
             ...project,
-            status: res?.status,
-            startPaymentSchedule: res?.startPaymentSchedule,
+            ...res,
           })
         );
-        dispatch(getProjectRequest(project.id));
+        dispatch(getPaymentSchedulesRequest(project.id));
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
@@ -151,233 +151,238 @@ const SelectDate = memo(({ projectId }: SelectDateProps) => {
   };
 
   return (
-    <>
-      <Grid classes={{ root: classes.root }}>
-        <Grid pt={4}>
-          <Heading4
-            $colorName={"--eerie-black"}
-            translation-key="brand_track_select_start_date_title"
-          >
-            {t("brand_track_select_start_date_title")}
-          </Heading4>
-          <ParagraphBody
-            $colorName={"--eerie-black"}
-            translation-key="brand_track_select_start_date_description"
-          >
-            {t("brand_track_select_start_date_description")}
-          </ParagraphBody>
-          <Grid className={classes.listDate}>
-            <Grid ml={3} className={classes.contentListDate}>
-              {listDate?.map((item, index) => (
-                <Box
-                  mr={2}
-                  key={index}
-                  className={clsx(classes.itemDate, {
-                    [classes.itemDateActive]: index === selectedDate.id,
-                  })}
-                  onClick={() => {
-                    selectedDatePayment(item);
-                  }}
-                >
-                  <span className={classes.iconActive}>
-                    <DoneIcon />
-                  </span>
-                  <Heading5 className={classes.titleMonth} pb={2}>
-                    {moment(item.date).format("MMM").toUpperCase()}
-                  </Heading5>
-                  <ParagraphBody>
-                    {+moment(item.date).format("yyyy")}
-                  </ParagraphBody>
-                </Box>
-              ))}
-            </Grid>
-          </Grid>
-          {selectedDate && (
-            <Grid pb={4}>
+    <PageRoot>
+      <LeftContent>
+        <Content classes={{root: classes.rootContent}}>
+          <Grid classes={{ root: classes.root }}>
+            <Grid pt={4}>
+              <Heading4
+                $colorName={"--eerie-black"}
+                translation-key="brand_track_select_start_date_title"
+              >
+                {t("brand_track_select_start_date_title")}
+              </Heading4>
               <ParagraphBody
                 $colorName={"--eerie-black"}
-                className={classes.note}
-                translation-key="brand_track_select_start_date_note_selected_date"
-                dangerouslySetInnerHTML={{
-                  __html: t(
-                    "brand_track_select_start_date_note_selected_date",
-                    {
-                      date: moment(listSchedulePreview?.[0]?.dueDate).format(
-                        "MMM DD, yyyy"
-                      ),
-                      scheduledMonths:
-                        listSchedulePreview?.[0]?.scheduledMonths,
-                    }
-                  ),
-                }}
+                translation-key="brand_track_select_start_date_description"
               >
+                {t("brand_track_select_start_date_description")}
               </ParagraphBody>
-            </Grid>
-          )}
-          {listSchedulePreview && (
-            <>
-              <Grid className={classes.viewPaymentScheduleTextWrapper} pl={1}>
-                <ArrowRightIcon
-                  className={clsx({
-                    [classes.rotateIcon]: isOpenListPaymentSchedule,
-                  })}
-                />
-                <ParagraphBodyUnderline
-                  $colorName={"--cimigo-blue"}
-                  onClick={onToggleListPaymentSchedule}
-                  translation-key="brand_track_select_start_date_view_payment_schedules"
-                >
-                  {t("brand_track_select_start_date_view_payment_schedules")}
-                </ParagraphBodyUnderline>
+              <Grid className={classes.listDate}>
+                <Grid ml={3} className={classes.contentListDate}>
+                  {listDate?.map((item, index) => (
+                    <Box
+                      mr={2}
+                      key={index}
+                      className={clsx(classes.itemDate, {
+                        [classes.itemDateActive]: index === selectedDate.id,
+                      })}
+                      onClick={() => {
+                        selectedDatePayment(item);
+                      }}
+                    >
+                      <span className={classes.iconActive}>
+                        <DoneIcon />
+                      </span>
+                      <Heading5 className={classes.titleMonth} pb={2}>
+                        {moment(item.date).format("MMM").toUpperCase()}
+                      </Heading5>
+                      <ParagraphBody>
+                        {+moment(item.date).format("yyyy")}
+                      </ParagraphBody>
+                    </Box>
+                  ))}
+                </Grid>
               </Grid>
-              {isOpenListPaymentSchedule && (
-                <Grid pt={2}>
+              {selectedDate && (
+                <Grid pb={4}>
                   <ParagraphBody
                     $colorName={"--eerie-black"}
-                    translation-key="brand_track_select_start_date_title_payment_schedule"
+                    className={classes.note}
+                    translation-key="brand_track_select_start_date_note_selected_date"
+                    dangerouslySetInnerHTML={{
+                      __html: t(
+                        "brand_track_select_start_date_note_selected_date",
+                        {
+                          date: moment(listSchedulePreview?.[0]?.dueDate).format(
+                            "MMM DD, yyyy"
+                          ),
+                          scheduledMonths:
+                            listSchedulePreview?.[0]?.scheduledMonths,
+                        }
+                      ),
+                    }}
                   >
-                    {t("brand_track_select_start_date_title_payment_schedule")}
                   </ParagraphBody>
-                  <Grid className={classes.listPayment} pt={2}>
-                    <Grid container spacing={2}>
-                      {listSchedulePreview?.map((schedulePreview) => {
-                        return (
-                          <Grid item xs={12} md={5} key={schedulePreview.order}>
-                            <Box className={classes.payment}>
-                              <Grid className={classes.contentPayment}>
-                                <Heading3
-                                  $colorName={"--gray-80"}
-                                  translation-key="brand_track_select_start_date_payment"
-                                  dangerouslySetInnerHTML={{
-                                    __html: t(
-                                      "brand_track_select_start_date_payment",
-                                      {
-                                        ordinal: formatOrdinalumbers(
-                                          schedulePreview.order,
-                                          i18n.language
-                                        ),
-                                      }
-                                    ),
-                                  }}
-                                ></Heading3>
-                                <ParagraphBody
-                                  $colorName={"--gray-80"}
-                                  translation-key={"common_month"}
-                                >
-                                  {schedulePreview.scheduledMonths}{" "}
-                                  {t("common_month", {
-                                    s:
-                                      schedulePreview.scheduledMonths === 1
-                                        ? ""
-                                        : t("common_s"),
-                                  })}{" "}
-                                  (
-                                  {`${moment(schedulePreview.startDate).format(
-                                    "MMM yyyy"
-                                  )} - ${moment(schedulePreview.endDate).format(
-                                    "MMM yyyy"
-                                  )}`}
-                                  )
-                                </ParagraphBody>
-                                <Heading3
-                                  $colorName={"--gray-80"}
-                                  $fontWeight={400}
-                                  pt={1}
-                                >
-                                  <span className={classes.iconDolar}>
-                                    <Dolar />
-                                  </span>
-                                  {
-                                    getCostCurrency(schedulePreview.totalAmount)
-                                      ?.show
-                                  }
-                                </Heading3>
-                                <ParagraphSmall
-                                  $colorName={"--gray-80"}
-                                  pt={2}
-                                  translation-key={"brand_track_due_date"}
-                                >
-                                  {`${t("brand_track_due_date")} ${moment(
-                                    schedulePreview.dueDate
-                                  ).format("MMM DD, yyyy")}`}
-                                </ParagraphSmall>
-                              </Grid>
-                            </Box>
-                          </Grid>
-                        );
-                      })}
-                    </Grid>
-                  </Grid>
                 </Grid>
               )}
-            </>
-          )}
+              {listSchedulePreview && (
+                <>
+                  <Grid className={classes.viewPaymentScheduleTextWrapper} pl={1}>
+                    <ArrowRightIcon
+                      sx={{color: "var(--cimigo-blue)"}}
+                      className={clsx({
+                        [classes.rotateIcon]: isOpenListPaymentSchedule,
+                      })}
+                    />
+                    <ParagraphBodyUnderline
+                      $colorName={"--cimigo-blue"}
+                      onClick={onToggleListPaymentSchedule}
+                      translation-key="brand_track_select_start_date_view_payment_schedules"
+                    >
+                      {t("brand_track_select_start_date_view_payment_schedules")}
+                    </ParagraphBodyUnderline>
+                  </Grid>
+                  {isOpenListPaymentSchedule && (
+                    <Grid pt={2}>
+                      <ParagraphBody
+                        $colorName={"--eerie-black"}
+                        translation-key="brand_track_select_start_date_title_payment_schedule"
+                      >
+                        {t("brand_track_select_start_date_title_payment_schedule")}
+                      </ParagraphBody>
+                      <Grid className={classes.listPayment} pt={2}>
+                        <Grid container spacing={2}>
+                          {listSchedulePreview?.map((schedulePreview) => {
+                            return (
+                              <Grid item xs={12} md={5} key={schedulePreview.order}>
+                                <Box className={classes.payment}>
+                                  <Grid className={classes.contentPayment}>
+                                    <Heading3
+                                      $colorName={"--gray-80"}
+                                      translation-key="brand_track_select_start_date_payment"
+                                      dangerouslySetInnerHTML={{
+                                        __html: t(
+                                          "brand_track_select_start_date_payment",
+                                          {
+                                            ordinal: formatOrdinalumbers(
+                                              schedulePreview.order,
+                                              i18n.language
+                                            ),
+                                          }
+                                        ),
+                                      }}
+                                    ></Heading3>
+                                    <ParagraphBody
+                                      $colorName={"--gray-80"}
+                                      translation-key={"common_month"}
+                                    >
+                                      {schedulePreview.scheduledMonths}{" "}
+                                      {t("common_month", {
+                                        s:
+                                          schedulePreview.scheduledMonths === 1
+                                            ? ""
+                                            : t("common_s"),
+                                      })}{" "}
+                                      (
+                                      {`${moment(schedulePreview.startDate).format(
+                                        "MMM yyyy"
+                                      )} - ${moment(schedulePreview.endDate).format(
+                                        "MMM yyyy"
+                                      )}`}
+                                      )
+                                    </ParagraphBody>
+                                    <Heading3
+                                      $colorName={"--gray-80"}
+                                      $fontWeight={400}
+                                      pt={1}
+                                    >
+                                      <span className={classes.iconDolar}>
+                                        <Dolar />
+                                      </span>
+                                      {
+                                        getCostCurrency(schedulePreview.totalAmount)
+                                          ?.show
+                                      }
+                                    </Heading3>
+                                    <ParagraphSmall
+                                      $colorName={"--gray-80"}
+                                      pt={2}
+                                      translation-key={"brand_track_due_date"}
+                                    >
+                                      {`${t("brand_track_due_date")} ${moment(
+                                        schedulePreview.dueDate
+                                      ).format("MMM DD, yyyy")}`}
+                                    </ParagraphSmall>
+                                  </Grid>
+                                </Box>
+                              </Grid>
+                            );
+                          })}
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  )}
+                </>
+              )}
 
-          <Grid className={classes.btnFooter} pt={4}>
-            <Button
-              className={classes.btnBack}
-              btnType={BtnType.Outlined}
-              children={
-                <TextBtnSecondary
-                  $colorName={"--cimigi-blue"}
-                  translation-key={"common_back"}
-                >
-                  {t("common_back")}
-                </TextBtnSecondary>
-              }
-              onClick={goToPayment}
-            />
-            <Button
-              className={classes.btnBack}
-              btnType={BtnType.Raised}
-              children={
-                <TextBtnSecondary
-                  translation-key={
-                    "brand_track_select_start_date_button_make_an_order"
+              <Grid className={classes.btnFooter} pt={4}>
+                <Button
+                  className={classes.btnBack}
+                  btnType={BtnType.Outlined}
+                  children={
+                    <TextBtnSecondary
+                      $colorName={"--cimigi-blue"}
+                      translation-key={"common_back"}
+                    >
+                      {t("common_back")}
+                    </TextBtnSecondary>
                   }
-                >
-                  {t("brand_track_select_start_date_button_make_an_order")}
-                </TextBtnSecondary>
-              }
-              onClick={goToMakeAnOrder}
-            />
+                  onClick={goToPayment}
+                />
+                <Button
+                  className={classes.btnBack}
+                  btnType={BtnType.Raised}
+                  children={
+                    <TextBtnSecondary
+                      translation-key={
+                        "brand_track_select_start_date_button_make_an_order"
+                      }
+                    >
+                      {t("brand_track_select_start_date_button_make_an_order")}
+                    </TextBtnSecondary>
+                  }
+                  onClick={goToMakeAnOrder}
+                />
+              </Grid>
+              <Grid className={classes.disTermsOfServices} pt={1}>
+                <ParagraphSmall $colorName={"--gray-60"}>
+                  <span translation-key="brand_track_select_start_date_sub_tab_make_an_order_confirm_des_1">
+                    {t(
+                      "brand_track_select_start_date_sub_tab_make_an_order_confirm_des_1"
+                    )}
+                  </span>{" "}
+                  <a
+                    className={classes.linkTermOfService}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={routesOutside(i18n.language)?.rapidsurveyTermsOfService}
+                    translation-key="brand_track_select_start_date_sub_tab_make_an_order_confirm_des_2"
+                  >
+                    {t(
+                      "brand_track_select_start_date_sub_tab_make_an_order_confirm_des_2"
+                    )}
+                  </a>{" "}
+                  <span translation-key="brand_track_select_start_date_sub_tab_make_an_order_confirm_des_3">
+                    {t(
+                      "brand_track_select_start_date_sub_tab_make_an_order_confirm_des_3"
+                    )}
+                  </span>
+                </ParagraphSmall>
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid className={classes.disTermsOfServices} pt={1}>
-            <ParagraphSmall $colorName={"--gray-60"}>
-              <span translation-key="brand_track_select_start_date_sub_tab_make_an_order_confirm_des_1">
-                {t(
-                  "brand_track_select_start_date_sub_tab_make_an_order_confirm_des_1"
-                )}
-              </span>{" "}
-              <a
-                className={classes.linkTermOfService}
-                target="_blank"
-                rel="noopener noreferrer"
-                href={routesOutside(i18n.language)?.rapidsurveyTermsOfService}
-                translation-key="brand_track_select_start_date_sub_tab_make_an_order_confirm_des_2"
-              >
-                {t(
-                  "brand_track_select_start_date_sub_tab_make_an_order_confirm_des_2"
-                )}
-              </a>{" "}
-              <span translation-key="brand_track_select_start_date_sub_tab_make_an_order_confirm_des_3">
-                {t(
-                  "brand_track_select_start_date_sub_tab_make_an_order_confirm_des_3"
-                )}
-              </span>
-            </ParagraphSmall>
-          </Grid>
-        </Grid>
-      </Grid>
-      <PopupConfirmMakeAnOrder
-        isOpen={onSubmitMakeAnOrder}
-        project={project}
-        paymentSchedule={listSchedulePreview?.[0]}
-        onCancel={onConfirmMakeAnOrder}
-        onSubmit={() => submitMakeAnOrder()}
-      />
-      <Footer />
-    </>
+          <PopupConfirmMakeAnOrder
+            isOpen={onSubmitMakeAnOrder}
+            project={project}
+            paymentSchedule={listSchedulePreview?.[0]}
+            onCancel={onConfirmMakeAnOrder}
+            onSubmit={() => submitMakeAnOrder()}
+          />
+          <Footer />
+        </Content>
+      </LeftContent>
+    </PageRoot>
   );
 });
 export default SelectDate;

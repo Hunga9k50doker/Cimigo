@@ -219,9 +219,9 @@ const schema = yup.object().shape({
   daysOfDueDate: yup.number()
     .when('typeId', {
       is: (typeId: OptionItem) => typeId?.id === ESOLUTION_TYPE.BRAND_TRACKING,
-      then: yup.number()
+      then: yup.number().integer('Days of payment due date must be an integer.')
         .typeError('Days of payment due date is required.')
-        .positive('Days of payment due date must be a positive number.')
+        .min(0, 'Days of payment due date must be greater or equal to 0.')
         .required('Days of payment due date is required.'),
       otherwise: yup.number().empty().notRequired().nullable()
     }),

@@ -25,6 +25,7 @@ import ProjectHelper from "helpers/project"
 import { ESOLUTION_TYPE } from "models"
 import DetailSurveySetupForPack from "../components/DetailSurveySetupForPack"
 import DetailSurveySetupForVideoChoice from "../components/DetailSurveySetupForVideoChoice"
+import DetailSurveySetupForBrandTrack from "../components/DetailSurveySetupForBrandTrack"
 
 
 enum ETab {
@@ -109,6 +110,33 @@ const Detail = memo(({ }: Props) => {
                   .catch((e) => dispatch(setErrorMess(e)))
                   .finally(() => dispatch(setLoading(false)))
                 break;
+              case ESOLUTION_TYPE.BRAND_TRACKING:
+                Promise.all([
+                  AdminProjectService.getQuotas(Number(id)),
+                  AdminProjectService.additionalBrands(Number(id)),
+                  AdminProjectService.getCompetitiveBrands(Number(id)),
+                  AdminProjectService.projectAttributes(Number(id)),
+                  AdminProjectService.userAttributes(Number(id)),
+                  AdminProjectService.getBrandAsset(Number(id)),
+                  AdminProjectService.getCustomQuestions(Number(id)),
+                  AdminProjectService.getTargets(Number(id)),
+                ])
+                  .then(([quotas, additionalBrands, projectBrands, projectAttributes, userAttributes, brandAssets, customQuestions, targets]) => {
+                    setProject({
+                      ...res,
+                      additionalBrands,
+                      projectBrands,
+                      projectAttributes,
+                      userAttributes,
+                      brandAssets,
+                      customQuestions,
+                      targets
+                    })
+                    setQuotas(quotas)
+                  })
+                  .catch((e) => dispatch(setErrorMess(e)))
+                  .finally(() => dispatch(setLoading(false)))
+                break;
             }
           })
           .catch((e) => {
@@ -158,6 +186,8 @@ const Detail = memo(({ }: Props) => {
         return <DetailSurveySetupForPack project={project} />
       case ESOLUTION_TYPE.VIDEO_CHOICE:
         return <DetailSurveySetupForVideoChoice project={project} />
+      case ESOLUTION_TYPE.BRAND_TRACKING:
+        return <DetailSurveySetupForBrandTrack project={project} />
     }
   }
 
@@ -218,6 +248,19 @@ const Detail = memo(({ }: Props) => {
               </TabPanel>
               <TabPanel value={activeTab} index={ETab.TARGET}>
                 <Box>
+                  {
+                    (project?.solution?.typeId === ESOLUTION_TYPE.BRAND_TRACKING && !!project?.sampleSize) && (
+                      <Grid container mb={2}>
+                        <Grid item xs={12}>
+                          <Paper elevation={3} sx={{ p: 2, height: '100%' }}>
+                            <Typography variant="h6" mb={1}>
+                              Monthly sample size: {project?.sampleSize}
+                            </Typography>
+                          </Paper>
+                        </Grid>
+                      </Grid>
+                      )
+                  }
                   {!!project?.targets?.length && (
                     <>
                       <Grid container spacing={2}>
@@ -232,10 +275,10 @@ const Detail = memo(({ }: Props) => {
                                   <strong>{it.targetQuestion?.name}: </strong>
                                   <br></br>
                                   {it.answers?.map(it =>
-                                  <>
-                                    <span>{it.name}</span>
-                                    <br></br>
-                                  </>)}
+                                    <>
+                                      <span>{it.name}</span>
+                                      <br></br>
+                                    </>)}
                                 </Typography>
                               ))}
                             </Paper>
@@ -252,10 +295,10 @@ const Detail = memo(({ }: Props) => {
                                   <strong>{it.targetQuestion?.name}: </strong>
                                   <br></br>
                                   {it.answers?.map(it =>
-                                  <>
-                                    <span>{it.name}</span>
-                                    <br></br>
-                                  </>)}                                
+                                    <>
+                                      <span>{it.name}</span>
+                                      <br></br>
+                                    </>)}
                                 </Typography>
                               ))}
                             </Paper>
@@ -271,11 +314,11 @@ const Detail = memo(({ }: Props) => {
                                 <Typography key={it.id} variant="subtitle1" ml={2}>
                                   <strong>{it.targetQuestion?.name}: </strong>
                                   <br></br>
-                                  {it.answers?.map(it => 
-                                   <>
-                                    <span>{it.name}</span>
-                                    <br></br>
-                                  </>)} 
+                                  {it.answers?.map(it =>
+                                    <>
+                                      <span>{it.name}</span>
+                                      <br></br>
+                                    </>)}
                                 </Typography>
                               ))}
                             </Paper>
@@ -454,7 +497,7 @@ const Detail = memo(({ }: Props) => {
                           {!!project?.eyeTrackingSampleSize && (
                             <Grid item xs={12}>
                               <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              {project?.solution?.typeId === ESOLUTION_TYPE.PACK && (
+                                {project?.solution?.typeId === ESOLUTION_TYPE.PACK && (
                                   <>
                                     <span>Eye-tracking ({project?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(price?.eyeTrackingSampleSizeCost?.USD || 0)}</strong>
                                   </>

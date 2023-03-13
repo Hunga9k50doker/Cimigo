@@ -1,10 +1,17 @@
+
+.rootContent{
+  flex: unset;
+  padding: 0;
+  @media only screen and (max-width: 767px) {
+    padding: 0;
+  }
+}
 .root {
     max-width: 1048px;
     margin: auto;
     padding-left: 24px;
     padding-right: 24px;
     padding-bottom: 96px;
-    min-height: 1000px;
     @media only screen and (max-width: 767px) {
         padding-bottom: 85px;
     }
@@ -44,10 +51,10 @@
     display: flex;
     justify-content: space-between;
 }
-.iconDolar{
-    position: relative;
-    top: 5px;
-    padding-right: 10px;
+.priceWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 .pagination{
     display: flex;
@@ -62,6 +69,7 @@
     cursor: pointer;
 }
 .customSlide{
+    height: 100%;
     width: 100%;
     border-radius: 8px;
 }
@@ -71,14 +79,15 @@
 .slideProcessing{
     border: 1px solid var(--gray-40);
     .contentRightSwiper{
-        .statusPayment{
-            border: 1px solid var(--orange-light);
-            border-radius: 4px;
-            background: var(--orange-light);
-            display: flex;
+        .processingBtn {
+            padding: 4px 8px;
             color: var(--warning-dark);
-            padding: 6px 8px 10px 12px;
-        }   
+            background: var(--orange-light);
+            box-shadow: unset !important;
+            &:hover {
+                opacity: 0.8;
+            }
+        }
         .urlViewDetail{
             text-align: right;
             @media only screen and (max-width: 980px) {
@@ -89,6 +98,7 @@
 }
 .slideDisabled {
     border: 1px solid var(--gray-20);
+    filter: unset;
     background: var(--gray-2);
     .contentSlide{
         display: flex;
@@ -106,23 +116,9 @@
             display: block;
         }
     }
-    .iconDolar{
-        color: var(--gray-20);
-    }
-}
-.slideCompleted{
-    border: 1px solid var(--cimigo-green-dark);
-    .contentRightSwiper{
-        .icon{
-            text-align: center;
-            color: var(--cimigo-green);
-        }
-        .urlViewDetail{
-            text-align: center;
-        }
-    }
 }
 .contentSlideSwiper{
+    height: 100%;
     padding: 16px 24px;
     display: flex;
     justify-content: space-between;
@@ -130,9 +126,22 @@
         width: 35%;
         display: flex;
         align-items: center;
+        justify-content: flex-end;
+         .contentRightSwiperItem{
+            display: flex;
+            align-items: flex-end;
+            flex-direction: column;
+            button{
+                white-space: nowrap;
+            }
+        }
     }
     .contentLeftSwiper{
         width: 65%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-direction: column;
     }
 }
 .slidePaymentSwiper{
@@ -199,6 +208,7 @@
     svg{
         width: 17px;
     }
+  
 }
 .iconSlideLeft{
     right: 24px;
@@ -211,6 +221,13 @@
     @media only screen and (max-width: 785px) {
         display: none;
     }
+}
+
+.iconDisabled {
+    pointer-events: none;
+    border: 1px solid var(--gray-2);
+    background: var(--gray-2);
+    color: var(--gray-20);
 }
 .subPaymentCompleted{
     text-align: center;

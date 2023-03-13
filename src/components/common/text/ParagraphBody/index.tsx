@@ -13,6 +13,7 @@ const ParagraphBody = styled(Typography)<Props>`
     font-size: 16px;
     line-height: 24px;
     color: ${props => `var(${props.$colorName || '--gray-50'})`};
+    font-variant-numeric: tabular-nums;
     @media only screen and (max-width: 767px) {
       font-size: 14px;
     }

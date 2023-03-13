@@ -49,7 +49,8 @@ export const API = {
     UPDATE_AGREE_QUOTA: '/v1.0/project/:id/update-agree-quota',
     QUOTA: {
       DEFAULT: '/v1.0/project/:id/quota',
-    }
+    },
+    CANCEL_PAYMENT_SCHEDULE_SUBSCRIPTION: '/v1.0/project/cancel-subscription'
   },
   FOLDER: {
     DEFAULT: '/v1.0/folder',
@@ -105,6 +106,8 @@ export const API = {
     TRY_AGAIN: '/v1.0/payment/:id/try-again',
     UPDATE_INVOICE_INFO: '/v1.0/payment/:id/invoice-info',
     CHANGE_PAYMENT_METHOD: '/v1.0/payment/:id/change-payment-method',
+    SCHEDULE_INVOICE: '/v1.0/payment/payment-schedule-invoice',
+    SCHEDULE_INVOICE_DEMO: '/v1.0/payment/payment-schedule-invoice-demo',
   },
   PAYMENT_SCHEDULE: {
     PREVIEW: 'v1.0/payment-schedule/preview',
@@ -113,6 +116,8 @@ export const API = {
     PAYMENT_SCHEDULE_HISTORY: 'v1.0/payment/history/brand-track',
     LATEST_PAID: 'v1.0/payment-schedule/latest-paid',
     DETAIL: 'v1.0/payment-schedule/:id',
+    CANCEL_PAYMENT: 'v1.0/payment-schedule/cancel-payment',
+    CONFIRM_PAYMENT: 'v1.0/payment-schedule/confirm-payment',
   },
   ATTACHMENT: {
     DEFAULT: '/v1.0/attachment/',
@@ -196,6 +201,10 @@ export const API = {
       USER_ATTRIBUTE: '/v1.0/admin/project/:id/user-attributes',
       CUSTOM_QUESTION: '/v1.0/admin/project/:id/custom-questions',
       TARGET: '/v1.0/admin/project/:id/targets',
+      MAIN_BRANDS: '/v1.0/admin/project/:id/main-brands',
+      COMPETING_BRANDS: '/v1.0/admin/project/:id/competing-brands',
+      COMPETITIVE_BRANDS: '/v1.0/admin/project/:id/competitive-brands',
+      BRAND_ASSET: '/v1.0/admin/project/:id/brand-asset'
     },
     USER: {
       DEFAULT: '/v1.0/admin/user',
