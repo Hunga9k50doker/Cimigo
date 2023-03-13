@@ -204,7 +204,12 @@ export const API = {
       MAIN_BRANDS: '/v1.0/admin/project/:id/main-brands',
       COMPETING_BRANDS: '/v1.0/admin/project/:id/competing-brands',
       COMPETITIVE_BRANDS: '/v1.0/admin/project/:id/competitive-brands',
-      BRAND_ASSET: '/v1.0/admin/project/:id/brand-asset'
+      BRAND_ASSET: '/v1.0/admin/project/:id/brand-asset',
+      PAYMENT_SCHEDULE: '/v1.0/admin/project/:id/payment-schedule'
+    },
+    PAYMENT_SCHEDULE: {
+      UPDATE_STATUS: '/v1.0/admin/payment-schedule/:id/update-status',
+      UPDATE_BASIC_INFO: '/v1.0/admin/payment-schedule/:id/basic-info'
     },
     USER: {
       DEFAULT: '/v1.0/admin/user',
