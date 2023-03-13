@@ -27,7 +27,9 @@ export enum PaymentScheduleStatus {
   IN_PROGRESS,
   PAID,
   OVERDUE,
+  CANCEL
 }
+
 export interface PaymentSchedule {
   id: number;
   solutionConfig: SolutionConfig;
