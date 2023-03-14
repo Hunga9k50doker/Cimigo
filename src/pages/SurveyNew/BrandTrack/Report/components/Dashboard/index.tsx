@@ -12,6 +12,7 @@ import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { AttachmentService } from "services/attachment";
 import FileSaver from "file-saver";
 import { IReport } from "../..";
+import { t } from "i18next";
 
 interface Props {
   isOpen: boolean;
@@ -21,7 +22,7 @@ interface Props {
 
 const Dashboard = memo(({ isOpen, report, onClose }: Props) => {
   const dispatch = useDispatch();
-  
+
   const onDownLoad = () => {
     dispatch(setLoading(true));
     AttachmentService.download(report?.attachment?.id)
@@ -34,12 +35,19 @@ const Dashboard = memo(({ isOpen, report, onClose }: Props) => {
 
   return (
     <Grid className={clsx(classes.root, { [classes.hidden]: !isOpen })}>
-      <Grid sx={{ display: "flex", justifyContent: "space-between" }} my={1} className={classes.actionWrapper}>
+      <Grid sx={{ display: "flex", justifyContent: "space-between" }} className={classes.actionWrapper}>
         <Button
           btnType={BtnType.Text}
           children={
-            <ParagraphSmall $colorName="--cimigo-blue" $fontWeight={500} translation-key="">
-              Results - {moment(report?.date).format("MMM").toUpperCase()} {moment(report?.date).year()}
+            <ParagraphSmall
+              marginLeft={"20px"}
+              $colorName="--cimigo-blue"
+              $fontWeight={500}
+              translation-key="brand_track_results_tab_dashboard_result"
+            >
+              {t("brand_track_results_tab_dashboard_result", {
+                dueDate: `${moment(report?.date).format("MMM").toUpperCase()} ${moment(report?.date).year()}`,
+              })}
             </ParagraphSmall>
           }
           startIcon={<ArrowBack sx={{ fontSize: "22px !important" }} />}
@@ -50,8 +58,13 @@ const Dashboard = memo(({ isOpen, report, onClose }: Props) => {
           <Button
             btnType={BtnType.Text}
             children={
-              <ParagraphSmall $colorName="--cimigo-blue" $fontWeight={500} translation-key="">
-                Download
+              <ParagraphSmall
+                $colorName="--cimigo-blue"
+                marginLeft={"11px"}
+                $fontWeight={500}
+                translation-key="brand_track_results_tab_dashboard_dowload"
+              >
+                {t("brand_track_results_tab_dashboard_dowload")}
               </ParagraphSmall>
             }
             startIcon={<IconDownload sx={{ fontSize: "11px !important" }} />}
@@ -61,7 +74,7 @@ const Dashboard = memo(({ isOpen, report, onClose }: Props) => {
         )}
       </Grid>
       <Grid className={classes.dashboard}>
-        <Box mt={2} sx={{ minHeight: "600px" }}>
+        <Box sx={{ minHeight: "600px" }}>
           {!!report?.dataStudio && (
             <iframe
               width="100%"

@@ -7,6 +7,7 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import moment from "moment";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { ETimelineType, ITimeLineItem } from "../..";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   timeLineItem: ITimeLineItem;
@@ -16,12 +17,13 @@ interface Props {
 }
 
 const TimeLineItem = memo(({ timeLineItem, isFirstWave, isLastWave, onSelect }: Props) => {
+  const { t } = useTranslation();
   return (
     <Box className={classes.root}>
       {timeLineItem.state === ETimelineType.DELIVERED ? (
         <>
-          <ParagraphBody $colorName="--cimigo-blue" $fontWeight={600}>
-            Delivered
+          <ParagraphBody $colorName="--cimigo-blue" $fontWeight={600} translation-key="brand_track_results_tab_result_delivered">
+            {t("brand_track_results_tab_result_delivered")}
           </ParagraphBody>
           <Box className={classes.lineWrapper}>
             <Box className={clsx(classes.line, classes.deliveredLine)}></Box>
@@ -37,20 +39,20 @@ const TimeLineItem = memo(({ timeLineItem, isFirstWave, isLastWave, onSelect }: 
             {moment(timeLineItem.date).year()}
           </ParagraphExtraSmall>
           {isFirstWave && (
-            <ParagraphExtraSmall $colorName="--cimigo-blue" $fontWeight={600}>
-              (First wave)
+            <ParagraphExtraSmall $colorName="--cimigo-blue" $fontWeight={600} translation-key="brand_track_results_tab_result_first_wave">
+              {t("brand_track_results_tab_result_first_wave")}
             </ParagraphExtraSmall>
           )}
           {isLastWave && (
-            <ParagraphExtraSmall $colorName="--cimigo-blue" $fontWeight={600}>
-              (Last wave)
+            <ParagraphExtraSmall $colorName="--cimigo-blue" $fontWeight={600} translation-key="brand_track_results_tab_result_last_wave">
+              {t("brand_track_results_tab_result_last_wave")}
             </ParagraphExtraSmall>
           )}
         </>
       ) : timeLineItem.state === ETimelineType.IN_PROGRESS ? (
         <>
-          <ParagraphBody $colorName="--warning-dark" $fontWeight={600}>
-            In progress
+          <ParagraphBody $colorName="--warning-dark" $fontWeight={600} translation-key="brand_track_results_tab_result_inprogress">
+            {t("brand_track_results_tab_result_inprogress")}
           </ParagraphBody>
           <Box className={classes.lineWrapper}>
             <Box className={clsx(classes.line, classes.inProgressLine)}></Box>
@@ -66,13 +68,13 @@ const TimeLineItem = memo(({ timeLineItem, isFirstWave, isLastWave, onSelect }: 
             {moment(timeLineItem.date).year()}
           </ParagraphExtraSmall>
           {isFirstWave && (
-            <ParagraphExtraSmall $colorName="--warning-dark" $fontWeight={600}>
-              (First wave)
+            <ParagraphExtraSmall $colorName="--warning-dark" $fontWeight={600} translation-key="brand_track_results_tab_result_first_wave">
+              {t("brand_track_results_tab_result_first_wave")}
             </ParagraphExtraSmall>
           )}
           {isLastWave && (
-            <ParagraphExtraSmall $colorName="--warning-dark" $fontWeight={600}>
-              (Last wave)
+            <ParagraphExtraSmall $colorName="--warning-dark" $fontWeight={600} translation-key="brand_track_results_tab_result_last_wave">
+              {t("brand_track_results_tab_result_last_wave")}
             </ParagraphExtraSmall>
           )}
         </>
@@ -91,13 +93,13 @@ const TimeLineItem = memo(({ timeLineItem, isFirstWave, isLastWave, onSelect }: 
             {moment(timeLineItem.date).year()}
           </ParagraphExtraSmall>
           {isFirstWave && (
-            <ParagraphExtraSmall $colorName="--gray-40" $fontWeight={600}>
-              (First wave)
+            <ParagraphExtraSmall $colorName="--gray-40" $fontWeight={600} translation-key="brand_track_results_tab_result_first_wave">
+              {t("brand_track_results_tab_result_first_wave")}
             </ParagraphExtraSmall>
           )}
           {isLastWave && (
-            <ParagraphExtraSmall $colorName="--gray-40" $fontWeight={600}>
-              (Last wave)
+            <ParagraphExtraSmall $colorName="--gray-40" $fontWeight={600} translation-key="brand_track_results_tab_result_last_wave">
+              {t("brand_track_results_tab_result_last_wave")}
             </ParagraphExtraSmall>
           )}
         </>

@@ -55,12 +55,10 @@ const Report = memo(({ projectId }: Props) => {
   const [listTimeline, setListTimeline] = useState<ITimeLineItem[]>([]);
   const [timelineSelected, setTimelineSelected] = useState<ITimeLineItem>(null);
   const [isOpenDashboard, setIsOpenDashboard] = useState(false);
-console.log(timelineSelected,"yhdiusadhsbadh");
   useEffect(() => {
     const currentDate = moment();
     const startPaymentScheduleDate = moment(project?.startPaymentSchedule);
     let _listTimeline = [];
-    console.log(project);
     if (currentDate > startPaymentScheduleDate) {
       for (let i = 0; i <= 3; i++) {
         _listTimeline.push({
@@ -212,11 +210,7 @@ console.log(timelineSelected,"yhdiusadhsbadh");
           {(!timelineSelected || timelineSelected?.state === ETimelineType.NOT_STARTED_YET) && <ReportNotStarted />}
           {timelineSelected?.state === ETimelineType.IN_PROGRESS && <ReportInProgress />}
           {timelineSelected?.state === ETimelineType.DELIVERED && (
-            <ReportDelivered
-              isHasReport={Boolean(timelineSelected?.report)}
-              onOpenDashboard={onOpenDashboard}
-              onDownLoad={onDownLoad}
-            />
+            <ReportDelivered isHasReport={Boolean(timelineSelected?.report)} onOpenDashboard={onOpenDashboard} onDownLoad={onDownLoad} />
           )}
         </Grid>
       ) : (
@@ -225,12 +219,16 @@ console.log(timelineSelected,"yhdiusadhsbadh");
           <Heading1 align="center" mb={2} $colorName="--gray-80" translation-key="report_coming_soon">
             {t("report_coming_soon")}
           </Heading1>
-          <Heading4 align="center" sx={{ fontWeight: "400 !important" }} $colorName="--gray-80" translation-key="">
-            You have not completed your project setup and payment. Please finish these first.
+          <Heading4
+            align="center"
+            sx={{ fontWeight: "400 !important" }}
+            $colorName="--gray-80"
+            translation-key="brand_track_results_tab_result_no_result_description"
+          >
+            {t("brand_track_results_tab_result_no_result_description")}
           </Heading4>
         </Grid>
       )}
-
       <Dashboard isOpen={isOpenDashboard} onClose={onCloseDashboard} report={timelineSelected?.report} />
     </Grid>
   );
