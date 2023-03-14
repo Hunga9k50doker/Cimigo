@@ -52,8 +52,14 @@
     padding: 0px 16px;
   }
 }
-.customTextField fieldset {
-  border: 1px solid var(--gray-40) !important;
+.customTextField  {
+  fieldset{
+    border: 1px solid var(--gray-40) !important;
+  }
+  input{
+   background: var(--white);
+   color: var(--gray-50);
+ }
 }
 .informationBox {
   @media only screen and (max-width: 845px) {
