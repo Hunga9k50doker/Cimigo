@@ -12,9 +12,10 @@ import { IconDownload } from "components/icons";
 interface Props {
   onOpenDashboard?: () => void;
   onDownLoad?: () => void;
+  isHasReport: boolean;
 }
 
-const ReportDelivered = memo(({ onOpenDashboard, onDownLoad }: Props) => {
+const ReportDelivered = memo(({ onOpenDashboard, onDownLoad, isHasReport }: Props) => {
   return (
     <Grid className={classes.descriptionWrapper}>
       <Box className={classes.imageDescription}>
@@ -37,7 +38,7 @@ const ReportDelivered = memo(({ onOpenDashboard, onDownLoad }: Props) => {
             sx={{ width: { xs: "100%", sm: "auto" } }}
             onClick={onOpenDashboard}
           />
-          {onDownLoad && (
+          {isHasReport && (
             <Button
               btnType={BtnType.Outlined}
               children={

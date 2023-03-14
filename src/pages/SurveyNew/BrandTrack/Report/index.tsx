@@ -55,13 +55,13 @@ const Report = memo(({ projectId }: Props) => {
   const [listTimeline, setListTimeline] = useState<ITimeLineItem[]>([]);
   const [timelineSelected, setTimelineSelected] = useState<ITimeLineItem>(null);
   const [isOpenDashboard, setIsOpenDashboard] = useState(false);
-
+console.log(timelineSelected,"yhdiusadhsbadh");
   useEffect(() => {
     const currentDate = moment();
     const startPaymentScheduleDate = moment(project?.startPaymentSchedule);
     let _listTimeline = [];
-
-    if (currentDate < startPaymentScheduleDate) {
+    console.log(project);
+    if (currentDate > startPaymentScheduleDate) {
       for (let i = 0; i <= 3; i++) {
         _listTimeline.push({
           date: moment(startPaymentScheduleDate).add(i, "month").startOf("month"),
@@ -212,7 +212,11 @@ const Report = memo(({ projectId }: Props) => {
           {(!timelineSelected || timelineSelected?.state === ETimelineType.NOT_STARTED_YET) && <ReportNotStarted />}
           {timelineSelected?.state === ETimelineType.IN_PROGRESS && <ReportInProgress />}
           {timelineSelected?.state === ETimelineType.DELIVERED && (
-            <ReportDelivered onOpenDashboard={onOpenDashboard} onDownLoad={timelineSelected?.report ? onDownLoad : null} />
+            <ReportDelivered
+              isHasReport={Boolean(timelineSelected?.report)}
+              onOpenDashboard={onOpenDashboard}
+              onDownLoad={onDownLoad}
+            />
           )}
         </Grid>
       ) : (

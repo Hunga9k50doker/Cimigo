@@ -79,6 +79,8 @@
 .imageDescription {
   display: flex;
   justify-content: center;
+  min-width: 312px;
+  min-height: 185px;
   @media only screen and (max-width: 991px) {
     margin-bottom: 24px;
   }
