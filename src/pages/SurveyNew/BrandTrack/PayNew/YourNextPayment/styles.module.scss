@@ -75,9 +75,11 @@
 }
 .slideDefault{
     border: 1px solid var(--cimigo-blue);
+    box-shadow: 0px 0px 8px rgba(var(--cimigo-blue), 0.16 );
 }
 .slideProcessing{
     border: 1px solid var(--gray-40);
+    box-shadow: 0px 0px 8px rgba(var(--gray-40), 0.1);
     .contentRightSwiper{
         .processingBtn {
             padding: 4px 8px;
@@ -131,9 +133,6 @@
             display: flex;
             align-items: flex-end;
             flex-direction: column;
-            button{
-                white-space: nowrap;
-            }
         }
     }
     .contentLeftSwiper{
@@ -234,4 +233,12 @@
 }
 .swiperContentt{
     height: 100% !important;
+}
+.btnWating{
+    background: var(--gray-5) !important;
+    border: 1px solid var(--gray-20) !important;
+    border-radius: 4px;
+    p{
+        color: var(--gray-20) !important;
+    }
 }

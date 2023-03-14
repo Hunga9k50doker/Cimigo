@@ -55,16 +55,8 @@ interface MakeAnOrderProp {
 }
 
 const sliderSettings = {
-  50: {
+  0: {
     slidesPerView: 1,
-    spaceBetween: 30,
-  },
-  440: {
-    slidesPerView: 1,
-    spaceBetween: 30,
-  },
-  680: {
-    slidesPerView: 2,
     spaceBetween: 30,
   },
   1024: {
@@ -427,6 +419,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                         slidesPerView={2}
                         breakpoints={sliderSettings}
                         direction={"horizontal"}
+                        spaceBetween={30} 
                       >
                         {paymentSchedules?.map((item, index) => {
                           return (
@@ -480,12 +473,12 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                     {item.status === PaymentScheduleStatus.NOT_PAID && (
                                   <Box className={classes.contentRightSwiperItem}>
                                         <Button
+                                          className={!index ? classes.btnPaynow : classes.btnWating}
                                           btnType={BtnType.Raised}
-                                          endIcon={<CreditCardIcon sx={{ fontSize: "15px !important" }} />}
+                                          endIcon={<CreditCardIcon sx={{ fontSize: "15px !important", color:!index ? "var(--white)" : "var(--gray-20)" }} />}
                                           children={
                                             !index ? (
                                               <TextBtnSmall
-                                                $colorName={"--white"}
                                                 translation-key="brand_track_your_next_payment_title_button_pay_now"
                                               >
                                             {t(
@@ -511,7 +504,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                         <ParagraphSmall
                                           pt={0.5}
                                           translation-key="brand_track_your_next_payment_sub_due"
-                                          $colorName={!index ? "--eerie-black" : "--gray-40"}
+                                          $colorName={!index ? "--eerie-black" : "--gray-20"}
                                     >{`${t(
                                       "brand_track_your_next_payment_sub_due"
                                     )} ${moment(item.dueDate).format(
