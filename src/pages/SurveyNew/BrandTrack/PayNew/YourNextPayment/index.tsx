@@ -479,7 +479,6 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                                           children={
                                             !index ? (
                                               <TextBtnSmall
-                                                // $colorName={"--white"}
                                                 translation-key="brand_track_your_next_payment_title_button_pay_now"
                                               >
                                             {t(
