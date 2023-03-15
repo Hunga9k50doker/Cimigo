@@ -2,7 +2,7 @@ import { Box, Grid, Paper, TableBody, Menu, MenuItem, TableCell, TableHead, Tabl
 import { Project } from "models/project"
 import { memo, useMemo, useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
+import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes"
 import { TableCustom } from ".."
 import classes from './styles.module.scss'
 import clsx from "clsx"
@@ -11,10 +11,12 @@ import { PaymentScheduleStatus as EPaymentScheduleStatus } from "models/payment_
 import PaymentScheduleStatus from "components/PaymentScheduleStatus"
 import { fCurrencyVND, fCurrency } from "utils/formatNumber";
 import { PaymentSchedule } from "models/payment_schedule"
-import { EditOutlined, ExpandMoreOutlined, Check, DeleteOutlineOutlined } from "@mui/icons-material";
+import { EditOutlined, ExpandMoreOutlined, Check, Email } from "@mui/icons-material";
 import PopupEditPaymentSchedule from "./components/PopupEditPaymentSchedule"
+import PopupUploadInvoice from "./components/PopupUploadInvoice"
 import { AdminPaymentScheduleService } from 'services/admin/payment_schedule';
 import { AdminProjectService } from 'services/admin/project';
+import { FileUpload } from "models/attachment";
 
 export interface Props {
     project?: Project
@@ -25,6 +27,10 @@ interface PaymentScheduleForm {
     dueDate: Date;
 }
 
+interface UploadInvoiceForm {
+    invoice: FileUpload;
+}
+
 const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
 
     const dispatch = useDispatch()
@@ -32,13 +38,18 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
     const [itemAction, setItemAction] = useState<PaymentSchedule>();
     const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
     const [isOpenEditPaymentSchedulePopup, setIsOpenEditPaymentSchedulePopup] = useState<boolean>(false)
+    const [isOpenUploadInvoicePopup, setIsOpenUploadInvoicePopup] = useState<boolean>(false)
 
-    useEffect(() => {
-        dispatch(setLoading(true));
-        AdminProjectService.getPaymentSchedule(Number(project.id))
+    const getPaymentSchedules = async () => {
+        await AdminProjectService.getPaymentSchedule(Number(project.id))
             .then((paymentSchedules) => setPaymentScheduleList(paymentSchedules))
             .catch((e) => dispatch(setErrorMess(e)))
             .finally(() => dispatch(setLoading(false)))
+    }
+
+    useEffect(() => {
+        dispatch(setLoading(true));
+        getPaymentSchedules()
     }, [dispatch])
 
     const onCloseActionMenu = () => {
@@ -56,6 +67,16 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
         setIsOpenEditPaymentSchedulePopup(true)
     }
 
+    const onClosePopupUploadInvoice = () => {
+        onCloseActionMenu()
+        setIsOpenUploadInvoicePopup(false)
+    }
+
+    const handleUploadInvoice = () => {
+        if (!itemAction) return
+        setIsOpenUploadInvoicePopup(true)
+    }
+
     const handleAction = (
         event: React.MouseEvent<HTMLButtonElement>,
         item: PaymentSchedule
@@ -64,20 +85,23 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
         setActionAnchor(event.currentTarget);
     };
 
-    const updateEditList = (paymentSchedule: PaymentSchedule) => {
-        const tempList = [...paymentScheduleList].map((item) => {
-            return paymentSchedule.id === item.id ? paymentSchedule : item
-        })
-
-        setPaymentScheduleList(tempList)
-    }
-
     const onSubmitEditPaymentSchedule = (data: PaymentScheduleForm) => {
         dispatch(setLoading(true));
         AdminPaymentScheduleService.updateBasicInfo(itemAction.id, data)
-            .then((paymentSchedule) => {
-                updateEditList(paymentSchedule)
+            .then(async () => {
+                await getPaymentSchedules()
                 onClosePopupEditPaymentSchedule()
+            })
+            .catch((e) => dispatch(setErrorMess(e)))
+            .finally(() => dispatch(setLoading(false)))
+    }
+
+    const onSubmitUploadInvoice = (data: FormData) => {
+        dispatch(setLoading(true));
+        AdminPaymentScheduleService.uploadInvoice(itemAction.id, data)
+            .then(async () => {
+                await getPaymentSchedules()
+                onClosePopupUploadInvoice()
             })
             .catch((e) => dispatch(setErrorMess(e)))
             .finally(() => dispatch(setLoading(false)))
@@ -86,9 +110,20 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
     const handleUpdateStatus = () => {
         dispatch(setLoading(true));
         AdminPaymentScheduleService.updatePaidStatus(itemAction.id)
-            .then((paymentSchedule) => {
-                updateEditList(paymentSchedule)
+            .then(async () => {
+                await getPaymentSchedules()
                 onCloseActionMenu()
+            })
+            .catch((e) => dispatch(setErrorMess(e)))
+            .finally(() => dispatch(setLoading(false)))
+    }
+
+    const handleSendInvoiceReadyEmail = () => {
+        dispatch(setLoading(true));
+        AdminPaymentScheduleService.sendInvoiceReadyEmail(itemAction.id)
+            .then(async () => {
+                dispatch(setSuccessMess("Send email successfully"))
+                onClosePopupUploadInvoice()
             })
             .catch((e) => dispatch(setErrorMess(e)))
             .finally(() => dispatch(setLoading(false)))
@@ -112,6 +147,7 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
                                     <TableCell>Amount</TableCell>
                                     <TableCell>VAT</TableCell>
                                     <TableCell>Total Amount</TableCell>
+                                    <TableCell>USD to VND</TableCell>
                                     <TableCell>Payment ref</TableCell>
                                     <TableCell>Actions</TableCell>
                                 </TableRow>
@@ -123,9 +159,10 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
                                         <TableCell>{moment(item.end).format("MMM yyyy").toUpperCase()}</TableCell>
                                         <TableCell>{moment(item.dueDate).format("MMMM DD, yyyy")}</TableCell>
                                         <TableCell><PaymentScheduleStatus status={item.status} /></TableCell>
-                                        <TableCell>{fCurrencyVND(item.amount)}</TableCell>
-                                        <TableCell>{fCurrencyVND(item.vat)}</TableCell>
-                                        <TableCell>{fCurrencyVND(item.totalAmount)}</TableCell>
+                                        <TableCell>{fCurrencyVND(item.amount)} ({fCurrency(item.totalAmountUSD)})</TableCell>
+                                        <TableCell>{fCurrencyVND(item.vat)} ({fCurrency(item.vatUSD)})</TableCell>
+                                        <TableCell>{fCurrencyVND(item.totalAmount)} ({fCurrency(item.totalAmountUSD)})</TableCell>
+                                        <TableCell>{fCurrencyVND(item.systemConfig.usdToVND)}</TableCell>
                                         <TableCell>{item?.payments?.length ? item.payments[0].orderId : null}</TableCell>
                                         <TableCell>
                                             <IconButton
@@ -181,12 +218,42 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
                                 </MenuItem>
                             )
                         }
+                        {
+                            itemAction?.status === EPaymentScheduleStatus.PAID && (
+                                <>
+                                    <MenuItem
+                                        sx={{ fontSize: '0.875rem' }}
+                                        onClick={handleUploadInvoice}
+                                    >
+                                        <Box display="flex" alignItems={"center"}>
+                                            <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                                            <span>Upload invoice</span>
+                                        </Box>
+                                    </MenuItem>
+                                    <MenuItem
+                                        sx={{ fontSize: '0.875rem' }}
+                                        onClick={handleSendInvoiceReadyEmail}
+                                    >
+                                        <Box display="flex" alignItems={"center"}>
+                                            <Email sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                                            <span>Send email invoice ready</span>
+                                        </Box>
+                                    </MenuItem>
+                                </>
+                            )
+                        }
                     </Menu>
                     <PopupEditPaymentSchedule
                         isOpen={isOpenEditPaymentSchedulePopup}
                         onClose={onClosePopupEditPaymentSchedule}
                         paymentSchedule={itemAction}
                         onSubmit={onSubmitEditPaymentSchedule}
+                    />
+                    <PopupUploadInvoice
+                        isOpen={isOpenUploadInvoicePopup}
+                        onClose={onClosePopupUploadInvoice}
+                        paymentSchedule={itemAction}
+                        onSubmit={onSubmitUploadInvoice}
                     />
                 </>
             )}

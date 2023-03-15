@@ -1,5 +1,6 @@
 import { ConfigData } from "./config";
 import { Payment } from "./payment";
+import { Attachment } from './attachment';
 import { Project } from "./project";
 export interface GetPaymentSchedulePreview {
   projectId: number;
@@ -37,12 +38,16 @@ export interface PaymentSchedule {
   end: Date;
   dueDate: Date;
   amount: number;
+  amountUSD: number;
   totalAmount: number;
   totalAmountUSD: number;
   status: number;
   project: Project;
   sampleSizeCostPerMonth: number;
   vat: number;
+  vatUSD: number;
+  invoiceId: number;
+  invoice?: Attachment;
   systemConfig: ConfigData;
   projectData: Project;
   payments: Payment[];
