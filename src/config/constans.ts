@@ -209,7 +209,9 @@ export const API = {
     },
     PAYMENT_SCHEDULE: {
       UPDATE_STATUS: '/v1.0/admin/payment-schedule/:id/update-status',
-      UPDATE_BASIC_INFO: '/v1.0/admin/payment-schedule/:id/basic-info'
+      UPDATE_BASIC_INFO: '/v1.0/admin/payment-schedule/:id/basic-info',
+      UPLOAD_INVOICE: '/v1.0/admin/payment-schedule/:id/upload-invoice',
+      INVOICE_READY: '/v1.0/admin/payment-schedule/:id/invoice-ready',
     },
     USER: {
       DEFAULT: '/v1.0/admin/user',
