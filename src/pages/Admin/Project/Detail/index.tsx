@@ -206,7 +206,7 @@ const Detail = memo(({ }: Props) => {
           >
             Back
           </Button>
-          {project && (
+          {project && ![ESOLUTION_TYPE.BRAND_TRACKING].includes(project?.solution?.typeId) && (
             <Button
               sx={{ marginLeft: 2 }}
               variant="contained"
@@ -227,7 +227,7 @@ const Detail = memo(({ }: Props) => {
                 <Box>
                   <div className={classes.title}>Name: {project?.name}</div>
                   <Typography mt={2} ml={4} variant="h6" sx={{ fontWeight: 500 }}>ID: <span className={classes.valueBox}>{project?.id}</span></Typography>
-                  {isPaymentPaid && (
+                  {isPaymentPaid && ![ESOLUTION_TYPE.BRAND_TRACKING].includes(project?.solution?.typeId) && (
                     <Typography ml={4} variant="h6" sx={{ fontWeight: 500 }}>Report ready date: <span className={classes.valueBox}>{reportReadyDate}</span></Typography>
                   )}
                   <Typography mb={4} ml={4} variant="h6" sx={{ fontWeight: 500 }}>Survey language: <span className={classes.valueBox}>{langSupports.find(it => it.key === project?.surveyLanguage)?.name}</span></Typography>

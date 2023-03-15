@@ -145,43 +145,47 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
                             </TableBody>
                         </TableCustom>
                     </Box>
-                    <Menu
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        anchorEl={actionAnchor}
-                        keepMounted
-                        open={Boolean(actionAnchor)}
-                        onClose={onCloseActionMenu}
-                    >
-                        {
-                            [EPaymentScheduleStatus.NOT_PAID, EPaymentScheduleStatus.OVERDUE].includes(itemAction?.status) && (
-                                <MenuItem
-                                    sx={{ fontSize: '0.875rem' }}
-                                    onClick={handleEdit}
-                                >
-                                    <Box display="flex" alignItems={"center"}>
-                                        <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                                        <span>Edit</span>
-                                    </Box>
-                                </MenuItem>
-                            )
-                        }
-                        {
-                            itemAction?.status === EPaymentScheduleStatus.IN_PROGRESS && (
-                                <MenuItem
-                                    sx={{ fontSize: '0.875rem' }}
-                                    onClick={handleUpdateStatus}
-                                >
-                                    <Box display="flex" alignItems={"center"}>
-                                        <Check sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                                        <span>Mark as paid</span>
-                                    </Box>
-                                </MenuItem>
-                            )
-                        }
-                    </Menu>
+                    {
+                        ([EPaymentScheduleStatus.NOT_PAID, EPaymentScheduleStatus.OVERDUE].includes(itemAction?.status) || itemAction?.status === EPaymentScheduleStatus.IN_PROGRESS) && (
+                            <Menu
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                anchorEl={actionAnchor}
+                                keepMounted
+                                open={Boolean(actionAnchor)}
+                                onClose={onCloseActionMenu}
+                            >
+                                {
+                                    [EPaymentScheduleStatus.NOT_PAID, EPaymentScheduleStatus.OVERDUE].includes(itemAction?.status) && (
+                                        <MenuItem
+                                            sx={{ fontSize: '0.875rem' }}
+                                            onClick={handleEdit}
+                                        >
+                                            <Box display="flex" alignItems={"center"}>
+                                                <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                                                <span>Edit</span>
+                                            </Box>
+                                        </MenuItem>
+                                    )
+                                }
+                                {
+                                    itemAction?.status === EPaymentScheduleStatus.IN_PROGRESS && (
+                                        <MenuItem
+                                            sx={{ fontSize: '0.875rem' }}
+                                            onClick={handleUpdateStatus}
+                                        >
+                                            <Box display="flex" alignItems={"center"}>
+                                                <Check sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                                                <span>Mark as paid</span>
+                                            </Box>
+                                        </MenuItem>
+                                    )
+                                }
+                            </Menu>
+                        )
+                    }
                     <PopupEditPaymentSchedule
                         isOpen={isOpenEditPaymentSchedulePopup}
                         onClose={onClosePopupEditPaymentSchedule}
