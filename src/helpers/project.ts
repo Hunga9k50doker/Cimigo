@@ -359,6 +359,15 @@ export class ProjectHelper {
     const minBrandAssetRecognition = ProjectHelper.minBrandAssetRecognition(project)
     return totalBrandAssetRecognition >= minBrandAssetRecognition ? 0 : minBrandAssetRecognition - totalBrandAssetRecognition
   }
+
+  static checkSolutionType = (project: Project, solutionTypes: ESOLUTION_TYPE[], isInclude?: boolean) => {
+    if (isInclude) {
+      return solutionTypes.includes(project?.solution?.typeId)
+    }
+    else {
+      return !solutionTypes.includes(project?.solution?.typeId)
+    }
+  }
 }
 
 export default ProjectHelper

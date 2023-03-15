@@ -24,6 +24,7 @@ import AdminSolutionService from "services/admin/solution";
 import { fCurrency, fCurrencyVND } from "utils/formatNumber";
 import classes from './styles.module.scss';
 import { ESOLUTION_TYPE } from "models/solution";
+import ProjectHelper from "helpers/project"
 
 const tableHeaders: TableHeaderLabel[] = [
   { name: 'id', label: 'Id', sortable: true },
@@ -364,7 +365,7 @@ const List = memo(({ sort, setSort, keyword, setKeyword, data, setData, filterDa
             onClose={onCloseActionMenu}
           >
             {
-              ![ESOLUTION_TYPE.BRAND_TRACKING].includes(itemAction?.solution?.typeId) && (
+              ProjectHelper.checkSolutionType(itemAction, [ESOLUTION_TYPE.BRAND_TRACKING], false) && (
                 <MenuItem
                   sx={{ fontSize: '0.875rem' }}
                   onClick={onEdit}

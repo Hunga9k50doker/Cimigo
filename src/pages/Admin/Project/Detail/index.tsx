@@ -191,6 +191,8 @@ const Detail = memo(({ }: Props) => {
     }
   }
 
+  const checkSolutionType = useMemo(() => ProjectHelper.checkSolutionType(project, [ESOLUTION_TYPE.BRAND_TRACKING], false), [project])
+
   return (
     <div>
       <Box display="flex" justifyContent="space-between" alignContent="center" mb={4}>
@@ -206,7 +208,7 @@ const Detail = memo(({ }: Props) => {
           >
             Back
           </Button>
-          {project && ![ESOLUTION_TYPE.BRAND_TRACKING].includes(project?.solution?.typeId) && (
+          {project && checkSolutionType && (
             <Button
               sx={{ marginLeft: 2 }}
               variant="contained"
@@ -227,7 +229,7 @@ const Detail = memo(({ }: Props) => {
                 <Box>
                   <div className={classes.title}>Name: {project?.name}</div>
                   <Typography mt={2} ml={4} variant="h6" sx={{ fontWeight: 500 }}>ID: <span className={classes.valueBox}>{project?.id}</span></Typography>
-                  {isPaymentPaid && ![ESOLUTION_TYPE.BRAND_TRACKING].includes(project?.solution?.typeId) && (
+                  {isPaymentPaid && checkSolutionType && (
                     <Typography ml={4} variant="h6" sx={{ fontWeight: 500 }}>Report ready date: <span className={classes.valueBox}>{reportReadyDate}</span></Typography>
                   )}
                   <Typography mb={4} ml={4} variant="h6" sx={{ fontWeight: 500 }}>Survey language: <span className={classes.valueBox}>{langSupports.find(it => it.key === project?.surveyLanguage)?.name}</span></Typography>

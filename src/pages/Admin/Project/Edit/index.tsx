@@ -8,6 +8,7 @@ import ProjectForm from "../components/ProjectForm"
 import { Project } from "models/project"
 import { AdminProjectService } from "services/admin/project"
 import { ESOLUTION_TYPE } from "models/solution";
+import ProjectHelper from "helpers/project"
 
 interface Props {
 
@@ -25,7 +26,7 @@ const EditProject = memo((props: Props) => {
         dispatch(setLoading(true))
         AdminProjectService.getProject(Number(id))
           .then((res) => {
-            if ([ESOLUTION_TYPE.BRAND_TRACKING].includes(res?.solution?.typeId)) {
+            if (ProjectHelper.checkSolutionType(res, [ESOLUTION_TYPE.BRAND_TRACKING], true)) {
               dispatch(push(routes.admin.project.root))
             }
             else {
