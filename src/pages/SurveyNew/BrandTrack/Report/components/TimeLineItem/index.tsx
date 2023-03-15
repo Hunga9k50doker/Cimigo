@@ -59,7 +59,7 @@ const TimeLineItem = memo(({ timeLineItem, isFirstWave, isLastWave, onSelect }: 
             <Box className={classes.circleInProgress} onClick={onSelect}>
               <Box className={classes.circle}></Box>
             </Box>
-            <Box className={clsx(classes.line, classes.inProgressLine)}></Box>
+            <Box className={classes.line}></Box>
           </Box>
           <ParagraphBody $colorName="--warning-dark" $fontWeight={600}>
             {moment(timeLineItem.date).format("MMM").toUpperCase()}

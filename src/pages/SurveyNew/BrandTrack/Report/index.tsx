@@ -99,7 +99,8 @@ const Report = memo(({ projectId }: Props) => {
       for (let i = 0; i <= 3; i++) {
         _listTimeline.push({
           date: moment(startPaymentScheduleDate).add(i, "month").startOf("month"),
-          state: i === 0 ? ETimelineType.DELIVERED : i === 1 ? ETimelineType.IN_PROGRESS : ETimelineType.NOT_STARTED_YET,
+          state: i < 3 ? ETimelineType.DELIVERED : i === 3 ? ETimelineType.IN_PROGRESS : ETimelineType.NOT_STARTED_YET,
+          // state: ETimelineType.DELIVERED,
           report: null,
         });
       }
@@ -174,22 +175,22 @@ const Report = memo(({ projectId }: Props) => {
                 </Box>
               </Box>
             )}
-            {listTimeline?.map((item, index) => (
-              <TimeLineItem
-                key={index}
-                timeLineItem={item}
-                isFirstWave={!index && moment(listTimeline?.[index]?.date).isSame(startPaymentScheduleDate, "month")}
-                isLastWave={false}
-                onSelect={() => {
-                  setTimelineSelected(item);
-                }}
-              />
-            ))}
+            {listTimeline.length !== 0 &&
+              listTimeline.map((item, index) => (
+                <TimeLineItem
+                  key={index}
+                  timeLineItem={item}
+                  isFirstWave={!index && moment(listTimeline?.[index]?.date).isSame(startPaymentScheduleDate, "month")}
+                  isLastWave={Boolean(index === listTimeline.length - 1 && item.state === ETimelineType.DELIVERED)}
+                  onSelect={() => {
+                    setTimelineSelected(item);
+                  }}
+                />
+              ))}
             {project?.status === ProjectStatus.COMPLETED ? (
               <Box
                 className={clsx(classes.headPoint, {
                   [classes.deliveredHeadPoint]: listTimeline?.[listTimeline?.length - 1]?.state === ETimelineType.DELIVERED,
-                  [classes.inProgressHeadPoint]: listTimeline?.[listTimeline?.length - 1]?.state === ETimelineType.IN_PROGRESS,
                 })}
               ></Box>
             ) : (

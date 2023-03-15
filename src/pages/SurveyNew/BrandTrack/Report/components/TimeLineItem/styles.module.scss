@@ -29,11 +29,9 @@
 .deliveredLine {
   background: var(--cimigo-blue);
 }
-
 .inProgressLine {
-  background: var(--warning-dark);
+  background: linear-gradient(to left, var(--warning-dark) 75%, var(--cimigo-blue) 100%);
 }
-
 .circle {
   width: 20px;
   height: 20px;
