@@ -88,7 +88,7 @@ export const projectStatus: OptionItem[] = [
   { id: ProjectStatus.DRAFT, name: 'Draft', translation: 'project_status_draft' },
   { id: ProjectStatus.AWAIT_PAYMENT, name: 'Awaiting payment', translation: 'project_status_await_payment' },
   { id: ProjectStatus.IN_PROGRESS, name: 'Launching', translation: 'project_status_in_progress' },
-  { id: ProjectStatus.COMPLETED, name: 'Results ready', translation: 'project_status_completed' }
+  { id: ProjectStatus.COMPLETED, name: 'Completed', translation: 'project_status_completed' }
 ]
 
 export interface GetMyProjects {
