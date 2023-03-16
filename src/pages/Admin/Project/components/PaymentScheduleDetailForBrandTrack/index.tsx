@@ -14,12 +14,16 @@ import { PaymentSchedule } from "models/payment_schedule"
 import { EditOutlined, ExpandMoreOutlined, Check, Email } from "@mui/icons-material";
 import PopupEditPaymentSchedule from "./components/PopupEditPaymentSchedule"
 import PopupUploadInvoice from "./components/PopupUploadInvoice"
+import PopupRestartPaymentSchedule from "./components/PopupRestartPaymentSchedule"
 import { AdminPaymentScheduleService } from 'services/admin/payment_schedule';
 import { AdminProjectService } from 'services/admin/project';
 import { FileUpload } from "models/attachment";
+import Buttons from 'components/Buttons';
+import ProjectHelper from "helpers/project"
 
 export interface Props {
-    project?: Project
+    project?: Project,
+    getProject?: () => Promise<void>
 }
 
 interface PaymentScheduleForm {
@@ -31,7 +35,16 @@ interface UploadInvoiceForm {
     invoice: FileUpload;
 }
 
-const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
+interface RestartScheduleForm {
+    paymentSchedules: {
+        dueDate: Date,
+        start: Date
+        end: Date,
+        amount: number,
+    }[],
+}
+
+const PaymentScheduleDetailForBrandTrack = memo(({ project, getProject }: Props) => {
 
     const dispatch = useDispatch()
     const [paymentScheduleList, setPaymentScheduleList] = useState<PaymentSchedule[]>([])
@@ -39,6 +52,7 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
     const [actionAnchor, setActionAnchor] = useState<null | HTMLElement>(null);
     const [isOpenEditPaymentSchedulePopup, setIsOpenEditPaymentSchedulePopup] = useState<boolean>(false)
     const [isOpenUploadInvoicePopup, setIsOpenUploadInvoicePopup] = useState<boolean>(false)
+    const [isOpenRestartPaymentSchedulePopup, setIsOpenRestartPaymentSchedulePopup] = useState<boolean>(false)
 
     const getPaymentSchedules = async () => {
         await AdminProjectService.getPaymentSchedule(Number(project.id))
@@ -62,6 +76,10 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
         setIsOpenEditPaymentSchedulePopup(false)
     }
 
+    const onClosePopupRestartPaymentSchedule = () => {
+        setIsOpenRestartPaymentSchedulePopup(false)
+    }
+
     const handleEdit = () => {
         if (!itemAction) return
         setIsOpenEditPaymentSchedulePopup(true)
@@ -75,6 +93,10 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
     const handleUploadInvoice = () => {
         if (!itemAction) return
         setIsOpenUploadInvoicePopup(true)
+    }
+
+    const handleRestartPaymentSchedule = () => {
+        setIsOpenRestartPaymentSchedulePopup(true)
     }
 
     const handleAction = (
@@ -129,10 +151,30 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
             .finally(() => dispatch(setLoading(false)))
     }
 
+    const onSubmitRestartPaymentSchedule = (data: RestartScheduleForm) => {
+        dispatch(setLoading(true));
+        AdminPaymentScheduleService.restartPaymentSchedule({
+            projectId: project.id,
+            paymentSchedules: data.paymentSchedules
+        })
+            .then(async (res) => {
+                dispatch(setSuccessMess("Restart payment schedule successfully"))
+                await getPaymentSchedules()
+                await getProject()
+            })
+            .catch((e) => dispatch(setErrorMess(e)))
+            .finally(() => dispatch(setLoading(false)))
+    }
+
     return (
         <Box>
             {(!!paymentScheduleList?.length) && (
                 <>
+                    {
+                        ProjectHelper.isCancelProject(project) && (
+                            <Buttons btnType='Blue' children="Restart payment schedules" padding='11px 16px' onClick={handleRestartPaymentSchedule} />
+                        )
+                    }
                     <Typography variant="h6" mt={4} mb={2}>
                         Payment Schedules
                     </Typography>
@@ -254,6 +296,12 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project }: Props) => {
                         onClose={onClosePopupUploadInvoice}
                         paymentSchedule={itemAction}
                         onSubmit={onSubmitUploadInvoice}
+                    />
+                    <PopupRestartPaymentSchedule
+                        isOpen={isOpenRestartPaymentSchedulePopup}
+                        onClose={onClosePopupRestartPaymentSchedule}
+                        onSubmit={onSubmitRestartPaymentSchedule}
+                        project={project}
                     />
                 </>
             )}

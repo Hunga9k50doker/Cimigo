@@ -57,93 +57,94 @@ const Detail = memo(({ }: Props) => {
     dispatch(push(routes.admin.project.root))
   }
 
+  const getProject = async () => {
+    dispatch(setLoading(true))
+    AdminProjectService.getProject(Number(id))
+      .then(res => {
+        switch (res.solution?.typeId) {
+          case ESOLUTION_TYPE.PACK:
+            Promise.all([
+              AdminProjectService.getQuotas(Number(id)),
+              AdminProjectService.getPacks(Number(id)),
+              AdminProjectService.eyeTrackingPacks(Number(id)),
+              AdminProjectService.additionalBrands(Number(id)),
+              AdminProjectService.projectAttributes(Number(id)),
+              AdminProjectService.userAttributes(Number(id)),
+              AdminProjectService.getCustomQuestions(Number(id)),
+              AdminProjectService.getTargets(Number(id)),
+            ])
+              .then(([quotas, packs, eyeTrackingPacks, additionalBrands, projectAttributes, userAttributes, customQuestions, targets]) => {
+                setProject({
+                  ...res,
+                  packs,
+                  eyeTrackingPacks,
+                  additionalBrands,
+                  projectAttributes,
+                  userAttributes,
+                  customQuestions,
+                  targets
+                })
+                setQuotas(quotas)
+              })
+              .catch((e) => dispatch(setErrorMess(e)))
+              .finally(() => dispatch(setLoading(false)))
+            break;
+          case ESOLUTION_TYPE.VIDEO_CHOICE:
+            Promise.all([
+              AdminProjectService.getQuotas(Number(id)),
+              AdminProjectService.getVideos(Number(id)),
+              AdminProjectService.getCustomQuestions(Number(id)),
+              AdminProjectService.getTargets(Number(id)),
+            ])
+              .then(([quotas, videos, customQuestions, targets]) => {
+                setProject({
+                  ...res,
+                  videos,
+                  customQuestions,
+                  targets
+                })
+                setQuotas(quotas)
+              })
+              .catch((e) => dispatch(setErrorMess(e)))
+              .finally(() => dispatch(setLoading(false)))
+            break;
+          case ESOLUTION_TYPE.BRAND_TRACKING:
+            Promise.all([
+              AdminProjectService.getQuotas(Number(id)),
+              AdminProjectService.additionalBrands(Number(id)),
+              AdminProjectService.getCompetitiveBrands(Number(id)),
+              AdminProjectService.projectAttributes(Number(id)),
+              AdminProjectService.userAttributes(Number(id)),
+              AdminProjectService.getBrandAsset(Number(id)),
+              AdminProjectService.getCustomQuestions(Number(id)),
+              AdminProjectService.getTargets(Number(id)),
+            ])
+              .then(([quotas, additionalBrands, projectBrands, projectAttributes, userAttributes, brandAssets, customQuestions, targets]) => {
+                setProject({
+                  ...res,
+                  additionalBrands,
+                  projectBrands,
+                  projectAttributes,
+                  userAttributes,
+                  brandAssets,
+                  customQuestions,
+                  targets
+                })
+                setQuotas(quotas)
+              })
+              .catch((e) => dispatch(setErrorMess(e)))
+              .finally(() => dispatch(setLoading(false)))
+            break;
+        }
+      })
+      .catch((e) => {
+        dispatch(setErrorMess(e))
+        dispatch(setLoading(false))
+      })
+  }
+
   useEffect(() => {
     if (id && !isNaN(Number(id))) {
-      const getProject = async () => {
-        dispatch(setLoading(true))
-        AdminProjectService.getProject(Number(id))
-          .then(res => {
-            switch (res.solution?.typeId) {
-              case ESOLUTION_TYPE.PACK:
-                Promise.all([
-                  AdminProjectService.getQuotas(Number(id)),
-                  AdminProjectService.getPacks(Number(id)),
-                  AdminProjectService.eyeTrackingPacks(Number(id)),
-                  AdminProjectService.additionalBrands(Number(id)),
-                  AdminProjectService.projectAttributes(Number(id)),
-                  AdminProjectService.userAttributes(Number(id)),
-                  AdminProjectService.getCustomQuestions(Number(id)),
-                  AdminProjectService.getTargets(Number(id)),
-                ])
-                  .then(([quotas, packs, eyeTrackingPacks, additionalBrands, projectAttributes, userAttributes, customQuestions, targets]) => {
-                    setProject({
-                      ...res,
-                      packs,
-                      eyeTrackingPacks,
-                      additionalBrands,
-                      projectAttributes,
-                      userAttributes,
-                      customQuestions,
-                      targets
-                    })
-                    setQuotas(quotas)
-                  })
-                  .catch((e) => dispatch(setErrorMess(e)))
-                  .finally(() => dispatch(setLoading(false)))
-                break;
-              case ESOLUTION_TYPE.VIDEO_CHOICE:
-                Promise.all([
-                  AdminProjectService.getQuotas(Number(id)),
-                  AdminProjectService.getVideos(Number(id)),
-                  AdminProjectService.getCustomQuestions(Number(id)),
-                  AdminProjectService.getTargets(Number(id)),
-                ])
-                  .then(([quotas, videos, customQuestions, targets]) => {
-                    setProject({
-                      ...res,
-                      videos,
-                      customQuestions,
-                      targets
-                    })
-                    setQuotas(quotas)
-                  })
-                  .catch((e) => dispatch(setErrorMess(e)))
-                  .finally(() => dispatch(setLoading(false)))
-                break;
-              case ESOLUTION_TYPE.BRAND_TRACKING:
-                Promise.all([
-                  AdminProjectService.getQuotas(Number(id)),
-                  AdminProjectService.additionalBrands(Number(id)),
-                  AdminProjectService.getCompetitiveBrands(Number(id)),
-                  AdminProjectService.projectAttributes(Number(id)),
-                  AdminProjectService.userAttributes(Number(id)),
-                  AdminProjectService.getBrandAsset(Number(id)),
-                  AdminProjectService.getCustomQuestions(Number(id)),
-                  AdminProjectService.getTargets(Number(id)),
-                ])
-                  .then(([quotas, additionalBrands, projectBrands, projectAttributes, userAttributes, brandAssets, customQuestions, targets]) => {
-                    setProject({
-                      ...res,
-                      additionalBrands,
-                      projectBrands,
-                      projectAttributes,
-                      userAttributes,
-                      brandAssets,
-                      customQuestions,
-                      targets
-                    })
-                    setQuotas(quotas)
-                  })
-                  .catch((e) => dispatch(setErrorMess(e)))
-                  .finally(() => dispatch(setLoading(false)))
-                break;
-            }
-          })
-          .catch((e) => {
-            dispatch(setErrorMess(e))
-            dispatch(setLoading(false))
-          })
-      }
       getProject()
     }
   }, [id, dispatch])
@@ -406,7 +407,7 @@ const Detail = memo(({ }: Props) => {
                   project?.solution?.typeId === ESOLUTION_TYPE.BRAND_TRACKING
                     ?
                     (
-                      <PaymentScheduleDetailForBrandTrack project={project} />
+                      <PaymentScheduleDetailForBrandTrack project={project} getProject={getProject} />
                     )
                     :
                     (

@@ -8,7 +8,7 @@ import { PackType } from "models/pack";
 import { EPaymentStatus } from "models/payment";
 import { Project, ProjectStatus } from "models/project";
 import moment from "moment-timezone";
-import { PaymentSchedule } from "models/payment_schedule";
+import { PaymentSchedule, EPaymentScheduleCancelType } from "models/payment_schedule";
 
 export const editableProject = (project: Project) => {
   return project?.editable
@@ -367,6 +367,10 @@ export class ProjectHelper {
     else {
       return !solutionTypes.includes(project?.solution?.typeId)
     }
+  }
+
+  static isCancelProject = (project: Project) => {
+    return [EPaymentScheduleCancelType.AUTO_CANCEL, EPaymentScheduleCancelType.USER_CANCEL].includes(project?.cancelPaymentScheduleType)
   }
 }
 
