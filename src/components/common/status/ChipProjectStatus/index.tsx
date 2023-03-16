@@ -10,10 +10,10 @@ import classes from './styles.module.scss';
 
 interface ProjectStatusProps extends ChipProps {
   status: ProjectStatus
+  type: string;
 }
 
-export const ChipProjectStatus = memo(({ status, className, ...rest }: ProjectStatusProps) => {
-
+export const ChipProjectStatus = memo(({ status, className, type,  ...rest }: ProjectStatusProps) => {
   const { t } = useTranslation()
 
   const statusLabel = useMemo(() => {
@@ -25,7 +25,7 @@ export const ChipProjectStatus = memo(({ status, className, ...rest }: ProjectSt
       case ProjectStatus.IN_PROGRESS:
         return t('project_status_in_progress')
       case ProjectStatus.COMPLETED:
-        return t('project_status_completed')
+        return type === "Brand tracking" ? t("brand_track_project_status_completed") : t("project_status_completed");
     }
   }, [status]);
 

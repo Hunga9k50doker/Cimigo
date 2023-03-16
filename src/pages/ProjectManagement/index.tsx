@@ -624,6 +624,7 @@ const ProjectManagement = memo((props: Props) => {
                       <TableCell>
                         <ChipProjectStatus
                           status={item.status}
+                          type={item?.solution?.title}
                         ></ChipProjectStatus>
                       </TableCell>
                       <TableCell>
@@ -822,7 +823,7 @@ const ProjectManagement = memo((props: Props) => {
                 <div>
                   <p className={classes.itemNameMobile}>{item.name}</p>
                   <Grid sx={{ padding: "8px 0px 4px 0px" }}>
-                    <ChipProjectStatus status={item.status}></ChipProjectStatus>
+                    <ChipProjectStatus status={item.status} type={item?.solution?.title}></ChipProjectStatus>
                   </Grid>
 
                   <Grid

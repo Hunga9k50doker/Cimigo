@@ -233,7 +233,7 @@ export const Survey = () => {
           />
         </Tabs>
         <Box className={classes.statusBox}>
-          <ChipProjectStatus status={project?.status} />
+          <ChipProjectStatus status={project?.status} type={project?.solution?.title} />
         </Box>
       </Box>
       <Box className={classes.tabContent}>
