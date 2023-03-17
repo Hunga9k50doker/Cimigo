@@ -6,11 +6,13 @@ import { useTranslation } from "react-i18next";
 
 interface LabelStatusProps {
   typeStatus: ProjectStatus,
-  className?: string
+  className?: string,
+  typeBrand?:string
 }
 
 const LabelStatus = memo((props: LabelStatusProps) => {
   const { t } = useTranslation()
+  const { typeStatus, className, typeBrand } = props;
 
   const statusLabel = () => {
     switch (typeStatus) {
@@ -21,11 +23,10 @@ const LabelStatus = memo((props: LabelStatusProps) => {
       case ProjectStatus.IN_PROGRESS:
         return t('project_status_in_progress')
       case ProjectStatus.COMPLETED:
-        return t('project_status_completed')
+        return typeBrand === "Brand traking" ? t('brand_track_project_status_completed') : t("project_status_completed");
       default: return typeStatus;
     }
   };
-  const { typeStatus, className } = props;
 
   return (
     <div
