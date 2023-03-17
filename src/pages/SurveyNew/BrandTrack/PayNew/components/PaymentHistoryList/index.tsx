@@ -8,8 +8,8 @@ import moment from "moment";
 import { useTranslation } from "react-i18next";
 import Heading5 from "components/common/text/Heading5";
 import { PaymentScheduleHistory, GetListPaymentScheduleHistory } from "models/payment_schedule";
-import DateRangeIcon from "@mui/icons-material/DateRange";
-import Dolar from "components/icons/IconDolar";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import IconMoneyCash from "components/icons/IconMoneyCash";
 import ParagraphSmallUnderline2 from "components/common/text/ParagraphSmallUnderline2";
 import { PaymentScheduleService } from "services/payment_schedule";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
@@ -126,28 +126,24 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
                                             <Grid item xs={12} sm={8}>
                                                 <Heading5 $colorName={"--gray-90"}>
                                                     {`${moment(itemPaymentHistory.schedule.start)
-                                                        .lang(i18n.language)
                                                         .format("MMM yyyy")} - ${moment(
                                                             itemPaymentHistory.schedule.end
                                                         )
-                                                            .lang(i18n.language)
                                                             .format("MMM yyyy")}`}
                                                 </Heading5>
                                                 <Grid className={classes.moneyAndDate} pt={1}>
                                                     <Grid className={classes.money} pr={2.5}>
-                                                        <span className={classes.iconDolar}>
-                                                            <Dolar />
-                                                        </span>
+                                                        <IconMoneyCash/>
+                                                        <span>
                                                         {getCostCurrency(itemPaymentHistory.totalAmount, itemPaymentHistory?.currency)?.show}
+                                                        </span>
                                                     </Grid>
                                                     <Grid className={classes.date}>
-                                                        <DateRangeIcon
-                                                            className={classes.iconCalendar}
-                                                            sx={{ marginRight: "10px" }}
-                                                        />
-                                                        {moment(itemPaymentHistory.completedDate)
-                                                            .lang(i18n.language)
+                                                        <CalendarMonthOutlinedIcon sx={{color: "var(--gray-80)"}} />
+                                                        <span>
+                                                        {moment(itemPaymentHistory.completedDate ?? new Date())
                                                             .format("MMM DD, yyyy")}
+                                                        </span>
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
