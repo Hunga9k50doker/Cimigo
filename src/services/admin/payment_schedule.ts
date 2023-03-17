@@ -1,6 +1,6 @@
 import { API } from 'config/constans';
 import api from 'services/configApi';
-import { UpdateBasicInfo } from 'models/Admin/payment_schedule';
+import { UpdateBasicInfo, RestartPaymentSchedule, GetPaymentScheduleRestartPreview } from 'models/Admin/payment_schedule';
 
 export class AdminPaymentScheduleService {
   static async updateBasicInfo(id: number, data: UpdateBasicInfo): Promise<any> {
@@ -45,5 +45,25 @@ export class AdminPaymentScheduleService {
       .catch((e) => {
         return Promise.reject(e?.response?.data);
       })
+  }
+
+  static async restartPaymentSchedule(data: RestartPaymentSchedule): Promise<any> {
+    return await api.post(API.ADMIN.PAYMENT_SCHEDULE.RESTART, data)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async getPaymentScheduleRestartPreview(data: GetPaymentScheduleRestartPreview): Promise<any> {
+    return await api.get(API.ADMIN.PAYMENT_SCHEDULE.PREVIEW_RESTART, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
   }
 }
