@@ -14,6 +14,10 @@ export interface PaymentSchedulePreview{
     startDate: Date;
     endDate: Date;
     dueDate: Date;
+    amount: number,
+    amountUSD: number,
+    vat: number,
+    vatUSD: number
 }
 export interface GetPaymentSchedule{
   projectId: number;

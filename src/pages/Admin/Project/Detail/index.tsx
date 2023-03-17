@@ -57,6 +57,19 @@ const Detail = memo(({ }: Props) => {
     dispatch(push(routes.admin.project.root))
   }
 
+  const reloadProjectInfo = async () => {
+    dispatch(setLoading(true))
+    AdminProjectService.getProject(Number(id))
+      .then((res) => setProject({
+        ...project,
+        ...res,
+      }))
+      .catch((e) => {
+        dispatch(setErrorMess(e))
+        dispatch(setLoading(false))
+      })
+  }
+
   useEffect(() => {
     if (id && !isNaN(Number(id))) {
       const getProject = async () => {
@@ -261,7 +274,7 @@ const Detail = memo(({ }: Props) => {
                           </Paper>
                         </Grid>
                       </Grid>
-                      )
+                    )
                   }
                   {!!project?.targets?.length && (
                     <>
@@ -406,7 +419,7 @@ const Detail = memo(({ }: Props) => {
                   project?.solution?.typeId === ESOLUTION_TYPE.BRAND_TRACKING
                     ?
                     (
-                      <PaymentScheduleDetailForBrandTrack project={project} />
+                      <PaymentScheduleDetailForBrandTrack project={project} reloadProjectInfo={reloadProjectInfo} />
                     )
                     :
                     (
