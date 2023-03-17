@@ -20,7 +20,7 @@ export interface TableHeaderLabel {
 export interface OptionItem<T=number> {
   id: T;
   name: string;
-  translation?: string;
+  translation?: any;
   img?: string;
   subName?: string;
   icon?: any;

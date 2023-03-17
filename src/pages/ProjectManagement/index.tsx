@@ -67,6 +67,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { Helmet } from "react-helmet";
+import { ProjectStatus as ProjectStatus } from "models/project";
 
 const ExpandIcon = (props) => {
   return <KeyboardArrowDownIcon {...props} sx={{ color: "var(--gray-60)" }} />;
@@ -112,7 +113,7 @@ const ProjectManagement = memo((props: Props) => {
   const [folderEdit, setFolderEdit] = useState<Folder>(null);
   const [folderDelete, setFolderDelete] = useState<Folder>(null);
   const [createFolder, setCreateFolder] = useState(false);
-
+ console.log(data, "dhjkasdhsadashdssjkh");
   const fetchData = async () => {
     dispatch(setLoading(true));
     await ProjectService.getMyProjects(params)
@@ -519,11 +520,11 @@ const ProjectManagement = memo((props: Props) => {
                         className={classes.itemStatus}
                         key={item.id}
                         value={item.id}
-                        translation-key={item.translation}
+                        translation-key={item.id === ProjectStatus.COMPLETED ? item.translation(item.name) : item.translation}
                       >
                         <ParagraphBody pr={1} $colorName="--gray-80">
                           {" "}
-                          {t(item.translation)}
+                          {t(item.id === ProjectStatus.COMPLETED ? item.translation(item.name) : item.translation)}
                         </ParagraphBody>
                       </MenuItem>
                     ))}

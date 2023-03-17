@@ -40,7 +40,7 @@ interface Props {
 }
 
 const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
-
+ console.log(itemEdit);
   const dispatch = useDispatch();
 
   const { register, handleSubmit, formState: { errors }, reset, control } = useForm<ProjectFormData>({
@@ -140,6 +140,9 @@ const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
                       title="Status"
                       name="status"
                       control={control}
+                      translationData={itemEdit?.solution?.title === 'Brand tracking' ?
+                        "brand_track_project_status_completed"
+                        : "project_status_completed"}
                       selectProps={{
                         menuPosition: 'fixed',
                         options: projectStatus,

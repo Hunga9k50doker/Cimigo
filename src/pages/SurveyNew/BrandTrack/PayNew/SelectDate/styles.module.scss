@@ -89,7 +89,8 @@
   .payment{
     width: 100%;
     border: 1px solid var(--gray-2);
-    background: var(--gray-10);
+    border-radius: 8px;
+    background: var(--gray-2);
     .contentPayment{
       padding: 16px 0px 16px 24px;
     }
