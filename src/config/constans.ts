@@ -213,6 +213,7 @@ export const API = {
       UPLOAD_INVOICE: '/v1.0/admin/payment-schedule/:id/upload-invoice',
       INVOICE_READY: '/v1.0/admin/payment-schedule/:id/invoice-ready',
       RESTART: '/v1.0/admin/payment-schedule/restart',
+      PREVIEW_RESTART: '/v1.0/admin/payment-schedule/preview-restart',
     },
     USER: {
       DEFAULT: '/v1.0/admin/user',

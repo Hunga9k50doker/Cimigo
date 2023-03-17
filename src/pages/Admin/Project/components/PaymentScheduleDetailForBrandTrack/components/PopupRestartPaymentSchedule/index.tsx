@@ -13,15 +13,12 @@ import ButtonCLose from "components/common/buttons/ButtonClose";
 import classes from "./styles.module.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { PaymentSchedule } from "models/payment_schedule";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import moment from "moment"
 import { Controller } from 'react-hook-form';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ErrorMessage from "components/common/text/ErrorMessage";
 import Inputs, { classesInputs } from "components/Inputs";
-import { OptionItem } from "models/general";
-import { PaymentScheduleService } from "services/payment_schedule"
 import {
     GetPaymentSchedulePreview,
     PaymentSchedulePreview,
@@ -29,7 +26,7 @@ import {
 import { useDispatch } from "react-redux"
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes"
 import { formatOrdinalumbers } from "utils/formatNumber";
-import { fCurrencyVND, fCurrency } from "utils/formatNumber";
+import { AdminPaymentScheduleService } from 'services/admin/payment_schedule';
 
 interface RestartScheduleForm {
     paymentSchedules: {
@@ -58,7 +55,7 @@ const PopupRestartPaymentSchedule = (props: Props) => {
             startDate: moment(startMonth).startOf('month').toDate(),
         }
         dispatch(setLoading(true))
-        PaymentScheduleService.getPaymentSchedulePreview(params)
+        AdminPaymentScheduleService.getPaymentScheduleRestartPreview(params)
             .then((res) => {
                 reset({
                     paymentSchedules: res.data.map(it => ({
@@ -143,7 +140,6 @@ const PopupRestartPaymentSchedule = (props: Props) => {
                             </ParagraphSmall>
                             <DatePicker
                                 views={['year', 'month']}
-                                minDate={new Date()}
                                 inputFormat="MM/YYYY"
                                 value={startMonth}
                                 onChange={setStartMonth}

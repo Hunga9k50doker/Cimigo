@@ -12,3 +12,8 @@ export interface RestartPaymentSchedule {
         dueDate: Date
     }[]
 }
+
+export interface GetPaymentScheduleRestartPreview {
+    startDate: Date,
+    projectId: number,
+}

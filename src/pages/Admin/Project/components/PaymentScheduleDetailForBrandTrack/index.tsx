@@ -23,7 +23,7 @@ import ProjectHelper from "helpers/project"
 
 export interface Props {
     project?: Project,
-    getProject?: () => Promise<void>
+    reloadProjectInfo?: () => Promise<void>
 }
 
 interface PaymentScheduleForm {
@@ -44,7 +44,7 @@ interface RestartScheduleForm {
     }[],
 }
 
-const PaymentScheduleDetailForBrandTrack = memo(({ project, getProject }: Props) => {
+const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }: Props) => {
 
     const dispatch = useDispatch()
     const [paymentScheduleList, setPaymentScheduleList] = useState<PaymentSchedule[]>([])
@@ -160,7 +160,7 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project, getProject }: Props)
             .then(async (res) => {
                 dispatch(setSuccessMess("Restart payment schedule successfully"))
                 await getPaymentSchedules()
-                await getProject()
+                await reloadProjectInfo()
             })
             .catch((e) => dispatch(setErrorMess(e)))
             .finally(() => dispatch(setLoading(false)))
