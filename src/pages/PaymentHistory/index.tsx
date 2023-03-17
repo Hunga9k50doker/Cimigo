@@ -216,7 +216,24 @@ const PaymentHistory = memo(({ }: Props) => {
                       </Heading5>
                     </TableSortLabel>
                   </TableCell>
-                  <TableCell sx={{ textAlign: 'center' }}>
+                   <TableCell sx={{ textAlign: 'center' }}>
+                    <TableSortLabel
+                      active={params?.sortedField === SortedField.amountUSD}
+                      direction={params?.isDescending ? "desc" : "asc"}
+                      onClick={() => {
+                        onChangeSort(SortedField.amountUSD);
+                      }}
+                      IconComponent={ArrowDropdownIcon}
+                      className={classes.tableLabel}
+                    >
+                      <Heading5
+                        translation-key="payment_history_amount"
+                      >
+                        {t("payment_history_description")}
+                      </Heading5>
+                    </TableSortLabel>
+                  </TableCell>
+                   <TableCell sx={{ textAlign: 'center' }}>
                     <TableSortLabel
                       active={params?.sortedField === SortedField.amountUSD}
                       direction={params?.isDescending ? "desc" : "asc"}
@@ -261,7 +278,13 @@ const PaymentHistory = memo(({ }: Props) => {
                       </TableCell>
                       <TableCell>
                         <ParagraphBody className={classes.cellText}>
-                          {moment(item.completedDate).format("DD-MM-yyyy")}
+                           {item.completedDate && moment(item.completedDate).format("DD-MM-yyyy")}
+                        </ParagraphBody>
+                      </TableCell>
+                       <TableCell>
+                        <ParagraphBody className={classes.cellText}>
+                          {item?.schedule?.start && moment(item.schedule.start).format("MM/yyyy")}
+                          {item?.schedule?.end && ` - ${moment(item.schedule.end).format("MM/yyyy")}`}
                         </ParagraphBody>
                       </TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>

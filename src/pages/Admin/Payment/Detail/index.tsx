@@ -168,7 +168,9 @@ const Detail = memo(({ }: Props) => {
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>VAT Rate:</span> {payment.vatRate * 100 || 0}%</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Created Time:</span> {payment.createdAt && moment(payment.createdAt).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
                         <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Completed Time:</span> {payment.completedDate && moment(payment.completedDate).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
-                        <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Cancel Time:</span> {payment.cancelledDate && moment(payment.cancelledDate).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Cancel Time:</span> {payment.cancelledDate && moment(payment.cancelledDate).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>Start Date:</span> {payment.schedule.start && moment(payment.schedule.start).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
+                        <Grid item xs={12} sm={6}><Typography mb={2} variant="subtitle1" sx={{ fontWeight: 500 }}><span className={classes.subtitle}>End Date:</span> {payment.schedule.end && moment(payment.schedule.end).format("DD-MM-YYYY HH:ss")}</Typography></Grid>
                       </Grid>
                     </Box>
                     <Box px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
