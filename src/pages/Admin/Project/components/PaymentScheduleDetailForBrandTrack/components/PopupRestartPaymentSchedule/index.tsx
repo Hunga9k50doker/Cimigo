@@ -163,35 +163,27 @@ const PopupRestartPaymentSchedule = (props: Props) => {
                                         <ParagraphSmall $colorName="--gray-80">
                                             Start
                                         </ParagraphSmall>
-                                        <Controller
-                                            name={`paymentSchedules.${index}.start`}
-                                            control={control}
-                                            render={({ field }) => <DatePicker
-                                                inputFormat="MM/YYYY"
-                                                disabled
-                                                value={field.value}
-                                                onChange={field.onChange}
-                                                renderInput={(params) => <TextField fullWidth {...params} classes={{ root: classesInputs.inputTextfield }} />}
-                                            />}
+                                        <Inputs
+                                            className={classes.inputField}
+                                            placeholder={"Start time"}
+                                            value={moment(paymentSchedule.startDate).format("MM/YYYY")}
+                                            type="text"
+                                            autoComplete="off"
+                                            disabled
                                         />
-                                        {!!errors.paymentSchedules?.[index]?.start?.message && (<ErrorMessage>{errors.paymentSchedules?.[index]?.start?.message}</ErrorMessage>)}
                                     </Grid>
                                     <Grid item xs={12}>
                                         <ParagraphSmall $colorName="--gray-80">
                                             End
                                         </ParagraphSmall>
-                                        <Controller
-                                            name={`paymentSchedules.${index}.end`}
-                                            control={control}
-                                            render={({ field }) => <DatePicker
-                                                inputFormat="MM/YYYY"
-                                                disabled
-                                                value={field.value}
-                                                onChange={field.onChange}
-                                                renderInput={(params) => <TextField fullWidth {...params} classes={{ root: classesInputs.inputTextfield }} />}
-                                            />}
+                                        <Inputs
+                                            className={classes.inputField}
+                                            placeholder={"End time"}
+                                            value={moment(paymentSchedule.endDate).format("MM/YYYY")}
+                                            type="text"
+                                            autoComplete="off"
+                                            disabled
                                         />
-                                        {!!errors.paymentSchedules?.[index]?.end?.message && (<ErrorMessage>{errors.paymentSchedules?.[index]?.end?.message}</ErrorMessage>)}
                                     </Grid>
                                     <Grid item xs={12}>
                                         <ParagraphSmall $colorName="--gray-80">
@@ -202,8 +194,7 @@ const PopupRestartPaymentSchedule = (props: Props) => {
                                             placeholder={"Amount of payment schedule"}
                                             type="text"
                                             autoComplete="off"
-                                            inputRef={register(`paymentSchedules.${index}.amount`)}
-                                            errorMessage={errors.paymentSchedules?.[index]?.amount?.message}
+                                            value={`${paymentSchedule.amount}`}
                                             disabled
                                         />
                                     </Grid>
@@ -259,7 +250,7 @@ const PopupRestartPaymentSchedule = (props: Props) => {
                         translation-key="common_cancel"
                         children={<TextBtnSmall>Cancel</TextBtnSmall>}
                         className={classes.btnCancel}
-                        onClick={onClose}
+                        onClick={_onClose}
                     />
                     <Button
                         btnType={BtnType.Raised}
