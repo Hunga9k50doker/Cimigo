@@ -97,18 +97,18 @@ const InputSelect = memo((props: InputSelectProps) => {
         return t(option["translation"])
       default:
         return option[bindLabel || 'name']
-        }
     }
+  }
 
   return (
     <FormControl classes={{ root: classes.container }} sx={{ width: fullWidth ? '100%' : 'auto' }}>
       {title && <TextTitle invalid={errorMessage}>{title} {optional && <span className={classes.optional}>({t('common_optional')})</span>}</TextTitle>}
       {
         control ? (
-        <>
-          <Controller
-            name={name}
-            control={control}
+          <>
+            <Controller
+              name={name}
+              control={control}
               render={({ field }) => <Select
                 {...field}
                 styles={customStyles(!!errorMessage)}
@@ -117,18 +117,18 @@ const InputSelect = memo((props: InputSelectProps) => {
                 components={{ DropdownIndicator, Option, SingleValue }}
                 {...selectProps}
               />}
-          />
-        </>
-      ) : (
-        <>
-          <Select
-            styles={customStyles(!!errorMessage)}
+            />
+          </>
+        ) : (
+          <>
+            <Select
+              styles={customStyles(!!errorMessage)}
               getOptionValue={(option) => option[bindKey || 'id']}
-            getOptionLabel={(option) => getOptionLabel(option)}
-            components={{ DropdownIndicator, Option, SingleValue }}
-            {...selectProps}
-          />
-        </>
+              getOptionLabel={(option) => getOptionLabel(option)}
+              components={{ DropdownIndicator, Option, SingleValue }}
+              {...selectProps}
+            />
+          </>
         )
       }
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
