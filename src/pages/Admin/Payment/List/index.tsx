@@ -33,6 +33,7 @@ const tableHeaders: TableHeaderLabel[] = [
   { name: 'orderCreatedTime', label: 'Created Time', sortable: false },
   { name: 'orderCompletedTime', label: 'Completed Time', sortable: false },
   { name: 'orderCancelTime', label: 'Cancel Time', sortable: false },
+  { name: 'description', label: 'Description', sortable: false },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
 
@@ -368,6 +369,11 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                           </TableCell>
                           <TableCell>
                             {item.cancelledDate && moment(item.cancelledDate).format("DD-MM-YYYY HH:ss")}
+                          </TableCell>
+                          <TableCell >
+                            {item.schedule?.start && moment(item.schedule.start).format("DD/MM/YYYY HH:ss")}
+                            {item.schedule?.end && `- ${moment(item.schedule.end).format("DD/MM/YYYY HH:ss")}`}
+                            {item.schedule?.turn && `Turn ${moment(item.schedule.turn).format("DD/MM/YYYY HH:ss")}`}
                           </TableCell>
                           <TableCell>
                             <IconButton

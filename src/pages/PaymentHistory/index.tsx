@@ -151,7 +151,7 @@ const PaymentHistory = memo(({ }: Props) => {
       <Grid className={classes.root}>
         <Grid className={classes.main}>
           <Grid className={classes.headerContainer}>
-            <Heading2 translation-key="payment_history_title">{t("payment_history_title")}</Heading2>
+            <Heading2 sx={{whiteSpace:"nowrap"}} translation-key="payment_history_title">{t("payment_history_title")}</Heading2>
             <Grid className={classes.inputContainer}>
               <InputSearch
                 translation-key-placeholder="payment_history_placeholder_search_invoice"
@@ -282,9 +282,10 @@ const PaymentHistory = memo(({ }: Props) => {
                         </ParagraphBody>
                       </TableCell>
                        <TableCell>
-                        <ParagraphBody className={classes.cellText}>
+                        <ParagraphBody className={classes.cellText} translation-key="brand_track_turn_title">
                           {item?.schedule?.start && moment(item.schedule.start).format("MM/yyyy")}
                           {item?.schedule?.end && ` - ${moment(item.schedule.end).format("MM/yyyy")}`}
+                          {item?.schedule?.turn && ` (${t('brand_track_turn_title')} ${item?.schedule?.turn})`}
                         </ParagraphBody>
                       </TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>
