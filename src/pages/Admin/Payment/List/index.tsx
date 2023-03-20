@@ -373,7 +373,7 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                           <TableCell >
                             {item.schedule?.start && moment(item.schedule.start).format("DD/MM/YYYY HH:ss")}
                             {item.schedule?.end && `- ${moment(item.schedule.end).format("DD/MM/YYYY HH:ss")}`}
-                            {item.schedule?.turn && `Turn ${moment(item.schedule.turn).format("DD/MM/YYYY HH:ss")}`}
+                            {item.schedule?.turn && ` (Turn ${item.schedule.turn})`}
                           </TableCell>
                           <TableCell>
                             <IconButton
