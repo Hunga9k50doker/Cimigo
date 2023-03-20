@@ -27,12 +27,14 @@ import DetailSurveySetupForPack from "../components/DetailSurveySetupForPack"
 import DetailSurveySetupForVideoChoice from "../components/DetailSurveySetupForVideoChoice"
 import DetailSurveySetupForBrandTrack from "../components/DetailSurveySetupForBrandTrack"
 import PaymentScheduleDetailForBrandTrack from "../components/PaymentScheduleDetailForBrandTrack"
+import ResultTab from "../components/ResultTab";
 
 enum ETab {
   SETUP_SURVEY,
   TARGET,
   QUOTAS,
-  PAYMENT
+  PAYMENT,
+  RESULT
 }
 
 interface Props {
@@ -256,6 +258,9 @@ const Detail = memo(({ }: Props) => {
                   <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Target</Typography>} />
                   <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Quotas</Typography>} />
                   <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Payment</Typography>} />
+                  {
+                    project?.solution?.typeId === ESOLUTION_TYPE.BRAND_TRACKING && <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Result</Typography>} />
+                  }
                 </Tabs>
               </Box>
               <TabPanel value={activeTab} index={ETab.SETUP_SURVEY}>
@@ -552,6 +557,13 @@ const Detail = memo(({ }: Props) => {
                     )
                 }
               </TabPanel>
+              {
+                project?.solution?.typeId === ESOLUTION_TYPE.BRAND_TRACKING && (
+                  <TabPanel value={activeTab} index={ETab.RESULT}>
+                      <ResultTab project={project}/>
+                  </TabPanel>
+                )
+              }
             </CardContent>
           </Card>
         </Grid>

@@ -215,6 +215,10 @@ export const API = {
       RESTART: '/v1.0/admin/payment-schedule/restart',
       PREVIEW_RESTART: '/v1.0/admin/payment-schedule/preview-restart',
     },
+    PROJECT_RESULT: {
+      DEFAULT: '/v1.0/admin/project-result',
+      DETAIL: '/v1.0/admin/project-result/:id',
+    },
     USER: {
       DEFAULT: '/v1.0/admin/user',
     },
