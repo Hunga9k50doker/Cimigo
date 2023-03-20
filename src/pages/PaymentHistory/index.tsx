@@ -216,22 +216,12 @@ const PaymentHistory = memo(({ }: Props) => {
                       </Heading5>
                     </TableSortLabel>
                   </TableCell>
-                   <TableCell sx={{ textAlign: 'center' }}>
-                    <TableSortLabel
-                      active={params?.sortedField === SortedField.amountUSD}
-                      direction={params?.isDescending ? "desc" : "asc"}
-                      onClick={() => {
-                        onChangeSort(SortedField.amountUSD);
-                      }}
-                      IconComponent={ArrowDropdownIcon}
-                      className={classes.tableLabel}
-                    >
+                   <TableCell sx={{ textAlign: 'center' }} className={classes.tableLabel}>
                       <Heading5
-                        translation-key="payment_history_amount"
+                        translation-key="payment_history_description"
                       >
                         {t("payment_history_description")}
                       </Heading5>
-                    </TableSortLabel>
                   </TableCell>
                    <TableCell sx={{ textAlign: 'center' }}>
                     <TableSortLabel
