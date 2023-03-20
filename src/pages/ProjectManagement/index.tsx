@@ -113,7 +113,6 @@ const ProjectManagement = memo((props: Props) => {
   const [folderEdit, setFolderEdit] = useState<Folder>(null);
   const [folderDelete, setFolderDelete] = useState<Folder>(null);
   const [createFolder, setCreateFolder] = useState(false);
- console.log(data, "dhjkasdhsadashdssjkh");
   const fetchData = async () => {
     dispatch(setLoading(true));
     await ProjectService.getMyProjects(params)

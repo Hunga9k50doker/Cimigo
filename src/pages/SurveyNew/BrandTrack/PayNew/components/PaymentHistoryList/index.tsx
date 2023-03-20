@@ -111,11 +111,10 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
             {
                 listPaymentHistory?.data?.length ? (
                     <Grid className={classes.paymentHistory}>
-                        <Grid pt={6}>
+                        <Grid>
                             <Heading4 $fontWeight={"400"} $colorName={"--eerie-black"} translation-key="brand_track_your_next_payment_title_list_payment_history">
                                 {t("brand_track_your_next_payment_title_list_payment_history")}
                             </Heading4>
-
                             <Grid className={classes.listPayemnt} pt={2}>
                                 {listPaymentHistory.data.map((itemPaymentHistory) => (
                                     <Box
@@ -184,7 +183,7 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
                         </Grid>
                     </Grid>
                 ) : (
-                    <Grid className={classes.paymentHistory} pt={6}>
+                    <Grid className={classes.paymentHistory}>
                         <Heading4 $fontWeight={"400"} $colorName={"--gray-black"} translation-key="brand_track_your_next_payment_title_list_payment_history">
                             {t("brand_track_your_next_payment_title_list_payment_history")}
                         </Heading4>
