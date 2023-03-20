@@ -141,8 +141,7 @@ const PaymentHistoryList = memo((props: PaymentHistoryListProps) => {
                                                     <Grid className={classes.date}>
                                                         <CalendarMonthOutlinedIcon sx={{color: "var(--gray-80)"}} />
                                                         <span>
-                                                        {moment(itemPaymentHistory.completedDate ?? new Date())
-                                                            .format("MMM DD, yyyy")}
+                                                        {moment(itemPaymentHistory.completedDate).format("MMM DD, yyyy")}
                                                         </span>
                                                     </Grid>
                                                 </Grid>
