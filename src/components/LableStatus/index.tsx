@@ -35,7 +35,7 @@ const LabelStatus = memo((props: LabelStatusProps) => {
         className,
         typeStatus === ProjectStatus.AWAIT_PAYMENT ? classes.red : "",
         typeStatus === ProjectStatus.DRAFT ? classes.gray : "",
-        typeStatus === ProjectStatus.IN_PROGRESS ? classes.green : "",
+        typeStatus === ProjectStatus.IN_PROGRESS ? classes.green  : "",
         typeStatus === ProjectStatus.COMPLETED ? classes.green : "",
       )}
     >
