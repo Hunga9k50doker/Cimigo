@@ -1,6 +1,6 @@
 import { Box, Grid, Paper, TableBody, Menu, MenuItem, TableCell, TableHead, TableRow, Tooltip, Typography, IconButton } from "@mui/material"
 import { Project } from "models/project"
-import { memo, useMemo, useState, useEffect } from "react"
+import { memo, useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes"
 import { TableCustom } from ".."
@@ -45,7 +45,6 @@ interface RestartScheduleForm {
 }
 
 const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }: Props) => {
-    const { getCostCurrency } = usePrice();
     const dispatch = useDispatch()
     const [paymentScheduleList, setPaymentScheduleList] = useState<PaymentSchedule[]>([])
     const [itemAction, setItemAction] = useState<PaymentSchedule>();
@@ -201,9 +200,9 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }:
                                         <TableCell>{moment(item.end).format("MMM yyyy").toUpperCase()}</TableCell>
                                         <TableCell>{moment(item.dueDate).format("MMMM DD, yyyy")}</TableCell>
                                         <TableCell><PaymentScheduleStatus status={item.status} /></TableCell>
-                                        <TableCell>{fCurrencyVND(item.amount)} ({getCostCurrency(item?.totalAmount)?.USDShow})</TableCell>
+                                        <TableCell>{fCurrencyVND(item.amount)} ({fCurrency(item?.totalAmountUSD)})</TableCell>
                                         <TableCell>{fCurrencyVND(item.vat)} ({fCurrency(item.vatUSD)})</TableCell>
-                                        <TableCell>{fCurrencyVND(item.totalAmount)} ({getCostCurrency(item?.totalAmount)?.USDShow})</TableCell>
+                                        <TableCell>{fCurrencyVND(item.totalAmount)} ({fCurrency(item?.totalAmountUSD)})</TableCell>
                                         <TableCell>{fCurrencyVND(item.systemConfig.usdToVND)}</TableCell>
                                         <TableCell>{item?.payments?.length ? item.payments[0].orderId : null}</TableCell>
                                         <TableCell>
@@ -225,9 +224,7 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }:
                             </TableBody>
                         </TableCustom>
                     </Box>
-                    {
-                     EPaymentScheduleStatus.CANCEL !== itemAction?.status && (
-                        <Menu
+                    <Menu
                             transformOrigin={{
                                 vertical: 'top',
                                 horizontal: 'right',
@@ -287,9 +284,7 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }:
                                     </Grid>
                                 )
                             }
-                        </Menu>
-                        )
-                    }
+                    </Menu>
                     <PopupEditPaymentSchedule
                         isOpen={isOpenEditPaymentSchedulePopup}
                         onClose={onClosePopupEditPaymentSchedule}
