@@ -519,10 +519,10 @@ const ProjectManagement = memo((props: Props) => {
                         className={classes.itemStatus}
                         key={item.id}
                         value={item.id}
-                        translation-key={item.id === ProjectStatus.COMPLETED ? item.translation(item.name) : item.translation}
+                        translation-key={typeof item.translation === 'function' ? item.translation(item.name) : item.translation}
                       >
                         <ParagraphBody pr={1} $colorName="--gray-80">
-                          {t(item.id === ProjectStatus.COMPLETED ? item.translation(item.id) : item.translation)}
+                          {t(typeof item.translation === 'function' ? item.translation(item.id) : item.translation)}
                         </ParagraphBody>
                       </MenuItem>
                     ))}
@@ -607,7 +607,6 @@ const ProjectManagement = memo((props: Props) => {
                   </TableCell>
                 </TableRow>
               </TableHead>
-              {console.log(data)}
               <TableBody>
                 {data?.data?.length ? (
                   data?.data?.map((item) => (

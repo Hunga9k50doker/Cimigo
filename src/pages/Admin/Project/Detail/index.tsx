@@ -235,7 +235,7 @@ const Detail = memo(({ }: Props) => {
                   <Typography mb={4} ml={4} variant="h6" sx={{ fontWeight: 500 }}>Survey language: <span className={classes.valueBox}>{langSupports.find(it => it.key === project?.surveyLanguage)?.name}</span></Typography>
 
                 </Box>
-                {project && <LabelStatus typeStatus={project.status} typeBrand={project.solution.typeId} />}
+                {project && <LabelStatus typeStatus={project.status} solutionTypeId={project.solution.typeId} />}
               </Box>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={activeTab} onChange={handleChange}>

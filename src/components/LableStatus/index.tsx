@@ -7,12 +7,12 @@ import { ESOLUTION_TYPE } from 'models/solution';
 interface LabelStatusProps {
   typeStatus: ProjectStatus,
   className?: string,
-  typeBrand?:number
+  solutionTypeId?:number
 }
 
 const LabelStatus = memo((props: LabelStatusProps) => {
   const { t } = useTranslation()
-  const { typeStatus, className, typeBrand } = props;
+  const { typeStatus, className, solutionTypeId } = props;
 
   const statusLabel = () => {
     switch (typeStatus) {
@@ -23,7 +23,7 @@ const LabelStatus = memo((props: LabelStatusProps) => {
       case ProjectStatus.IN_PROGRESS:
         return t('project_status_in_progress')
       case ProjectStatus.COMPLETED:
-        return typeBrand === ESOLUTION_TYPE.BRAND_TRACKING ? t('brand_track_project_status_completed') : t("project_status_completed");
+        return solutionTypeId === ESOLUTION_TYPE.BRAND_TRACKING ? t("brand_track_project_status_completed") : t("project_status_completed");
       default: return typeStatus;
     }
   };
@@ -35,7 +35,7 @@ const LabelStatus = memo((props: LabelStatusProps) => {
         className,
         typeStatus === ProjectStatus.AWAIT_PAYMENT ? classes.red : "",
         typeStatus === ProjectStatus.DRAFT ? classes.gray : "",
-        typeStatus === ProjectStatus.IN_PROGRESS ? classes.green  : "",
+        typeStatus === ProjectStatus.IN_PROGRESS ? classes.green : "",
         typeStatus === ProjectStatus.COMPLETED ? classes.green : "",
       )}
     >
