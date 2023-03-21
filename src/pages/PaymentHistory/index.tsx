@@ -273,9 +273,9 @@ const PaymentHistory = memo(({ }: Props) => {
                       </TableCell>
                        <TableCell>
                         <ParagraphBody className={classes.cellText} translation-key="brand_track_turn_title">
-                          {item?.schedule?.start && moment(item.schedule.start).format("MM/yyyy")}
-                          {item?.schedule?.end && ` - ${moment(item.schedule.end).format("MM/yyyy")}`}
-                          {item?.schedule?.turn && ` (${t('brand_track_turn_title')} ${item?.schedule?.turn})`}
+                          {item.schedule && moment(item.schedule.start).format("MM/yyyy")}
+                          {item.schedule && ` - ${moment(item.schedule.end).format("MM/yyyy")}`}
+                          {item.schedule && ` (${t('brand_track_turn_title')} ${item?.schedule?.turn})`}
                         </ParagraphBody>
                       </TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>

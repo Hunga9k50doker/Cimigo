@@ -371,9 +371,9 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                             {item.cancelledDate && moment(item.cancelledDate).format("DD-MM-YYYY HH:ss")}
                           </TableCell>
                           <TableCell >
-                            {item.schedule?.start && moment(item.schedule.start).format("DD/MM/YYYY HH:ss")}
-                            {item.schedule?.end && `- ${moment(item.schedule.end).format("DD/MM/YYYY HH:ss")}`}
-                            {item.schedule?.turn && ` (Turn ${item.schedule.turn})`}
+                            {item.schedule && moment(item.schedule.start).format("DD/MM/YYYY HH:ss")}
+                            {item.schedule && `- ${moment(item.schedule.end).format("DD/MM/YYYY HH:ss")}`}
+                            {item.schedule && ` (Turn ${item.schedule.turn})`}
                           </TableCell>
                           <TableCell>
                             <IconButton
@@ -393,7 +393,7 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={9}>
+                      <TableCell align="center" colSpan={10}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>
