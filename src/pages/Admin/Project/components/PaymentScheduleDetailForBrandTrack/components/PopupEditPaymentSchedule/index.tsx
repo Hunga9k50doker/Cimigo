@@ -39,11 +39,11 @@ const PopupEditPaymentSchedule = (props: Props) => {
 
     const schema = useMemo(() => {
         return yup.object().shape({
-            amount: yup.number().required('Amount is required'),
-            dueDate: yup.date().required('Due date is required'),
+          amount: yup.number().required("Amount is required").typeError("Amount is required."),
+          dueDate: yup.date().required("Due date is required").typeError("Invalid Date"),
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isOpen]);
 
     const {
         register,
@@ -102,7 +102,7 @@ const PopupEditPaymentSchedule = (props: Props) => {
                             <Inputs
                                 className={classes.inputField}
                                 placeholder={"Amount of payment schedule"}
-                                type="text"
+                                type="number"
                                 autoComplete="off"
                                 inputRef={register("amount")}
                                 errorMessage={errors.amount?.message}
