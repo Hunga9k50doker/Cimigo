@@ -3,11 +3,11 @@ import classes from './styles.module.scss';
 import clsx from "clsx";
 import { ProjectStatus } from "models/project";
 import { useTranslation } from "react-i18next";
-
+import { ESOLUTION_TYPE } from 'models/solution';
 interface LabelStatusProps {
   typeStatus: ProjectStatus,
   className?: string,
-  typeBrand?:string
+  typeBrand?:number
 }
 
 const LabelStatus = memo((props: LabelStatusProps) => {
@@ -23,7 +23,7 @@ const LabelStatus = memo((props: LabelStatusProps) => {
       case ProjectStatus.IN_PROGRESS:
         return t('project_status_in_progress')
       case ProjectStatus.COMPLETED:
-        return typeBrand === "Brand traking" ? t('brand_track_project_status_completed') : t("project_status_completed");
+        return typeBrand === ESOLUTION_TYPE.BRAND_TRACKING ? t('brand_track_project_status_completed') : t("project_status_completed");
       default: return typeStatus;
     }
   };

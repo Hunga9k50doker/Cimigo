@@ -522,8 +522,7 @@ const ProjectManagement = memo((props: Props) => {
                         translation-key={item.id === ProjectStatus.COMPLETED ? item.translation(item.name) : item.translation}
                       >
                         <ParagraphBody pr={1} $colorName="--gray-80">
-                          {" "}
-                          {t(item.id === ProjectStatus.COMPLETED ? item.translation(item.name) : item.translation)}
+                          {t(item.id === ProjectStatus.COMPLETED ? item.translation(item.id) : item.translation)}
                         </ParagraphBody>
                       </MenuItem>
                     ))}
@@ -608,6 +607,7 @@ const ProjectManagement = memo((props: Props) => {
                   </TableCell>
                 </TableRow>
               </TableHead>
+              {console.log(data)}
               <TableBody>
                 {data?.data?.length ? (
                   data?.data?.map((item) => (
@@ -624,7 +624,7 @@ const ProjectManagement = memo((props: Props) => {
                       <TableCell>
                         <ChipProjectStatus
                           status={item.status}
-                          type={item?.solution?.title}
+                          type={item?.solution?.typeId}
                         ></ChipProjectStatus>
                       </TableCell>
                       <TableCell>
@@ -823,7 +823,7 @@ const ProjectManagement = memo((props: Props) => {
                 <div>
                   <p className={classes.itemNameMobile}>{item.name}</p>
                   <Grid sx={{ padding: "8px 0px 4px 0px" }}>
-                    <ChipProjectStatus status={item.status} type={item?.solution?.title}></ChipProjectStatus>
+                    <ChipProjectStatus status={item.status} type={item?.solution?.typeId}></ChipProjectStatus>
                   </Grid>
 
                   <Grid

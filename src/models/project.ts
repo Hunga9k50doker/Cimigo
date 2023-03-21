@@ -15,6 +15,8 @@ import { Video } from './video';
 import { ProjectBrand } from './project_brand';
 import { BrandAsset } from './brand_asset';
 import { EPaymentScheduleCancelType, PaymentSchedule } from './payment_schedule';
+import { ESOLUTION_TYPE } from "./solution";
+
 export interface CreateProjectData {
   solutionId: number;
   planId: number;
@@ -89,9 +91,9 @@ export const projectStatus: OptionItem[] = [
   { id: ProjectStatus.AWAIT_PAYMENT, name: 'Awaiting payment', translation: 'project_status_await_payment' },
   { id: ProjectStatus.IN_PROGRESS, name: 'Launching', translation: 'project_status_in_progress' },
   {
-    id: ProjectStatus.COMPLETED, name: 'Results ready', translation: (type:string) => {
+    id: ProjectStatus.COMPLETED, name: 'Results ready', translation: (type:number) => {
     switch (type) {
-      case 'Brand tracking':
+      case ESOLUTION_TYPE.BRAND_TRACKING:
         return "brand_track_project_status_completed";
       default:
         return "project_status_completed";
