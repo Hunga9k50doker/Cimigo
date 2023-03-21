@@ -12,10 +12,10 @@ import { ESOLUTION_TYPE } from "models/solution";
 
 interface ProjectStatusProps extends ChipProps {
   status: ProjectStatus
-  type: number;
+  solutionTypeId: number;
 }
 
-export const ChipProjectStatus = memo(({ status, className, type,  ...rest }: ProjectStatusProps) => {
+export const ChipProjectStatus = memo(({ status, className, solutionTypeId,  ...rest }: ProjectStatusProps) => {
   const { t } = useTranslation()
   const statusLabel = useMemo(() => {
     switch (status) {
@@ -26,7 +26,7 @@ export const ChipProjectStatus = memo(({ status, className, type,  ...rest }: Pr
       case ProjectStatus.IN_PROGRESS:
         return t('project_status_in_progress')
       case ProjectStatus.COMPLETED:
-        return type === ESOLUTION_TYPE.BRAND_TRACKING ? t("brand_track_project_status_completed") : t("project_status_completed");
+        return solutionTypeId === ESOLUTION_TYPE.BRAND_TRACKING ? t("brand_track_project_status_completed") : t("project_status_completed");
     }
   }, [status]);
 
