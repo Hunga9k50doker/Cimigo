@@ -371,9 +371,7 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                             {item.cancelledDate && moment(item.cancelledDate).format("DD-MM-YYYY HH:ss")}
                           </TableCell>
                           <TableCell >
-                            {item.schedule && moment(item.schedule.start).format("DD/MM/YYYY HH:ss")}
-                            {item.schedule && `- ${moment(item.schedule.end).format("DD/MM/YYYY HH:ss")}`}
-                            {item.schedule && ` (Turn ${item.schedule.turn})`}
+                            {item.schedule && `${moment(item.schedule.start).format("DD/MM/YYYY HH:ss")} - ${moment(item.schedule.end).format("DD/MM/YYYY HH:ss")} (Turn ${item.schedule.turn})`}
                           </TableCell>
                           <TableCell>
                             <IconButton

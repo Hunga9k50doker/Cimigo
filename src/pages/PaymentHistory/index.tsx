@@ -273,9 +273,7 @@ const PaymentHistory = memo(({ }: Props) => {
                       </TableCell>
                        <TableCell>
                         <ParagraphBody className={classes.cellText} translation-key="brand_track_turn_title">
-                          {item.schedule && moment(item.schedule.start).format("MM/yyyy")}
-                          {item.schedule && ` - ${moment(item.schedule.end).format("MM/yyyy")}`}
-                          {item.schedule && ` (${t('brand_track_turn_title')} ${item?.schedule?.turn})`}
+                          {item.schedule && `${moment(item.schedule.start).format("MM/yyyy")} - ${moment(item.schedule.end).format("MM/yyyy")} (${t('brand_track_turn_title')} ${item?.schedule?.turn})`}
                         </ParagraphBody>
                       </TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>
@@ -295,7 +293,7 @@ const PaymentHistory = memo(({ }: Props) => {
                   ))
                 ) : (
                   <TableRow className={classes.tableBody}>
-                    <TableCell align="center" colSpan={6}>
+                    <TableCell align="center" colSpan={7}>
                       <Box sx={{ py: 3 }}>
                         <SearchNotFound
                           messs={t("project_mgmt_project_not_found")}
