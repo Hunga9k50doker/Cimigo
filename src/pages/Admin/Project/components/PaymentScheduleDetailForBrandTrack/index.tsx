@@ -20,7 +20,6 @@ import { AdminProjectService } from 'services/admin/project';
 import { FileUpload } from "models/attachment";
 import Buttons from 'components/Buttons';
 import ProjectHelper from "helpers/project"
-import { usePrice } from "helpers/price";
 export interface Props {
     project?: Project,
     reloadProjectInfo?: () => Promise<void>
@@ -200,9 +199,9 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }:
                                         <TableCell>{moment(item.end).format("MMM yyyy").toUpperCase()}</TableCell>
                                         <TableCell>{moment(item.dueDate).format("MMMM DD, yyyy")}</TableCell>
                                         <TableCell><PaymentScheduleStatus status={item.status} /></TableCell>
-                                        <TableCell>{fCurrencyVND(item.amount)} ({fCurrency(item?.totalAmountUSD)})</TableCell>
+                                        <TableCell>{fCurrencyVND(item.amount)} ({fCurrency(item.totalAmountUSD)})</TableCell>
                                         <TableCell>{fCurrencyVND(item.vat)} ({fCurrency(item.vatUSD)})</TableCell>
-                                        <TableCell>{fCurrencyVND(item.totalAmount)} ({fCurrency(item?.totalAmountUSD)})</TableCell>
+                                        <TableCell>{fCurrencyVND(item.totalAmount)} ({fCurrency(item.totalAmountUSD)})</TableCell>
                                         <TableCell>{fCurrencyVND(item.systemConfig.usdToVND)}</TableCell>
                                         <TableCell>{item?.payments?.length ? item.payments[0].orderId : null}</TableCell>
                                         <TableCell>
