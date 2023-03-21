@@ -45,6 +45,7 @@ interface RestartScheduleForm {
 }
 
 const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }: Props) => {
+    
     const dispatch = useDispatch()
     const [paymentScheduleList, setPaymentScheduleList] = useState<PaymentSchedule[]>([])
     const [itemAction, setItemAction] = useState<PaymentSchedule>();
