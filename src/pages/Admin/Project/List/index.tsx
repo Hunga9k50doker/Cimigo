@@ -298,7 +298,7 @@ const List = memo(({ sort, setSort, keyword, setKeyword, data, setData, filterDa
                             <Link onClick={() => onRedirectDetail(item)}>{item.name}</Link>
                           </TableCell>
                           <TableCell component="th">
-                            <LabelStatus typeStatus={item.status} />
+                            <LabelStatus typeStatus={item.status} solutionTypeId={item.solution.typeId} />
                           </TableCell>
                           <TableCell component="th">
                             {item.user && <Link onClick={() => onRedirectUserDetail(item)}>{item.user.fullName}</Link>}

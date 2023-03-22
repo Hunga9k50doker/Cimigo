@@ -67,6 +67,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { Helmet } from "react-helmet";
+import { ProjectStatus as ProjectStatus } from "models/project";
 
 const ExpandIcon = (props) => {
   return <KeyboardArrowDownIcon {...props} sx={{ color: "var(--gray-60)" }} />;
@@ -112,7 +113,6 @@ const ProjectManagement = memo((props: Props) => {
   const [folderEdit, setFolderEdit] = useState<Folder>(null);
   const [folderDelete, setFolderDelete] = useState<Folder>(null);
   const [createFolder, setCreateFolder] = useState(false);
-
   const fetchData = async () => {
     dispatch(setLoading(true));
     await ProjectService.getMyProjects(params)
@@ -519,11 +519,10 @@ const ProjectManagement = memo((props: Props) => {
                         className={classes.itemStatus}
                         key={item.id}
                         value={item.id}
-                        translation-key={item.translation}
+                        translation-key={typeof item.translation === 'function' ? item.translation(item.name) : item.translation}
                       >
                         <ParagraphBody pr={1} $colorName="--gray-80">
-                          {" "}
-                          {t(item.translation)}
+                          {t(typeof item.translation === 'function' ? item.translation(item.id) : item.translation)}
                         </ParagraphBody>
                       </MenuItem>
                     ))}
@@ -624,6 +623,7 @@ const ProjectManagement = memo((props: Props) => {
                       <TableCell>
                         <ChipProjectStatus
                           status={item.status}
+                          solutionTypeId={item?.solution?.typeId}
                         ></ChipProjectStatus>
                       </TableCell>
                       <TableCell>
@@ -822,7 +822,7 @@ const ProjectManagement = memo((props: Props) => {
                 <div>
                   <p className={classes.itemNameMobile}>{item.name}</p>
                   <Grid sx={{ padding: "8px 0px 4px 0px" }}>
-                    <ChipProjectStatus status={item.status}></ChipProjectStatus>
+                    <ChipProjectStatus status={item.status} solutionTypeId={item?.solution?.typeId}></ChipProjectStatus>
                   </Grid>
 
                   <Grid

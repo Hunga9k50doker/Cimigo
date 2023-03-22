@@ -3,14 +3,16 @@ import classes from './styles.module.scss';
 import clsx from "clsx";
 import { ProjectStatus } from "models/project";
 import { useTranslation } from "react-i18next";
-
+import { ESOLUTION_TYPE } from 'models/solution';
 interface LabelStatusProps {
   typeStatus: ProjectStatus,
-  className?: string
+  className?: string,
+  solutionTypeId?:number
 }
 
 const LabelStatus = memo((props: LabelStatusProps) => {
   const { t } = useTranslation()
+  const { typeStatus, className, solutionTypeId } = props;
 
   const statusLabel = () => {
     switch (typeStatus) {
@@ -21,11 +23,10 @@ const LabelStatus = memo((props: LabelStatusProps) => {
       case ProjectStatus.IN_PROGRESS:
         return t('project_status_in_progress')
       case ProjectStatus.COMPLETED:
-        return t('project_status_completed')
+        return solutionTypeId === ESOLUTION_TYPE.BRAND_TRACKING ? t("brand_track_project_status_completed") : t("project_status_completed");
       default: return typeStatus;
     }
   };
-  const { typeStatus, className } = props;
 
   return (
     <div

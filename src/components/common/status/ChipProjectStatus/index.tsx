@@ -3,19 +3,20 @@ import clsx from "clsx";
 import Heading6 from "components/common/text/Heading6";
 import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import BasicTooltip from "components/common/tooltip/BasicTooltip";
-import { ProjectStatus as ProjectStatus } from "models/project";
+import { ProjectStatus } from "models/project";
 import { memo, useMemo } from "react"
 import { useTranslation } from "react-i18next";
 import classes from './styles.module.scss';
+import { ESOLUTION_TYPE } from "models/solution";
+
 
 interface ProjectStatusProps extends ChipProps {
   status: ProjectStatus
+  solutionTypeId: number;
 }
 
-export const ChipProjectStatus = memo(({ status, className, ...rest }: ProjectStatusProps) => {
-
+export const ChipProjectStatus = memo(({ status, className, solutionTypeId,  ...rest }: ProjectStatusProps) => {
   const { t } = useTranslation()
-
   const statusLabel = useMemo(() => {
     switch (status) {
       case ProjectStatus.AWAIT_PAYMENT:
@@ -25,7 +26,7 @@ export const ChipProjectStatus = memo(({ status, className, ...rest }: ProjectSt
       case ProjectStatus.IN_PROGRESS:
         return t('project_status_in_progress')
       case ProjectStatus.COMPLETED:
-        return t('project_status_completed')
+        return solutionTypeId === ESOLUTION_TYPE.BRAND_TRACKING ? t("brand_track_project_status_completed") : t("project_status_completed");
     }
   }, [status]);
 

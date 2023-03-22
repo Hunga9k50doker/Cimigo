@@ -17,6 +17,8 @@ import UploadFile from "components/UploadFile";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ErrorMessage from "components/common/text/ErrorMessage";
 import moment from "moment";
+import { ESOLUTION_TYPE } from 'models/solution';
+
 
 const schema = yup.object().shape({
   status: yup.object().required('Status is required.'),
@@ -40,7 +42,6 @@ interface Props {
 }
 
 const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
-
   const dispatch = useDispatch();
 
   const { register, handleSubmit, formState: { errors }, reset, control } = useForm<ProjectFormData>({
@@ -140,6 +141,9 @@ const ProjectForm = memo(({ itemEdit, onSubmit }: Props) => {
                       title="Status"
                       name="status"
                       control={control}
+                      translationData={itemEdit?.solutionId === ESOLUTION_TYPE.BRAND_TRACKING ?
+                        "brand_track_project_status_completed"
+                        : "project_status_completed"}
                       selectProps={{
                         menuPosition: 'fixed',
                         options: projectStatus,

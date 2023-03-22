@@ -402,7 +402,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                       {t("brand_track_your_next_payment_title_cancel_subscription")}
                     </TextBtnSmall>
                   </Grid>
-                  <Box className={classes.slidePayment} pt={4}>
+                  <Box className={classes.slidePayment} pt={3}>
                     <Grid className={classes.slidePaymentSwiper}>
                       <Box
                         className={clsx(classes.iconSlide, classes.iconSlideLeft)}
