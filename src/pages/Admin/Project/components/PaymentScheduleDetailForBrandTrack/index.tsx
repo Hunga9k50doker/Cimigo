@@ -1,6 +1,6 @@
 import { Box, Grid, Paper, TableBody, Menu, MenuItem, TableCell, TableHead, TableRow, Tooltip, Typography, IconButton } from "@mui/material"
 import { Project } from "models/project"
-import { memo, useMemo, useState, useEffect } from "react"
+import { memo, useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { setErrorMess, setLoading, setSuccessMess } from "redux/reducers/Status/actionTypes"
 import { TableCustom } from ".."
@@ -45,7 +45,7 @@ interface RestartScheduleForm {
 }
 
 const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }: Props) => {
-
+    
     const dispatch = useDispatch()
     const [paymentScheduleList, setPaymentScheduleList] = useState<PaymentSchedule[]>([])
     const [itemAction, setItemAction] = useState<PaymentSchedule>();
@@ -208,6 +208,7 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }:
                                         <TableCell>{item?.payments?.length ? item.payments[0].orderId : null}</TableCell>
                                         <TableCell>
                                             <IconButton
+                                                disabled={Boolean(EPaymentScheduleStatus.CANCEL === item?.status)}
                                                 className={clsx(classes.actionButton, {
                                                     [classes.actionButtonActive]: item.id === itemAction?.id
                                                 })}
@@ -225,65 +226,65 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }:
                         </TableCustom>
                     </Box>
                     <Menu
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        anchorEl={actionAnchor}
-                        keepMounted
-                        open={Boolean(actionAnchor)}
-                        onClose={onCloseActionMenu}
-                    >
-                        {
-                            [EPaymentScheduleStatus.NOT_PAID, EPaymentScheduleStatus.OVERDUE].includes(itemAction?.status) && (
-                                <MenuItem
-                                    sx={{ fontSize: '0.875rem' }}
-                                    onClick={handleEdit}
-                                >
-                                    <Box display="flex" alignItems={"center"}>
-                                        <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                                        <span>Edit</span>
-                                    </Box>
-                                </MenuItem>
-                            )
-                        }
-                        {
-                            itemAction?.status === EPaymentScheduleStatus.IN_PROGRESS && (
-                                <MenuItem
-                                    sx={{ fontSize: '0.875rem' }}
-                                    onClick={handleUpdateStatus}
-                                >
-                                    <Box display="flex" alignItems={"center"}>
-                                        <Check sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                                        <span>Mark as paid</span>
-                                    </Box>
-                                </MenuItem>
-                            )
-                        }
-                        {
-                            itemAction?.status === EPaymentScheduleStatus.PAID && (
-                                <>
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            anchorEl={actionAnchor}
+                            keepMounted
+                            open={Boolean(actionAnchor)}
+                            onClose={onCloseActionMenu}
+                        >
+                            {
+                                [EPaymentScheduleStatus.NOT_PAID, EPaymentScheduleStatus.OVERDUE].includes(itemAction?.status) && (
                                     <MenuItem
                                         sx={{ fontSize: '0.875rem' }}
-                                        onClick={handleUploadInvoice}
+                                        onClick={handleEdit}
                                     >
                                         <Box display="flex" alignItems={"center"}>
                                             <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                                            <span>Upload invoice</span>
+                                            <span>Edit</span>
                                         </Box>
                                     </MenuItem>
+                                )
+                            }
+                            {
+                                itemAction?.status === EPaymentScheduleStatus.IN_PROGRESS && (
                                     <MenuItem
                                         sx={{ fontSize: '0.875rem' }}
-                                        onClick={handleSendInvoiceReadyEmail}
+                                        onClick={handleUpdateStatus}
                                     >
                                         <Box display="flex" alignItems={"center"}>
-                                            <Email sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                                            <span>Send email invoice ready</span>
+                                            <Check sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                                            <span>Mark as paid</span>
                                         </Box>
                                     </MenuItem>
-                                </>
-                            )
-                        }
+                                )
+                            }
+                            {
+                                itemAction?.status === EPaymentScheduleStatus.PAID && (
+                                    <Grid>
+                                        <MenuItem
+                                            sx={{ fontSize: '0.875rem' }}
+                                            onClick={handleUploadInvoice}
+                                        >
+                                            <Box display="flex" alignItems={"center"}>
+                                                <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                                                <span>Upload invoice</span>
+                                            </Box>
+                                        </MenuItem>
+                                        <MenuItem
+                                            sx={{ fontSize: '0.875rem' }}
+                                            onClick={handleSendInvoiceReadyEmail}
+                                        >
+                                            <Box display="flex" alignItems={"center"}>
+                                                <Email sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                                                <span>Send email invoice ready</span>
+                                            </Box>
+                                        </MenuItem>
+                                    </Grid>
+                                )
+                            }
                     </Menu>
                     <PopupEditPaymentSchedule
                         isOpen={isOpenEditPaymentSchedulePopup}

@@ -192,7 +192,7 @@ const PopupRestartPaymentSchedule = (props: Props) => {
                                         <Inputs
                                             className={classes.inputField}
                                             placeholder={"Amount of payment schedule"}
-                                            type="text"
+                                            type="number"
                                             autoComplete="off"
                                             value={`${paymentSchedule.amount}`}
                                             disabled
@@ -217,7 +217,7 @@ const PopupRestartPaymentSchedule = (props: Props) => {
                                         <Inputs
                                             className={classes.inputField}
                                             value={`${paymentSchedule.totalAmount}`}
-                                            type="text"
+                                            type="number"
                                             autoComplete="off"
                                             disabled
                                         />
