@@ -30,8 +30,8 @@ interface ProjectResultForm {
     month: Date,
     dataStudio: string,
     report: FileUpload,
-    isReplaced: boolean,
-    isReady: boolean
+    isReplacedDataStudio: boolean,
+    isReplacedReport: boolean
 }
 interface Props {
     isOpen: boolean;
@@ -48,8 +48,8 @@ const PopupAddEditProjectResult = (props: Props) => {
         return yup.object().shape({
             dataStudio: yup.string().nullable().notRequired(),
             month: yup.date().nullable().typeError('Month is required').required('Month is required'),
-            isReplaced: yup.boolean().nullable().notRequired(),
-            isReady: yup.boolean().nullable().notRequired(),
+            isReplacedDataStudio: yup.boolean().nullable().notRequired(),
+            isReplacedReport: yup.boolean().nullable().notRequired(),
             report: yup.mixed().nullable().notRequired(),
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,8 +65,8 @@ const PopupAddEditProjectResult = (props: Props) => {
         resolver: yupResolver(schema),
         mode: "onChange",
         defaultValues: {
-            isReplaced: false,
-            isReady: false,
+            isReplacedReport: false,
+            isReplacedDataStudio: false,
             month: null
         }
     });
@@ -75,8 +75,8 @@ const PopupAddEditProjectResult = (props: Props) => {
         const form = new FormData()
         form.append('projectId', project.id.toString())
         form.append('month', moment(data.month).endOf('month').format('YYYY-MM-DD'))
-        form.append('isReplaced', data.isReplaced ? 'true' : 'false')
-        form.append('isReady', data.isReady ? 'true' : 'false')
+        form.append('isReplacedReport', data.isReplacedReport ? 'true' : 'false')
+        form.append('isReplacedDataStudio', data.isReplacedDataStudio ? 'true' : 'false')
         if (data.dataStudio) form.append('dataStudio', data.dataStudio)
         if (data.report?.file) form.append('report', data.report.file)
         onSubmit(form, itemEdit?.id)
@@ -87,8 +87,8 @@ const PopupAddEditProjectResult = (props: Props) => {
         reset({
             dataStudio: "",
             month: null,
-            isReplaced: null,
-            isReady: null,
+            isReplacedReport: null,
+            isReplacedDataStudio: null,
             report: null,
         })
     }
@@ -109,8 +109,8 @@ const PopupAddEditProjectResult = (props: Props) => {
             reset({
                 dataStudio: itemEdit.dataStudio,
                 month: itemEdit.month,
-                isReplaced: itemEdit.isReplaced,
-                isReady: itemEdit.isReady,
+                isReplacedReport: itemEdit.isReplacedReport,
+                isReplacedDataStudio: itemEdit.isReplacedDataStudio,
                 report: report
             });
         }
@@ -181,7 +181,7 @@ const PopupAddEditProjectResult = (props: Props) => {
                             <FormControlLabel
                                 control={
                                     <Controller
-                                        name="isReplaced"
+                                        name="isReplacedReport"
                                         control={control}
                                         render={({ field }) =>
                                             <InputCheckbox
@@ -197,7 +197,7 @@ const PopupAddEditProjectResult = (props: Props) => {
                             <FormControlLabel
                                 control={
                                     <Controller
-                                        name="isReady"
+                                        name="isReplacedDataStudio"
                                         control={control}
                                         render={({ field }) =>
                                             <InputCheckbox
@@ -206,7 +206,7 @@ const PopupAddEditProjectResult = (props: Props) => {
                                             />}
                                     />
                                 }
-                                label={<>Report is ready</>}
+                                label={<>Replaced by total data studio</>}
                             />
                         </Grid>
                         <Grid item xs={12}>

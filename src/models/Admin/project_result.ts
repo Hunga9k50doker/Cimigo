@@ -6,7 +6,8 @@ export interface ProjectResult {
     dataStudio: string,
     report?: Attachment,
     reportId: number,
-    isReplaced: boolean,
+    isReplacedReport: boolean,
+    isReplacedDataStudio: boolean,
     isReady: boolean
 }
 

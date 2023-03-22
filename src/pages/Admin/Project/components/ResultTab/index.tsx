@@ -9,7 +9,7 @@ import clsx from "clsx"
 import moment from "moment"
 import { PaymentScheduleStatus as EPaymentScheduleStatus } from "models/payment_schedule";
 import PaymentScheduleStatus from "components/PaymentScheduleStatus"
-import { EditOutlined, ExpandMoreOutlined, Check as CheckIcon, Close, DeleteOutlineOutlined } from "@mui/icons-material";
+import { EditOutlined, ExpandMoreOutlined, Check as CheckIcon, Close, DeleteOutlineOutlined, Check } from "@mui/icons-material";
 import { AdminProjectResultService } from 'services/admin/project_result';
 import { FileUpload } from "models/attachment";
 import Buttons from 'components/Buttons';
@@ -63,7 +63,7 @@ const ResultTab = memo(({ project }: Props) => {
                 .finally(() => dispatch(setLoading(false)))
         }
         else {
-            AdminProjectResultService.uploadResult(data)
+            AdminProjectResultService.createResult(data)
                 .then(async () => {
                     await getProjectResult()
                 })
@@ -106,16 +106,28 @@ const ResultTab = memo(({ project }: Props) => {
         dispatch(setLoading(true))
         AdminProjectResultService.deleteResult(itemAction.id)
             .then(async () => {
+                onCloseConfirm()
                 await getProjectResult()
             })
             .catch((e) => dispatch(setErrorMess(e)))
             .finally(() => dispatch(setLoading(false)))
-        onCloseConfirm()
     }
 
     const onShowConfirm = () => {
         if (!itemAction) return
         setItemDelete(itemAction)
+    }
+
+    const handleUpdateStatus = () => {
+        if (!itemAction) return
+        dispatch(setLoading(true))
+        AdminProjectResultService.updateStatusReady(itemAction.id)
+            .then(async () => {
+                onCloseActionMenu()
+                await getProjectResult()
+            })
+            .catch((e) => dispatch(setErrorMess(e)))
+            .finally(() => dispatch(setLoading(false)))
     }
 
     return (
@@ -125,7 +137,7 @@ const ResultTab = memo(({ project }: Props) => {
                     <Typography variant="h6" mt={2} mb={2}>
                         Total Result
                     </Typography>
-                    
+
                     <TotalResultForm project={project} />
                 </Box>
                 <Box>
@@ -141,8 +153,9 @@ const ResultTab = memo(({ project }: Props) => {
                                 <TableCell>Month</TableCell>
                                 <TableCell>Data Studio</TableCell>
                                 <TableCell>Report</TableCell>
-                                <TableCell>Replaced by total report</TableCell>
-                                <TableCell>Result ready</TableCell>
+                                <TableCell>Report replaced</TableCell>
+                                <TableCell>Data Studio replaced</TableCell>
+                                <TableCell>Is Ready ?</TableCell>
                                 <TableCell>Action</TableCell>
                             </TableRow>
                         </TableHead>
@@ -152,7 +165,8 @@ const ResultTab = memo(({ project }: Props) => {
                                     <TableCell>{moment(item.month).format("MMM yyyy").toUpperCase()}</TableCell>
                                     <TableCell>{item.dataStudio ? <CheckIcon /> : <Close />}</TableCell>
                                     <TableCell>{item.report ? <CheckIcon /> : <Close />}</TableCell>
-                                    <TableCell>{item.isReplaced ? <CheckIcon /> : <Close />}</TableCell>
+                                    <TableCell>{item.isReplacedReport ? <CheckIcon /> : <Close />}</TableCell>
+                                    <TableCell>{item.isReplacedDataStudio ? <CheckIcon /> : <Close />}</TableCell>
                                     <TableCell>{item.isReady ? <CheckIcon /> : <Close />}</TableCell>
                                     <TableCell>
                                         <IconButton
@@ -183,6 +197,19 @@ const ResultTab = memo(({ project }: Props) => {
                 open={Boolean(actionAnchor)}
                 onClose={onCloseActionMenu}
             >
+                {
+                    !itemAction?.isReady && (
+                        <MenuItem
+                            sx={{ fontSize: '0.875rem' }}
+                            onClick={handleUpdateStatus}
+                        >
+                            <Box display="flex" alignItems={"center"}>
+                                <Check sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                                <span>Mark result ready</span>
+                            </Box>
+                        </MenuItem>
+                    )
+                }
                 <MenuItem
                     sx={{ fontSize: '0.875rem' }}
                     onClick={handleEditResult}

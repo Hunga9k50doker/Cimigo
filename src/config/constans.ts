@@ -218,6 +218,7 @@ export const API = {
     PROJECT_RESULT: {
       DEFAULT: '/v1.0/admin/project-result',
       DETAIL: '/v1.0/admin/project-result/:id',
+      UPDATE_READY: '/v1.0/admin/project-result/:id/update-ready',
     },
     USER: {
       DEFAULT: '/v1.0/admin/user',

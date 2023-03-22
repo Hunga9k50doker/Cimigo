@@ -15,7 +15,7 @@ export class AdminProjectResultService {
             })
     }
 
-    static async uploadResult(data: FormData): Promise<ProjectResult[]> {
+    static async createResult(data: FormData): Promise<ProjectResult[]> {
         return await api.post(API.ADMIN.PROJECT_RESULT.DEFAULT, data, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -45,6 +45,16 @@ export class AdminProjectResultService {
 
     static async deleteResult(id: number): Promise<ProjectResult[]> {
         return await api.delete(`${API.ADMIN.PROJECT_RESULT.DETAIL.replace(':id', `${id}`)}`)
+            .then((res) => {
+                return Promise.resolve(res.data)
+            })
+            .catch((e) => {
+                return Promise.reject(e?.response?.data);
+            })
+    }
+
+    static async updateStatusReady(id: number): Promise<ProjectResult[]> {
+        return await api.put(`${API.ADMIN.PROJECT_RESULT.UPDATE_READY.replace(':id', `${id}`)}`)
             .then((res) => {
                 return Promise.resolve(res.data)
             })
