@@ -151,7 +151,7 @@ const PaymentHistory = memo(({ }: Props) => {
       <Grid className={classes.root}>
         <Grid className={classes.main}>
           <Grid className={classes.headerContainer}>
-            <Heading2 translation-key="payment_history_title">{t("payment_history_title")}</Heading2>
+            <Heading2 sx={{whiteSpace:"nowrap"}} translation-key="payment_history_title">{t("payment_history_title")}</Heading2>
             <Grid className={classes.inputContainer}>
               <InputSearch
                 translation-key-placeholder="payment_history_placeholder_search_invoice"
@@ -216,7 +216,14 @@ const PaymentHistory = memo(({ }: Props) => {
                       </Heading5>
                     </TableSortLabel>
                   </TableCell>
-                  <TableCell sx={{ textAlign: 'center' }}>
+                   <TableCell sx={{ textAlign: 'center' }} className={classes.tableLabel}>
+                      <Heading5
+                        translation-key="payment_history_description"
+                      >
+                        {t("payment_history_description")}
+                      </Heading5>
+                  </TableCell>
+                   <TableCell sx={{ textAlign: 'center' }}>
                     <TableSortLabel
                       active={params?.sortedField === SortedField.amountUSD}
                       direction={params?.isDescending ? "desc" : "asc"}
@@ -261,7 +268,12 @@ const PaymentHistory = memo(({ }: Props) => {
                       </TableCell>
                       <TableCell>
                         <ParagraphBody className={classes.cellText}>
-                          {moment(item.completedDate).format("DD-MM-yyyy")}
+                           {item.completedDate && moment(item.completedDate).format("DD-MM-yyyy")}
+                        </ParagraphBody>
+                      </TableCell>
+                       <TableCell>
+                        <ParagraphBody className={classes.cellText}>
+                          {item.schedule && `${moment(item.schedule.start).format("MM/yyyy")} - ${moment(item.schedule.end).format("MM/yyyy")}`}
                         </ParagraphBody>
                       </TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>
@@ -281,7 +293,7 @@ const PaymentHistory = memo(({ }: Props) => {
                   ))
                 ) : (
                   <TableRow className={classes.tableBody}>
-                    <TableCell align="center" colSpan={6}>
+                    <TableCell align="center" colSpan={7}>
                       <Box sx={{ py: 3 }}>
                         <SearchNotFound
                           messs={t("project_mgmt_project_not_found")}

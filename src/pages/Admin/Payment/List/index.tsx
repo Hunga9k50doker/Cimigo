@@ -33,6 +33,7 @@ const tableHeaders: TableHeaderLabel[] = [
   { name: 'orderCreatedTime', label: 'Created Time', sortable: false },
   { name: 'orderCompletedTime', label: 'Completed Time', sortable: false },
   { name: 'orderCancelTime', label: 'Cancel Time', sortable: false },
+  { name: 'description', label: 'Description', sortable: false },
   { name: 'actions', label: 'Actions', sortable: false },
 ];
 
@@ -369,6 +370,9 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                           <TableCell>
                             {item.cancelledDate && moment(item.cancelledDate).format("DD-MM-YYYY HH:ss")}
                           </TableCell>
+                          <TableCell >
+                            {item.schedule && `${moment(item.schedule.start).format("MM/YYYY")} - ${moment(item.schedule.end).format("MM/YYYY")}`}
+                          </TableCell>
                           <TableCell>
                             <IconButton
                               className={clsx(classes.actionButton, {
@@ -387,7 +391,7 @@ const List = memo(({ keyword, setKeyword, data, setData, filterData, setFilterDa
                     })
                   ) : (
                     <TableRow>
-                      <TableCell align="center" colSpan={9}>
+                      <TableCell align="center" colSpan={10}>
                         <Box sx={{ py: 3 }}>
                           <SearchNotFound searchQuery={keyword} />
                         </Box>

@@ -55,6 +55,7 @@ export interface PaymentSchedule {
   systemConfig: ConfigData;
   projectData: Project;
   payments: Payment[];
+  turn: number;
 }
 export interface PaymentScheduleMakeAnOrder{
   projectId: number;

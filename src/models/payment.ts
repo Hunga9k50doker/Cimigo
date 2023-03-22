@@ -5,7 +5,7 @@ import { ECurrency, OptionItem } from "./general";
 import { OnePay } from "./onepays";
 import { Project } from "./project";
 import { User } from "./user";
-
+import {PaymentSchedule} from './payment_schedule'
 export interface CheckoutParams {
   projectId: number,
   returnUrl?: string,
@@ -74,6 +74,7 @@ export interface Payment {
   projectData: Project;
   config: ConfigData;
   currency: ECurrency;
+  schedule: PaymentSchedule;
 }
 
 export interface TryAgain {
