@@ -13,7 +13,7 @@ import _ from "lodash";
 import { AdminGetProjects } from "models/Admin/project";
 import { Solution } from "models/Admin/solution"
 import { DataPagination, OptionItemT, paymentMethods, SortItem, TableHeaderLabel } from "models/general";
-import { Project, projectStatus } from "models/project";
+import { Project, projectStatus, ProjectStatus } from "models/project";
 import moment from "moment";
 import { memo, useEffect, useMemo, useState } from "react"
 import { useDispatch } from "react-redux";
@@ -23,6 +23,8 @@ import { AdminProjectService } from "services/admin/project";
 import AdminSolutionService from "services/admin/solution";
 import { fCurrency, fCurrencyVND } from "utils/formatNumber";
 import classes from './styles.module.scss';
+import { ESOLUTION_TYPE } from "models/solution";
+import ProjectHelper from "helpers/project"
 
 const tableHeaders: TableHeaderLabel[] = [
   { name: 'id', label: 'Id', sortable: true },
@@ -296,7 +298,7 @@ const List = memo(({ sort, setSort, keyword, setKeyword, data, setData, filterDa
                             <Link onClick={() => onRedirectDetail(item)}>{item.name}</Link>
                           </TableCell>
                           <TableCell component="th">
-                            <LabelStatus typeStatus={item.status} />
+                            <LabelStatus typeStatus={item.status} solutionTypeId={item.solution.typeId} />
                           </TableCell>
                           <TableCell component="th">
                             {item.user && <Link onClick={() => onRedirectUserDetail(item)}>{item.user.fullName}</Link>}
@@ -362,15 +364,19 @@ const List = memo(({ sort, setSort, keyword, setKeyword, data, setData, filterDa
             open={Boolean(actionAnchor)}
             onClose={onCloseActionMenu}
           >
-            <MenuItem
-              sx={{ fontSize: '0.875rem' }}
-              onClick={onEdit}
-            >
-              <Box display="flex" alignItems={"center"}>
-                <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                <span>Edit</span>
-              </Box>
-            </MenuItem>
+            {
+              ProjectHelper.checkSolutionType(itemAction, [ESOLUTION_TYPE.BRAND_TRACKING], false) && (
+                <MenuItem
+                  sx={{ fontSize: '0.875rem' }}
+                  onClick={onEdit}
+                >
+                  <Box display="flex" alignItems={"center"}>
+                    <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                    <span>Edit</span>
+                  </Box>
+                </MenuItem>
+              )
+            }
             <MenuItem
               sx={{ fontSize: '0.875rem' }}
               onClick={onShowConfirm}

@@ -1,5 +1,6 @@
 import { ConfigData } from "./config";
 import { Payment } from "./payment";
+import { Attachment } from './attachment';
 import { Project } from "./project";
 export interface GetPaymentSchedulePreview {
   projectId: number;
@@ -13,6 +14,10 @@ export interface PaymentSchedulePreview{
     startDate: Date;
     endDate: Date;
     dueDate: Date;
+    amount: number,
+    amountUSD: number,
+    vat: number,
+    vatUSD: number
 }
 export interface GetPaymentSchedule{
   projectId: number;
@@ -27,7 +32,9 @@ export enum PaymentScheduleStatus {
   IN_PROGRESS,
   PAID,
   OVERDUE,
+  CANCEL
 }
+
 export interface PaymentSchedule {
   id: number;
   solutionConfig: SolutionConfig;
@@ -35,15 +42,20 @@ export interface PaymentSchedule {
   end: Date;
   dueDate: Date;
   amount: number;
+  amountUSD: number;
   totalAmount: number;
   totalAmountUSD: number;
   status: number;
   project: Project;
   sampleSizeCostPerMonth: number;
   vat: number;
+  vatUSD: number;
+  invoiceId: number;
+  invoice?: Attachment;
   systemConfig: ConfigData;
   projectData: Project;
   payments: Payment[];
+  turn: number;
 }
 export interface PaymentScheduleMakeAnOrder{
   projectId: number;

@@ -85,15 +85,19 @@ interface InputSelectProps {
   selectProps?: StateManagerProps,
   fullWidth?: boolean,
   optional?: boolean
+  translationData?: any
 }
 
 const InputSelect = memo((props: InputSelectProps) => {
-  const { title, errorMessage, name, control, bindKey, bindLabel, selectProps, fullWidth, optional } = props;
+  const { title, errorMessage, name, control, bindKey, bindLabel, selectProps, fullWidth, optional, translationData } = props;
   const { t } = useTranslation()
 
   const getOptionLabel = (option: any) => {
     switch (bindLabel || 'name') {
       case 'translation':
+        if (typeof option["translation"] === "function") {
+          return t(option["translation"](translationData))
+        }
         return t(option["translation"])
       default:
         return option[bindLabel || 'name']

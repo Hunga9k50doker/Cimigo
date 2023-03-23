@@ -15,8 +15,11 @@
     @media only screen and (max-width: 767px) {
         padding-bottom: 85px;
     }
-    @media only screen and (max-width: 1042px) {
+    @media only screen and (max-width: 1024px) {
         margin: 0px;
+    }
+     @media only screen and (max-width: 1118px) {
+        overflow-x: hidden;
     }
 }
 .alert{
@@ -72,12 +75,17 @@
     height: 100%;
     width: 100%;
     border-radius: 8px;
+     @media only screen and (max-width: 1024px) {
+       margin-right: 2px;
+    }
 }
 .slideDefault{
     border: 1px solid var(--cimigo-blue);
+    box-shadow: 0px 0px 8px rgba(var(--cimigo-blue), 0.16 );
 }
 .slideProcessing{
     border: 1px solid var(--gray-40);
+    box-shadow: 0px 0px 8px rgba(var(--gray-40), 0.1);
     .contentRightSwiper{
         .processingBtn {
             padding: 4px 8px;
@@ -143,7 +151,7 @@
 }
 .slidePaymentSwiper{
     display: flex;
-    margin: 0px -33px;
+    width: 100%;
     @media only screen and (max-width: 785px) {
         margin: 0px 0px;
     }
@@ -204,18 +212,17 @@
     }
     svg{
         width: 17px;
-    }
-  
+    }  
 }
 .iconSlideLeft{
     right: 24px;
-    @media only screen and (max-width: 785px) {
+    @media only screen and (max-width: 1024px) {
         display: none;
     }
 }
 .iconSlideRight{
     left: 24px;
-    @media only screen and (max-width: 785px) {
+    @media only screen and (max-width: 1024px) {
         display: none;
     }
 }
@@ -231,4 +238,12 @@
 }
 .swiperContentt{
     height: 100% !important;
+}
+.btnWating{
+    background: var(--gray-5) !important;
+    border: 1px solid var(--gray-20) !important;
+    border-radius: 4px;
+    p{
+        color: var(--gray-20) !important;
+    }
 }

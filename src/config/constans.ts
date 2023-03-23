@@ -207,7 +207,21 @@ export const API = {
       MAIN_BRANDS: '/v1.0/admin/project/:id/main-brands',
       COMPETING_BRANDS: '/v1.0/admin/project/:id/competing-brands',
       COMPETITIVE_BRANDS: '/v1.0/admin/project/:id/competitive-brands',
-      BRAND_ASSET: '/v1.0/admin/project/:id/brand-asset'
+      BRAND_ASSET: '/v1.0/admin/project/:id/brand-asset',
+      PAYMENT_SCHEDULE: '/v1.0/admin/project/:id/payment-schedule'
+    },
+    PAYMENT_SCHEDULE: {
+      UPDATE_STATUS: '/v1.0/admin/payment-schedule/:id/update-status',
+      UPDATE_BASIC_INFO: '/v1.0/admin/payment-schedule/:id/basic-info',
+      UPLOAD_INVOICE: '/v1.0/admin/payment-schedule/:id/upload-invoice',
+      INVOICE_READY: '/v1.0/admin/payment-schedule/:id/invoice-ready',
+      RESTART: '/v1.0/admin/payment-schedule/restart',
+      PREVIEW_RESTART: '/v1.0/admin/payment-schedule/preview-restart',
+    },
+    PROJECT_RESULT: {
+      DEFAULT: '/v1.0/admin/project-result',
+      DETAIL: '/v1.0/admin/project-result/:id',
+      UPDATE_READY: '/v1.0/admin/project-result/:id/update-ready',
     },
     USER: {
       DEFAULT: '/v1.0/admin/user',

@@ -26,13 +26,15 @@ import { ESOLUTION_TYPE } from "models"
 import DetailSurveySetupForPack from "../components/DetailSurveySetupForPack"
 import DetailSurveySetupForVideoChoice from "../components/DetailSurveySetupForVideoChoice"
 import DetailSurveySetupForBrandTrack from "../components/DetailSurveySetupForBrandTrack"
-
+import PaymentScheduleDetailForBrandTrack from "../components/PaymentScheduleDetailForBrandTrack"
+import ResultTab from "../components/ResultTab";
 
 enum ETab {
   SETUP_SURVEY,
   TARGET,
   QUOTAS,
-  PAYMENT
+  PAYMENT,
+  RESULT
 }
 
 interface Props {
@@ -55,6 +57,19 @@ const Detail = memo(({ }: Props) => {
 
   const handleBack = () => {
     dispatch(push(routes.admin.project.root))
+  }
+
+  const reloadProjectInfo = async () => {
+    dispatch(setLoading(true))
+    AdminProjectService.getProject(Number(id))
+      .then((res) => setProject({
+        ...project,
+        ...res,
+      }))
+      .catch((e) => {
+        dispatch(setErrorMess(e))
+        dispatch(setLoading(false))
+      })
   }
 
   useEffect(() => {
@@ -191,6 +206,8 @@ const Detail = memo(({ }: Props) => {
     }
   }
 
+  const checkSolutionType = useMemo(() => ProjectHelper.checkSolutionType(project, [ESOLUTION_TYPE.BRAND_TRACKING], false), [project])
+
   return (
     <div>
       <Box display="flex" justifyContent="space-between" alignContent="center" mb={4}>
@@ -206,7 +223,7 @@ const Detail = memo(({ }: Props) => {
           >
             Back
           </Button>
-          {project && (
+          {project && checkSolutionType && (
             <Button
               sx={{ marginLeft: 2 }}
               variant="contained"
@@ -227,13 +244,13 @@ const Detail = memo(({ }: Props) => {
                 <Box>
                   <div className={classes.title}>Name: {project?.name}</div>
                   <Typography mt={2} ml={4} variant="h6" sx={{ fontWeight: 500 }}>ID: <span className={classes.valueBox}>{project?.id}</span></Typography>
-                  {isPaymentPaid && (
+                  {isPaymentPaid && checkSolutionType && (
                     <Typography ml={4} variant="h6" sx={{ fontWeight: 500 }}>Report ready date: <span className={classes.valueBox}>{reportReadyDate}</span></Typography>
                   )}
                   <Typography mb={4} ml={4} variant="h6" sx={{ fontWeight: 500 }}>Survey language: <span className={classes.valueBox}>{langSupports.find(it => it.key === project?.surveyLanguage)?.name}</span></Typography>
 
                 </Box>
-                {project && <LabelStatus typeStatus={project.status} />}
+                {project && <LabelStatus typeStatus={project.status} solutionTypeId={project.solution.typeId} />}
               </Box>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={activeTab} onChange={handleChange}>
@@ -241,6 +258,9 @@ const Detail = memo(({ }: Props) => {
                   <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Target</Typography>} />
                   <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Quotas</Typography>} />
                   <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Payment</Typography>} />
+                  {
+                    project?.solution?.typeId === ESOLUTION_TYPE.BRAND_TRACKING && <Tab label={<Typography variant="subtitle1" sx={{ fontWeight: 500 }}>Result</Typography>} />
+                  }
                 </Tabs>
               </Box>
               <TabPanel value={activeTab} index={ETab.SETUP_SURVEY}>
@@ -259,7 +279,7 @@ const Detail = memo(({ }: Props) => {
                           </Paper>
                         </Grid>
                       </Grid>
-                      )
+                    )
                   }
                   {!!project?.targets?.length && (
                     <>
@@ -400,133 +420,150 @@ const Detail = memo(({ }: Props) => {
                 </Grid>
               </TabPanel>
               <TabPanel value={activeTab} index={ETab.PAYMENT}>
-                <Box>
-                  {!!payment ? (
-                    <>
-                      <Box mb={6}>
-                        <p className={classes.textGreen}>Total amount: {fCurrency(payment?.totalAmountUSD || 0)}</p>
-                        <p className={classes.textBlue}>(Equivalent to {fCurrencyVND(payment?.totalAmount || 0)})</p>
-                      </Box>
-                      <Box maxWidth="600px" margin="auto">
-                        <Grid container spacing={2}>
-                          <Grid item xs={12}>
-                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Sample size ({payment?.sampleSize || 0}):</span> <strong>{fCurrency(payment?.sampleSizeCostUSD || 0)}</strong>
-                            </Typography>
-                          </Grid>
-                          {!!payment?.customQuestions?.length && (
-                            <Grid item xs={12}>
-                              <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                                <span>Custom questions ({payment?.customQuestions?.length}):</span> <strong>{fCurrency(payment?.customQuestionCostUSD || 0)}</strong>
-                              </Typography>
-                            </Grid>
-                          )}
-                          {!!payment?.eyeTrackingSampleSize && (
-                            <Grid item xs={12}>
-                              <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                                {project?.solution?.typeId === ESOLUTION_TYPE.PACK && (
-                                  <>
-                                    <span>Eye-tracking ({payment?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(payment?.eyeTrackingSampleSizeCostUSD || 0)}</strong>
-                                  </>
+                {
+                  project?.solution?.typeId === ESOLUTION_TYPE.BRAND_TRACKING
+                    ?
+                    (
+                      <PaymentScheduleDetailForBrandTrack project={project} reloadProjectInfo={reloadProjectInfo} />
+                    )
+                    :
+                    (
+                      <Box>
+                        {!!payment ? (
+                          <>
+                            <Box mb={6}>
+                              <p className={classes.textGreen}>Total amount: {fCurrency(payment?.totalAmountUSD || 0)}</p>
+                              <p className={classes.textBlue}>(Equivalent to {fCurrencyVND(payment?.totalAmount || 0)})</p>
+                            </Box>
+                            <Box maxWidth="600px" margin="auto">
+                              <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                  <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                    <span>Sample size ({payment?.sampleSize || 0}):</span> <strong>{fCurrency(payment?.sampleSizeCostUSD || 0)}</strong>
+                                  </Typography>
+                                </Grid>
+                                {!!payment?.customQuestions?.length && (
+                                  <Grid item xs={12}>
+                                    <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                      <span>Custom questions ({payment?.customQuestions?.length}):</span> <strong>{fCurrency(payment?.customQuestionCostUSD || 0)}</strong>
+                                    </Typography>
+                                  </Grid>
                                 )}
-                                {project?.solution?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
-                                  <>
-                                    <span>Emotion measurement ({payment?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(payment?.eyeTrackingSampleSizeCostUSD || 0)}</strong>
-                                  </>
+                                {!!payment?.eyeTrackingSampleSize && (
+                                  <Grid item xs={12}>
+                                    <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                      {project?.solution?.typeId === ESOLUTION_TYPE.PACK && (
+                                        <>
+                                          <span>Eye-tracking ({payment?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(payment?.eyeTrackingSampleSizeCostUSD || 0)}</strong>
+                                        </>
+                                      )}
+                                      {project?.solution?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
+                                        <>
+                                          <span>Emotion measurement ({payment?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(payment?.eyeTrackingSampleSizeCostUSD || 0)}</strong>
+                                        </>
+                                      )}
+                                    </Typography>
+                                  </Grid>
                                 )}
-                              </Typography>
-                            </Grid>
-                          )}
-                          <Grid item xs={12}><Divider /></Grid>
-                          <Grid item xs={12}>
-                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Subtotal:</span> <strong>{fCurrency(payment?.amountUSD || 0)}</strong>
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={12}>
-                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Tax (VAT {(payment?.vatRate || 0) * 100}%):</span> <strong>{fCurrency(payment?.vatUSD || 0)}</strong>
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={12}><Divider /></Grid>
-                          <Grid item xs={12}>
-                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Payment reference:</span> <strong>{payment?.orderId}</strong>
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={12}>
-                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Payment method:</span> <strong>{paymentMethods.find(it => it.id === payment?.paymentMethodId)?.name}</strong>
-                            </Typography>
-                          </Grid>
-                          {payment?.paymentMethodId === EPaymentMethod.BANK_TRANSFER && (
-                            <Grid item xs={12}>
-                              <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                                <span>Confirm payment:</span> <strong>{payment?.userConfirm ? "Yes" : 'No'}</strong>
-                              </Typography>
-                            </Grid>
-                          )}
-                          <Grid item xs={12}>
-                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Payment status:</span> <Box ml={0.5}><PaymentStatus status={payment?.status} /></Box>
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </Box>
-                    </>
-                  ) : (
-                    <>
-                      <Box mb={6}>
-                        <p className={classes.textGreen}>Total amount: {fCurrency(price?.totalAmountCost?.USD || 0)}</p>
-                        <p className={classes.textBlue}>(Equivalent to {fCurrencyVND(price?.totalAmountCost?.VND || 0)})</p>
-                      </Box>
-                      <Box maxWidth="600px" margin="auto">
-                        <Grid container spacing={2}>
-                          <Grid item xs={12}>
-                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Sample size ({project?.sampleSize || 0}):</span> <strong>{fCurrency(price?.sampleSizeCost?.USD || 0)}</strong>
-                            </Typography>
-                          </Grid>
-                          {!!project?.customQuestions?.length && (
-                            <Grid item xs={12}>
-                              <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                                <span>Custom questions ({project?.customQuestions?.length}):</span> <strong>{fCurrency(price?.customQuestionCost?.USD || 0)}</strong>
-                              </Typography>
-                            </Grid>
-                          )}
-                          {!!project?.eyeTrackingSampleSize && (
-                            <Grid item xs={12}>
-                              <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                                {project?.solution?.typeId === ESOLUTION_TYPE.PACK && (
-                                  <>
-                                    <span>Eye-tracking ({project?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(price?.eyeTrackingSampleSizeCost?.USD || 0)}</strong>
-                                  </>
+                                <Grid item xs={12}><Divider /></Grid>
+                                <Grid item xs={12}>
+                                  <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                    <span>Subtotal:</span> <strong>{fCurrency(payment?.amountUSD || 0)}</strong>
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                    <span>Tax (VAT {(payment?.vatRate || 0) * 100}%):</span> <strong>{fCurrency(payment?.vatUSD || 0)}</strong>
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12}><Divider /></Grid>
+                                <Grid item xs={12}>
+                                  <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                    <span>Payment reference:</span> <strong>{payment?.orderId}</strong>
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                    <span>Payment method:</span> <strong>{paymentMethods.find(it => it.id === payment?.paymentMethodId)?.name}</strong>
+                                  </Typography>
+                                </Grid>
+                                {payment?.paymentMethodId === EPaymentMethod.BANK_TRANSFER && (
+                                  <Grid item xs={12}>
+                                    <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                      <span>Confirm payment:</span> <strong>{payment?.userConfirm ? "Yes" : 'No'}</strong>
+                                    </Typography>
+                                  </Grid>
                                 )}
-                                {project?.solution?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
-                                  <>
-                                    <span>Emotion measurement ({project?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(price?.eyeTrackingSampleSizeCost?.USD || 0)}</strong>
-                                  </>
+                                <Grid item xs={12}>
+                                  <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                    <span>Payment status:</span> <Box ml={0.5}><PaymentStatus status={payment?.status} /></Box>
+                                  </Typography>
+                                </Grid>
+                              </Grid>
+                            </Box>
+                          </>
+                        ) : (
+                          <>
+                            <Box mb={6}>
+                              <p className={classes.textGreen}>Total amount: {fCurrency(price?.totalAmountCost?.USD || 0)}</p>
+                              <p className={classes.textBlue}>(Equivalent to {fCurrencyVND(price?.totalAmountCost?.VND || 0)})</p>
+                            </Box>
+                            <Box maxWidth="600px" margin="auto">
+                              <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                  <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                    <span>Sample size ({project?.sampleSize || 0}):</span> <strong>{fCurrency(price?.sampleSizeCost?.USD || 0)}</strong>
+                                  </Typography>
+                                </Grid>
+                                {!!project?.customQuestions?.length && (
+                                  <Grid item xs={12}>
+                                    <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                      <span>Custom questions ({project?.customQuestions?.length}):</span> <strong>{fCurrency(price?.customQuestionCost?.USD || 0)}</strong>
+                                    </Typography>
+                                  </Grid>
                                 )}
-                              </Typography>
-                            </Grid>
-                          )}
-                          <Grid item xs={12}><Divider /></Grid>
-                          <Grid item xs={12}>
-                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Subtotal:</span> <strong>{fCurrency(price?.amountCost?.USD || 0)}</strong>
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={12}>
-                            <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
-                              <span>Tax (VAT {(configs?.vat || 0) * 100}%):</span> <strong>{fCurrency(price?.vatCost?.USD || 0)}</strong>
-                            </Typography>
-                          </Grid>
-                        </Grid>
+                                {!!project?.eyeTrackingSampleSize && (
+                                  <Grid item xs={12}>
+                                    <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                      {project?.solution?.typeId === ESOLUTION_TYPE.PACK && (
+                                        <>
+                                          <span>Eye-tracking ({project?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(price?.eyeTrackingSampleSizeCost?.USD || 0)}</strong>
+                                        </>
+                                      )}
+                                      {project?.solution?.typeId === ESOLUTION_TYPE.VIDEO_CHOICE && (
+                                        <>
+                                          <span>Emotion measurement ({project?.eyeTrackingSampleSize || 0}):</span> <strong>{fCurrency(price?.eyeTrackingSampleSizeCost?.USD || 0)}</strong>
+                                        </>
+                                      )}
+                                    </Typography>
+                                  </Grid>
+                                )}
+                                <Grid item xs={12}><Divider /></Grid>
+                                <Grid item xs={12}>
+                                  <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                    <span>Subtotal:</span> <strong>{fCurrency(price?.amountCost?.USD || 0)}</strong>
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <Typography variant="subtitle1" display="flex" justifyContent="space-between" alignItems="center">
+                                    <span>Tax (VAT {(configs?.vat || 0) * 100}%):</span> <strong>{fCurrency(price?.vatCost?.USD || 0)}</strong>
+                                  </Typography>
+                                </Grid>
+                              </Grid>
+                            </Box>
+                          </>
+                        )}
                       </Box>
-                    </>
-                  )}
-                </Box>
+                    )
+                }
               </TabPanel>
+              {
+                project?.solution?.typeId === ESOLUTION_TYPE.BRAND_TRACKING && (
+                  <TabPanel value={activeTab} index={ETab.RESULT}>
+                      <ResultTab project={project}/>
+                  </TabPanel>
+                )
+              }
             </CardContent>
           </Card>
         </Grid>

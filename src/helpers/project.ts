@@ -8,7 +8,7 @@ import { PackType } from "models/pack";
 import { EPaymentStatus } from "models/payment";
 import { Project, ProjectStatus } from "models/project";
 import moment from "moment-timezone";
-import { PaymentSchedule } from "models/payment_schedule";
+import { PaymentSchedule, EPaymentScheduleCancelType } from "models/payment_schedule";
 
 export const editableProject = (project: Project) => {
   return project?.editable
@@ -358,6 +358,19 @@ export class ProjectHelper {
     const totalBrandAssetRecognition = project?.brandAssets?.length || 0
     const minBrandAssetRecognition = ProjectHelper.minBrandAssetRecognition(project)
     return totalBrandAssetRecognition >= minBrandAssetRecognition ? 0 : minBrandAssetRecognition - totalBrandAssetRecognition
+  }
+
+  static checkSolutionType = (project: Project, solutionTypes: ESOLUTION_TYPE[], isInclude?: boolean) => {
+    if (isInclude) {
+      return solutionTypes.includes(project?.solution?.typeId)
+    }
+    else {
+      return !solutionTypes.includes(project?.solution?.typeId)
+    }
+  }
+
+  static isCancelProject = (project: Project) => {
+    return [EPaymentScheduleCancelType.AUTO_CANCEL, EPaymentScheduleCancelType.USER_CANCEL].includes(project?.cancelPaymentScheduleType)
   }
 }
 

@@ -10,6 +10,7 @@ import { UserAttribute } from 'models/user_attribute';
 import { Video } from 'models/video';
 import api from 'services/configApi';
 import { ProjectBrand } from './../../models/project_brand';
+import { PaymentSchedule } from './../../models/payment_schedule';
 import { BrandAsset } from 'models/brand_asset';
 
 export class AdminProjectService {
@@ -179,6 +180,16 @@ export class AdminProjectService {
 
   static async getBrandAsset(id: number): Promise<BrandAsset[]> {
     return await api.get(`${API.ADMIN.PROJECT.BRAND_ASSET.replace(':id', `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data.data)
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      })
+  }
+
+  static async getPaymentSchedule(id: number): Promise<PaymentSchedule[]> {
+    return await api.get(`${API.ADMIN.PROJECT.PAYMENT_SCHEDULE.replace(':id', `${id}`)}`)
       .then((res) => {
         return Promise.resolve(res.data.data)
       })
