@@ -20,6 +20,9 @@ import { Dot } from "components/common/dot/Dot";
 import ReportNotStarted from "./components/ReportNotStarted";
 import ReportInProgress from "./components/ReportInProgress";
 import ReportDelivered from "./components/ReportDelivered";
+import ProjectHelper from "helpers/project"
+import { ProjectResultService } from "services/project_result";
+import _ from "lodash";
 
 export enum ETimelineType {
   NOT_STARTED_YET = 1,
@@ -27,16 +30,19 @@ export enum ETimelineType {
   DELIVERED,
 }
 
-export interface IReport {
-  attachment: Attachment;
+const NUMBER_OF_LIST_MONTHS = 4
+
+export interface IResult {
+  report: Attachment;
   dataStudio: string;
-  date: Date;
+  month: Date;
+  isReady: boolean;
 }
 
 export interface ITimeLineItem {
   date: Moment;
-  state: ETimelineType;
-  report: IReport;
+  state?: ETimelineType;
+  result?: IResult;
 }
 
 interface Props {
@@ -53,71 +59,116 @@ const Report = memo(({ projectId }: Props) => {
   const startPaymentScheduleDate = useMemo(() => moment(project?.startPaymentSchedule), [project]);
 
   const [listTimeline, setListTimeline] = useState<ITimeLineItem[]>([]);
+  const [listTimelineRender, setListTimelineRender] = useState<ITimeLineItem[]>([]);
+  const [page, setPage] = useState(1)
+  const [maxPage, setMaxPage] = useState(1)
   const [timelineSelected, setTimelineSelected] = useState<ITimeLineItem>(null);
   const [isOpenDashboard, setIsOpenDashboard] = useState(false);
+
   useEffect(() => {
-    const currentDate = moment();
-    const startPaymentScheduleDate = moment(project?.startPaymentSchedule);
-    let _listTimeline = [];
-    if (currentDate > startPaymentScheduleDate) {
-      for (let i = 0; i <= 3; i++) {
-        _listTimeline.push({
-          date: moment(startPaymentScheduleDate).add(i, "month").startOf("month"),
-          state: ETimelineType.NOT_STARTED_YET,
-          report: null,
-        });
-      }
-      setListTimeline(_listTimeline);
-    } else {
-      // const _currentDate = moment([currentDate.year(), currentDate.month()]);
-      // const _startPaymentScheduleDate = moment([startPaymentScheduleDate.year(), startPaymentScheduleDate.month()]);
-      // const monthDiff = Math.ceil(_currentDate.diff(_startPaymentScheduleDate, "months", true));
+    const startPaymentScheduleMoment = moment(project.startPaymentSchedule).startOf('month')
+    const monthsToAdd = moment().diff(startPaymentScheduleMoment, 'months') + 1
 
-      // if (monthDiff <= 2) {
-      //   for (let i = monthDiff; i >= 0; i--) {
-      //     _listTimeline.push(getTimeLine(moment(currentDate).subtract(i, "month").startOf("month")));
-      //   }
-      //   for (let i = 1; _listTimeline.length <= 3; i++) {
-      //     _listTimeline.push({
-      //       date: moment(currentDate).add(i, "month").startOf("month"),
-      //       state: ETimelineType.NOT_STARTED_YET,
-      //       report: null,
-      //     });
-      //   }
-      // } else {
-      //   for (let i = 2; i >= 0; i--) {
-      //     _listTimeline.push(getTimeLine(moment(currentDate).subtract(i, "month").startOf("month")));
-      //   }
-      //   _listTimeline.push({
-      //     date: moment(currentDate).add(1, "month").startOf("month"),
-      //     state: ETimelineType.NOT_STARTED_YET,
-      //     report: null,
-      //   });
-      // }
+    let rawTimeLineList = _.map(new Array(monthsToAdd), ((item, index) => ({
+      date: startPaymentScheduleMoment.clone().add(index, 'month'),
+    })))
 
-      // Fake data
-      for (let i = 0; i <= 3; i++) {
-        _listTimeline.push({
-          date: moment(startPaymentScheduleDate).add(i, "month").startOf("month"),
-          state: i < 3 ? ETimelineType.DELIVERED : i === 3 ? ETimelineType.IN_PROGRESS : ETimelineType.NOT_STARTED_YET,
-          // state: ETimelineType.DELIVERED,
-          report: null,
-        });
-      }
+    const rawLengthTimeLine = rawTimeLineList.length
 
-      setListTimeline(_listTimeline);
+    if (rawLengthTimeLine < NUMBER_OF_LIST_MONTHS) {
+      const notStartedMonth = NUMBER_OF_LIST_MONTHS - rawLengthTimeLine
+      _.forEach(Array(notStartedMonth), ((item, index) => {
+        rawTimeLineList.push({
+          date: startPaymentScheduleMoment.clone().add(rawLengthTimeLine + index, 'month')
+        })
+      }))
     }
-  }, [dispatch, project]);
+    else {
+      rawTimeLineList.push({
+        date: rawTimeLineList[rawTimeLineList.length - 1].date.clone().add(1, 'month')
+      })
+    }
+
+    ProjectResultService.getProjectResult({
+      projectId: project.id,
+    })
+      .then((res: IResult[]) => {
+        if (res?.length) {
+          rawTimeLineList = rawTimeLineList.map((item) => {
+            const result = res.find((it: IResult) => moment(item.date).isSame(moment(it?.month), "month")) || null
+            let state: ETimelineType
+
+            if (result?.isReady && (result?.report || result?.dataStudio)) {
+              state = ETimelineType.DELIVERED
+            }
+            else if (item?.date && moment().isSame(item.date, "month")) {
+              state = ETimelineType.IN_PROGRESS
+            }
+            else {
+              state = ETimelineType.NOT_STARTED_YET
+            }
+
+            return {
+              ...item,
+              result,
+              state
+            }
+          })
+
+          setListTimeline(rawTimeLineList)
+        }
+      })
+      .catch((error) => dispatch(setErrorMess(error)))
+      .finally(() => dispatch(setLoading(false)));
+      
+  }, [dispatch]);
+
+  const checkReadyResult = (result: IResult) => {
+    return result?.isReady && (result?.dataStudio || result?.report)
+  }
 
   useEffect(() => {
-    setTimelineSelected(listTimeline?.filter((item) => moment().isSame(item?.date, "month"))[0] || null);
+    if (listTimeline.length) {
+      setMaxPage(Math.ceil(listTimeline.length / NUMBER_OF_LIST_MONTHS))
+      
+      const latestReadyResult = [...listTimeline].reverse().find((item) => checkReadyResult(item?.result))
+      const latestReadyResultIndex = [...listTimeline].reverse().findIndex((item) => checkReadyResult(item?.result))
+
+      if (latestReadyResult) {
+        setTimelineSelected(latestReadyResult)
+        setPage(Math.floor((listTimeline.length - latestReadyResultIndex - 1) / NUMBER_OF_LIST_MONTHS) + 1)
+      }
+      else {
+        setPage(Math.ceil(listTimeline.length / NUMBER_OF_LIST_MONTHS))
+      }
+    }
   }, [listTimeline]);
+  
+  useEffect(() => {
+    let startIndex = listTimeline.length - (NUMBER_OF_LIST_MONTHS * (maxPage - page + 1));
+    if (startIndex < 0) startIndex = 0
+    const endIndex = startIndex + NUMBER_OF_LIST_MONTHS
+
+    setListTimelineRender([...listTimeline].slice(startIndex, endIndex));
+
+  }, [page])
+
+  const goToPreviousPage = () => {
+    if (page <= 1) return;
+    setPage(page - 1)
+  }
+
+  const goToNextPage = () => {
+    if (page >= maxPage) return;
+    setPage(page + 1)
+  }
 
   const onDownLoad = () => {
+    if (!timelineSelected?.result?.report) return;
     dispatch(setLoading(true));
-    AttachmentService.download(timelineSelected?.report?.attachment.id)
+    AttachmentService.download(timelineSelected?.result?.report.id)
       .then((res) => {
-        FileSaver.saveAs(res.data, timelineSelected?.report?.attachment.fileName);
+        FileSaver.saveAs(res.data, timelineSelected?.result?.report.fileName);
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
@@ -141,6 +192,10 @@ const Report = memo(({ projectId }: Props) => {
   //   }
   // };
 
+  const handleChangeSelectedItem = (item: ITimeLineItem) => {
+    setTimelineSelected(item)
+  }
+
   const onOpenDashboard = () => {
     setIsOpenDashboard(true);
   };
@@ -151,22 +206,22 @@ const Report = memo(({ projectId }: Props) => {
 
   return (
     <Grid className={classes.root}>
-      {project?.status === ProjectStatus.IN_PROGRESS || project?.status === ProjectStatus.COMPLETED ? (
+      {ProjectHelper.checkProjectStatus(project, [ProjectStatus.AWAIT_PAYMENT, ProjectStatus.IN_PROGRESS, ProjectStatus.COMPLETED], true) ? (
         <Grid className={classes.content}>
           <Grid className={classes.timelineWrapper}>
-            {moment(listTimeline?.[0]?.date).isSame(startPaymentScheduleDate, "month") ? (
+            {moment(listTimelineRender?.[0]?.date).isSame(startPaymentScheduleDate, "month") ? (
               <Box
                 className={clsx(classes.headPoint, {
-                  [classes.deliveredHeadPoint]: listTimeline?.[0]?.state === ETimelineType.DELIVERED,
-                  [classes.inProgressHeadPoint]: listTimeline?.[0]?.state === ETimelineType.IN_PROGRESS,
+                  [classes.deliveredHeadPoint]: listTimelineRender?.[0]?.state === ETimelineType.DELIVERED,
+                  [classes.inProgressHeadPoint]: listTimelineRender?.[0]?.state === ETimelineType.IN_PROGRESS,
                 })}
               ></Box>
             ) : (
-              <Box className={classes.leftMidPoint}>
+              <Box className={classes.leftMidPoint} onClick={goToPreviousPage}>
                 <Box
                   className={clsx({
-                    [classes.deliveredPoint]: listTimeline?.[0]?.state === ETimelineType.DELIVERED,
-                    [classes.inProgressPoint]: listTimeline?.[0]?.state === ETimelineType.IN_PROGRESS,
+                    [classes.deliveredPoint]: listTimelineRender?.[0]?.state === ETimelineType.DELIVERED,
+                    [classes.inProgressPoint]: listTimelineRender?.[0]?.state === ETimelineType.IN_PROGRESS,
                   })}
                 >
                   <Dot />
@@ -175,30 +230,30 @@ const Report = memo(({ projectId }: Props) => {
                 </Box>
               </Box>
             )}
-            {!!listTimeline?.length &&
-              listTimeline.map((item, index) => (
+            {!!listTimelineRender?.length &&
+              listTimelineRender.map((item, index) => (
                 <TimeLineItem
                   key={index}
                   timeLineItem={item}
-                  isFirstWave={!index && moment(listTimeline?.[index]?.date).isSame(startPaymentScheduleDate, "month")}
-                  isLastWave={Boolean(index === listTimeline.length - 1 && item.state === ETimelineType.DELIVERED)}
+                  isFirstWave={!index && moment(listTimelineRender?.[index]?.date).isSame(startPaymentScheduleDate, "month")}
+                  isLastWave={Boolean(index === listTimelineRender.length - 1 && item.state === ETimelineType.DELIVERED)}
                   onSelect={() => {
-                    setTimelineSelected(item);
+                    handleChangeSelectedItem(item);
                   }}
                 />
               ))}
             {project?.status === ProjectStatus.COMPLETED ? (
               <Box
                 className={clsx(classes.headPoint, {
-                  [classes.deliveredHeadPoint]: listTimeline?.[listTimeline?.length - 1]?.state === ETimelineType.DELIVERED,
+                  [classes.deliveredHeadPoint]: listTimelineRender?.[listTimelineRender?.length - 1]?.state === ETimelineType.DELIVERED,
                 })}
               ></Box>
             ) : (
-              <Box className={classes.rightMidPoint}>
+              <Box className={classes.rightMidPoint} onClick={goToNextPage}>
                 <Box
                   className={clsx({
-                    [classes.deliveredPoint]: listTimeline?.[listTimeline?.length - 1]?.state === ETimelineType.DELIVERED,
-                    [classes.inProgressPoint]: listTimeline?.[listTimeline?.length - 1]?.state === ETimelineType.IN_PROGRESS,
+                    [classes.deliveredPoint]: listTimelineRender?.[listTimelineRender?.length - 1]?.state === ETimelineType.DELIVERED,
+                    [classes.inProgressPoint]: listTimelineRender?.[listTimelineRender?.length - 1]?.state === ETimelineType.IN_PROGRESS,
                   })}
                 >
                   <Dot $height={"12px"} $width={"12px"} />
@@ -208,11 +263,17 @@ const Report = memo(({ projectId }: Props) => {
               </Box>
             )}
           </Grid>
-          {(!timelineSelected || timelineSelected?.state === ETimelineType.NOT_STARTED_YET) && <ReportNotStarted />}
-          {timelineSelected?.state === ETimelineType.IN_PROGRESS && <ReportInProgress />}
-          {timelineSelected?.state === ETimelineType.DELIVERED && (
-            <ReportDelivered isHasReport={Boolean(timelineSelected?.report)} onOpenDashboard={onOpenDashboard} onDownLoad={onDownLoad} />
-          )}
+          {
+            (!timelineSelected || timelineSelected?.state === ETimelineType.NOT_STARTED_YET) && <ReportNotStarted />
+          }
+          {
+            timelineSelected?.state === ETimelineType.IN_PROGRESS && <ReportInProgress />
+          }
+          {
+            timelineSelected?.state === ETimelineType.DELIVERED && (
+              <ReportDelivered isHasReport={Boolean(timelineSelected?.result)} onOpenDashboard={onOpenDashboard} onDownLoad={onDownLoad} />
+            )
+          }
         </Grid>
       ) : (
         <Grid className={classes.noSetup}>
@@ -230,7 +291,7 @@ const Report = memo(({ projectId }: Props) => {
           </Heading4>
         </Grid>
       )}
-      <Dashboard isOpen={isOpenDashboard} onClose={onCloseDashboard} report={timelineSelected?.report} />
+      <Dashboard isOpen={isOpenDashboard} onClose={onCloseDashboard} result={timelineSelected?.result} />
     </Grid>
   );
 });

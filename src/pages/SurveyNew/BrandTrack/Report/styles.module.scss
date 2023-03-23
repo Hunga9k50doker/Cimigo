@@ -44,6 +44,9 @@
     align-items: center;
     gap: 8px;
   }
+  &:hover {
+    cursor: pointer;
+  }
 }
 .rightMidPoint {
   margin-top: 40px;
@@ -52,6 +55,9 @@
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+  &:hover {
+    cursor: pointer;
   }
 }
 .deliveredPoint {

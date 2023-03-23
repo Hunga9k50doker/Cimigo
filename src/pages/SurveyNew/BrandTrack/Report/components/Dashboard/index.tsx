@@ -11,23 +11,23 @@ import { IconDownload } from "components/icons";
 import { setErrorMess, setLoading } from "redux/reducers/Status/actionTypes";
 import { AttachmentService } from "services/attachment";
 import FileSaver from "file-saver";
-import { IReport } from "../..";
+import { IResult } from "../..";
 import { t } from "i18next";
 
 interface Props {
   isOpen: boolean;
-  report: IReport;
+  result: IResult;
   onClose: () => void;
 }
 
-const Dashboard = memo(({ isOpen, report, onClose }: Props) => {
+const Dashboard = memo(({ isOpen, result, onClose }: Props) => {
   const dispatch = useDispatch();
 
   const onDownLoad = () => {
     dispatch(setLoading(true));
-    AttachmentService.download(report?.attachment?.id)
+    AttachmentService.download(result?.report?.id)
       .then((res) => {
-        FileSaver.saveAs(res.data, report?.attachment?.fileName);
+        FileSaver.saveAs(res.data, result?.report?.fileName);
       })
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
@@ -46,7 +46,7 @@ const Dashboard = memo(({ isOpen, report, onClose }: Props) => {
               translation-key="brand_track_results_tab_dashboard_result"
             >
               {t("brand_track_results_tab_dashboard_result", {
-                dueDate: `${moment(report?.date).format("MMM").toUpperCase()} ${moment(report?.date).year()}`,
+                dueDate: `${moment(result?.month).format("MMM").toUpperCase()} ${moment(result?.month).year()}`,
               })}
             </ParagraphSmall>
           }
@@ -54,7 +54,7 @@ const Dashboard = memo(({ isOpen, report, onClose }: Props) => {
           sx={{ width: { xs: "100%", sm: "auto" } }}
           onClick={onClose}
         />
-        {report && (
+        {result && (
           <Button
             btnType={BtnType.Text}
             children={
@@ -75,11 +75,11 @@ const Dashboard = memo(({ isOpen, report, onClose }: Props) => {
       </Grid>
       <Grid className={classes.dashboard}>
         <Box sx={{ minHeight: "600px" }}>
-          {!!report?.dataStudio && (
+          {!!result?.dataStudio && (
             <iframe
               width="100%"
               height="800"
-              src={report?.dataStudio}
+              src={result?.dataStudio}
               allowFullScreen
               frameBorder={0}
               className={classes.iframe}

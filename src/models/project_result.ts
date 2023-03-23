@@ -1,3 +1,3 @@
 export interface GetProjectResult {
-    projectId: number;
+    projectId: number,
 }

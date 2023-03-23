@@ -56,7 +56,7 @@ const TimeLineItem = memo(({ timeLineItem, isFirstWave, isLastWave, onSelect }: 
           </ParagraphBody>
           <Box className={classes.lineWrapper}>
             <Box className={clsx(classes.line, classes.inProgressLine)}></Box>
-            <Box className={classes.circleInProgress} onClick={onSelect}>
+            <Box className={classes.circleInProgress}>
               <Box className={classes.circle}></Box>
             </Box>
             <Box className={classes.line}></Box>
