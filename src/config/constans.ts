@@ -70,6 +70,9 @@ export const API = {
   PROJECT_BRAND: {
     DEFAULT: '/v1.0/project-brand',
   },
+  PROJECT_RESULT: {
+    DEFAULT: '/v1.0/project-result',
+  },
   BRAND_ASSET: {
     DEFAULT: '/v1.0/brand-asset',
   },

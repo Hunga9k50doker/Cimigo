@@ -175,7 +175,7 @@ const Report = memo(({ projectId }: Props) => {
                 </Box>
               </Box>
             )}
-            {listTimeline.length !== 0 &&
+            {!!listTimeline?.length &&
               listTimeline.map((item, index) => (
                 <TimeLineItem
                   key={index}
