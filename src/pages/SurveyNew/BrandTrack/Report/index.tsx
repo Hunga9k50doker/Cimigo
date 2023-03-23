@@ -60,8 +60,8 @@ const Report = memo(({ projectId }: Props) => {
 
   const [listTimeline, setListTimeline] = useState<ITimeLineItem[]>([]);
   const [listTimelineRender, setListTimelineRender] = useState<ITimeLineItem[]>([]);
-  const [page, setPage] = useState(1)
-  const [maxPage, setMaxPage] = useState(1)
+  const [page, setPage] = useState(0)
+  const [maxPage, setMaxPage] = useState(0)
   const [timelineSelected, setTimelineSelected] = useState<ITimeLineItem>(null);
   const [isOpenDashboard, setIsOpenDashboard] = useState(false);
 
@@ -120,7 +120,7 @@ const Report = memo(({ projectId }: Props) => {
       })
       .catch((error) => dispatch(setErrorMess(error)))
       .finally(() => dispatch(setLoading(false)));
-      
+
   }, [dispatch]);
 
   const checkReadyResult = (result: IResult) => {
@@ -129,28 +129,27 @@ const Report = memo(({ projectId }: Props) => {
 
   useEffect(() => {
     if (listTimeline.length) {
-      setMaxPage(Math.ceil(listTimeline.length / NUMBER_OF_LIST_MONTHS))
-      
+      const rawMaxPage = Math.ceil(listTimeline.length / NUMBER_OF_LIST_MONTHS)
+      setMaxPage(rawMaxPage)
+
       const latestReadyResult = [...listTimeline].reverse().find((item) => checkReadyResult(item?.result))
-      const latestReadyResultIndex = [...listTimeline].reverse().findIndex((item) => checkReadyResult(item?.result))
+      const latestReadyResultIndex = [...listTimeline].lastIndexOf([...listTimeline].reverse().find((item) => checkReadyResult(item?.result)))
 
       if (latestReadyResult) {
         setTimelineSelected(latestReadyResult)
-        setPage(Math.floor((listTimeline.length - latestReadyResultIndex - 1) / NUMBER_OF_LIST_MONTHS) + 1)
+        setPage(rawMaxPage + 1 - Math.ceil((listTimeline.length - latestReadyResultIndex) / NUMBER_OF_LIST_MONTHS))
       }
       else {
-        setPage(Math.ceil(listTimeline.length / NUMBER_OF_LIST_MONTHS))
+        setPage(rawMaxPage)
       }
     }
   }, [listTimeline]);
-  
+
   useEffect(() => {
     let startIndex = listTimeline.length - (NUMBER_OF_LIST_MONTHS * (maxPage - page + 1));
     if (startIndex < 0) startIndex = 0
     const endIndex = startIndex + NUMBER_OF_LIST_MONTHS
-
     setListTimelineRender([...listTimeline].slice(startIndex, endIndex));
-
   }, [page])
 
   const goToPreviousPage = () => {
