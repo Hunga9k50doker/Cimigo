@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-height: 124px;
+  max-width: 240px;
 }
 
 .lineWrapper {
@@ -30,7 +32,7 @@
   background: var(--cimigo-blue);
 }
 .inProgressLine {
-  background: linear-gradient(to left, var(--warning-dark) 75%, var(--cimigo-blue) 100%);
+  background: linear-gradient(to left, var(--warning-dark) 75%, var(--warning-dark) 100%);
 }
 .circle {
   width: 20px;

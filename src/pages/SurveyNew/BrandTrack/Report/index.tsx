@@ -69,80 +69,90 @@ const Report = memo(({ projectId }: Props) => {
   const [isOpenDashboard, setIsOpenDashboard] = useState(false);
 
   useEffect(() => {
-    dispatch(setLoading(true))
-    const startPaymentScheduleMoment = moment(project.startPaymentSchedule).startOf('month')
-    const monthsToAdd = moment().diff(startPaymentScheduleMoment, 'months') + 1
-    let rawTimeLineList = []
+    if (ProjectHelper.checkProjectStatus(project, [ProjectStatus.AWAIT_PAYMENT, ProjectStatus.IN_PROGRESS, ProjectStatus.COMPLETED], true)) {
+      dispatch(setLoading(true))
+      const startPaymentScheduleMoment = moment(project.startPaymentSchedule).startOf('month')
+      const monthsToAdd = moment().diff(startPaymentScheduleMoment, 'months') + 1
+      let rawTimeLineList = []
 
-    if (monthsToAdd > 0) {
-      rawTimeLineList = _.map(new Array(monthsToAdd), ((item, index) => ({
-        date: startPaymentScheduleMoment.clone().add(index, 'month'),
-      })))
-    }
+      if (monthsToAdd > 0) {
+        rawTimeLineList = _.map(new Array(monthsToAdd), ((item, index) => ({
+          date: startPaymentScheduleMoment.clone().add(index, 'month'),
+        })))
+      }
 
-    const rawLengthTimeLine = rawTimeLineList.length
+      const rawLengthTimeLine = rawTimeLineList.length
 
-    if (rawLengthTimeLine < NUMBER_OF_LIST_MONTHS) {
-      const notStartedMonth = NUMBER_OF_LIST_MONTHS - rawLengthTimeLine
-      _.forEach(Array(notStartedMonth), ((item, index) => {
+      if (rawLengthTimeLine < NUMBER_OF_LIST_MONTHS) {
+        const notStartedMonth = NUMBER_OF_LIST_MONTHS - rawLengthTimeLine
+        _.forEach(Array(notStartedMonth), ((item, index) => {
+          rawTimeLineList.push({
+            date: startPaymentScheduleMoment.clone().add(rawLengthTimeLine + index, 'month')
+          })
+        }))
+      }
+      else if (!ProjectHelper.isCancelProject(project)) {
         rawTimeLineList.push({
-          date: startPaymentScheduleMoment.clone().add(rawLengthTimeLine + index, 'month')
+          date: rawTimeLineList[rawTimeLineList.length - 1].date.clone().add(1, 'month')
         })
-      }))
-    }
-    else {
-      rawTimeLineList.push({
-        date: rawTimeLineList[rawTimeLineList.length - 1].date.clone().add(1, 'month')
-      })
-    }
+      }
 
-    const handleCancelPaymentSchedule = async () => {
-      await PaymentScheduleService.getLatestPaidPaymentSchedule(project.id)
-        .then((latestPaidPaymentSchedule) => {
-          if (latestPaidPaymentSchedule?.data) {
-            const lastMonth = moment(latestPaidPaymentSchedule.data.end)
-
-            if (lastMonth.isSameOrAfter(moment())) {
-              const currentLastMonth = rawTimeLineList[rawTimeLineList.length - 1]?.date
-              const monthsToAddToLastMonth = lastMonth.diff(currentLastMonth.clone(), 'months') + 1
-              if (monthsToAddToLastMonth >= 0) {
-                _.forEach(Array(monthsToAddToLastMonth), (item, index) => {
-                  rawTimeLineList.push({
-                    date: rawTimeLineList[rawTimeLineList.length - 1].date.clone().add(1, 'month')
-                  })
-                })
-              }
-            }
-            else {
-              const latestRunningMonth = rawTimeLineList.findIndex((item) => moment(item.date).isSame(moment(), "month"))
-              if (latestRunningMonth > 0) {
-                const numberOfNotRunMonth = rawTimeLineList.length - latestRunningMonth - 1
-                rawTimeLineList = rawTimeLineList.slice(0, numberOfNotRunMonth * -1);
-              }
-
-            }
-          }
+      const handleGetResult = async () => {
+        await ProjectResultService.getProjectResult({
+          projectId: project.id,
         })
-        .catch((error) => dispatch(setErrorMess(error)))
-        .finally(() => dispatch(setLoading(false)));
-    }
+          .then(async (res: IResult[]) => {
+            const latestPaidPaymentSchedule = await PaymentScheduleService.getLatestPaidPaymentSchedule(project.id)
+              .then((latestResult) => {
+                if (ProjectHelper.isCancelProject(project) && latestResult?.data) {
+                  const lastMonth = moment(latestResult.data.end)
+                  if (lastMonth.isSameOrAfter(moment(), "month")) {
+                    const currentLastMonth = rawTimeLineList[rawTimeLineList.length - 1]?.date
+                    const monthsToAddToLastMonth = lastMonth.diff(currentLastMonth.clone(), 'months')
+                    if (monthsToAddToLastMonth > 0) {
+                      _.forEach(Array(monthsToAddToLastMonth), (item, index) => {
+                        rawTimeLineList.push({
+                          date: rawTimeLineList[rawTimeLineList.length - 1].date.clone().add(1, 'month')
+                        })
+                      })
+                    }
+                  }
+                  else {
+                    const latestRunningMonth = rawTimeLineList.findIndex((item) => moment(item.date).isSame(moment(), "month"))
+                    if (latestRunningMonth > 0) {
+                      const numberOfNotRunMonth = rawTimeLineList.length - latestRunningMonth - 1
+                      if (numberOfNotRunMonth > 0) {
+                        rawTimeLineList = rawTimeLineList.slice(0, numberOfNotRunMonth * -1);
+                      }
+                    }
+                  }
+                }
 
-    if (ProjectHelper.isCancelProject(project)) {
-      handleCancelPaymentSchedule()
-    }
+                return latestResult?.data
+              })
+              .catch((error) => dispatch(setErrorMess(error)))
 
-    const handleGetResult = async () => {
-      await ProjectResultService.getProjectResult({
-        projectId: project.id,
-      })
-        .then((res: IResult[]) => {
-          if (res?.length) {
             rawTimeLineList = rawTimeLineList.map((item, index) => {
-              const result = res.find((it: IResult) => moment(item.date).isSame(moment(it?.month), "month")) || null
+              const result = res?.find((it: IResult) => moment(item.date).isSame(moment(it?.month), "month")) || null
               let state: ETimelineType
 
               if (item?.date && moment().isSame(item.date, "month")) {
-                state = ETimelineType.IN_PROGRESS
+                if (ProjectHelper.isCancelProject(project)) {
+                  if (!latestPaidPaymentSchedule?.end || moment().isAfter(moment(latestPaidPaymentSchedule?.end), "month")) {
+                    state = ETimelineType.NOT_STARTED_YET
+                  }
+                  else if (moment().isSameOrBefore(moment(latestPaidPaymentSchedule?.end), "month")) {
+                    if (result?.isReady && (result?.report || result?.dataStudio)) {
+                      state = ETimelineType.DELIVERED
+                    }
+                    else {
+                      state = ETimelineType.IN_PROGRESS
+                    }
+                  }
+                }
+                else {
+                  state = ETimelineType.IN_PROGRESS
+                }
               }
               else if (item?.date && moment(item.date).isAfter(moment())) {
                 state = ETimelineType.NOT_STARTED_YET
@@ -161,32 +171,14 @@ const Report = memo(({ projectId }: Props) => {
                 state
               }
             })
-          }
-          else {
-            rawTimeLineList = rawTimeLineList.map((item, index) => {
-              let state: ETimelineType
-              if (item?.date && moment().isSame(item.date, "month")) {
-                state = ETimelineType.IN_PROGRESS
-              }
-              else {
-                state = ETimelineType.NOT_STARTED_YET
-              }
+            setListTimeline(rawTimeLineList)
+          })
+          .catch((error) => dispatch(setErrorMess(error)))
+          .finally(() => dispatch(setLoading(false)));
+      }
 
-              return {
-                ...item,
-                id: index,
-                state
-              }
-            })
-          }
-          setListTimeline(rawTimeLineList)
-        })
-        .catch((error) => dispatch(setErrorMess(error)))
-        .finally(() => dispatch(setLoading(false)));
+      handleGetResult()
     }
-
-    handleGetResult()
-
   }, [dispatch]);
 
   const getDateFormatted = (date: Date | moment.Moment, isDate?: boolean) => {
