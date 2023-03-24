@@ -54,7 +54,7 @@ const Dashboard = memo(({ isOpen, result, onClose }: Props) => {
           sx={{ width: { xs: "100%", sm: "auto" } }}
           onClick={onClose}
         />
-        {result && (
+        {result?.report && (
           <Button
             btnType={BtnType.Text}
             children={

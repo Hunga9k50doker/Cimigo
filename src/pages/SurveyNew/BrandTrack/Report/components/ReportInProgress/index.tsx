@@ -8,9 +8,11 @@ import ParagraphBody from "components/common/text/ParagraphBody";
 import Heading4 from "components/common/text/Heading4";
 import { useTranslation } from "react-i18next";
 
-interface Props {}
+interface Props {
+  dueDate: string
+}
 
-const ReportInProgress = memo(({}: Props) => {
+const ReportInProgress = memo(({ dueDate }: Props) => {
   const { t } = useTranslation();
   return (
     <Grid className={classes.descriptionWrapper}>
@@ -29,7 +31,7 @@ const ReportInProgress = memo(({}: Props) => {
           mb={4}
           className={classes.descriptionSubTitle}
           translation-key="brand_track_results_tab_report_inprogress_description"
-          dangerouslySetInnerHTML={{ __html: t("brand_track_results_tab_report_inprogress_description", { dueDate: "December 30, 2022" }) }}
+          dangerouslySetInnerHTML={{ __html: t("brand_track_results_tab_report_inprogress_description", { dueDate: dueDate }) }}
         ></ParagraphBody>
         <Button
           btnType={BtnType.Primary}

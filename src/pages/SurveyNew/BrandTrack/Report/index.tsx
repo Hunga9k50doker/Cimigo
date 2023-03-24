@@ -19,9 +19,11 @@ import { Attachment } from "models/attachment";
 import { Dot } from "components/common/dot/Dot";
 import ReportNotStarted from "./components/ReportNotStarted";
 import ReportInProgress from "./components/ReportInProgress";
+import ReportStillProgress from "./components/ReportStillProgress";
 import ReportDelivered from "./components/ReportDelivered";
 import ProjectHelper from "helpers/project"
 import { ProjectResultService } from "services/project_result";
+import { PaymentScheduleService } from "services/payment_schedule";
 import _ from "lodash";
 
 export enum ETimelineType {
@@ -43,6 +45,7 @@ export interface ITimeLineItem {
   date: Moment;
   state?: ETimelineType;
   result?: IResult;
+  id?: number
 }
 
 interface Props {
@@ -66,12 +69,16 @@ const Report = memo(({ projectId }: Props) => {
   const [isOpenDashboard, setIsOpenDashboard] = useState(false);
 
   useEffect(() => {
+    dispatch(setLoading(true))
     const startPaymentScheduleMoment = moment(project.startPaymentSchedule).startOf('month')
     const monthsToAdd = moment().diff(startPaymentScheduleMoment, 'months') + 1
+    let rawTimeLineList = []
 
-    let rawTimeLineList = _.map(new Array(monthsToAdd), ((item, index) => ({
-      date: startPaymentScheduleMoment.clone().add(index, 'month'),
-    })))
+    if (monthsToAdd > 0) {
+      rawTimeLineList = _.map(new Array(monthsToAdd), ((item, index) => ({
+        date: startPaymentScheduleMoment.clone().add(index, 'month'),
+      })))
+    }
 
     const rawLengthTimeLine = rawTimeLineList.length
 
@@ -89,39 +96,104 @@ const Report = memo(({ projectId }: Props) => {
       })
     }
 
-    ProjectResultService.getProjectResult({
-      projectId: project.id,
-    })
-      .then((res: IResult[]) => {
-        if (res?.length) {
-          rawTimeLineList = rawTimeLineList.map((item) => {
-            const result = res.find((it: IResult) => moment(item.date).isSame(moment(it?.month), "month")) || null
-            let state: ETimelineType
+    const handleCancelPaymentSchedule = async () => {
+      await PaymentScheduleService.getLatestPaidPaymentSchedule(project.id)
+        .then((latestPaidPaymentSchedule) => {
+          if (latestPaidPaymentSchedule?.data) {
+            const lastMonth = moment(latestPaidPaymentSchedule.data.end)
 
-            if (result?.isReady && (result?.report || result?.dataStudio)) {
-              state = ETimelineType.DELIVERED
-            }
-            else if (item?.date && moment().isSame(item.date, "month")) {
-              state = ETimelineType.IN_PROGRESS
+            if (lastMonth.isSameOrAfter(moment())) {
+              const currentLastMonth = rawTimeLineList[rawTimeLineList.length - 1]?.date
+              const monthsToAddToLastMonth = lastMonth.diff(currentLastMonth.clone(), 'months') + 1
+              if (monthsToAddToLastMonth >= 0) {
+                _.forEach(Array(monthsToAddToLastMonth), (item, index) => {
+                  rawTimeLineList.push({
+                    date: rawTimeLineList[rawTimeLineList.length - 1].date.clone().add(1, 'month')
+                  })
+                })
+              }
             }
             else {
-              state = ETimelineType.NOT_STARTED_YET
-            }
+              const latestRunningMonth = rawTimeLineList.findIndex((item) => moment(item.date).isSame(moment(), "month"))
+              if (latestRunningMonth > 0) {
+                const numberOfNotRunMonth = rawTimeLineList.length - latestRunningMonth - 1
+                rawTimeLineList = rawTimeLineList.slice(0, numberOfNotRunMonth * -1);
+              }
 
-            return {
-              ...item,
-              result,
-              state
             }
-          })
+          }
+        })
+        .catch((error) => dispatch(setErrorMess(error)))
+        .finally(() => dispatch(setLoading(false)));
+    }
 
-          setListTimeline(rawTimeLineList)
-        }
+    if (ProjectHelper.isCancelProject(project)) {
+      handleCancelPaymentSchedule()
+    }
+
+    const handleGetResult = async () => {
+      await ProjectResultService.getProjectResult({
+        projectId: project.id,
       })
-      .catch((error) => dispatch(setErrorMess(error)))
-      .finally(() => dispatch(setLoading(false)));
+        .then((res: IResult[]) => {
+          if (res?.length) {
+            rawTimeLineList = rawTimeLineList.map((item, index) => {
+              const result = res.find((it: IResult) => moment(item.date).isSame(moment(it?.month), "month")) || null
+              let state: ETimelineType
+
+              if (item?.date && moment().isSame(item.date, "month")) {
+                state = ETimelineType.IN_PROGRESS
+              }
+              else if (item?.date && moment(item.date).isAfter(moment())) {
+                state = ETimelineType.NOT_STARTED_YET
+              }
+              else if (result?.isReady && (result?.report || result?.dataStudio)) {
+                state = ETimelineType.DELIVERED
+              }
+              else {
+                state = ETimelineType.NOT_STARTED_YET
+              }
+
+              return {
+                ...item,
+                id: index,
+                result,
+                state
+              }
+            })
+          }
+          else {
+            rawTimeLineList = rawTimeLineList.map((item, index) => {
+              let state: ETimelineType
+              if (item?.date && moment().isSame(item.date, "month")) {
+                state = ETimelineType.IN_PROGRESS
+              }
+              else {
+                state = ETimelineType.NOT_STARTED_YET
+              }
+
+              return {
+                ...item,
+                id: index,
+                state
+              }
+            })
+          }
+          setListTimeline(rawTimeLineList)
+        })
+        .catch((error) => dispatch(setErrorMess(error)))
+        .finally(() => dispatch(setLoading(false)));
+    }
+
+    handleGetResult()
 
   }, [dispatch]);
+
+  const getDateFormatted = (date: Date | moment.Moment, isDate?: boolean) => {
+    moment.locale(i18n.language)
+    if (isDate) return moment(date).format("DD MMMM, YYYY")
+    return moment(date).format("MMMM YYYY")
+  }
 
   const checkReadyResult = (result: IResult) => {
     return result?.isReady && (result?.dataStudio || result?.report)
@@ -132,15 +204,20 @@ const Report = memo(({ projectId }: Props) => {
       const rawMaxPage = Math.ceil(listTimeline.length / NUMBER_OF_LIST_MONTHS)
       setMaxPage(rawMaxPage)
 
-      const latestReadyResult = [...listTimeline].reverse().find((item) => checkReadyResult(item?.result))
+      const latestReadyResult = [...listTimeline].reverse().find((item) => checkReadyResult(item?.result) && moment(item.date).isSameOrBefore(moment()))
       const latestReadyResultIndex = [...listTimeline].lastIndexOf([...listTimeline].reverse().find((item) => checkReadyResult(item?.result)))
+
+      const getPageFromIndex = (index: number) => {
+        return rawMaxPage + 1 - Math.ceil((listTimeline.length - index) / NUMBER_OF_LIST_MONTHS)
+      }
 
       if (latestReadyResult) {
         setTimelineSelected(latestReadyResult)
-        setPage(rawMaxPage + 1 - Math.ceil((listTimeline.length - latestReadyResultIndex) / NUMBER_OF_LIST_MONTHS))
+        setPage(getPageFromIndex(latestReadyResultIndex))
       }
       else {
-        setPage(rawMaxPage)
+        const currentMonth = listTimeline.findIndex((item) => item.state === ETimelineType.IN_PROGRESS)
+        setPage(getPageFromIndex(currentMonth >= 0 ? currentMonth : 0))
       }
     }
   }, [listTimeline]);
@@ -172,24 +249,6 @@ const Report = memo(({ projectId }: Props) => {
       .catch((e) => dispatch(setErrorMess(e)))
       .finally(() => dispatch(setLoading(false)));
   };
-
-  // const getTimeLine = (date: Moment) => {
-  //   const currentDate = moment();
-  //   const reportOfTimeline = project?.reports.filter((itemReport) => moment(date).isSame(itemReport?.updatedAt, "month"));
-  //   if (!!reportOfTimeline.length) {
-  //     return {
-  //       date: date,
-  //       state: ETimelineType.DELIVERED,
-  //       report: { attachment: reportOfTimeline[0] },
-  //     };
-  //   } else {
-  //     return {
-  //       date: date,
-  //       state: moment(date).isSame(currentDate, "month") ? ETimelineType.IN_PROGRESS : ETimelineType.NOT_STARTED_YET,
-  //       report: null,
-  //     };
-  //   }
-  // };
 
   const handleChangeSelectedItem = (item: ITimeLineItem) => {
     setTimelineSelected(item)
@@ -234,14 +293,14 @@ const Report = memo(({ projectId }: Props) => {
                 <TimeLineItem
                   key={index}
                   timeLineItem={item}
-                  isFirstWave={!index && moment(listTimelineRender?.[index]?.date).isSame(startPaymentScheduleDate, "month")}
-                  isLastWave={Boolean(index === listTimelineRender.length - 1 && item.state === ETimelineType.DELIVERED)}
+                  isFirstWave={!index && moment(item?.date).isSame(startPaymentScheduleDate, "month")}
+                  isLastWave={ProjectHelper.isCancelProject(project) && item?.id === listTimeline?.[listTimeline?.length - 1]?.id}
                   onSelect={() => {
                     handleChangeSelectedItem(item);
                   }}
                 />
               ))}
-            {project?.status === ProjectStatus.COMPLETED ? (
+            {ProjectHelper.isCancelProject(project) && listTimelineRender?.[listTimelineRender?.length - 1]?.id === listTimeline?.[listTimeline?.length - 1]?.id ? (
               <Box
                 className={clsx(classes.headPoint, {
                   [classes.deliveredHeadPoint]: listTimelineRender?.[listTimelineRender?.length - 1]?.state === ETimelineType.DELIVERED,
@@ -263,15 +322,18 @@ const Report = memo(({ projectId }: Props) => {
             )}
           </Grid>
           {
-            (!timelineSelected || timelineSelected?.state === ETimelineType.NOT_STARTED_YET) && <ReportNotStarted />
+            (moment().isBefore(moment(startPaymentScheduleDate))) && <ReportNotStarted dueDate={getDateFormatted(startPaymentScheduleDate)} />
           }
           {
-            timelineSelected?.state === ETimelineType.IN_PROGRESS && <ReportInProgress />
+            (listTimeline?.[0]?.state === ETimelineType.IN_PROGRESS) && <ReportInProgress dueDate={getDateFormatted(moment(startPaymentScheduleDate).endOf("month"), true)} />
           }
           {
             timelineSelected?.state === ETimelineType.DELIVERED && (
-              <ReportDelivered isHasReport={Boolean(timelineSelected?.result)} onOpenDashboard={onOpenDashboard} onDownLoad={onDownLoad} />
+              <ReportDelivered result={timelineSelected?.result} onOpenDashboard={onOpenDashboard} onDownLoad={onDownLoad} date={getDateFormatted(timelineSelected.date)} />
             )
+          }
+          {
+            !timelineSelected && moment().isAfter(moment(startPaymentScheduleDate), "month") && <ReportStillProgress />
           }
         </Grid>
       ) : (

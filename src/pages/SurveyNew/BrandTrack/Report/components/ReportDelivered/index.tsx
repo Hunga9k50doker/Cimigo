@@ -9,14 +9,15 @@ import Heading4 from "components/common/text/Heading4";
 import { DashboardOutlined } from "@mui/icons-material";
 import { IconDownload } from "components/icons";
 import { useTranslation } from "react-i18next";
-
+import { IResult } from "../.."
 interface Props {
   onOpenDashboard?: () => void;
   onDownLoad?: () => void;
-  isHasReport: boolean;
+  result: IResult;
+  date: string;
 }
 
-const ReportDelivered = memo(({ onOpenDashboard, onDownLoad, isHasReport }: Props) => {
+const ReportDelivered = memo(({ onOpenDashboard, onDownLoad, result, date }: Props) => {
   const { t } = useTranslation();
 
   return (
@@ -26,24 +27,29 @@ const ReportDelivered = memo(({ onOpenDashboard, onDownLoad, isHasReport }: Prop
       </Box>
       <Box className={classes.description}>
         <Heading2 mb={1} translation-key="brand_track_results_tab_report_delivered_title">
-          {t("brand_track_results_tab_report_delivered_title")}
+          {t("brand_track_results_tab_report_delivered_title", {
+            date: date
+          })}
         </Heading2>
         <ParagraphBody $colorName="--eerie-black" mb={4} translation-key="brand_track_results_tab_report_delivered_subtitle">
           {t("brand_track_results_tab_report_delivered_subtitle")}
         </ParagraphBody>
         <Box className={classes.actionWrapper}>
-          <Button
-            btnType={BtnType.Primary}
-            children={
-              <Heading4 $colorName="--white" $fontWeight={500} translation-key="brand_track_results_tab_report_delivered_access">
-                {t("brand_track_results_tab_report_delivered_access")}
-              </Heading4>
-            }
-            startIcon={<DashboardOutlined sx={{ fontSize: "22.5px !important" }} />}
-            sx={{ width: { xs: "100%", sm: "auto" } }}
-            onClick={onOpenDashboard}
-          />
-          {isHasReport && (
+          {
+            result?.dataStudio &&
+            <Button
+              btnType={BtnType.Primary}
+              children={
+                <Heading4 $colorName="--white" $fontWeight={500} translation-key="brand_track_results_tab_report_delivered_access">
+                  {t("brand_track_results_tab_report_delivered_access")}
+                </Heading4>
+              }
+              startIcon={<DashboardOutlined sx={{ fontSize: "22.5px !important" }} />}
+              sx={{ width: { xs: "100%", sm: "auto" } }}
+              onClick={onOpenDashboard}
+            />
+          }
+          {result?.report && (
             <Button
               btnType={BtnType.Outlined}
               children={
