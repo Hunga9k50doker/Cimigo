@@ -270,7 +270,7 @@ const Report = memo(({ projectId }: Props) => {
           <Grid className={classes.timelineWrapper}>
             {moment(listTimelineRender?.[0]?.date).isSame(startPaymentScheduleDate, "month") ? (
               <Box
-                className={clsx(classes.headPoint, {
+                className={clsx(classes.leftHeadPoint, {
                   [classes.deliveredHeadPoint]: listTimelineRender?.[0]?.state === ETimelineType.DELIVERED,
                   [classes.inProgressHeadPoint]: listTimelineRender?.[0]?.state === ETimelineType.IN_PROGRESS,
                 })}
@@ -303,7 +303,7 @@ const Report = memo(({ projectId }: Props) => {
               ))}
             {ProjectHelper.isCancelProject(project) && listTimelineRender?.[listTimelineRender?.length - 1]?.id === listTimeline?.[listTimeline?.length - 1]?.id ? (
               <Box
-                className={clsx(classes.headPoint, {
+                className={clsx(classes.rightHeadPoint, {
                   [classes.deliveredHeadPoint]: listTimelineRender?.[listTimelineRender?.length - 1]?.state === ETimelineType.DELIVERED,
                 })}
               ></Box>
@@ -312,7 +312,6 @@ const Report = memo(({ projectId }: Props) => {
                 <Box
                   className={clsx({
                     [classes.deliveredPoint]: listTimelineRender?.[listTimelineRender?.length - 1]?.state === ETimelineType.DELIVERED,
-                    [classes.inProgressPoint]: listTimelineRender?.[listTimelineRender?.length - 1]?.state === ETimelineType.IN_PROGRESS,
                   })}
                 >
                   <Dot $height={"12px"} $width={"12px"} />

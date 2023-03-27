@@ -24,8 +24,16 @@
     display: none;
   }
 }
-.headPoint {
+.leftHeadPoint {
   min-width: 2px;
+  margin-left: 46px;
+  height: 24px;
+  margin-top: 34px;
+  background-color: var(--gray-40);
+}
+.rightHeadPoint {
+  min-width: 2px;
+  margin-right: 46px;
   height: 24px;
   margin-top: 34px;
   background-color: var(--gray-40);
