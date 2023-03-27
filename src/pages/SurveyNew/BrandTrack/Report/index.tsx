@@ -62,123 +62,138 @@ const Report = memo(({ projectId }: Props) => {
   const startPaymentScheduleDate = useMemo(() => moment(project?.startPaymentSchedule), [project]);
 
   const [listTimeline, setListTimeline] = useState<ITimeLineItem[]>([]);
-  const [listTimelineRender, setListTimelineRender] = useState<ITimeLineItem[]>([]);
   const [page, setPage] = useState(0)
-  const [maxPage, setMaxPage] = useState(0)
   const [timelineSelected, setTimelineSelected] = useState<ITimeLineItem>(null);
   const [isOpenDashboard, setIsOpenDashboard] = useState(false);
 
+  const maxPage = useMemo(() => {
+    if (listTimeline.length) {
+      return Math.ceil(listTimeline.length / NUMBER_OF_LIST_MONTHS)
+    }
+    return 0
+  }, [listTimeline])
+
+  const listTimelineRender = useMemo(() => {
+    if (page && maxPage) {
+      let startIndex = listTimeline.length - (NUMBER_OF_LIST_MONTHS * (maxPage - page + 1));
+      if (startIndex < 0) startIndex = 0
+      const endIndex = startIndex + NUMBER_OF_LIST_MONTHS
+      return [...listTimeline].slice(startIndex, endIndex)
+    }
+    return []
+  }, [page, maxPage])
+
   useEffect(() => {
-    if (ProjectHelper.checkProjectStatus(project, [ProjectStatus.AWAIT_PAYMENT, ProjectStatus.IN_PROGRESS, ProjectStatus.COMPLETED], true)) {
-      dispatch(setLoading(true))
-      const startPaymentScheduleMoment = moment(project.startPaymentSchedule).startOf('month')
-      const monthsToAdd = moment().diff(startPaymentScheduleMoment, 'months') + 1
-      let rawTimeLineList = []
+    if (ProjectHelper.checkProjectStatus(project, [ProjectStatus.AWAIT_PAYMENT, ProjectStatus.IN_PROGRESS, ProjectStatus.COMPLETED], false)) return;
 
-      if (monthsToAdd > 0) {
-        rawTimeLineList = _.map(new Array(monthsToAdd), ((item, index) => ({
-          date: startPaymentScheduleMoment.clone().add(index, 'month'),
-        })))
-      }
+    dispatch(setLoading(true))
+    let rawTimeLineList = []
 
-      const rawLengthTimeLine = rawTimeLineList.length
+    // add timeline months to current month
+    const monthAddToCurrentMonth = moment().diff(startPaymentScheduleDate, 'months') + 1
+    if (monthAddToCurrentMonth > 0) {
+      rawTimeLineList = _.map(new Array(monthAddToCurrentMonth), ((item, index) => ({
+        date: startPaymentScheduleDate.clone().add(index, 'month'),
+      })))
+    }
 
-      if (rawLengthTimeLine < NUMBER_OF_LIST_MONTHS) {
-        const notStartedMonth = NUMBER_OF_LIST_MONTHS - rawLengthTimeLine
-        _.forEach(Array(notStartedMonth), ((item, index) => {
-          rawTimeLineList.push({
-            date: startPaymentScheduleMoment.clone().add(rawLengthTimeLine + index, 'month')
-          })
-        }))
-      }
-      else if (!ProjectHelper.isCancelProject(project)) {
+    // if number of months of timeline is less than 4, add some next months to timeline to make timeline months equal to 4
+    const currentTimeLineLength = rawTimeLineList.length
+    if (currentTimeLineLength < NUMBER_OF_LIST_MONTHS) {
+      const notStartedMonth = NUMBER_OF_LIST_MONTHS - currentTimeLineLength
+      _.forEach(Array(notStartedMonth), ((item, index) => {
         rawTimeLineList.push({
-          date: rawTimeLineList[rawTimeLineList.length - 1].date.clone().add(1, 'month')
+          date: startPaymentScheduleDate.clone().add(currentTimeLineLength + index, 'month')
         })
-      }
+      }))
+    }
+    else if (!ProjectHelper.isCancelProject(project)) {
+      rawTimeLineList.push({
+        date: rawTimeLineList[currentTimeLineLength - 1].date.clone().add(1, 'month')
+      })
+    }
 
-      const handleGetResult = async () => {
-        await ProjectResultService.getProjectResult({
-          projectId: project.id,
-        })
-          .then(async (res: IResult[]) => {
-            const latestPaidPaymentSchedule = await PaymentScheduleService.getLatestPaidPaymentSchedule(project.id)
-              .then((latestResult) => {
-                if (ProjectHelper.isCancelProject(project) && latestResult?.data) {
-                  const lastMonth = moment(latestResult.data.end)
-                  if (lastMonth.isSameOrAfter(moment(), "month")) {
-                    const currentLastMonth = rawTimeLineList[rawTimeLineList.length - 1]?.date
-                    const monthsToAddToLastMonth = lastMonth.diff(currentLastMonth.clone(), 'months')
-                    if (monthsToAddToLastMonth > 0) {
-                      _.forEach(Array(monthsToAddToLastMonth), (item, index) => {
-                        rawTimeLineList.push({
-                          date: rawTimeLineList[rawTimeLineList.length - 1].date.clone().add(1, 'month')
-                        })
-                      })
-                    }
-                  }
-                  else {
-                    const latestRunningMonth = rawTimeLineList.findIndex((item) => moment(item.date).isSame(moment(), "month"))
-                    if (latestRunningMonth > 0) {
-                      const numberOfNotRunMonth = rawTimeLineList.length - latestRunningMonth - 1
-                      if (numberOfNotRunMonth > 0) {
-                        rawTimeLineList = rawTimeLineList.slice(0, numberOfNotRunMonth * -1);
-                      }
-                    }
-                  }
-                }
-
-                return latestResult?.data
+    Promise.all([
+      PaymentScheduleService.getLatestPaidPaymentSchedule(project.id),
+      ProjectResultService.getProjectResult({ projectId: project.id })
+    ])
+      .then(([latestPaymentSchedule, results]) => {
+        // if project is cancelled and project has at least 1 payment that paid
+        if (ProjectHelper.isCancelProject(project) && latestPaymentSchedule?.data) {
+          const lastMonth = moment(latestPaymentSchedule.data.end)
+          // if the paid payment last month is same or after current => add months to timeline to make timeline runs to last paid payment month
+          if (lastMonth.isSameOrAfter(moment(), "month")) {
+            const currentLastMonth = rawTimeLineList[rawTimeLineList.length - 1]?.date
+            const monthsToAddToLastMonth = lastMonth.diff(currentLastMonth.clone(), 'months')
+            if (monthsToAddToLastMonth > 0) {
+              _.forEach(Array(monthsToAddToLastMonth), (item, index) => {
+                rawTimeLineList.push({
+                  date: rawTimeLineList[rawTimeLineList.length - 1].date.clone().add(1, 'month')
+                })
               })
-              .catch((error) => dispatch(setErrorMess(error)))
+            }
+          }
+          // if the paid payment last month is before current => delete all months after current month in the timeline
+          else {
+            const latestRunningMonth = rawTimeLineList.findIndex((item) => moment(item.date).isSame(moment(), "month"))
+            if (latestRunningMonth > 0) {
+              const numberOfNotRunMonth = rawTimeLineList.length - latestRunningMonth - 1
+              if (numberOfNotRunMonth > 0) {
+                rawTimeLineList = rawTimeLineList.slice(0, numberOfNotRunMonth * -1);
+              }
+            }
+          }
+        }
 
-            rawTimeLineList = rawTimeLineList.map((item, index) => {
-              const result = res?.find((it: IResult) => moment(item.date).isSame(moment(it?.month), "month")) || null
-              let state: ETimelineType
+        // find result and update status for each month in timeline
+        rawTimeLineList = rawTimeLineList.map((item, index) => {
+          const result = results?.find((it: IResult) => moment(item.date).isSame(moment(it?.month), "month")) || null
+          let state: ETimelineType
 
-              if (item?.date && moment().isSame(item.date, "month")) {
-                if (ProjectHelper.isCancelProject(project)) {
-                  if (!latestPaidPaymentSchedule?.end || moment().isAfter(moment(latestPaidPaymentSchedule?.end), "month")) {
-                    state = ETimelineType.NOT_STARTED_YET
-                  }
-                  else if (moment().isSameOrBefore(moment(latestPaidPaymentSchedule?.end), "month")) {
-                    if (result?.isReady && (result?.report || result?.dataStudio)) {
-                      state = ETimelineType.DELIVERED
-                    }
-                    else {
-                      state = ETimelineType.IN_PROGRESS
-                    }
-                  }
+          if (item?.date && moment().isSame(item.date, "month")) {
+            if (ProjectHelper.isCancelProject(project)) {
+              // if project is cancelled and there is no payment paid for current month => make current month is not started
+              if (!latestPaymentSchedule?.data?.end || moment().isAfter(moment(latestPaymentSchedule?.data?.end), "month")) {
+                state = ETimelineType.NOT_STARTED_YET
+              }
+              // if project is cancelled and there is a payment paid for current month
+              else if (moment().isSameOrBefore(moment(latestPaymentSchedule?.end), "month")) {
+                // if current month has a result, status of current month is deliverer
+                if (result?.isReady && (result?.report || result?.dataStudio)) {
+                  state = ETimelineType.DELIVERED
                 }
                 else {
                   state = ETimelineType.IN_PROGRESS
                 }
               }
-              else if (item?.date && moment(item.date).isAfter(moment())) {
-                state = ETimelineType.NOT_STARTED_YET
-              }
-              else if (result?.isReady && (result?.report || result?.dataStudio)) {
-                state = ETimelineType.DELIVERED
-              }
-              else {
-                state = ETimelineType.NOT_STARTED_YET
-              }
+            }
+            else {
+              state = ETimelineType.IN_PROGRESS
+            }
+          }
+          else if (item?.date && moment(item.date).isAfter(moment())) {
+            state = ETimelineType.NOT_STARTED_YET
+          }
+          else if (result?.isReady && (result?.report || result?.dataStudio)) {
+            state = ETimelineType.DELIVERED
+          }
+          else {
+            state = ETimelineType.NOT_STARTED_YET
+          }
 
-              return {
-                ...item,
-                id: index,
-                result,
-                state
-              }
-            })
-            setListTimeline(rawTimeLineList)
-          })
-          .catch((error) => dispatch(setErrorMess(error)))
-          .finally(() => dispatch(setLoading(false)));
-      }
+          return {
+            ...item,
+            id: index,
+            result,
+            state
+          }
+        })
 
-      handleGetResult()
-    }
+        setListTimeline(rawTimeLineList)
+      })
+      .catch((error) => dispatch(setErrorMess(error)))
+      .finally(() => dispatch(setLoading(false)));
+
   }, [dispatch]);
 
   const getDateFormatted = (date: Date | moment.Moment, isDate?: boolean) => {
@@ -192,34 +207,28 @@ const Report = memo(({ projectId }: Props) => {
   }
 
   useEffect(() => {
-    if (listTimeline.length) {
-      const rawMaxPage = Math.ceil(listTimeline.length / NUMBER_OF_LIST_MONTHS)
-      setMaxPage(rawMaxPage)
+    // set active page and active item (first render) for timeline
+    if (listTimeline.length && maxPage) {
 
       const latestReadyResult = [...listTimeline].reverse().find((item) => checkReadyResult(item?.result) && moment(item.date).isSameOrBefore(moment()))
       const latestReadyResultIndex = [...listTimeline].lastIndexOf([...listTimeline].reverse().find((item) => checkReadyResult(item?.result)))
 
       const getPageFromIndex = (index: number) => {
-        return rawMaxPage + 1 - Math.ceil((listTimeline.length - index) / NUMBER_OF_LIST_MONTHS)
+        return maxPage + 1 - Math.ceil((listTimeline.length - index) / NUMBER_OF_LIST_MONTHS)
       }
 
+      // show latest month that has result
       if (latestReadyResult) {
         setTimelineSelected(latestReadyResult)
         setPage(getPageFromIndex(latestReadyResultIndex))
       }
+      // show current month if no month has a result
       else {
         const currentMonth = listTimeline.findIndex((item) => item.state === ETimelineType.IN_PROGRESS)
         setPage(getPageFromIndex(currentMonth >= 0 ? currentMonth : 0))
       }
     }
-  }, [listTimeline]);
-
-  useEffect(() => {
-    let startIndex = listTimeline.length - (NUMBER_OF_LIST_MONTHS * (maxPage - page + 1));
-    if (startIndex < 0) startIndex = 0
-    const endIndex = startIndex + NUMBER_OF_LIST_MONTHS
-    setListTimelineRender([...listTimeline].slice(startIndex, endIndex));
-  }, [page])
+  }, [listTimeline, maxPage]);
 
   const goToPreviousPage = () => {
     if (page <= 1) return;
