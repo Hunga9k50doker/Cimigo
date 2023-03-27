@@ -89,6 +89,9 @@ import imgNoResultPaid from 'assets/img/no-result-paid.svg';
 import icPaymentHistory from "assets/img/icon/ic-payment-history.svg";
 import imgPaymentError1 from "assets/img/img-payment-error-1.svg";
 import imgSupportAgent from "assets/img/img-support_agent.svg";
+import imgDashboardReady from "assets/img/img-dashboard-ready.svg";
+import imgProjectScheduled from "assets/img/img-project-scheduled.svg";
+import imgFieldworkInProgress from "assets/img/img-fieldwork-in-progress.svg";
 
 
 const images = {
@@ -183,7 +186,10 @@ const images = {
   imgPain,
   icPaymentHistory,
   imgPaymentError1,
-  imgSupportAgent
+  imgSupportAgent,
+  imgDashboardReady,
+  imgProjectScheduled,
+  imgFieldworkInProgress
 }
 
 export default images

@@ -369,6 +369,15 @@ export class ProjectHelper {
     }
   }
 
+  static checkProjectStatus = (project: Project, projectStatuses: ProjectStatus[], isInclude?: boolean) => {
+    if (isInclude) {
+      return projectStatuses.includes(project?.status)
+    }
+    else {
+      return !projectStatuses.includes(project?.status)
+    }
+  }
+
   static isCancelProject = (project: Project) => {
     return [EPaymentScheduleCancelType.AUTO_CANCEL, EPaymentScheduleCancelType.USER_CANCEL].includes(project?.cancelPaymentScheduleType)
   }
