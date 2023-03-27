@@ -13,22 +13,26 @@ import { ESOLUTION_TYPE } from "models/solution";
 interface ProjectStatusProps extends ChipProps {
   status: ProjectStatus
   solutionTypeId: number;
+  turn?: number;
 }
 
-export const ChipProjectStatus = memo(({ status, className, solutionTypeId,  ...rest }: ProjectStatusProps) => {
+export const ChipProjectStatus = memo(({ status, className, solutionTypeId, turn,  ...rest }: ProjectStatusProps) => {
   const { t } = useTranslation()
   const statusLabel = useMemo(() => {
     switch (status) {
       case ProjectStatus.AWAIT_PAYMENT:
-        return t('project_status_await_payment')
+        if (turn && turn > 1 && solutionTypeId === ESOLUTION_TYPE.BRAND_TRACKING) {
+          return t("brand_track_project_status_in_progress");
+        }
+        return t("project_status_await_payment");
       case ProjectStatus.DRAFT:
-        return t('project_status_draft')
+        return t("project_status_draft");
       case ProjectStatus.IN_PROGRESS:
-        return t('project_status_in_progress')
+        return t("project_status_in_progress");
       case ProjectStatus.COMPLETED:
         return solutionTypeId === ESOLUTION_TYPE.BRAND_TRACKING ? t("brand_track_project_status_completed") : t("project_status_completed");
     }
-  }, [status]);
+  }, [status, turn, solutionTypeId]);
 
   const statusContent = useMemo(() => {
     switch (status) {

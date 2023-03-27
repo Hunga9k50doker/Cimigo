@@ -233,7 +233,8 @@ export const Survey = () => {
           />
         </Tabs>
         <Box className={classes.statusBox}>
-          <ChipProjectStatus status={project?.status} solutionTypeId={project?.solution?.typeId} />
+          {console.log(project?.paymentSchedules?.[0]?.turn,"djaskdjkdjdkasd", project?.paymentSchedules)}
+          <ChipProjectStatus status={project?.status} solutionTypeId={project?.solution?.typeId} turn={project?.paymentSchedules?.[0]?.turn} />
         </Box>
       </Box>
       <Box className={classes.tabContent}>

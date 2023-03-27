@@ -607,6 +607,7 @@ const ProjectManagement = memo((props: Props) => {
                   </TableCell>
                 </TableRow>
               </TableHead>
+              {console.log(data)}
               <TableBody>
                 {data?.data?.length ? (
                   data?.data?.map((item) => (
@@ -624,6 +625,7 @@ const ProjectManagement = memo((props: Props) => {
                         <ChipProjectStatus
                           status={item.status}
                           solutionTypeId={item?.solution?.typeId}
+                          turn={item?.paymentSchedules?.[0]?.turn}
                         ></ChipProjectStatus>
                       </TableCell>
                       <TableCell>
@@ -822,7 +824,7 @@ const ProjectManagement = memo((props: Props) => {
                 <div>
                   <p className={classes.itemNameMobile}>{item.name}</p>
                   <Grid sx={{ padding: "8px 0px 4px 0px" }}>
-                    <ChipProjectStatus status={item.status} solutionTypeId={item?.solution?.typeId}></ChipProjectStatus>
+                    <ChipProjectStatus status={item.status} solutionTypeId={item?.solution?.typeId} turn={item?.paymentSchedules?.[0]?.turn}></ChipProjectStatus>
                   </Grid>
 
                   <Grid
