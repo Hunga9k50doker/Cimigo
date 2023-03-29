@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, TableBody, Menu, MenuItem, TableCell, TableHead, TableRow, Tooltip, Typography, IconButton } from "@mui/material"
+import { Box, Grid, Button, TableBody, Menu, MenuItem, TableCell, TableHead, TableRow, Tooltip, Typography, IconButton } from "@mui/material"
 import { Project } from "models/project"
 import { memo, useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
@@ -11,7 +11,7 @@ import { PaymentScheduleStatus as EPaymentScheduleStatus } from "models/payment_
 import PaymentScheduleStatus from "components/PaymentScheduleStatus"
 import { fCurrencyVND, fCurrency } from "utils/formatNumber";
 import { PaymentSchedule } from "models/payment_schedule"
-import { EditOutlined, ExpandMoreOutlined, Check, Email } from "@mui/icons-material";
+import { EditOutlined, ExpandMoreOutlined, Check, Email, FileDownload } from "@mui/icons-material";
 import PopupEditPaymentSchedule from "./components/PopupEditPaymentSchedule"
 import PopupUploadInvoice from "./components/PopupUploadInvoice"
 import PopupRestartPaymentSchedule from "./components/PopupRestartPaymentSchedule"
@@ -20,6 +20,10 @@ import { AdminProjectService } from 'services/admin/project';
 import { FileUpload } from "models/attachment";
 import Buttons from 'components/Buttons';
 import ProjectHelper from "helpers/project"
+import ExcelJS from "exceljs";
+import { DataPagination, OptionItemT, paymentMethods, TableHeaderLabel } from "models/general";
+import { worksheetCols } from "./model";
+import FileSaver from "file-saver";
 
 export interface Props {
     project?: Project,
@@ -45,7 +49,7 @@ interface RestartScheduleForm {
 }
 
 const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }: Props) => {
-    
+
     const dispatch = useDispatch()
     const [paymentScheduleList, setPaymentScheduleList] = useState<PaymentSchedule[]>([])
     const [itemAction, setItemAction] = useState<PaymentSchedule>();
@@ -166,6 +170,80 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }:
             .finally(() => dispatch(setLoading(false)))
     }
 
+    const _getCellData = (paymentSchedule, key): string | number => {
+        switch (key) {
+            case "start":
+            case "end":
+                return moment(paymentSchedule[key]).format("MM-YYYY");
+            case "sampleSizeCostPerMonth":
+            case "customQuestionCostPerMonth":
+            case "vat":
+            case "totalAmount":
+            case "sampleSizeCostPerMonthUSD":
+            case "customQuestionCostPerMonthUSD":
+            case "vatUSD":
+            case "totalAmountUSD":
+                return paymentSchedule[key] ?? 0;
+            case "createdAt":
+            case "dueDate":
+                return paymentSchedule[key] ? moment(paymentSchedule[key]).format("DD-MM-YYYY HH:mm") : "";
+            case "payment.paymentMethodId":
+                if (paymentSchedule?.payments?.length) {
+                    key = key.split(".")[1];
+                    return paymentMethods.find(
+                        (method) => method.id === paymentSchedule.payments[0][key]
+                    )?.name;
+                }
+                return ""
+            case "payment.completedDate":
+                if (paymentSchedule?.payments?.length) {
+                    key = key.split(".")[1];
+                    return paymentSchedule.payments[0][key] ? moment(paymentSchedule.payments[0][key]).format("DD-MM-YYYY HH:mm") : "";
+                }
+                return ""
+            case "payment.orderId":
+                if (paymentSchedule?.payments?.length) {
+                    key = key.split(".")[1];
+                    return paymentSchedule.payments[0][key];
+                }
+                return ""
+            case "systemConfig.usdToVND":
+                key = key.split(".")[1];
+                return paymentSchedule.systemConfig[key] ?? 0;
+            case "systemConfig.vat":
+                key = key.split(".")[1];
+                return `${((paymentSchedule.systemConfig[key] ?? 0) * 100)}%`;
+            default:
+                return paymentSchedule[key];
+        }
+    }
+
+    const handleExportExcel = async () => {
+        const workbook = new ExcelJS.Workbook();
+        workbook.created = new Date();
+        const worksheet = workbook.addWorksheet(
+            `Payment schedules ${moment().format("DD-MM-YYYY")}`,
+            {}
+        );
+        worksheet.addRow(worksheetCols.map((col) => col.header));
+
+        try {
+            paymentScheduleList.forEach(async (payment) => {
+                const row: (string | number)[] = [];
+                worksheetCols.forEach(({ key }) => {
+                    row.push(_getCellData(payment, key) ?? "");
+                });
+                worksheet.addRow(row);
+            });
+
+            const buffer = await workbook.xlsx.writeBuffer();
+            const filedata: Blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
+            FileSaver.saveAs(filedata, `Payment schedules project ${project.name} ${moment().format("DD-MM-YYYY HH:mm")}.xlsx`);
+        } catch (err) {
+            dispatch(setErrorMess(err));
+        }
+    };
+
     return (
         <Box>
             {(!!paymentScheduleList?.length) && (
@@ -175,9 +253,19 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }:
                             <Buttons btnType='Blue' children="Restart payment schedules" padding='11px 16px' onClick={handleRestartPaymentSchedule} />
                         )
                     }
-                    <Typography variant="h6" mt={4} mb={2}>
-                        Payment Schedules
-                    </Typography>
+                    <Box display="flex" justifyContent="space-between" mt={4} mb={2}>
+                        <Typography variant="h6">
+                            Payment Schedules
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleExportExcel}
+                            startIcon={<FileDownload />}
+                        >
+                            Export
+                        </Button>
+                    </Box>
                     <Box ml={2}>
                         <TableCustom>
                             <TableHead>
@@ -226,65 +314,65 @@ const PaymentScheduleDetailForBrandTrack = memo(({ project, reloadProjectInfo }:
                         </TableCustom>
                     </Box>
                     <Menu
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            anchorEl={actionAnchor}
-                            keepMounted
-                            open={Boolean(actionAnchor)}
-                            onClose={onCloseActionMenu}
-                        >
-                            {
-                                [EPaymentScheduleStatus.NOT_PAID, EPaymentScheduleStatus.OVERDUE].includes(itemAction?.status) && (
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        anchorEl={actionAnchor}
+                        keepMounted
+                        open={Boolean(actionAnchor)}
+                        onClose={onCloseActionMenu}
+                    >
+                        {
+                            [EPaymentScheduleStatus.NOT_PAID, EPaymentScheduleStatus.OVERDUE].includes(itemAction?.status) && (
+                                <MenuItem
+                                    sx={{ fontSize: '0.875rem' }}
+                                    onClick={handleEdit}
+                                >
+                                    <Box display="flex" alignItems={"center"}>
+                                        <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                                        <span>Edit</span>
+                                    </Box>
+                                </MenuItem>
+                            )
+                        }
+                        {
+                            itemAction?.status === EPaymentScheduleStatus.IN_PROGRESS && (
+                                <MenuItem
+                                    sx={{ fontSize: '0.875rem' }}
+                                    onClick={handleUpdateStatus}
+                                >
+                                    <Box display="flex" alignItems={"center"}>
+                                        <Check sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                                        <span>Mark as paid</span>
+                                    </Box>
+                                </MenuItem>
+                            )
+                        }
+                        {
+                            itemAction?.status === EPaymentScheduleStatus.PAID && (
+                                <Grid>
                                     <MenuItem
                                         sx={{ fontSize: '0.875rem' }}
-                                        onClick={handleEdit}
+                                        onClick={handleUploadInvoice}
                                     >
                                         <Box display="flex" alignItems={"center"}>
                                             <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                                            <span>Edit</span>
+                                            <span>Upload invoice</span>
                                         </Box>
                                     </MenuItem>
-                                )
-                            }
-                            {
-                                itemAction?.status === EPaymentScheduleStatus.IN_PROGRESS && (
                                     <MenuItem
                                         sx={{ fontSize: '0.875rem' }}
-                                        onClick={handleUpdateStatus}
+                                        onClick={handleSendInvoiceReadyEmail}
                                     >
                                         <Box display="flex" alignItems={"center"}>
-                                            <Check sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                                            <span>Mark as paid</span>
+                                            <Email sx={{ marginRight: '0.25rem' }} fontSize="small" />
+                                            <span>Send email invoice ready</span>
                                         </Box>
                                     </MenuItem>
-                                )
-                            }
-                            {
-                                itemAction?.status === EPaymentScheduleStatus.PAID && (
-                                    <Grid>
-                                        <MenuItem
-                                            sx={{ fontSize: '0.875rem' }}
-                                            onClick={handleUploadInvoice}
-                                        >
-                                            <Box display="flex" alignItems={"center"}>
-                                                <EditOutlined sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                                                <span>Upload invoice</span>
-                                            </Box>
-                                        </MenuItem>
-                                        <MenuItem
-                                            sx={{ fontSize: '0.875rem' }}
-                                            onClick={handleSendInvoiceReadyEmail}
-                                        >
-                                            <Box display="flex" alignItems={"center"}>
-                                                <Email sx={{ marginRight: '0.25rem' }} fontSize="small" />
-                                                <span>Send email invoice ready</span>
-                                            </Box>
-                                        </MenuItem>
-                                    </Grid>
-                                )
-                            }
+                                </Grid>
+                            )
+                        }
                     </Menu>
                     <PopupEditPaymentSchedule
                         isOpen={isOpenEditPaymentSchedulePopup}

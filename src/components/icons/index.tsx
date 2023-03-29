@@ -12,3 +12,4 @@ export { default as IconNextOutline} from "./IconNextOutline";
 export { default as IconNewLabelFilled} from "./IconNewLabelFilled";
 export { default as IconHeartPlus} from "./IconHeartPlus";
 export { default as IconImagesMode} from "./IconImagesMode";
+export { default as IconDownload} from "./IconDownload";
