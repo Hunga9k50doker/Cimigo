@@ -21,13 +21,13 @@ export const ChipProjectStatus = memo(({ status, className, solutionTypeId, turn
   const statusLabel = useMemo(() => {
     switch (status) {
       case ProjectStatus.AWAIT_PAYMENT:
-        if (turn && turn > 1 && solutionTypeId === ESOLUTION_TYPE.BRAND_TRACKING) {
-          return t("brand_track_project_status_in_progress");
-        }
         return t("project_status_await_payment");
       case ProjectStatus.DRAFT:
         return t("project_status_draft");
       case ProjectStatus.IN_PROGRESS:
+         if (turn && turn > 1 && solutionTypeId === ESOLUTION_TYPE.BRAND_TRACKING) {
+           return t("brand_track_project_status_in_progress");
+         }
         return t("project_status_in_progress");
       case ProjectStatus.COMPLETED:
         return solutionTypeId === ESOLUTION_TYPE.BRAND_TRACKING ? t("brand_track_project_status_completed") : t("project_status_completed");
