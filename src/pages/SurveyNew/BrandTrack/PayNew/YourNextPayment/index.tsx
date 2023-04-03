@@ -421,6 +421,7 @@ const YourNextPayment = ({ projectId }: MakeAnOrderProp) => {
                         direction={"horizontal"}
                         spaceBetween={30} 
                       >
+                        {console.log(paymentSchedules,'jdkadjkdsjkdjaskkdj')}
                         {paymentSchedules?.map((item, index) => {
                           return (
                             <SwiperSlide key={item.id}>
